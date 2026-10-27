@@ -179,9 +179,7 @@ A role's [data scope](./roles-and-permissions.md#data-scope) can take its values
 
 In the user form, **Data-scope attributes** holds one row per attribute: a key (`company`) and a value (`00001, 00050` — a comma makes a list). **Add an attribute…** suggests the keys the roles already use. A user who lacks the attribute a rule needs sees no row through that rule.
 
-The users list shows the attributes on each card (`company=00001,00050`), and the user sees them, with their data scope in words, in their **Profile** window.
-
-For OIDC users, the attributes can come from the identity provider at every sign-in — see [Sign-in](./sign-in.md#attribute-claims). From the command line: `liberty-admin set-attributes alice company=00001,00050`.
+The users list shows the attributes on each card (`company=00001,00050`), and the user sees them, with their data scope in words, in their **Profile** window. From the command line: `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 
@@ -244,7 +242,7 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 ### Revoke an account immediately
 
 1. Toggle **Active** off and save.
-2. If you can't tolerate the up-to-1-hour delay until their current access token expires, rotate the JWT signing secret (`[auth] jwt_secret` in `app.toml` or `LIBERTY_JWT_SECRET` env var) and restart. Every existing token is invalidated — a heavy hammer but the only **immediate** revocation Liberty offers.
+2. If you can't tolerate the up-to-1-hour delay until their current access token expires, rotate the JWT signing secret (`LIBERTY_JWT_SECRET`) and restart. Every existing token is invalidated — a heavy hammer but the only **immediate** revocation Liberty offers.
 
 ---
 

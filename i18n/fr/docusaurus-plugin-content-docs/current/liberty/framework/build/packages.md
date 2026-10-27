@@ -98,7 +98,7 @@ Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer �
 
 | Non inclus | Où cela se trouve à la place |
 |---|---|
-| `app.toml` | Propre à chaque installation — porte les identifiants des pools, le backend d'authentification, la racine frontend. Jamais regroupé. |
+| Paramètres → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
 | `auth.toml` / utilisateurs stockés en base | Propre à chaque installation — porte les empreintes de mot de passe Argon2. Jamais regroupé. |
 | Plugins Python | Livrés avec le [wheel liberty-apps](../../installation/deploy-prebuilt-apps.md) ou le canal de release propre au plugin. |
 | Jobs Nomaflow | Le bouton *Export job* sur la fiche de chaque job produit un ZIP mono-job. L'export en masse de jobs n'est pas encore automatisé. Voir [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
@@ -209,7 +209,7 @@ Le package est du **TOML en clair**. Deux schémas permettent aux secrets de la 
 
 | Schéma | Ce qui se passe à la construction / application |
 |---|---|
-| **Secrets chiffrés** — `password = "ENC:base64=="` | Le texte chiffré se retrouve verbatim dans le package. La **cible doit porter la même `[crypto] master_key`** (ou variable d'environnement `LIBERTY_MASTER_KEY`) que la source — faute de quoi le déchiffrement échouera à la première utilisation. |
+| **Secrets chiffrés** — `password = "ENC:base64=="` | Le texte chiffré se retrouve verbatim dans le package. La **cible doit avoir la même clé maître** (`LIBERTY_MASTER_KEY`) (ou variable d'environnement `LIBERTY_MASTER_KEY`) que la source — faute de quoi le déchiffrement échouera à la première utilisation. |
 | **Références à des variables d'environnement** — `password = "${DB_PASSWORD}"` | La chaîne littérale `${DB_PASSWORD}` est dans le package. L'opérateur doit définir la variable **sur la cible** avant de recharger. `MANIFEST.md` liste chaque `${VAR}` référencée par le package. |
 
 Il convient de choisir un schéma par installation — mélanger les deux dans une même configuration prête à confusion. Les secrets chiffrés voyagent mieux entre déploiements conteneurisés ; les variables d'environnement voyagent mieux entre orchestrateurs (Kubernetes Secrets, Docker `--env-file`, `EnvironmentFile` systemd).
@@ -219,7 +219,7 @@ Il convient de choisir un schéma par installation — mélanger les deux dans u
 | À éviter | Pourquoi |
 |---|---|
 | Déplacer `auth.toml` entre installations via l'écran Package. | L'écran ignore `auth.toml`. Déplacer les utilisateurs via l'administration dédiée *Users* (ou les inviter sur chaque installation). |
-| Déplacer `app.toml` via l'écran Package. | L'écran l'ignore — écraserait les identifiants des pools connecteurs, les chemins frontend, la licence. |
+| Attendre d'un package qu'il transporte Paramètres → App. | Il ne le fait pas — réglages de l'application, licence et connexion restent propres à chaque installation. |
 | Livrer un package en `replace_all` à un client qui a des modifications locales sans prévenir. | Les écrans / requêtes / entrées de dictionnaire du client sont supprimés. Il n'existe aucune annulation automatique — conserver d'abord une sauvegarde de l'arborescence de configuration de la cible. |
 
 ---

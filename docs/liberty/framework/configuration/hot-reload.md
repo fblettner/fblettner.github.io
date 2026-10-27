@@ -20,7 +20,7 @@ Requests in progress finish with the configuration they started with; the next o
 
 ## The file watcher \{#watcher\}
 
-With `[app] hot_reload = true` — the value of the shipped `app.toml` — the server watches its configuration files and reloads the part concerned a moment after a file changes (a save from Settings, an edit on the server, a `git pull`):
+With **Hot reload** on in **Settings → App** — the default — the server watches its configuration files and reloads the part concerned a moment after a file changes (a save from Settings, an edit on the server, a `git pull`):
 
 | File | Reloaded |
 |---|---|
@@ -50,7 +50,7 @@ Saving Settings → App applies the licence, the AI assistant, OpenID Connect, t
 
 | Change | How |
 |---|---|
-| `host`, `port`, `log_level`, `oracle_thick` in `app.toml` | `./liberty restart` or `liberty-ops restart`. |
+| Address, port, log level and Oracle thick mode in **Settings → App** | `./liberty restart` or `liberty-ops restart`. |
 | An environment variable (`.env`, the service's environment file) | A restart — `./liberty restart` recreates nothing; for a changed `.env`, `./liberty start`. |
 | A plugin's Python code | A restart: modules are imported once. |
 | A new release | `./liberty upgrade` — see [Upgrade and rollback](../../installation/upgrading.md). |

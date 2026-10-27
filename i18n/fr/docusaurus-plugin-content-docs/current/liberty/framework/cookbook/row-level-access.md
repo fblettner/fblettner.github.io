@@ -17,7 +17,7 @@ Deux besoins reviennent sans cesse :
 
 L'objectif : les titulaires du rôle *subsidiary* ne voient que les lignes de leurs propres sociétés, sur chaque écran, export et tableau de bord, tandis que le rôle *group* voit tout.
 
-1. **Donner ses sociétés à chaque utilisateur.** Dans **Paramètres → Access → Users**, ouvrir l'utilisateur et ajouter un attribut de périmètre de données : clé `company`, valeur `00001, 00050`. (Avec OpenID Connect, l'attribut peut venir d'un claim — voir [Se connecter](../build/secure/sign-in.md#attribute-claims).)
+1. **Donner ses sociétés à chaque utilisateur.** Dans **Paramètres → Access → Users**, ouvrir l'utilisateur et ajouter un attribut de périmètre de données : clé `company`, valeur `00001, 00050`.
 2. **Créer le rôle.** Dans **Paramètres → Access → Roles**, ajouter *subsidiary* et lui accorder ses menus dans l'onglet **Access**.
 3. **Ajouter la règle.** Dans l'onglet **Data scope** : **Dictionary item** `CO — Company`, **From the user's attribute** `company`, et pour *A query without this item* : **returns nothing** — un écran qui ne porte pas la société n'affiche rien plutôt que tout.
 4. **Laisser *group* sans règle** : il voit toutes les lignes.

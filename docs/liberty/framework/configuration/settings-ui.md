@@ -34,7 +34,7 @@ keywords: [Liberty Next, Settings UI, editors, connectors, dictionary, actions, 
 | **Pools** | Database connections: address, credentials, size, schema and DB-link maps. | [Connectors](../connectors.md) |
 | **Theme** | Colours and branding. | — |
 | **Access** | Users and roles. | [Users](../build/secure/users.md), [Roles and permissions](../build/secure/roles-and-permissions.md) |
-| **App** | `app.toml`: application settings, licence, AI assistant, notifications (e-mail), OpenID Connect, PDF branding. | [App settings](../build/settings-app.md) |
+| **App** | Application settings, licence, AI assistant, notifications (e-mail), OpenID Connect, PDF branding. | [App settings](../build/settings-app.md) |
 | **History** | Versions of each configuration file and of each screen, upgrade history and reports. | [Config history](./config-history.md) |
 | **Release notes** | The release notes of the running version. | — |
 
@@ -47,7 +47,7 @@ keywords: [Liberty Next, Settings UI, editors, connectors, dictionary, actions, 
 
 1. **Save** sends the edited configuration; the server validates it against its model and refuses an invalid one with the reason.
 2. The file is written. A version of the previous content is kept in **History**.
-3. The change is applied: at once when the server watches its files (`[app] hot_reload = true`, the setting shipped in `app.toml`), or with **Reload config** otherwise. A reload rebuilds the connectors from the new files; if they fail, the previous configuration stays active.
+3. The change is applied: at once when the server watches its files (**Hot reload** on in Settings → App, the default), or with **Reload config** otherwise. A reload rebuilds the connectors from the new files; if they fail, the previous configuration stays active.
 
 The pools are not reloaded by the file watcher, so that a running query never loses its connection: after changing a pool, use **Reload config**. Settings → **App** applies its own changes at once, except the address, port and log level, which need a restart.
 

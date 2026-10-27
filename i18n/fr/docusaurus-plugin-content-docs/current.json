@@ -264,7 +264,7 @@
     "description": "The label for category 'Configuration' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Configuration.link.generated-index.description": {
-    "message": "Interface des paramètres, app.toml, variables d'environnement, rechargement à chaud et secrets chiffrés.",
+    "message": "Interface des paramètres, variables d'environnement, rechargement à chaud et secrets chiffrés.",
     "description": "The generated-index page description for category 'Configuration' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Build an application": {

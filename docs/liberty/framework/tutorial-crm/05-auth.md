@@ -69,7 +69,7 @@ Bob signs out and in again: Customers and Deals show the French customers only �
 
 To let users sign in with their company account (Entra ID, Keycloak, Okta…), fill **Settings → App → OpenID Connect (SSO)** with the values of the application registered at the provider. A **Sign in with OIDC** button appears on the sign-in page; new users arrive without roles, an administrator gives them `crm-viewer` or `crm-sales`.
 
-The attribute `country` can come from the directory with `attribute_claims` — the data scope then follows the directory. Full recipe: [OIDC sign-in](../cookbook/oidc-sso.md).
+Full recipe: [OIDC sign-in](../cookbook/oidc-sso.md).
 
 ---
 

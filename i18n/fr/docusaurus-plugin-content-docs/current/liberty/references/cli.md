@@ -10,7 +10,7 @@ L'essentiel de l'administration se fait dans **Paramètres**. Les outils en lign
 
 | Outil | Rôle |
 |---|---|
-| `liberty-next` | Démarre le serveur. Adresse et port viennent de `[app]` dans `app.toml`. |
+| `liberty-next` | Démarre le serveur. Adresse et port viennent de **Paramètres → App**. |
 | [`liberty-admin`](#liberty-admin) | Initialisation de la base, utilisateurs, rôles et périmètre de données, tâches d'installation, migrations de schéma. |
 | `./liberty` et `liberty-ops` | Exploitation d'une installation Docker ou Python — voir [Exploitation](../installation/operations.md). |
 | [`liberty-connectors`](#liberty-connectors) | Liste les connecteurs et lance une requête ou un endpoint. |
@@ -113,7 +113,7 @@ Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l
 | `liberty-crypto decrypt [ENC:…]` | Affiche la valeur en clair. |
 | `liberty-crypto is-encrypted [VALEUR]` | Indique si la valeur commence par `ENC:`. |
 
-La clé vient de `[crypto] master_key` dans `app.toml` (normalement `${LIBERTY_MASTER_KEY}`) ; `--master-key` et `--config` la remplacent.
+La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplacent.
 
 ---
 

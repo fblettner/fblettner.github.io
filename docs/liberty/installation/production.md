@@ -45,7 +45,6 @@ The shipped layouts are already hardened; this page lists what they do for you a
 ## Logs \{#logs\}
 
 - Every response carries an `X-Request-ID` header, and every log line written for that request carries the same id: give it when reporting a problem.
-- For a log collector, `log_format = "json"` in the `[app]` section of `app.toml` writes one JSON object per line.
 - The container log is rotated by Docker for PostgreSQL (3 × 100 MB). For the other containers, set a rotation in the Docker daemon (`/etc/docker/daemon.json`).
 
 ---

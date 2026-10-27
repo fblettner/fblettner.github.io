@@ -1,7 +1,7 @@
 ---
 title: Project layout
 description: "File map of the two repositories — liberty-next (framework binary) and liberty-apps (per-installation configuration). What lives where, what is committed, what is per-installation, and how LIBERTY_APPS_DIR routes the framework to the apps repo."
-keywords: [Liberty Framework, project layout, liberty-next, liberty-apps, file structure, LIBERTY_APPS_DIR, config, TOML, plugins, auth.toml, app.toml]
+keywords: [Liberty Framework, project layout, liberty-next, liberty-apps, file structure, LIBERTY_APPS_DIR, config, TOML, plugins, auth.toml]
 ---
 
 # Project layout
@@ -61,7 +61,7 @@ liberty-next/
 │       └── api/              ← REST client
 │
 ├── config/                   ← bundled templates + per-installation files
-│   ├── app.toml              ← framework settings (auth, OIDC, AI, crypto, license)
+│   ├── app.toml              ← application settings — edited in Settings → App
 │   ├── auth.toml             ← local users — created by init-db, gitignored
 │   ├── *.toml.example        ← templates for connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← real per-section files (only when LIBERTY_APPS_DIR is unset)
@@ -73,7 +73,7 @@ liberty-next/
 | File | Status | Edited by |
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Committed | Framework maintainers — *don't* edit per-installation. |
-| `config/app.toml` | Per-installation | Operator — auth backend, OIDC issuer, AI key reference, license file path. |
+| `config/app.toml` | Per-installation | Settings → App. |
 | `config/auth.toml` | Per-installation, gitignored | `liberty-admin` CLI / the Settings UI. |
 | `config/*.toml.example` | Committed | Framework maintainers — bundled templates. |
 | `config/*.toml` (without `.example`) | Per-installation, gitignored | Editable from the Settings UI when `LIBERTY_APPS_DIR` is unset. |
@@ -163,5 +163,4 @@ The full env-var contract is documented under [Configuration → Environment var
 ## What's next
 
 - [Configuration → Settings UI](../configuration/settings-ui.md) — the in-browser editor for everything under `liberty-apps/config/`.
-- [Configuration → app.toml reference](../configuration/app-toml.md) — every key documented.
 - [Apps & Plugins → Apps](../apps/overview.md) — how to organise multiple apps inside `liberty-apps`.

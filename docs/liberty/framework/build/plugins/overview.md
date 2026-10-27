@@ -59,7 +59,7 @@ Plugins live in the **apps repo**, alongside (not inside) the framework. The exp
 
 | Element | Notes |
 |---|---|
-| `LIBERTY_APPS_DIR` | Env var (or `[app] apps_dir` in `app.toml`) — points at the `config/` folder. |
+| `LIBERTY_APPS_DIR` | Env var — points at the `config/` folder. |
 | `plugins/` | The sibling folder. **Inferred** by the framework as `<LIBERTY_APPS_DIR>/../plugins/`. |
 | `plugins/<name>/` | One Python package per plugin. Must have `__init__.py` (empty is fine) to be importable. |
 | `plugins/<name>/<module>.py` | The actual code. Referenced from `python` step callables as `<name>.<module>:<function>`. |

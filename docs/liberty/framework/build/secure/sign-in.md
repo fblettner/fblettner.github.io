@@ -1,7 +1,7 @@
 ---
 title: Sign-in — local and OIDC
-description: "Pick the identity backend (TOML or DB), configure local users, optionally enable OIDC against any compliant provider (Keycloak, Azure AD, Auth0, Okta…). What the user sees at sign-in."
-keywords: [Liberty Framework, sign-in, login, authentication, OIDC, Keycloak, Azure AD, Auth0, Okta, local users, auth.toml]
+description: "Local users, optional OIDC sign-in against any compliant provider (Keycloak, Azure AD, Auth0, Okta…). What the user sees at sign-in."
+keywords: [Liberty Framework, sign-in, login, authentication, OIDC, Keycloak, Azure AD, Auth0, Okta, local users]
 ---
 
 # Sign-in — local and OIDC
@@ -10,7 +10,7 @@ A user signs into Liberty through one of two paths:
 
 | Path | When |
 |---|---|
-| **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against `auth.toml` (or the `ly2_users` table) and mints a JWT. |
+| **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against the stored users and mints a JWT. |
 | **OIDC** | The user clicks *Sign in with OIDC*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
 
 Both can coexist — a single install offers both buttons on the sign-in screen, and users pick whichever applies.
@@ -49,21 +49,9 @@ When OIDC is configured, a second button appears below the local form. When OIDC
 
 ---
 
-## Step 1 — Pick the identity backend
+## Step 1 — Local users
 
-In `app.toml`:
-
-```toml
-[auth]
-backend = "toml"   # or "db"
-```
-
-| Value | Stores users in | When |
-|---|---|---|
-| **`toml`** (default) | `config/auth.toml` | Single-instance installs, small teams. Edits land atomically on disk. |
-| **`db`** | The framework's pool (tables `ly2_users`, `ly2_roles`, `ly2_user_roles`). | Multi-instance installs that need a shared user catalogue. |
-
-Both backends are managed through the **same UI** — *Settings → Access*. The backend is a deployment choice; the UI doesn't care.
+Local users and roles are managed in **Settings → Access**. The installation chooses where they are stored (the server's configuration folder, or the framework's database for several instances sharing one user list); the screens are the same either way.
 
 ### Bootstrap the first user
 
@@ -79,7 +67,7 @@ The command creates the `admin` superuser and prints a random password once (`--
 
 ## Step 2 — Configure OIDC (optional) \{#oidc\}
 
-OIDC is layered on top of the chosen backend. Any OIDC-compliant provider works — Liberty discovers endpoints, JWKS and supported scopes from the provider's `.well-known/openid-configuration`.
+OIDC is layered on top of the local users. Any OIDC-compliant provider works — Liberty discovers endpoints, JWKS and supported scopes from the provider's `.well-known/openid-configuration`.
 
 | Provider | Discovery URL pattern |
 |---|---|
@@ -91,44 +79,21 @@ OIDC is layered on top of the chosen backend. Any OIDC-compliant provider works 
 
 ### Configuration
 
-The canonical place to configure OIDC is **Settings → App → OpenID Connect (SSO)** — every field below has a matching UI control. The client secret is encrypted with the install master key when saved (`ENC:` prefix in `app.toml`); the field is a masked input with a show / hide eye. Saving rebuilds the OIDC handler in-place — **no restart** needed; the next sign-in attempt uses the new config. See [App settings → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) for the editor walkthrough.
-
-The resulting `app.toml` after a UI save:
-
-```toml
-[oidc]
-enabled         = true
-discovery_url   = "https://keycloak.corp.local/realms/liberty/.well-known/openid-configuration"
-client_id       = "liberty-app"
-client_secret   = "ENC:Mq6vNg…2z=="          # AES-256-GCM, decrypted at startup
-scopes          = "openid email profile"
-username_claim  = "preferred_username"
-email_claim     = "email"
-name_claim      = "name"
-redirect_url    = ""                          # blank = auto-derived as https://<host>/auth/oidc/callback
-frontend_redirect = ""                        # blank = standard server-side flow
-attribute_claims  = { company = "company", pole = "department" }   # optional, app.toml only
-```
-
-For installs that prefer secret-manager storage, write `client_secret = "${OIDC_CLIENT_SECRET}"` in `app.toml`: the variable is resolved at startup. The Settings form then shows the `${…}` reference as it is.
+OIDC is set in **Settings → App → OpenID Connect (SSO)**. The client secret is encrypted when saved, in a masked input with an eye to show it. Saving applies the change at once — **no restart**; the next sign-in uses it.
 
 | Field | Required | Notes |
 |---|---|---|
-| `enabled` | yes | Turn OIDC on / off. When off, the OIDC button hides from the sign-in screen. |
-| `discovery_url` | yes | The provider's `.well-known` URL. Liberty fetches once on rebuild, caches the result. |
-| `client_id` | yes | The OAuth2 client id registered with the provider. |
-| `client_secret` | yes | Set in *Settings → App → OpenID Connect (SSO)*; encrypted when saved. A `${VARIABLE}` reference also works. |
-| `scopes` | yes | At minimum `openid`; add `email` / `profile` to pull those claims. |
-| `username_claim` | no (defaults to `preferred_username`) | Which claim becomes the Liberty username. Falls back to `email`, then `sub` if missing. |
-| `email_claim` | no | Which claim becomes the user's email. |
-| `name_claim` | no | Which claim becomes the user's full name. |
-| `redirect_url` | no | Override only when the framework is behind a reverse proxy that rewrites the host. |
-| `frontend_redirect` | no | Set for SPA-style flows that handle tokens in the URL fragment. Standard server-side flow leaves it blank. |
-| `attribute_claims` | no | Fills the users' [data-scope attributes](./users.md#attributes) from ID token claims — see below. Set in `app.toml`; the Settings form does not show it. |
+| **Enabled** | yes | Shows or hides the **Sign in with OIDC** button. |
+| **Discovery URL** | yes | The provider's `.well-known/openid-configuration` URL. |
+| **Client ID** | yes | The client id registered at the provider. |
+| **Client secret** | yes | Encrypted when saved. |
+| **Scopes** | yes | At least `openid`; `email` and `profile` bring those claims (`openid email profile` by default). |
+| **Username claim** | no | The claim that becomes the Liberty user name (`preferred_username` by default; then `email`, then `sub` when absent). |
+| **Email claim**, **Name claim** | no | The claims that fill the e-mail address and the full name. |
+| **Redirect URL override (proxy)** | no | Only behind a reverse proxy that rewrites the host. |
+| **Frontend redirect** | no | Only for a front end that handles the tokens itself. |
 
-### Attributes from the provider \{#attribute-claims\}
-
-`attribute_claims = { company = "company", pole = "department" }` maps a user attribute to a claim of the ID token. At every OIDC sign-in, a mapped claim sets its attribute, a mapped claim that is absent removes it, and attributes that are not mapped (set by hand in **Settings → Access → Users**) are kept. A role whose data scope reads `#USER.company#` then follows the directory.
+See [App settings → OpenID Connect](../settings-app.md#section-4--openid-connect-sso).
 
 ### Register the redirect URL with the provider
 
@@ -144,7 +109,7 @@ Add it to the OAuth2 client's *Redirect URIs* in the provider's console. Without
 
 ## Step 3 — What happens on OIDC sign-in
 
-1. User clicks **Sign in with \<provider>** on the sign-in screen.
+1. User clicks **Sign in with OIDC** on the sign-in screen.
 2. Liberty redirects to the provider's authorization endpoint (`/auth/oidc/login`).
 3. User signs in at the provider — including MFA, password resets, all the IdP's own flows.
 4. The provider redirects back to `https://<host>/auth/oidc/callback?code=…&state=…`.
@@ -152,7 +117,6 @@ Add it to the OAuth2 client's *Redirect URIs* in the provider's console. Without
 6. Liberty **provisions** or **updates** the local user:
    - First sign-in: a new user row is created with `provider = "oidc"`, `provider_subject = <sub>`, `username = <username_claim>`, `email`, `full_name` from claims. `is_active = true`, **no roles**.
    - Subsequent sign-ins: the email + full name fields are refreshed from the latest claims; roles stay as configured in Liberty.
-   - Every sign-in: the attributes mapped by `attribute_claims` are refreshed.
 7. Liberty mints its own JWT pair (access + refresh) and the user is signed in.
 
 The provider's tokens are **not propagated** — Liberty issues fresh tokens with its own signing key. The provider's session ends; Liberty's begins.
@@ -182,18 +146,7 @@ When sign-in succeeds (local or OIDC), Liberty mints two tokens:
 | **Access token** | 1 hour | The user's `username`, roles, permissions, attributes and resolved data scope. Sent on every API call as `Authorization: Bearer <token>`. |
 | **Refresh token** | 14 days | Used at `POST /auth/refresh` to mint a new access token without re-typing credentials. |
 
-Lifetimes are configurable:
-
-```toml
-[auth]
-access_token_ttl    = 3600      # seconds, default 1 h
-refresh_token_ttl   = 1209600   # seconds, default 14 days
-refresh_reuse_grace = 60        # seconds a used refresh token is still accepted
-```
-
-Short access TTLs (e.g. 15 minutes) make permission changes propagate faster but increase the refresh load. The default 1-hour balance fits most installs.
-
-**Refresh tokens are single-use.** Each `POST /auth/refresh` returns a new refresh token and consumes the one presented. The same token presented again more than `refresh_reuse_grace` seconds later (two browser tabs racing) is refused. An API client must store the refresh token of every reply. The renewal also reads the user again: a deactivated user is refused, and changed roles, attributes and data scope apply from that moment.
+**Refresh tokens are single-use.** Each `POST /auth/refresh` returns a new refresh token and consumes the one presented. The same token presented again more than 60 seconds later (two browser tabs racing) is refused. An API client must store the refresh token of every reply. The renewal also reads the user again: a deactivated user is refused, and changed roles, attributes and data scope apply from that moment.
 
 ### Silent refresh
 
@@ -209,13 +162,7 @@ The two paths are complementary. The proactive timer covers the common case wher
 
 ## Too many failed sign-ins \{#throttle\}
 
-After `login_max_failures` failed sign-ins for one username within `login_window_seconds` (10 in 5 minutes by default), `/auth/login` answers *429 — Too many failed logins — try again in N s* until the window has passed. From one client address the limit is five times higher. A successful sign-in clears the count for that user.
-
-```toml
-[auth]
-login_max_failures   = 10     # 0 turns the throttle off
-login_window_seconds = 300
-```
+After 10 failed sign-ins for one username within 5 minutes, `/auth/login` answers *429 — Too many failed logins — try again in N s* until the window has passed. From one client address the limit is five times higher. A successful sign-in clears the count for that user.
 
 The counts are kept in the server's memory: a restart clears them.
 
@@ -233,12 +180,11 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Inlined `client_secret` in `app.toml`. | The secret leaks into version control. | Use `${OIDC_CLIENT_SECRET}` and set the env var. |
-| `redirect_url` doesn't match what's registered with the provider. | Sign-in returns `redirect_uri_mismatch`. | Register the exact URL Liberty sends — including the scheme and port. |
-| `discovery_url` returns 404 or HTML. | Sign-in fails at startup with a config error. | Verify the URL — most providers add `/.well-known/openid-configuration` to a base URL; Liberty needs the full path. |
-| `username_claim` not present in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
+| The redirect URL registered at the provider differs from Liberty's. | Sign-in returns `redirect_uri_mismatch`. | Register the exact URL Liberty sends — including the scheme and port. |
+| The **Discovery URL** returns 404 or HTML. | Sign-in fails at startup with a config error. | Verify the URL — most providers add `/.well-known/openid-configuration` to a base URL; Liberty needs the full path. |
+| The **Username claim** is not in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
 | OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Settings → Access → Users*. |
-| Forgot to enable OIDC after configuring it. | The OIDC button doesn't show. | `enabled = true`. |
+| OIDC configured but not enabled. | The OIDC button doesn't show. | Tick **Enabled**. |
 
 ---
 

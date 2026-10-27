@@ -66,7 +66,7 @@ It checks:
 | `./liberty restart` | Restarts `liberty-next` only. |
 | `./liberty logs` / `logs -f` | The last 200 lines of the server log / follow it. |
 
-Every log line written while a request is handled carries that request's id, which is also returned in the `X-Request-ID` response header: quote it to find the matching lines. For a log collector, `log_format = "json"` in the `[app]` section of `app.toml` writes one JSON object per line.
+Every log line written while a request is handled carries that request's id, which is also returned in the `X-Request-ID` response header: quote it to find the matching lines.toml` writes one JSON object per line.
 
 ---
 

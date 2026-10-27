@@ -59,7 +59,7 @@ Les plugins résident dans le **dépôt des applications**, à côté (et non à
 
 | Élément | Notes |
 |---|---|
-| `LIBERTY_APPS_DIR` | Variable d'environnement (ou `[app] apps_dir` dans `app.toml`) — pointe sur le dossier `config/`. |
+| `LIBERTY_APPS_DIR` | Variable d'environnement — pointe sur le dossier `config/`. |
 | `plugins/` | Le dossier frère. **Inféré** par le framework comme `<LIBERTY_APPS_DIR>/../plugins/`. |
 | `plugins/<name>/` | Un package Python par plugin. Doit contenir `__init__.py` (vide convient) pour être importable. |
 | `plugins/<name>/<module>.py` | Le code réel. Référencé depuis les callables des étapes `python` sous la forme `<name>.<module>:<function>`. |

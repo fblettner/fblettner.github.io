@@ -1,7 +1,7 @@
 ---
 title: OIDC sign-in
 description: "Recipe — let users sign in with the company's identity provider (Microsoft Entra ID, Keycloak, Okta, Auth0…): register the application at the provider, fill Settings → App → OpenID Connect (SSO), then give the new users their roles."
-keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, sign-in, attribute_claims]
+keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, sign-in]
 ---
 
 # OIDC sign-in
@@ -43,17 +43,6 @@ Save: the change applies without a restart. See [App settings → OpenID Connect
 ### 3. First sign-in and roles
 
 Users appear in **Settings → Access → Users** at their first sign-in, active and **without roles**: they see an empty application until a role is given to them. The usual onboarding: the person signs in once, an administrator assigns the roles. See [Users](../build/secure/users.md).
-
-### 4. Attributes from the directory (optional)
-
-To filter rows by company or department from the directory, map user attributes to ID-token claims with `attribute_claims` in `app.toml`:
-
-```toml
-[oidc]
-attribute_claims = { company = "company", pole = "department" }
-```
-
-At every sign-in, the mapped attributes are refreshed from the token; a role's [data scope](../build/secure/roles-and-permissions.md#data-scope) using `#USER.company#` then follows the directory. See [Sign-in → Attributes from the provider](../build/secure/sign-in.md#attribute-claims).
 
 ## Check
 

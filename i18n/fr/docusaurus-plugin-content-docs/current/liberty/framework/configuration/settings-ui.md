@@ -34,7 +34,7 @@ keywords: [Liberty Next, Paramètres, éditeurs, connecteurs, dictionnaire, acti
 | **Pools** | Les connexions aux bases : adresse, identifiants, taille, correspondances de schémas et de DB links. | [Connecteurs](../connectors.md) |
 | **Thème** | Couleurs et habillage. | — |
 | **Access** | Utilisateurs et rôles. | [Utilisateurs](../build/secure/users.md), [Rôles et permissions](../build/secure/roles-and-permissions.md) |
-| **App** | `app.toml` : réglages de l'application, licence, assistant IA, notifications (e-mail), OpenID Connect, habillage PDF. | [Paramètres de l'application](../build/settings-app.md) |
+| **App** | Réglages de l'application, licence, assistant IA, notifications (e-mail), OpenID Connect, habillage PDF. | [Paramètres de l'application](../build/settings-app.md) |
 | **History** | Les versions de chaque fichier de configuration et de chaque écran, l'historique et les rapports de mise à jour. | [Historique de la configuration](./config-history.md) |
 | **Release notes** | Les notes de version de la version en service. | — |
 
@@ -46,7 +46,7 @@ keywords: [Liberty Next, Paramètres, éditeurs, connecteurs, dictionnaire, acti
 
 1. **Enregistrer** envoie la configuration modifiée ; le serveur la valide avec son modèle et refuse une configuration invalide en donnant la raison.
 2. Le fichier est écrit. Une version du contenu précédent est conservée dans **History**.
-3. La modification s'applique : aussitôt quand le serveur surveille ses fichiers (`[app] hot_reload = true`, la valeur du `app.toml` livré), sinon par **Recharger la config**. Un rechargement reconstruit les connecteurs à partir des nouveaux fichiers ; en cas d'échec, la configuration précédente reste active.
+3. La modification s'applique : aussitôt quand le serveur surveille ses fichiers (**Hot reload** activé dans Paramètres → App, la valeur par défaut), sinon par **Recharger la config**. Un rechargement reconstruit les connecteurs à partir des nouveaux fichiers ; en cas d'échec, la configuration précédente reste active.
 
 La surveillance des fichiers ne recharge pas les pools, pour qu'une requête en cours ne perde jamais sa connexion : après la modification d'un pool, utiliser **Recharger la config**. Paramètres → **App** applique ses propres changements aussitôt, sauf l'adresse, le port et le niveau de journal, qui demandent un redémarrage.
 

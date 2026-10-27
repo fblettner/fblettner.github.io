@@ -66,7 +66,7 @@ Variables d'environnement :
 
 | Variable | Rôle |
 |---|---|
-| `LIBERTY_DB_URL` | Pool du framework (porte les tables d'authentification quand `[auth] backend = "db"`). Par défaut : un fichier SQLite local. |
+| `LIBERTY_DB_URL` | La base de données propre au framework. Par défaut : un fichier SQLite local. |
 | `LIBERTY_JWT_SECRET` | Clé de signature des jetons — éphémère si absente. |
 | `LIBERTY_MASTER_KEY` | Clé maîtresse de chiffrement utilisée pour déchiffrer les valeurs `ENC:` dans la configuration. |
 | `LIBERTY_LICENSE_KEY` | JWT signé RS256 qui déverrouille les connecteurs sous licence (Nomasx-1 / Nomajde). |
@@ -1997,7 +1997,7 @@ liberty-next/
 │       └── api/              ← client REST
 │
 ├── config/                   ← modèles fournis + fichiers spécifiques à l'installation
-│   ├── app.toml              ← paramètres du framework (auth, OIDC, IA, crypto, licence)
+│   ├── app.toml              ← réglages de l'application — modifiés dans Paramètres → App
 │   ├── auth.toml             ← utilisateurs locaux — créé par init-db, ignoré par git
 │   ├── *.toml.example        ← modèles pour connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← fichiers réels par section (uniquement quand LIBERTY_APPS_DIR n'est pas défini)
@@ -2009,7 +2009,7 @@ liberty-next/
 | Fichier | Statut | Édité par |
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Versionné | Mainteneurs du framework — *ne pas* modifier par installation. |
-| `config/app.toml` | Spécifique à l'installation | Opérateur — backend d'auth, issuer OIDC, référence de clé IA, chemin du fichier de licence. |
+| `config/app.toml` | Spécifique à l'installation | Paramètres → App. |
 | `config/auth.toml` | Spécifique à l'installation, ignoré par git | CLI `liberty-admin` / Paramètres. |
 | `config/*.toml.example` | Versionné | Mainteneurs du framework — modèles fournis. |
 | `config/*.toml` (sans `.example`) | Spécifique à l'installation, ignoré par git | Modifiable depuis les Paramètres quand `LIBERTY_APPS_DIR` n'est pas défini. |
@@ -2099,7 +2099,6 @@ Le contrat complet des variables d'environnement est documenté dans [Configurat
 ## Pour aller plus loin
 
 - [Configuration → Interface des paramètres](../configuration/settings-ui.md) — les éditeurs de tout ce qui se trouve sous `liberty-apps/config/`.
-- [Configuration → Référence `app.toml`](../configuration/app-toml.md) — chaque clé documentée.
 - [Apps et Plugins → Apps](../apps/overview.md) — comment organiser plusieurs apps dans `liberty-apps`.
 
 ---
@@ -2570,7 +2569,7 @@ Bob se déconnecte puis se reconnecte : Clients et Affaires n'affichent plus que
 
 Pour que les utilisateurs se connectent avec leur compte d'entreprise (Entra ID, Keycloak, Okta…), renseigner **Paramètres → App → OpenID Connect (SSO)** avec les valeurs de l'application déclarée chez le fournisseur. Un bouton **Se connecter avec OIDC** apparaît sur la page de connexion ; les nouveaux utilisateurs arrivent sans rôle, et un administrateur leur attribue `crm-viewer` ou `crm-sales`.
 
-L'attribut `country` peut venir de l'annuaire grâce à `attribute_claims` — le périmètre de données suit alors l'annuaire. Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
+Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
 
 ---
 
@@ -2728,7 +2727,7 @@ La page Paramètres de Liberty Next : un éditeur par fichier de configuration, 
 | **Pools** | Les connexions aux bases : adresse, identifiants, taille, correspondances de schémas et de DB links. | [Connecteurs](../connectors.md) |
 | **Thème** | Couleurs et habillage. | — |
 | **Access** | Utilisateurs et rôles. | [Utilisateurs](../build/secure/users.md), [Rôles et permissions](../build/secure/roles-and-permissions.md) |
-| **App** | `app.toml` : réglages de l'application, licence, assistant IA, notifications (e-mail), OpenID Connect, habillage PDF. | [Paramètres de l'application](../build/settings-app.md) |
+| **App** | Réglages de l'application, licence, assistant IA, notifications (e-mail), OpenID Connect, habillage PDF. | [Paramètres de l'application](../build/settings-app.md) |
 | **History** | Les versions de chaque fichier de configuration et de chaque écran, l'historique et les rapports de mise à jour. | [Historique de la configuration](./config-history.md) |
 | **Release notes** | Les notes de version de la version en service. | — |
 
@@ -2740,7 +2739,7 @@ La page Paramètres de Liberty Next : un éditeur par fichier de configuration, 
 
 1. **Enregistrer** envoie la configuration modifiée ; le serveur la valide avec son modèle et refuse une configuration invalide en donnant la raison.
 2. Le fichier est écrit. Une version du contenu précédent est conservée dans **History**.
-3. La modification s'applique : aussitôt quand le serveur surveille ses fichiers (`[app] hot_reload = true`, la valeur du `app.toml` livré), sinon par **Recharger la config**. Un rechargement reconstruit les connecteurs à partir des nouveaux fichiers ; en cas d'échec, la configuration précédente reste active.
+3. La modification s'applique : aussitôt quand le serveur surveille ses fichiers (**Hot reload** activé dans Paramètres → App, la valeur par défaut), sinon par **Recharger la config**. Un rechargement reconstruit les connecteurs à partir des nouveaux fichiers ; en cas d'échec, la configuration précédente reste active.
 
 La surveillance des fichiers ne recharge pas les pools, pour qu'une requête en cours ne perde jamais sa connexion : après la modification d'un pool, utiliser **Recharger la config**. Paramètres → **App** applique ses propres changements aussitôt, sauf l'adresse, le port et le niveau de journal, qui demandent un redémarrage.
 
@@ -2765,111 +2764,6 @@ Les fichiers sont réécrits à partir du modèle enregistré : les commentaires
 
 ---
 
-## Liberty Next — app.toml
-Source: https://docs.nomana-it.fr/fr/liberty/framework/configuration/app-toml/
-
-Référence d'app.toml, les réglages de l'application Liberty Next — [app], [auth], [oidc], [crypto], [license], [ai], [notify], [jobs], [changesets], [reports] et les chemins de fichiers — avec les valeurs par défaut et ceux que Paramètres → App modifie.
-
-`app.toml` contient les réglages de l'application. La plupart se modifient dans **Paramètres → App** ([Paramètres de l'application](../build/settings-app.md)), qui chiffre les secrets et applique les changements aussitôt ; cette page liste chaque clé, pour lire le fichier ou le préparer au déploiement.
-
-Le fichier est `config/app.toml` sous le répertoire de travail du serveur (ou le chemin de `LIBERTY_APP_CONFIG`). Toute valeur peut s'écrire `${VARIABLE}` ou `${VARIABLE:-défaut}` pour la lire dans l'environnement, et les secrets enregistrés depuis les Paramètres s'écrivent `ENC:…` — voir [Variables d'environnement](./environment-variables.md) et [Chiffrement](./encryption-secrets.md).
-
----
-
-## [app] \{#app\}
-
-| Clé | Défaut | Signification |
-|---|---|---|
-| `name` | `Liberty Next` | Le nom de l'application. |
-| `host`, `port` | `0.0.0.0`, `8000` | Adresse d'écoute. Redémarrage nécessaire. |
-| `log_level` | `info` | `debug`, `info`, `warning`, `error`, `critical`. Redémarrage nécessaire. |
-| `log_format` | `text` | `json` écrit un objet JSON par ligne. Fichier uniquement. |
-| `hot_reload` | `false` (`true` dans le fichier livré) | Appliquer les fichiers de configuration dès qu'ils changent. |
-| `default_language` | `en` | Langue des libellés quand une requête n'en indique pas. |
-| `oracle_thick` | `false` | Mode thick d'Oracle pour tous les pools Oracle — voir [Connecteurs](../connectors.md#oracle-thick). Redémarrage nécessaire. |
-| `default_period` | `thisMonth` | La période d'ouverture d'un tableau de bord qui n'en indique pas. |
-| `default_page_size` | `50` | La taille de page initiale des grilles. |
-| `dashboard_cache_seconds` | `60` | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord ; `0` le désactive. |
-
----
-
-## [auth] \{#auth\}
-
-| Clé | Défaut | Signification |
-|---|---|---|
-| `backend` | `toml` | `toml` : utilisateurs et rôles dans `toml_path` (`config/auth.toml`). `db` : dans les tables `ly2_users`, `ly2_roles`, `ly2_user_roles` de `pool`. |
-| `jwt_secret` | `${LIBERTY_JWT_SECRET}` | Signe les sessions. Vide : une clé temporaire, perdue au redémarrage. |
-| `access_token_ttl`, `refresh_token_ttl` | `3600`, `1209600` | Durées de vie des jetons en secondes (1 heure, 14 jours). |
-| `refresh_reuse_grace` | `60` | Secondes pendant lesquelles un jeton de rafraîchissement déjà utilisé reste accepté. |
-| `login_max_failures`, `login_window_seconds` | `10`, `300` | Limitation des connexions ; `0` la désactive. |
-
-Voir [Se connecter](../build/secure/sign-in.md).
-
----
-
-## [oidc] \{#oidc\}
-
-`enabled`, `discovery_url`, `client_id`, `client_secret`, `scopes` (`openid email profile`), `username_claim` (`preferred_username`), `email_claim`, `name_claim`, `attribute_claims`, `redirect_url`, `frontend_redirect`, `session_secret` (le secret JWT par défaut). Voir [Se connecter → OIDC](../build/secure/sign-in.md#oidc).
-
----
-
-## [crypto] et [license] \{#crypto\}
-
-| Clé | Défaut | Signification |
-|---|---|---|
-| `[crypto] master_key` | `${LIBERTY_MASTER_KEY}` | Chiffre et déchiffre chaque valeur `ENC:`. |
-| `[license] key` | `${LIBERTY_LICENSE_KEY}` | La clé de licence, en principe collée dans Paramètres → App. |
-
----
-
-## [ai] \{#ai\}
-
-| Clé | Défaut | Signification |
-|---|---|---|
-| `enabled` | `true` | L'assistant. |
-| `api_key` | `${ANTHROPIC_API_KEY}` | Vide : l'assistant indique qu'il n'est pas configuré. |
-| `model`, `max_tokens` | — , `8192` | Le modèle et la longueur des réponses. |
-| `max_iterations` | `8` | Nombre maximal d'appels d'outils par réponse. |
-| `system_prompt`, `thinking`, `effort` | intégré, `false`, — | Consignes et options de raisonnement. |
-| `request_timeout` | `120` | Secondes. |
-| `connector_tools` | `true` | L'assistant peut lister les connecteurs et lancer leurs requêtes de lecture. |
-| `api_tool` | `false` | L'assistant peut appeler des endpoints d'API. |
-| `scaffold_tools` | `false` | L'assistant peut proposer de la configuration (requêtes, écrans). |
-| `allowed_connectors` | `[]` (tous) | Les connecteurs utilisables par l'assistant. |
-| `web_fetch_domains`, `web_fetch_max_uses` | `[]`, `5` | Les pages web que l'assistant peut lire. |
-
-Voir [Assistant IA](../ai-assistant.md).
-
----
-
-## [notify] \{#notify\}
-
-`enabled` (`true`), `pool` (`default`), `config_path` (`notifications.toml`), `smtp_host`, `smtp_port` (`587`), `smtp_user`, `smtp_password`, `smtp_from`, `smtp_tls` (`true`, STARTTLS), `smtp_ssl` (`false`, TLS implicite), `smtp_timeout` (`20`), `retention_days` (`90`). Voir [Notifications](../../nomaflow/notifications.md).
-
----
-
-## [jobs] \{#jobs\}
-
-`enabled` (`true`), `pool` (`default`), `config_path`, `run_log_max_lines` (`5000`), `files_dir`, `max_upload_mb` (`200`). Voir [Nomaflow → Administration](../../nomaflow/administration.md#settings).
-
----
-
-## [changesets] et [reports] \{#changesets\}
-
-| Clé | Signification |
-|---|---|
-| `[changesets] enabled`, `pool` | Les paquets de modifications et le pool de leurs tables. |
-| `[changesets] post_apply` | La bibliothèque des étapes de post-application (`id`, `type` = `call_plugin` / `call_api` / `run_query`, `connector`, `target`, `params`, `label`). Voir [Paquets de modifications](../../nomaflow/change-packages.md). |
-| `[reports] …` | Le fichier des rapports personnalisés et l'habillage PDF (auteur, couleurs, textes de couverture, pied de page) — l'habillage se modifie dans Paramètres → App. |
-
----
-
-## Chemins des fichiers \{#paths\}
-
-`[connectors]`, `[menus]`, `[screens]`, `[charts]`, `[actions]`, `[dashboards]`, `[explorer]`, `[theme]` acceptent chacun un `config_path`. Les laisser vides : ils suivent `LIBERTY_APPS_DIR`, ou `config/` — voir [Architecture](../../installation/architecture.md#configuration).
-
----
-
 ## Liberty Next — Variables d'environnement
 Source: https://docs.nomana-it.fr/fr/liberty/framework/configuration/environment-variables/
 
@@ -2884,9 +2778,6 @@ L'environnement porte ce qui ne doit pas être écrit dans les fichiers de confi
 Toute valeur de tout fichier de configuration peut s'écrire `${NOM}` ou `${NOM:-défaut}` : elle est remplacée par la variable d'environnement au chargement du fichier (par la valeur par défaut quand la variable est absente ou vide).
 
 ```toml
-[auth]
-jwt_secret = "${LIBERTY_JWT_SECRET}"
-
 [pools.reporting]
 url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
 password = "${REPORTING_PASSWORD}"
@@ -2900,12 +2791,12 @@ Les Paramètres affichent une telle référence telle qu'elle est écrite. Pour 
 
 | Variable | Usage |
 |---|---|
-| `LIBERTY_MASTER_KEY` | La clé de chaque valeur `ENC:` (via `[crypto] master_key = "${LIBERTY_MASTER_KEY}"`). Ne jamais la changer sur une installation existante. |
-| `LIBERTY_JWT_SECRET` | Signe les sessions (via `[auth] jwt_secret`). Au moins 32 caractères. |
+| `LIBERTY_MASTER_KEY` | La clé de chaque valeur `ENC:`. Ne jamais la changer sur une installation existante. |
+| `LIBERTY_JWT_SECRET` | Signe les sessions. Au moins 32 caractères. |
 | `LIBERTY_LICENSE_KEY` | La clé de licence, quand elle n'est pas collée dans Paramètres → App. |
 | `ANTHROPIC_API_KEY` | La clé de l'assistant IA, quand elle n'est pas saisie dans Paramètres → App. |
 | `LIBERTY_APPS_DIR` | Le dossier des fichiers de configuration (connecteurs, écrans, menus…) ; les plugins sont dans `../plugins`. Voir [Architecture](../../installation/architecture.md#configuration). |
-| `LIBERTY_APP_CONFIG` | Un autre `app.toml` que `config/app.toml`. |
+| `LIBERTY_APP_CONFIG` | Le chemin du fichier des réglages de l'application, quand ce n'est pas `config/app.toml`. |
 | `LIBERTY_ORACLE_CLIENT_LIB` | Le dossier de l'Oracle Instant Client pour le mode thick (défini dans l'image Docker). |
 
 ---
@@ -2976,7 +2867,7 @@ Les requêtes en cours se terminent avec la configuration de leur démarrage ; l
 
 ## La surveillance des fichiers \{#watcher\}
 
-Avec `[app] hot_reload = true` — la valeur du `app.toml` livré — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
+Avec **Hot reload** activé dans **Paramètres → App** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
 
 | Fichier | Rechargé |
 |---|---|
@@ -3006,7 +2897,7 @@ Enregistrer Paramètres → App applique aussitôt la licence, l'assistant IA, O
 
 | Modification | Comment |
 |---|---|
-| `host`, `port`, `log_level`, `oracle_thick` dans `app.toml` | `./liberty restart` ou `liberty-ops restart`. |
+| Adresse, port, niveau de journal et mode thick Oracle dans **Paramètres → App** | `./liberty restart` ou `liberty-ops restart`. |
 | Une variable d'environnement (`.env`, fichier d'environnement du service) | Un redémarrage — `./liberty restart` ne recrée rien ; pour un `.env` modifié, `./liberty start`. |
 | Le code Python d'un plugin | Un redémarrage : les modules ne sont importés qu'une fois. |
 | Une nouvelle version | `./liberty upgrade` — voir [Mise à jour et retour arrière](../../installation/upgrading.md). |
@@ -3038,7 +2929,7 @@ Le champ est une saisie masquée avec un œil pour en afficher le contenu. Une n
 
 ## La clé maître \{#master-key\}
 
-`[crypto] master_key` dans `app.toml`, en principe `"${LIBERTY_MASTER_KEY}"`. La clé est une phrase secrète : la clé de chiffrement en est dérivée (PBKDF2), et chaque valeur est chiffrée en AES-256-GCM.
+La clé maître vient de la variable d'environnement `LIBERTY_MASTER_KEY`. La clé est une phrase secrète : la clé de chiffrement en est dérivée (PBKDF2), et chaque valeur est chiffrée en AES-256-GCM.
 
 - L'installation Docker la génère dans `release/.env` ; une installation Python la définit dans le fichier d'environnement du service.
 - En garder une copie hors du serveur : une sauvegarde est inutilisable sans elle.
@@ -6347,7 +6238,7 @@ Pour chaque requête, la langue est, dans l'ordre :
 
 1. l'en-tête `X-Liberty-Lang` — l'application web envoie la langue choisie dans son interface ;
 2. sinon la première langue de l'`Accept-Language` du navigateur, sans sa région (`fr-CA` → `fr`) ;
-3. sinon `[app] default_language`.
+3. sinon la langue par défaut de **Paramètres → App**.
 
 Quand `l` n'a pas d'entrée pour cette langue, `label` est utilisé. Écrire les codes en minuscules (`fr`, pas `FR`).
 
@@ -6448,13 +6339,13 @@ Les mots de passe des pools, les identifiants d'API, la clé de licence, la clé
 ## Liberty Next — Se connecter — local et OIDC
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/secure/sign-in/
 
-Choisir le backend d'identité (TOML ou DB), configurer les utilisateurs locaux, activer en option l'OIDC sur n'importe quel fournisseur conforme (Keycloak, Azure AD, Auth0, Okta…). Ce que voit l'utilisateur à la connexion.
+Utilisateurs locaux, connexion OIDC facultative sur n'importe quel fournisseur conforme (Keycloak, Azure AD, Auth0, Okta…). Ce que voit l'utilisateur à la connexion.
 
 Un utilisateur se connecte à Liberty par l'un de ces deux chemins :
 
 | Chemin | Quand |
 |---|---|
-| **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie face à `auth.toml` (ou à la table `ly2_users`) et émet un JWT. |
+| **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie auprès des utilisateurs enregistrés et émet un JWT. |
 | **OIDC** | L'utilisateur clique sur *Se connecter avec OIDC*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
 
 Les deux peuvent coexister — une seule installation propose les deux boutons sur l'écran de connexion, et chacun choisit celui qui s'applique.
@@ -6467,21 +6358,9 @@ Quand l'OIDC est configuré, un second bouton apparaît sous le formulaire local
 
 ---
 
-## Étape 1 — Choisir le backend d'identité
+## Étape 1 — Utilisateurs locaux
 
-Dans `app.toml` :
-
-```toml
-[auth]
-backend = "toml"   # ou "db"
-```
-
-| Valeur | Stocke les utilisateurs dans | Quand |
-|---|---|---|
-| **`toml`** (par défaut) | `config/auth.toml` | Installations mono-instance, petites équipes. Les modifications arrivent atomiquement sur disque. |
-| **`db`** | Le pool du framework (tables `ly2_users`, `ly2_roles`, `ly2_user_roles`). | Installations multi-instance qui ont besoin d'un catalogue d'utilisateurs partagé. |
-
-Les deux backends se gèrent via la **même interface** — *Paramètres → Accès*. Le backend est un choix de déploiement ; l'interface s'en moque.
+Les utilisateurs locaux et les rôles se gèrent dans **Paramètres → Accès**. L'installation détermine leur lieu de stockage (le dossier de configuration du serveur, ou la base du framework quand plusieurs instances partagent les mêmes utilisateurs) ; les écrans sont identiques dans les deux cas.
 
 ### Amorcer le premier utilisateur
 
@@ -6497,7 +6376,7 @@ La commande crée le superutilisateur `admin` et affiche une seule fois un mot d
 
 ## Étape 2 — Configurer l'OIDC (optionnel) \{#oidc\}
 
-L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC fonctionne — Liberty découvre les endpoints, les JWKS et les scopes pris en charge depuis le `.well-known/openid-configuration` du fournisseur.
+L'OIDC se superpose aux utilisateurs locaux. N'importe quel fournisseur conforme OIDC fonctionne — Liberty découvre les endpoints, les JWKS et les scopes pris en charge depuis le `.well-known/openid-configuration` du fournisseur.
 
 | Fournisseur | Motif d'URL de découverte |
 |---|---|
@@ -6509,44 +6388,21 @@ L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC 
 
 ### Configuration
 
-L'emplacement canonique pour configurer l'OIDC est **Paramètres → App → OpenID Connect (SSO)** — chaque champ ci-dessous dispose d'un contrôle d'interface correspondant. Le client secret est chiffré avec la clé maître de l'installation à l'enregistrement (préfixe `ENC:` dans `app.toml`) ; le champ est une saisie masquée avec un œil pour l'afficher. L'enregistrement reconstruit le gestionnaire OIDC en place — **aucun redémarrage** requis ; la prochaine tentative de connexion utilise la nouvelle configuration. Voir [Paramètres App → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) pour la visite guidée de l'éditeur.
+L'OIDC se règle dans **Paramètres → App → OpenID Connect (SSO)**. Le secret client est chiffré à l'enregistrement, dans une saisie masquée avec un œil pour l'afficher. L'enregistrement s'applique aussitôt — **sans redémarrage** ; la connexion suivante en tient compte.
 
-L'`app.toml` résultant après un enregistrement depuis l'interface :
-
-```toml
-[oidc]
-enabled         = true
-discovery_url   = "https://keycloak.corp.local/realms/liberty/.well-known/openid-configuration"
-client_id       = "liberty-app"
-client_secret   = "ENC:Mq6vNg…2z=="          # AES-256-GCM, déchiffré au démarrage
-scopes          = "openid email profile"
-username_claim  = "preferred_username"
-email_claim     = "email"
-name_claim      = "name"
-redirect_url    = ""                          # vide = auto-déduit https://<host>/auth/oidc/callback
-frontend_redirect = ""                        # vide = flux standard côté serveur
-attribute_claims  = { company = "company", pole = "department" }   # facultatif, app.toml seulement
-```
-
-Pour les installations qui préfèrent un gestionnaire de secrets, écrire `client_secret = "${OIDC_CLIENT_SECRET}"` dans `app.toml` : la variable est résolue au démarrage. Le formulaire des Paramètres affiche alors la référence `${…}` telle quelle.
-
-| Champ | Requis | Notes |
+| Champ | Requis | Remarques |
 |---|---|---|
-| `enabled` | oui | Active / désactive l'OIDC. Désactivé, le bouton OIDC disparaît de l'écran de connexion. |
-| `discovery_url` | oui | L'URL `.well-known` du fournisseur. Liberty la récupère une fois au démarrage et met le résultat en cache. |
-| `client_id` | oui | L'identifiant client OAuth2 enregistré auprès du fournisseur. |
-| `client_secret` | oui | Renseigné dans *Paramètres → App → OpenID Connect (SSO)* ; chiffré à l'enregistrement. Une référence `${VARIABLE}` est aussi acceptée. |
-| `scopes` | oui | Au minimum `openid` ; ajouter `email` / `profile` pour récupérer ces claims. |
-| `username_claim` | non (défaut `preferred_username`) | Quel claim devient le nom d'utilisateur Liberty. Repli sur `email`, puis sur `sub` en cas d'absence. |
-| `email_claim` | non | Quel claim devient l'adresse de courriel. |
-| `name_claim` | non | Quel claim devient le nom complet. |
-| `redirect_url` | non | À renseigner uniquement si le framework est derrière un reverse proxy qui réécrit l'hôte. |
-| `frontend_redirect` | non | À définir pour les flux SPA qui gèrent les jetons dans le fragment d'URL. Le flux standard côté serveur le laisse vide. |
-| `attribute_claims` | non | Renseigne les [attributs de périmètre de données](./users.md#attributes) des utilisateurs à partir des claims de l'ID token — voir ci-dessous. Se définit dans `app.toml` ; le formulaire des Paramètres ne l'affiche pas. |
+| **Enabled** | oui | Affiche ou masque le bouton **Se connecter avec OIDC**. |
+| **Discovery URL** | oui | L'URL `.well-known/openid-configuration` du fournisseur. |
+| **Client ID** | oui | L'identifiant client déclaré chez le fournisseur. |
+| **Client secret** | oui | Chiffré à l'enregistrement. |
+| **Scopes** | oui | Au moins `openid` ; `email` et `profile` apportent ces claims (`openid email profile` par défaut). |
+| **Username claim** | non | Le claim qui devient le nom d'utilisateur Liberty (`preferred_username` par défaut ; puis `email`, puis `sub` s'il manque). |
+| **Email claim**, **Name claim** | non | Les claims qui renseignent l'adresse e-mail et le nom complet. |
+| **Redirect URL override (proxy)** | non | Uniquement derrière un proxy inverse qui réécrit l'hôte. |
+| **Frontend redirect** | non | Uniquement pour une interface qui gère elle-même les jetons. |
 
-### Attributs fournis par le fournisseur d'identité \{#attribute-claims\}
-
-`attribute_claims = { company = "company", pole = "department" }` associe un attribut de l'utilisateur à un claim de l'ID token. À chaque connexion OIDC, un claim associé et présent renseigne son attribut, un claim associé mais absent le supprime, et les attributs non associés (saisis à la main dans **Paramètres → Access → Users**) sont conservés. Un rôle dont le périmètre de données lit `#USER.company#` suit alors l'annuaire.
+Voir [Paramètres de l'application → OpenID Connect](../settings-app.md#section-4--openid-connect-sso).
 
 ### Enregistrer l'URL de redirection auprès du fournisseur
 
@@ -6562,7 +6418,7 @@ L'ajouter dans les *Redirect URIs* du client OAuth2 dans la console du fournisse
 
 ## Étape 3 — Ce qui se passe à la connexion OIDC
 
-1. L'utilisateur clique sur **Se connecter avec \** sur l'écran de connexion.
+1. L'utilisateur clique sur **Se connecter avec OIDC** sur l'écran de connexion.
 2. Liberty redirige vers le endpoint d'autorisation du fournisseur (`/auth/oidc/login`).
 3. L'utilisateur se connecte chez le fournisseur — MFA, réinitialisation de mot de passe, tous les flux propres à l'IdP compris.
 4. Le fournisseur renvoie sur `https://<host>/auth/oidc/callback?code=…&state=…`.
@@ -6570,7 +6426,6 @@ L'ajouter dans les *Redirect URIs* du client OAuth2 dans la console du fournisse
 6. Liberty **provisionne** ou **met à jour** l'utilisateur local :
    - Première connexion : une nouvelle ligne utilisateur est créée avec `provider = "oidc"`, `provider_subject = <sub>`, `username = <username_claim>`, `email`, `full_name` issus des claims. `is_active = true`, **aucun rôle**.
    - Connexions suivantes : les champs courriel + nom complet sont rafraîchis depuis les derniers claims ; les rôles restent tels que configurés dans Liberty.
-   - À chaque connexion : les attributs associés par `attribute_claims` sont rafraîchis.
 7. Liberty émet sa propre paire JWT (accès + rafraîchissement) et l'utilisateur est connecté.
 
 Les jetons du fournisseur **ne sont pas propagés** — Liberty émet de nouveaux jetons avec sa propre clé de signature. La session du fournisseur se termine ; celle de Liberty commence.
@@ -6600,18 +6455,7 @@ Voir [Utilisateurs](./users.md) pour l'interface d'attribution.
 | **Jeton d'accès** | 1 heure | Le `username`, les rôles, les permissions, les attributs et le périmètre de données calculé. Envoyé à chaque appel API en `Authorization: Bearer <token>`. |
 | **Jeton de rafraîchissement** | 14 jours | Sert à `POST /auth/refresh` pour émettre un nouveau jeton d'accès sans ressaisir les identifiants. |
 
-Les durées de vie se configurent :
-
-```toml
-[auth]
-access_token_ttl    = 3600      # secondes, défaut 1 h
-refresh_token_ttl   = 1209600   # secondes, défaut 14 jours
-refresh_reuse_grace = 60        # secondes pendant lesquelles un jeton de rafraîchissement déjà utilisé reste accepté
-```
-
-Des TTL d'accès courts (par exemple 15 minutes) propagent plus vite les changements de permissions mais augmentent la charge de rafraîchissement. L'équilibre par défaut d'1 heure convient à la plupart des installations.
-
-**Les jetons de rafraîchissement sont à usage unique.** Chaque `POST /auth/refresh` renvoie un nouveau jeton de rafraîchissement et consomme celui présenté. Le même jeton présenté de nouveau plus de `refresh_reuse_grace` secondes après (deux onglets en concurrence) est refusé. Un client d'API doit conserver le jeton de rafraîchissement de chaque réponse. Le renouvellement relit aussi l'utilisateur : un utilisateur désactivé est refusé, et les changements de rôles, d'attributs et de périmètre s'appliquent dès ce moment.
+**Les jetons de rafraîchissement sont à usage unique.** Chaque `POST /auth/refresh` renvoie un nouveau jeton de rafraîchissement et consomme celui présenté. Le même jeton présenté de nouveau plus de 60 secondes après (deux onglets en concurrence) est refusé. Un client d'API doit conserver le jeton de rafraîchissement de chaque réponse. Le renouvellement relit aussi l'utilisateur : un utilisateur désactivé est refusé, et les changements de rôles, d'attributs et de périmètre s'appliquent dès ce moment.
 
 ### Rafraîchissement silencieux
 
@@ -6627,13 +6471,7 @@ Les deux mécanismes se complètent. Le minuteur proactif couvre le cas courant 
 
 ## Trop d'échecs de connexion \{#throttle\}
 
-Après `login_max_failures` échecs de connexion pour un même nom d'utilisateur en `login_window_seconds` (10 en 5 minutes par défaut), `/auth/login` répond *429 — Too many failed logins — try again in N s* jusqu'à la fin de la fenêtre. Depuis une même adresse cliente, la limite est cinq fois plus haute. Une connexion réussie remet le compteur de cet utilisateur à zéro.
-
-```toml
-[auth]
-login_max_failures   = 10     # 0 désactive la limitation
-login_window_seconds = 300
-```
+Après 10 échecs de connexion pour un même nom d'utilisateur en 5 minutes, `/auth/login` répond *429 — Too many failed logins — try again in N s* jusqu'à la fin de la fenêtre. Depuis une même adresse cliente, la limite est cinq fois plus haute. Une connexion réussie remet le compteur de cet utilisateur à zéro.
 
 Les compteurs sont tenus en mémoire par le serveur : un redémarrage les remet à zéro.
 
@@ -6651,12 +6489,11 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| `client_secret` en clair dans `app.toml`. | Le secret fuit dans le contrôle de version. | Utiliser `${OIDC_CLIENT_SECRET}` et définir la variable d'environnement. |
-| `redirect_url` ne correspond pas à ce qui est enregistré chez le fournisseur. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
-| `discovery_url` renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
-| `username_claim` absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
+| L'URL de redirection déclarée chez le fournisseur diffère de celle de Liberty. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
+| La **Discovery URL** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
+| Le **Username claim** est absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
 | Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Paramètres → Accès → Utilisateurs*. |
-| Oubli d'activer l'OIDC après l'avoir configuré. | Le bouton OIDC n'apparaît pas. | `enabled = true`. |
+| OIDC configuré mais non activé. | Le bouton OIDC n'apparaît pas. | Cocher **Enabled**. |
 
 ---
 
@@ -6889,10 +6726,8 @@ Les changements n'interrompent pas la session courante. Les nouveaux rôles / le
 Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle peut prendre ses valeurs chez l'utilisateur au lieu de les lister : une règle *Company (CO) = user.company* permet à un seul rôle de servir toutes les filiales, chaque utilisateur voyant ses propres sociétés.
 
 Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle. Le formulaire est en anglais.
-
+ En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
-
-Pour les utilisateurs OIDC, les attributs peuvent venir du fournisseur d'identité à chaque connexion — voir [Se connecter](./sign-in.md#attribute-claims). En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 
@@ -6955,7 +6790,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 ### Révoquer un compte immédiatement
 
 1. Basculer **Actif** sur off et enregistrer.
-2. Si le délai pouvant aller jusqu'à 1 heure avant l'expiration du jeton d'accès courant est inacceptable, faire tourner le secret de signature JWT (`[auth] jwt_secret` dans `app.toml` ou variable d'environnement `LIBERTY_JWT_SECRET`) et redémarrer. Chaque jeton existant est invalidé — un coup de marteau lourd, mais la seule révocation **immédiate** offerte par Liberty.
+2. Si le délai pouvant aller jusqu'à 1 heure avant l'expiration du jeton d'accès courant est inacceptable, faire tourner le secret de signature JWT (`LIBERTY_JWT_SECRET`) et redémarrer. Chaque jeton existant est invalidé — un coup de marteau lourd, mais la seule révocation **immédiate** offerte par Liberty.
 
 ---
 
@@ -7041,7 +6876,7 @@ Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mod
 
 Noter la date d'expiration à l'installation de la clé. Avant l'échéance, coller la nouvelle clé dans **Paramètres → App → License** et enregistrer : elle s'applique aussitôt.
 
-La clé peut aussi venir de l'environnement — `[license] key = "${LIBERTY_LICENSE_KEY}"` dans `app.toml` — pour les installations qui gardent leurs secrets dans un orchestrateur ; les Paramètres affichent alors la référence telle quelle.
+La clé peut aussi venir de la variable d'environnement `LIBERTY_LICENSE_KEY`, pour les installations qui gardent leurs secrets dans un orchestrateur ; les Paramètres affichent alors la référence telle quelle.
 
 ---
 
@@ -7103,7 +6938,7 @@ Les plugins résident dans le **dépôt des applications**, à côté (et non à
 
 | Élément | Notes |
 |---|---|
-| `LIBERTY_APPS_DIR` | Variable d'environnement (ou `[app] apps_dir` dans `app.toml`) — pointe sur le dossier `config/`. |
+| `LIBERTY_APPS_DIR` | Variable d'environnement — pointe sur le dossier `config/`. |
 | `plugins/` | Le dossier frère. **Inféré** par le framework comme `<LIBERTY_APPS_DIR>/../plugins/`. |
 | `plugins/<name>/` | Un package Python par plugin. Doit contenir `__init__.py` (vide convient) pour être importable. |
 | `plugins/<name>/<module>.py` | Le code réel. Référencé depuis les callables des étapes `python` sous la forme `<name>.<module>:<function>`. |
@@ -8124,7 +7959,7 @@ Le `POST /admin/reload` du framework (déclenché par chaque *Save* dans l'inter
 | Fichier | Rechargement automatique |
 |---|---|
 | `connectors.toml`, `dictionary.toml`, `screens.toml`, `menus.toml`, `dashboards.toml`, `charts.toml`, `jobs.toml` | Oui. |
-| `app.toml` | Partiel — la plupart des champs. Les changements de pool demandent un rechargement manuel depuis la page Pools. |
+| Paramètres → App | Partiel — la plupart des champs. Les changements de pool demandent un rechargement manuel depuis la page Pools. |
 | Code Python dans `plugins/` | **Non.** |
 
 Le code du plugin se trouve dans le cache d'imports Python. **Redémarrer le processus du framework** pour prendre en compte les changements de code.
@@ -8399,7 +8234,7 @@ Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer �
 
 | Non inclus | Où cela se trouve à la place |
 |---|---|
-| `app.toml` | Propre à chaque installation — porte les identifiants des pools, le backend d'authentification, la racine frontend. Jamais regroupé. |
+| Paramètres → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
 | `auth.toml` / utilisateurs stockés en base | Propre à chaque installation — porte les empreintes de mot de passe Argon2. Jamais regroupé. |
 | Plugins Python | Livrés avec le [wheel liberty-apps](../../installation/deploy-prebuilt-apps.md) ou le canal de release propre au plugin. |
 | Jobs Nomaflow | Le bouton *Export job* sur la fiche de chaque job produit un ZIP mono-job. L'export en masse de jobs n'est pas encore automatisé. Voir [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
@@ -8460,7 +8295,7 @@ Le package est du **TOML en clair**. Deux schémas permettent aux secrets de la 
 
 | Schéma | Ce qui se passe à la construction / application |
 |---|---|
-| **Secrets chiffrés** — `password = "ENC:base64=="` | Le texte chiffré se retrouve verbatim dans le package. La **cible doit porter la même `[crypto] master_key`** (ou variable d'environnement `LIBERTY_MASTER_KEY`) que la source — faute de quoi le déchiffrement échouera à la première utilisation. |
+| **Secrets chiffrés** — `password = "ENC:base64=="` | Le texte chiffré se retrouve verbatim dans le package. La **cible doit avoir la même clé maître** (`LIBERTY_MASTER_KEY`) (ou variable d'environnement `LIBERTY_MASTER_KEY`) que la source — faute de quoi le déchiffrement échouera à la première utilisation. |
 | **Références à des variables d'environnement** — `password = "${DB_PASSWORD}"` | La chaîne littérale `${DB_PASSWORD}` est dans le package. L'opérateur doit définir la variable **sur la cible** avant de recharger. `MANIFEST.md` liste chaque `${VAR}` référencée par le package. |
 
 Il convient de choisir un schéma par installation — mélanger les deux dans une même configuration prête à confusion. Les secrets chiffrés voyagent mieux entre déploiements conteneurisés ; les variables d'environnement voyagent mieux entre orchestrateurs (Kubernetes Secrets, Docker `--env-file`, `EnvironmentFile` systemd).
@@ -8470,7 +8305,7 @@ Il convient de choisir un schéma par installation — mélanger les deux dans u
 | À éviter | Pourquoi |
 |---|---|
 | Déplacer `auth.toml` entre installations via l'écran Package. | L'écran ignore `auth.toml`. Déplacer les utilisateurs via l'administration dédiée *Users* (ou les inviter sur chaque installation). |
-| Déplacer `app.toml` via l'écran Package. | L'écran l'ignore — écraserait les identifiants des pools connecteurs, les chemins frontend, la licence. |
+| Attendre d'un package qu'il transporte Paramètres → App. | Il ne le fait pas — réglages de l'application, licence et connexion restent propres à chaque installation. |
 | Livrer un package en `replace_all` à un client qui a des modifications locales sans prévenir. | Les écrans / requêtes / entrées de dictionnaire du client sont supprimés. Il n'existe aucune annulation automatique — conserver d'abord une sauvegarde de l'arborescence de configuration de la cible. |
 
 ---
@@ -8533,7 +8368,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/build/settings-app/
 
 Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, journaux, langue, valeurs par défaut de l'interface, rechargement à chaud, mode thick d'Oracle), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage.
 
-**Paramètres → App** modifie `app.toml`. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -8599,7 +8434,7 @@ Voir [Assistant IA](../ai-assistant.md).
 | **Username claim**, **Email claim**, **Name claim** | Les claims de l'ID token qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
 | **Redirect URL override (proxy)**, **Frontend redirect** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
 
-Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur. Les attributs de périmètre de données issus des claims (`attribute_claims`) se définissent dans `app.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
+Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
 
 ---
 
@@ -8615,7 +8450,6 @@ Les réglages de couverture et de page des rapports PDF : auteur, couleurs princ
 |---|---|
 | Pools et leurs mots de passe | Paramètres → Pools. |
 | Utilisateurs et rôles | Paramètres → Access. |
-| `log_format`, durées et limitation de `[auth]`, `[jobs]`, `[changesets]` | `app.toml` — voir [app.toml](../configuration/app-toml.md). |
 | La clé maître et le secret JWT | L'environnement — voir [Variables d'environnement](../configuration/environment-variables.md). |
 
 ---
@@ -10199,17 +10033,6 @@ Enregistrer : la modification s'applique sans redémarrage. Voir [Paramètres de
 
 Les utilisateurs apparaissent dans **Paramètres → Access → Users** à leur première connexion, actifs et **sans rôle** : l'application leur apparaît vide tant qu'aucun rôle ne leur est attribué. Usage courant : la personne se connecte une première fois, puis un administrateur lui attribue ses rôles. Voir [Utilisateurs](../build/secure/users.md).
 
-### 4. Attributs issus de l'annuaire (facultatif)
-
-Pour filtrer les lignes par société ou par service à partir de l'annuaire, associer des attributs utilisateur à des claims du jeton d'identité avec `attribute_claims`, dans `app.toml` :
-
-```toml
-[oidc]
-attribute_claims = { company = "company", pole = "department" }
-```
-
-À chaque connexion, les attributs associés sont mis à jour depuis le jeton ; le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) d'un rôle qui utilise `#USER.company#` suit alors l'annuaire. Voir [Se connecter → Attributs fournis par le fournisseur](../build/secure/sign-in.md#attribute-claims).
-
 ## Vérifications
 
 | Symptôme | Cause |
@@ -10340,7 +10163,7 @@ Deux besoins reviennent sans cesse :
 
 L'objectif : les titulaires du rôle *subsidiary* ne voient que les lignes de leurs propres sociétés, sur chaque écran, export et tableau de bord, tandis que le rôle *group* voit tout.
 
-1. **Donner ses sociétés à chaque utilisateur.** Dans **Paramètres → Access → Users**, ouvrir l'utilisateur et ajouter un attribut de périmètre de données : clé `company`, valeur `00001, 00050`. (Avec OpenID Connect, l'attribut peut venir d'un claim — voir [Se connecter](../build/secure/sign-in.md#attribute-claims).)
+1. **Donner ses sociétés à chaque utilisateur.** Dans **Paramètres → Access → Users**, ouvrir l'utilisateur et ajouter un attribut de périmètre de données : clé `company`, valeur `00001, 00050`.
 2. **Créer le rôle.** Dans **Paramètres → Access → Roles**, ajouter *subsidiary* et lui accorder ses menus dans l'onglet **Access**.
 3. **Ajouter la règle.** Dans l'onglet **Data scope** : **Dictionary item** `CO — Company`, **From the user's attribute** `company`, et pour *A query without this item* : **returns nothing** — un écran qui ne porte pas la société n'affiche rien plutôt que tout.
 4. **Laisser *group* sans règle** : il voit toutes les lignes.
@@ -10920,7 +10743,7 @@ liberty-ops status
 
 `liberty-ops` pilote l'unité nommée `liberty-next` ; définir `LIBERTY_SERVICE` si la vôtre porte un autre nom.
 
-Le serveur écoute sur `http://<hôte>:8000/` (`[app] port` dans `app.toml`). Se connecter en **`admin`**, puis coller la clé de licence dans **Paramètres → App → License**. Pour le HTTPS, placer devant un proxy inverse au choix, en relayant aussi le trafic WebSocket (`/socket.io`).
+Le serveur écoute sur `http://<hôte>:8000/` (le port de **Paramètres → App**). Se connecter en **`admin`**, puis coller la clé de licence dans **Paramètres → App → License**. Pour le HTTPS, placer devant un proxy inverse au choix, en relayant aussi le trafic WebSocket (`/socket.io`).
 
 ---
 
@@ -11437,7 +11260,7 @@ Elle contrôle :
 | `./liberty restart` | Redémarre uniquement `liberty-next`. |
 | `./liberty logs` / `logs -f` | Les 200 dernières lignes du journal du serveur / le suivre. |
 
-Chaque ligne de journal écrite pendant le traitement d'une requête porte l'identifiant de cette requête, également renvoyé dans l'en-tête de réponse `X-Request-ID` : le citer permet de retrouver les lignes correspondantes. Pour un collecteur de journaux, `log_format = "json"` dans la section `[app]` de `app.toml` écrit un objet JSON par ligne.
+Chaque ligne de journal écrite pendant le traitement d'une requête porte l'identifiant de cette requête, également renvoyé dans l'en-tête de réponse `X-Request-ID` : le citer permet de retrouver les lignes correspondantes.toml` écrit un objet JSON par ligne.
 
 ---
 
@@ -11690,7 +11513,6 @@ Les installations livrées sont déjà sécurisées ; cette page liste ce qu'ell
 ## Journaux \{#logs\}
 
 - Chaque réponse porte un en-tête `X-Request-ID`, et chaque ligne de journal écrite pour cette requête porte le même identifiant : le communiquer en signalant un problème.
-- Pour un collecteur de journaux, `log_format = "json"` dans la section `[app]` d'`app.toml` écrit un objet JSON par ligne.
 - Docker applique une rotation au journal du conteneur PostgreSQL (3 × 100 Mo). Pour les autres conteneurs, définir une rotation dans le démon Docker (`/etc/docker/daemon.json`).
 
 ---
@@ -11851,7 +11673,7 @@ Un appelant anonyme ne reçoit que les compteurs et les indicateurs. Un appelant
 ## Surveillance externe \{#external-monitoring\}
 
 - Interroger `/ready` chaque minute depuis l'outil de supervision et alerter après quelques échecs consécutifs.
-- Collecter le journal du serveur sur la sortie standard ; `log_format = "json"` dans `[app]` écrit un objet JSON par ligne, chacun avec l'identifiant de la requête.
+- Collecter le journal du serveur sur la sortie standard, chaque ligne portant l'identifiant de la requête.
 - Pour les tâches, préférer une règle de notification sur `failure` et `missed` — voir [Notifications](../nomaflow/notifications.md).
 
 ---
@@ -11865,7 +11687,7 @@ L'essentiel de l'administration se fait dans **Paramètres**. Les outils en lign
 
 | Outil | Rôle |
 |---|---|
-| `liberty-next` | Démarre le serveur. Adresse et port viennent de `[app]` dans `app.toml`. |
+| `liberty-next` | Démarre le serveur. Adresse et port viennent de **Paramètres → App**. |
 | [`liberty-admin`](#liberty-admin) | Initialisation de la base, utilisateurs, rôles et périmètre de données, tâches d'installation, migrations de schéma. |
 | `./liberty` et `liberty-ops` | Exploitation d'une installation Docker ou Python — voir [Exploitation](../installation/operations.md). |
 | [`liberty-connectors`](#liberty-connectors) | Liste les connecteurs et lance une requête ou un endpoint. |
@@ -11968,7 +11790,7 @@ Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l
 | `liberty-crypto decrypt [ENC:…]` | Affiche la valeur en clair. |
 | `liberty-crypto is-encrypted [VALEUR]` | Indique si la valeur commence par `ENC:`. |
 
-La clé vient de `[crypto] master_key` dans `app.toml` (normalement `${LIBERTY_MASTER_KEY}`) ; `--master-key` et `--config` la remplacent.
+La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplacent.
 
 ---
 

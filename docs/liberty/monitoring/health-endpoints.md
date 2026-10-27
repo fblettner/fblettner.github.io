@@ -56,5 +56,5 @@ Anonymous callers get the counts and flags only. A signed-in caller also gets th
 ## External monitoring \{#external-monitoring\}
 
 - Probe `/ready` every minute from the monitoring tool and alert after a few failures in a row.
-- Collect the server log from standard output; `log_format = "json"` in `[app]` writes one JSON object per line, each with the request id.
+- Collect the server log from standard output, each line carrying the request id.
 - For jobs, prefer a notification rule on `failure` and `missed` — see [Notifications](../nomaflow/notifications.md).

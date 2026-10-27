@@ -117,7 +117,7 @@ Variables d'environnement :
 
 | Variable | Rôle |
 |---|---|
-| `LIBERTY_DB_URL` | Pool du framework (porte les tables d'authentification quand `[auth] backend = "db"`). Par défaut : un fichier SQLite local. |
+| `LIBERTY_DB_URL` | La base de données propre au framework. Par défaut : un fichier SQLite local. |
 | `LIBERTY_JWT_SECRET` | Clé de signature des jetons — éphémère si absente. |
 | `LIBERTY_MASTER_KEY` | Clé maîtresse de chiffrement utilisée pour déchiffrer les valeurs `ENC:` dans la configuration. |
 | `LIBERTY_LICENSE_KEY` | JWT signé RS256 qui déverrouille les connecteurs sous licence (Nomasx-1 / Nomajde). |

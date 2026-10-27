@@ -30,7 +30,7 @@ Pour chaque requête, la langue est, dans l'ordre :
 
 1. l'en-tête `X-Liberty-Lang` — l'application web envoie la langue choisie dans son interface ;
 2. sinon la première langue de l'`Accept-Language` du navigateur, sans sa région (`fr-CA` → `fr`) ;
-3. sinon `[app] default_language`.
+3. sinon la langue par défaut de **Paramètres → App**.
 
 Quand `l` n'a pas d'entrée pour cette langue, `label` est utilisé. Écrire les codes en minuscules (`fr`, pas `FR`).
 

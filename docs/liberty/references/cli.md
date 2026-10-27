@@ -10,7 +10,7 @@ Most administration is done in **Settings**. The command-line tools cover what h
 
 | Tool | Purpose |
 |---|---|
-| `liberty-next` | Starts the server. Address and port come from `[app]` in `app.toml`. |
+| `liberty-next` | Starts the server. Address and port come from **Settings → App**. |
 | [`liberty-admin`](#liberty-admin) | Database bootstrap, users, roles and data scope, installation jobs, schema migrations. |
 | `./liberty` and `liberty-ops` | Operations on a Docker or a Python install — see [Operations](../installation/operations.md). |
 | [`liberty-connectors`](#liberty-connectors) | Lists the connectors and runs a query or an endpoint. |
@@ -113,7 +113,7 @@ Encrypts values for the configuration files with the install's master key. **Set
 | `liberty-crypto decrypt [ENC:…]` | Prints the clear value. |
 | `liberty-crypto is-encrypted [VALUE]` | Says whether the value starts with `ENC:`. |
 
-The key comes from `[crypto] master_key` in `app.toml` (normally `${LIBERTY_MASTER_KEY}`); `--master-key` and `--config` override it.
+The key comes from `LIBERTY_MASTER_KEY`; `--master-key` and `--config` override it.
 
 ---
 

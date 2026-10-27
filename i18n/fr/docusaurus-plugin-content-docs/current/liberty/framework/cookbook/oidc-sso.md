@@ -1,7 +1,7 @@
 ---
 title: Connexion OIDC
 description: "Recette — permettre aux utilisateurs de se connecter avec le fournisseur d'identité de l'entreprise (Microsoft Entra ID, Keycloak, Okta, Auth0…) : déclarer l'application chez le fournisseur, renseigner Paramètres → App → OpenID Connect (SSO), puis attribuer leurs rôles aux nouveaux utilisateurs."
-keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, connexion, attribute_claims]
+keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, connexion]
 ---
 
 # Connexion OIDC
@@ -43,17 +43,6 @@ Enregistrer : la modification s'applique sans redémarrage. Voir [Paramètres de
 ### 3. Première connexion et rôles
 
 Les utilisateurs apparaissent dans **Paramètres → Access → Users** à leur première connexion, actifs et **sans rôle** : l'application leur apparaît vide tant qu'aucun rôle ne leur est attribué. Usage courant : la personne se connecte une première fois, puis un administrateur lui attribue ses rôles. Voir [Utilisateurs](../build/secure/users.md).
-
-### 4. Attributs issus de l'annuaire (facultatif)
-
-Pour filtrer les lignes par société ou par service à partir de l'annuaire, associer des attributs utilisateur à des claims du jeton d'identité avec `attribute_claims`, dans `app.toml` :
-
-```toml
-[oidc]
-attribute_claims = { company = "company", pole = "department" }
-```
-
-À chaque connexion, les attributs associés sont mis à jour depuis le jeton ; le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) d'un rôle qui utilise `#USER.company#` suit alors l'annuaire. Voir [Se connecter → Attributs fournis par le fournisseur](../build/secure/sign-in.md#attribute-claims).
 
 ## Vérifications
 

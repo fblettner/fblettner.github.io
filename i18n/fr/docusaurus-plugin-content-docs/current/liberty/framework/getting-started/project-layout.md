@@ -1,7 +1,7 @@
 ---
 title: Structure du projet
 description: "Cartographie des fichiers des deux dépôts — liberty-next (binaire du framework) et liberty-apps (configuration spécifique à l'installation). Ce qui se trouve où, ce qui est versionné, ce qui est spécifique à l'installation, et comment LIBERTY_APPS_DIR aiguille le framework vers le dépôt apps."
-keywords: [Liberty Framework, structure du projet, liberty-next, liberty-apps, arborescence, LIBERTY_APPS_DIR, config, TOML, plugins, auth.toml, app.toml]
+keywords: [Liberty Framework, structure du projet, liberty-next, liberty-apps, arborescence, LIBERTY_APPS_DIR, config, TOML, plugins, auth.toml]
 ---
 
 # Structure du projet
@@ -61,7 +61,7 @@ liberty-next/
 │       └── api/              ← client REST
 │
 ├── config/                   ← modèles fournis + fichiers spécifiques à l'installation
-│   ├── app.toml              ← paramètres du framework (auth, OIDC, IA, crypto, licence)
+│   ├── app.toml              ← réglages de l'application — modifiés dans Paramètres → App
 │   ├── auth.toml             ← utilisateurs locaux — créé par init-db, ignoré par git
 │   ├── *.toml.example        ← modèles pour connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← fichiers réels par section (uniquement quand LIBERTY_APPS_DIR n'est pas défini)
@@ -73,7 +73,7 @@ liberty-next/
 | Fichier | Statut | Édité par |
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Versionné | Mainteneurs du framework — *ne pas* modifier par installation. |
-| `config/app.toml` | Spécifique à l'installation | Opérateur — backend d'auth, issuer OIDC, référence de clé IA, chemin du fichier de licence. |
+| `config/app.toml` | Spécifique à l'installation | Paramètres → App. |
 | `config/auth.toml` | Spécifique à l'installation, ignoré par git | CLI `liberty-admin` / Paramètres. |
 | `config/*.toml.example` | Versionné | Mainteneurs du framework — modèles fournis. |
 | `config/*.toml` (sans `.example`) | Spécifique à l'installation, ignoré par git | Modifiable depuis les Paramètres quand `LIBERTY_APPS_DIR` n'est pas défini. |
@@ -163,5 +163,4 @@ Le contrat complet des variables d'environnement est documenté dans [Configurat
 ## Pour aller plus loin
 
 - [Configuration → Interface des paramètres](../configuration/settings-ui.md) — les éditeurs de tout ce qui se trouve sous `liberty-apps/config/`.
-- [Configuration → Référence `app.toml`](../configuration/app-toml.md) — chaque clé documentée.
 - [Apps et Plugins → Apps](../apps/overview.md) — comment organiser plusieurs apps dans `liberty-apps`.

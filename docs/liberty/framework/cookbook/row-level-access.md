@@ -17,7 +17,7 @@ Two needs come up again and again:
 
 The goal: users of the *subsidiary* role see only the rows of their own companies, on every screen, export and dashboard, while the *group* role sees everything.
 
-1. **Give each user their companies.** In **Settings → Access → Users**, open the user and add a data-scope attribute: key `company`, value `00001, 00050`. (With OpenID Connect, the attribute can come from a claim — see [Sign-in](../build/secure/sign-in.md#attribute-claims).)
+1. **Give each user their companies.** In **Settings → Access → Users**, open the user and add a data-scope attribute: key `company`, value `00001, 00050`.
 2. **Create the role.** In **Settings → Access → Roles**, add *subsidiary*, grant its menus in the **Access** tab.
 3. **Add the rule.** In the **Data scope** tab: **Dictionary item** `CO — Company`, **From the user's attribute** `company`, and *A query without this item*: **returns nothing** — a screen that does not carry the company shows nothing rather than everything.
 4. **Leave *group* without any rule**: it sees every row.

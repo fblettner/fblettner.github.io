@@ -39,4 +39,4 @@ Without a key, or with an expired or invalid one, the server runs in **restricte
 
 Note the expiry date when the key is installed. Before it expires, paste the new key in **Settings → App → License** and save: it applies at once.
 
-The key can also come from the environment — `[license] key = "${LIBERTY_LICENSE_KEY}"` in `app.toml` — for installs that keep secrets in an orchestrator; Settings then shows the reference as it is.
+The key can also come from the environment variable `LIBERTY_LICENSE_KEY`, for installs that keep secrets in an orchestrator; Settings then shows the reference as it is.

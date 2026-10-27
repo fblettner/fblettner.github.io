@@ -150,6 +150,7 @@ const config: Config = {
           {from: '/liberty/technical/tools-deployment', to: '/liberty/installation/portainer'},
           {from: '/liberty/technical/linux-services', to: '/liberty/installation/python-server'},
           {from: '/liberty/technical/post-ssl', to: '/liberty/installation/traefik'},
+          {from: '/liberty/framework/configuration/app-toml', to: '/liberty/framework/build/settings-app'},
           {from: '/nomaubl/application/technical-report', to: '/nomaubl/application/reports/technical-report'},
           {from: '/nomaubl/application/implementation-report', to: '/nomaubl/application/reports/implementation-report'},
           {from: '/nomaubl/application/audit-report', to: '/nomaubl/application/reports/audit-report'},

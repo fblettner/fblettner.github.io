@@ -20,7 +20,7 @@ Les requêtes en cours se terminent avec la configuration de leur démarrage ; l
 
 ## La surveillance des fichiers \{#watcher\}
 
-Avec `[app] hot_reload = true` — la valeur du `app.toml` livré — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
+Avec **Hot reload** activé dans **Paramètres → App** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
 
 | Fichier | Rechargé |
 |---|---|
@@ -50,7 +50,7 @@ Enregistrer Paramètres → App applique aussitôt la licence, l'assistant IA, O
 
 | Modification | Comment |
 |---|---|
-| `host`, `port`, `log_level`, `oracle_thick` dans `app.toml` | `./liberty restart` ou `liberty-ops restart`. |
+| Adresse, port, niveau de journal et mode thick Oracle dans **Paramètres → App** | `./liberty restart` ou `liberty-ops restart`. |
 | Une variable d'environnement (`.env`, fichier d'environnement du service) | Un redémarrage — `./liberty restart` ne recrée rien ; pour un `.env` modifié, `./liberty start`. |
 | Le code Python d'un plugin | Un redémarrage : les modules ne sont importés qu'une fois. |
 | Une nouvelle version | `./liberty upgrade` — voir [Mise à jour et retour arrière](../../installation/upgrading.md). |

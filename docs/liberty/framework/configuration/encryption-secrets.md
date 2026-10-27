@@ -26,7 +26,7 @@ The field is a masked input with an eye to show its content. Saving a new value 
 
 ## The master key \{#master-key\}
 
-`[crypto] master_key` in `app.toml`, normally `"${LIBERTY_MASTER_KEY}"`. The key is a passphrase: the encryption key is derived from it (PBKDF2), and each value is encrypted with AES-256-GCM.
+The master key comes from the environment variable `LIBERTY_MASTER_KEY`. The key is a passphrase: the encryption key is derived from it (PBKDF2), and each value is encrypted with AES-256-GCM.
 
 - The Docker installation generates it in `release/.env`; a Python install sets it in the service's environment file.
 - Keep a copy outside the server: a backup cannot be used without it.

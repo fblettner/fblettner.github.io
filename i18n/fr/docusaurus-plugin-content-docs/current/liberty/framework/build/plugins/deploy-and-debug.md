@@ -129,7 +129,7 @@ Le `POST /admin/reload` du framework (déclenché par chaque *Save* dans l'inter
 | Fichier | Rechargement automatique |
 |---|---|
 | `connectors.toml`, `dictionary.toml`, `screens.toml`, `menus.toml`, `dashboards.toml`, `charts.toml`, `jobs.toml` | Oui. |
-| `app.toml` | Partiel — la plupart des champs. Les changements de pool demandent un rechargement manuel depuis la page Pools. |
+| Paramètres → App | Partiel — la plupart des champs. Les changements de pool demandent un rechargement manuel depuis la page Pools. |
 | Code Python dans `plugins/` | **Non.** |
 
 Le code du plugin se trouve dans le cache d'imports Python. **Redémarrer le processus du framework** pour prendre en compte les changements de code.

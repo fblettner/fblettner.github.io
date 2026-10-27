@@ -39,4 +39,4 @@ Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mod
 
 Noter la date d'expiration à l'installation de la clé. Avant l'échéance, coller la nouvelle clé dans **Paramètres → App → License** et enregistrer : elle s'applique aussitôt.
 
-La clé peut aussi venir de l'environnement — `[license] key = "${LIBERTY_LICENSE_KEY}"` dans `app.toml` — pour les installations qui gardent leurs secrets dans un orchestrateur ; les Paramètres affichent alors la référence telle quelle.
+La clé peut aussi venir de la variable d'environnement `LIBERTY_LICENSE_KEY`, pour les installations qui gardent leurs secrets dans un orchestrateur ; les Paramètres affichent alors la référence telle quelle.

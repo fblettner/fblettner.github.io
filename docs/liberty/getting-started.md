@@ -117,7 +117,7 @@ Environment knobs:
 
 | Variable | Purpose |
 |---|---|
-| `LIBERTY_DB_URL` | Framework pool (auth tables when `[auth] backend = "db"`). Defaults to a local SQLite file. |
+| `LIBERTY_DB_URL` | The framework's own database. Defaults to a local SQLite file. |
 | `LIBERTY_JWT_SECRET` | Token signing key — ephemeral when unset. |
 | `LIBERTY_MASTER_KEY` | Crypto master key used to decrypt `ENC:` values in configuration. |
 | `LIBERTY_LICENSE_KEY` | RS256-signed JWT that unlocks licensed connectors (nomasx1 / nomajde). |

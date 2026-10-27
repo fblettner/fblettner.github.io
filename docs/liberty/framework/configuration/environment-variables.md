@@ -15,9 +15,6 @@ The environment holds what must not be written in the configuration files — th
 Any value of any configuration file can be written `${NAME}` or `${NAME:-default}`: it is replaced by the environment variable when the file is loaded (the default when the variable is unset or empty).
 
 ```toml
-[auth]
-jwt_secret = "${LIBERTY_JWT_SECRET}"
-
 [pools.reporting]
 url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
 password = "${REPORTING_PASSWORD}"
@@ -31,12 +28,12 @@ Settings shows such a reference as it is written. For a secret field (a password
 
 | Variable | Use |
 |---|---|
-| `LIBERTY_MASTER_KEY` | The key of every `ENC:` value (through `[crypto] master_key = "${LIBERTY_MASTER_KEY}"`). Never change it on an existing install. |
-| `LIBERTY_JWT_SECRET` | Signs the sessions (through `[auth] jwt_secret`). At least 32 characters. |
+| `LIBERTY_MASTER_KEY` | The key of every `ENC:` value. Never change it on an existing install. |
+| `LIBERTY_JWT_SECRET` | Signs the sessions. At least 32 characters. |
 | `LIBERTY_LICENSE_KEY` | The licence key, when it is not pasted in Settings → App. |
 | `ANTHROPIC_API_KEY` | The AI assistant's key, when it is not entered in Settings → App. |
 | `LIBERTY_APPS_DIR` | The folder of the configuration files (connectors, screens, menus…); the plugins are in `../plugins`. See [Architecture](../../installation/architecture.md#configuration). |
-| `LIBERTY_APP_CONFIG` | Another `app.toml` than `config/app.toml`. |
+| `LIBERTY_APP_CONFIG` | The path of the application settings file, when it is not `config/app.toml`. |
 | `LIBERTY_ORACLE_CLIENT_LIB` | The Oracle Instant Client folder for the thick mode (set in the Docker image). |
 
 ---

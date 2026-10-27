@@ -26,7 +26,7 @@ Le champ est une saisie masquée avec un œil pour en afficher le contenu. Une n
 
 ## La clé maître \{#master-key\}
 
-`[crypto] master_key` dans `app.toml`, en principe `"${LIBERTY_MASTER_KEY}"`. La clé est une phrase secrète : la clé de chiffrement en est dérivée (PBKDF2), et chaque valeur est chiffrée en AES-256-GCM.
+La clé maître vient de la variable d'environnement `LIBERTY_MASTER_KEY`. La clé est une phrase secrète : la clé de chiffrement en est dérivée (PBKDF2), et chaque valeur est chiffrée en AES-256-GCM.
 
 - L'installation Docker la génère dans `release/.env` ; une installation Python la définit dans le fichier d'environnement du service.
 - En garder une copie hors du serveur : une sauvegarde est inutilisable sans elle.

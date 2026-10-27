@@ -15,9 +15,6 @@ L'environnement porte ce qui ne doit pas être écrit dans les fichiers de confi
 Toute valeur de tout fichier de configuration peut s'écrire `${NOM}` ou `${NOM:-défaut}` : elle est remplacée par la variable d'environnement au chargement du fichier (par la valeur par défaut quand la variable est absente ou vide).
 
 ```toml
-[auth]
-jwt_secret = "${LIBERTY_JWT_SECRET}"
-
 [pools.reporting]
 url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
 password = "${REPORTING_PASSWORD}"
@@ -31,12 +28,12 @@ Les Paramètres affichent une telle référence telle qu'elle est écrite. Pour 
 
 | Variable | Usage |
 |---|---|
-| `LIBERTY_MASTER_KEY` | La clé de chaque valeur `ENC:` (via `[crypto] master_key = "${LIBERTY_MASTER_KEY}"`). Ne jamais la changer sur une installation existante. |
-| `LIBERTY_JWT_SECRET` | Signe les sessions (via `[auth] jwt_secret`). Au moins 32 caractères. |
+| `LIBERTY_MASTER_KEY` | La clé de chaque valeur `ENC:`. Ne jamais la changer sur une installation existante. |
+| `LIBERTY_JWT_SECRET` | Signe les sessions. Au moins 32 caractères. |
 | `LIBERTY_LICENSE_KEY` | La clé de licence, quand elle n'est pas collée dans Paramètres → App. |
 | `ANTHROPIC_API_KEY` | La clé de l'assistant IA, quand elle n'est pas saisie dans Paramètres → App. |
 | `LIBERTY_APPS_DIR` | Le dossier des fichiers de configuration (connecteurs, écrans, menus…) ; les plugins sont dans `../plugins`. Voir [Architecture](../../installation/architecture.md#configuration). |
-| `LIBERTY_APP_CONFIG` | Un autre `app.toml` que `config/app.toml`. |
+| `LIBERTY_APP_CONFIG` | Le chemin du fichier des réglages de l'application, quand ce n'est pas `config/app.toml`. |
 | `LIBERTY_ORACLE_CLIENT_LIB` | Le dossier de l'Oracle Instant Client pour le mode thick (défini dans l'image Docker). |
 
 ---

@@ -1,7 +1,7 @@
 ---
 title: Se connecter — local et OIDC
-description: "Choisir le backend d'identité (TOML ou DB), configurer les utilisateurs locaux, activer en option l'OIDC sur n'importe quel fournisseur conforme (Keycloak, Azure AD, Auth0, Okta…). Ce que voit l'utilisateur à la connexion."
-keywords: [Liberty Framework, connexion, authentification, OIDC, Keycloak, Azure AD, Auth0, Okta, utilisateurs locaux, auth.toml]
+description: "Utilisateurs locaux, connexion OIDC facultative sur n'importe quel fournisseur conforme (Keycloak, Azure AD, Auth0, Okta…). Ce que voit l'utilisateur à la connexion."
+keywords: [Liberty Framework, connexion, authentification, OIDC, Keycloak, Azure AD, Auth0, Okta, utilisateurs locaux]
 ---
 
 # Se connecter — local et OIDC
@@ -10,7 +10,7 @@ Un utilisateur se connecte à Liberty par l'un de ces deux chemins :
 
 | Chemin | Quand |
 |---|---|
-| **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie face à `auth.toml` (ou à la table `ly2_users`) et émet un JWT. |
+| **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie auprès des utilisateurs enregistrés et émet un JWT. |
 | **OIDC** | L'utilisateur clique sur *Se connecter avec OIDC*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
 
 Les deux peuvent coexister — une seule installation propose les deux boutons sur l'écran de connexion, et chacun choisit celui qui s'applique.
@@ -50,21 +50,9 @@ Quand l'OIDC est configuré, un second bouton apparaît sous le formulaire local
 
 ---
 
-## Étape 1 — Choisir le backend d'identité
+## Étape 1 — Utilisateurs locaux
 
-Dans `app.toml` :
-
-```toml
-[auth]
-backend = "toml"   # ou "db"
-```
-
-| Valeur | Stocke les utilisateurs dans | Quand |
-|---|---|---|
-| **`toml`** (par défaut) | `config/auth.toml` | Installations mono-instance, petites équipes. Les modifications arrivent atomiquement sur disque. |
-| **`db`** | Le pool du framework (tables `ly2_users`, `ly2_roles`, `ly2_user_roles`). | Installations multi-instance qui ont besoin d'un catalogue d'utilisateurs partagé. |
-
-Les deux backends se gèrent via la **même interface** — *Paramètres → Accès*. Le backend est un choix de déploiement ; l'interface s'en moque.
+Les utilisateurs locaux et les rôles se gèrent dans **Paramètres → Accès**. L'installation détermine leur lieu de stockage (le dossier de configuration du serveur, ou la base du framework quand plusieurs instances partagent les mêmes utilisateurs) ; les écrans sont identiques dans les deux cas.
 
 ### Amorcer le premier utilisateur
 
@@ -80,7 +68,7 @@ La commande crée le superutilisateur `admin` et affiche une seule fois un mot d
 
 ## Étape 2 — Configurer l'OIDC (optionnel) \{#oidc\}
 
-L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC fonctionne — Liberty découvre les endpoints, les JWKS et les scopes pris en charge depuis le `.well-known/openid-configuration` du fournisseur.
+L'OIDC se superpose aux utilisateurs locaux. N'importe quel fournisseur conforme OIDC fonctionne — Liberty découvre les endpoints, les JWKS et les scopes pris en charge depuis le `.well-known/openid-configuration` du fournisseur.
 
 | Fournisseur | Motif d'URL de découverte |
 |---|---|
@@ -92,44 +80,21 @@ L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC 
 
 ### Configuration
 
-L'emplacement canonique pour configurer l'OIDC est **Paramètres → App → OpenID Connect (SSO)** — chaque champ ci-dessous dispose d'un contrôle d'interface correspondant. Le client secret est chiffré avec la clé maître de l'installation à l'enregistrement (préfixe `ENC:` dans `app.toml`) ; le champ est une saisie masquée avec un œil pour l'afficher. L'enregistrement reconstruit le gestionnaire OIDC en place — **aucun redémarrage** requis ; la prochaine tentative de connexion utilise la nouvelle configuration. Voir [Paramètres App → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) pour la visite guidée de l'éditeur.
+L'OIDC se règle dans **Paramètres → App → OpenID Connect (SSO)**. Le secret client est chiffré à l'enregistrement, dans une saisie masquée avec un œil pour l'afficher. L'enregistrement s'applique aussitôt — **sans redémarrage** ; la connexion suivante en tient compte.
 
-L'`app.toml` résultant après un enregistrement depuis l'interface :
-
-```toml
-[oidc]
-enabled         = true
-discovery_url   = "https://keycloak.corp.local/realms/liberty/.well-known/openid-configuration"
-client_id       = "liberty-app"
-client_secret   = "ENC:Mq6vNg…2z=="          # AES-256-GCM, déchiffré au démarrage
-scopes          = "openid email profile"
-username_claim  = "preferred_username"
-email_claim     = "email"
-name_claim      = "name"
-redirect_url    = ""                          # vide = auto-déduit https://<host>/auth/oidc/callback
-frontend_redirect = ""                        # vide = flux standard côté serveur
-attribute_claims  = { company = "company", pole = "department" }   # facultatif, app.toml seulement
-```
-
-Pour les installations qui préfèrent un gestionnaire de secrets, écrire `client_secret = "${OIDC_CLIENT_SECRET}"` dans `app.toml` : la variable est résolue au démarrage. Le formulaire des Paramètres affiche alors la référence `${…}` telle quelle.
-
-| Champ | Requis | Notes |
+| Champ | Requis | Remarques |
 |---|---|---|
-| `enabled` | oui | Active / désactive l'OIDC. Désactivé, le bouton OIDC disparaît de l'écran de connexion. |
-| `discovery_url` | oui | L'URL `.well-known` du fournisseur. Liberty la récupère une fois au démarrage et met le résultat en cache. |
-| `client_id` | oui | L'identifiant client OAuth2 enregistré auprès du fournisseur. |
-| `client_secret` | oui | Renseigné dans *Paramètres → App → OpenID Connect (SSO)* ; chiffré à l'enregistrement. Une référence `${VARIABLE}` est aussi acceptée. |
-| `scopes` | oui | Au minimum `openid` ; ajouter `email` / `profile` pour récupérer ces claims. |
-| `username_claim` | non (défaut `preferred_username`) | Quel claim devient le nom d'utilisateur Liberty. Repli sur `email`, puis sur `sub` en cas d'absence. |
-| `email_claim` | non | Quel claim devient l'adresse de courriel. |
-| `name_claim` | non | Quel claim devient le nom complet. |
-| `redirect_url` | non | À renseigner uniquement si le framework est derrière un reverse proxy qui réécrit l'hôte. |
-| `frontend_redirect` | non | À définir pour les flux SPA qui gèrent les jetons dans le fragment d'URL. Le flux standard côté serveur le laisse vide. |
-| `attribute_claims` | non | Renseigne les [attributs de périmètre de données](./users.md#attributes) des utilisateurs à partir des claims de l'ID token — voir ci-dessous. Se définit dans `app.toml` ; le formulaire des Paramètres ne l'affiche pas. |
+| **Enabled** | oui | Affiche ou masque le bouton **Se connecter avec OIDC**. |
+| **Discovery URL** | oui | L'URL `.well-known/openid-configuration` du fournisseur. |
+| **Client ID** | oui | L'identifiant client déclaré chez le fournisseur. |
+| **Client secret** | oui | Chiffré à l'enregistrement. |
+| **Scopes** | oui | Au moins `openid` ; `email` et `profile` apportent ces claims (`openid email profile` par défaut). |
+| **Username claim** | non | Le claim qui devient le nom d'utilisateur Liberty (`preferred_username` par défaut ; puis `email`, puis `sub` s'il manque). |
+| **Email claim**, **Name claim** | non | Les claims qui renseignent l'adresse e-mail et le nom complet. |
+| **Redirect URL override (proxy)** | non | Uniquement derrière un proxy inverse qui réécrit l'hôte. |
+| **Frontend redirect** | non | Uniquement pour une interface qui gère elle-même les jetons. |
 
-### Attributs fournis par le fournisseur d'identité \{#attribute-claims\}
-
-`attribute_claims = { company = "company", pole = "department" }` associe un attribut de l'utilisateur à un claim de l'ID token. À chaque connexion OIDC, un claim associé et présent renseigne son attribut, un claim associé mais absent le supprime, et les attributs non associés (saisis à la main dans **Paramètres → Access → Users**) sont conservés. Un rôle dont le périmètre de données lit `#USER.company#` suit alors l'annuaire.
+Voir [Paramètres de l'application → OpenID Connect](../settings-app.md#section-4--openid-connect-sso).
 
 ### Enregistrer l'URL de redirection auprès du fournisseur
 
@@ -145,7 +110,7 @@ L'ajouter dans les *Redirect URIs* du client OAuth2 dans la console du fournisse
 
 ## Étape 3 — Ce qui se passe à la connexion OIDC
 
-1. L'utilisateur clique sur **Se connecter avec \<fournisseur>** sur l'écran de connexion.
+1. L'utilisateur clique sur **Se connecter avec OIDC** sur l'écran de connexion.
 2. Liberty redirige vers le endpoint d'autorisation du fournisseur (`/auth/oidc/login`).
 3. L'utilisateur se connecte chez le fournisseur — MFA, réinitialisation de mot de passe, tous les flux propres à l'IdP compris.
 4. Le fournisseur renvoie sur `https://<host>/auth/oidc/callback?code=…&state=…`.
@@ -153,7 +118,6 @@ L'ajouter dans les *Redirect URIs* du client OAuth2 dans la console du fournisse
 6. Liberty **provisionne** ou **met à jour** l'utilisateur local :
    - Première connexion : une nouvelle ligne utilisateur est créée avec `provider = "oidc"`, `provider_subject = <sub>`, `username = <username_claim>`, `email`, `full_name` issus des claims. `is_active = true`, **aucun rôle**.
    - Connexions suivantes : les champs courriel + nom complet sont rafraîchis depuis les derniers claims ; les rôles restent tels que configurés dans Liberty.
-   - À chaque connexion : les attributs associés par `attribute_claims` sont rafraîchis.
 7. Liberty émet sa propre paire JWT (accès + rafraîchissement) et l'utilisateur est connecté.
 
 Les jetons du fournisseur **ne sont pas propagés** — Liberty émet de nouveaux jetons avec sa propre clé de signature. La session du fournisseur se termine ; celle de Liberty commence.
@@ -183,18 +147,7 @@ Voir [Utilisateurs](./users.md) pour l'interface d'attribution.
 | **Jeton d'accès** | 1 heure | Le `username`, les rôles, les permissions, les attributs et le périmètre de données calculé. Envoyé à chaque appel API en `Authorization: Bearer <token>`. |
 | **Jeton de rafraîchissement** | 14 jours | Sert à `POST /auth/refresh` pour émettre un nouveau jeton d'accès sans ressaisir les identifiants. |
 
-Les durées de vie se configurent :
-
-```toml
-[auth]
-access_token_ttl    = 3600      # secondes, défaut 1 h
-refresh_token_ttl   = 1209600   # secondes, défaut 14 jours
-refresh_reuse_grace = 60        # secondes pendant lesquelles un jeton de rafraîchissement déjà utilisé reste accepté
-```
-
-Des TTL d'accès courts (par exemple 15 minutes) propagent plus vite les changements de permissions mais augmentent la charge de rafraîchissement. L'équilibre par défaut d'1 heure convient à la plupart des installations.
-
-**Les jetons de rafraîchissement sont à usage unique.** Chaque `POST /auth/refresh` renvoie un nouveau jeton de rafraîchissement et consomme celui présenté. Le même jeton présenté de nouveau plus de `refresh_reuse_grace` secondes après (deux onglets en concurrence) est refusé. Un client d'API doit conserver le jeton de rafraîchissement de chaque réponse. Le renouvellement relit aussi l'utilisateur : un utilisateur désactivé est refusé, et les changements de rôles, d'attributs et de périmètre s'appliquent dès ce moment.
+**Les jetons de rafraîchissement sont à usage unique.** Chaque `POST /auth/refresh` renvoie un nouveau jeton de rafraîchissement et consomme celui présenté. Le même jeton présenté de nouveau plus de 60 secondes après (deux onglets en concurrence) est refusé. Un client d'API doit conserver le jeton de rafraîchissement de chaque réponse. Le renouvellement relit aussi l'utilisateur : un utilisateur désactivé est refusé, et les changements de rôles, d'attributs et de périmètre s'appliquent dès ce moment.
 
 ### Rafraîchissement silencieux
 
@@ -210,13 +163,7 @@ Les deux mécanismes se complètent. Le minuteur proactif couvre le cas courant 
 
 ## Trop d'échecs de connexion \{#throttle\}
 
-Après `login_max_failures` échecs de connexion pour un même nom d'utilisateur en `login_window_seconds` (10 en 5 minutes par défaut), `/auth/login` répond *429 — Too many failed logins — try again in N s* jusqu'à la fin de la fenêtre. Depuis une même adresse cliente, la limite est cinq fois plus haute. Une connexion réussie remet le compteur de cet utilisateur à zéro.
-
-```toml
-[auth]
-login_max_failures   = 10     # 0 désactive la limitation
-login_window_seconds = 300
-```
+Après 10 échecs de connexion pour un même nom d'utilisateur en 5 minutes, `/auth/login` répond *429 — Too many failed logins — try again in N s* jusqu'à la fin de la fenêtre. Depuis une même adresse cliente, la limite est cinq fois plus haute. Une connexion réussie remet le compteur de cet utilisateur à zéro.
 
 Les compteurs sont tenus en mémoire par le serveur : un redémarrage les remet à zéro.
 
@@ -234,12 +181,11 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| `client_secret` en clair dans `app.toml`. | Le secret fuit dans le contrôle de version. | Utiliser `${OIDC_CLIENT_SECRET}` et définir la variable d'environnement. |
-| `redirect_url` ne correspond pas à ce qui est enregistré chez le fournisseur. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
-| `discovery_url` renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
-| `username_claim` absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
+| L'URL de redirection déclarée chez le fournisseur diffère de celle de Liberty. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
+| La **Discovery URL** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
+| Le **Username claim** est absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
 | Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Paramètres → Accès → Utilisateurs*. |
-| Oubli d'activer l'OIDC après l'avoir configuré. | Le bouton OIDC n'apparaît pas. | `enabled = true`. |
+| OIDC configuré mais non activé. | Le bouton OIDC n'apparaît pas. | Cocher **Enabled**. |
 
 ---
 

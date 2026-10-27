@@ -35,10 +35,9 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Configuration',
-          link: {type: 'generated-index', slug: '/liberty/framework/configuration', description: 'Settings UI, app.toml, environment variables, hot-reload and encrypted secrets.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/configuration', description: 'Settings UI, environment variables, hot-reload and encrypted secrets.'},
           items: [
             'liberty/framework/configuration/settings-ui',
-            'liberty/framework/configuration/app-toml',
             'liberty/framework/configuration/environment-variables',
             'liberty/framework/configuration/hot-reload',
             'liberty/framework/configuration/encryption-secrets',

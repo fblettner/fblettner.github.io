@@ -98,7 +98,7 @@ Worth knowing so you don't try to ship through this channel:
 
 | Not included | Where it lives instead |
 |---|---|
-| `app.toml` | Per-install — carries pool credentials, auth backend, frontend root. Never bundled. |
+| Settings → App | Per install — application settings, licence, sign-in. Never bundled. |
 | `auth.toml` / DB-stored users | Per-install — carries Argon2 password hashes. Never bundled. |
 | Python plugins | Shipped with the [liberty-apps wheel](../../installation/deploy-prebuilt-apps.md) or the plugin's own release channel. |
 | Nomaflow jobs | The *Export job* button on each job's card produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
@@ -209,7 +209,7 @@ The package is **plaintext TOML**. Two patterns let the source's secrets travel 
 
 | Pattern | What happens at build / apply |
 |---|---|
-| **Encrypted secrets** — `password = "ENC:base64=="` | The ciphertext lands verbatim in the package. The **target must carry the same `[crypto] master_key`** (or `LIBERTY_MASTER_KEY` env var) as the source — otherwise decryption fails on first use. |
+| **Encrypted secrets** — `password = "ENC:base64=="` | The ciphertext lands verbatim in the package. The **target must have the same master key** (`LIBERTY_MASTER_KEY`) as the source — otherwise decryption fails on first use. |
 | **Env var references** — `password = "${DB_PASSWORD}"` | The literal string `${DB_PASSWORD}` is in the package. The operator must set the env var **on the target** before reloading. `MANIFEST.md` lists every `${VAR}` the package references. |
 
 Pick one pattern per install — mixing both inside a single config gets confusing. Encrypted secrets travel best across containerised deployments; env vars travel best across orchestrators (Kubernetes Secrets, Docker `--env-file`, systemd `EnvironmentFile`).
@@ -219,7 +219,7 @@ Pick one pattern per install — mixing both inside a single config gets confusi
 | Don't | Why |
 |---|---|
 | Move `auth.toml` between installs via the Package screen. | The screen ignores `auth.toml`. Move users via the dedicated *Users* admin (or invite them per install). |
-| Move `app.toml` via the Package screen. | The screen ignores it — would clobber connector pool credentials, frontend paths, license. |
+| Expect a package to carry Settings → App. | It does not — application settings, licence and sign-in stay on each install. |
 | Ship a package with `replace_all` to a customer who has local edits without a heads-up. | The customer's screens / queries / dictionary entries are dropped. There is no automatic undo — keep a backup of the target's config tree first. |
 
 ---

@@ -1,12 +1,12 @@
 ---
 title: Paramètres de l'application
 description: "Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, journaux, langue, valeurs par défaut de l'interface, rechargement à chaud, mode thick d'Oracle), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage."
-keywords: [Liberty Next, Paramètres App, app.toml, licence, assistant IA, notifications, SMTP, OpenID Connect, SSO, habillage PDF, période par défaut, taille de page, Oracle thick]
+keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, SMTP, OpenID Connect, SSO, habillage PDF, période par défaut, taille de page, Oracle thick]
 ---
 
 # Paramètres de l'application
 
-**Paramètres → App** modifie `app.toml`. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -72,7 +72,7 @@ Voir [Assistant IA](../ai-assistant.md).
 | **Username claim**, **Email claim**, **Name claim** | Les claims de l'ID token qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
 | **Redirect URL override (proxy)**, **Frontend redirect** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
 
-Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur. Les attributs de périmètre de données issus des claims (`attribute_claims`) se définissent dans `app.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
+Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
 
 ---
 
@@ -88,5 +88,4 @@ Les réglages de couverture et de page des rapports PDF : auteur, couleurs princ
 |---|---|
 | Pools et leurs mots de passe | Paramètres → Pools. |
 | Utilisateurs et rôles | Paramètres → Access. |
-| `log_format`, durées et limitation de `[auth]`, `[jobs]`, `[changesets]` | `app.toml` — voir [app.toml](../configuration/app-toml.md). |
 | La clé maître et le secret JWT | L'environnement — voir [Variables d'environnement](../configuration/environment-variables.md). |

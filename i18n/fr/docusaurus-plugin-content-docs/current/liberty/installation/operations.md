@@ -66,7 +66,7 @@ Elle contrôle :
 | `./liberty restart` | Redémarre uniquement `liberty-next`. |
 | `./liberty logs` / `logs -f` | Les 200 dernières lignes du journal du serveur / le suivre. |
 
-Chaque ligne de journal écrite pendant le traitement d'une requête porte l'identifiant de cette requête, également renvoyé dans l'en-tête de réponse `X-Request-ID` : le citer permet de retrouver les lignes correspondantes. Pour un collecteur de journaux, `log_format = "json"` dans la section `[app]` de `app.toml` écrit un objet JSON par ligne.
+Chaque ligne de journal écrite pendant le traitement d'une requête porte l'identifiant de cette requête, également renvoyé dans l'en-tête de réponse `X-Request-ID` : le citer permet de retrouver les lignes correspondantes.toml` écrit un objet JSON par ligne.
 
 ---
 

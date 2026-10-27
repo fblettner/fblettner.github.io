@@ -129,7 +129,7 @@ The framework's `POST /admin/reload` (triggered by every *Save* in the Settings 
 | File | Auto-reloaded |
 |---|---|
 | `connectors.toml`, `dictionary.toml`, `screens.toml`, `menus.toml`, `dashboards.toml`, `charts.toml`, `jobs.toml` | Yes. |
-| `app.toml` | Partial — most fields. Pool changes require a manual reload from the Pools page. |
+| Settings → App | Partial — most fields. Pool changes require a manual reload from the Pools page. |
 | Python code in `plugins/` | **No.** |
 
 The plugin code is in Python's import cache. **Restart the framework process** to pick up code changes.

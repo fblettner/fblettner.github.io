@@ -178,10 +178,8 @@ Les changements n'interrompent pas la session courante. Les nouveaux rôles / le
 Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle peut prendre ses valeurs chez l'utilisateur au lieu de les lister : une règle *Company (CO) = user.company* permet à un seul rôle de servir toutes les filiales, chaque utilisateur voyant ses propres sociétés.
 
 Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle. Le formulaire est en anglais.
-
+ En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
-
-Pour les utilisateurs OIDC, les attributs peuvent venir du fournisseur d'identité à chaque connexion — voir [Se connecter](./sign-in.md#attribute-claims). En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 
@@ -244,7 +242,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 ### Révoquer un compte immédiatement
 
 1. Basculer **Actif** sur off et enregistrer.
-2. Si le délai pouvant aller jusqu'à 1 heure avant l'expiration du jeton d'accès courant est inacceptable, faire tourner le secret de signature JWT (`[auth] jwt_secret` dans `app.toml` ou variable d'environnement `LIBERTY_JWT_SECRET`) et redémarrer. Chaque jeton existant est invalidé — un coup de marteau lourd, mais la seule révocation **immédiate** offerte par Liberty.
+2. Si le délai pouvant aller jusqu'à 1 heure avant l'expiration du jeton d'accès courant est inacceptable, faire tourner le secret de signature JWT (`LIBERTY_JWT_SECRET`) et redémarrer. Chaque jeton existant est invalidé — un coup de marteau lourd, mais la seule révocation **immédiate** offerte par Liberty.
 
 ---
 

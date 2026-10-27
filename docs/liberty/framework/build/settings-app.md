@@ -1,12 +1,12 @@
 ---
 title: App settings
 description: "Settings → App in Liberty Next: the six sections — App (name, address, logs, language, UI defaults, hot reload, Oracle thick mode), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — what each field does, which secrets are encrypted, and what needs a restart."
-keywords: [Liberty Next, Settings App, app.toml, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
+keywords: [Liberty Next, Settings App, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
 ---
 
 # App settings
 
-**Settings → App** edits `app.toml`. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
+**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
@@ -72,7 +72,7 @@ See [AI assistant](../ai-assistant.md).
 | **Username claim**, **Email claim**, **Name claim** | Which ID-token claims fill the user (`preferred_username`, `email`, `name`). |
 | **Redirect URL override (proxy)**, **Frontend redirect** | Only behind a proxy that rewrites the host, or for a front-end that handles the tokens itself. |
 
-Register `https://<host>/auth/oidc/callback` as redirect URI at the provider. Data-scope attributes from claims (`attribute_claims`) are set in `app.toml`. See [Sign-in](./secure/sign-in.md#oidc).
+Register `https://<host>/auth/oidc/callback` as redirect URI at the provider. See [Sign-in](./secure/sign-in.md#oidc).
 
 ---
 
@@ -88,5 +88,4 @@ The cover and page settings of the PDF reports: author, primary colours, cover t
 |---|---|
 | Pools and their passwords | Settings → Pools. |
 | Users and roles | Settings → Access. |
-| `log_format`, `[auth]` lifetimes and throttle, `[jobs]`, `[changesets]` | `app.toml` — see [app.toml](../configuration/app-toml.md). |
 | The master key and the JWT secret | The environment — see [Environment variables](../configuration/environment-variables.md). |

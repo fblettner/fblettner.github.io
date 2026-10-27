@@ -45,7 +45,6 @@ Les installations livrées sont déjà sécurisées ; cette page liste ce qu'ell
 ## Journaux \{#logs\}
 
 - Chaque réponse porte un en-tête `X-Request-ID`, et chaque ligne de journal écrite pour cette requête porte le même identifiant : le communiquer en signalant un problème.
-- Pour un collecteur de journaux, `log_format = "json"` dans la section `[app]` d'`app.toml` écrit un objet JSON par ligne.
 - Docker applique une rotation au journal du conteneur PostgreSQL (3 × 100 Mo). Pour les autres conteneurs, définir une rotation dans le démon Docker (`/etc/docker/daemon.json`).
 
 ---

@@ -56,5 +56,5 @@ Un appelant anonyme ne reçoit que les compteurs et les indicateurs. Un appelant
 ## Surveillance externe \{#external-monitoring\}
 
 - Interroger `/ready` chaque minute depuis l'outil de supervision et alerter après quelques échecs consécutifs.
-- Collecter le journal du serveur sur la sortie standard ; `log_format = "json"` dans `[app]` écrit un objet JSON par ligne, chacun avec l'identifiant de la requête.
+- Collecter le journal du serveur sur la sortie standard, chaque ligne portant l'identifiant de la requête.
 - Pour les tâches, préférer une règle de notification sur `failure` et `missed` — voir [Notifications](../nomaflow/notifications.md).

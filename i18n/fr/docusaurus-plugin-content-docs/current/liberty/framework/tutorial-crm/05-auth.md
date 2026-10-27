@@ -69,7 +69,7 @@ Bob se déconnecte puis se reconnecte : Clients et Affaires n'affichent plus que
 
 Pour que les utilisateurs se connectent avec leur compte d'entreprise (Entra ID, Keycloak, Okta…), renseigner **Paramètres → App → OpenID Connect (SSO)** avec les valeurs de l'application déclarée chez le fournisseur. Un bouton **Se connecter avec OIDC** apparaît sur la page de connexion ; les nouveaux utilisateurs arrivent sans rôle, et un administrateur leur attribue `crm-viewer` ou `crm-sales`.
 
-L'attribut `country` peut venir de l'annuaire grâce à `attribute_claims` — le périmètre de données suit alors l'annuaire. Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
+Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
 
 ---
 
