@@ -123,7 +123,7 @@ keywords: [Liberty Next, Paramètres, éditeurs, connecteurs, dictionnaire, acti
 | **Écrans** | Grilles, fenêtres, onglets, actions — le Concepteur d'écran. | [Écrans](../build/screens/overview.md) |
 | **Graphiques** | Les graphiques enregistrés. | [Graphiques](../charts.md) |
 | **Tableaux de bord** | Les tableaux de bord et leurs widgets. | [Tableaux de bord](../dashboards.md) |
-| **Explorateur** | Le modèle de l'explorateur de données. | — |
+| **Explorateur** | Les modèles de l'explorateur de données. | [Construire un modèle](../explorer/model.md) |
 | **Rapports** | Les rapports personnalisés. | — |
 | **Notifications** | Les règles de notification. | [Notifications](../../nomaflow/notifications.md) |
 

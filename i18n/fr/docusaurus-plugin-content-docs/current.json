@@ -594,5 +594,9 @@
   "sidebar.libertySidebar.category.Dashboards & charts.link.generated-index.description": {
     "message": "Paramètres → Tableaux de bord et Paramètres → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
     "description": "The generated-index page description for category 'Dashboards & charts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Data Explorer": {
+    "message": "Explorateur de données",
+    "description": "The label for category 'Data Explorer' in sidebar 'libertySidebar'"
   }
 }

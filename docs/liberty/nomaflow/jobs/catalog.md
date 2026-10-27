@@ -128,7 +128,7 @@ The card's buttons:
 | **▶ Run now** | Runs the job. When there is something to choose — shared parameters, step arguments, several steps, a `file_load` step — it opens **Run with parameters** first. |
 | **Cancel** | Shown while the job runs: cancels the run in progress. |
 | **Edit** | Opens the job editor. |
-| **Clone** | Asks for a new id (`<id>_copy` proposed) and creates a disabled copy without the job's own schedule — preset schedules are copied as they are. |
+| **Clone** | Asks for a new id (`<id>_copy` proposed) and creates a disabled copy without any schedule: neither the job's own nor its presets'. |
 | **Delete** | Removes the job from `jobs.toml` after confirmation. Its run history is kept. |
 | **Export** | Downloads a ZIP with the job's `jobs.toml` entry and a `MANIFEST.md`. The connectors and queries it uses are not included. |
 

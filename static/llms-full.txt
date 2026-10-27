@@ -274,6 +274,7 @@ A database (customers, products, contracts, tickets…) and a team that must rea
 | A period with presets, and the change compared with the previous period | [Dashboards](./dashboards.md) |
 | Filters from the dictionary, shared by every widget | [Dashboards](./dashboards.md) |
 | A cache with a **Refresh** button | [Dashboards](./dashboards.md) |
+| Free analysis by the users themselves — pivot, charts, drill, calculated fields, saved analyses, Excel / PDF export | [Data Explorer](./explorer/overview.md) |
 
 **To configure**: the aggregate queries (usually `GROUP BY` on the period), then the widgets.
 
@@ -5942,10 +5943,10 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 | **`rules`** | How to render and validate the column. `BOOLEAN` renders a checkbox, `ENUM` a dropdown, `LOOKUP` a searchable picker. Blank inherits from the dictionary. |
 | **`rules_values`** | The rule's value — `BOOLEAN` → the true marker (`Y` / `1` / `true`); `ENUM` → the enum id; `LOOKUP` → the lookup id; `SEQUENCE` / `NN` → the sequence id. |
 | **`default`** | Pre-fill value when adding a new row. |
-| **`required`** | When on, the field is marked as required (asterisk). |
+| **`required`** | When on, the field is marked with an asterisk and **Save** stays blocked while it is empty. |
 | **`disabled`** | When on, the column is read-only — the operator sees the value but can't change it. |
 | **`disable_on_add`** / **`disable_on_edit`** | Read-only only when a row is added, or only once it exists — the second one for keys that must not change. |
-| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. |
+| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. A required field blocks **Save** only while it is visible. |
 | **`default_when`** | A value forced (and locked, unless **lock** is off) while a condition holds. |
 | **`rules_when`** | Another rule (lookup, enum, Boolean) while a condition holds. |
 | **`write_when`** | The column is written only while a condition holds. |
@@ -6283,7 +6284,7 @@ A row of a closed period opens in view-only mode, and the server refuses changes
 |---|---|---|
 | The deciding field is not on the dialog. | Its value is unknown to the form: the condition never matches, and the dependent field stays hidden. | Add the deciding field to the dialog, hidden or not. |
 | `visible_when` on a key column. | A user adding a row may not see the key. | Lock a key (`disable_on_edit`); do not hide it. |
-| `required_when` matches while `visible_when` does not. | The field is required but hidden. | Keep the two conditions in line. |
+| `required_when` matches while `visible_when` does not. | A hidden field is never demanded: **Save** goes through with it empty. | Keep the two conditions in line. |
 | A value with different spelling. | The condition never matches: values are compared exactly (only the surrounding spaces are ignored). | Copy the stored codes, not their labels. |
 | A threshold (`AMOUNT > 1000`). | Conditions only test equality. | Return a flag from the read query (`HIGH_VALUE = 'Y'`) and test that flag. |
 
@@ -8224,6 +8225,392 @@ The *override* badge flags a chart marked as a local customisation: an upgrade p
 
 ---
 
+## Liberty Next — Data Explorer
+Source: https://docs.nomana-it.fr/liberty/framework/explorer/overview/
+
+The Liberty Next Data Explorer: free analysis of an app's data without writing SQL — fields pane, rows, measures and filters, a period, table, pivot, charts and KPI views, detail rows and drill, calculated fields, saved analyses, dashboards and Excel / PDF export, over a model built in Settings → Explorer.
+
+The Data Explorer lets users analyse an app's data on their own: they pick fields, group, filter, choose a period, then read the result as a table, a pivot, a chart or KPI cards — without writing a query. It works on any connected application whose data is reached through a SQL connector.
+
+An operator first describes the data once, as a **model**, in **Settings → Explorer**. Users then open the explorer from the **compass** in the header, which appears when at least one model is available to them.
+
+---
+
+## At a glance
+
+---
+
+## The pieces \{#pieces\}
+
+| Piece | What it is | Page |
+|---|---|---|
+| **Model** | One data mart of an app: a central entity (the **hub**, such as deals or invoice lines) and the entities around it (customers, activities…), each read by a query of a connector, joined by relations. An app can have several models. | [Build a model](./model.md) |
+| **Analysis** | What the user puts together on the page: rows, measures, filters, a period, a view. | [Analyse data](./analysis.md) |
+| **Calculated field** | A field computed from the others (`AMOUNT * 0.6`, `year(CLOSE_DATE)`), typed and checked on the server. | [Calculated fields](./calculated-fields.md) |
+| **Saved analysis, dashboard** | An analysis kept under a name, private or shared; a dashboard is a grid of saved analyses. Both export to Excel and PDF. | [Saved analyses and dashboards](./saved-and-dashboards.md) |
+
+---
+
+## Who sees what \{#access\}
+
+- A model is offered to the holders of a role that grants it: in **Settings → Access → Roles**, **Beyond the menus**, type **Data Explorer**, then a model, or every model of an app. Superusers see every model. See [Roles & permissions](../build/secure/roles-and-permissions.md#access).
+- The role's **data scope** applies inside every query the explorer runs: a user who sees one company's rows in the screens sees the same rows in the explorer, the totals included. See [Data scope](../build/secure/roles-and-permissions.md#data-scope).
+- Only a superuser edits **Settings → Explorer**, and sees the SQL of an analysis and the model's warnings (a column that disappeared, a measure that is not numeric).
+
+---
+
+## What it is not \{#limits\}
+
+- **Not a SQL editor.** Users never type SQL: the explorer builds one statement from the model, the same on Oracle, PostgreSQL and SQLite. A calculated field is a small expression language, compiled by the server.
+- **Not unlimited.** An aggregate reads at most 50,000 grouped rows (beyond that, a note says the figures are partial) and shows the **Top** N groups (up to 10,000). The detail view pages through the rows; an export holds up to 3,000 rows per section.
+- **Not a replacement for dashboards.** [Dashboards](../dashboards.md) are designed by an operator over chosen queries; the explorer lets users build their own views over a model.
+
+---
+
+## What's next
+
+- [Build a model](./model.md) — Settings → Explorer, from scratch or from a Screen Assistant preset.
+- [Analyse data](./analysis.md) — the page, step by step.
+
+---
+
+## Liberty Next — Build a model
+Source: https://docs.nomana-it.fr/liberty/framework/explorer/model/
+
+Settings → Explorer in Liberty Next: an explorer model per data mart — the hub, the entities (a query with its cardinality, key, measures, hidden columns and default date), the relations on column pairs, and a model filled from a Screen Assistant preset.
+
+A model tells the explorer what a user may analyse and how the tables relate. It is built in **Settings → Explorer** by a superuser, with no SQL: every entity reads an existing query of a connector, and the columns are discovered from that query's result.
+
+---
+
+## At a glance
+
+---
+
+## The app and the model \{#app-model\}
+
+1. **App** — the bar at the top lists the apps that already have a model; **+ Add an app** offers the SQL connectors that have none.
+2. **Model** — pick a model of the app, or **Add model** and give its id (letters, digits, `_` and `-`). An app can hold several models: tables that do not relate to one another belong in different models. **Delete model** removes it with its entities and relations.
+3. The header of the model:
+
+| Field | Use |
+|---|---|
+| **Label** | The name users see in the explorer's model picker. |
+| **Hub** | The entity every analysis starts from: a fact table, a document header, the lines of a document. |
+| **Description** | Shown under the explorer's title. |
+| **Preset (Screen Assistant)** | Fills the model from a preset — see [below](#preset). |
+
+**Save** writes the model and reloads it: the explorer sees it at once. A model without any entity is not saved.
+
+---
+
+## Entities \{#entities\}
+
+**Add entity** (or a click on an entity) opens its form:
+
+| Field | Use |
+|---|---|
+| **Id** | The entity's identifier, fixed once created (`deals`, `customers`). |
+| **Label** | The name of the group in the fields pane. |
+| **Rows per hub row** | **1..1 · one** — at most one row per hub row (the customer of a deal); **1..n · many** — several rows (the activities of a deal). The hub itself is always 1..1. |
+| **Description** | Free text. |
+| **Connector** | The connector of the query; the app's own by default. |
+| **Query** | A SELECT query of that connector, without parameters. Its columns are discovered by running it for one row. |
+| **Screen (column hints)** | A screen whose column settings give the labels, formats and lists of values. The screens that read the same query come first. |
+| **Default date** | The date field the period applies to first. |
+
+The **Columns** table lists the discovered columns, with the label and the type taken from the screen. For each one:
+
+- **Key** — the columns that identify a row. A new entity takes the screen's key columns. The key opens a row in its screen's dialog from the detail view.
+- **Measure** — a numeric column that users sum, average, count…: pick its default aggregate (`sum`, `avg`, `min`, `max`, `count`, `count_distinct`). Left on *— dimension —*, the column groups and filters.
+- **Hidden** — left out of the fields pane. A column hidden by the screen stays hidden.
+
+A column that the query no longer returns is flagged with **?** so it can be unticked.
+
+### What users get from a column \{#fields\}
+
+Each column becomes a **field** of the pane, labelled and formatted through the dictionary and the screen, and typed as text, number, date, date-time or yes/no. A column with a list of values (an enum or a lookup in the screen) shows its labels and offers its values in the filters. A column declared as a measure but not numeric stays a dimension, and the model reports it to superusers.
+
+---
+
+## Relations \{#relations\}
+
+A relation joins two entities on one or more **column pairs**: `customers` → `deals` on `ID = CUSTOMER_ID`. **Add relation**, pick both entities, then the columns (the lists show each entity's columns; a name can also be typed); **+** adds a pair for a composite key.
+
+Every entity must reach the hub, directly or through other entities. The explorer then picks the joins an analysis needs, and never multiplies rows twice: an analysis groups by at most one 1..n entity, and the others are reached without duplicating the hub's rows.
+
+---
+
+## A model from a preset \{#preset\}
+
+A Screen Assistant preset already declares a set of tables and their joins. Picking it in **Preset (Screen Assistant)** fills the model:
+
+- every table of the preset becomes an entity (all its columns, or the preset's own column list), the base table the hub;
+- the joins become relations, matched on the real columns — the column of that name, the one carrying that dictionary item, or, on a connector with a table prefix (JD Edwards EnterpriseOne: `ABAN8`, `WWAN8`), the one whose name without the prefix is the item.
+
+Entities already declared are kept and completed; a key, measures, a default date or a cardinality set by hand stay as they are. Then adjust what is needed and **Save**. Picking the preset again fills the model once more.
+
+---
+
+## Things to know
+
+| Situation | What happens | What to do |
+|---|---|---|
+| An entity is not linked to the hub. | **Save** is refused and names the entities left out. | Add the missing relation. |
+| The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
+| No column is discovered. | The query failed or returned nothing. | Check the query in Settings → Connectors. |
+| A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
+
+## What's next
+
+- [Analyse data](./analysis.md) — what users do with the model.
+- [Roles & permissions](../build/secure/roles-and-permissions.md#access) — give access to a model.
+
+---
+
+## Liberty Next — Analyse data
+Source: https://docs.nomana-it.fr/liberty/framework/explorer/analysis/
+
+Using the Liberty Next Data Explorer: the fields pane, the Rows, Measures and Filters shelves, the period, Top N, the table, pivot, bar, line, pie and KPI views, the detail view, the drill to the rows behind a figure and the record dialog.
+
+The explorer opens from the **compass** in the header. The model picker at the top right switches between the models available; picking an app in the left navigation opens that app's model.
+
+The analysis runs on its own a moment after each change; **Run** runs it again on demand.
+
+---
+
+## Fields pane \{#fields\}
+
+The left pane lists the model's entities — the analysed one opened, the others folded — with their **1..1** or **1..n** badge. In each entity, the dimensions come first, then the **Σ Measures**. The search box filters the fields of every entity.
+
+| Action | Result |
+|---|---|
+| Click a field | A dimension goes to **Rows**, a measure to **Measures**. |
+| Funnel on a field | The field goes to **Filters**. |
+| Drag a field | Drops it on the shelf of choice. |
+| Double-click an entity | Makes it the **analysed entity** — the one the analysis starts from (the hub by default). The selector at the left of the toolbar does the same. |
+
+Fields already in use are highlighted. **New calculated field**, at the bottom of the pane, opens the [calculated-field editor](./calculated-fields.md).
+
+---
+
+## Shelves \{#shelves\}
+
+| Shelf | Content |
+|---|---|
+| **Rows** | The dimensions to group by. A date gets a grouping: *Exact value*, *Day*, *Week*, *Month* (the default), *Quarter*, *Year*. In the detail view, this shelf lists the columns shown. |
+| **Measures** | One aggregate per chip: *Sum*, *Average*, *Min*, *Max*, *Count*, *Distinct count* for a number; *Count* or *Distinct count* otherwise. **+** adds a row count. A dimension dropped here counts its distinct values. |
+| **Filters** | A field, an operator, a value. Text: *contains*, `=`, `≠`, *starts with*, *ends with*, *in*, *is empty*, *is not empty*. Numbers and dates: `=`, `≠`, *between*, `<`, `≤`, `>`, `≥`, *in*, *is empty*, *is not empty*. A field with a list of values offers its values; *in* takes a comma-separated list. |
+
+Chips move by drag within a shelf; the cross removes one. A filter value applies on **Enter** or when leaving the field.
+
+---
+
+## Period and Top N \{#period\}
+
+The **Period** bar appears when the analysed entity has a date field: pick the date field (the entity's default date first), then a preset — *Today*, *Yesterday*, *Last 7 days*, *Last 30 days*, *This month*, *Last month*, *This quarter*, *This year*, *Last year*, *Last 12 months* — or a custom range on the calendar. *All dates* removes the period.
+
+**Top** keeps the first N groups (up to 10,000). The note in the toolbar reads *N group(s) from M row(s)*, and says when the list was cut or when the figures are partial.
+
+---
+
+## Views \{#views\}
+
+The buttons of the toolbar switch the view without running the query again.
+
+| View | Shows |
+|---|---|
+| **Table** | One row per group, sortable by header. A click on a row drills to its rows. |
+| **Pivot** | The rows as a collapsible hierarchy with subtotals, one dimension spread as **Columns** (*Automatic*: the last one), a grand total, and a **Share** — *of parent* or *of total* — beside each value. Subtotals appear only for a sum or a count: a sum of averages means nothing. Toolbar: expand all, collapse all, Excel export. A click on a value drills. |
+| **Bars**, **Lines** | The first dimension on the x axis, the second one (or the measures) as **Series**; the top 10 series, the rest folded into *Others*; dates in order, other categories by value; **Stacked** option. |
+| **Pie** | The first dimension as slices, top 10 plus *Others*. |
+| **KPI** | One card per measure with its total. |
+| **Detail** | The rows themselves, 50 per page, with the **Rows** shelf as columns (the analysed entity's fields when empty). |
+
+**Measure** picks the measure of the pivot or the chart (the first one by default).
+
+---
+
+## Drill and record \{#drill\}
+
+A click on a group of the table or on a value of the pivot lists the **rows behind that figure**: the key, the dimensions and the measures' fields of each row. The values of the cell show above the list (*Country: France*, *Stage: Negotiation*); **Back to the analysis** returns to the figures.
+
+In the detail view, and after a drill, a row of an entity linked to a screen opens that screen's **dialog**: the record shows as it does in the screen, and can be edited with the same rights. The analysis refreshes after a save.
+
+---
+
+## Things to know
+
+| Situation | What happens |
+|---|---|
+| A measure of a 1..n entity next to hub dimensions. | Summed per hub row, without duplicating the hub's rows. |
+| Two 1..n entities in the rows. | Refused, with a message: one many-side entity at a time. |
+| The note says the figures are partial. | More than 50,000 grouped rows were read: narrow the period or add a filter. |
+| A superuser wants to see the query. | The **SQL** button of the toolbar shows the statement and its values. |
+
+## What's next
+
+- [Calculated fields](./calculated-fields.md) — fields of your own.
+- [Saved analyses and dashboards](./saved-and-dashboards.md) — keep, share, export.
+
+---
+
+## Liberty Next — Calculated fields
+Source: https://docs.nomana-it.fr/liberty/framework/explorer/calculated-fields/
+
+Calculated fields in the Liberty Next Data Explorer: the editor (name, label, expression, field and function pickers, Test), the expression language — arithmetic, comparisons, conditions, in, is empty, date, text and number functions — and how the result type makes a measure or a dimension.
+
+A calculated field computes a value from the other fields: a margin, a weighted amount, a year, a delay in days, a category. It is written in a small expression language that the server checks and translates for the database — never free SQL. It belongs to the analysis and is saved with it.
+
+---
+
+## At a glance
+
+---
+
+## The editor \{#editor\}
+
+**New calculated field**, at the bottom of the fields pane, opens the editor; the pencil of a calculated field edits it, the bin deletes it (it also leaves the shelves).
+
+| Field | Use |
+|---|---|
+| **Name** | A letter, then letters, digits or `_`; unique in the analysis. |
+| **Label** | The name shown in the pane and the results. |
+| **Insert a field**, **Insert a function** | Insert at the cursor; a function is inserted with its arguments selected. |
+| **Expression** | The formula. |
+| **Test** | Compiles the expression on the server and shows its type and eight sample values. |
+
+**Save** is enabled once the test passes. The result type decides the field's role: a **number** becomes a measure, anything else a dimension. The field then appears in a *calc* group of the pane, and can be used in the rows, the measures and the filters like any other.
+
+---
+
+## The language \{#language\}
+
+A field is written by its name for the analysed entity (`AMOUNT`), or `entity.NAME` for another one (`customers.COUNTRY`). Text values go between single quotes.
+
+| Element | Forms |
+|---|---|
+| Arithmetic | `+` `-` `*` `/` and brackets. A division by zero gives an empty value. |
+| Comparison | `=` `!=` `<>` `<` `<=` `>` `>=` |
+| Logic | `and`, `or`, `not` |
+| Condition | `condition ? value_if_true : value_if_false` |
+| List | `x in ('FR', 'BE')` |
+| Empty | `x is empty`, `x is not empty` |
+| Dates | `year(d)`, `month(d)`, `day(d)`, `days(from, to)` — the days between two dates |
+| Numbers | `round(x, n)`, `abs(x)` |
+| Text | `upper(s)`, `lower(s)`, `length(s)`, `concat(a, b, …)` |
+| Any | `coalesce(a, b, …)` — the first non-empty value |
+
+A yes/no result shows as `Y` / `N`. A JD Edwards EnterpriseOne Julian date is converted to a real date before a date function applies.
+
+---
+
+## Examples \{#examples\}
+
+| Need | Expression | Role |
+|---|---|---|
+| Weighted pipeline | `STAGE = 'Negotiation' ? AMOUNT * 0.6 : AMOUNT * 0.3` | measure |
+| Unit price | `AMOUNT / QTY` | measure |
+| Closing year | `year(CLOSE_DATE)` | measure — a number; to group by it, prefer the *Year* grouping of the date on **Rows** |
+| Days to close | `days(CREATED_ON, CLOSE_DATE)` | measure |
+| Size band | `AMOUNT >= 100000 ? 'large' : 'standard'` | dimension |
+| Domestic or not | `customers.COUNTRY = 'FR'` | dimension (`Y` / `N`) |
+
+---
+
+## Things to know
+
+| Situation | What happens |
+|---|---|
+| A type mismatch (`AMOUNT + 'x'`). | The test fails and gives the position of the error. |
+| An unknown field. | The test fails and names it. |
+| The two branches of `? :` have different types. | The test fails: both must be numbers, or both text, or both dates. |
+| An expression over 2,000 characters. | Refused. |
+
+## What's next
+
+- [Analyse data](./analysis.md) — the shelves and views.
+- [Saved analyses and dashboards](./saved-and-dashboards.md) — a saved analysis keeps its calculated fields.
+
+---
+
+## Liberty Next — Saved analyses and dashboards
+Source: https://docs.nomana-it.fr/liberty/framework/explorer/saved-and-dashboards/
+
+Keeping Data Explorer work in Liberty Next: saved analyses, private or shared, with an audience; dashboards of saved analyses with their own period and layout; Excel and PDF export; the analyses and dashboards an app ships.
+
+The mode bar at the top of the explorer has two modes: **Analyses**, the editor with its saved analyses, and **Dashboards**, grids of saved analyses. Each mode shows how many items it holds.
+
+---
+
+## At a glance
+
+---
+
+## Saved analyses \{#analyses\}
+
+In **Analyses** mode, the picker lists the saved analyses of the model, grouped by audience, the user's own ones flagged *mine*. *New analysis* starts an empty one.
+
+| Button | Effect |
+|---|---|
+| **Save** | Saves the current analysis — rows, measures, filters, period, view, calculated fields. |
+| **Save as** | Saves a copy under a new name, always private to start with. |
+| **Delete** | Shown to the owner of the analysis and to superusers. |
+| **Excel**, **PDF** | Export — see [below](#export). |
+
+The save window asks for:
+
+| Field | Use |
+|---|---|
+| **Name** | The name in the picker. |
+| **Description** | Free text. |
+| **Audience** | A group for the picker: *finance*, *sales*, *it*… |
+| **Visible to everyone** | Off: private to its owner. On: **shared** — every user who has access to the model sees it. |
+
+Saving a shared analysis changes it for everyone; the window says so. **Save as** makes a personal copy instead.
+
+---
+
+## Dashboards \{#dashboards\}
+
+In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, each running one saved analysis in its own view — table, pivot, chart, KPI or detail.
+
+- **The period** at the top applies to every tile whose analysis has a period field; the others keep theirs.
+- **Edit layout** shows the tile tools: move left or right, width (1 to 4 columns), height (*s*, *m*, *l*), remove. **Add an analysis…** adds a tile.
+- **The pencil** of a tile opens its analysis in the editor; a drill from a tile does the same, with the clicked values as filters.
+- **Save**, **Save as**, **Delete** work as for analyses. A tile whose analysis was deleted says so.
+
+---
+
+## Export \{#export\}
+
+**Excel** and **PDF** export the current analysis, or the whole dashboard (one section per tile):
+
+| | Excel | PDF |
+|---|---|---|
+| Layout | One sheet per section, bold headers and subtotals, period and filters as a note. | A title, one chapter per section, tables with bold group rows, the install's PDF branding. |
+| A pivot | Flattened, with its subtotals. | Same. |
+| A chart | Its data table. | Same. |
+| KPI | A row of totals. | Same. |
+| Detail | Its rows. | Same. |
+
+Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
+
+---
+
+## Analyses shipped with an app \{#bundled\}
+
+An app can ship ready-made analyses and dashboards with its model. They appear as **shared** items when the app is installed, and are updated with new versions of the app — until someone saves changes to them, after which the local version is kept. A shipped item that a user deleted is not installed again.
+
+---
+
+## What's next
+
+- [Analyse data](./analysis.md) — build what you save.
+- [Data Explorer](./overview.md) — the whole picture.
+
+---
+
 ## Liberty Next — Secure — overview
 Source: https://docs.nomana-it.fr/liberty/framework/build/secure/overview/
 
@@ -8515,6 +8902,7 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | Query | One query — for a screen reached from a button or a link rather than from the menu. |
 | API endpoint | One endpoint of an API connector. |
 | Dashboard | One dashboard. |
+| Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
 | AI assistant | The assistant. |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 
@@ -8900,7 +9288,7 @@ See [AI assistant](../ai-assistant.md).
 
 ## Notifications (email) \{#notifications\}
 
-**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address). See [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address, Keep read notifications — days, `0` = forever). See [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -8960,7 +9348,7 @@ The Liberty Next Settings page: one editor per configuration file, grouped per c
 | **Screens** | Grids, dialogs, tabs, actions — the Screen Designer. | [Screens](../build/screens/overview.md) |
 | **Charts** | Saved charts. | [Charts](../charts.md) |
 | **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
-| **Explorer** | The data explorer's model. | — |
+| **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
 | **Reports** | Custom reports. | — |
 | **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
 
@@ -11853,7 +12241,7 @@ liberty-admin set-attributes alice company=00001,00050
 ```
 
 :::warning[Updating an existing role]
-`create-role` on an existing role replaces its permissions with the `--permission` values given — none given means none kept. To change only the scope of a role, use `set-scope`.
+`create-role` on an existing role replaces its permissions with the `--permission` values given; without `--permission`, the role keeps its permissions. To change only the scope of a role, use `set-scope`, which needs `--rule` or `--clear`.
 :::
 
 ### Schema migrations \{#migrate\}
@@ -12172,7 +12560,7 @@ The card's buttons:
 | **▶ Run now** | Runs the job. When there is something to choose — shared parameters, step arguments, several steps, a `file_load` step — it opens **Run with parameters** first. |
 | **Cancel** | Shown while the job runs: cancels the run in progress. |
 | **Edit** | Opens the job editor. |
-| **Clone** | Asks for a new id (`<id>_copy` proposed) and creates a disabled copy without the job's own schedule — preset schedules are copied as they are. |
+| **Clone** | Asks for a new id (`<id>_copy` proposed) and creates a disabled copy without any schedule: neither the job's own nor its presets'. |
 | **Delete** | Removes the job from `jobs.toml` after confirmation. Its run history is kept. |
 | **Export** | Downloads a ZIP with the job's `jobs.toml` entry and a `MANIFEST.md`. The connectors and queries it uses are not included. |
 
@@ -12236,7 +12624,7 @@ Presets are saved from **Run with parameters → Save as preset…**. Here each 
 
 ### Alerts
 
-**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. To be warned of long runs, use a notification rule with the `long_run` event: see [Notifications](../notifications.md#job-alerts).
+**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
 
 ### Shared params
 
@@ -12368,7 +12756,7 @@ The scheduler then runs the job on that schedule with the preset's parameters: o
 A preset's schedule is independent of the job's **Enabled** switch: an enabled preset runs even when the job's own schedule is off.
 
 :::info[Cloning a job]
-**Clone** creates a disabled copy without the job's own schedule, but the presets keep their schedules and their *Schedule enabled* state: review them in the copy before saving it.
+**Clone** creates a disabled copy without any schedule: the job's own cron and the presets' schedules are dropped, so the copy never fires alongside the original. Give it its schedules once it is ready.
 :::
 
 ---
@@ -14030,7 +14418,9 @@ E-mail goes through the SMTP server set in **Settings → App → Notifications 
 | User, Password | — | The password is encrypted with the install's master key. |
 | From address | the user | Falls back to the user name when empty. |
 
-E-mails are plain text: the subject, then the body. The link of a rule is used by the bell, not by the e-mail.
+| Keep read notifications (days, 0 = forever) | `90` | Read notifications older than that are purged, at startup and every six hours. Unread ones are kept. |
+
+E-mails are plain text: the subject, then the body, then the rule's link.
 
 ---
 
@@ -14066,7 +14456,7 @@ A channel that fails is logged and does not stop the others. Sending runs in the
 | `role:controllers` | Every active user holding the role. |
 | `email:finance@example.com` | An address — e-mail only. |
 
-In the editor, pick users and roles from the list or type an address.
+In the editor, pick users and roles from the list or type an address. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
 
 ### Placeholders
 
@@ -14112,7 +14502,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address. For a long run, use a rule with the `long_run` event.
+On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address.
 
 ---
 

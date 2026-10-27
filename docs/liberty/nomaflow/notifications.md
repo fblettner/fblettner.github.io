@@ -160,7 +160,9 @@ E-mail goes through the SMTP server set in **Settings → App → Notifications 
 | User, Password | — | The password is encrypted with the install's master key. |
 | From address | the user | Falls back to the user name when empty. |
 
-E-mails are plain text: the subject, then the body. The link of a rule is used by the bell, not by the e-mail.
+| Keep read notifications (days, 0 = forever) | `90` | Read notifications older than that are purged, at startup and every six hours. Unread ones are kept. |
+
+E-mails are plain text: the subject, then the body, then the rule's link.
 
 ---
 
@@ -196,7 +198,7 @@ A channel that fails is logged and does not stop the others. Sending runs in the
 | `role:controllers` | Every active user holding the role. |
 | `email:finance@example.com` | An address — e-mail only. |
 
-In the editor, pick users and roles from the list or type an address.
+In the editor, pick users and roles from the list or type an address. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
 
 ### Placeholders
 
@@ -242,7 +244,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address. For a long run, use a rule with the `long_run` event.
+On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address.
 
 ---
 

@@ -123,7 +123,7 @@ keywords: [Liberty Next, Settings UI, editors, connectors, dictionary, actions, 
 | **Screens** | Grids, dialogs, tabs, actions — the Screen Designer. | [Screens](../build/screens/overview.md) |
 | **Charts** | Saved charts. | [Charts](../charts.md) |
 | **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
-| **Explorer** | The data explorer's model. | — |
+| **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
 | **Reports** | Custom reports. | — |
 | **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
 

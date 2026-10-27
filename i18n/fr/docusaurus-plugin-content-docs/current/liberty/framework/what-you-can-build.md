@@ -40,6 +40,7 @@ Une base de données (clients, produits, contrats, tickets…) et une équipe qu
 | Une période avec préréglages, et l'évolution par rapport à la période précédente | [Tableaux de bord](./dashboards.md) |
 | Des filtres issus du dictionnaire, communs à tous les widgets | [Tableaux de bord](./dashboards.md) |
 | Un cache, avec un bouton **Actualiser** | [Tableaux de bord](./dashboards.md) |
+| L'analyse libre par les utilisateurs eux-mêmes — tableau croisé, graphiques, descente, champs calculés, analyses enregistrées, export Excel / PDF | [Explorateur de données](./explorer/overview.md) |
 
 **À configurer** : les requêtes d'agrégation (en général un `GROUP BY` sur la période), puis les widgets.
 

@@ -160,7 +160,9 @@ Les e-mails passent par le serveur SMTP défini dans **Paramètres → App → N
 | User, Password | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
 | From address | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
 
-Les e-mails sont en texte brut : l'objet, puis le corps. Le lien d'une règle sert à la cloche, pas à l'e-mail.
+| Keep read notifications (days, 0 = forever) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
+
+Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ---
 
@@ -196,7 +198,7 @@ Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait 
 | `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
 | `email:finance@example.com` | Une adresse — e-mail uniquement. |
 
-Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse.
+Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
 
 ### Variables
 
@@ -242,7 +244,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail. Pour une exécution longue, utiliser une règle avec l'événement `long_run`.
+En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail.
 
 ---
 

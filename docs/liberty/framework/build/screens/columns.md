@@ -101,10 +101,10 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 | **`rules`** | How to render and validate the column. `BOOLEAN` renders a checkbox, `ENUM` a dropdown, `LOOKUP` a searchable picker. Blank inherits from the dictionary. |
 | **`rules_values`** | The rule's value — `BOOLEAN` → the true marker (`Y` / `1` / `true`); `ENUM` → the enum id; `LOOKUP` → the lookup id; `SEQUENCE` / `NN` → the sequence id. |
 | **`default`** | Pre-fill value when adding a new row. |
-| **`required`** | When on, the field is marked as required (asterisk). |
+| **`required`** | When on, the field is marked with an asterisk and **Save** stays blocked while it is empty. |
 | **`disabled`** | When on, the column is read-only — the operator sees the value but can't change it. |
 | **`disable_on_add`** / **`disable_on_edit`** | Read-only only when a row is added, or only once it exists — the second one for keys that must not change. |
-| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. |
+| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. A required field blocks **Save** only while it is visible. |
 | **`default_when`** | A value forced (and locked, unless **lock** is off) while a condition holds. |
 | **`rules_when`** | Another rule (lookup, enum, Boolean) while a condition holds. |
 | **`write_when`** | The column is written only while a condition holds. |

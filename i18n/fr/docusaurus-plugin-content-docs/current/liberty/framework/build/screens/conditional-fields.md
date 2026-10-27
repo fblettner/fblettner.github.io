@@ -145,7 +145,7 @@ Une ligne d'une période clôturée s'ouvre en consultation, et le serveur en re
 |---|---|---|
 | Le champ déterminant ne figure pas dans le dialogue. | Le formulaire ignore sa valeur : la condition n'est jamais remplie et le champ dépendant reste masqué. | Ajouter le champ déterminant au dialogue, masqué ou non. |
 | `visible_when` sur une colonne clé. | À l'ajout d'une ligne, la clé peut ne pas apparaître. | Verrouiller une clé (`disable_on_edit`) plutôt que la masquer. |
-| `required_when` rempli alors que `visible_when` ne l'est pas. | Le champ est obligatoire mais masqué. | Aligner les deux conditions. |
+| `required_when` rempli alors que `visible_when` ne l'est pas. | Un champ masqué n'est jamais exigé : l'enregistrement passe avec le champ vide. | Aligner les deux conditions. |
 | Une valeur orthographiée différemment. | La condition n'est jamais remplie : la comparaison est exacte (seuls les espaces autour sont ignorés). | Reprendre les codes stockés, pas leurs libellés. |
 | Un seuil (`AMOUNT > 1000`). | Les conditions ne testent que l'égalité. | Renvoyer un indicateur depuis la requête de lecture (`HIGH_VALUE = 'Y'`) et tester cet indicateur. |
 

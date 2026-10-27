@@ -145,7 +145,7 @@ A row of a closed period opens in view-only mode, and the server refuses changes
 |---|---|---|
 | The deciding field is not on the dialog. | Its value is unknown to the form: the condition never matches, and the dependent field stays hidden. | Add the deciding field to the dialog, hidden or not. |
 | `visible_when` on a key column. | A user adding a row may not see the key. | Lock a key (`disable_on_edit`); do not hide it. |
-| `required_when` matches while `visible_when` does not. | The field is required but hidden. | Keep the two conditions in line. |
+| `required_when` matches while `visible_when` does not. | A hidden field is never demanded: **Save** goes through with it empty. | Keep the two conditions in line. |
 | A value with different spelling. | The condition never matches: values are compared exactly (only the surrounding spaces are ignored). | Copy the stored codes, not their labels. |
 | A threshold (`AMOUNT > 1000`). | Conditions only test equality. | Return a flag from the read query (`HIGH_VALUE = 'Y'`) and test that flag. |
 

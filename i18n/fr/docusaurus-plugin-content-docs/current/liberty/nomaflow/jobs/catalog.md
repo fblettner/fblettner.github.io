@@ -128,7 +128,7 @@ Les boutons de la carte :
 | **▶ Exécuter** | Lance la tâche. Quand il y a quelque chose à choisir — paramètres partagés, arguments d'étapes, plusieurs étapes, une étape `file_load` — il ouvre d'abord **Run with parameters**. |
 | **Annuler** | Affiché pendant l'exécution : annule l'exécution en cours. |
 | **Modifier** | Ouvre l'éditeur de tâche. |
-| **Cloner** | Demande un nouvel identifiant (`<id>_copy` proposé) et crée une copie désactivée, sans la planification propre de la tâche — les planifications des préréglages sont copiées telles quelles. |
+| **Cloner** | Demande un nouvel identifiant (`<id>_copy` proposé) et crée une copie désactivée et sans aucune planification : ni celle de la tâche, ni celles de ses préréglages. |
 | **Supprimer** | Retire la tâche de `jobs.toml` après confirmation. Son historique d'exécutions est conservé. |
 | **Export** | Télécharge un ZIP avec l'entrée `jobs.toml` de la tâche et un `MANIFEST.md`. Les connecteurs et requêtes qu'elle utilise ne sont pas inclus. |
 

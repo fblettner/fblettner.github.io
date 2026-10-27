@@ -126,7 +126,7 @@ Les préréglages s'enregistrent depuis **Run with parameters → Save as preset
 
 ### Alertes
 
-**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. Pour être prévenu des exécutions longues, utiliser une règle de notification sur l'événement `long_run` : voir [Notifications](../notifications.md#job-alerts).
+**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
 
 ### Paramètres partagés
 

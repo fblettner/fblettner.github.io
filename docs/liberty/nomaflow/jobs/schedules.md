@@ -147,7 +147,7 @@ The scheduler then runs the job on that schedule with the preset's parameters: o
 A preset's schedule is independent of the job's **Enabled** switch: an enabled preset runs even when the job's own schedule is off.
 
 :::info[Cloning a job]
-**Clone** creates a disabled copy without the job's own schedule, but the presets keep their schedules and their *Schedule enabled* state: review them in the copy before saving it.
+**Clone** creates a disabled copy without any schedule: the job's own cron and the presets' schedules are dropped, so the copy never fires alongside the original. Give it its schedules once it is ready.
 :::
 
 ---

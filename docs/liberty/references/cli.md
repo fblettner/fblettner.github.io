@@ -60,7 +60,7 @@ liberty-admin set-attributes alice company=00001,00050
 ```
 
 :::warning[Updating an existing role]
-`create-role` on an existing role replaces its permissions with the `--permission` values given — none given means none kept. To change only the scope of a role, use `set-scope`.
+`create-role` on an existing role replaces its permissions with the `--permission` values given; without `--permission`, the role keeps its permissions. To change only the scope of a role, use `set-scope`, which needs `--rule` or `--clear`.
 :::
 
 ### Schema migrations \{#migrate\}

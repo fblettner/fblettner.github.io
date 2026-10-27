@@ -101,10 +101,10 @@ Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé d
 | **`rules`** | Comment afficher et valider la colonne. `BOOLEAN` affiche une case à cocher, `ENUM` une liste déroulante, `LOOKUP` un sélecteur avec recherche. Vide hérite du dictionnaire. |
 | **`rules_values`** | La valeur de la règle — `BOOLEAN` → le marqueur vrai (`Y` / `1` / `true`) ; `ENUM` → l'identifiant d'énumération ; `LOOKUP` → l'identifiant de recherche ; `SEQUENCE` / `NN` → l'identifiant de séquence. |
 | **`default`** | Valeur pré-remplie à l'ajout d'une nouvelle ligne. |
-| **`required`** | Activé, le champ est signalé comme obligatoire (astérisque). |
+| **`required`** | Activé, le champ porte un astérisque et **Enregistrer** reste bloqué tant qu'il est vide. |
 | **`disabled`** | Activé, la colonne est en lecture seule — l'opérateur voit la valeur sans pouvoir la modifier. |
 | **`disable_on_add`** / **`disable_on_edit`** | Lecture seule uniquement à l'ajout d'une ligne, ou uniquement une fois la ligne créée — le second pour les clés qui ne doivent plus changer. |
-| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. |
+| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. Un champ obligatoire ne bloque l'enregistrement que s'il est visible. |
 | **`default_when`** | Une valeur imposée (et verrouillée, sauf si **lock** est désactivé) tant qu'une condition est remplie. |
 | **`rules_when`** | Une autre règle (lookup, énumération, booléen) tant qu'une condition est remplie. |
 | **`write_when`** | La colonne n'est écrite que tant qu'une condition est remplie. |

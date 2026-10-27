@@ -60,7 +60,7 @@ liberty-admin set-attributes alice company=00001,00050
 ```
 
 :::warning[Mettre à jour un rôle existant]
-`create-role` sur un rôle existant remplace ses permissions par les valeurs `--permission` fournies — aucune valeur fournie signifie aucune permission conservée. Pour ne modifier que le périmètre d'un rôle, utiliser `set-scope`.
+`create-role` sur un rôle existant remplace ses permissions par les valeurs `--permission` fournies ; sans `--permission`, le rôle garde les siennes. Pour ne modifier que le périmètre d'un rôle, utiliser `set-scope`, qui exige `--rule` ou `--clear`.
 :::
 
 ### Migrations de schéma \{#migrate\}

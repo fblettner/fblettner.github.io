@@ -147,7 +147,7 @@ Le planificateur exécute alors la tâche selon cette planification avec les par
 La planification d'un préréglage ne dépend pas du switch **Activée** de la tâche : un préréglage activé s'exécute même quand la planification propre de la tâche est arrêtée.
 
 :::info[Cloner une tâche]
-**Cloner** crée une copie désactivée, sans la planification propre de la tâche, mais les préréglages gardent leurs planifications et leur état *Planning activé* : les vérifier dans la copie avant de l'enregistrer.
+**Cloner** crée une copie désactivée et sans aucune planification : le cron de la tâche et ceux des préréglages sont retirés, si bien que la copie ne se déclenche jamais en même temps que l'original. Ses planifications se définissent une fois la copie prête.
 :::
 
 ---

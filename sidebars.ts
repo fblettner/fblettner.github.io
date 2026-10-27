@@ -102,6 +102,17 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Data Explorer',
+      link: {type: 'doc', id: 'liberty/framework/explorer/overview'},
+      items: [
+        'liberty/framework/explorer/model',
+        'liberty/framework/explorer/analysis',
+        'liberty/framework/explorer/calculated-fields',
+        'liberty/framework/explorer/saved-and-dashboards',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Security',
       link: {type: 'generated-index', slug: '/liberty/framework/build/secure', description: 'Sign-in, roles and data scope, users, encrypted secrets and the licence key.'},
       items: [

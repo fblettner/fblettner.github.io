@@ -141,7 +141,7 @@ See [AI assistant](../ai-assistant.md).
 
 ## Notifications (email) \{#notifications\}
 
-**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address). See [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address, Keep read notifications — days, `0` = forever). See [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 

@@ -40,6 +40,7 @@ A database (customers, products, contracts, tickets…) and a team that must rea
 | A period with presets, and the change compared with the previous period | [Dashboards](./dashboards.md) |
 | Filters from the dictionary, shared by every widget | [Dashboards](./dashboards.md) |
 | A cache with a **Refresh** button | [Dashboards](./dashboards.md) |
+| Free analysis by the users themselves — pivot, charts, drill, calculated fields, saved analyses, Excel / PDF export | [Data Explorer](./explorer/overview.md) |
 
 **To configure**: the aggregate queries (usually `GROUP BY` on the period), then the widgets.
 

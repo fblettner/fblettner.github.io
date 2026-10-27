@@ -274,6 +274,7 @@ Une base de données (clients, produits, contrats, tickets…) et une équipe qu
 | Une période avec préréglages, et l'évolution par rapport à la période précédente | [Tableaux de bord](./dashboards.md) |
 | Des filtres issus du dictionnaire, communs à tous les widgets | [Tableaux de bord](./dashboards.md) |
 | Un cache, avec un bouton **Actualiser** | [Tableaux de bord](./dashboards.md) |
+| L'analyse libre par les utilisateurs eux-mêmes — tableau croisé, graphiques, descente, champs calculés, analyses enregistrées, export Excel / PDF | [Explorateur de données](./explorer/overview.md) |
 
 **À configurer** : les requêtes d'agrégation (en général un `GROUP BY` sur la période), puis les widgets.
 
@@ -5911,10 +5912,10 @@ Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé d
 | **`rules`** | Comment afficher et valider la colonne. `BOOLEAN` affiche une case à cocher, `ENUM` une liste déroulante, `LOOKUP` un sélecteur avec recherche. Vide hérite du dictionnaire. |
 | **`rules_values`** | La valeur de la règle — `BOOLEAN` → le marqueur vrai (`Y` / `1` / `true`) ; `ENUM` → l'identifiant d'énumération ; `LOOKUP` → l'identifiant de recherche ; `SEQUENCE` / `NN` → l'identifiant de séquence. |
 | **`default`** | Valeur pré-remplie à l'ajout d'une nouvelle ligne. |
-| **`required`** | Activé, le champ est signalé comme obligatoire (astérisque). |
+| **`required`** | Activé, le champ porte un astérisque et **Enregistrer** reste bloqué tant qu'il est vide. |
 | **`disabled`** | Activé, la colonne est en lecture seule — l'opérateur voit la valeur sans pouvoir la modifier. |
 | **`disable_on_add`** / **`disable_on_edit`** | Lecture seule uniquement à l'ajout d'une ligne, ou uniquement une fois la ligne créée — le second pour les clés qui ne doivent plus changer. |
-| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. |
+| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. Un champ obligatoire ne bloque l'enregistrement que s'il est visible. |
 | **`default_when`** | Une valeur imposée (et verrouillée, sauf si **lock** est désactivé) tant qu'une condition est remplie. |
 | **`rules_when`** | Une autre règle (lookup, énumération, booléen) tant qu'une condition est remplie. |
 | **`write_when`** | La colonne n'est écrite que tant qu'une condition est remplie. |
@@ -6252,7 +6253,7 @@ Une ligne d'une période clôturée s'ouvre en consultation, et le serveur en re
 |---|---|---|
 | Le champ déterminant ne figure pas dans le dialogue. | Le formulaire ignore sa valeur : la condition n'est jamais remplie et le champ dépendant reste masqué. | Ajouter le champ déterminant au dialogue, masqué ou non. |
 | `visible_when` sur une colonne clé. | À l'ajout d'une ligne, la clé peut ne pas apparaître. | Verrouiller une clé (`disable_on_edit`) plutôt que la masquer. |
-| `required_when` rempli alors que `visible_when` ne l'est pas. | Le champ est obligatoire mais masqué. | Aligner les deux conditions. |
+| `required_when` rempli alors que `visible_when` ne l'est pas. | Un champ masqué n'est jamais exigé : l'enregistrement passe avec le champ vide. | Aligner les deux conditions. |
 | Une valeur orthographiée différemment. | La condition n'est jamais remplie : la comparaison est exacte (seuls les espaces autour sont ignorés). | Reprendre les codes stockés, pas leurs libellés. |
 | Un seuil (`AMOUNT > 1000`). | Les conditions ne testent que l'égalité. | Renvoyer un indicateur depuis la requête de lecture (`HIGH_VALUE = 'Y'`) et tester cet indicateur. |
 
@@ -8209,6 +8210,391 @@ Le badge *override* signale un graphique marqué comme personnalisation locale :
 
 ---
 
+## Liberty Next — Explorateur de données
+Source: https://docs.nomana-it.fr/fr/liberty/framework/explorer/overview/
+
+L'explorateur de données de Liberty Next : l'analyse libre des données d'une application sans écrire de SQL — volet des champs, lignes, mesures et filtres, période, vues tableau, croisé, graphiques et KPI, lignes de détail et descente, champs calculés, analyses enregistrées, tableaux de bord et export Excel / PDF, sur un modèle défini dans Paramètres → Explorateur.
+
+L'explorateur de données permet aux utilisateurs d'analyser seuls les données d'une application : choix des champs, regroupements, filtres, période, puis lecture du résultat en tableau, en tableau croisé, en graphique ou en cartes KPI — sans écrire de requête. Il s'applique à toute application connectée dont les données passent par un connecteur SQL.
+
+Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d'un **modèle**, dans **Paramètres → Explorateur**. Les utilisateurs ouvrent ensuite l'explorateur depuis la **boussole** de l'en-tête, visible dès qu'au moins un modèle leur est accessible.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Les éléments \{#pieces\}
+
+| Élément | Rôle | Page |
+|---|---|---|
+| **Modèle** | Un magasin de données d'une application : une entité centrale (le **pivot**, par exemple les affaires ou les lignes de facture) et les entités qui l'entourent (clients, activités…), chacune lue par une requête d'un connecteur et reliée aux autres par des relations. Une application peut compter plusieurs modèles. | [Construire un modèle](./model.md) |
+| **Analyse** | Ce que l'utilisateur compose sur la page : lignes, mesures, filtres, période, vue. | [Analyser les données](./analysis.md) |
+| **Champ calculé** | Un champ calculé à partir des autres (`AMOUNT * 0.6`, `year(CLOSE_DATE)`), typé et contrôlé par le serveur. | [Champs calculés](./calculated-fields.md) |
+| **Analyse enregistrée, tableau de bord** | Une analyse conservée sous un nom, privée ou partagée ; un tableau de bord est une grille d'analyses enregistrées. Les deux s'exportent en Excel et en PDF. | [Analyses enregistrées et tableaux de bord](./saved-and-dashboards.md) |
+
+---
+
+## Qui voit quoi \{#access\}
+
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Paramètres → Access → Roles**, bloc **Beyond the menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
+- Le **périmètre de données** du rôle s'applique à chaque requête de l'explorateur : un utilisateur limité aux lignes d'une société dans les écrans retrouve exactement ces lignes dans l'explorateur, totaux compris. Voir [Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
+- Seul un superutilisateur modifie **Paramètres → Explorateur** ; lui seul voit aussi le SQL d'une analyse et les avertissements du modèle (colonne disparue, mesure non numérique).
+
+---
+
+## Ce que l'explorateur n'est pas \{#limits\}
+
+- **Un éditeur SQL.** L'utilisateur ne saisit jamais de SQL : l'explorateur construit une seule instruction à partir du modèle, identique sur Oracle, PostgreSQL et SQLite. Un champ calculé s'écrit dans un petit langage d'expressions, compilé par le serveur.
+- **Sans limite.** Un agrégat lit au plus 50 000 lignes regroupées (au-delà, une mention signale des chiffres partiels) et affiche les N premiers groupes (**Top**, jusqu'à 10 000). La vue détail se parcourt page par page ; un export contient au plus 3 000 lignes par section.
+- **Un remplaçant des tableaux de bord.** Les [tableaux de bord](../dashboards.md) sont conçus par un opérateur sur des requêtes choisies ; l'explorateur laisse les utilisateurs construire leurs propres vues sur un modèle.
+
+---
+
+## Pour aller plus loin
+
+- [Construire un modèle](./model.md) — Paramètres → Explorateur, de zéro ou depuis un préréglage de l'assistant de création d'écran.
+- [Analyser les données](./analysis.md) — la page, étape par étape.
+
+---
+
+## Liberty Next — Construire un modèle
+Source: https://docs.nomana-it.fr/fr/liberty/framework/explorer/model/
+
+Paramètres → Explorateur dans Liberty Next : un modèle d'exploration par magasin de données — le pivot, les entités (une requête avec sa cardinalité, sa clé, ses mesures, ses colonnes masquées et sa date par défaut), les relations sur des paires de colonnes, et un modèle rempli depuis un préréglage de l'assistant de création d'écran.
+
+Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et comment les tables se rejoignent. Un superutilisateur le construit dans **Paramètres → Explorateur**, sans SQL : chaque entité lit une requête existante d'un connecteur, et les colonnes se déduisent du résultat de cette requête.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## L'application et le modèle \{#app-model\}
+
+1. **App** — la barre du haut liste les applications qui ont déjà un modèle ; **+ Ajouter une app** propose les connecteurs SQL qui n'en ont pas.
+2. **Modèle** — choisir un modèle de l'application, ou **Ajouter un modèle** et saisir son identifiant (lettres, chiffres, `_` et `-`). Une application peut avoir plusieurs modèles : des tables sans lien entre elles font l'objet de modèles distincts. **Supprimer le modèle** le retire avec ses entités et ses relations.
+3. L'en-tête du modèle :
+
+| Champ | Usage |
+|---|---|
+| **Libellé** | Le nom affiché dans le sélecteur de modèle de l'explorateur. |
+| **Pivot** | L'entité de départ de chaque analyse : une table de faits, un en-tête de document, des lignes de document. |
+| **Description** | Affichée sous le titre de l'explorateur. |
+| **Préréglage (assistant écran)** | Remplit le modèle depuis un préréglage — voir [plus bas](#preset). |
+
+**Enregistrer** écrit le modèle et le recharge : l'explorateur le voit aussitôt. Un modèle sans entité n'est pas enregistré.
+
+---
+
+## Entités \{#entities\}
+
+**Ajouter une entité** (ou un clic sur une entité) ouvre son formulaire :
+
+| Champ | Usage |
+|---|---|
+| **Id** | L'identifiant de l'entité, figé après création (`deals`, `customers`). |
+| **Libellé** | Le nom du groupe dans le volet des champs. |
+| **Lignes par ligne du pivot** | **1..1 · une** — au plus une ligne par ligne du pivot (le client d'une affaire) ; **1..n · plusieurs** — plusieurs lignes (les activités d'une affaire). Le pivot est toujours en 1..1. |
+| **Description** | Texte libre. |
+| **Connecteur** | Le connecteur de la requête ; par défaut, celui de l'application. |
+| **Requête** | Une requête SELECT de ce connecteur, sans paramètre. Ses colonnes se découvrent en l'exécutant sur une ligne. |
+| **Écran (indications de colonnes)** | Un écran dont les réglages de colonnes fournissent libellés, formats et listes de valeurs. Les écrans qui lisent la même requête apparaissent en tête. |
+| **Date par défaut** | Le champ date auquel la période s'applique en premier. |
+
+Le tableau **Colonnes** liste les colonnes découvertes, avec le libellé et le type fournis par l'écran. Pour chacune :
+
+- **Clé** — les colonnes qui identifient une ligne. Une nouvelle entité reprend les colonnes clés de l'écran. La clé permet d'ouvrir une ligne dans le dialogue de son écran depuis la vue détail.
+- **Mesure** — une colonne numérique à additionner, moyenner, compter… : choisir son agrégat par défaut (`sum`, `avg`, `min`, `max`, `count`, `count_distinct`). Laissée sur *— dimension —*, la colonne sert aux regroupements et aux filtres.
+- **Masquée** — absente du volet des champs. Une colonne masquée par l'écran le reste.
+
+Une colonne que la requête ne renvoie plus porte un **?**, pour pouvoir la décocher.
+
+### Ce qu'une colonne devient pour l'utilisateur \{#fields\}
+
+Chaque colonne devient un **champ** du volet, libellé et formaté par le dictionnaire et l'écran, typé en texte, nombre, date, date-heure ou oui/non. Une colonne dotée d'une liste de valeurs (une énumération ou une liste de recherche dans l'écran) affiche ses libellés et propose ses valeurs dans les filtres. Une colonne déclarée comme mesure mais non numérique reste une dimension, et le modèle le signale aux superutilisateurs.
+
+---
+
+## Relations \{#relations\}
+
+Une relation relie deux entités sur une ou plusieurs **paires de colonnes** : `customers` → `deals` sur `ID = CUSTOMER_ID`. **Ajouter une relation**, choisir les deux entités, puis les colonnes (les listes proposent les colonnes de chaque entité ; un nom peut aussi se saisir) ; **+** ajoute une paire pour une clé composée.
+
+Chaque entité doit rejoindre le pivot, directement ou par d'autres entités. L'explorateur choisit ensuite les jointures utiles à chaque analyse, sans jamais multiplier les lignes deux fois : une analyse regroupe sur une seule entité 1..n au plus, et les autres sont atteintes sans dupliquer les lignes du pivot.
+
+---
+
+## Un modèle depuis un préréglage \{#preset\}
+
+Un préréglage de l'assistant de création d'écran déclare déjà un ensemble de tables et leurs jointures. Le choisir dans **Préréglage (assistant écran)** remplit le modèle :
+
+- chaque table du préréglage devient une entité (toutes ses colonnes, ou la liste de colonnes du préréglage), la table de base devient le pivot ;
+- les jointures deviennent des relations, posées sur les colonnes réelles — la colonne de ce nom, celle qui porte cet élément du dictionnaire ou, sur un connecteur à préfixe de table (JD Edwards EnterpriseOne : `ABAN8`, `WWAN8`), celle dont le nom sans préfixe correspond à l'élément.
+
+Les entités déjà déclarées sont conservées et complétées ; une clé, des mesures, une date par défaut ou une cardinalité réglées à la main restent en place. Il reste à ajuster ce qui doit l'être, puis **Enregistrer**. Choisir de nouveau le préréglage remplit encore le modèle.
+
+---
+
+## Points d'attention
+
+| Situation | Effet | Solution |
+|---|---|---|
+| Une entité n'est pas reliée au pivot. | L'enregistrement est refusé, avec le nom des entités isolées. | Ajouter la relation manquante. |
+| La requête de l'entité attend des paramètres. | L'explorateur l'exécute sans paramètre. | Rattacher l'entité à une requête sans paramètre. |
+| Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Paramètres → Connecteurs. |
+
+## Pour aller plus loin
+
+- [Analyser les données](./analysis.md) — ce que les utilisateurs font du modèle.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md#access) — donner accès à un modèle.
+
+---
+
+## Liberty Next — Analyser les données
+Source: https://docs.nomana-it.fr/fr/liberty/framework/explorer/analysis/
+
+L'explorateur de données de Liberty Next au quotidien : le volet des champs, les étagères Lignes, Mesures et Filtres, la période, le Top N, les vues tableau, croisé, barres, courbes, secteurs et KPI, la vue détail, la descente vers les lignes d'un chiffre et le dialogue de l'enregistrement.
+
+L'explorateur s'ouvre depuis la **boussole** de l'en-tête. Le sélecteur en haut à droite passe d'un modèle accessible à l'autre ; choisir une application dans la navigation de gauche ouvre le modèle de cette application.
+
+L'analyse se relance d'elle-même un instant après chaque modification ; **Exécuter** la relance à la demande.
+
+---
+
+## Volet des champs \{#fields\}
+
+Le volet de gauche liste les entités du modèle — l'entité analysée dépliée, les autres repliées — avec leur badge **1..1** ou **1..n**. Dans chaque entité, les dimensions viennent d'abord, puis les **Σ Mesures**. La zone de recherche filtre les champs de toutes les entités.
+
+| Action | Résultat |
+|---|---|
+| Clic sur un champ | Une dimension rejoint **Lignes**, une mesure **Mesures**. |
+| Entonnoir d'un champ | Le champ rejoint **Filtres**. |
+| Glisser un champ | Le dépose sur l'étagère voulue. |
+| Double-clic sur une entité | En fait l'**entité analysée** — le point de départ de l'analyse (le pivot par défaut). Le sélecteur à gauche de la barre d'outils fait de même. |
+
+Les champs déjà utilisés sont mis en évidence. **Nouveau champ calculé**, en bas du volet, ouvre l'[éditeur de champ calculé](./calculated-fields.md).
+
+---
+
+## Étagères \{#shelves\}
+
+| Étagère | Contenu |
+|---|---|
+| **Lignes** | Les dimensions de regroupement. Une date reçoit une granularité : *Valeur exacte*, *Jour*, *Semaine*, *Mois* (par défaut), *Trimestre*, *Année*. En vue détail, cette étagère liste les colonnes affichées. |
+| **Mesures** | Un agrégat par pastille : *Somme*, *Moyenne*, *Min*, *Max*, *Nombre*, *Nombre distinct* pour un nombre ; *Nombre* ou *Nombre distinct* sinon. **+** ajoute un nombre de lignes. Une dimension déposée ici compte ses valeurs distinctes. |
+| **Filtres** | Un champ, un opérateur, une valeur. Texte : *contient*, `=`, `≠`, *commence par*, *finit par*, *parmi*, *est vide*, *n'est pas vide*. Nombres et dates : `=`, `≠`, *entre*, `<`, `≤`, `>`, `≥`, *parmi*, *est vide*, *n'est pas vide*. Un champ doté d'une liste de valeurs propose ses valeurs ; *parmi* accepte une liste séparée par des virgules. |
+
+Les pastilles se réordonnent par glisser-déposer dans une même étagère ; la croix en retire une. Une valeur de filtre s'applique avec **Entrée** ou en quittant le champ.
+
+---
+
+## Période et Top N \{#period\}
+
+La barre **Période** apparaît dès que l'entité analysée a un champ date : choisir le champ (la date par défaut de l'entité en premier), puis un préréglage — *Aujourd'hui*, *Hier*, *7 derniers jours*, *30 derniers jours*, *Ce mois-ci*, *Mois dernier*, *Ce trimestre*, *Cette année*, *Année dernière*, *12 derniers mois* — ou une *Période libre* choisie sur le calendrier. *Toutes les dates* retire la période.
+
+**Top** conserve les N premiers groupes (jusqu'à 10 000). La mention de la barre d'outils indique *N groupe(s) sur M ligne(s)*, et précise si la liste a été coupée ou si les chiffres sont partiels.
+
+---
+
+## Vues \{#views\}
+
+Les boutons de la barre d'outils changent de vue sans relancer la requête.
+
+| Vue | Contenu |
+|---|---|
+| **Tableau** | Une ligne par groupe, triable par en-tête. Un clic sur une ligne descend vers ses lignes. |
+| **Croisé** | Les lignes en hiérarchie repliable avec sous-totaux, une dimension étalée en **Colonnes** (*Automatique* : la dernière), un total général et une **Part** — *du parent* ou *du total* — à côté de chaque valeur. Les sous-totaux n'apparaissent que pour une somme ou un nombre : une somme de moyennes n'a pas de sens. Outils : tout déplier, tout replier, export Excel. Un clic sur une valeur descend vers ses lignes. |
+| **Barres**, **Courbes** | La première dimension en abscisse, la deuxième (ou les mesures) en **Séries** ; les 10 premières séries, le reste regroupé dans *Autres* ; les dates dans l'ordre, les autres catégories par valeur ; option **Empilé**. |
+| **Secteurs** | La première dimension en secteurs, les 10 premiers plus *Autres*. |
+| **KPI** | Une carte par mesure, avec son total. |
+| **Détail** | Les lignes elles-mêmes, 50 par page, avec l'étagère **Lignes** pour colonnes (à défaut, les champs de l'entité analysée). |
+
+**Mesure** choisit la mesure du croisé ou du graphique (la première par défaut).
+
+---
+
+## Descente et enregistrement \{#drill\}
+
+Un clic sur un groupe du tableau ou sur une valeur du croisé liste les **lignes qui composent ce chiffre** : la clé, les dimensions et les champs des mesures de chaque ligne. Les valeurs de la cellule s'affichent au-dessus de la liste (*Pays : France*, *Étape : Négociation*) ; **Retour à l'analyse** ramène aux chiffres.
+
+En vue détail comme après une descente, une ligne d'une entité rattachée à un écran ouvre le **dialogue** de cet écran : l'enregistrement s'affiche comme dans l'écran et se modifie avec les mêmes droits. L'analyse se met à jour après l'enregistrement.
+
+---
+
+## Points d'attention
+
+| Situation | Effet |
+|---|---|
+| Une mesure d'une entité 1..n à côté de dimensions du pivot. | Agrégée par ligne du pivot, sans dupliquer les lignes du pivot. |
+| Deux entités 1..n dans les lignes. | Refusé, avec un message : une seule entité 1..n à la fois. |
+| La mention signale des chiffres partiels. | Plus de 50 000 lignes regroupées ont été lues : resserrer la période ou ajouter un filtre. |
+| Un superutilisateur veut voir la requête. | Le bouton **SQL** de la barre d'outils affiche l'instruction et ses valeurs. |
+
+## Pour aller plus loin
+
+- [Champs calculés](./calculated-fields.md) — des champs sur mesure.
+- [Analyses enregistrées et tableaux de bord](./saved-and-dashboards.md) — conserver, partager, exporter.
+
+---
+
+## Liberty Next — Champs calculés
+Source: https://docs.nomana-it.fr/fr/liberty/framework/explorer/calculated-fields/
+
+Les champs calculés de l'explorateur de données de Liberty Next : l'éditeur (nom, libellé, expression, sélecteurs de champs et de fonctions, Tester), le langage d'expressions — arithmétique, comparaisons, conditions, in, is empty, fonctions de date, de texte et de nombre — et le rôle de mesure ou de dimension selon le type du résultat.
+
+Un champ calculé produit une valeur à partir des autres champs : une marge, un montant pondéré, une année, un délai en jours, une catégorie. Il s'écrit dans un petit langage d'expressions que le serveur contrôle et traduit pour la base — jamais du SQL libre. Il appartient à l'analyse et s'enregistre avec elle.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## L'éditeur \{#editor\}
+
+**Nouveau champ calculé**, en bas du volet des champs, ouvre l'éditeur ; le crayon d'un champ calculé le modifie, la corbeille le supprime (il quitte alors aussi les étagères).
+
+| Champ | Usage |
+|---|---|
+| **Nom** | Une lettre, puis lettres, chiffres ou `_` ; unique dans l'analyse. |
+| **Libellé** | Le nom affiché dans le volet et les résultats. |
+| **Insérer un champ**, **Insérer une fonction** | Insèrent au curseur ; une fonction s'insère avec ses arguments sélectionnés. |
+| **Expression** | La formule. |
+| **Tester** | Compile l'expression sur le serveur et affiche son type et huit valeurs d'exemple. |
+
+**Enregistrer** n'est disponible qu'après un test réussi. Le type du résultat fixe le rôle du champ : un **nombre** devient une mesure, tout autre type une dimension. Le champ rejoint alors un groupe *calc* du volet et s'utilise dans les lignes, les mesures et les filtres comme tout autre champ.
+
+---
+
+## Le langage \{#language\}
+
+Un champ s'écrit par son nom pour l'entité analysée (`AMOUNT`), ou `entité.NOM` pour une autre entité (`customers.COUNTRY`). Les textes s'écrivent entre apostrophes.
+
+| Élément | Formes |
+|---|---|
+| Arithmétique | `+` `-` `*` `/` et parenthèses. Une division par zéro donne une valeur vide. |
+| Comparaison | `=` `!=` `<>` `<` `<=` `>` `>=` |
+| Logique | `and`, `or`, `not` |
+| Condition | `condition ? valeur_si_vrai : valeur_si_faux` |
+| Liste | `x in ('FR', 'BE')` |
+| Vide | `x is empty`, `x is not empty` |
+| Dates | `year(d)`, `month(d)`, `day(d)`, `days(début, fin)` — le nombre de jours entre deux dates |
+| Nombres | `round(x, n)`, `abs(x)` |
+| Texte | `upper(s)`, `lower(s)`, `length(s)`, `concat(a, b, …)` |
+| Tout type | `coalesce(a, b, …)` — la première valeur non vide |
+
+Un résultat oui/non s'affiche `Y` / `N`. Une date julienne de JD Edwards EnterpriseOne est convertie en vraie date avant l'application d'une fonction de date.
+
+---
+
+## Exemples \{#examples\}
+
+| Besoin | Expression | Rôle |
+|---|---|---|
+| Pipeline pondéré | `STAGE = 'Negotiation' ? AMOUNT * 0.6 : AMOUNT * 0.3` | mesure |
+| Prix unitaire | `AMOUNT / QTY` | mesure |
+| Année de clôture | `year(CLOSE_DATE)` | mesure — un nombre ; pour regrouper par année, la granularité *Année* de la date dans **Lignes** convient mieux |
+| Délai de clôture | `days(CREATED_ON, CLOSE_DATE)` | mesure |
+| Tranche de montant | `AMOUNT >= 100000 ? 'large' : 'standard'` | dimension |
+| Client national ou non | `customers.COUNTRY = 'FR'` | dimension (`Y` / `N`) |
+
+---
+
+## Points d'attention
+
+| Situation | Effet |
+|---|---|
+| Types incompatibles (`AMOUNT + 'x'`). | Le test échoue et indique la position de l'erreur. |
+| Un champ inconnu. | Le test échoue et le nomme. |
+| Les deux branches de `? :` n'ont pas le même type. | Le test échoue : deux nombres, deux textes ou deux dates. |
+| Une expression de plus de 2 000 caractères. | Refusée. |
+
+## Pour aller plus loin
+
+- [Analyser les données](./analysis.md) — les étagères et les vues.
+- [Analyses enregistrées et tableaux de bord](./saved-and-dashboards.md) — une analyse enregistrée conserve ses champs calculés.
+
+---
+
+## Liberty Next — Analyses enregistrées et tableaux de bord
+Source: https://docs.nomana-it.fr/fr/liberty/framework/explorer/saved-and-dashboards/
+
+Conserver le travail de l'explorateur de données de Liberty Next : analyses enregistrées, privées ou partagées, avec un public ; tableaux de bord d'analyses avec leur propre période et leur disposition ; export Excel et PDF ; analyses et tableaux de bord livrés avec une application.
+
+La barre de mode, en haut de l'explorateur, offre deux modes : **Analyses**, l'éditeur avec ses analyses enregistrées, et **Tableaux de bord**, des grilles d'analyses enregistrées. Chaque mode affiche le nombre d'éléments qu'il contient.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Analyses enregistrées \{#analyses\}
+
+En mode **Analyses**, le sélecteur liste les analyses enregistrées du modèle, regroupées par public, celles de l'utilisateur marquées *à moi*. *Nouvelle analyse* repart d'une analyse vide.
+
+| Bouton | Effet |
+|---|---|
+| **Enregistrer** | Enregistre l'analyse en cours — lignes, mesures, filtres, période, vue, champs calculés. |
+| **Enregistrer sous** | Enregistre une copie sous un nouveau nom, toujours privée au départ. |
+| **Supprimer** | Proposé au propriétaire de l'analyse et aux superutilisateurs. |
+| **Excel**, **PDF** | Export — voir [plus bas](#export). |
+
+La fenêtre d'enregistrement demande :
+
+| Champ | Usage |
+|---|---|
+| **Nom** | Le nom dans le sélecteur. |
+| **Description** | Texte libre. |
+| **Public** | Un groupe pour le sélecteur : *finance*, *ventes*, *it*… |
+| **Visible par tous** | Décochée : réservée à son propriétaire. Cochée : **partagée** — tout utilisateur qui a accès au modèle la voit. |
+
+Enregistrer une analyse partagée la modifie pour tout le monde, comme le rappelle la fenêtre. **Enregistrer sous** crée à la place une copie personnelle.
+
+---
+
+## Tableaux de bord \{#dashboards\}
+
+En mode **Tableaux de bord**, un tableau de bord est une grille de **tuiles** sur quatre colonnes, chacune exécutant une analyse enregistrée dans sa propre vue — tableau, croisé, graphique, KPI ou détail.
+
+- **La période** du haut s'applique à chaque tuile dont l'analyse a un champ de période ; les autres conservent la leur.
+- **Modifier la disposition** affiche les outils des tuiles : déplacer à gauche ou à droite, largeur (1 à 4 colonnes), hauteur (*s*, *m*, *l*), retrait. **Ajouter une analyse…** ajoute une tuile.
+- **Le crayon** d'une tuile ouvre son analyse dans l'éditeur ; une descente depuis une tuile fait de même, avec les valeurs cliquées en filtres.
+- **Enregistrer**, **Enregistrer sous** et **Supprimer** fonctionnent comme pour les analyses. Une tuile dont l'analyse a été supprimée le signale.
+
+---
+
+## Export \{#export\}
+
+**Excel** et **PDF** exportent l'analyse en cours, ou le tableau de bord entier (une section par tuile) :
+
+| | Excel | PDF |
+|---|---|---|
+| Mise en page | Une feuille par section, en-têtes et sous-totaux en gras, période et filtres en note. | Un titre, un chapitre par section, des tableaux avec lignes de groupe en gras, la charte PDF de l'installation. |
+| Un croisé | Aplati, avec ses sous-totaux. | Idem. |
+| Un graphique | Son tableau de données. | Idem. |
+| KPI | Une ligne de totaux. | Idem. |
+| Détail | Ses lignes. | Idem. |
+
+Chaque section contient au plus 3 000 lignes. La vue croisée a aussi son propre bouton Excel, qui exporte le croisé tel qu'il est affiché. La charte PDF se règle dans [Paramètres → App](../build/settings-app.md).
+
+---
+
+## Analyses livrées avec une application \{#bundled\}
+
+Une application peut livrer des analyses et des tableaux de bord prêts à l'emploi avec son modèle. Ils apparaissent comme éléments **partagés** à l'installation de l'application et suivent ses nouvelles versions — jusqu'à ce qu'un utilisateur y enregistre des modifications, après quoi la version locale est conservée. Un élément livré qu'un utilisateur a supprimé n'est pas réinstallé.
+
+---
+
+## Pour aller plus loin
+
+- [Analyser les données](./analysis.md) — construire ce qui s'enregistre.
+- [Explorateur de données](./overview.md) — la vue d'ensemble.
+
+---
+
 ## Liberty Next — Sécurité — vue d'ensemble
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/secure/overview/
 
@@ -8500,6 +8886,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the
 | Query | Une requête — pour un écran ouvert depuis un bouton ou un lien plutôt que depuis le menu. |
 | API endpoint | Un endpoint d'un connecteur API. |
 | Dashboard | Un tableau de bord. |
+| Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
 | AI assistant | L'assistant. |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
@@ -8885,7 +9272,7 @@ Voir [Assistant IA](../ai-assistant.md).
 
 ## Notifications (email) \{#notifications\}
 
-**Notifications enabled**, puis le **Server** (SMTP host, Port, Encryption — STARTTLS, TLS implicite ou aucun —, Timeout), le **Account** (User, Password) et **Sending** (From address). Voir [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications enabled**, puis le **Server** (SMTP host, Port, Encryption — STARTTLS, TLS implicite ou aucun —, Timeout), le **Account** (User, Password) et **Sending** (From address, Keep read notifications — en jours, `0` = sans limite). Voir [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -8945,7 +9332,7 @@ La page Paramètres de Liberty Next : un éditeur par fichier de configuration, 
 | **Écrans** | Grilles, fenêtres, onglets, actions — le Concepteur d'écran. | [Écrans](../build/screens/overview.md) |
 | **Graphiques** | Les graphiques enregistrés. | [Graphiques](../charts.md) |
 | **Tableaux de bord** | Les tableaux de bord et leurs widgets. | [Tableaux de bord](../dashboards.md) |
-| **Explorateur** | Le modèle de l'explorateur de données. | — |
+| **Explorateur** | Les modèles de l'explorateur de données. | [Construire un modèle](../explorer/model.md) |
 | **Rapports** | Les rapports personnalisés. | — |
 | **Notifications** | Les règles de notification. | [Notifications](../../nomaflow/notifications.md) |
 
@@ -11838,7 +12225,7 @@ liberty-admin set-attributes alice company=00001,00050
 ```
 
 :::warning[Mettre à jour un rôle existant]
-`create-role` sur un rôle existant remplace ses permissions par les valeurs `--permission` fournies — aucune valeur fournie signifie aucune permission conservée. Pour ne modifier que le périmètre d'un rôle, utiliser `set-scope`.
+`create-role` sur un rôle existant remplace ses permissions par les valeurs `--permission` fournies ; sans `--permission`, le rôle garde les siennes. Pour ne modifier que le périmètre d'un rôle, utiliser `set-scope`, qui exige `--rule` ou `--clear`.
 :::
 
 ### Migrations de schéma \{#migrate\}
@@ -12157,7 +12544,7 @@ Les boutons de la carte :
 | **▶ Exécuter** | Lance la tâche. Quand il y a quelque chose à choisir — paramètres partagés, arguments d'étapes, plusieurs étapes, une étape `file_load` — il ouvre d'abord **Run with parameters**. |
 | **Annuler** | Affiché pendant l'exécution : annule l'exécution en cours. |
 | **Modifier** | Ouvre l'éditeur de tâche. |
-| **Cloner** | Demande un nouvel identifiant (`<id>_copy` proposé) et crée une copie désactivée, sans la planification propre de la tâche — les planifications des préréglages sont copiées telles quelles. |
+| **Cloner** | Demande un nouvel identifiant (`<id>_copy` proposé) et crée une copie désactivée et sans aucune planification : ni celle de la tâche, ni celles de ses préréglages. |
 | **Supprimer** | Retire la tâche de `jobs.toml` après confirmation. Son historique d'exécutions est conservé. |
 | **Export** | Télécharge un ZIP avec l'entrée `jobs.toml` de la tâche et un `MANIFEST.md`. Les connecteurs et requêtes qu'elle utilise ne sont pas inclus. |
 
@@ -12221,7 +12608,7 @@ Les préréglages s'enregistrent depuis **Run with parameters → Save as preset
 
 ### Alertes
 
-**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. Pour être prévenu des exécutions longues, utiliser une règle de notification sur l'événement `long_run` : voir [Notifications](../notifications.md#job-alerts).
+**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
 
 ### Paramètres partagés
 
@@ -12353,7 +12740,7 @@ Le planificateur exécute alors la tâche selon cette planification avec les par
 La planification d'un préréglage ne dépend pas du switch **Activée** de la tâche : un préréglage activé s'exécute même quand la planification propre de la tâche est arrêtée.
 
 :::info[Cloner une tâche]
-**Cloner** crée une copie désactivée, sans la planification propre de la tâche, mais les préréglages gardent leurs planifications et leur état *Planning activé* : les vérifier dans la copie avant de l'enregistrer.
+**Cloner** crée une copie désactivée et sans aucune planification : le cron de la tâche et ceux des préréglages sont retirés, si bien que la copie ne se déclenche jamais en même temps que l'original. Ses planifications se définissent une fois la copie prête.
 :::
 
 ---
@@ -14015,7 +14402,9 @@ Les e-mails passent par le serveur SMTP défini dans **Paramètres → App → N
 | User, Password | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
 | From address | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
 
-Les e-mails sont en texte brut : l'objet, puis le corps. Le lien d'une règle sert à la cloche, pas à l'e-mail.
+| Keep read notifications (days, 0 = forever) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
+
+Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ---
 
@@ -14051,7 +14440,7 @@ Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait 
 | `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
 | `email:finance@example.com` | Une adresse — e-mail uniquement. |
 
-Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse.
+Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
 
 ### Variables
 
@@ -14097,7 +14486,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail. Pour une exécution longue, utiliser une règle avec l'événement `long_run`.
+En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail.
 
 ---
 

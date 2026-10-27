@@ -126,7 +126,7 @@ Presets are saved from **Run with parameters → Save as preset…**. Here each 
 
 ### Alerts
 
-**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. To be warned of long runs, use a notification rule with the `long_run` event: see [Notifications](../notifications.md#job-alerts).
+**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
 
 ### Shared params
 

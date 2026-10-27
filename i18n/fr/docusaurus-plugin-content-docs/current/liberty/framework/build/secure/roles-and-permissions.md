@@ -204,6 +204,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the
 | Query | Une requête — pour un écran ouvert depuis un bouton ou un lien plutôt que depuis le menu. |
 | API endpoint | Un endpoint d'un connecteur API. |
 | Dashboard | Un tableau de bord. |
+| Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
 | AI assistant | L'assistant. |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
