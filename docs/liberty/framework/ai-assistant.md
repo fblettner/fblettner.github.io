@@ -173,7 +173,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ## Settings → AI \{#settings-ai\}
 
-**Settings → AI** edits what each application ships for the assistant. **Add an app** picks an application; for each one:
+**Settings → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
 
 | Part | Content |
 |---|---|

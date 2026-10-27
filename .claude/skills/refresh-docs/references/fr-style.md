@@ -30,7 +30,8 @@ Casual verbs to avoid: vivre, tourner, scanner → s'exécuter, fonctionner, par
 ## UI labels and menu paths
 
 - Translate UI labels in the prose **and** in the SVG/HTML mockups with the app's own FR labels (`fr.json`): Yesterday → Hier, Refresh → Actualiser / Rafraîchir (whichever the app uses), Edit → Modifier, Save → Enregistrer, Submit → Soumettre, Cancel → Annuler, Subject → Objet, Body → Corps, Add → Ajouter, Customer → Client, Status → Statut, Currency → Devise, View → Voir, Download → Télécharger, Restore → Restaurer…
-- When a screen is English-only in the app (most NomaUBL Settings editors), quote its labels in English and say once on the page that the editor stays in English.
+- NomaUBL only: when a screen is English-only in the app (most NomaUBL Settings editors), quote its labels in English and say once on the page that the editor stays in English.
+- Liberty Next / Nomaflow / Nomasx-1 / Nomajde: never write that a screen, editor or label is in English or not translated — the translations are in progress. Quote the label the app shows; report missing FR keys in « Points à vérifier côté application » only.
 - Menu paths: Sync → Synchronisation, UBL Tools → Outils UBL, Configuration → System → Configuration → Système, Management → Gestion, Diagnostics → Diagnostic, Settings → Paramètres.
 - « Accès : **Gestion → Promotion**. » rather than « Ouvrez-la depuis… ».
 

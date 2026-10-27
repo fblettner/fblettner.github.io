@@ -6,7 +6,7 @@ keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, 
 
 # Paramètres de l'application
 
-**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 

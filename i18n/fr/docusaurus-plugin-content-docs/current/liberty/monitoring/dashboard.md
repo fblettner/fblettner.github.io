@@ -6,7 +6,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
 
 # La page Surveillance
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs, se rafraîchit par la connexion en temps réel (Socket.IO), et ses libellés sont en anglais.
+**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO).
 
 ---
 

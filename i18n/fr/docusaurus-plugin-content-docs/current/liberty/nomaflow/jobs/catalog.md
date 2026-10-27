@@ -136,7 +136,7 @@ Les boutons de la carte :
 
 ## Run with parameters \{#run-with-parameters\}
 
-La fenêtre ne vaut que pour cette exécution — `jobs.toml` n'est pas modifié. Ses libellés sont en anglais.
+La fenêtre ne vaut que pour cette exécution — `jobs.toml` n'est pas modifié.
 
 | Partie | Contenu |
 |---|---|

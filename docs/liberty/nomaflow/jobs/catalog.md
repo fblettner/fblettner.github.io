@@ -136,7 +136,7 @@ The card's buttons:
 
 ## Run with parameters \{#run-with-parameters\}
 
-The window applies to this run only — `jobs.toml` is not changed. Its labels are in English.
+The window applies to this run only — `jobs.toml` is not changed.
 
 | Part | Content |
 |---|---|

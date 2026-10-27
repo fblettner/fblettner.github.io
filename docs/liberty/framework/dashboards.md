@@ -311,7 +311,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | Filters | The dropdowns of the bar. |
 | Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
-The editor's labels are in English. To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
+To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 
 ### In TOML
 

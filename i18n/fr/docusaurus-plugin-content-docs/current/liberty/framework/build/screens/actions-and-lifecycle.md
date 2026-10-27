@@ -50,7 +50,7 @@ Ils se règlent dans les onglets **Actions** et **Menu de ligne** de l'éditeur 
 | | `on_cancel` | À la fermeture du dialogue sans enregistrement, avant sa fermeture ; une erreur le maintient ouvert. | Le formulaire. |
 | **Barre d'outils** | `actions` | Chaque entrée est un bouton au-dessus de la grille. | Aucune ligne ; valeurs saisies dans `INPUT.<nom>`. |
 | **Hooks de ligne** | `on_insert`, `on_update`, `on_delete` | Après le succès de l'écriture — depuis le dialogue ou la saisie en grille. | La ligne créée, ou la ligne supprimée. |
-| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue (libellé non traduit), à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
+| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
 | **Menu de ligne** *(onglet dédié)* | `row_menu` | Chaque entrée est un élément du menu contextuel d'une ligne. | La ligne cliquée. |
 
 Un hook exécute sa liste dans l'ordre et s'arrête à la première erreur, sauf si une action a **stop_on_error** désactivé. Une entrée de barre d'outils ou de menu de ligne correspond à une seule action : pour enchaîner plusieurs étapes depuis un même bouton, passer par une `chain`.

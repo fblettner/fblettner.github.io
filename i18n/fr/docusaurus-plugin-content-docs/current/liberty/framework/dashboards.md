@@ -302,7 +302,7 @@ Un widget dont la requête échoue devient une section d'erreur ; le reste de l'
 
 ## Construire un tableau de bord \{#builder\}
 
-Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur (en anglais) comprend :
+Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
 
 | Partie | Contenu |
 |---|---|

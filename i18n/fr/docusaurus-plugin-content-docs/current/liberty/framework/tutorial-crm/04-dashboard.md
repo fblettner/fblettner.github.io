@@ -136,7 +136,7 @@ Voir [Graphiques](../charts.md).
 | Graphique | Le graphique enregistré `pipeline_by_stage`. | 8, hauteur 2 |
 | Table *Dernières activités* | Requête `recent_activities_get`, 10 lignes au plus. | 4, hauteur 2 |
 
-Enregistrer. L'éditeur est en anglais. Voir [Tableaux de bord](../dashboards.md).
+Enregistrer. Voir [Tableaux de bord](../dashboards.md).
 
 ---
 

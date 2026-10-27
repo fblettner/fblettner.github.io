@@ -140,7 +140,7 @@ Le champ **Planification (cron)** de l'éditeur propose des choix tout faits —
 
 ## Préréglages planifiables \{#schedulable-presets\}
 
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…** (fenêtre en anglais). Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
 
 Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
 

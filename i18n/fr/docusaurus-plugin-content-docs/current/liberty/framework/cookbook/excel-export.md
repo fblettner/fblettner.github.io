@@ -27,7 +27,7 @@ L'export porte sur les lignes chargées par la grille : pour un fichier complet,
 
 ## Les classeurs configurés
 
-Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'onglet **Export** de l'écran. Un bouton **Export workbooks** (libellé anglais) apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
+Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'onglet **Export** de l'écran. Un bouton **Export workbooks** apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
 
 | Réglage | Effet |
 |---|---|

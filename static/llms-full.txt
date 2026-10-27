@@ -1650,7 +1650,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ## Settings → AI \{#settings-ai\}
 
-**Settings → AI** edits what each application ships for the assistant. **Add an app** picks an application; for each one:
+**Settings → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
 
 | Part | Content |
 |---|---|
@@ -4284,7 +4284,7 @@ The mode bar of a SQL connector has five views: **Settings…**, **Tables**, **Q
 
 ### Settings \{#connection-fields\}
 
-The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
+The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings.
 
 | Field | Effect |
 |---|---|
@@ -4348,7 +4348,7 @@ The reachable set is the default `pool` plus `pools`; a request or a job can nev
 
 ## API connector \{#api\}
 
-An API connector calls a web API. Its editor has five tabs, labelled in English:
+An API connector calls a web API. Its editor has five tabs:
 
 | Tab | Content |
 |---|---|
@@ -8319,7 +8319,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | Filters | The dropdowns of the bar. |
 | Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
-The editor's labels are in English. To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
+To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 
 ### In TOML
 
@@ -9456,7 +9456,7 @@ Source: https://docs.nomana-it.fr/liberty/framework/build/settings-app/
 
 Settings → App in Liberty Next: the six sections — App (name, address, logs, language, UI defaults, hot reload, Oracle thick mode), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — what each field does, which secrets are encrypted, and what needs a restart.
 
-**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
+**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
@@ -12293,7 +12293,7 @@ Source: https://docs.nomana-it.fr/liberty/monitoring/dashboard/
 
 Block by block, the Liberty Next Monitoring page: the four KPIs, database pools, runtime, connected users, record locks and the live log tail — what each value means and when to act.
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only, refreshes itself through the live connection (Socket.IO), and its labels are in English.
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO).
 
 ---
 
@@ -12798,7 +12798,7 @@ The card's buttons:
 
 ## Run with parameters \{#run-with-parameters\}
 
-The window applies to this run only — `jobs.toml` is not changed. Its labels are in English.
+The window applies to this run only — `jobs.toml` is not changed.
 
 | Part | Content |
 |---|---|
@@ -14852,7 +14852,7 @@ Run **one** Liberty Next instance: the scheduler fires from the server process, 
 
 ## Run history retention \{#retention\}
 
-The **Run history retention** panel of the Jobs page (labels in English):
+The **Run history retention** panel of the Jobs page:
 
 | Setting | Default | Meaning |
 |---|---|---|

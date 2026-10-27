@@ -82,7 +82,7 @@ Les réglages et leur comportement exact sont détaillés dans [Conditions de fo
 Un champ de dialogue affiche une colonne de l'écran, et c'est la colonne qui porte tous les comportements — les mêmes réglages pilotent le dialogue et la grille. Dans l'éditeur d'écran :
 
 1. Ouvrir le dialogue dans le [Constructeur de dialogue](./dialog-builder.md) et cliquer sur le champ — ou sélectionner la colonne dans l'onglet **Colonnes**.
-2. L'inspecteur affiche **Configuration de la colonne**, répartie en onglets libellés en anglais : les conditions se trouvent dans **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) et **Rules** (`rules_when`).
+2. L'inspecteur affiche **Configuration de la colonne**, répartie en onglets : les conditions se trouvent dans **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) et **Rules** (`rules_when`).
 3. Ajouter une ligne par condition : le **champ** (choisi parmi les colonnes de l'écran) et la **valeur**, ou plusieurs valeurs.
 
 Toutes les lignes d'un même réglage doivent être remplies ensemble (ET). Pour un OU sur un même champ, lister les valeurs dans une seule condition.

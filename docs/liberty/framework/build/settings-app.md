@@ -6,7 +6,7 @@ keywords: [Liberty Next, Settings App, license, AI assistant, notifications, SMT
 
 # App settings
 
-**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
+**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 

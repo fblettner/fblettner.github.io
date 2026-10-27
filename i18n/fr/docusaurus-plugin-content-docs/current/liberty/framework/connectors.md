@@ -140,7 +140,7 @@ La barre de modes d'un connecteur SQL propose cinq vues : **Paramètres…**, **
 
 ### Réglages \{#connection-fields\}
 
-Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion. Les libellés du formulaire sont en anglais.
+Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion.
 
 | Champ | Effet |
 |---|---|
@@ -195,7 +195,7 @@ Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases o
 
 Le pool se choisit à l'exécution :
 
-- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, un choix **Pool** apparaît dans le menu latéral, sous le sélecteur d'applications (*Default* désigne le pool propre du connecteur ; ces deux libellés restent en anglais). Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est conservé par application dans le navigateur, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
+- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, un choix **Pool** apparaît dans le menu latéral, sous le sélecteur d'applications (*Default* désigne le pool propre du connecteur). Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est conservé par application dans le navigateur, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
 - **Dans les tâches** — une étape `sql_copy` accepte `pool` dans son bloc `source` ou `target`, une étape `sql_query` accepte `pool`, pour cibler une instance précise sans nouveau connecteur ([étapes](../nomaflow/steps.md)). Ces clés se définissent dans `jobs.toml` ; l'éditeur d'étape ne les affiche pas.
 
 L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
@@ -204,7 +204,7 @@ L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou 
 
 ## Connecteur API \{#api\}
 
-Un connecteur API appelle une API web. Son éditeur comporte cinq onglets, libellés en anglais :
+Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
 
 | Onglet | Contenu |
 |---|---|

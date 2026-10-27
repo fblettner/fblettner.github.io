@@ -77,7 +77,7 @@ Jusqu'ici, tout s'est fait en superutilisateur, qui voit tout. Cette étape ajou
 
 ## Deux rôles
 
-**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. L'éditeur est en anglais. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
+**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ### `crm-viewer` — consulte le CRM
 

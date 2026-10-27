@@ -8,7 +8,7 @@ keywords: [Liberty Next, rôles, permissions, Paramètres Access, arborescence d
 
 Un rôle répond à deux questions : **ce que** ses titulaires peuvent ouvrir (menus, requêtes, tableaux de bord, assistant) et **quelles lignes** ils voient. Les utilisateurs reçoivent des rôles ; un utilisateur qui a plusieurs rôles en cumule les droits.
 
-Les rôles se modifient dans **Paramètres → Access → Roles**. La liste des rôles est à gauche ; le rôle sélectionné s'ouvre dans un panneau à deux onglets : **Access** et **Data scope**. L'éditeur est en anglais.
+Les rôles se modifient dans **Paramètres → Access → Roles**. La liste des rôles est à gauche ; le rôle sélectionné s'ouvre dans un panneau à deux onglets : **Access** et **Data scope**.
 
 :::info[Rôles JD Edwards]
 Cette page traite des rôles de Liberty Next lui-même. Les rôles de JD Edwards EnterpriseOne et leur sécurité se gèrent dans Nomajde.

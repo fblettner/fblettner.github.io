@@ -173,7 +173,7 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 
 ## Paramètres → IA \{#settings-ai\}
 
-**Paramètres → IA** modifie ce que chaque application livre pour l'assistant. **Ajouter une application** en choisit une ; pour chacune :
+**Paramètres → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
 
 | Partie | Contenu |
 |---|---|

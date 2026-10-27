@@ -92,7 +92,7 @@ Exécuter **une seule** instance de Liberty Next : le planificateur se déclench
 
 ## Rétention de l'historique \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches (libellés en anglais) :
+Le panneau **Run history retention** de la page des Tâches :
 
 | Réglage | Défaut | Signification |
 |---|---|---|

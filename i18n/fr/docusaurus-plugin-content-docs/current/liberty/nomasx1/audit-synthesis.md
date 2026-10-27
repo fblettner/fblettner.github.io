@@ -8,8 +8,6 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
 
 **Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre l'**Audit synthesis** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
 
-Les libellés du tableau de bord sont en anglais dans l'application ; cette page les cite tels quels.
-
 ---
 
 ## Vue d'ensemble

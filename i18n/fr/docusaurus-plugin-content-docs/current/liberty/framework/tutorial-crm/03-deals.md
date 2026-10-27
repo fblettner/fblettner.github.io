@@ -80,7 +80,7 @@ Trois volets dans cette étape :
 
 ### Les entrées tirées des tables
 
-**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** (libellé anglais) :
+**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** :
 
 1. Connecteur `crm`, table `customers`, **Scan** : une proposition par colonne, les manquantes cochées.
 2. Renseigner le **Label** de chacune (`Nom`, `Secteur`, `Pays`, `Statut`, `E-mail`…), puis **Add**.

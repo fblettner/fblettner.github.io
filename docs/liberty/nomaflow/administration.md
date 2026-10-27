@@ -92,7 +92,7 @@ Run **one** Liberty Next instance: the scheduler fires from the server process, 
 
 ## Run history retention \{#retention\}
 
-The **Run history retention** panel of the Jobs page (labels in English):
+The **Run history retention** panel of the Jobs page:
 
 | Setting | Default | Meaning |
 |---|---|---|

@@ -140,7 +140,7 @@ The mode bar of a SQL connector has five views: **Settings…**, **Tables**, **Q
 
 ### Settings \{#connection-fields\}
 
-The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
+The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings.
 
 | Field | Effect |
 |---|---|
@@ -204,7 +204,7 @@ The reachable set is the default `pool` plus `pools`; a request or a job can nev
 
 ## API connector \{#api\}
 
-An API connector calls a web API. Its editor has five tabs, labelled in English:
+An API connector calls a web API. Its editor has five tabs:
 
 | Tab | Content |
 |---|---|

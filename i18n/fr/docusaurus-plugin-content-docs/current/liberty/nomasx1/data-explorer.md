@@ -10,8 +10,6 @@ L'**explorateur de données** permet aux équipes conformité et licences d'anal
 
 Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du détail, champs calculés — est décrit dans la [documentation de Liberty Next](../framework/explorer/analysis.md). Cette page présente ce que livre Nomasx-1.
 
-Les noms des modèles, des analyses et des tableaux de bord livrés sont en anglais dans l'application ; cette page les cite tels quels.
-
 ---
 
 ## Vue d'ensemble

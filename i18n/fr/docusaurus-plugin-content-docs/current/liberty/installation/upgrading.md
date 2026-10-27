@@ -107,7 +107,7 @@ La lancer sous l'utilisateur du service avec son environnement chargé, comme to
 
 Chaque `upgrade` et chaque `rollback` enregistre un rapport : versions avant et après, version de l'image, fichiers compose, dossier de sauvegarde, constats de `doctor`, résultat de chaque étape et migrations appliquées. Il est stocké avec la configuration (`.versions/upgrades/`) et, avec Docker, une copie est aussi écrite dans le dossier de sauvegarde.
 
-Il se consulte dans **Paramètres → History → Upgrades** (écran en anglais). Chaque entrée indique son composant :
+Il se consulte dans **Paramètres → History → Upgrades**. Chaque entrée indique son composant :
 
 | Entrée | Enregistrée par |
 |---|---|

@@ -159,7 +159,7 @@ Sur un écran, une colonne peut aussi neutraliser la règle héritée avec la r�
 
 ## Entrées \{#entries\}
 
-La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, et un champ de filtre. Les clés s'écrivent en majuscules. Le formulaire de droite est réparti en onglets, libellés en anglais :
+La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, et un champ de filtre. Les clés s'écrivent en majuscules. Le formulaire de droite est réparti en onglets :
 
 | Onglet | Champ | Effet |
 |---|---|---|
@@ -290,7 +290,7 @@ Les listes déroulantes des éditeurs (formats, règles, types de source, métho
 
 ## Analyser une table \{#scan-a-table\}
 
-Le bouton **Scan a table** (libellé anglais) crée des entrées à partir d'une table réelle, au lieu de les saisir une à une. La fenêtre *Generate dictionary items* demande :
+Le bouton **Scan a table** crée des entrées à partir d'une table réelle, au lieu de les saisir une à une. La fenêtre *Generate dictionary items* demande :
 
 - **Connector** — le connecteur à lire ;
 - **Store under (app)** — la portée qui reçoit les entrées (celle du connecteur par défaut) ;

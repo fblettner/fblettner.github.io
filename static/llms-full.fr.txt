@@ -1621,7 +1621,7 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 
 ## Paramètres → IA \{#settings-ai\}
 
-**Paramètres → IA** modifie ce que chaque application livre pour l'assistant. **Ajouter une application** en choisit une ; pour chacune :
+**Paramètres → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
 
 | Partie | Contenu |
 |---|---|
@@ -3464,7 +3464,7 @@ La lancer sous l'utilisateur du service avec son environnement chargé, comme to
 
 Chaque `upgrade` et chaque `rollback` enregistre un rapport : versions avant et après, version de l'image, fichiers compose, dossier de sauvegarde, constats de `doctor`, résultat de chaque étape et migrations appliquées. Il est stocké avec la configuration (`.versions/upgrades/`) et, avec Docker, une copie est aussi écrite dans le dossier de sauvegarde.
 
-Il se consulte dans **Paramètres → History → Upgrades** (écran en anglais). Chaque entrée indique son composant :
+Il se consulte dans **Paramètres → History → Upgrades**. Chaque entrée indique son composant :
 
 | Entrée | Enregistrée par |
 |---|---|
@@ -3824,7 +3824,7 @@ Trois volets dans cette étape :
 
 ### Les entrées tirées des tables
 
-**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** (libellé anglais) :
+**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** :
 
 1. Connecteur `crm`, table `customers`, **Scan** : une proposition par colonne, les manquantes cochées.
 2. Renseigner le **Label** de chacune (`Nom`, `Secteur`, `Pays`, `Statut`, `E-mail`…), puis **Add**.
@@ -3975,7 +3975,7 @@ Voir [Graphiques](../charts.md).
 | Graphique | Le graphique enregistré `pipeline_by_stage`. | 8, hauteur 2 |
 | Table *Dernières activités* | Requête `recent_activities_get`, 10 lignes au plus. | 4, hauteur 2 |
 
-Enregistrer. L'éditeur est en anglais. Voir [Tableaux de bord](../dashboards.md).
+Enregistrer. Voir [Tableaux de bord](../dashboards.md).
 
 ---
 
@@ -4020,7 +4020,7 @@ Jusqu'ici, tout s'est fait en superutilisateur, qui voit tout. Cette étape ajou
 
 ## Deux rôles
 
-**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. L'éditeur est en anglais. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
+**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ### `crm-viewer` — consulte le CRM
 
@@ -4255,7 +4255,7 @@ La barre de modes d'un connecteur SQL propose cinq vues : **Paramètres…**, **
 
 ### Réglages \{#connection-fields\}
 
-Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion. Les libellés du formulaire sont en anglais.
+Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion.
 
 | Champ | Effet |
 |---|---|
@@ -4310,7 +4310,7 @@ Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases o
 
 Le pool se choisit à l'exécution :
 
-- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, un choix **Pool** apparaît dans le menu latéral, sous le sélecteur d'applications (*Default* désigne le pool propre du connecteur ; ces deux libellés restent en anglais). Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est conservé par application dans le navigateur, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
+- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, un choix **Pool** apparaît dans le menu latéral, sous le sélecteur d'applications (*Default* désigne le pool propre du connecteur). Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est conservé par application dans le navigateur, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
 - **Dans les tâches** — une étape `sql_copy` accepte `pool` dans son bloc `source` ou `target`, une étape `sql_query` accepte `pool`, pour cibler une instance précise sans nouveau connecteur ([étapes](../nomaflow/steps.md)). Ces clés se définissent dans `jobs.toml` ; l'éditeur d'étape ne les affiche pas.
 
 L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
@@ -4319,7 +4319,7 @@ L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou 
 
 ## Connecteur API \{#api\}
 
-Un connecteur API appelle une API web. Son éditeur comporte cinq onglets, libellés en anglais :
+Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
 
 | Onglet | Contenu |
 |---|---|
@@ -5514,7 +5514,7 @@ Sur un écran, une colonne peut aussi neutraliser la règle héritée avec la r�
 
 ## Entrées \{#entries\}
 
-La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, et un champ de filtre. Les clés s'écrivent en majuscules. Le formulaire de droite est réparti en onglets, libellés en anglais :
+La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, et un champ de filtre. Les clés s'écrivent en majuscules. Le formulaire de droite est réparti en onglets :
 
 | Onglet | Champ | Effet |
 |---|---|---|
@@ -5645,7 +5645,7 @@ Les listes déroulantes des éditeurs (formats, règles, types de source, métho
 
 ## Analyser une table \{#scan-a-table\}
 
-Le bouton **Scan a table** (libellé anglais) crée des entrées à partir d'une table réelle, au lieu de les saisir une à une. La fenêtre *Generate dictionary items* demande :
+Le bouton **Scan a table** crée des entrées à partir d'une table réelle, au lieu de les saisir une à une. La fenêtre *Generate dictionary items* demande :
 
 - **Connector** — le connecteur à lire ;
 - **Store under (app)** — la portée qui reçoit les entrées (celle du connecteur par défaut) ;
@@ -6375,7 +6375,7 @@ Les réglages et leur comportement exact sont détaillés dans [Conditions de fo
 Un champ de dialogue affiche une colonne de l'écran, et c'est la colonne qui porte tous les comportements — les mêmes réglages pilotent le dialogue et la grille. Dans l'éditeur d'écran :
 
 1. Ouvrir le dialogue dans le [Constructeur de dialogue](./dialog-builder.md) et cliquer sur le champ — ou sélectionner la colonne dans l'onglet **Colonnes**.
-2. L'inspecteur affiche **Configuration de la colonne**, répartie en onglets libellés en anglais : les conditions se trouvent dans **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) et **Rules** (`rules_when`).
+2. L'inspecteur affiche **Configuration de la colonne**, répartie en onglets : les conditions se trouvent dans **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) et **Rules** (`rules_when`).
 3. Ajouter une ligne par condition : le **champ** (choisi parmi les colonnes de l'écran) et la **valeur**, ou plusieurs valeurs.
 
 Toutes les lignes d'un même réglage doivent être remplies ensemble (ET). Pour un OU sur un même champ, lister les valeurs dans une seule condition.
@@ -6554,7 +6554,7 @@ Ils se règlent dans les onglets **Actions** et **Menu de ligne** de l'éditeur 
 | | `on_cancel` | À la fermeture du dialogue sans enregistrement, avant sa fermeture ; une erreur le maintient ouvert. | Le formulaire. |
 | **Barre d'outils** | `actions` | Chaque entrée est un bouton au-dessus de la grille. | Aucune ligne ; valeurs saisies dans `INPUT.<nom>`. |
 | **Hooks de ligne** | `on_insert`, `on_update`, `on_delete` | Après le succès de l'écriture — depuis le dialogue ou la saisie en grille. | La ligne créée, ou la ligne supprimée. |
-| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue (libellé non traduit), à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
+| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
 | **Menu de ligne** *(onglet dédié)* | `row_menu` | Chaque entrée est un élément du menu contextuel d'une ligne. | La ligne cliquée. |
 
 Un hook exécute sa liste dans l'ordre et s'arrête à la première erreur, sauf si une action a **stop_on_error** désactivé. Une entrée de barre d'outils ou de menu de ligne correspond à une seule action : pour enchaîner plusieurs étapes depuis un même bouton, passer par une `chain`.
@@ -8291,7 +8291,7 @@ Un widget dont la requête échoue devient une section d'erreur ; le reste de l'
 
 ## Construire un tableau de bord \{#builder\}
 
-Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur (en anglais) comprend :
+Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
 
 | Partie | Contenu |
 |---|---|
@@ -8366,10 +8366,6 @@ Les graphiques sont regroupés par connecteur : les pastilles de **portée** en 
 
 **Add chart** ouvre l'éditeur d'un nouveau graphique dans la portée courante ; un clic sur une ligne ouvre le graphique en modification.
 
-:::note[Libellés en anglais]
-L'éditeur de graphiques n'est pas encore traduit : ses boutons, onglets et champs s'affichent en anglais dans l'interface française, sauf les réglages de l'onglet *Chart* partagés avec la vue Graphique des écrans.
-:::
-
 ---
 
 ## L'éditeur \{#editor\}
@@ -8395,7 +8391,7 @@ L'onglet charge un échantillon des lignes de la requête et dessine le graphiqu
 | **Graphique** | Le type : barres, courbe, aire ou camembert. |
 | **Axe X** | La colonne portée par l'axe X — les libellés des parts pour un camembert. |
 | **Series** | Une ligne par colonne Y : la colonne, une pastille de couleur, et **L** / **R** pour placer la série sur l'axe Y de gauche ou de droite. **+** ajoute une série. Un camembert n'utilise que la première série. |
-| **Pivot by** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. Le libellé reste en anglais dans l'éditeur. |
+| **Pivot by** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. |
 | **Agréger** | La façon de combiner les lignes de même valeur X : **Somme**, **Moyenne**, **Compte** (compte les lignes, sans tenir compte de la valeur Y), **Min**, **Max**, ou **Aucune (par ligne)** pour conserver chaque ligne — pour une série chronologique dont l'axe X est déjà unique. |
 
 L'axe Y affiche des graduations abrégées (1,2 k, 27,5 M, selon la langue du navigateur) ; l'infobulle donne le chiffre complet. Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. La légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
@@ -9062,7 +9058,7 @@ Les rôles de Liberty Next : ce qu'un rôle accorde, modifié directement sur l'
 
 Un rôle répond à deux questions : **ce que** ses titulaires peuvent ouvrir (menus, requêtes, tableaux de bord, assistant) et **quelles lignes** ils voient. Les utilisateurs reçoivent des rôles ; un utilisateur qui a plusieurs rôles en cumule les droits.
 
-Les rôles se modifient dans **Paramètres → Access → Roles**. La liste des rôles est à gauche ; le rôle sélectionné s'ouvre dans un panneau à deux onglets : **Access** et **Data scope**. L'éditeur est en anglais.
+Les rôles se modifient dans **Paramètres → Access → Roles**. La liste des rôles est à gauche ; le rôle sélectionné s'ouvre dans un panneau à deux onglets : **Access** et **Data scope**.
 
 :::info[Rôles JD Edwards]
 Cette page traite des rôles de Liberty Next lui-même. Les rôles de JD Edwards EnterpriseOne et leur sécurité se gèrent dans Nomajde.
@@ -9276,7 +9272,7 @@ Les changements n'interrompent pas la session courante. Les nouveaux rôles / le
 
 Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle peut prendre ses valeurs chez l'utilisateur au lieu de les lister : une règle *Company (CO) = user.company* permet à un seul rôle de servir toutes les filiales, chaque utilisateur voyant ses propres sociétés.
 
-Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle. Le formulaire est en anglais.
+Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle.
  En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
 
@@ -9440,7 +9436,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/build/settings-app/
 
 Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, journaux, langue, valeurs par défaut de l'interface, rechargement à chaud, mode thick d'Oracle), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage.
 
-**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -11605,7 +11601,7 @@ L'export porte sur les lignes chargées par la grille : pour un fichier complet,
 
 ## Les classeurs configurés
 
-Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'onglet **Export** de l'écran. Un bouton **Export workbooks** (libellé anglais) apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
+Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'onglet **Export** de l'écran. Un bouton **Export workbooks** apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
 
 | Réglage | Effet |
 |---|---|
@@ -12277,7 +12273,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/monitoring/dashboard/
 
 Bloc par bloc, la page Surveillance de Liberty Next : les quatre indicateurs, les pools de base, le runtime, les utilisateurs connectés, les verrous d'enregistrement et le journal en direct — la signification de chaque valeur et quand agir.
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs, se rafraîchit par la connexion en temps réel (Socket.IO), et ses libellés sont en anglais.
+**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO).
 
 ---
 
@@ -12782,7 +12778,7 @@ Les boutons de la carte :
 
 ## Run with parameters \{#run-with-parameters\}
 
-La fenêtre ne vaut que pour cette exécution — `jobs.toml` n'est pas modifié. Ses libellés sont en anglais.
+La fenêtre ne vaut que pour cette exécution — `jobs.toml` n'est pas modifié.
 
 | Partie | Contenu |
 |---|---|
@@ -12963,7 +12959,7 @@ Le champ **Planification (cron)** de l'éditeur propose des choix tout faits —
 
 ## Préréglages planifiables \{#schedulable-presets\}
 
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…** (fenêtre en anglais). Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
 
 Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
 
@@ -13131,7 +13127,7 @@ Chaque cellule est convertie au type de sa colonne cible : entiers, décimaux (`
 
 ### Dans l'exécution
 
-Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger (libellés en anglais). Le journal ajoute les partitions remplacées et les lignes supprimées.
+Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger. Le journal ajoute les partitions remplacées et les lignes supprimées.
 
 Les fichiers envoyés et les fichiers de rejets vont dans la zone de travail des tâches, `.nomaflow/files` à côté de la configuration ; un envoi est limité à 200 Mo.
 
@@ -14681,7 +14677,7 @@ Chaque utilisateur ne voit que ses propres notifications.
 
 ## Le compte e-mail \{#smtp\}
 
-Les e-mails passent par le serveur SMTP défini dans **Paramètres → App → Notifications (email)** (section en anglais) :
+Les e-mails passent par le serveur SMTP défini dans **Paramètres → App → Notifications (email)** :
 
 | Champ | Défaut | Remarques |
 |---|---|---|
@@ -14700,7 +14696,7 @@ Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ## Règles \{#rules\}
 
-Les règles se modifient dans **Paramètres → Notifications** (éditeur en anglais) et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
+Les règles se modifient dans **Paramètres → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
 
 ### Déclencheurs
 
@@ -14836,7 +14832,7 @@ Exécuter **une seule** instance de Liberty Next : le planificateur se déclench
 
 ## Rétention de l'historique \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches (libellés en anglais) :
+Le panneau **Run history retention** de la page des Tâches :
 
 | Réglage | Défaut | Signification |
 |---|---|---|
@@ -14893,8 +14889,6 @@ Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/audit-synthesis/
 La page d'accueil de Nomasx-1 : le tableau de bord Audit synthesis — utilisateurs, rôles, conflits de séparation des tâches et exposition de licences en un coup d'œil, les conflits par rafraîchissement et par processus, les constats qui demandent une décision, le détail par processus et par composant de licence, la fraîcheur des données, l'activité et les utilisateurs les plus en conflit — avec un filtre par application, une période et l'export Excel / PDF.
 
 **Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre l'**Audit synthesis** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
-
-Les libellés du tableau de bord sont en anglais dans l'application ; cette page les cite tels quels.
 
 ---
 
@@ -14983,8 +14977,6 @@ L'analyse libre des données de Nomasx-1 dans l'explorateur de données : trois 
 L'**explorateur de données** permet aux équipes conformité et licences d'analyser elles-mêmes les données de Nomasx-1, sans nouvel écran : lignes, mesures, filtres et période choisis dans une liste de champs, présentés en tableau, en croisé, en graphique ou en KPI, puis enregistrés, partagés, réunis en tableau de bord et exportés en Excel ou en PDF. Il lit les données collectées sur **toutes les applications connectées**, avec les mêmes droits que les écrans.
 
 Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du détail, champs calculés — est décrit dans la [documentation de Liberty Next](../framework/explorer/analysis.md). Cette page présente ce que livre Nomasx-1.
-
-Les noms des modèles, des analyses et des tableaux de bord livrés sont en anglais dans l'application ; cette page les cite tels quels.
 
 ---
 

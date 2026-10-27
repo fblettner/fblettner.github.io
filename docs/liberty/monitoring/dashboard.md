@@ -6,7 +6,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 # The Monitoring page
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only, refreshes itself through the live connection (Socket.IO), and its labels are in English.
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO).
 
 ---
 

@@ -188,7 +188,7 @@ Chaque cellule est convertie au type de sa colonne cible : entiers, décimaux (`
 
 ### Dans l'exécution
 
-Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger (libellés en anglais). Le journal ajoute les partitions remplacées et les lignes supprimées.
+Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger. Le journal ajoute les partitions remplacées et les lignes supprimées.
 
 Les fichiers envoyés et les fichiers de rejets vont dans la zone de travail des tâches, `.nomaflow/files` à côté de la configuration ; un envoi est limité à 200 Mo.
 
