@@ -1,230 +1,72 @@
 ---
-title: Diagnostic
-description: "Une exécution a échoué, une étape se fige, le planificateur ne déclenche pas, l'annulation ne fonctionne pas — listes de vérification et solutions concrètes pour chaque incident Nomaflow courant."
-keywords: [Nomaflow, diagnostic, exécution en échec, blocage, planification, annulation, niveau de journal, debug, Liberty Framework]
+title: Dépannage
+description: "Corriger les exécutions Nomaflow : une exécution en échec, une étape qui fait autre chose que prévu, une exécution bloquée, une annulation qui n'arrête pas une étape Python, une planification qui ne se déclenche pas, une tâche absente de la liste, un journal vide."
+keywords: [Nomaflow, dépannage, exécution en échec, délai, annulation, planification, MISSED, journal, Liberty Next]
 ---
 
-# Diagnostic
+# Dépannage
 
-Cette page rassemble la liste de vérification à suivre quand une exécution Nomaflow se comporte mal. Chaque section suit le schéma symptôme → diagnostic → correctif, dans l'ordre où un opérateur les rencontre naturellement.
+Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec, puis le **Journal**. Relancer avec **Run with parameters** en `DEBUG` pour voir le SQL de chaque requête.
 
 ---
 
-## Une exécution affiche FAILED
+## Une exécution est en FAILED \{#failed\}
 
-Ouvrez la page Détail d'exécution (clic sur le badge rouge de la carte du catalogue). Trois zones livrent beaucoup d'informations :
-
-| Où regarder | Ce qui s'y trouve |
+| Erreur dans la ligne de l'étape | Cause habituelle |
 |---|---|
-| **L'étape rouge** | L'étape qui a levé l'exception. |
-| **La ligne d'étape dépliée** | Le type d'exception + le message + la trace. |
-| **Le journal juste avant la frontière d'étape** | Souvent la véritable cause (une connexion expirée, une ligne qui viole une contrainte, un service amont qui répond 500). |
+| *step timed out after N s* | L'étape a dépassé son `timeout_seconds` (3 600 par défaut). L'augmenter dans `jobs.toml`, ou découper le traitement. |
+| *→ 404*, *→ 500* (étape http) | L'URL appelée a répondu avec ce code. |
+| Une erreur de base de données | Identifiants faux, table absente, contrainte. Tester le pool dans **Paramètres → Pools** et la requête dans la page du connecteur. |
+| *cannot import module …* / *has no attribute …* (étape python) | Le plugin n'est pas là où l'indique `callable`, ou le serveur n'a pas été redémarré après une modification — voir [Déployer et déboguer](../../framework/build/plugins/deploy-and-debug.md). |
+| *period … is closed* (file_load) | La requête de refus de l'étape a volontairement rejeté le chargement. |
+| *control total mismatch …* (file_load) | Le total chargé diffère du total attendu ; rien n'a été écrit. |
 
-Le type d'exception donne en général l'indice rapide :
-
-| Exception | Sens habituel | Où regarder |
-|---|---|---|
-| `OperationalError` / `InterfaceError` | La connexion à la base est rompue — hôte erroné, expiration, pool épuisé. | La configuration du pool du connecteur. |
-| `IntegrityError` / `UniqueViolation` | Une contrainte a été violée côté cible. | Les données écrites par l'étape — clé primaire en doublon, violation de NOT NULL. |
-| `TimeoutError` (asyncio) | L'étape a dépassé son `timeout_seconds`. | Le réglage de timeout de l'étape, ou la réactivité du service amont. |
-| `HTTPStatusError` 4xx | L'appel HTTP a été rejeté. | Authentification, URL, forme de la charge utile. |
-| `HTTPStatusError` 5xx | Le service amont a rencontré un problème. | Une politique de nouvelle tentative peut aider ; sinon, attendre et rejouer. |
-| `ImportError` / `ModuleNotFoundError` | Le *callable* d'une étape Python n'est pas importable. | Plugin installé ? Chemin du module correct ? |
-| `KeyError` / `AttributeError` | Une étape Python lit un champ absent. | Le cliché des paramètres fusionnés dans l'en-tête. |
+Après correction, ne relancer que l'étape en échec : **Run with parameters**, décocher les étapes déjà réussies, **Run**.
 
 ---
 
-## Une étape réussie produit le mauvais résultat
+## Une étape a réussi mais n'a pas fait ce qu'il fallait \{#wrong-result\}
 
-Symptôme : l'étape est verte mais les données produites sont erronées. L'exécution semble correcte ; le résultat ne correspond pas.
-
-Étapes de diagnostic :
-
-1. **Ouvrir le cliché des paramètres** dans l'en-tête du Détail d'exécution. Les paramètres fusionnés correspondent-ils à ce qui était attendu ? (Piège fréquent : un `target_connector` au niveau tâche oublié, qui écrase la valeur locale d'une étape.)
-2. **Examiner la sortie de l'étape**. `sql_copy` indique les nombres de lignes source / cible — une divergence trahit une clause `WHERE` qui filtre plus qu'attendu.
-3. **Relancer avec `log_level = DEBUG`**. Le SQL complet de chaque requête est émis — lisez l'instruction réellement exécutée, pas celle que vous pensez avoir écrite.
-4. **Comparer à la précédente exécution réussie**. Si le cliché d'hier paraît correct et celui d'aujourd'hui non, ce sont les données qui ont changé — pas le code.
-
-Le correctif se trouve presque toujours dans **la configuration de l'étape**, pas dans l'exécuteur. L'exécuteur est fidèle ; la configuration dérive.
+Regarder les **Lignes affectées** et le détail de l'étape, puis relancer en `DEBUG` : le journal affiche chaque requête avec ses valeurs. Pour un `file_load`, comparer *read / inserted / rejected* et télécharger les lignes rejetées.
 
 ---
 
-## Une exécution reste figée en RUNNING
+## Une exécution reste RUNNING \{#hangs\}
 
-Symptôme : le badge demeure bleu, la chronologie n'avance pas, le journal cesse d'émettre.
+Une étape attend quelque chose de lent — une table verrouillée, une API distante, une longue synchronisation. Chaque étape s'arrête à son `timeout_seconds`, la tâche au sien (4 heures par défaut). **Annuler** sur la carte de la tâche l'arrête plus tôt.
 
-Diagnostic :
+---
 
-| Ce que vous voyez | Cause probable |
+## Annuler n'arrête pas mon étape \{#cancellation-doesnt-stop-my-step\}
+
+Les étapes SQL, HTTP, de chargement de fichier et les fonctions Python `async` s'arrêtent aussitôt. Une fonction Python écrite avec `def` s'exécute dans un thread de travail qui ne peut pas être interrompu : l'exécution affiche **CANCELED**, mais la fonction continue jusqu'à son retour. Écrire les fonctions longues en `async` — voir [Écrire un callable](../../framework/build/plugins/write-a-callable.md).
+
+---
+
+## La planification ne se déclenche pas \{#schedule\}
+
+| Vérification | Correction |
 |---|---|
-| Dernière ligne « fetching from source » ; aucune progression pendant des minutes. | Une requête SQL est bloquée — exécution longue, table verrouillée, latence réseau. |
-| Dernière ligne « HTTP request started » ; plus rien ensuite. | Le service amont est lent / figé. Le `timeout_seconds` de l'étape finira par se déclencher. |
-| Aucune ligne de journal, la pastille d'étape ne bouge plus. | Une étape Python qui boucle sans rendre la main à la boucle d'événements. |
-
-Correctifs :
-
-- **Pour un SQL bloqué** : annulez l'exécution, examinez la base (`SHOW PROCESSLIST` / `pg_stat_activity`). Si le bloqueur est identifié, terminez-le ; rejouez ensuite la tâche.
-- **Pour un service amont lent** : attendez le timeout de l'étape. L'exécution échouera ; rejouez avec la politique de nouvelle tentative renforcée.
-- **Pour un Python non coopératif** : l'annulation n'aide pas (l'étape n'atteint aucun point de contrôle). Le correctif se trouve dans le code Python — faites-le rendre la main (`await asyncio.sleep(0)` périodique, ou appel à `ctx.is_cancelled()` dans la boucle). En dernier ressort, redémarrez le processus du framework.
+| La carte affiche **désactivée** ou **Manuelle** | Activer la tâche, ou lui donner une planification. |
+| Le jour est faux | Le planificateur numérote les jours de la semaine à partir de 0 = lundi. Écrire `mon-fri`, pas `1-5` — voir [Planifications](../jobs/schedules.md#cron). |
+| L'aperçu **Prochaines exécutions** n'est pas celui attendu | Corriger le cron ou le fuseau horaire. |
+| Le serveur était arrêté à ce moment-là | L'exécution est enregistrée **MISSED** ; la lancer à la main. |
+| `[jobs] enabled = false` dans `app.toml` | Rien ne s'exécute, ni planifié ni manuel. Remettre `true` et redémarrer. |
 
 ---
 
-## ✕ Annuler n'arrête pas mon étape \{#cancellation-doesnt-stop-my-step\}
+## La tâche n'apparaît pas dans la liste \{#missing\}
 
-Symptôme : vous avez cliqué sur Annuler ; l'étape continue.
-
-Cause : l'annulation est une **demande**, pas un kill. L'étape la reçoit à son prochain point de contrôle :
-
-| Type d'étape | Point de contrôle d'annulation |
-|---|---|
-| `sql_query` / `sql_copy` | Entre les lots (`sql_copy`) ou quand le pilote sous-jacent vérifie. Généralement en quelques secondes. |
-| `http` | À la prochaine lecture réseau. Les connexions figées honorent la demande via le timeout. |
-| `python` | À chaque `await`. Une boucle sans `await` ne rend jamais la main. |
-
-### Correctif pour les étapes Python
-
-Rendez l'étape **coopérative** :
-
-```python
-async def long_loop(ctx, **kwargs):
-    for i, item in enumerate(items):
-        # Yield to the event loop so the cancellation request gets handled.
-        if i % 100 == 0:
-            await asyncio.sleep(0)
-            if ctx.is_cancelled():
-                ctx.log.info(f"cancelled at item {i}/{len(items)}")
-                raise asyncio.CancelledError()
-        process(item)
-```
-
-Pour un travail réellement CPU-bound qui ne peut pas rendre la main, déléguez à un thread avec `await asyncio.to_thread(…)` — le framework exécute le thread, la boucle d'événements reste libre, l'annulation se propage par le wrapper de tâche asyncio.
+`jobs.toml` a été modifié à la main et n'est plus valide : le journal du serveur indique l'erreur. Une clé absente du schéma est refusée — vérifier l'orthographe avec [Étapes](../steps.md) et [Créer une tâche](../jobs/create.md#toml-only). Après correction du fichier, **Paramètres → Recharger la config**.
 
 ---
 
-## Le planificateur ne déclenche pas
+## Le journal est vide \{#empty-log\}
 
-Symptôme : le cron est défini, l'heure est passée, aucune nouvelle exécution.
-
-Liste de vérification :
-
-| Vérifier | Comment |
-|---|---|
-| **La tâche est-elle activée ?** | Le switch de la carte du catalogue doit être vert. |
-| **Le cron est-il valide ?** | L'aperçu en direct de l'éditeur de tâche doit afficher trois déclenchements à venir. |
-| **Le fuseau horaire est-il bien celui attendu ?** | Un cron en `UTC` se déclenche à 02 h 00 UTC, pas à 02 h 00 heure de Paris. |
-| **Le framework a-t-il redémarré pile pendant le moment de déclenchement ?** | Un déclenchement planifié qui aurait dû avoir lieu pendant l'arrêt n'est **pas** rattrapé — il est perdu. Le prochain déclenchement intervient à la prochaine correspondance du cron. |
-| **`[jobs] scheduler_enabled` est-il actif sur ce réplica ?** | Les installations multi-réplicas attribuent les tâches du planificateur à un seul réplica. Les autres ont `scheduler_enabled = false` et ne déclenchent aucun cron. |
-
-Pour un test rapide, réglez le cron sur `* * * * *` (toutes les minutes) et observez le catalogue. Si des exécutions apparaissent, le câblage fonctionne ; rétablissez ensuite votre planification réelle.
+Le niveau de journal de l'exécution est `WARNING`, ou un plugin Python écrit dans un espace de noms non enregistré — voir [Étapes Python personnalisées](../custom-python.md#logging).
 
 ---
 
-## La tâche n'apparaît pas dans le catalogue
+## 403 sur la page des Tâches \{#forbidden\}
 
-Symptôme : la tâche est enregistrée, mais elle ne s'affiche pas.
-
-Cause la plus courante : le **rechargement du planificateur** n'a pas atteint cette page. La page interroge toutes les 2 secondes pendant qu'une exécution est en cours ; sinon, elle dépend d'un rafraîchissement manuel. Cliquez sur **↻ Recharger** dans la barre d'outils.
-
-Si la tâche reste invisible :
-
-- Inspectez les journaux du framework à la recherche d'une erreur de analyse au moment de l'enregistrement — une étape malformée ou un type d'étape inconnu empêche le catalogue entier de se charger.
-- Vérifiez que votre rôle possède la permission `job:*` — l'API filtre les tâches que votre rôle n'a pas le droit de voir.
-
----
-
-## « Permission denied » ou 403 sur la page Tâches
-
-La page Tâches exige la permission `job:*` (ou `superuser`). Si la page refuse de s'ouvrir :
-
-- Déconnectez-vous puis reconnectez-vous. Les permissions sont mises en cache dans le JWT ; une nouvelle connexion les rafraîchit.
-- Vérifiez vos attributions de rôle dans *Paramètres → Rôles*.
-- Le rôle `superuser` contourne le contrôle et représente le bon outil pour un administrateur qui a besoin d'un accès complet ; les permissions granulaires `job:<name>` sont destinées aux opérateurs qui ne doivent voir que certaines tâches.
-
----
-
-## Une étape réessaie indéfiniment
-
-Symptôme : une étape enchaîne les nouvelles tentatives ; l'exécution est en cours mais ne s'achève jamais.
-
-Cause : une politique de nouvelle tentative mal configurée combinée à un échec déterministe. Avec `attempts = 5` et `backoff = exponential`, une étape qui échoue immédiatement est relancée après 60 s, 120 s, 240 s, 480 s — près de 15 minutes au total.
-
-Correctifs :
-
-- Annulez l'exécution.
-- Abaissez `attempts` à une valeur réaliste (2 ou 3).
-- Cherchez la cause racine ; les nouvelles tentatives ne réparent pas une violation de contrainte SQL.
-
----
-
-## Multi-réplica : tâches qui se déclenchent deux fois
-
-Symptôme : chaque cron planifié produit deux exécutions au même instant.
-
-Cause : deux réplicas du framework font tourner leur planificateur contre la même base. Le verrou applicatif intégré devrait l'empêcher, mais la configuration explicite reste plus sûre.
-
-Correctif :
-
-- Sur chaque réplica sauf un, positionnez `[jobs] scheduler_enabled = false` dans `app.toml`.
-- Redémarrez le processus du framework sur ces réplicas.
-- Le réplica restant devient le **planificateur principal** — chaque déclenchement cron passe par lui.
-
-Les autres réplicas **servent toujours l'interface** et acceptent les déclenchements manuels / API. Ils n'auto-déclenchent simplement plus.
-
-Voir [Administration](../administration.md) pour le câblage multi-réplica complet.
-
----
-
-## Le journal DEBUG est trop bruyant
-
-Symptôme : vous êtes passé en `DEBUG` pour investiguer ; le journal devient illisible.
-
-`DEBUG` émet le SQL complet de chaque requête ainsi que les événements internes du framework. Il est destiné à une investigation ponctuelle, pas à un régime permanent.
-
-- Après l'exécution de diagnostic, remettez la tâche en `INFO` (ou retirez le forçage par déclenchement).
-- Si DEBUG ne sert qu'à une étape précise, restreignez la portée : scindez la tâche, isolez la logique à diagnostiquer dans une étape exécutée séparément.
-
----
-
-## L'authentification du connecteur échoue en boucle
-
-Symptôme : l'étape échoue avec `authentication failed` ou `permission denied`.
-
-Liste de vérification :
-
-| Vérifier | Comment |
-|---|---|
-| Le mot de passe chiffré du connecteur est-il toujours valide ? | *Paramètres → Connecteurs → \<nom>* → ressaisir le mot de passe, enregistrer. |
-| Le système amont a-t-il fait tourner ses identifiants ? | Voir avec le responsable du service amont. Mettre à jour le mot de passe dans le connecteur. |
-| La clé de chiffrement du framework est-elle toujours la même ? | Si `LIBERTY_ENCRYPTION_KEY` a été régénérée, les valeurs chiffrées sous l'ancienne clé ne peuvent plus être déchiffrées. Ressaisissez le connecteur. |
-| Le réseau est-il réellement joignable ? | Une petite étape `python` qui ouvre le connecteur et exécute `SELECT 1` reste le diagnostic le plus rapide. |
-
----
-
-## Le journal d'une exécution est vide
-
-Symptôme : la page Détail d'exécution affiche zéro ligne de journal.
-
-Causes :
-
-- **L'exécution a échoué avant que l'exécuteur n'émette sa première ligne** — généralement une erreur de validation de configuration. Le journal du framework côté hôte contient le détail.
-- **La fenêtre de rétention du journal est dépassée** — les exécutions de plus de 90 jours sont purgées ; leurs lignes d'étape subsistent, leur journal non.
-- **La connexion à la *room* Socket.IO s'est coupée pendant une exécution en direct** — rafraîchissez la page ; le journal est reconstitué depuis la base.
-
----
-
-## « Step has no output » dans l'historique
-
-Certaines étapes Python renvoient `None`. La page Détail d'exécution affiche `{}` ou « no output » pour ces étapes. L'étape reste SUCCEEDED.
-
-Ce n'est pas un bug — c'est une occasion manquée. Une étape qui renvoie toujours un dictionnaire structuré (`{"rows_affected": N, "details": ...}`) rend l'historique d'exécution lisible trois semaines plus tard. Une étape qui ne renvoie rien reste une boîte noire.
-
-Convention : chaque étape Python devrait renvoyer au minimum `{"rows_affected": …}` ou `{"status": "ok"}`.
-
----
-
-## Pour la suite
-
-- [Historique d'exécution](./history.md) — la surface depuis laquelle le diagnostic démarre.
-- [Notifications](../notifications.md) — recevoir une alerte en cas d'échec pour entamer l'investigation plus tôt.
-- [Administration](../administration.md) — multi-réplica, rétention, comportement au redémarrage.
-- [Étapes Python personnalisées](../custom-python.md) — écrire du Python compatible avec l'annulation.
+Les pages Nomaflow et leur API sont réservées aux superutilisateurs.

@@ -1,243 +1,138 @@
 ---
-title: Référence API REST
-description: "Tous les endpoints REST proposés par le framework — groupés par domaine : auth, connecteurs, écrans, tableaux de bord, menus, tâches, IA, configuration admin, sonde de santé. URL, méthode, permission requise, corps de requête et forme de réponse."
-keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /health, /docs]
+title: Référence de l'API REST
+description: "La carte de l'API REST de Liberty Next par domaine — santé, connexion, connecteurs et données, écrans, tableaux de bord, menus, rapports, notifications, vues enregistrées, tâches Nomaflow, packages de modifications, accès et configuration — avec la règle d'accès de chaque famille. Les formes exactes des requêtes et réponses sont dans les pages OpenAPI intégrées."
+keywords: [Liberty Next, API REST, OpenAPI, endpoints, auth, sql, écrans, tableaux de bord, tâches, changesets, accès, configuration, Socket.IO]
 ---
 
-# Référence API REST
+# Référence de l'API REST
 
-Chaque concept du framework — se connecter, lancer une requête, charger un écran, déclencher une tâche, dialoguer avec l'assistant — est accessible via la surface REST. Le frontend utilise les mêmes endpoints que les intégrations externes, et le document OpenAPI sur `/docs` (en direct, généré depuis les signatures de routes FastAPI) est parcourable comme référence développeur.
-
-Cette page est une cartographie domaine par domaine des endpoints, avec la permission requise, la forme de la requête et la forme de la réponse pour chacun. La variante interactive se trouve sur `http://${HOST}:${PORT}/docs` — le Swagger UI embarqué par le framework est la référence pour les schémas requête / réponse.
-
----
-
-## Conventions
-
-- **Chemin de base** — le framework sert l'API à la **racine de l'origine liée** : `https://liberty.example.com/api/...` et `https://liberty.example.com/admin/...`.
-- **Authentification** — chaque endpoint demande un token `Bearer` dans l'en-tête `Authorization`, sauf `POST /auth/login`, `POST /auth/refresh`, la paire OIDC et `GET /api/health`.
-- **Type de contenu** — JSON en entrée / JSON en sortie, sauf mention contraire. Les erreurs portent un corps `{ "detail": "..." }` avec un statut non 2xx.
-- **Langue** — `X-Liberty-Lang: fr` modifie les libellés de la réponse pour les endpoints qui en contiennent (écrans, dictionnaire, menus, erreurs).
-- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](../framework/build/secure/roles-and-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
+Cette page présente les points d'accès par domaine. Les formes exactes des requêtes et des réponses se trouvent dans les pages OpenAPI du serveur : **`/docs`** (Swagger UI), **`/redoc`** et **`/openapi.json`** — ce dernier sert à générer des clients typés.
 
 ---
 
-## Santé
+## Conventions \{#conventions\}
 
-| Méthode | Chemin | Permission | Réponse |
-|---|---|---|---|
-| `GET` | `/api/health` | aucune (public) | `{ "ok": true, "version": "0.42.0" }` |
-
-Utile pour les sondes de vivacité. Ne touche pas la base de données.
-
----
-
-## Auth
-
-| Méthode | Chemin | Permission | Corps | Réponse |
-|---|---|---|---|---|
-| `POST` | `/auth/login` | public | `{ "username", "password" }` | `{ "access_token", "refresh_token", "token_type": "Bearer", "expires_in": 900 }` |
-| `POST` | `/auth/refresh` | public (cookie / corps) | `{ "refresh_token" }` | Identique à `/auth/login`. |
-| `POST` | `/auth/logout` | authentifié | — | `{ "ok": true }`. Invalide le refresh token. |
-| `GET` | `/auth/me` | authentifié | — | `{ "username", "display_name", "roles", "permissions": [...] }`. |
-| `GET` | `/auth/oidc/login` | public | — | 302 vers l'IdP. |
-| `GET` | `/auth/oidc/callback` | public | query | 302 vers `/`. Pose la session locale. |
-
-Voir [Authentification](../framework/build/secure/sign-in.md) pour le flux OIDC.
+- **Authentification** — `Authorization: Bearer <jeton d'accès>` à chaque appel, sauf `/health`, `/ready`, `/info`, `/api/theme`, `POST /auth/login`, `POST /auth/refresh` et le couple OIDC.
+- **Règles d'accès** — les points d'accès aux données vérifient la permission de ce qu'ils exécutent (`sql:<connecteur>:<requête>`, `api:<connecteur>:<endpoint>`), et les lectures et écritures SQL appliquent le [périmètre de données](../framework/build/secure/roles-and-permissions.md#data-scope) de l'appelant. Tout ce qui se trouve sous **`/admin/`** est réservé aux superutilisateurs.
+- **Langue** — `X-Liberty-Lang: fr` (sinon `Accept-Language`) choisit la langue des libellés des écrans, du dictionnaire et des menus.
+- **Pool** — `X-Liberty-Pool: <pool>` exécute les requêtes d'un connecteur multi-pools sur un autre pool de son ensemble.
+- **Erreurs** — un corps JSON `{"detail": …}` avec un code non 2xx. Une erreur de base de données donne aux utilisateurs ordinaires le message du pilote et un `error_id` ; l'instruction elle-même ne leur est jamais renvoyée.
+- **Identifiant de requête** — chaque réponse porte `X-Request-ID` ; les lignes du journal du serveur pour cette requête portent le même identifiant.
 
 ---
 
-## Connecteurs et données
+## Santé \{#health\}
 
-### Connecteurs SQL
+| Méthode | Chemin | Description |
+|---|---|---|
+| `GET` | `/health` | Sonde de vie : `{"status": "ok", "version"}`. |
+| `GET` | `/ready` | Disponibilité : `200` quand la base du framework répond, `503` sinon. |
+| `GET` | `/info` | Version, compteurs et indicateurs ; noms et détails pour un appelant connecté. |
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/connectors` | `connectors:read` | Liste tous les connecteurs avec type et statut. |
-| `GET` | `/api/connectors/{name}` | `connectors:read` | Définition du connecteur et schéma découvert. |
-| `POST` | `/api/sql/{pool}/_schema` | `connectors:read` | Introspecte le schéma d'un pool (liste des tables, liste des colonnes). |
-| `GET` | `/api/sql/{connector}/{query}` | `sql:{connector}:{query}` | Exécute une requête en lecture. Les paramètres d'URL se lient aux paramètres du connecteur. |
-| `POST` | `/api/sql/{connector}/{query}` | identique | Identique à GET mais avec un corps JSON pour des mappings complexes. |
-| `POST` | `/api/sql/{connector}/{query}:write` | `sql:{connector}:{query}:write` | Exécute une requête en écriture. Le corps est le mapping des paramètres. |
-
-### Connecteurs HTTP / API
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `POST` | `/api/http/{connector}/{endpoint}` | `api:{connector}:{endpoint}` | Appelle un endpoint nommé. Le corps porte le mapping des paramètres. |
-
-### Export Excel
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `POST` | `/api/screens/{app}/{screen_id}/export` | `screen:{app}:{id}` | Exporte la vue courante de l'écran au format XLSX. Le corps accepte les filtres actifs. La réponse est `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`. |
+Voir [Points de santé](../monitoring/health-endpoints.md).
 
 ---
 
-## Écrans
+## Connexion et profil \{#auth\}
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/screens` | `screens:read` | Liste tous les écrans de toutes les apps. |
-| `GET` | `/api/screens/{app}` | `screens:read` | Écrans d'une app. |
-| `GET` | `/api/screens/{app}/{screen_id}` | `screen:{app}:{id}` | Définition de l'écran, colonnes de la grille et champs de la boîte de dialogue. |
-| `POST` | `/api/screens/{app}/{screen_id}/lock` | `screen:{app}:{id}` | Acquiert un verrou d'enregistrement — `{ "key": {...} }`. |
-| `DELETE` | `/api/screens/{app}/{screen_id}/lock` | identique | Libère le verrou d'enregistrement. |
+| Méthode | Chemin | Description |
+|---|---|---|
+| `POST` | `/auth/login` | `{username, password}` → jetons d'accès et de rafraîchissement. `429` après trop d'échecs. |
+| `POST` | `/auth/refresh` | Un jeton de rafraîchissement → une nouvelle paire. Le jeton présenté est consommé : conserver le nouveau. |
+| `GET` | `/auth/me` | L'identité du jeton : rôles, permissions, attributs, périmètre de données. |
+| `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
+| `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
+| `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
----
-
-## Tableaux de bord et graphiques
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/dashboards` | `dashboards:read` | Liste tous les tableaux de bord. |
-| `GET` | `/api/dashboards/{id}` | `dashboard:{id}` | Disposition du tableau de bord et références de graphique par panneau. |
-| `GET` | `/api/charts` | `charts:read` | Liste tous les graphiques. |
-| `GET` | `/api/charts/{id}` | `chart:{id}` | Définition du graphique et données liées (quand appelé avec `?include_data=true`). |
-| `POST` | `/api/charts/{id}/data` | `chart:{id}` | Rafraîchit les données d'un graphique avec un mapping de paramètres. |
+Voir [Se connecter](../framework/build/secure/sign-in.md).
 
 ---
 
-## Menus
+## Connecteurs et données \{#data\}
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/menus` | authentifié | Tous les arbres de menus que l'appelant peut voir, élagués selon ses permissions. |
-| `GET` | `/api/menus/{app}` | authentifié | L'arbre de menu d'une app. |
-
----
-
-## Dictionnaire
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/dictionary` | authentifié | Toutes les colonnes, lookups et libellés, localisés selon `X-Liberty-Lang`. |
-| `GET` | `/api/dictionary/lookups/{name}` | authentifié | L'ensemble de valeurs d'un lookup. |
+| Méthode | Chemin | Description |
+|---|---|---|
+| `GET` | `/api/connectors`, `/api/connectors/{connector}` | Les connecteurs et leurs requêtes / endpoints. |
+| `GET` | `/api/sql/{connector}/{query}` | Exécute une requête de lecture ; les paramètres de l'URL s'y lient, avec filtres, pagination et tri. |
+| `POST` | `/api/sql/{connector}/{query}` | Exécute une requête d'écriture avec un corps JSON. |
+| `GET` | `/api/sql/{connector}/_schemas`, `/_schema` | Schémas et tables de la base du connecteur. |
+| `POST` | `/api/sql/{connector}/_import` | Importe des lignes (l'import Excel de la grille). |
+| `POST` | `/api/http/{connector}/{endpoint}` | Appelle un endpoint d'un connecteur API. |
+| `GET` | `/api/actions`, `/api/actions/{action_id}` | Les actions partagées. |
+| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Les fonctions de plugin appelables depuis les écrans. |
 
 ---
 
-## i18n
+## Écrans, tableaux de bord, menus \{#screens\}
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/i18n/{lang}` | authentifié | Paquet de langue groupé pour `lang`. Inclut le commun et les surcharges par app. |
-| `GET` | `/api/i18n/_revisions` | authentifié | La chaîne de révision de chaque paquet chargé. Le frontend l'utilise comme clé de cache. |
+| Méthode | Chemin | Description |
+|---|---|---|
+| `GET` | `/api/screens`, `/api/screens/{app}`, `/api/screens/{app}/{screen_id}` | Définitions des écrans, traduites. |
+| `POST` | `/api/screens/{app}/{screen_id}/export` | Export Excel de la vue courante de l'écran. |
+| `GET` | `/api/dashboards`, `/api/dashboards/{dashboard_id}` | Les tableaux de bord et leurs widgets. |
+| `GET` | `/api/charts`, `/api/charts/{chart_id}` | Les graphiques enregistrés. |
+| `GET` | `/api/menus`, `/api/menus/{app}` | Les arborescences de menus, réduites à ce que l'appelant peut ouvrir. |
+| `GET` | `/api/theme` | Habillage et valeurs par défaut de l'interface (public). |
+| `GET` / `PUT` / `DELETE` | `/api/views/{kind}` | Les vues de grille enregistrées. |
 
 ---
 
-## Tâches (Nomaflow) \{#jobs\}
+## Rapports, notifications, licence \{#other\}
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/jobs` | `jobs:read` | Catalogue des tâches et statut de la dernière exécution par tâche. |
-| `GET` | `/admin/jobs/{name}` | `job:{name}` | Définition d'une tâche et 50 dernières exécutions. |
-| `POST` | `/admin/jobs/{name}/run` | `job:{name}` | Déclenche une exécution manuelle. Le corps accepte des surcharges de `params`. Renvoie `{ "run_id" }`. |
-| `GET` | `/admin/jobs/runs` | `jobs:read` | Liste les exécutions sur toutes les tâches — filtrable par `job`, `status`, `from`, `to`. |
-| `GET` | `/admin/jobs/runs/{run_id}` | `job:{name}` | Détail complet de l'exécution avec étapes et les 1000 dernières lignes de log. |
-| `POST` | `/admin/jobs/runs/{run_id}/abort` | `job:{name}` | Abandonne une exécution en cours. |
-| `POST` | `/admin/jobs/runs/{run_id}/replay` | `job:{name}` | Rejoue avec les mêmes paramètres. |
-| `GET` | `/admin/jobs/runs/{run_id}/logs` | `job:{name}` | Diffuse la fin du journal. `?follow=true` bascule sur Socket.IO. |
-| `GET` | `/admin/jobs/cron-preview?expression=...` | `jobs:read` | Analyse une expression cron et retourne les 5 prochains déclenchements. |
+| Méthode | Chemin | Description |
+|---|---|---|
+| `GET` | `/api/reports`, `/api/reports/{scope}/{report_id}` | Les rapports et leurs paramètres. |
+| `POST` | `/api/reports/{scope}/{report_id}/run` | Exécute un rapport (PDF ou Markdown). |
+| `GET` | `/api/notifications` (`?unread=1`), `/api/notifications/unread_count` | Les notifications de l'appelant. |
+| `POST` | `/api/notifications/read` | Marque des notifications comme lues (`{ids}`, ou toutes). |
+| `POST` | `/api/notify/fire` | Déclenche une règle de notification de type action (utilisé par l'action d'écran `send_notification`). |
+| `GET` | `/api/license` | Mode de licence, client, offre, applications, expiration. |
 
 ---
 
 ## Assistant IA \{#ai\}
 
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/ai/tools` | `ai:chat` | La liste d'outils que l'appelant verrait dans la discussion — utile pour déboguer les permissions. |
-| `POST` | `/ai/chat` | `ai:chat` | Envoie un tour. Diffuse en Server-Sent Events par défaut ; `?stream=false` renvoie une seule réponse JSON. |
-| `GET` | `/ai/conversations` | `ai:chat` | Liste les conversations de l'appelant. |
-| `GET` | `/ai/conversations/{id}` | `ai:chat` | Une conversation avec ses messages, appels d'outils et résultats. |
-| `DELETE` | `/ai/conversations/{id}` | `ai:chat` | Supprime une conversation. |
-| `POST` | `/ai/conversations/{id}/share` | `ai:share` | Produit un lien de partage en lecture seule. |
-
----
-
-## Configuration admin (backend de l'interface Paramètres) \{#admin-config\}
-
-Chaque TOML par section suit la même forme — `<section>` vaut l'une de : `pools`, `connectors`, `dictionary`, `menus`, `screens`, `dashboards`, `charts`, `jobs`.
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/config/{section}/parsed` | `settings:{section}` | Le TOML analysé en JSON. |
-| `PUT` | `/admin/config/{section}/parsed` | `settings:{section}` | Remplace le TOML analysé. Le serveur re-sérialise en préservant les commentaires. |
-| `GET` | `/admin/config/{section}/raw` | `settings:raw` | Le texte TOML brut. |
-| `POST` | `/admin/config/{section}/raw` | `settings:raw` | Remplace le texte TOML brut. |
-| `POST` | `/admin/config/connectors/{name}/test-sql` | `settings:connectors` | Exécute une requête SQL — le corps contient `{ "query", "params" }`. |
-| `POST` | `/admin/config/api/test` | `settings:connectors` | Appelle un endpoint HTTP. |
-| `POST` | `/admin/config/rename` | `settings:write` | Renomme une entité dans tous les fichiers. Corps : `{ "scope", "from", "to" }`. |
-| `POST` | `/admin/reload` | `settings:reload` | Recharge les registres en mémoire. `?scope=<section>` pour restreindre ; valeur par défaut `all`. |
-
----
-
-## Licence
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/license` | `license:read` | La charge utile de la licence courante et son statut de vérification. |
-| `POST` | `/admin/license/reload` | `license:write` | Relit `LIBERTY_LICENSE_KEY` et revérifie la signature sans redémarrage complet. |
-
----
-
-## Utilisateurs et rôles
-
-| Méthode | Chemin | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/users` | `users:read` | Liste tous les utilisateurs. |
-| `GET` | `/admin/users/{username}` | `users:read` | Un utilisateur avec ses rôles et ses permissions effectives. |
-| `POST` | `/admin/users` | `users:write` | Crée un utilisateur. |
-| `PUT` | `/admin/users/{username}` | `users:write` | Met à jour le nom affiché, les rôles, le drapeau actif. |
-| `POST` | `/admin/users/{username}/password` | `users:write` | Définit un nouveau mot de passe. |
-| `POST` | `/admin/users/{username}/revoke` | `users:write` | Révoque toutes les sessions actives. |
-| `GET` | `/admin/roles` | `users:read` | Liste tous les rôles. |
-| `POST` | `/admin/roles` | `users:write` | Crée un rôle. |
-| `PUT` | `/admin/roles/{name}` | `users:write` | Met à jour les permissions / l'héritage / la description. |
-| `DELETE` | `/admin/roles/{name}` | `users:write` | Supprime un rôle (refusé tant qu'il reste des membres). |
-
----
-
-## Socket.IO
-
-Le framework propose aussi un endpoint **Socket.IO** sur `/socket.io` pour les mises à jour en direct. Ce n'est pas un endpoint REST, mais il joue le même rôle :
-
-| Événement | Sens | Rôle |
+| Méthode | Chemin | Description |
 |---|---|---|
-| `config.reloaded` | serveur → client | Diffusé après un rechargement à chaud — les clients rechargent le catalogue concerné. |
-| `lock.acquired` / `lock.released` | serveur → client | Verrous d'enregistrement sur les écrans (visibles sur le tableau de bord Technique). |
-| `job.run.transitioned` | serveur → client | Une exécution de tâche a changé de statut (`running` → `succeeded` / `failed` / `aborted`). |
-| `job.run.log` | serveur → client | Une ligne de log issue d'une exécution en cours. Filtrée par `run_id`. |
-| `pool.stats` | serveur → client | Instantané périodique du pool pour le tableau de bord Technique. |
-| `ai.chat.delta` | serveur → client | Un bloc de tokens pendant un tour de discussion IA. |
-
-L'authentification se fait avec le même token Bearer qu'en REST, passé dans la charge utile `auth` du handshake Socket.IO.
+| `GET` | `/ai/tools` | Le catalogue d'outils de l'assistant. |
+| `POST` | `/ai/chat` | Envoie la conversation (`{messages, model?}`) ; la réponse revient en flux. Demande `ai:chat`. |
 
 ---
 
-## OpenAPI
+## Administration (superutilisateurs) \{#admin-config\}
 
-Le document OpenAPI complet est servi sur :
-
-- **`/docs`** — Swagger UI interactif.
-- **`/redoc`** — vue Redoc statique.
-- **`/openapi.json`** — le JSON OpenAPI 3.1 brut, adapté à la génération de code.
-
-Chaque endpoint y est documenté avec la forme exacte de requête / réponse générée à partir des modèles Pydantic de la route — cette page est la cartographie conceptuelle ; le document OpenAPI est le contrat précis.
-
----
-
-## Conseils et bonnes pratiques
-
-- **Utiliser `/openapi.json` pour générer des clients.** Des outils comme `openapi-typescript` ou `openapi-python-client` produisent un SDK typé en une commande.
-- **Toujours passer `X-Liberty-Lang`** quand la réponse est affichée à un utilisateur. La valeur par défaut est `en` ; les libellés dans la langue cible demandent l'en-tête.
-- **Préférer l'endpoint REST nommé au SQL brut**. `GET /api/sql/invoices/invoices-for-period` est auditable et contrôlé en permission ; construire du SQL côté client et le POSTer ne l'est pas (le framework le refuse de toute façon — il n'existe pas d'endpoint « exécuter du SQL arbitraire »).
-- **Épingler l'en-tête `Authorization` sur chaque appel.** Le frontend a un repli sur cookie pour le refresh token, mais la surface API requiert l'en-tête explicite — plus simple à déboguer.
-- **`POST /admin/reload`** depuis la CI après un déploiement de configuration. Un `git pull` sur `liberty-apps` ne touche pas le framework en cours d'exécution tant que le registre n'a pas été reconstruit.
+| Famille | Chemins | Description |
+|---|---|---|
+| Accès | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}` | Utilisateurs (création, modification, attributs, mot de passe) et rôles (permissions, périmètre de données). |
+| Configuration | `/admin/config/{section}/parsed` (`GET` / `PUT`) pour `connectors`, `dictionary`, `menus`, `screens`, `charts`, `dashboards`, `actions`, `notifications`, `theme`, `jobs`, `app`, `reports`, `explorer` ; `/admin/config/pools` | Lire et enregistrer un fichier de configuration en JSON ; un enregistrement est validé, puis appliqué. |
+| Outils de configuration | `/admin/config/connectors/{connector}/test-sql`, `/admin/config/api/test`, `/admin/config/rename`, `/admin/config/move`, `/admin/config/clone-app`, `/admin/config/delete-app`, `/admin/config/integrity`, `/admin/config/schema` | Tests, renommages et déplacements entre fichiers, contrôle d'intégrité, schémas JSON. |
+| Historique | `/admin/config/versions…`, `/admin/config/screen-versions…`, `/admin/upgrades`, `/admin/upgrades/{id}/report`, `/admin/release-notes` | Versions de configuration, historique et rapports de mise à jour, notes de version. |
+| Rechargement | `POST /admin/reload` | Relit tous les fichiers de configuration. |
+| Packages | `/admin/find-dependencies`, `/admin/build-package`, `/admin/import-package`, `/admin/clone-with-deps`, `/admin/delete-with-deps` | Packages, clonage et suppression tenant compte des dépendances. |
+| Packages de modifications | `/admin/changesets…` | Voir [Paquets de modifications](../nomaflow/change-packages.md#api-contract). |
+| Notifications | `POST /admin/notify/test` | Envoie un test par les canaux. |
 
 ---
 
-## Pour aller plus loin
+## Tâches Nomaflow (superutilisateurs) \{#jobs\}
 
-- L'API en direct sur `http://${HOST}:${PORT}/docs`.
-- [Configuration → Interface Paramètres](../framework/configuration/settings-ui.md) — l'éditeur dans le navigateur qui consomme la famille `/admin/config/*`.
-- [Authentification → Rôles et permissions](../framework/build/secure/roles-and-permissions.md) — les codes de permission vérifiés par chaque endpoint.
+| Méthode | Chemin | Description |
+|---|---|---|
+| `GET` | `/admin/jobs` | Les tâches avec leur état, prochaine et dernière exécution. |
+| `POST` | `/admin/jobs/{job_id}/run` | Exécuter maintenant. Corps (facultatif) : `{params, op_kwargs, step_enabled, log_level}` → `{job_id, run_id, triggered_by, status: "queued"}`. |
+| `POST` | `/admin/jobs/{job_id}/upload` | Envoie un fichier pour une étape `file_load` (multipart `file`). |
+| `GET` | `/admin/jobs/runs/{run_id}` | Détail d'une exécution : étapes, journal, valeurs particulières. |
+| `POST` | `/admin/jobs/runs/{run_id}/cancel` | Annule une exécution en cours. |
+| `GET` | `/admin/jobs/runs/{run_id}/files/{name}` | Télécharge un fichier de l'exécution (lignes rejetées). |
+| `GET` | `/admin/jobs/cron-preview?schedule=…&timezone=…&count=5` | Les prochaines exécutions d'un cron. |
+| `GET` | `/admin/jobs/callables` | Les fonctions Python disponibles pour les étapes `python`. |
+| `GET` / `POST` | `/admin/jobs/retention`, `/admin/jobs/retention/sweep` | État de la rétention ; nettoyage immédiat. |
+| `GET` / `POST` | `/admin/jobs/missed`, `/admin/jobs/missed/check` | État des planifications manquées ; contrôle immédiat. |
+
+Les tâches elles-mêmes se modifient par `/admin/config/jobs/parsed`.
+
+---
+
+## Socket.IO \{#socketio\}
+
+`/socket.io` transporte les mises à jour en direct, authentifiées avec le même jeton lors de la poignée de main : changements d'état des exécutions et étapes Nomaflow (`job_run.state`, `step_run.state`), nouvelles notifications pour la cloche, verrous d'enregistrement, et instantanés et journal de la page Surveillance.

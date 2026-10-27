@@ -16,14 +16,14 @@ The expected production layout:
 
 ```
 <apps-repo>/
-├── config/
-│   ├── app.toml
+├── config/                  ← LIBERTY_APPS_DIR
 │   ├── connectors.toml
 │   ├── screens.toml
 │   ├── menus.toml
-│   ├── dictionary.toml
-│   └── jobs.toml
+│   └── dictionary.toml
 └── plugins/
+    ├── nomaflow/
+    │   └── jobs.toml          ← the Nomaflow jobs
     ├── myapp/
     │   ├── __init__.py        ← required to be a package
     │   ├── cleanup.py
@@ -37,7 +37,7 @@ The expected production layout:
 
 | Element | Required | Notes |
 |---|---|---|
-| `<apps-repo>/config/` | Yes | The framework's config directory. `LIBERTY_APPS_DIR` points here. |
+| `<apps-repo>/config/` | Yes | The configuration files. `LIBERTY_APPS_DIR` points here. `app.toml` and `auth.toml` stay in the server's own `config/` folder — see [Architecture](../../../installation/architecture.md#configuration). |
 | `<apps-repo>/plugins/` | Yes (for plugins) | Inferred by the framework as `<LIBERTY_APPS_DIR>/../plugins/`. |
 | `plugins/<name>/` | Yes | One Python package per plugin. Must have `__init__.py`. |
 | `plugins/<name>/__init__.py` | Yes | Empty is fine. Without it, Python doesn't see the dir as a package. |
@@ -49,14 +49,7 @@ The `plugins/` folder is a **sibling** of `config/`, not a child. This is so the
 
 ## The env var
 
-The framework reads **`LIBERTY_APPS_DIR`** at startup. Two ways to set it:
-
-| Source | Notes |
-|---|---|
-| OS env var | `LIBERTY_APPS_DIR=/opt/apps/config` in the systemd unit / Docker `ENV` / shell. |
-| `app.toml` | `[app] apps_dir = "/opt/apps/config"`. |
-
-The OS env var wins.
+The framework reads the **`LIBERTY_APPS_DIR`** environment variable at startup — in the systemd unit, the container's environment or the shell. On a Docker install, `./liberty apps` sets it for you (`/apps/config`).
 
 For dev:
 
@@ -95,8 +88,9 @@ When the framework boots:
 Verify with:
 
 ```bash
-grep "liberty.plugins importable" /var/log/liberty/app.log
-# → INFO  liberty.plugins importable from /opt/apps/plugins
+./liberty logs | grep "liberty.plugins importable"     # Docker
+liberty-ops logs | grep "liberty.plugins importable"   # Python install
+# → INFO  liberty.plugins importable from /apps/plugins
 ```
 
 If the log line is missing, the `plugins/` folder isn't where the framework expects — most often because:
@@ -114,7 +108,7 @@ For interactive development, run the framework with auto-restart:
 ```bash
 cd <apps-repo>
 LIBERTY_APPS_DIR=$(pwd)/config \
-    uvicorn liberty.main:app --reload --reload-dir plugins
+    uvicorn liberty.main:asgi_app --reload --reload-dir plugins
 ```
 
 What this does:
@@ -124,13 +118,7 @@ What this does:
 
 The cycle becomes: edit a `.py` file in `plugins/` → uvicorn restarts → next job run picks up the new code.
 
-For a strict dev workflow, also keep the framework log open:
-
-```bash
-tail -f /var/log/liberty/app.log | grep -E "(nomaflow|liberty.etl|liberty.plugins|<your-plugin>)"
-```
-
-The four log namespaces above cover plugin loading, ETL primitive calls, Nomaflow step execution, and anything your plugin logs under its own logger name.
+Keep the server output open in another terminal: the `liberty.plugins`, `liberty.etl` and `nomaflow` lines cover plugin loading, ETL primitive calls and step execution, plus anything your plugin logs under its own registered namespace.
 
 ---
 
@@ -151,11 +139,8 @@ Two patterns:
 | Workflow | Restart approach |
 |---|---|
 | Dev shell with `uvicorn --reload` | Automatic on file change. |
-| Production (systemd) | `systemctl restart liberty` — pick a low-traffic moment. |
-| Production (Docker / Kubernetes) | Rolling restart — kill the old pod, the new one comes up with the new code. |
-| Production (multi-replica) | Replace replicas one at a time; the scheduler lock ensures only one fires crons. See [Nomaflow → Administration](../../../nomaflow/administration.md). |
-
-For Python-only changes, you can avoid full restarts by using `liberty-admin reload-plugin <name>` (which under the hood calls `importlib.reload` on every module in the plugin tree) — but this is **brittle**: re-importing in-flight modules can leave the runtime in a half-old, half-new state. **The safe path is a full restart.**
+| Production, Python install | `liberty-ops restart` — pick a quiet moment. |
+| Production, Docker | `./liberty restart`. |
 
 ---
 
@@ -165,11 +150,11 @@ A typical CI/CD flow:
 
 1. **Build the apps repo** — copy `config/` + `plugins/` into a release tarball / Docker image.
 2. **Deploy** — push to the framework's hosts, set `LIBERTY_APPS_DIR` to the unpacked `config/`.
-3. **Restart** — `systemctl restart liberty` or roll the pod.
-4. **Verify** — `curl http://localhost:8000/health` and check `grep "liberty.plugins importable" app.log`.
-5. **Smoke test** — open the Settings → Nomaflow page, run a small known-good job, check the Run detail.
+3. **Restart** — `./liberty restart` or `liberty-ops restart`.
+4. **Verify** — `curl http://localhost:8000/ready` and look for `liberty.plugins importable` in the log.
+5. **Smoke test** — open the Nomaflow Jobs page, run a small known-good job, check the run detail.
 
-The plugin's Python dependencies (`httpx`, `openpyxl`, `ldap3`, whatever the plugin imports) need to be installed in the framework's virtual environment. Either bake them into the image / venv build, or maintain a `requirements.txt` alongside the plugin that gets installed before the framework starts.
+The plugin's Python dependencies must be installed in the framework's environment: `pipx inject liberty-next <package>` on a Python install; on Docker, only the libraries the image already ships (`httpx`, `openpyxl`, `ldap3`…) are available.
 
 ---
 
@@ -188,7 +173,7 @@ Present → the plugins dir is on `sys.path`. Absent → it isn't.
 When a `python` step fires:
 
 ```
-INFO  nomaflow.python start run=run_a8c4d step='cleanup' callable=myapp.cleanup:purge ...
+INFO  nomaflow.python start run=3f2c… step='cleanup' callable=myapp.cleanup:purge ...
 ```
 
 If the callable can't resolve:
@@ -214,8 +199,8 @@ The message tells you which half failed — module import or attribute lookup. T
 ### Did my callable run?
 
 ```
-INFO  nomaflow.python start run=run_a8c4d step='cleanup' callable=myapp.cleanup:purge kwargs=['apps_id', 'connectors', 'ctx', 'max_age_days']
-INFO  nomaflow.python done  run=run_a8c4d step='cleanup' rows=1234
+INFO  nomaflow.python start run=3f2c… step='cleanup' callable=myapp.cleanup:purge kwargs=['apps_id', 'connectors', 'ctx', 'max_age_days']
+INFO  nomaflow.python done  run=3f2c… step='cleanup' rows=1234
 ```
 
 The `kwargs` list is sorted — it tells you what the function actually received (auto-injected + op_kwargs combined). Useful when you suspect an injection wasn't named in the signature.
@@ -223,25 +208,25 @@ The `kwargs` list is sorted — it tells you what the function actually received
 ### Did my callable fail?
 
 ```
-ERROR nomaflow.python run=run_a8c4d step='cleanup' callable=myapp.cleanup:purge raised
+ERROR nomaflow.python run=3f2c… step='cleanup' callable=myapp.cleanup:purge raised
 ERROR Traceback (most recent call last):
 ERROR   File ".../plugins/myapp/cleanup.py", line 42, in purge
 ERROR     ...
 ERROR RuntimeError: db connection refused
 ```
 
-The full traceback lands in the log AND in the Nomaflow Run detail page's step expansion. Same content, two surfaces.
+The traceback lands in the server log, and the error in the run detail's step row.
 
 ### My change isn't reflected
 
 ```
-INFO  nomaflow.python done run=run_a8c4d step='cleanup' rows=0     # still the old behaviour
+INFO  nomaflow.python done run=3f2c… step='cleanup' rows=0     # still the old behaviour
 ```
 
 You forgot to restart the framework. Python cached the old module.
 
 ```bash
-systemctl restart liberty    # or whatever your restart is
+./liberty restart            # or: liberty-ops restart
 # next run picks up the new code
 ```
 
@@ -266,7 +251,7 @@ async def test_purge_old_sessions(fake_registry):
         apps_id=10,
         max_age_days=30,
     )
-    assert result["rows_affected"] >= 0
+    assert result.rows_affected >= 0
 ```
 
 `fake_registry` is a pytest fixture you build yourself — a `ConnectorRegistry` pointing at a SQLite in-memory DB so the test has a real engine to run against without depending on a live Postgres.
@@ -295,15 +280,9 @@ async def test_refresh_security_against_real_db(real_registry):
 
 The framework's own test suite uses this pattern — fixtures wired against a throwaway Postgres in `tests/conftest.py`.
 
-### Run a job from the CLI without the UI
+### Run a job end to end
 
-For end-to-end testing without round-tripping through the Settings UI:
-
-```bash
-liberty-admin job run <job-id> --params apps_id=10 --params max_age_days=7
-```
-
-The CLI fires the same path as the UI's *▶ Run now* — same plugin loading, same auto-injections, same log lines.
+Run the job from the Nomaflow Jobs page with **Run with parameters**: same plugin loading, same injections, same log lines as a scheduled run. The REST API offers the same call (`POST /admin/jobs/{job_id}/run`) for scripts.
 
 ---
 
@@ -311,13 +290,12 @@ The CLI fires the same path as the UI's *▶ Run now* — same plugin loading, s
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| `LIBERTY_APPS_DIR` not set in prod. | Plugins fail to import; framework log shows no `liberty.plugins importable` line. | Set the env var in the systemd unit / docker / k8s. |
+| `LIBERTY_APPS_DIR` not set in prod. | Plugins fail to import; framework log shows no `liberty.plugins importable` line. | Set the env var in the systemd unit, or install the apps with `./liberty apps` on Docker. |
 | Path points at `plugins/` directly (not `config/`). | Framework looks for `<path>/../plugins/` → wrong place. | Point at the **config** dir; `plugins/` is inferred as its sibling. |
 | `plugins/<name>/__init__.py` missing. | `ImportError: No module named '<name>'`. | Add an empty `__init__.py`. |
-| Plugin imports a library not in the framework's venv. | `ImportError: No module named 'openpyxl'` at the first call. | `pip install` the library in the framework's venv before restarting. |
+| Plugin imports a library not in the framework's environment. | `ImportError: No module named '…'` at the first call. | `pipx inject liberty-next <library>` on a Python install, then restart. |
 | Different Python version between dev and prod. | Code works locally, fails in prod with cryptic syntax / import errors. | Pin the Python version (`pyproject.toml` `requires-python = ">=3.12"`) and match it in CI / prod. |
 | Plugin code edits with no restart. | Old code keeps running. | Restart the framework. |
-| Multi-replica install — restart one replica but not the others. | Inconsistent behaviour (some runs use new code, others use old). | Restart all replicas. |
 
 ---
 

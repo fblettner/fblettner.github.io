@@ -42,7 +42,7 @@ The page lives under Nomaflow because the workflow — *capture → review → s
   <rect x="40" y="84" width="240" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <rect x="40" y="84" width="100" height="28" rx="6" fill="url(#cp-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="90" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Changes</text>
-  <text x="190" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Apply bundle</text>
+  <text x="190" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Apply</text>
 
   <rect x="40" y="128" width="280" height="412" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
 
@@ -161,12 +161,12 @@ Each entry also records:
 
 ## The lifecycle
 
-A package walks through up to six states:
+A package walks through these states:
 
 ```text
-    DRAFT ─── submit ───▶ PENDING ─── approve ──▶ APPROVED ─── export ──▶ EXPORTED ─── apply ──▶ PROMOTED
-                              │                       │
-                              └── reject ──▶ REJECTED (reopens to DRAFT on next capture)
+    DRAFT ─── submit ───▶ PENDING ─── approve ──▶ APPROVED ─── export ──▶ EXPORTED
+                              │
+                              └── reject ──▶ REJECTED
 ```
 
 | State | Meaning |
@@ -175,14 +175,13 @@ A package walks through up to six states:
 | **`PENDING`** | Submitted for approval. No new writes attach (a fresh DRAFT opens for the application on the next capture). Reviewer can approve or reject. |
 | **`APPROVED`** | Frozen, ready to export. Entries can no longer be excluded. |
 | **`EXPORTED`** | A JSON bundle has been downloaded. The package is now the source-side record of what was shipped; the bundle is what reaches the target. |
-| **`PROMOTED`** | The target's apply path has reported success and stamped this package's `promoted_at`. |
-| **`REJECTED`** | The reviewer pushed it back. Reopens to `DRAFT` on the next captured write, so the operator can amend and resubmit. |
+| **`REJECTED`** | The reviewer turned it down. It stays rejected; the next tracked write on the application opens a new draft. |
 
-The four lifecycle buttons on the detail header — *Submit*, *Approve*, *Reject*, *Export* — fire `POST /admin/changesets/<id>/submit` (or `…/approve`, `…/reject`, `…/export`). The flow is permissioned: roles `package:submit`, `package:approve`, `package:export` gate the buttons individually (default: superuser).
+The four lifecycle buttons on the detail header — *Submit*, *Approve*, *Reject*, *Export* — fire `POST /admin/changesets/<id>/submit` (or `…/approve`, `…/reject`, `…/export`). Change packages are reserved to superusers.
 
 ### Per-entry: exclude / re-include
 
-While the package is `DRAFT` or `PENDING`, every captured entry has an **Exclude** button. Excluded entries are not removed (no audit loss); they're flagged `status = excluded` and skipped on compaction + export. Re-including is one click. Useful for cherry-picking: capture a wide set of changes during the day, exclude the experiment that didn't pan out, ship the rest.
+While the package is `DRAFT`, every captured entry has an **Exclude** button. Excluded entries are not removed (no audit loss); they're flagged `status = excluded` and skipped on compaction + export. Re-including is one click. Useful for cherry-picking: capture a wide set of changes during the day, exclude the experiment that didn't pan out, ship the rest.
 
 Compaction is computed at **export time**, not on capture — exclusions take effect immediately the moment the bundle is built.
 
@@ -190,16 +189,16 @@ Compaction is computed at **export time**, not on capture — exclusions take ef
 
 ## The Changes tab — review and act
 
-The page has two tabs: **Changes** (the package catalogue) and **Apply bundle** (covered below).
+The page has two tabs: **Changes** (the package catalogue) and **Apply** (covered below).
 
 ### Left column — the package list
 
 | Element | What |
 |---|---|
-| Filter box | Substring match on package name + application. Server-side. |
+| Filter box | Matches the package name or status. |
 | Active package | Pre-selected on open (the draft of the application the operator last touched). Highlighted blue. |
 | Package row | Name + meta line (`status · captured_by · timestamp · entry_count`) + a coloured status badge. |
-| Status colours | `DRAFT` blue, `PENDING` orange, `APPROVED` green, `EXPORTED` / `PROMOTED` grey, `REJECTED` red. |
+| Status colours | `DRAFT` blue, `PENDING` orange, `APPROVED` green, `EXPORTED` grey, `REJECTED` red. |
 | Trash icon | Deletes the package log — the rows already written to the underlying tables are NOT affected; only the change-package record is removed. Confirmed via the themed dialog. |
 
 ### Right column — package detail
@@ -211,13 +210,11 @@ The page has two tabs: **Changes** (the package catalogue) and **Apply bundle** 
 | Group head | The label + the entry count + a short sample of the natural keys (e.g. `PRJM_NEW · UDC_ADM · BUYER_R2`). |
 | Entry row | Operation badge + the natural key + the firing action label. Click the chevron to expand the `old → new` diff. |
 | Diff view | Two-column `field` / `value` table with three tones: red strikethrough = old, green = new, secondary = unchanged. A small *Show unchanged* toggle reveals the noise of untouched columns when reviewing a renamed-but-not-changed entry. |
-| Per-entry buttons | *Exclude* (only on `DRAFT` / `PENDING` packages) flips the entry to `EXCLUDED` and dims it. Click again to re-include. |
+| Per-entry buttons | *Exclude* (only on `DRAFT` packages) flips the entry to `EXCLUDED` and dims it. Click again to re-include. |
 
-### Post-apply step ids on the header
+### Post-apply steps on the header
 
-When the screens that contributed to the package have `Screen.post_apply` step ids set (a list of Nomaflow step ids that should run once on the target after the bundle lands), those ids accumulate on the package header. On export they're stitched into a `[changesets] post_apply` section in the bundle; the target's apply path runs them after the last row write. Example use: a JDE security promotion that needs `nomajde-remerge-security` to run on the target once every captured role + assignment row has landed.
-
-The editor for the step ids — what to register on a screen, what to wire to it — lives on the *Settings → Post-apply* sub-page next to the change-package editor. Defining a step takes a Nomaflow job id; the job is then runnable on the target.
+A screen can name **post-apply steps** (`Screen.post_apply`): actions to run once on the target after the package's rows have landed — re-merge a security model, refresh a materialised view. They come from a shared library declared under `[changesets] post_apply` in `app.toml`, each step being a plugin call (`call_plugin`), an API endpoint (`call_api`) or a query (`run_query`). Their ids accumulate on the package header, and on export they are appended to the bundle as final operations.
 
 ---
 
@@ -229,34 +226,32 @@ The apply flow is two-pass: **dry-run first** to see the per-op drift report, th
 
 | Step | What |
 |---|---|
-| 1. **Pick the JSON** | The exported `.changeset.json` file. The header shows its name, application and op count once parsed. |
+| 1. **Pick the JSON** | The exported bundle. The header shows its name, application and op count once parsed. |
 | 2. **Dry-run** | `POST /admin/changesets/apply { bundle, dry_run: true }`. The server walks every op, fetches the current target row via the captured `read_query`, compares to the captured `old_values`, and tags the op with a status. **No write happens.** |
-| 3. **Read the report** | Each op shows its status badge: `would_apply` (clean), `would_force` (drift on UPDATE / DELETE — needs the *force* tick), `unverified` (no read_query in the bundle — apply will land but no drift check), `conflict` (insert on a row that already exists, or delete on a missing row), `error` (per-op failure). The summary line totals each status. |
-| 4. **Tick *force* on the rows you want to override** | Each `would_force` op has a checkbox. Confirms the operator's intent to overwrite a drifted row. `conflict` ops also get a checkbox — ticking it skips them on the real apply. |
+| 3. **Read the report** | Each op shows its status badge: `would_apply` (clean), `conflict` (the target differs from the captured state — see below), `would_force` (a conflict the operator chose to apply), `unverified` (no drift check possible), `skipped` (an action captured for review only), `error`. The summary line totals each status. |
+| 4. **Tick the conflicts to apply anyway** | Each `conflict` op has a checkbox. Ticking it **applies** the op despite the difference (it then reads `would_force`); an unticked conflict is not applied. |
 | 5. **Apply** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<indexes>] }`. Each op runs in its own transaction; per-op rowcounts + status come back in the report. |
-| 6. **Confirmation** | A row lands in the target's `AppliedBundle` log (the import-log on this same page → *Apply bundle* tab → top of the panel). The source-side package's status flips to `PROMOTED` only after the target's apply path reports back to the source — not automatic in the standalone Apply flow. |
+| 6. **Confirmation** | A row lands in the target's import log (top of the *Apply* tab), with the bundle's checksum. The source package stays `EXPORTED`. |
 
 ### Drift detection — what it compares
 
-For every row op (`INSERT` / `UPDATE` / `DELETE`), the apply path:
+For every row op, the apply path reads the target's current row with the captured `read_query` and key, then:
 
-1. Reads the captured `read_query` from the bundle, runs it against the target with the captured `entity_key` → the **target's current row**.
-2. Compares **field by field** to the bundle's `old_values`.
-3. If they match → `would_apply` (the source's pre-image is consistent with the target's current state).
-4. If they differ → `would_force` for UPDATE / DELETE (the row changed on the target since the package was captured; the operator decides whether to overwrite) or `conflict` for INSERT (a row at that key already exists on the target).
-5. If the bundle has no `read_query` → `unverified`. Apply lands but no drift check ran. Compact bundles created with `--no-read-query` or from screens that don't expose a read query land here.
-
-| Status | Meaning | What apply does |
+| Op | Target row | Status |
 |---|---|---|
-| `would_apply` / `applied` | Clean — the target's current row matches the bundle's pre-image. | Apply runs the row write. |
-| `would_force` / `applied` after *force* | Drift detected; operator opted to overwrite. | Apply runs the row write. |
-| `unverified` | No read query → no drift check ran. | Apply runs the row write (single tick is `applied`). |
-| `conflict` | INSERT on an existing key, DELETE on a missing row. | Skipped unless the operator ticks the conflict's checkbox. |
-| `error` | The write itself raised (FK violation, constraint, dialect mismatch). | Skipped; the detail line carries the SQL error. |
+| INSERT | absent | `would_apply` |
+| INSERT | already exists | `conflict` |
+| UPDATE / DELETE | equal to the captured pre-image | `would_apply` |
+| UPDATE / DELETE | different, or missing | `conflict` |
+| any | no read query or key captured, or unreadable | `unverified` — applied without check |
+| `CALL_API` / `CALL_PLUGIN` | — | `unverified` — re-run on apply; `skipped` when the action was captured without `change_replay` |
+| post-apply step | — | `unverified` — always runs, after the change ops |
+
+A conflict is applied only when its checkbox is ticked. An op whose write raises is reported `error` with the database message.
 
 ### Re-applying the same bundle
 
-The `AppliedBundle` log uses the bundle's **checksum** (sha256 over its ops) as the identity. Re-applying the same file is detected before any write runs — the dry-run report carries an `already_applied` block with the previous `applied_at` / `applied_by`. The operator can either confirm and re-apply (every row will land as `applied` if the target is back to the pre-image, or `would_force` / `conflict` if it's drifted) or close the file.
+The import log uses the bundle's **checksum** (a SHA-256 of its ops) as the identity. Re-applying the same file is detected before any write runs — the dry-run report carries an `already_applied` block with the previous `applied_at` / `applied_by`. The operator can either confirm and re-apply (rows land again where the target matches the pre-image; the others come back as conflicts) or close the file.
 
 ### Action replay (`CALL_API` / `CALL_PLUGIN`)
 
@@ -282,10 +277,10 @@ The motivating workflow for this feature. On the **dev** instance:
 
 On the **prod** instance:
 
-5. Operator opens *Nomaflow → Changes → Apply bundle*, drops the JSON in.
-6. Dry-run runs. The report shows 11 `would_apply` and 1 `would_force` on the role `BUYER_R2` (someone touched it on prod since the package was captured). Operator ticks the *force* checkbox for that row.
-7. Operator clicks *Apply*. Every row lands; the post-apply step `nomajde-remerge-security` fires, re-merging the security for the affected parent roles on prod.
-8. The source package on dev flips to `PROMOTED` once the target reports back. The prod-side *Applied bundles* panel records the new row with its checksum.
+5. Operator opens *Nomaflow → Changes → Apply*, drops the JSON in.
+6. Dry-run runs. The report shows 11 `would_apply` and 1 `conflict` on the role `BUYER_R2` (someone touched it on prod since the package was captured). Operator ticks that row to apply it anyway.
+7. Operator clicks *Apply*. Every row lands; the post-apply step fires last, re-merging the security for the affected parent roles on prod.
+8. The prod-side import log records the bundle with its checksum.
 
 For the deep reference of the merge SQL the post-apply step runs, see [Nomaflow → Bundled jobs → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all).
 
@@ -299,7 +294,7 @@ The screen's *General* tab carries three toggles:
 |---|---|
 | **`change_tracked`** | Master toggle. When on, the screen's writes attach to the active package on its application. |
 | **`change_entity`** | Optional label that groups entries on the detail page. Free text — `role`, `user`, `relationship`, `security` are conventions. Empty falls back to the query name. |
-| **`Screen.post_apply`** | List of Nomaflow step ids (from the *Post-apply* sub-page) to run **once on the target** after every row of every package contributed by this screen has landed. Use sparingly — these are the cross-cutting "now re-merge security" / "now refresh materialised views" steps. |
+| **`Screen.post_apply`** | Ids of post-apply steps (from the `[changesets] post_apply` library) to run **once on the target** after the package's rows have landed. Use sparingly — these are the cross-cutting "now re-merge security" / "now refresh materialised views" steps. |
 
 For an action embedded in the screen, an additional toggle on the action's *General* tab:
 
@@ -318,7 +313,7 @@ For an action embedded in the screen, an additional toggle on the action's *Gene
 | `/admin/changesets/<id>` | `DELETE` | Delete the package log only (not the underlying writes). |
 | `/admin/changesets/<id>/submit` | `POST` | Move `DRAFT` → `PENDING`. |
 | `/admin/changesets/<id>/approve` | `POST` | Move `PENDING` → `APPROVED`. |
-| `/admin/changesets/<id>/reject` | `POST` | Move `PENDING` → `REJECTED` (will reopen to `DRAFT` on next capture). |
+| `/admin/changesets/<id>/reject` | `POST` | Move `PENDING` → `REJECTED`. |
 | `/admin/changesets/<id>/entries/<entry_id>/exclude` | `POST` | Flip an entry's status to `EXCLUDED`. |
 | `/admin/changesets/<id>/entries/<entry_id>/include` | `POST` | Flip an entry's status to `CAPTURED`. |
 | `/admin/changesets/<id>/export` | `GET` | Returns the compacted JSON bundle; flips the package to `EXPORTED`. |
@@ -329,8 +324,8 @@ The bundle shape:
 
 ```json
 {
-  "format": "liberty.changeset.v1",
-  "package": { "id": "...", "name": "...", "application": "JDE-PROD", "exported_at": "..." },
+  "format": "liberty-changeset/1",
+  "package": { "id": "...", "name": "...", "application": "JDE-PROD", "approved_by": "...", "approved_at": "..." },
   "op_count": 12,
   "ops": [
     { "seq": 1, "connector": "jdedwards", "query": "roles", "read_query": "roles_by_key",
@@ -338,12 +333,11 @@ The bundle shape:
       "new_values": {"RLDF": "PRJM_NEW", "RLDC": "1", ...},
       "source_action": "import security" }
   ],
-  "post_apply": ["nomajde-remerge-security"],
-  "checksum": "sha256:..."
+  "checksum": "9f2c…"
 }
 ```
 
-The format is stable across framework upgrades — a bundle built on `2026.06` applies cleanly on `2026.07`. Forward compatibility is enforced by version tag (`format = "liberty.changeset.v1"`); a bundle produced by a hypothetical `v2` would be rejected by a `v1`-only target with a clear error.
+The format is stable across framework upgrades — a bundle built on `2026.06` applies cleanly on `2026.07`. The `format` field names the bundle version (`liberty-changeset/1`); post-apply steps travel as the last entries of `ops`.
 
 ---
 
@@ -367,9 +361,9 @@ The framework does ship the engine for these but the UI today is intentionally b
 | Screen wasn't marked `change_tracked`. | Writes go through; no entries appear in the package. | Open the screen's *General* tab, toggle on, save. The change applies to subsequent writes only — earlier writes don't backfill. |
 | Two operators have a DRAFT package open on the same application. | At most one DRAFT exists at a time; the second operator's writes attach to the same package. | Coordinate. The package's `created_by` records the original author; subsequent captures stamp `captured_by` on each entry, so attribution survives. |
 | Bundle applied on the wrong target (staging instead of prod). | Apply lands; rows exist on staging. | Capture a reverse package on staging, promote to prod — the framework doesn't synthesise this automatically. Workflow discipline matters more than tooling here. |
-| `would_force` on every UPDATE in the dry-run. | The target's pre-image diverged broadly — typically because the source and target weren't in sync to begin with. | Audit the divergence first. Forcing everything propagates the source's state wholesale; sometimes that's right, sometimes the source is the one that's stale. |
+| `conflict` on every UPDATE in the dry-run. | The target's pre-image diverged broadly — typically because the source and target weren't in sync to begin with. | Audit the divergence first. Forcing everything propagates the source's state wholesale; sometimes that's right, sometimes the source is the one that's stale. |
 | `CALL_PLUGIN` captured but didn't fire on apply. | `change_replay` is off on the action. | Open the action's *General* tab, toggle `change_replay` on, save. Future captures will replay; past ones in already-exported packages stay as-is. |
-| Post-apply step never ran. | The contributing screen's `Screen.post_apply` field is empty. | Wire the step id (a Nomaflow job's `id`) into the screen's `post_apply`. New captures will accumulate it on the package header; existing packages won't backfill. |
+| Post-apply step never ran. | The contributing screen's `Screen.post_apply` field is empty. | Declare the step in `[changesets] post_apply` and add its id to the screen's `post_apply`. New captures accumulate it on the package header; existing packages are not back-filled. |
 | Bundle re-applied accidentally. | Dry-run shows `already_applied` with the previous timestamp. | Read the existing apply's report. Re-applying is allowed and idempotent on clean rows; only do it intentionally. |
 
 ---

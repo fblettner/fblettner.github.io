@@ -1,322 +1,189 @@
 ---
 title: Steps
-description: "The five Nomaflow step types — sql_query, sql_copy, python, http, ldap_sync — what each one does, the fields it accepts and when to reach for it."
-keywords: [Nomaflow, steps, sql_query, sql_copy, python, http, ldap_sync, step types, Liberty Framework]
+description: "The seven Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job — what each one does, its fields and defaults, and what it records in the run."
+keywords: [Nomaflow, steps, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, spreadsheet load, CSV, replace_partition, Liberty Next]
 ---
 
 # Steps
 
-A **step** is one unit of work inside a job. Nomaflow ships **five step types** — three declarative (SQL Query, SQL Copy, LDAP Sync), one for outbound HTTP calls and one Python escape hatch for everything else.
+A **step** is one unit of work in a job. Steps run in order; when one fails, the following ones are recorded as *skipped: earlier step failed*.
 
-Pick a step type by asking *"what does this unit of work touch?"*:
-
-| It touches… | Use |
+| The step… | Type |
 |---|---|
-| One SQL query on one connector. | **sql_query** |
-| A whole table — moving rows from connector A to connector B. | **sql_copy** |
-| An HTTP endpoint (REST, webhook, third-party API). | **http** |
-| An LDAP / Active Directory directory subtree. | **ldap_sync** |
-| Anything that isn't naturally one of the above. | **python** |
+| runs one named query of a SQL connector | **`sql_query`** |
+| copies a whole table from one connector to another | **`sql_copy`** |
+| loads a spreadsheet or a CSV file into a table | **`file_load`** |
+| calls a Python function of a plugin | **`python`** |
+| calls a URL | **`http`** |
+| reads an LDAP / Active Directory directory into a table | **`ldap_sync`** |
+| runs another job and waits for it | **`call_job`** |
 
-This page is the **reference** — every field, every default. For the editor workflow, see [Create a job](./jobs/create.md).
+In the job editor, the **Add step:** bar has one button per type, and each step opens a form with its own fields. A few keys exist only in `jobs.toml` (noted below).
 
 ---
 
-## Fields every step has
-
-These four fields apply regardless of type — they're at the top of every step editor pane.
+## Common fields \{#common\}
 
 | Field | Default | Notes |
 |---|---|---|
-| **`name`** | — | Label that appears in the run history. Must be unique inside the job. Use a verb-noun: `refresh-totals`, `fetch-clients`, `sync-users`. |
-| **`type`** | — | One of the five values below. Locked once a step is created — to change type, delete and re-add. |
-| **`enabled`** | `true` | When `false`, the runner records the step as `CANCELED` with reason `skipped: disabled` and moves on. Useful as a kill-switch. |
-| **`timeout_seconds`** | `3600` (1 h) | Hard wall — when exceeded, the step is cancelled. Tune up for long ETLs, down for HTTP probes. |
+| `name` | — | Shown in the run detail; unique within the job. |
+| `type` | — | One of the seven types. |
+| `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
+| `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
 
 ---
 
-## SQL Query — `sql_query`
+## SQL query — `sql_query` \{#sql-query\}
 
-Runs **one** SQL statement on a connector. The most common Nomaflow step.
-
-### Fields
+Runs one **named query** of a SQL connector — a query defined on the connector's page, read or write.
 
 | Field | Required | Notes |
 |---|---|---|
-| **`connector`** | Yes | Name of the connector to run on. |
-| **`query`** | Yes | The SQL statement. Can be a SELECT (rows are counted, results discarded) or a write (INSERT / UPDATE / DELETE / REFRESH). |
-| **`params`** | No | Dict of bound parameters passed to the connector's `execute(params=…)`. Avoids string interpolation and SQL injection. |
+| `connector` | yes | The SQL connector. |
+| `query` | yes | The name of the query, not SQL text. |
+| `params` | no | Values bound to the query's parameters. |
+| `pool` | no | Another pool of the connector's set — see [Multi-pool connectors](../framework/connectors.md#multi-pool). `jobs.toml` only. |
 
-### What it captures
+Records the number of rows returned or affected. To refresh a materialised view, call a procedure or purge a table, write the statement as a query of the connector, then call it here.
 
-- The number of rows the statement returned (SELECT) or affected (write).
-- The error, if the statement failed.
-- The full SQL — emitted at DEBUG log level, not INFO.
+---
 
-### When to use it
+## SQL copy — `sql_copy` \{#sql-copy\}
 
-| Pattern | Example |
+Streams the rows of a source table to a target table, possibly on another database.
+
+| Field | Default | Notes |
+|---|---|---|
+| `source` = `{connector, schema, table}` | — | Required. `pool` may be added (`jobs.toml` only). |
+| `target` = `{connector, schema, table}` | — | Required. Same. |
+| `mode` | `overwrite` | `overwrite`: the rows are written to a work table `<table>__new`, which then replaces the target in one transaction — the target is never empty during the copy. `append`: rows are inserted into the target as it is. |
+| `type_coercion` | `jde` | `jde` applies the JD Edwards rules (scaled decimals, Julian dates, padded codes); `none` copies the values as they are. |
+| `decimal_mode` | `truncate` | With `jde`: `truncate` or `preserve` the decimal part. |
+| `batch_size` | `10000` | Rows per batch. |
+| `strip_both_columns` | `[]` | Columns whose values are trimmed on both sides. |
+
+`upsert` is accepted by the schema but refused at run time: for an insert-or-update, write a `MERGE` / `ON CONFLICT` query and call it with `sql_query`. Records the number of rows written.
+
+---
+
+## File load — `file_load` \{#file-load\}
+
+Loads an Excel workbook (`.xlsx`, `.xlsm`) or a text file (`.csv`, `.txt`, `.tsv`) into a table — on a schedule, without anyone at the keyboard, at the volume a facts table needs, and replayable for one period without touching the others.
+
+### The file
+
+The file comes from, in this order of priority:
+
+1. **a file chosen when the job is run** — the **Run with parameters** window shows a file picker for each `file_load` step (the window opens for any job that has one);
+2. **`path`** — a path on the server, which may contain `${params.x}` (a run parameter), `${run.id}` and `${job.id}`: `/data/in/sales-${params.period}.xlsx`;
+3. **a watched folder** — `watch_dir` and `watch_pattern` (`*.xlsx`): every matching file is loaded in name order, each in its own transaction, then moved to `done/` or `failed/` under a time-stamped name. A file that fails stops the run; the files after it stay in the folder. An empty folder is not an error.
+
+| Field | Default | Notes |
+|---|---|---|
+| `sheet` | first sheet | A name or a number (1 = first). |
+| `header_row` | `1` | The row of the column headers; data starts below. Empty rows are skipped. |
+| `delimiter` | detected | CSV separator; detected among `;` `,` tab `|` when empty. |
+| `encoding` | `utf-8-sig` | CSV only. |
+
+### The target
+
+| Field | Notes |
 |---|---|
-| Refresh a materialised view. | `REFRESH MATERIALIZED VIEW reporting.daily_summary` |
-| Update a counter. | `UPDATE stats SET total = (SELECT count(*) FROM orders) WHERE name = 'orders'` |
-| Delete old rows. | `DELETE FROM ly2_job_runs WHERE finished_at < now() - interval '90 days'` |
-| Run a stored procedure. | `CALL refresh_reporting()` |
-| Health-check a connection. | `SELECT 1` |
+| `target` = `{connector, schema, table}` | A SQL connector; the table must exist. |
+| `columns` | Target column ← file header or position (`#3`). Headers match ignoring case, spaces, `_` and `-`; unmapped columns match by name. |
+| `constants` | Target column ← value, for what the file does not carry: `period = "${params.period}"`, `batch_id = "${run.id}"`. |
 
-### When to reach for something else
+Each cell is converted to the type of its target column: integers, decimals (`12,5` and `12.5` both read as 12.5; a lone comma is the decimal separator), dates (`2026-10-27`, `27/10/2026`, `27.10.2026`, `20261027`, and Excel dates), booleans (`1`, `true`, `yes`, `oui`…), text. A number typed as text keeps no leading zeros that the spreadsheet already removed.
 
-- **Streaming rows from one table to another** — use `sql_copy` instead. It handles batching, type coercion and atomic swap.
-- **Iterating over a result set in Python logic** — use a `python` step that opens the connector itself.
-- **Running 14 statements that share a transaction** — `sql_query` runs one statement per step. Either chain 14 steps (visible in the timeline, but no shared transaction) or wrap them in a stored procedure / `python` step.
+### Load mode
 
----
+| Field | Choice |
+|---|---|
+| `load_mode` | `append` (default) inserts the rows. `replace_partition` first deletes the rows of the partitions the file carries, then inserts — **in one transaction**: a failed load leaves the previous data in place, and a corrected month replaces that month only. |
+| `partition_by` | The partition columns (`period, company`) — required with `replace_partition`. The partitions come from the constants when they cover every column, otherwise from the distinct values found in the file. |
+| `on_error` | `fail` (default): the first bad cell fails the step and names the row. `skip`: bad rows are counted as rejected and written to a CSV (file, row, reason) offered in the run detail. |
+| `batch_size` | `10000` rows per insert. |
 
-## SQL Copy — `sql_copy`
+### Guards
 
-Streams rows from a **source connector + schema + table** to a **target connector + schema + table**. The backbone of ETL workloads.
+| Field | Notes |
+|---|---|
+| `refuse_query` | A named query run before anything is touched, with the run parameters and the constants as binds. If it returns a row, the load is refused and the first column is the reason: *period 2026-02 is closed*. `refuse_connector`: its connector, the target's by default. |
+| `control_column` + `control_total` | The column is summed over the loaded rows and compared with a value, `${params.total}`, or a cell of the file (`@B2`, `@Totals!B2`), within `control_tolerance`. A difference rolls the file's load back and names both figures. |
 
-### Fields
+### In the run
 
-| Field | Required | Notes |
-|---|---|---|
-| **`source.connector`** | Yes | Source pool. |
-| **`source.schema`** | Yes | Source schema (`PS920CTL`, `public`, etc.). |
-| **`source.table`** | Yes | Source table name. |
-| **`target.connector`** | Yes | Target pool. |
-| **`target.schema`** | Yes | Target schema. |
-| **`target.table`** | Yes | Target table name. |
-| **`mode`** | `overwrite` | `overwrite` / `append` / `upsert`. See below. |
-| **`type_coercion`** | none | `jde` to apply JD Edwards typing rules (decimal alignment, char trimming). |
-| **`decimal_mode`** | `preserve` | With `jde` coercion: `truncate` reproduces JDE's "no decimals in storage" cast; `preserve` keeps the source decimal value. |
-| **`batch_size`** | `10000` | Rows per fetch from the source. Tune up for fast pipes, down for memory-constrained sources. |
-| **`strip_both_columns`** | `[]` | List of source column names whose values get a full `strip()`. Use for JDE codes that are right-justified and left-padded. |
+The run detail shows *N read · N inserted · N rejected* and, when rows were rejected, **Rejected rows (csv)** to download them. The log adds the partitions replaced and the rows deleted.
 
-### Copy modes
+Uploaded files and reject files go to the job's work area: `[jobs] files_dir` in `app.toml` (default `.nomaflow/files` next to the configuration); `[jobs] max_upload_mb` (200) caps an upload.
 
-| Mode | Behaviour | When |
-|---|---|---|
-| **`overwrite`** | Writes to a **stash table**, then atomically swaps with the target. Target is **never empty** mid-run. | Default for ETL. The target stays consistent even if the source pull fails halfway. |
-| **`append`** | Inserts rows on top of the target's existing data. | Daily snapshots, audit trails. |
-| **`upsert`** | Inserts new rows, updates existing rows. Requires the target to have a primary key. | Slowly-changing dimensions. |
-
-### Type coercion: when `type_coercion = "jde"`
-
-JD Edwards stores numbers and dates in formats that don't round-trip naturally into other databases. The `jde` coercion handles three things:
-
-- **Decimals**: JDE stores no decimal point — `1234567` with 2 decimals means `12345.67`. The data dictionary supplies the scale; the executor applies it.
-- **Dates**: Julian (`CYYDDD`) → ISO `YYYY-MM-DD`.
-- **Strings**: Some codes are right-justified, left-padded with spaces. Add the column to `strip_both_columns` so the target receives the trimmed value.
-
-### What it captures
-
-- Source row count (rows read).
-- Target row count (rows written).
-- Per-batch progress markers at INFO level (`▶ batch 12 of 47 · 120 000 rows`).
-- The stash-swap moment (`overwrite` mode only).
-
----
-
-## Python — `python`
-
-Calls a Python function in your plugins. The **escape hatch** — anything declarative steps can't express.
-
-### Fields
-
-| Field | Required | Notes |
-|---|---|---|
-| **`callable`** | Yes | `module.path:function_name` (e.g. `reports.summary:generate_pdf`). Validated for shape at save time; importability checked at run time. |
-| **`op_kwargs`** | `{}` | Map of kwargs passed to the function. Merged on top of the job's shared `params`. |
-
-### The function signature
-
-```python
-# plugins/reports/summary.py
-from liberty.jobs.types import StepContext
-
-def generate_pdf(ctx: StepContext, *, period: str, target_path: str, **_) -> dict:
-    """Generate the monthly summary PDF.
-
-    Returns a dict — keys land on the step's `output` field in the run history.
-    """
-    # ... build the PDF
-    return {"path": target_path, "size_bytes": 12345}
+```toml title="jobs.toml"
+[[jobs.steps]]
+type = "file_load"
+name = "load-sales"
+path = "/data/in/sales-${params.period}.xlsx"
+sheet = "Sales"
+target = { connector = "sales", schema = "public", table = "fact_sales" }
+columns = { company = "Company", article = "Item", qty = "Quantity", revenue = "Revenue" }
+constants = { period = "${params.period}", batch_id = "${run.id}" }
+load_mode = "replace_partition"
+partition_by = ["period", "company"]
+refuse_query = "period_closed_get"
+control_column = "revenue"
+control_total = "@Totals!B2"
 ```
 
-| Parameter | What it is |
+---
+
+## Python — `python` \{#python\}
+
+Calls a function of a plugin: `callable = "package.module:function"`.
+
+| Field | Notes |
 |---|---|
-| **`ctx`** | A `StepContext` — gives access to connectors, the run logger and the job's params. |
-| **`**kwargs`** | The merged kwargs (job `params` + step `op_kwargs` + per-fire overrides from the modal). |
+| `callable` | `module.path:function` — checked for shape when saved, imported when the step runs. |
+| `op_kwargs` | Arguments passed to the function, merged over the job's shared parameters. |
 
-### What `ctx` gives you
-
-| Method / property | What it does |
-|---|---|
-| **`ctx.get_connector("name")`** | Returns the SQL / API connector by name. |
-| **`ctx.log.info(msg)`** / `warning` / `error` | Routes log lines to the run's log stream. |
-| **`ctx.session_user`** | The account that triggered the run (for audit writes). |
-| **`ctx.params`** | The merged kwargs as a dict (same as `**kwargs` but available as a snapshot). |
-| **`ctx.is_cancelled()`** | Returns `True` if the operator clicked ✕ Cancel. Long Python steps should check this periodically. |
-
-### Return value
-
-The function's return value is stored on the step's `output` field. Keep it small and structured — `{"rows_affected": N}` is great, returning the whole table isn't.
-
-### When to use it
-
-| Pattern | Why Python |
-|---|---|
-| Walk a directory, transform each file. | Filesystem traversal is awkward in SQL. |
-| Decompress an XML blob and parse fields. | XML parsing belongs in Python. |
-| Call a third-party SDK (AWS S3, Stripe, …). | Same. |
-| Chain several SQL statements that need a shared transaction. | The function can open one connection and run them all. |
-| Conditional logic ("only delete if count > 1000"). | A `python` step can branch; SQL can't without procedural code. |
-
-### What not to do in a Python step
-
-| Anti-pattern | Why |
-|---|---|
-| Loop for an hour with no `await` and no cancellation check. | Blocks the worker; the ✕ Cancel button can't stop it. |
-| Open external HTTP / SMTP / database connections directly. | Use the framework's connectors so credentials stay declared once. |
-| Catch and swallow exceptions. | The runner needs the exception to drive the retry / failure flow. |
-| Print to stdout. | Use `ctx.log.info(…)` — only those go into the run's log stream. |
-
-The [Custom Python steps](./custom-python.md) page walks through the function-writing flow with concrete examples.
+The function receives its arguments as keyword arguments and, when it declares them by name, `connectors` (the connector registry), `ctx` (the run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`) and `settings`. It may be `async` or not. Its return value: an `int` is the number of rows affected, a `dict` is kept as the step's details, `None` is fine; an exception fails the step. To reach the run log, write with a logger of a registered namespace. The full contract is in [Write a callable](../framework/build/plugins/write-a-callable.md).
 
 ---
 
-## HTTP — `http`
+## HTTP — `http` \{#http\}
 
-Calls an HTTP endpoint. Use for webhooks, third-party REST APIs, internal microservices.
-
-### Fields
-
-| Field | Required | Notes |
+| Field | Default | Notes |
 |---|---|---|
-| **`url`** | Yes | Full URL. Supports `${env:VAR}` substitution from the framework's env file. |
-| **`method`** | `GET` | One of `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
-| **`headers`** | `{}` | Map of header name → value. |
-| **`body`** | none | For POST / PUT / PATCH. JSON-encoded automatically when it's a dict / list. |
+| `url` | — | Required. Used as written. |
+| `method` | `GET` | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`. |
+| `headers` | `{}` | Sent as they are. |
+| `body` | none | Text, or a table sent as JSON (with `Content-Type: application/json` when none is set). |
 
-### What it captures
-
-- The HTTP status code.
-- The response time.
-- The response body (truncated to ~64 KB in the run output for safety).
-
-### Authentication
-
-The HTTP step does not have a special "auth" field — credentials go through the `headers`:
-
-| Auth scheme | Header |
-|---|---|
-| Bearer token | `Authorization: Bearer ${env:THIRD_PARTY_TOKEN}` |
-| Basic | `Authorization: Basic <base64>` |
-| API key | `X-API-Key: ${env:THIRD_PARTY_KEY}` |
-| HMAC / signed requests | Use a `python` step — the HTTP step doesn't do per-request signing. |
-
-The `${env:…}` substitution reads from the framework's env file — never put a secret directly in `jobs.toml`.
-
-### Retry on HTTP
-
-HTTP is the step type that benefits most from a retry policy. A common shape:
-
-```
-retry: { attempts = 3, backoff = exponential, base_seconds = 30 }
-```
-
-Catches rate-limits (429), transient outages and connection resets. Exponential backoff gives the upstream a chance to recover.
-
-### When to reach for `python` instead
-
-| Pattern | Why Python |
-|---|---|
-| The response needs parsing into structured fields. | The `http` step records the raw body — parsing happens in a downstream Python step or you can roll both into one Python step. |
-| The API needs pagination. | A `python` step loops; the `http` step can't. |
-| The auth needs computed signatures (AWS Sig v4, etc.). | Same. |
+A 2xx answer succeeds; anything else fails the step with the status. The step keeps the status, the first 4 KB of the answer and the duration. Values from the environment are written `${NAME}` in `jobs.toml` and replaced when the file is loaded.
 
 ---
 
-## LDAP Sync — `ldap_sync`
+## LDAP sync — `ldap_sync` \{#ldap-sync\}
 
-Pulls a directory subtree from an LDAP / Active Directory server and upserts it into a target connector.
+Reads entries from an LDAP directory and runs a write query of a SQL connector for each entry.
 
-### Fields
-
-| Field | Required | Notes |
-|---|---|---|
-| **`server`** | Yes | LDAP server URL (`ldap://`, `ldaps://`). |
-| **`bind_dn`** | Yes | Distinguished Name of the service account. |
-| **`bind_password`** | Yes | Password. Always 🔒 encrypted. |
-| **`search_base`** | Yes | Base DN to search from (`ou=people,dc=corp,dc=local`). |
-| **`search_filter`** | `(objectClass=*)` | LDAP filter (`(&(objectClass=user)(memberOf=cn=staff,…))`). |
-| **`attributes`** | `[]` | List of LDAP attributes to fetch. Empty = all available. |
-| **`target_connector`** | Yes | SQL connector to upsert into. |
-| **`target_query`** | Yes | Named upsert query on the target connector. |
-| **`mapping`** | `{}` | Map of LDAP attribute → target column (e.g. `{ "sAMAccountName": "user_id" }`). |
-
-### What it captures
-
-- Number of LDAP entries fetched.
-- Number of rows upserted.
-- Number of stale rows pruned (when the target query supports deletion).
-
-### When to use it
-
-LDAP sync is purpose-built for **mirroring a directory** into the application's user / group catalogue. A few common shapes:
-
-| Pattern | Source | Target |
-|---|---|---|
-| Mirror AD users into the app. | `ou=people,dc=corp` | The framework's user table. |
-| Pull group memberships for an access-review screen. | `ou=groups,dc=corp` | A flat `(user, group)` table. |
-| Snapshot an OU for a compliance report. | `ou=france,dc=corp` | A dated audit table. |
-
-### When to reach for `python` instead
-
-- Custom attribute parsing (Windows `accountExpires` as a FILETIME → date).
-- Multi-server reconciliation.
-- Inline transformation rules (regex on DN, conditional skip).
-
-LDAP Sync is meant for the **straightforward 80%**. For anything bespoke, a `python` step with the `ldap3` library is the natural choice — and that's exactly what Nomasx-1's `nomasx1-ldap-1` job does.
-
----
-
-## Disabling a step
-
-Every step has an **enabled** toggle (top-right of the step editor pane, also in the Run-with-parameters modal). When off:
-
-- The runner records the step as **`CANCELED`** in the run history.
-- The reason is `skipped: disabled` (visible on the Run detail page).
-- The remaining steps still run.
-
-Use cases:
-
-| Why disable | Where |
+| Field | Notes |
 |---|---|
-| Step is temporarily broken; rest of the job still runs. | Editor — saves into the job definition. |
-| Re-run only steps 6–9 after fixing the data. | Run-with-parameters modal — for this fire only. |
-| Steady-state kill switch on a destructive purge. | Editor — leaves the step as opt-in. |
+| `server` | `ldaps://ad.example.com:636`. |
+| `bind_dn`, `bind_password` | The account used to read; write the password as `${LDAP_PASSWORD}`. |
+| `search_base`, `search_filter` | Where and what to search: `DC=example,DC=com`, `(objectClass=user)`. |
+| `attributes` | The attributes to read. |
+| `target_connector`, `target_query` | The write query run for each entry. |
+| `mapping` | LDAP attribute → query parameter. A missing attribute gives `NULL`. |
+
+Records the number of entries read and rows written.
 
 ---
 
-## Step output
+## Call a job — `call_job` \{#call-job\}
 
-Each step row in the run history carries an **output** snapshot — a small JSON blob the executor or Python function produced:
-
-| Step type | Typical output |
-|---|---|
-| `sql_query` | `{"rows_affected": 1024}` |
-| `sql_copy` | `{"source_rows": 100000, "target_rows": 100000, "elapsed_ms": 14300}` |
-| `python` | Whatever the function returned (a dict). |
-| `http` | `{"status": 200, "elapsed_ms": 145, "body_preview": "..."}` |
-| `ldap_sync` | `{"fetched": 4321, "upserted": 4321, "pruned": 12}` |
-
-A step that returns **nothing** is harder to operate — the run history can't tell you *what happened*. Always return something structured.
+`target_job_id` names another job. The step starts it, waits for it to end and takes its result: success, failure or cancellation. The called job has its own run in the history, and inherits the caller's log level and run parameters. A job that would end up calling itself is refused.
 
 ---
 
-## What's next
+## Retries and timeouts \{#retry\}
 
-- [Create a job](./jobs/create.md) — the Job editor, where you wire steps in.
-- [Workflow recipes](./workflows/scheduled-sync.md) — three end-to-end patterns using multiple step types.
-- [Custom Python steps](./custom-python.md) — the Python escape hatch in depth.
-- [Runs → History](./runs/history.md) — what the captured step output looks like.
+The job's **Retry policy** block (`attempts`, `backoff` fixed or exponential, `base_seconds`) applies to each step: a step is tried up to `attempts` times in all (`1`, the default, means no retry), with a wait of `base_seconds` between tries — constant, or doubling with `exponential`. The job as a whole stops after `timeout_seconds` (4 hours by default).

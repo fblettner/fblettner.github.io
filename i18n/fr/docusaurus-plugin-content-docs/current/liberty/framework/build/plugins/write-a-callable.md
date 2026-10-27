@@ -103,18 +103,20 @@ Toute autre chose déclenche `StepFailed` — une typo ou un objet non sérialis
 
 ### Le retour recommandé
 
-La plupart des callables retournent un dict :
+Pour remonter un nombre de lignes **et** des détails, retourner un `StepResult` :
 
 ```python
-return {"rows_affected": deleted, "tenant": apps_id, "cutoff": cutoff.isoformat()}
+from liberty.jobs.steps.base import StepResult
+
+return StepResult(rows_affected=deleted, extras={"tenant": apps_id, "cutoff": cutoff.isoformat()})
 ```
 
-| Clé | Où elle apparaît |
+| Partie | Où elle apparaît |
 |---|---|
-| `rows_affected` | Cumulée dans le `rows_affected` de l'exécution parente sur la page Exécutions de Nomaflow. La grille s'en sert pour la colonne « X lignes touchées » d'un coup d'œil. |
-| Autres clés | Stockées sur l'enregistrement de l'étape comme `extras`. Visibles dans le dépliant par étape de la page Détail d'exécution. |
+| `rows_affected` | Additionné dans les *lignes modifiées* de l'exécution. Retourner un simple `int` le renseigne aussi. |
+| `extras` | Conservé avec l'étape. Un `dict` retourné devient `extras` — une clé `rows_affected` qu'il contiendrait n'est **pas** comptée comme lignes. |
 
-Garder le dict **petit et structuré** — entiers simples, chaînes courtes, timestamps ISO. L'historique d'exécution l'enregistre ; un dict de 10 Mo gonfle la base de données et l'interface.
+Garder les extras **petits et structurés** — entiers, chaînes courtes, horodatages ISO. L'historique des exécutions les enregistre ; un dict de 10 Mo alourdit la base.
 
 ---
 
@@ -139,12 +141,12 @@ Le framework annule une étape dans deux scénarios :
 
 | Déclencheur | Réaction attendue |
 |---|---|
-| L'opérateur clique sur ✕ Annuler sur la page Détail d'exécution. | L'exécuteur envoie `CancelledError` ; le respecter. |
+| Un opérateur clique sur **Annuler** sur la carte de la tâche, dans la page des Tâches. | L'exécuteur envoie `CancelledError` ; le respecter. |
 | L'étape dépasse son `timeout_seconds`. | Idem — `asyncio.wait_for` annule l'appel attendu. |
 
 Pour les fonctions asynchrones : l'annulation se propage automatiquement à travers `await`. La fonction doit la laisser passer — ne pas intercepter `asyncio.CancelledError` puis continuer.
 
-Pour les fonctions synchrones : l'annulation ne s'arrête qu'aux frontières `await`. Si la fonction est une longue boucle synchrone sans point de contrôle asynchrone, **l'annulation ne l'arrêtera pas**. Le correctif : rendre la main à la boucle d'événements périodiquement :
+Une fonction synchrone (`def`) s'exécute dans un thread de travail, qui **ne peut pas être interrompu** : l'exécution est marquée annulée, mais la fonction continue jusqu'à son retour. Pour un travail long, écrire une fonction `async` et rendre régulièrement la main à la boucle d'événements :
 
 ```python
 async def long_loop(*, items, **_):
@@ -158,7 +160,6 @@ async def long_loop(*, items, **_):
     return {"processed": processed}
 ```
 
-Ou utiliser `ctx.is_cancelled()` quand on ne peut sincèrement pas rendre la main (le runner fournit ce helper pour l'annulation coopérative).
 
 ---
 
@@ -217,7 +218,15 @@ async def my_function(*, ctx, **_):
     _log.info("done · rows=%d · run_id=%s", rows, ctx.run_id)
 ```
 
-La configuration de logging du framework étiquette automatiquement les enregistrements de log avec l'id d'exécution actif via un `ContextVar` posé par le runner. Inclure `ctx.run_id` dans le message reste utile — c'est redondant quand le format de log du framework affiche déjà l'id d'exécution, mais sans conséquence sinon.
+Le journal de l'exécution capte les messages des loggers `liberty.*` et des espaces de noms enregistrés par un plugin. Enregistrer une fois le paquet du plugin, dans son `__init__.py` :
+
+```python
+# plugins/myapp/__init__.py
+from liberty.jobs.runlog import register_namespace
+register_namespace("myapp")
+```
+
+Chaque logger `myapp.<module>` alimente alors le journal de l'exécution ; sans cela, les lignes ne vont que dans le journal du serveur.
 
 La page Détail d'exécution lit la table de logs alimentée par ces messages — chaque ligne `INFO` / `WARNING` / `ERROR` pendant l'exécution de l'étape y apparaît.
 
@@ -231,7 +240,7 @@ import logging
 from datetime import date, timedelta
 
 from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import RunContext, StepFailed
+from liberty.jobs.steps.base import RunContext, StepFailed, StepResult
 
 _log = logging.getLogger(__name__)
 
@@ -243,7 +252,7 @@ async def generate_monthly_summary(
     apps_id: int,
     target_table: str = "monthly_summary",
     **_,
-) -> dict:
+) -> StepResult:
     """Aggregate last month's invoices into the monthly_summary table."""
     target = connectors.pools.engine("reporting")
     last_month_start = date.today().replace(day=1) - timedelta(days=1)
@@ -280,7 +289,7 @@ async def generate_monthly_summary(
             raise StepFailed(f"no invoices to aggregate for {period} apps_id={apps_id}")
 
     _log.info("inserted %d summary row(s) · run_id=%s", rows, ctx.run_id)
-    return {"rows_affected": rows, "period": period, "tenant": apps_id}
+    return StepResult(rows_affected=rows, extras={"period": period, "tenant": apps_id})
 ```
 
 Référencé depuis `jobs.toml` :

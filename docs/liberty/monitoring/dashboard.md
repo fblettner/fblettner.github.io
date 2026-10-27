@@ -1,215 +1,185 @@
 ---
 title: The Monitoring page
-description: "Card-by-card walkthrough of the Monitoring page — KPI strip, Pools, Connected users, Held locks and the live Log tail. What each column means and when to act on it."
-keywords: [Liberty Framework, monitoring, technical dashboard, pools, connections, sessions, row locks, log tail, log filter]
+description: "Block by block, the Liberty Next Monitoring page: the four KPIs, database pools, runtime, connected users, record locks and the live log tail — what each value means and when to act."
+keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, record locks, runtime, log tail, log filter]
 ---
 
 # The Monitoring page
 
-The Monitoring page is a single scrollable view with five cards. This page walks each one — what every column means, what numbers are healthy, when to act.
-
-Reach the page from the **📊 Monitoring** entry in the left sidebar (visible to superusers + roles granted `monitoring:view`).
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only, refreshes itself through the live connection (Socket.IO), and its labels are in English.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 518" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="md-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="mon-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="mon-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="mon-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="mon-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="360" rx="14" fill="url(#md-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Monitoring</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="78" width="220" height="64" rx="8" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)"/>
-  <text x="56" y="98" fill="#94a3b8" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UPTIME</text>
-  <text x="56" y="124" fill="#e2e8f0" fontSize="20" fontFamily="ui-monospace, monospace">14d 03h</text>
-
-  <rect x="270" y="78" width="220" height="64" rx="8" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.30)"/>
-  <text x="286" y="98" fill="#94a3b8" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTED USERS</text>
-  <text x="286" y="124" fill="#e2e8f0" fontSize="20" fontFamily="ui-monospace, monospace">12</text>
-
-  <rect x="500" y="78" width="220" height="64" rx="8" fill="rgba(192,132,252,0.06)" stroke="rgba(192,132,252,0.30)"/>
-  <text x="516" y="98" fill="#94a3b8" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HELD LOCKS</text>
-  <text x="516" y="124" fill="#e2e8f0" fontSize="20" fontFamily="ui-monospace, monospace">3</text>
-
-  <rect x="730" y="78" width="230" height="64" rx="8" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.30)"/>
-  <text x="746" y="98" fill="#94a3b8" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOL CONNECTIONS</text>
-  <text x="746" y="124" fill="#e2e8f0" fontSize="20" fontFamily="ui-monospace, monospace">7 / 20</text>
-
-  <rect x="40" y="160" width="450" height="100" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="182" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOLS</text>
-  <text x="56" y="204" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">default · postgresql · 5/20 · 15 idle · 0 overflow</text>
-  <text x="56" y="222" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">reporting · postgresql · 2/10 · 8 idle · 0 overflow</text>
-  <text x="56" y="240" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">jdedwards · oracle · 0/5 · not opened (lazy)</text>
-
-  <rect x="500" y="160" width="460" height="100" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="516" y="182" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTED USERS</text>
-  <text x="516" y="204" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">alice · sid=a8c4d1f2…  · client=b7e3…</text>
-  <text x="516" y="222" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">bob · super · sid=c0f3a2b7…  · client=—</text>
-  <text x="516" y="240" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">carol · sid=e2a7c5d9…  · client=8a1f…</text>
-
-  <rect x="40" y="278" width="450" height="92" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="300" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HELD LOCKS</text>
-  <text x="56" y="322" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">bob · crm.customers · CUSTOMER_ID=14 · 2 min ago</text>
-  <text x="56" y="340" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">alice · crm.deals · DEAL_ID=88 · 5 min ago</text>
-  <text x="56" y="358" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">carol · crm.activities · ACTIVITY_ID=341 · 12 sec ago</text>
-
-  <rect x="500" y="278" width="460" height="92" rx="8" fill="rgba(0,0,0,0.40)" stroke="#1f2937"/>
-  <text x="516" y="300" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOGS (live)</text>
-  <text x="516" y="320" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">14:02:01.083  INFO  liberty.connectors · default pool: 5/20</text>
-  <text x="516" y="334" fill="#fde68a" fontSize="9" fontFamily="ui-monospace, monospace">14:02:11.408  WARN  liberty.jobs · run_a8c4 retried (1/3)</text>
-  <text x="516" y="348" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">14:02:12.812  INFO  liberty.web.screens · user alice opened crm.customers</text>
-  <text x="516" y="362" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">14:02:13.045  INFO  liberty.connectors · query customers_get · 42 rows</text>
+  <rect x="220" y="14" width="760" height="494" rx="14" fill="url(#mon-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Monitoring</text>
+  <rect x="240" y="64" width="172" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="82" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTED USERS</text>
+  <text x="252" y="108" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">4</text>
+  <text x="252" y="124" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Live Socket.IO sessions</text>
+  <rect x="422" y="64" width="172" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="434" y="82" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIVE LOCKS</text>
+  <text x="434" y="108" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">1</text>
+  <text x="434" y="124" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Records currently being edited</text>
+  <rect x="604" y="64" width="172" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="616" y="82" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOLS</text>
+  <text x="616" y="108" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">3 / 4</text>
+  <text x="616" y="124" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Materialised / configured</text>
+  <rect x="786" y="64" width="174" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="798" y="82" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UPTIME</text>
+  <text x="798" y="108" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">6 d 4 h</text>
+  <rect x="240" y="148" width="352" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="165.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOL</text>
+  <text x="340" y="165.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIALECT</text>
+  <text x="420" y="165.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IN USE</text>
+  <text x="480" y="165.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IDLE</text>
+  <text x="530" y="165.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OVERFLOW</text>
+  <rect x="240" y="180" width="352" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="196.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">default</text>
+  <text x="340" y="196.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">postgresql</text>
+  <text x="420" y="196.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1</text>
+  <text x="480" y="196.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">4</text>
+  <text x="530" y="196.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="240" y="210" width="352" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="226.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">jdedwards</text>
+  <text x="340" y="226.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">oracle</text>
+  <text x="420" y="226.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <text x="480" y="226.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3</text>
+  <text x="530" y="226.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="240" y="240" width="352" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="256.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">sales</text>
+  <text x="340" y="256.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">not opened</text>
+  <text x="420" y="256.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="480" y="256.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="530" y="256.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="240" y="142" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATABASE POOLS</text>
+  <text x="608" y="142" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RUNTIME</text>
+  <rect x="608" y="148" width="352" height="118" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="620" y="170" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Liberty Next</text>
+  <text x="948" y="170" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">7.0.58</text>
+  <text x="620" y="194" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Connectors · screens</text>
+  <text x="948" y="194" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">12 · 87</text>
+  <text x="620" y="218" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">License</text>
+  <text x="948" y="218" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">full · 2027-06-30</text>
+  <text x="620" y="242" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Socket.IO</text>
+  <text x="948" y="242" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">4 clients</text>
+  <text x="240" y="284" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTED USERS</text>
+  <text x="608" y="284" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD LOCKS</text>
+  <rect x="240" y="290" width="352" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USER</text>
+  <text x="370" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SESSION</text>
+  <text x="490" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT</text>
+  <rect x="240" y="322" width="352" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
+  <text x="370" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">a1f3…</text>
+  <text x="490" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10.0.0.12</text>
+  <rect x="240" y="352" width="352" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">bruno</text>
+  <text x="370" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">9c2e…</text>
+  <text x="490" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10.0.0.31</text>
+  <rect x="608" y="290" width="352" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="618" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD</text>
+  <text x="788" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USER</text>
+  <text x="878" y="307.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SINCE</text>
+  <rect x="608" y="322" width="352" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="618" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">sales/orders 4512</text>
+  <text x="788" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
+  <text x="878" y="338.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">14:02</text>
+  <text x="240" y="396" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIVE LOG TAIL</text>
+  <rect x="240" y="404" width="196" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="260.0" y="419.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">All</text>
+  <rect x="281" y="405" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="306.0" y="419.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">INFO+</text>
+  <line x1="332" y1="409" x2="332" y2="423" stroke="#334155" strokeWidth="1"/>
+  <text x="358.0" y="419.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">WARN+</text>
+  <line x1="384" y1="409" x2="384" y2="423" stroke="#334155" strokeWidth="1"/>
+  <text x="410.0" y="419.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">ERROR</text>
+  <rect x="446" y="404" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="456" y="418.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Filter… (logger name or message)</text>
+  <rect x="890" y="404" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="915.0" y="418.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Pause</text>
+  <rect x="240" y="436" width="720" height="62" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="454" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">14:05:12  INFO   liberty.web   POST /api/sql/sales/orders_put 200 · req 7d1e…</text>
+  <text x="252" y="472" fill="#fb923c" fontSize="9" fontFamily="ui-monospace, monospace">14:05:14  WARN   nomaflow      run 3f2c… step load-sales: 2 row(s) rejected</text>
+  <text x="252" y="490" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace">14:05:20  ERROR  liberty.sql   jdedwards: ORA-12541 (error_id 4be1a9c2)</text>
+  <rect x="10" y="80" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four KPIs</text>
+  <text x="20" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">users, locks, pools, uptime</text>
+  <line x1="210" y1="97.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mon-arrow)"/>
+  <rect x="10" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Database pools</text>
+  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in use, idle, overflow</text>
+  <line x1="210" y1="217.0" x2="240" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mon-arrow)"/>
+  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Runtime</text>
+  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">version, counts, licence</text>
+  <line x1="1000" y1="207.0" x2="960" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mon-arrow)"/>
+  <rect x="1000" y="330" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Record locks</text>
+  <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who edits which record</text>
+  <line x1="1000" y1="347.0" x2="960" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mon-arrow)"/>
+  <rect x="10" y="438" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="453" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live log</text>
+  <text x="20" y="466" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">level, text filter, pause</text>
+  <line x1="210" y1="455.0" x2="240" y2="448" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mon-arrow)"/>
 </svg>
 
 ---
 
-## KPI strip
+## The four KPIs \{#kpis\}
 
-Four numbers at the top. Each is a quick read on a single dimension:
-
-| KPI | What it counts | When to worry |
-|---|---|---|
-| **Uptime** | How long the framework process has been running. | If it resets unexpectedly, the framework crashed and restarted (or systemd / Docker re-pulled it). Check the logs around the restart timestamp. |
-| **Connected users** | Sessions currently signed in (have a fresh access token). | Normal install: low single digits. A jump (a hundred at once) might mean a load test or a script with a leaked token. |
-| **Held locks** | Row-level locks the framework holds — one per opened edit dialog. | If a lock is held for hours and the user has left, the dialog is stale. Either the user reopens and saves/closes, or you can release manually (see [Held locks](#held-locks)). |
-| **Pool connections** | Total in-use connections across every pool. | Should stay well below the sum of pool sizes. If you regularly hit the limit, raise pool sizes or investigate slow queries. |
-
-The KPIs refresh every few seconds via the framework's Socket.IO channel — no page reload needed.
+| KPI | Meaning |
+|---|---|
+| **Connected users** | Live sessions — one per open browser tab connected to the server. |
+| **Active locks** | Records currently open for editing. |
+| **Pools** | Pools opened / pools configured. A pool opens on its first use. |
+| **Uptime** | Time since the server started. |
 
 ---
 
-## Pools
+## Database pools \{#pools\}
 
-One row per SQL pool the framework knows about. Pool config comes from *Settings → Pools*; this card is the **live view** of each.
+One row per pool: **Pool**, **Dialect**, **In use** (connections busy), **Idle** (open and free), **Overflow** (connections beyond the pool's size). *not opened* means no query has used the pool yet.
 
-| Column | Notes |
-|---|---|
-| **Pool** | The pool's name (the key under `[pools.*]` in the connectors file). |
-| **Dialect** | `postgresql`, `oracle`, `mysql`, `mssql`, `sqlite`, `db2` — what SQLAlchemy reports for this engine. |
-| **In use** | Connections currently checked out of the pool by a running query. |
-| **Idle** | Connections that are open but free to serve the next query. |
-| **Overflow** | `n/max` — extra connections beyond pool size, opened temporarily when in-use hits the limit. A persistent non-zero overflow means the pool is under-sized. |
-
-A pool shown as `not opened` (lazy) hasn't been used yet — the engine isn't materialised until the first query hits it. That's normal and saves resources; it doesn't mean misconfiguration.
-
-### What to do on a saturated pool
-
-| Symptom | Action |
-|---|---|
-| `in use` = pool size, `overflow` growing. | Either bump the pool size (*Settings → Pools → \<pool> → Pool size*), or investigate slow queries — a stuck query holds a connection. |
-| Many idle connections. | Pool is over-sized; you can shrink it to save DB-side memory. Not urgent. |
-| `not opened` on a pool that should be active. | The connector hasn't been used yet. Open a screen / dashboard that uses it; the pool materialises. |
+All connections *In use* with *Overflow* above 0 means queries wait for a connection: look for slow queries in the log, or raise the pool's size in **Settings → Pools**.
 
 ---
 
-## Connected users
+## Runtime \{#runtime\}
 
-One row per currently-signed-in user.
-
-| Column | Notes |
-|---|---|
-| **User** | The username. Superusers get a `super` chip. |
-| **Session** | The Socket.IO session id (first 8 characters, the rest hidden — abbreviated for legibility). |
-| **Client** | The client id from the JWT (also abbreviated). Identifies the browser tab — one user may have multiple sessions across tabs. |
-
-The card is the live answer to "who's currently in?" — the framework's user store has timestamps for last sign-in, but this card shows **right now**.
-
-### When to investigate
-
-| Pattern | What it usually means |
-|---|---|
-| Same user with many sessions. | The user has many browser tabs open. Usually harmless. |
-| A user signed in days ago, still listed. | Their access token is still valid (the default TTL is 1 hour for the access token, 14 days for the refresh) — they renewed silently. Disabling the user in *Settings → Access* takes effect on their next refresh. |
-| The list is empty. | Nobody is signed in. (Or there's a problem — verify by signing in yourself.) |
+The server's version and platform, the numbers of connectors and screens, the AI assistant's state, the licence and the Socket.IO clients.
 
 ---
 
-## Held locks
+## Connected users \{#users\}
 
-One row per row-level lock the framework is holding. A lock is **soft** — it doesn't block the database; it blocks the *UI*. When user A opens row 14 for edit, user B sees the row marked locked and can't open the same edit dialog. The lock is released on dialog close (save or cancel) or after a TTL.
-
-| Column | Notes |
-|---|---|
-| **User** | Who holds the lock. |
-| **Record** | `<app>.<screen> · <key>=<value>` — which row, on which screen of which app. |
-| **Since** | How long the lock has been held. Format: `12 sec ago`, `3 min ago`. |
-
-### Released automatically
-
-A lock is released by:
-
-- The user clicking *Save* or *Cancel* on the dialog.
-- The user closing the browser tab (the framework detects the lost Socket.IO connection).
-- The lock TTL expiring (default 1 hour) — the framework drops orphaned locks.
-
-### Manual release
-
-For genuinely stuck locks (the user is gone, the lock TTL hasn't fired):
-
-```bash
-liberty-admin lock release --app crm --screen customers --key CUSTOMER_ID=14
-```
-
-This drops the lock immediately. The next user can open the dialog. Use sparingly — releasing a lock while the original user is mid-edit silently overwrites their work.
+One row per session: **User**, **Session**, **Client** (address). A user with three tabs open has three rows.
 
 ---
 
-## Logs (live)
+## Record locks \{#locks\}
 
-The bottom card streams the framework's last few hundred log lines from the in-memory ring buffer.
+When a record is opened for editing, it is locked so that two people do not overwrite each other: **Record**, **User**, **Since** (time). The lock is released when the dialog closes or the user's session ends.
 
-| Element | What it does |
-|---|---|
-| **Time** | Server-side timestamp (`HH:MM:SS.mmm`). |
-| **Level** | `INFO` / `WARNING` / `ERROR` / `CRITICAL` — colour-coded (green / yellow / red / dark red). |
-| **Name** | The Python logger name (`liberty.connectors`, `liberty.jobs`, `nomaflow.python`, your plugin's logger). |
-| **Message** | The log message. |
+---
 
-### Controls
+## Live log tail \{#logs\}
+
+The latest lines of the server log, newest at the bottom.
 
 | Control | Effect |
 |---|---|
-| **Pause** | Stops auto-scroll. Stream continues; you can scroll back without the view jumping. *Resume* re-engages auto-scroll. |
-| **Level filter** (All / Info / Warn / Err) | Hide lines below the chosen level. *Err* shows only `ERROR` + `CRITICAL`. |
-| **Text filter** | Substring match on logger name + message. Case-insensitive. |
-| **Clear filter** | Resets both filters. |
-| **Trash icon** | Empties the **client-side** buffer (the server buffer is untouched — refresh and lines re-arrive). |
+| **All** / **INFO+** / **WARN+** / **ERROR** | Minimum level shown. |
+| **Filter…** | Text in the logger name or the message — an `error_id`, a request id, a connector. **Clear filter** empties it. |
+| **Pause** / **Resume** | Stops the scrolling to read; new lines keep arriving. |
 
-The stream is **client-side bounded** at ~1000 lines. Older lines fall off as new ones arrive. For historical logs beyond what the buffer holds, look at the framework's log file on disk (`/var/log/liberty/app.log` by default, or wherever your logging config points).
-
-### Permissions
-
-The log viewer is **superuser-only** — the framework returns a `Log viewer requires superuser access` banner if a non-superuser opens the page. Logs frequently contain internal details (SQL fragments, function arguments, user emails) that aren't safe for general operator viewing.
-
----
-
-## Refresh interval
-
-The page refreshes its data via Socket.IO at these cadences:
-
-| Card | Refresh trigger |
-|---|---|
-| KPIs, Pools, Connected users, Held locks | Every ~5 seconds on a server tick, **and** immediately on user sign-in / sign-out / dialog open / dialog close events. |
-| Logs | Push-based — every log line emitted by the framework streams to the page in real time (subject to the 1000-line client buffer). |
-
-No manual reload button — the page is meant to stay open in an operations tab.
-
----
-
-## What this page is NOT
-
-- Not a **historical** view. A process restart wipes Locks, Connected users and the Log buffer. For long-term retention, route logs to an external system + use the framework's audit tables.
-- Not a **per-query performance** view. For slow-query investigation, enable Postgres' `pg_stat_statements` or wire an APM.
-- Not a **resource usage** view. Container CPU / RAM live in `docker stats` / Portainer / Kubernetes; OS-level metrics live in your monitoring agent.
-
-The Monitoring page answers *"what's the framework doing right now?"*. For *"what did it do yesterday?"* you need the layers below.
-
----
-
-## What's next
-
-- [Overview](./overview.md) — when to look at Monitoring vs external systems.
-- [Health endpoints](./health-endpoints.md) — the machine-readable side.
+Errors are red, warnings orange, debug lines dimmed; a line with a stack trace can be unfolded (**traceback**). For older lines, use `./liberty logs` or `liberty-ops logs`.

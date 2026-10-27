@@ -1,107 +1,31 @@
 ---
-title: Supervision — vue d'ensemble
-description: "La page Supervision intégrée de Liberty montre ce qui se passe à l'instant présent — utilisateurs connectés, verrous de lignes détenus, statistiques SQLAlchemy par pool, informations runtime et fil de journaux en direct. Ainsi que les endpoints de santé du framework pour la supervision externe."
-keywords: [Liberty Framework, supervision, tableau de bord technique, utilisateurs connectés, verrous détenus, statistiques de pool, fil de journaux, healthz, runtime]
+title: Surveillance — vue d'ensemble
+description: "Surveiller un serveur Liberty Next en fonctionnement : la page Surveillance pour les superutilisateurs (sessions, verrous d'enregistrement, pools de base, runtime, journal en direct), les points de santé pour les sondes, et les commandes status et doctor."
+keywords: [Liberty Next, surveillance, tableau de bord technique, utilisateurs connectés, verrous d'enregistrement, pools, journal, health, ready, info]
 ---
 
-# Supervision — vue d'ensemble
+# Surveillance — vue d'ensemble
 
-Deux surfaces donnent de la visibilité sur ce que fait une installation Liberty en cours d'exécution :
-
-| Surface | Ce qu'elle montre | Public |
+| Outil | Affiche | Pour |
 |---|---|---|
-| **La page Supervision** | Vue runtime en direct — bandeau de KPI, statistiques par pool, utilisateurs connectés, verrous détenus, fil de journaux. Accessible depuis la barre latérale (icône `📊 Supervision`). | Les exploitants de garde. |
-| **Les endpoints de santé** | État lisible par les machines — `/health`, `/health`. Utilisé par les load balancers, les sondes Kubernetes, la supervision externe (Prometheus, Datadog…). | L'automatisation. |
-
-Cette page est la carte des deux. Les cartes du tableau de bord ont leur page dédiée ; les endpoints de santé aussi.
+| **La page Surveillance** | Ce qui se passe maintenant : utilisateurs connectés, verrous d'enregistrement, pools de base, runtime, journal en direct. | Les superutilisateurs, depuis l'entrée **Surveillance** du menu latéral. Voir [La page Surveillance](./dashboard.md). |
+| **Points de santé** | `/health` (le processus fonctionne), `/ready` (la base du framework répond), `/info` (version et compteurs). | Répartiteurs de charge, contrôles de santé des conteneurs, sondes externes. Voir [Points de santé](./health-endpoints.md). |
+| **`./liberty status` / `doctor`** | Versions, santé, migrations en attente, problèmes de configuration. | Les administrateurs sur le serveur. Voir [Exploitation](../installation/operations.md). |
 
 ---
 
-## La page Supervision
+## Que regarder \{#when\}
 
-Cliquer sur **Supervision** dans la barre latérale gauche. La page est une vue défilante unique avec cinq sections, chacune dans sa propre carte :
-
-| Carte | Ce qu'elle contient |
+| Situation | Premier contrôle |
 |---|---|
-| **Bandeau de KPI** | Chiffres rapides : temps d'activité, nombre d'utilisateurs connectés, nombre de verrous actifs, total des connexions de pool. |
-| **Pools** | Une ligne par pool — taille du pool, connexions en cours d'utilisation, débordement, profondeur de la file d'attente. Aide à repérer un pool saturé. |
-| **Utilisateurs connectés** | Une ligne par utilisateur connecté — nom d'utilisateur, depuis quand, dernière activité. |
-| **Verrous détenus** | Les verrous au niveau ligne actuellement détenus par le framework (à l'ouverture d'une boîte de dialogue d'édition, un verrou logique évite que deux exploitants n'écrasent mutuellement leurs modifications). |
-| **Journaux** | Les dernières centaines de lignes de journal du framework — colorées par niveau, filtrables par niveau + texte. |
-
-La présentation complète de chaque carte se trouve sur [Tableau de bord](./dashboard.md).
+| Les utilisateurs trouvent l'application lente | **Database pools** : toutes les connexions *In use*, ou *Overflow* supérieur à 0. |
+| Une erreur sur un écran | Le journal en direct filtré sur **ERROR** ; le message de l'utilisateur donne un `error_id` à rechercher. |
+| Un enregistrement ne peut pas être sauvegardé | **Record locks** : quelqu'un d'autre l'a peut-être ouvert. |
+| Le serveur semble bloqué | `/ready`, puis `./liberty status`. |
+| Une tâche planifiée ne s'est pas exécutée | L'[historique des exécutions](../nomaflow/runs/history.md) Nomaflow — une exécution **MISSED** l'enregistre. |
 
 ---
 
-## Permissions requises pour voir la page
+## Ce qu'elle n'affiche pas \{#limits\}
 
-Visibilité :
-
-| Rôle | Effet |
-|---|---|
-| **Superutilisateur** | Accès complet — voit chaque section. |
-| `monitoring:view` (permission granulaire) | Idem — accès complet. |
-| Tout autre | L'entrée Supervision n'apparaît pas dans la barre latérale. La page renvoie 403 si l'URL est saisie directement. |
-
-Accorder la permission `monitoring:view` aux rôles d'exploitation qui doivent garder un œil sur l'installation en cours d'exécution sans hériter du reste des pouvoirs admin.
-
----
-
-## Quand consulter la Supervision
-
-| Situation | Quoi vérifier en premier |
-|---|---|
-| Des utilisateurs se plaignent de lenteurs. | Carte **Pools** — un pool est-il saturé (profondeur de file > 0) ? |
-| Erreur mystérieuse dans un écran. | Carte **Journaux** — filtrer par `ERROR` et remonter. |
-| « Bob a-t-il supprimé cette ligne par erreur ? » | Carte **Utilisateurs connectés** — confirmer que Bob était connecté à ce moment-là. Carte **Verrous** — voir si Bob détenait le verrou de la ligne. |
-| Le framework semble figé. | **Bandeau de KPI** — le temps d'activité doit être raisonnable. **Pools** — les connexions ne doivent pas être toutes en cours d'utilisation. |
-
-Pour une investigation plus poussée (temps de réponse par écran, journaux de requêtes lentes par requête), câbler un système de supervision externe — voir [Endpoints de santé](./health-endpoints.md).
-
----
-
-## Quand câbler une supervision externe
-
-La page Supervision intégrée vit **en mémoire** — un redémarrage du processus efface la carte des verrous, la liste des utilisateurs connectés et le fil de journaux. C'est une *vue d'exploitation en direct*, pas un enregistrement historique.
-
-Pour les métriques historiques et les alertes, il faut un système externe. Liberty fournit les briques :
-
-- **`/health`** — sonde de vivacité (le processus est démarré).
-- **`/health`** — sonde de disponibilité (le framework a fini d'amorcer et la base de données est joignable).
-- Journaux du processus sur `stdout` — à récupérer avec Loki / Fluentd / Datadog Agent.
-- La variable `LIBERTY_LOG_LEVEL` du framework — à passer à `DEBUG` pour une trace détaillée pendant un incident.
-
-La mise en place et les schémas de supervision externe sont couverts sur [Endpoints de santé](./health-endpoints.md).
-
----
-
-## Ce que la page NE montre PAS
-
-Connaître les limites évite les recherches frustrantes :
-
-| Vous n'y trouverez pas | Où regarder à la place |
-|---|---|
-| Histogrammes de temps de réponse par écran ou par requête. | Un APM (Datadog APM, New Relic, collecteur OpenTelemetry) — à câbler via le schéma de middleware FastAPI standard. |
-| Métriques du serveur de base de données (CPU Postgres, plans de requêtes). | La supervision propre à Postgres (`pg_stat_statements`, pgbadger) ou les outils de votre plateforme BDD. |
-| Utilisation des ressources du conteneur (RAM, CPU). | Docker (`docker stats`), la vue conteneur de Portainer, ou les métriques kubelet de Kubernetes. |
-| Historique des connexions. | Le journal d'audit du framework (quand il est configuré par écran via `audit_table`) — voir [Construire → Écrans → Général](../framework/build/screens/create-from-query.md). |
-| L'historique d'exécution Nomaflow. | La page [Nomaflow → Exécutions](../nomaflow/runs/history.md) — séparée de la Supervision. |
-
-La page Supervision est une vue d'**introspection de processus**. L'historique applicatif (qui a fait quoi quand, quelle exécution a réussi) se trouve sur des surfaces dédiées d'audit et Nomaflow.
-
----
-
-## Ce que vous faites concrètement — carte rapide
-
-| Objectif | À lire |
-|---|---|
-| Lire la page Supervision carte par carte. | [Tableau de bord](./dashboard.md). |
-| Câbler `/health` à votre load balancer. | [Endpoints de santé](./health-endpoints.md). |
-| Mettre en place une collecte de métriques externe. | [Endpoints de santé → Supervision externe](./health-endpoints.md#external-monitoring). |
-
----
-
-## La suite
-
-- [Tableau de bord](./dashboard.md) — chaque carte de la page Supervision.
-- [Endpoints de santé](./health-endpoints.md) — le contrat `/health` / `/health`.
+La page Surveillance est une vue en direct tenue en mémoire par le serveur : un redémarrage la vide. Pour l'historique — temps de réponse, charge de la base, ressources des conteneurs — utiliser les outils prévus pour cela (un APM, les statistiques propres à la base, `docker stats`). Le journal du serveur va sur la sortie standard : `log_format = "json"` dans `[app]` facilite sa collecte, et chaque ligne porte l'identifiant de la requête.

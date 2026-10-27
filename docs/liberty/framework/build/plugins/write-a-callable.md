@@ -103,18 +103,20 @@ Anything else raises `StepFailed` — a typo or a stray non-serialisable object 
 
 ### The recommended return
 
-Most callables return a dict:
+To report a row count **and** details, return a `StepResult`:
 
 ```python
-return {"rows_affected": deleted, "tenant": apps_id, "cutoff": cutoff.isoformat()}
+from liberty.jobs.steps.base import StepResult
+
+return StepResult(rows_affected=deleted, extras={"tenant": apps_id, "cutoff": cutoff.isoformat()})
 ```
 
-| Key | Where it surfaces |
+| Part | Where it surfaces |
 |---|---|
-| `rows_affected` | Sum-rolled into the parent run's `rows_affected` on the Nomaflow Runs page. The grid uses it for the at-a-glance "X rows touched" column. |
-| Other keys | Stored on the step's record as `extras`. Visible in the Run detail page's per-step expansion. |
+| `rows_affected` | Added up into the run's *Rows affected*. Returning a plain `int` sets it too. |
+| `extras` | Stored with the step. A returned `dict` becomes `extras` — a `rows_affected` key inside it is **not** counted as rows. |
 
-Keep the dict **small and structured** — single integers, short strings, ISO timestamps. The run history records it; a 10 MB dict bloats the database and the UI.
+Keep the extras **small and structured** — integers, short strings, ISO timestamps. The run history records them; a 10 MB dict bloats the database.
 
 ---
 
@@ -139,12 +141,12 @@ The framework cancels a step in two scenarios:
 
 | Trigger | What you should do |
 |---|---|
-| The operator clicks ✕ Cancel on the Run detail page. | The executor sends `CancelledError`; honor it. |
+| An operator clicks **Cancel** on the job's card in the Jobs page. | The executor sends `CancelledError`; honor it. |
 | The step exceeds its `timeout_seconds`. | Same — `asyncio.wait_for` cancels the awaited call. |
 
 For async functions: cancellation propagates through `await` automatically. The function must let it through — don't catch `asyncio.CancelledError` and continue.
 
-For sync functions: cancellation only stops at `await` boundaries. If your function is a long synchronous loop with no async checkpoints, **cancellation won't stop it**. The fix: yield to the event loop periodically:
+A synchronous function (`def`) runs in a worker thread, which **cannot be interrupted**: the run is marked cancelled but the function goes on until it returns. For long work, write an `async` function and give the event loop a chance to cancel it periodically:
 
 ```python
 async def long_loop(*, items, **_):
@@ -158,7 +160,6 @@ async def long_loop(*, items, **_):
     return {"processed": processed}
 ```
 
-Or use `ctx.is_cancelled()` if you genuinely can't yield (the runner provides that helper for cooperative cancellation).
 
 ---
 
@@ -217,7 +218,15 @@ async def my_function(*, ctx, **_):
     _log.info("done · rows=%d · run_id=%s", rows, ctx.run_id)
 ```
 
-The framework's logging configuration tags log records with the active run id automatically via a `ContextVar` set by the runner. Including `ctx.run_id` in the message is still useful — it's redundant when the framework's log format already shows the run id, but harmless otherwise.
+The run log captures the records of the `liberty.*` loggers and of the namespaces a plugin registers. Register the plugin's package once, in its `__init__.py`:
+
+```python
+# plugins/myapp/__init__.py
+from liberty.jobs.runlog import register_namespace
+register_namespace("myapp")
+```
+
+Every `myapp.<module>` logger then feeds the run log; without it, the lines go to the server log only.
 
 The Run detail page reads the log table populated by these messages — every `INFO` / `WARNING` / `ERROR` line during the step's execution shows up there.
 
@@ -231,7 +240,7 @@ import logging
 from datetime import date, timedelta
 
 from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import RunContext, StepFailed
+from liberty.jobs.steps.base import RunContext, StepFailed, StepResult
 
 _log = logging.getLogger(__name__)
 
@@ -243,7 +252,7 @@ async def generate_monthly_summary(
     apps_id: int,
     target_table: str = "monthly_summary",
     **_,
-) -> dict:
+) -> StepResult:
     """Aggregate last month's invoices into the monthly_summary table."""
     target = connectors.pools.engine("reporting")
     last_month_start = date.today().replace(day=1) - timedelta(days=1)
@@ -280,7 +289,7 @@ async def generate_monthly_summary(
             raise StepFailed(f"no invoices to aggregate for {period} apps_id={apps_id}")
 
     _log.info("inserted %d summary row(s) · run_id=%s", rows, ctx.run_id)
-    return {"rows_affected": rows, "period": period, "tenant": apps_id}
+    return StepResult(rows_affected=rows, extras={"period": period, "tenant": apps_id})
 ```
 
 Referenced from `jobs.toml`:

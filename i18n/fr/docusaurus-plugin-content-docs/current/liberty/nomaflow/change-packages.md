@@ -6,9 +6,9 @@ keywords: [Liberty Framework, paquets de modifications, change packages, changes
 
 # Paquets de modifications
 
-La page **Paquets de modifications** capture chaque écriture de donnée suivie dans un ensemble groupé, revu et promouvable. Le cas d'usage qui a motivé la fonctionnalité est la **promotion de la sécurité JD Edwards d'un environnement de développement vers la production** — copier un rôle, attacher quelques menus, enregistrer → les écritures atterrissent dans les tables de production en développement, ET dans un *paquet de modifications* que l'opérateur peut revoir, approuver et expédier vers la production sous forme de paquet JSON.
+La page **Paquets de modifications** capture chaque écriture de donnée suivie dans un ensemble groupé, revu et promouvable. Le cas d'usage qui a motivé la fonctionnalité est la **promotion de la sécurité JD Edwards d'un environnement de développement vers la production** — copier un rôle, attacher quelques menus, enregistrer → les écritures arrivent dans les tables de développement, ET dans un *paquet de modifications* que l'opérateur peut revoir, approuver et expédier vers la production sous forme de paquet JSON.
 
-Le même schéma convient à tout autre flux « faire les modifications ici, les rejouer là-bas » : un rafraîchissement de catalogue UDC curé, un lot de nouvelles permissions sur un écran spécifique, une mise à jour de règle de routage sur une table de configuration. Quand un écran est **`change_tracked`**, ses insertions / mises à jour / suppressions atterrissent dans le paquet brouillon actif en parallèle de l'écriture de production.
+Le même schéma convient à tout autre flux « faire les modifications ici, les rejouer là-bas » : un rafraîchissement de catalogue UDC curé, un lot de nouvelles permissions sur un écran spécifique, une mise à jour de règle de routage sur une table de configuration. Quand un écran est **`change_tracked`**, ses insertions / mises à jour / suppressions rejoignent le paquet brouillon actif en parallèle de l'écriture de production.
 
 C'est le pendant côté opérateur d'un moteur plus profond : le framework enregistre chaque écriture suivie dans les tables **`ly_change_packages`** + **`ly_change_entries`** (la **base change-set** — même pool que le framework, distincte du miroir d'audit), et le chemin d'application les rejoue sur la cible avec détection de dérive sur l'image avant.
 
@@ -42,7 +42,7 @@ La page se trouve sous Nomaflow parce que le flux — *capture → revue → sou
   <rect x="40" y="84" width="240" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <rect x="40" y="84" width="100" height="28" rx="6" fill="url(#cp-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="90" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Modifications</text>
-  <text x="190" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Appliquer un paquet</text>
+  <text x="190" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Appliquer</text>
 
   <rect x="40" y="128" width="280" height="412" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
 
@@ -114,14 +114,14 @@ La page se trouve sous Nomaflow parce que le flux — *capture → revue → sou
   <text x="398" y="475" fill="#fb923c" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">CALL_PLUGIN</text>
 
   <rect x="352" y="500" width="592" height="28" rx="6" fill="rgba(0,0,0,0.20)" stroke="#1f2937"/>
-  <text x="364" y="518" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Post-application : 1 étape · nomajde-remerge-security  (s'exécute une fois sur la cible après l'atterrissage de chaque ligne capturée)</text>
+  <text x="364" y="518" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Post-application : 1 étape · nomajde-remerge-security  (s'exécute une fois sur la cible après l'écriture de chaque ligne capturée)</text>
 </svg>
 
 ---
 
 ## Comment un paquet se remplit
 
-Trois éléments doivent être en place pour qu'une écriture atterrisse dans un paquet.
+Trois éléments doivent être en place pour qu'une écriture rejoigne un paquet.
 
 | Requis | Description |
 |---|---|
@@ -161,176 +161,169 @@ Chaque entrée enregistre aussi :
 
 ## Le cycle de vie
 
-Un paquet traverse jusqu'à six états :
+Un paquet passe par ces états :
 
 ```text
-    DRAFT ─── submit ───▶ PENDING ─── approve ──▶ APPROVED ─── export ──▶ EXPORTED ─── apply ──▶ PROMOTED
-                              │                       │
-                              └── reject ──▶ REJECTED (rouvre à DRAFT à la prochaine capture)
+    DRAFT ─── submit ───▶ PENDING ─── approve ──▶ APPROVED ─── export ──▶ EXPORTED
+                              │
+                              └── reject ──▶ REJECTED
 ```
 
-| État | Sens |
+| État | Signification |
 |---|---|
-| **`DRAFT`** | Le paquet actif sur son application. Les nouvelles écritures suivies s'y attachent. Les entrées peuvent être exclues / réincluses. |
-| **`PENDING`** | Soumis pour approbation. Aucune nouvelle écriture ne s'y attache (un nouveau DRAFT s'ouvre pour l'application à la prochaine capture). Le relecteur peut approuver ou rejeter. |
-| **`APPROVED`** | Figé, prêt à exporter. Les entrées ne peuvent plus être exclues. |
-| **`EXPORTED`** | Un paquet JSON a été téléchargé. Le paquet est désormais l'enregistrement côté source de ce qui a été expédié ; le paquet JSON est ce qui atteint la cible. |
-| **`PROMOTED`** | Le chemin d'application de la cible a signalé un succès et a marqué la date `promoted_at` de ce paquet. |
-| **`REJECTED`** | Le relecteur l'a renvoyé. Rouvre à `DRAFT` à la prochaine écriture capturée, pour que l'opérateur puisse amender et resoumettre. |
+| **`DRAFT`** | Le paquet actif de son application. Les nouvelles écritures suivies s'y rattachent. Les entrées peuvent être exclues / réincluses. |
+| **`PENDING`** | Soumis à approbation. Aucune nouvelle écriture ne s'y rattache (un nouveau brouillon s'ouvre pour l'application à la capture suivante). Le relecteur peut approuver ou rejeter. |
+| **`APPROVED`** | Figé, prêt à l'export. Les entrées ne peuvent plus être exclues. |
+| **`EXPORTED`** | Un paquet JSON a été téléchargé. Le paquet reste côté source la trace de ce qui a été livré ; le fichier JSON est ce qui part vers la cible. |
+| **`REJECTED`** | Le relecteur l'a refusé. Il reste rejeté ; la prochaine écriture suivie sur l'application ouvre un nouveau brouillon. |
 
-Les quatre boutons de cycle de vie en en-tête de la vue de détail — *Soumettre*, *Approuver*, *Rejeter*, *Exporter* — déclenchent `POST /admin/changesets/<id>/submit` (ou `…/approve`, `…/reject`, `…/export`). Le flux est soumis à permissions : les rôles `package:submit`, `package:approve`, `package:export` contrôlent les boutons individuellement (par défaut : superutilisateur).
+Les quatre boutons de cycle de vie en en-tête du détail — *Soumettre*, *Approuver*, *Rejeter*, *Exporter* — appellent `POST /admin/changesets/<id>/submit` (ou `…/approve`, `…/reject`, `…/export`). Les paquets de modifications sont réservés aux superutilisateurs.
 
 ### Par entrée : exclure / réinclure
 
-Tant que le paquet est `DRAFT` ou `PENDING`, chaque entrée capturée a un bouton **Exclure**. Les entrées exclues ne sont pas supprimées (aucune perte d'audit) ; elles sont marquées `status = excluded` et ignorées à la compaction + à l'export. La réinclusion se fait en un clic. Utile pour le tri à la carte : capturer un large ensemble de modifications dans la journée, exclure l'expérimentation qui n'a pas abouti, expédier le reste.
+Tant que le paquet est `DRAFT`, chaque entrée capturée a un bouton **Exclure**. Les entrées exclues ne sont pas supprimées (aucune perte d'audit) ; elles sont marquées `status = excluded` et ignorées à la compaction et à l'export. La réinclusion se fait en un clic. Pratique pour trier : capturer un large ensemble de modifications dans la journée, exclure l'essai abandonné, livrer le reste.
 
-La compaction est calculée à l'**export**, pas à la capture — les exclusions prennent effet immédiatement au moment où le paquet est construit.
+La compaction est calculée à l'**export**, pas à la capture — les exclusions comptent dès la construction du paquet JSON.
 
 ---
 
-## L'onglet Modifications — relire et agir
+## L'onglet Changements — relire et agir
 
-La page a deux onglets : **Modifications** (le catalogue de paquets) et **Appliquer un paquet** (traité plus bas).
+La page a deux onglets : **Changements** (le catalogue des paquets) et **Appliquer** (décrit plus bas).
 
 ### Colonne de gauche — la liste des paquets
 
 | Élément | Description |
 |---|---|
-| Boîte de filtre | Correspondance par sous-chaîne sur le nom du paquet + l'application. Côté serveur. |
-| Paquet actif | Présélectionné à l'ouverture (le brouillon de l'application que l'opérateur a touchée en dernier). Surligné en bleu. |
-| Ligne de paquet | Nom + ligne méta (`statut · captured_by · horodatage · nombre_entrées`) + un badge de statut coloré. |
-| Couleurs de statut | `DRAFT` bleu, `PENDING` orange, `APPROVED` vert, `EXPORTED` / `PROMOTED` gris, `REJECTED` rouge. |
-| Icône corbeille | Supprime le journal du paquet — les lignes déjà écrites dans les tables sous-jacentes NE sont PAS affectées ; seul l'enregistrement du paquet de modifications est retiré. Confirmé via la boîte de dialogue thématisée. |
+| Zone de filtre | Recherche sur le nom ou le statut du paquet. |
+| Paquet actif | Présélectionné à l'ouverture (le brouillon de la dernière application modifiée). Surligné en bleu. |
+| Ligne de paquet | Nom + ligne d'informations (`statut · captured_by · horodatage · nombre d'entrées`) + un badge de statut coloré. |
+| Couleurs de statut | `DRAFT` bleu, `PENDING` orange, `APPROVED` vert, `EXPORTED` gris, `REJECTED` rouge. |
+| Corbeille | Supprime le journal du paquet — les lignes déjà écrites dans les tables ne sont PAS touchées ; seul l'enregistrement du paquet disparaît. Confirmation demandée. |
 
 ### Colonne de droite — détail du paquet
 
 | Élément | Description |
 |---|---|
-| En-tête | Nom du paquet + application + nombre d'entrées + boutons de cycle de vie (*Soumettre* / *Approuver* / *Rejeter* / *Exporter*) + les ids des étapes de post-application résolues (quand elles sont définies sur les écrans contributeurs). |
-| Entrées groupées par entité | Groupes par défaut : `RÔLES`, `UTILISATEURS`, `RELATIONS`, `SÉCURITÉ`, `MENUS`, `REJEUX D'ACTION` (les entrées CALL_API / CALL_PLUGIN) — l'étiquette de groupe vient du `change_entity` de chaque entrée. Cliquer sur l'en-tête du groupe pour plier / déplier. |
-| En-tête de groupe | L'étiquette + le nombre d'entrées + un court échantillon des clés naturelles (par ex. `PRJM_NEW · UDC_ADM · BUYER_R2`). |
-| Ligne d'entrée | Badge d'opération + clé naturelle + étiquette de l'action déclenchante. Cliquer sur le chevron pour développer le diff `ancien → nouveau`. |
-| Vue diff | Tableau à deux colonnes `champ` / `valeur` avec trois tons : barré rouge = ancien, vert = nouveau, secondaire = inchangé. Un petit switch *Voir les inchangés* dévoile le bruit des colonnes intactes quand on relit une entrée renommée mais non modifiée. |
-| Boutons par entrée | *Exclure* (uniquement sur les paquets `DRAFT` / `PENDING`) bascule l'entrée en `EXCLUDED` et la grise. Cliquer à nouveau pour réinclure. |
+| En-tête | Nom du paquet + application + nombre d'entrées + boutons de cycle de vie (*Soumettre* / *Approuver* / *Rejeter* / *Exporter*) + les étapes de post-application retenues (quand les écrans contributeurs en définissent). |
+| Entrées groupées par entité | Groupes habituels : `ROLES`, `USERS`, `RELATIONSHIPS`, `SECURITY`, `MENUS`, `ACTION REPLAYS` (les entrées CALL_API / CALL_PLUGIN) — le libellé vient du `change_entity` de chaque entrée. Un clic sur l'en-tête du groupe le replie ou le déplie. |
+| En-tête de groupe | Le libellé + le nombre d'entrées + un court échantillon des clés naturelles (par ex. `PRJM_NEW · UDC_ADM · BUYER_R2`). |
+| Ligne d'entrée | Badge d'opération + la clé naturelle + l'action d'origine. Le chevron déplie l'écart `ancien → nouveau`. |
+| Vue des écarts | Tableau `champ` / `valeur` à trois tons : rouge barré = ancien, vert = nouveau, discret = inchangé. Un switch *Show unchanged* affiche aussi les colonnes non modifiées. |
+| Boutons par entrée | *Exclure* (paquets `DRAFT` uniquement) passe l'entrée en `EXCLUDED` et l'estompe. Un nouveau clic la réinclut. |
 
-### Ids d'étapes post-application en en-tête
+### Étapes de post-application en en-tête
 
-Quand les écrans qui ont contribué au paquet ont des ids d'étapes `Screen.post_apply` définis (une liste d'ids d'étapes Nomaflow à exécuter une fois sur la cible après l'atterrissage du paquet), ces ids s'accumulent en en-tête du paquet. À l'export ils sont cousus dans une section `[changesets] post_apply` du paquet JSON ; le chemin d'application de la cible les exécute après la dernière écriture de ligne. Exemple d'usage : une promotion de sécurité JDE qui demande à `nomajde-remerge-security` de s'exécuter sur la cible une fois que chaque ligne capturée (rôle + affectation) a atterri.
-
-L'éditeur des ids d'étapes — quoi enregistrer sur un écran, quoi y câbler — se trouve sur la sous-page *Paramètres → Post-application* à côté de l'éditeur de paquets de modifications. Définir une étape prend un id de job Nomaflow ; le job est ensuite exécutable sur la cible.
+Un écran peut nommer des **étapes de post-application** (`Screen.post_apply`) : des actions à exécuter une fois sur la cible après l'écriture des lignes du paquet — refusionner un modèle de sécurité, rafraîchir une vue matérialisée. Elles proviennent d'une bibliothèque commune déclarée sous `[changesets] post_apply` dans `app.toml`, chaque étape étant un appel de plugin (`call_plugin`), un endpoint d'API (`call_api`) ou une requête (`run_query`). Leurs identifiants s'accumulent en en-tête du paquet et, à l'export, s'ajoutent au paquet JSON comme dernières opérations.
 
 ---
 
 ## L'onglet Appliquer — importer un paquet
 
-À exécuter sur l'installation **cible** (typiquement la prod) pour importer un paquet exporté depuis la source (typiquement le dev).
+À lancer sur l'installation **cible** (en général la production) pour importer un paquet exporté depuis la source (en général le développement).
 
-Le flux d'application se fait en deux passes : **essai à blanc d'abord** pour voir le rapport de dérive par opération, puis application réelle, avec éventuellement *Forcer* coché sur les lignes que l'on veut écraser.
+L'application se fait en deux temps : **d'abord un essai à blanc** pour voir le rapport des écarts par opération, puis l'application réelle, avec éventuellement certains conflits cochés pour les appliquer quand même.
 
 | Étape | Description |
 |---|---|
-| 1. **Choisir le JSON** | Le fichier `.changeset.json` exporté. L'en-tête affiche son nom, son application et le nombre d'opérations une fois parsé. |
-| 2. **Essai à blanc** | `POST /admin/changesets/apply { bundle, dry_run: true }`. Le serveur parcourt chaque opération, récupère la ligne cible actuelle via le `read_query` capturé, la compare à l'`old_values` capturé et tague l'opération avec un statut. **Aucune écriture n'a lieu.** |
-| 3. **Lire le rapport** | Chaque opération affiche son badge de statut : `would_apply` (propre), `would_force` (dérive sur UPDATE / DELETE — exige le coche *Forcer*), `unverified` (pas de read_query dans le paquet — l'application atterrira mais sans contrôle de dérive), `conflict` (insertion sur une ligne déjà existante, ou suppression sur une ligne absente), `error` (échec par opération). La ligne de résumé totalise chaque statut. |
-| 4. **Cocher *Forcer* sur les lignes à écraser** | Chaque opération `would_force` a une case à cocher. Confirme l'intention de l'opérateur d'écraser une ligne dérivée. Les opérations `conflict` reçoivent aussi une case ; la cocher les ignore à l'application réelle. |
-| 5. **Appliquer** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<indexes>] }`. Chaque opération s'exécute dans sa propre transaction ; les nombres de lignes + le statut par opération reviennent dans le rapport. |
-| 6. **Confirmation** | Une ligne atterrit dans le journal `AppliedBundle` de la cible (le journal d'import sur cette même page → onglet *Appliquer un paquet* → haut du panneau). Le statut du paquet côté source bascule en `PROMOTED` uniquement après que le chemin d'application de la cible a fait son retour à la source — pas automatique dans le flux Appliquer autonome. |
+| 1. **Choisir le JSON** | Le paquet exporté. L'en-tête affiche son nom, son application et son nombre d'opérations une fois lu. |
+| 2. **Essai à blanc** | `POST /admin/changesets/apply { bundle, dry_run: true }`. Le serveur parcourt chaque opération, lit la ligne actuelle de la cible avec la `read_query` capturée, la compare aux `old_values` capturées et attribue un statut. **Aucune écriture.** |
+| 3. **Lire le rapport** | Chaque opération affiche son statut : `would_apply` (sans écart), `conflict` (la cible diffère de l'état capturé — voir plus bas), `would_force` (un conflit que l'opérateur a choisi d'appliquer), `unverified` (contrôle impossible), `skipped` (une action capturée pour relecture seulement), `error`. La ligne de synthèse totalise chaque statut. |
+| 4. **Cocher les conflits à appliquer quand même** | Chaque opération `conflict` a une case à cocher. La cocher **applique** l'opération malgré l'écart (elle devient `would_force`) ; un conflit non coché n'est pas appliqué. |
+| 5. **Appliquer** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<index>] }`. Chaque opération s'exécute dans sa propre transaction ; le nombre de lignes et le statut de chacune reviennent dans le rapport. |
+| 6. **Confirmation** | Une ligne s'ajoute au journal d'import de la cible (en haut de l'onglet *Appliquer*), avec la somme de contrôle du paquet. Le paquet source reste `EXPORTED`. |
 
-### Détection de dérive — ce qui est comparé
+### Détection des écarts — ce qui est comparé
 
-Pour chaque opération de ligne (`INSERT` / `UPDATE` / `DELETE`), le chemin d'application :
+Pour chaque opération sur une ligne, l'application lit la ligne actuelle de la cible avec la `read_query` et la clé capturées, puis :
 
-1. Lit le `read_query` capturé dans le paquet, l'exécute sur la cible avec l'`entity_key` capturé → la **ligne actuelle de la cible**.
-2. Compare **champ par champ** à l'`old_values` du paquet.
-3. S'ils correspondent → `would_apply` (l'image avant côté source est cohérente avec l'état actuel de la cible).
-4. S'ils diffèrent → `would_force` pour UPDATE / DELETE (la ligne a changé sur la cible depuis la capture du paquet ; l'opérateur décide d'écraser ou non) ou `conflict` pour INSERT (une ligne avec cette clé existe déjà sur la cible).
-5. Si le paquet n'a pas de `read_query` → `unverified`. L'application atterrit mais aucun contrôle de dérive n'a tourné. Les paquets compacts créés avec `--no-read-query` ou depuis des écrans qui ne fournissent pas de read query atterrissent ici.
-
-| Statut | Sens | Ce que fait l'application |
+| Opération | Ligne cible | Statut |
 |---|---|---|
-| `would_apply` / `applied` | Propre — la ligne actuelle de la cible correspond à l'image avant du paquet. | L'application exécute l'écriture de ligne. |
-| `would_force` / `applied` après *Forcer* | Dérive détectée ; l'opérateur a choisi d'écraser. | L'application exécute l'écriture de ligne. |
-| `unverified` | Pas de read query → pas de contrôle de dérive. | L'application exécute l'écriture de ligne (le coche simple est `applied`). |
-| `conflict` | INSERT sur une clé existante, DELETE sur une ligne absente. | Ignoré sauf si l'opérateur coche la case du conflit. |
-| `error` | L'écriture elle-même a levé une erreur (violation FK, contrainte, incompatibilité de dialecte). | Ignoré ; la ligne de détail porte l'erreur SQL. |
+| INSERT | absente | `would_apply` |
+| INSERT | déjà présente | `conflict` |
+| UPDATE / DELETE | identique à l'état capturé | `would_apply` |
+| UPDATE / DELETE | différente, ou absente | `conflict` |
+| toute | pas de requête de lecture ni de clé capturée, ou lecture impossible | `unverified` — appliquée sans contrôle |
+| `CALL_API` / `CALL_PLUGIN` | — | `unverified` — relancée à l'application ; `skipped` quand l'action a été capturée sans `change_replay` |
+| étape de post-application | — | `unverified` — toujours exécutée, après les opérations de modification |
+
+Un conflit n'est appliqué que si sa case est cochée. Une opération dont l'écriture échoue est signalée `error` avec le message de la base.
 
 ### Réappliquer le même paquet
 
-Le journal `AppliedBundle` utilise la **somme de contrôle** du paquet (sha256 sur ses opérations) comme identité. Réappliquer le même fichier est détecté avant la moindre écriture — le rapport d'essai à blanc porte un bloc `already_applied` avec l'`applied_at` / `applied_by` précédents. L'opérateur peut soit confirmer et réappliquer (chaque ligne atterrira en `applied` si la cible est revenue à l'image avant, ou en `would_force` / `conflict` si elle a dérivé) soit fermer le fichier.
+Le journal d'import identifie un paquet par sa **somme de contrôle** (un SHA-256 de ses opérations). Réappliquer le même fichier est détecté avant toute écriture — le rapport d'essai à blanc porte un bloc `already_applied` avec les `applied_at` / `applied_by` précédents. L'opérateur peut confirmer et réappliquer (les lignes s'écrivent de nouveau là où la cible correspond à l'état capturé ; les autres reviennent en conflit) ou fermer le fichier.
 
 ### Rejeu d'action (`CALL_API` / `CALL_PLUGIN`)
 
-Un écran suivi capture **chaque** appel API / plugin qu'il déclenche (pour que le paquet l'affiche en relecture). Le fait que l'appel soit **rejoué** sur la cible est conditionné par le drapeau `change_replay` de l'action :
+Un écran suivi capture **chaque** appel d'API ou de plugin qu'il déclenche (pour que le paquet l'affiche en relecture). Le **rejeu** de l'appel sur la cible dépend de l'option `change_replay` de l'action :
 
 | `change_replay` | Ce qui est rejoué sur la cible |
 |---|---|
-| `true` *(opt-in)* | L'action est réémise telle quelle avec les paramètres résolus capturés. Utilisé pour les plugins de fusion côté serveur comme `nomajde.security:j_remerge_security` — refusionner la sécurité sur la cible est juste après l'atterrissage des écritures de lignes. |
-| `false` *(par défaut)* | La capture est affichée dans le paquet pour relecture mais **pas** rejouée. Utilisé pour les effets de bord ponctuels qui ne doivent pas s'exécuter deux fois (envoi d'e-mails, webhook externe). |
-
-Une action rejouée tourne dans la même transaction que les écritures de lignes environnantes quand le dialecte le permet ; en pratique cela signifie qu'une exécution réussie du plugin de fusion de sécurité atterrit atomiquement avec les écritures de rôle / d'affectation qui l'ont déclenchée.
+| `true` *(à activer)* | L'action est relancée telle quelle avec les paramètres capturés. Sert aux plugins de fusion côté serveur comme `nomajde.security:j_remerge_security` — refusionner la sécurité sur la cible est correct une fois les lignes écrites. |
+| `false` *(par défaut)* | La capture est affichée dans le paquet pour relecture mais **pas** relancée. Sert aux effets ponctuels qui ne doivent pas se produire deux fois (envoi d'e-mails, webhook externe). |
 
 ---
 
-## Promouvoir la sécurité JD Edwards — le cas d'usage canonique
+## Promouvoir la sécurité JD Edwards — le cas d'usage de référence
 
-Le flux qui a motivé cette fonctionnalité. Sur l'instance **dev** :
+Le flux qui a motivé cette fonctionnalité. Sur l'instance de **développement** :
 
-1. L'opérateur crée un rôle `PRJM_NEW`, attache trois menus, modifie les permissions de deux rôles existants. Chaque écriture atterrit dans le paquet brouillon de l'application **`JDE-PROD`** au fil de l'eau.
-2. L'opérateur ouvre *Nomaflow → Modifications*, relit le brouillon. La vue de détail montre les trois rôles groupés sous `RÔLES`, les attachements de menus sous `MENUS`, la sécurité touchée sous `SÉCURITÉ`. Une entrée `CALL_PLUGIN` vers `nomajde.security:j_remerge_security` est aussi capturée.
-3. L'opérateur exclut une entrée — une correction de coquille qu'il veut annuler manuellement à la place. Soumet, puis *Approuve*, puis *Exporte*.
+1. L'opérateur crée un rôle `PRJM_NEW`, lui attache trois menus, modifie les permissions de deux rôles existants. Chaque écriture rejoint au fil de l'eau le paquet brouillon de l'application **`JDE-PROD`**.
+2. L'opérateur ouvre *Nomaflow → Changements*, relit le brouillon. Le détail regroupe les trois rôles sous `ROLES`, les menus attachés sous `MENUS`, la sécurité touchée sous `SECURITY`. Une entrée `CALL_PLUGIN` vers `nomajde.security:j_remerge_security` est aussi capturée.
+3. L'opérateur exclut une entrée — une correction de coquille qu'il préfère annuler à la main. Il soumet, puis *Approuve*, puis *Exporte*.
 4. Le navigateur télécharge `jde-prod-security-2026-06-09.changeset.json`.
 
-Sur l'instance **prod** :
+Sur l'instance de **production** :
 
-5. L'opérateur ouvre *Nomaflow → Modifications → Appliquer un paquet*, dépose le JSON.
-6. L'essai à blanc s'exécute. Le rapport affiche 11 `would_apply` et 1 `would_force` sur le rôle `BUYER_R2` (quelqu'un l'a touché en prod depuis la capture du paquet). L'opérateur coche la case *Forcer* pour cette ligne.
-7. L'opérateur clique *Appliquer*. Chaque ligne atterrit ; l'étape de post-application `nomajde-remerge-security` se déclenche, refusionnant la sécurité pour les rôles parents concernés en prod.
-8. Le paquet source côté dev bascule en `PROMOTED` une fois que la cible a fait son retour. Le panneau *Paquets appliqués* côté prod enregistre la nouvelle ligne avec sa somme de contrôle.
+5. L'opérateur ouvre *Nomaflow → Changements → Appliquer*, dépose le JSON.
+6. L'essai à blanc s'exécute. Le rapport affiche 11 `would_apply` et 1 `conflict` sur le rôle `BUYER_R2` (modifié en production depuis la capture). L'opérateur coche cette ligne pour l'appliquer quand même.
+7. L'opérateur clique sur *Appliquer*. Toutes les lignes s'écrivent ; l'étape de post-application s'exécute en dernier et refusionne la sécurité des rôles parents concernés.
+8. Le journal d'import de la production enregistre le paquet avec sa somme de contrôle.
 
-Pour la référence détaillée du SQL de fusion que l'étape de post-application exécute, voir [Nomaflow → Jobs intégrés → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all).
+Pour le détail du SQL de fusion exécuté par l'étape de post-application, voir [Nomaflow → Jobs intégrés → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all).
 
 ---
 
 ## Configurer un écran pour le suivi des modifications
 
-L'onglet *Général* de l'écran porte trois bascules :
+L'onglet *Général* de l'écran porte trois réglages :
 
 | Champ | Description |
 |---|---|
-| **`change_tracked`** | Bascule maîtresse. Quand elle est active, les écritures de l'écran s'attachent au paquet actif de son application. |
-| **`change_entity`** | Étiquette optionnelle qui groupe les entrées sur la page de détail. Texte libre — `role`, `user`, `relationship`, `security` sont des conventions. Vide, on retombe sur le nom de la requête. |
-| **`Screen.post_apply`** | Liste d'ids d'étapes Nomaflow (depuis la sous-page *Post-application*) à exécuter **une fois sur la cible** après l'atterrissage de chaque ligne de chaque paquet contribué par cet écran. À utiliser avec parcimonie — ce sont les étapes transverses « refusionner la sécurité maintenant » / « rafraîchir les vues matérialisées maintenant ». |
+| **`change_tracked`** | Réglage principal. Activé, les écritures de l'écran rejoignent le paquet actif de son application. |
+| **`change_entity`** | Libellé facultatif qui regroupe les entrées dans le détail. Texte libre — `role`, `user`, `relationship`, `security` par convention. Vide : le nom de la requête. |
+| **`Screen.post_apply`** | Identifiants d'étapes de post-application (de la bibliothèque `[changesets] post_apply`) à exécuter **une fois sur la cible** après l'écriture des lignes du paquet. À utiliser avec parcimonie — ce sont les étapes transverses du type « refusionner la sécurité » ou « rafraîchir les vues matérialisées ». |
 
-Pour une action embarquée dans l'écran, une bascule supplémentaire sur l'onglet *Général* de l'action :
+Pour une action intégrée à l'écran, un réglage supplémentaire dans l'onglet *Général* de l'action :
 
 | Champ | Description |
 |---|---|
-| **`change_replay`** | Quand elle est active, une invocation `CALL_API` / `CALL_PLUGIN` de cette action est rejouée sur la cible. Désactivée par défaut — capture seulement. |
+| **`change_replay`** | Activé, un appel `CALL_API` / `CALL_PLUGIN` de cette action est rejoué sur la cible. Désactivé par défaut — capture seule. |
 
 ---
 
-## Contrat d'API
+## Contrat d'API \{#api-contract\}
 
 | Endpoint | Méthode | Description |
 |---|---|---|
-| `/admin/changesets` | `GET` | Liste les paquets. Filtres : `application=<id>`, `status=<une-valeur>`. Superutilisateur uniquement. |
-| `/admin/changesets/<id>` | `GET` | Détail du paquet — en-tête + chaque entrée avec ses valeurs anciennes / nouvelles. |
-| `/admin/changesets/<id>` | `DELETE` | Supprime uniquement le journal du paquet (pas les écritures sous-jacentes). |
+| `/admin/changesets` | `GET` | Liste les paquets. Filtres : `application=<id>`, `status=<valeur>`. Superutilisateur uniquement. |
+| `/admin/changesets/<id>` | `GET` | Détail du paquet — en-tête + chaque entrée avec ses valeurs avant / après. |
+| `/admin/changesets/<id>` | `DELETE` | Supprime seulement le journal du paquet (pas les écritures). |
 | `/admin/changesets/<id>/submit` | `POST` | Passe `DRAFT` → `PENDING`. |
 | `/admin/changesets/<id>/approve` | `POST` | Passe `PENDING` → `APPROVED`. |
-| `/admin/changesets/<id>/reject` | `POST` | Passe `PENDING` → `REJECTED` (rouvre à `DRAFT` à la prochaine capture). |
-| `/admin/changesets/<id>/entries/<entry_id>/exclude` | `POST` | Bascule le statut d'une entrée vers `EXCLUDED`. |
-| `/admin/changesets/<id>/entries/<entry_id>/include` | `POST` | Bascule le statut d'une entrée vers `CAPTURED`. |
-| `/admin/changesets/<id>/export` | `GET` | Renvoie le paquet JSON compacté ; bascule le paquet en `EXPORTED`. |
-| `/admin/changesets/apply` | `POST` | Corps : `{ bundle, dry_run, force: [<indexes>] }`. Renvoie le rapport par opération. |
+| `/admin/changesets/<id>/reject` | `POST` | Passe `PENDING` → `REJECTED`. |
+| `/admin/changesets/<id>/entries/<entry_id>/exclude` | `POST` | Passe une entrée en `EXCLUDED`. |
+| `/admin/changesets/<id>/entries/<entry_id>/include` | `POST` | Repasse une entrée en `CAPTURED`. |
+| `/admin/changesets/<id>/export` | `GET` | Renvoie le paquet JSON compacté ; passe le paquet en `EXPORTED`. |
+| `/admin/changesets/apply` | `POST` | Corps : `{ bundle, dry_run, force: [<index>] }`. Renvoie le rapport par opération. |
 | `/admin/changesets/applied` | `GET` | Le journal d'import de la cible (chaque paquet appliqué). |
 
 La forme du paquet :
 
 ```json
 {
-  "format": "liberty.changeset.v1",
-  "package": { "id": "...", "name": "...", "application": "JDE-PROD", "exported_at": "..." },
+  "format": "liberty-changeset/1",
+  "package": { "id": "...", "name": "...", "application": "JDE-PROD", "approved_by": "...", "approved_at": "..." },
   "op_count": 12,
   "ops": [
     { "seq": 1, "connector": "jdedwards", "query": "roles", "read_query": "roles_by_key",
@@ -338,12 +331,11 @@ La forme du paquet :
       "new_values": {"RLDF": "PRJM_NEW", "RLDC": "1", ...},
       "source_action": "import security" }
   ],
-  "post_apply": ["nomajde-remerge-security"],
-  "checksum": "sha256:..."
+  "checksum": "9f2c…"
 }
 ```
 
-Le format est stable entre les montées de version du framework — un paquet construit sur `2026.06` s'applique sans souci sur `2026.07`. La compatibilité ascendante est garantie par l'étiquette de version (`format = "liberty.changeset.v1"`) ; un paquet produit par un hypothétique `v2` serait rejeté par une cible `v1` avec une erreur claire.
+Le format reste stable d'une version du framework à l'autre. Le champ `format` porte la version du paquet (`liberty-changeset/1`) ; les étapes de post-application voyagent comme dernières entrées de `ops`.
 
 ---
 
@@ -355,8 +347,8 @@ Le framework livre le moteur pour ce qui suit, mais l'interface aujourd'hui est 
 |---|---|
 | **Planifier une soumission / approbation automatique** | Non. Cycle de vie manuel par choix de conception (un paquet approuvé part en prod — la validation humaine est précisément l'objectif). |
 | **Diff entre deux paquets** | Non. Comparez sur la cible via le journal des paquets appliqués + la vue de détail côté source. |
-| **Annuler un paquet promu** | Non. Le framework enregistre l'application mais ne synthétise pas un paquet inverse. Pour défaire, capturez un nouveau paquet sur la source qui annule les lignes + promouvez-le. |
-| **Mises à jour multi-onglets en direct** | Non. Une capture sur un autre onglet ne rafraîchit pas cette page ; cliquez *Rafraîchir* (en haut à droite) pour recharger. |
+| **Annuler un paquet appliqué** | Non. Le framework enregistre l'application mais ne construit pas de paquet inverse. Pour défaire, capturer sur la source un nouveau paquet qui annule les lignes, puis l'appliquer. |
+| **Mises à jour multi-onglets en direct** | Non. Une capture sur un autre onglet ne rafraîchit pas cette page ; cliquer sur *Actualiser* (en haut à droite) pour recharger. |
 
 ---
 
@@ -365,12 +357,12 @@ Le framework livre le moteur pour ce qui suit, mais l'interface aujourd'hui est 
 | Erreur | Symptôme | Correctif |
 |---|---|---|
 | L'écran n'a pas été marqué `change_tracked`. | Les écritures passent ; aucune entrée n'apparaît dans le paquet. | Ouvrir l'onglet *Général* de l'écran, activer la bascule, enregistrer. La modification ne s'applique qu'aux écritures suivantes — les écritures antérieures ne sont pas rétro-remplies. |
-| Deux opérateurs ont un paquet BROUILLON ouvert sur la même application. | Au plus un BROUILLON existe à la fois ; les écritures du second opérateur s'attachent au même paquet. | Coordonnez-vous. Le `created_by` du paquet enregistre l'auteur d'origine ; les captures suivantes marquent `captured_by` sur chaque entrée, l'attribution est donc conservée. |
-| Paquet appliqué sur la mauvaise cible (recette au lieu de prod). | L'application atterrit ; les lignes existent sur la recette. | Capturez un paquet inverse sur la recette, promouvez-le en prod — le framework ne synthétise pas cela automatiquement. La discipline de flux compte plus que l'outil ici. |
-| `would_force` sur chaque UPDATE à l'essai à blanc. | L'image avant de la cible a divergé largement — typiquement parce que la source et la cible n'étaient pas synchronisées au départ. | Auditer la divergence d'abord. Tout forcer propage l'état de la source en bloc ; parfois c'est juste, parfois c'est la source qui est obsolète. |
+| Deux opérateurs ont un paquet `DRAFT` ouvert sur la même application. | Au plus un `DRAFT` existe à la fois ; les écritures du second opérateur s'attachent au même paquet. | Se coordonner. Le `created_by` du paquet enregistre l'auteur d'origine ; les captures suivantes marquent `captured_by` sur chaque entrée, l'attribution est donc conservée. |
+| Paquet appliqué sur la mauvaise cible (recette au lieu de prod). | L'application réussit ; les lignes existent sur la recette. | Capturer un paquet inverse sur la recette, le promouvoir en production — le framework ne synthétise pas cela automatiquement. La discipline de flux compte plus que l'outil ici. |
+| `conflict` sur chaque UPDATE à l'essai à blanc. | L'image avant de la cible a divergé largement — typiquement parce que la source et la cible n'étaient pas synchronisées au départ. | Auditer la divergence d'abord. Tout forcer propage l'état de la source en bloc ; parfois c'est juste, parfois c'est la source qui est obsolète. |
 | `CALL_PLUGIN` capturé mais non déclenché à l'application. | `change_replay` est désactivé sur l'action. | Ouvrir l'onglet *Général* de l'action, activer `change_replay`, enregistrer. Les captures futures seront rejouées ; les précédentes dans des paquets déjà exportés restent telles quelles. |
-| L'étape de post-application n'a jamais tourné. | Le champ `Screen.post_apply` de l'écran contributeur est vide. | Câblez l'id d'étape (le `id` d'un job Nomaflow) dans le `post_apply` de l'écran. Les nouvelles captures l'accumuleront en en-tête du paquet ; les paquets existants ne seront pas rétro-remplis. |
-| Paquet réappliqué par accident. | L'essai à blanc affiche `already_applied` avec l'horodatage précédent. | Lire le rapport de l'application existante. Réappliquer est permis et ré-exécutable sans danger sur les lignes propres ; ne le faites qu'en pleine conscience. |
+| L'étape de post-application ne s'est jamais exécutée. | Le champ `Screen.post_apply` de l'écran contributeur est vide. | Déclarer l'étape dans `[changesets] post_apply` et ajouter son identifiant au `post_apply` de l'écran. Les nouvelles captures l'ajoutent en en-tête du paquet ; les paquets existants ne sont pas complétés. |
+| Paquet réappliqué par accident. | L'essai à blanc affiche `already_applied` avec l'horodatage précédent. | Lire le rapport de l'application existante. Réappliquer est permis et ré-exécutable sans danger sur les lignes propres ; à ne faire qu'en connaissance de cause. |
 
 ---
 

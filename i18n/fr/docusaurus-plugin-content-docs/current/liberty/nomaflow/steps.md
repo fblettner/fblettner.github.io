@@ -1,322 +1,189 @@
 ---
 title: Étapes
-description: "Les cinq types d'étape Nomaflow — sql_query, sql_copy, python, http, ldap_sync — leur rôle, leurs champs et quand y recourir."
-keywords: [Nomaflow, étapes, sql_query, sql_copy, python, http, ldap_sync, types d'étape, Liberty Framework]
+description: "Les sept types d'étapes de Nomaflow — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution."
+keywords: [Nomaflow, étapes, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, chargement de tableur, CSV, replace_partition, Liberty Next]
 ---
 
 # Étapes
 
-Une **étape** représente une unité de travail au sein d'une tâche. Nomaflow propose **cinq types d'étape** — trois déclaratifs (SQL Query, SQL Copy, LDAP Sync), un pour les appels HTTP sortants et une porte de sortie Python pour tout le reste.
+Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent dans l'ordre ; quand l'une échoue, les suivantes sont enregistrées comme *skipped: earlier step failed*.
 
-Choisissez le type d'étape en vous demandant *« quoi touche cette unité de travail ? »* :
-
-| Si l'unité touche… | Utilisez |
+| L'étape… | Type |
 |---|---|
-| Une requête SQL sur un connecteur. | **sql_query** |
-| Une table entière — déplacement de lignes du connecteur A vers le connecteur B. | **sql_copy** |
-| Un point de terminaison HTTP (REST, webhook, API tierce). | **http** |
-| Un sous-arbre LDAP / Active Directory. | **ldap_sync** |
-| Tout ce qui n'entre naturellement dans aucune des catégories ci-dessus. | **python** |
+| lance une requête nommée d'un connecteur SQL | **`sql_query`** |
+| copie une table entière d'un connecteur à un autre | **`sql_copy`** |
+| charge un classeur ou un fichier CSV dans une table | **`file_load`** |
+| appelle une fonction Python d'un plugin | **`python`** |
+| appelle une URL | **`http`** |
+| lit un annuaire LDAP / Active Directory dans une table | **`ldap_sync`** |
+| lance une autre tâche et l'attend | **`call_job`** |
 
-Cette page sert de **référence** — chaque champ, chaque valeur par défaut. Pour le parcours dans l'éditeur, voir [Créer une tâche](./jobs/create.md).
-
----
-
-## Champs communs à toutes les étapes
-
-Ces quatre champs s'appliquent quel que soit le type — ils figurent en haut de chaque volet de l'éditeur d'étape.
-
-| Champ | Défaut | Notes |
-|---|---|---|
-| **`name`** | — | Libellé affiché dans l'historique d'exécution. Doit être unique au sein de la tâche. Utilisez un couple verbe-nom : `refresh-totals`, `fetch-clients`, `sync-users`. |
-| **`type`** | — | L'une des cinq valeurs ci-dessous. Verrouillé après création — pour changer de type, supprimer puis recréer. |
-| **`enabled`** | `true` | Quand `false`, l'exécuteur enregistre l'étape comme `CANCELED` avec la raison `skipped: disabled` et passe à la suivante. Utile comme switch d'arrêt. |
-| **`timeout_seconds`** | `3600` (1 h) | Limite stricte — l'étape est annulée en cas de dépassement. À augmenter pour les longs ETL, à baisser pour les sondes HTTP. |
+Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton par type, et chaque étape ouvre un formulaire avec ses propres champs. Quelques clés n'existent que dans `jobs.toml` (signalées ci-dessous).
 
 ---
 
-## SQL Query — `sql_query`
+## Champs communs \{#common\}
 
-Exécute **une** instruction SQL sur un connecteur. L'étape la plus fréquente de Nomaflow.
-
-### Champs
-
-| Champ | Obligatoire | Notes |
+| Champ | Défaut | Remarques |
 |---|---|---|
-| **`connector`** | Oui | Nom du connecteur sur lequel exécuter. |
-| **`query`** | Oui | L'instruction SQL. Peut être un SELECT (les lignes sont comptées, les résultats ignorés) ou une écriture (INSERT / UPDATE / DELETE / REFRESH). |
-| **`params`** | Non | Dictionnaire de paramètres liés transmis à `execute(params=…)` du connecteur. Évite l'interpolation de chaînes et l'injection SQL. |
+| `name` | — | Affiché dans le détail de l'exécution ; unique dans la tâche. |
+| `type` | — | L'un des sept types. |
+| `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Run with parameters**. |
+| `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
 
-### Ce qu'elle capture
+---
 
-- Le nombre de lignes renvoyées (SELECT) ou affectées (écriture) par l'instruction.
-- L'erreur, si l'instruction a échoué.
-- Le SQL complet — émis au niveau DEBUG, pas INFO.
+## Requête SQL — `sql_query` \{#sql-query\}
 
-### Quand l'utiliser
+Lance une **requête nommée** d'un connecteur SQL — une requête définie sur la page du connecteur, en lecture ou en écriture.
 
-| Modèle | Exemple |
+| Champ | Requis | Remarques |
+|---|---|---|
+| `connector` | oui | Le connecteur SQL. |
+| `query` | oui | Le nom de la requête, pas du texte SQL. |
+| `params` | non | Les valeurs liées aux paramètres de la requête. |
+| `pool` | non | Un autre pool de l'ensemble du connecteur — voir [Connecteurs multi-pools](../framework/connectors.md#multi-pool). Uniquement dans `jobs.toml`. |
+
+Enregistre le nombre de lignes renvoyées ou modifiées. Pour rafraîchir une vue matérialisée, appeler une procédure ou purger une table, écrire l'instruction comme une requête du connecteur, puis l'appeler ici.
+
+---
+
+## Copie SQL — `sql_copy` \{#sql-copy\}
+
+Transfère les lignes d'une table source vers une table cible, éventuellement sur une autre base.
+
+| Champ | Défaut | Remarques |
+|---|---|---|
+| `source` = `{connector, schema, table}` | — | Requis. `pool` peut s'y ajouter (uniquement dans `jobs.toml`). |
+| `target` = `{connector, schema, table}` | — | Requis. Idem. |
+| `mode` | `overwrite` | `overwrite` : les lignes sont écrites dans une table de travail `<table>__new`, qui remplace ensuite la cible en une transaction — la cible n'est jamais vide pendant la copie. `append` : les lignes s'ajoutent à la cible telle quelle. |
+| `type_coercion` | `jde` | `jde` applique les règles JD Edwards (décimales implicites, dates juliennes, codes complétés d'espaces) ; `none` copie les valeurs telles quelles. |
+| `decimal_mode` | `truncate` | Avec `jde` : tronquer (`truncate`) ou conserver (`preserve`) la partie décimale. |
+| `batch_size` | `10000` | Lignes par lot. |
+| `strip_both_columns` | `[]` | Colonnes dont les valeurs sont débarrassées des espaces des deux côtés. |
+
+`upsert` est accepté par le schéma mais refusé à l'exécution : pour un ajout ou une mise à jour, écrire une requête `MERGE` / `ON CONFLICT` et l'appeler avec `sql_query`. Enregistre le nombre de lignes écrites.
+
+---
+
+## Chargement de fichier — `file_load` \{#file-load\}
+
+Charge un classeur Excel (`.xlsx`, `.xlsm`) ou un fichier texte (`.csv`, `.txt`, `.tsv`) dans une table — selon une planification, sans personne au clavier, aux volumes d'une table de faits, et rejouable pour une période sans toucher aux autres.
+
+### Le fichier
+
+Le fichier vient, par ordre de priorité :
+
+1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Run with parameters** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une) ;
+2. **de `path`** — un chemin sur le serveur, qui peut contenir `${params.x}` (un paramètre d'exécution), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx` ;
+3. **d'un dossier surveillé** — `watch_dir` et `watch_pattern` (`*.xlsx`) : chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur.
+
+| Champ | Défaut | Remarques |
+|---|---|---|
+| `sheet` | première feuille | Un nom ou un numéro (1 = la première). |
+| `header_row` | `1` | La ligne des en-têtes de colonnes ; les données commencent en dessous. Les lignes vides sont ignorées. |
+| `delimiter` | détecté | Séparateur CSV ; détecté parmi `;` `,` tabulation `|` s'il est vide. |
+| `encoding` | `utf-8-sig` | CSV uniquement. |
+
+### La cible
+
+| Champ | Remarques |
 |---|---|
-| Rafraîchir une vue matérialisée. | `REFRESH MATERIALIZED VIEW reporting.daily_summary` |
-| Mettre à jour un compteur. | `UPDATE stats SET total = (SELECT count(*) FROM orders) WHERE name = 'orders'` |
-| Supprimer d'anciennes lignes. | `DELETE FROM ly2_job_runs WHERE finished_at < now() - interval '90 days'` |
-| Exécuter une procédure stockée. | `CALL refresh_reporting()` |
-| Vérifier l'état d'une connexion. | `SELECT 1` |
+| `target` = `{connector, schema, table}` | Un connecteur SQL ; la table doit exister. |
+| `columns` | Colonne cible ← en-tête du fichier ou position (`#3`). Les en-têtes se retrouvent sans tenir compte de la casse, des espaces, de `_` et de `-` ; les colonnes non citées se retrouvent par leur nom. |
+| `constants` | Colonne cible ← valeur, pour ce que le fichier ne porte pas : `period = "${params.period}"`, `batch_id = "${run.id}"`. |
 
-### Quand préférer autre chose
+Chaque cellule est convertie au type de sa colonne cible : entiers, décimaux (`12,5` et `12.5` donnent tous deux 12,5 ; une virgule seule est le séparateur décimal), dates (`2026-10-27`, `27/10/2026`, `27.10.2026`, `20261027`, et dates Excel), booléens (`1`, `true`, `yes`, `oui`…), texte. Un nombre saisi comme texte ne retrouve pas les zéros de tête que le tableur a déjà retirés.
 
-- **Recopier des lignes d'une table à une autre en flux** — utilisez plutôt `sql_copy`. Il gère le batch, la coercition de types et la bascule atomique.
-- **Itérer sur un jeu de résultats dans une logique Python** — utilisez une étape `python` qui ouvre elle-même le connecteur.
-- **Exécuter 14 instructions partageant une transaction** — `sql_query` traite une instruction par étape. Soit enchaîner 14 étapes (visibles dans la chronologie, mais sans transaction commune), soit les regrouper dans une procédure stockée ou une étape `python`.
+### Mode de chargement
 
----
+| Champ | Choix |
+|---|---|
+| `load_mode` | `append` (défaut) ajoute les lignes. `replace_partition` supprime d'abord les lignes des partitions présentes dans le fichier, puis insère — **en une seule transaction** : un chargement en échec laisse les données précédentes en place, et un mois corrigé ne remplace que ce mois. |
+| `partition_by` | Les colonnes de partition (`period, company`) — obligatoires avec `replace_partition`. Les partitions viennent des constantes quand elles couvrent toutes les colonnes, sinon des valeurs distinctes trouvées dans le fichier. |
+| `on_error` | `fail` (défaut) : la première cellule invalide fait échouer l'étape et cite la ligne. `skip` : les lignes invalides sont comptées comme rejetées et écrites dans un CSV (fichier, ligne, motif) proposé dans le détail de l'exécution. |
+| `batch_size` | `10000` lignes par insertion. |
 
-## SQL Copy — `sql_copy`
+### Garde-fous
 
-Recopie en flux des lignes depuis un **connecteur + schéma + table source** vers un **connecteur + schéma + table cible**. La colonne vertébrale des charges ETL.
+| Champ | Remarques |
+|---|---|
+| `refuse_query` | Une requête nommée lancée avant toute écriture, avec les paramètres d'exécution et les constantes comme paramètres liés. Si elle renvoie une ligne, le chargement est refusé et la première colonne en donne le motif : *période 2026-02 clôturée*. `refuse_connector` : son connecteur, celui de la cible par défaut. |
+| `control_column` + `control_total` | La colonne est sommée sur les lignes chargées et comparée à une valeur, à `${params.total}` ou à une cellule du fichier (`@B2`, `@Totaux!B2`), à `control_tolerance` près. Un écart annule le chargement du fichier et cite les deux montants. |
 
-### Champs
+### Dans l'exécution
 
-| Champ | Obligatoire | Notes |
-|---|---|---|
-| **`source.connector`** | Oui | Pool source. |
-| **`source.schema`** | Oui | Schéma source (`PS920CTL`, `public`, etc.). |
-| **`source.table`** | Oui | Nom de la table source. |
-| **`target.connector`** | Oui | Pool cible. |
-| **`target.schema`** | Oui | Schéma cible. |
-| **`target.table`** | Oui | Nom de la table cible. |
-| **`mode`** | `overwrite` | `overwrite` / `append` / `upsert`. Voir ci-dessous. |
-| **`type_coercion`** | aucune | `jde` pour appliquer les règles de typage JD Edwards (alignement décimal, troncature de caractères). |
-| **`decimal_mode`** | `preserve` | Avec la coercition `jde` : `truncate` reproduit la conversion JDE « sans décimales en stockage » ; `preserve` conserve la valeur décimale source. |
-| **`batch_size`** | `10000` | Lignes par lecture depuis la source. À augmenter pour les liaisons rapides, à baisser pour les sources à mémoire contrainte. |
-| **`strip_both_columns`** | `[]` | Liste des colonnes source dont les valeurs reçoivent un `strip()` complet. À utiliser pour les codes JDE justifiés à droite et complétés à gauche par des espaces. |
+Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger (libellés en anglais). Le journal ajoute les partitions remplacées et les lignes supprimées.
 
-### Modes de copie
+Les fichiers envoyés et les fichiers de rejets vont dans la zone de travail de la tâche : `[jobs] files_dir` dans `app.toml` (par défaut `.nomaflow/files` à côté de la configuration) ; `[jobs] max_upload_mb` (200) limite la taille d'un envoi.
 
-| Mode | Comportement | Quand |
-|---|---|---|
-| **`overwrite`** | Écriture dans une **table tampon**, puis bascule atomique avec la cible. La cible n'est **jamais vide** en cours d'exécution. | Par défaut pour l'ETL. La cible reste cohérente même si la lecture source échoue à mi-parcours. |
-| **`append`** | Insertion des lignes par-dessus les données existantes. | Instantanés quotidiens, pistes d'audit. |
-| **`upsert`** | Insertion des nouvelles lignes, mise à jour des lignes existantes. Nécessite une clé primaire sur la cible. | Dimensions à évolution lente. |
-
-### Coercition de type : `type_coercion = "jde"`
-
-JD Edwards stocke nombres et dates dans des formats qui ne reviennent pas naturellement dans d'autres bases. La coercition `jde` gère trois aspects :
-
-- **Décimales** : JDE ne stocke pas de séparateur décimal — `1234567` avec 2 décimales signifie `12345.67`. Le dictionnaire de données fournit l'échelle ; l'exécuteur l'applique.
-- **Dates** : julien (`CYYDDD`) → ISO `YYYY-MM-DD`.
-- **Chaînes** : certains codes sont justifiés à droite, complétés à gauche par des espaces. Ajoutez la colonne à `strip_both_columns` pour que la cible reçoive la valeur élaguée.
-
-### Ce qu'elle capture
-
-- Nombre de lignes lues à la source.
-- Nombre de lignes écrites à la cible.
-- Jalons d'avancement par lot au niveau INFO (`▶ batch 12 of 47 · 120 000 rows`).
-- Le moment de la bascule du tampon (mode `overwrite` uniquement).
-
----
-
-## Python — `python`
-
-Appelle une fonction Python dans vos extensions. La **porte de sortie** — tout ce que les étapes déclaratives ne savent pas exprimer.
-
-### Champs
-
-| Champ | Obligatoire | Notes |
-|---|---|---|
-| **`callable`** | Oui | `module.path:function_name` (par ex. `reports.summary:generate_pdf`). La forme est validée à l'enregistrement ; l'importabilité est vérifiée à l'exécution. |
-| **`op_kwargs`** | `{}` | Map de kwargs transmis à la fonction. Fusionnés au-dessus des `params` partagés de la tâche. |
-
-### Signature de la fonction
-
-```python
-# plugins/reports/summary.py
-from liberty.jobs.types import StepContext
-
-def generate_pdf(ctx: StepContext, *, period: str, target_path: str, **_) -> dict:
-    """Génère le PDF de synthèse mensuelle.
-
-    Retourne un dict — les clés se retrouvent dans le champ `output` de l'étape dans l'historique.
-    """
-    # ... construire le PDF
-    return {"path": target_path, "size_bytes": 12345}
+```toml title="jobs.toml"
+[[jobs.steps]]
+type = "file_load"
+name = "load-sales"
+path = "/data/in/ventes-${params.period}.xlsx"
+sheet = "Ventes"
+target = { connector = "sales", schema = "public", table = "fact_sales" }
+columns = { company = "Société", article = "Article", qty = "Quantité", revenue = "CA" }
+constants = { period = "${params.period}", batch_id = "${run.id}" }
+load_mode = "replace_partition"
+partition_by = ["period", "company"]
+refuse_query = "period_closed_get"
+control_column = "revenue"
+control_total = "@Totaux!B2"
 ```
 
-| Paramètre | Description |
+---
+
+## Python — `python` \{#python\}
+
+Appelle une fonction d'un plugin : `callable = "paquet.module:fonction"`.
+
+| Champ | Remarques |
 |---|---|
-| **`ctx`** | Un `StepContext` — donne accès aux connecteurs, au journaliseur d'exécution et aux paramètres de la tâche. |
-| **`**kwargs`** | Les kwargs fusionnés (`params` de la tâche + `op_kwargs` de l'étape + surcharges par déclenchement issues de la fenêtre). |
+| `callable` | `module.chemin:fonction` — forme vérifiée à l'enregistrement, import au lancement de l'étape. |
+| `op_kwargs` | Les arguments passés à la fonction, fusionnés par-dessus les paramètres partagés de la tâche. |
 
-### Ce que `ctx` propose
-
-| Méthode / propriété | Rôle |
-|---|---|
-| **`ctx.get_connector("name")`** | Renvoie le connecteur SQL / API par son nom. |
-| **`ctx.log.info(msg)`** / `warning` / `error` | Achemine les lignes de journal vers le flux de l'exécution. |
-| **`ctx.session_user`** | Le compte qui a déclenché l'exécution (pour les écritures d'audit). |
-| **`ctx.params`** | Les kwargs fusionnés sous forme de dict (équivalent à `**kwargs`, mais disponible comme instantané). |
-| **`ctx.is_cancelled()`** | Renvoie `True` si l'opérateur a cliqué sur ✕ Annuler. Les longues étapes Python doivent y revenir périodiquement. |
-
-### Valeur de retour
-
-La valeur de retour de la fonction est stockée dans le champ `output` de l'étape. À garder petite et structurée — `{"rows_affected": N}` est idéal ; renvoyer la table entière ne l'est pas.
-
-### Quand l'utiliser
-
-| Modèle | Pourquoi Python |
-|---|---|
-| Parcourir un répertoire, transformer chaque fichier. | Le parcours de système de fichiers s'exprime mal en SQL. |
-| Décompresser un blob XML et en extraire des champs. | L'analyse XML appartient à Python. |
-| Appeler un SDK tiers (AWS S3, Stripe, …). | Idem. |
-| Enchaîner plusieurs instructions SQL qui demandent une transaction commune. | La fonction peut ouvrir une connexion et les exécuter toutes. |
-| Logique conditionnelle (« supprimer uniquement si nombre > 1000 »). | Une étape `python` peut brancher ; le SQL ne le permet pas sans code procédural. |
-
-### À ne pas faire dans une étape Python
-
-| Anti-modèle | Raison |
-|---|---|
-| Boucler pendant une heure sans `await` ni vérification d'annulation. | Bloque le worker ; le bouton ✕ Annuler ne peut pas l'arrêter. |
-| Ouvrir directement des connexions HTTP / SMTP / base de données externes. | Passez par les connecteurs du framework pour que les identifiants restent déclarés en un seul endroit. |
-| Intercepter et avaler les exceptions. | L'exécuteur a besoin de l'exception pour déclencher la nouvelle tentative ou le flux d'échec. |
-| Écrire sur stdout. | Utilisez `ctx.log.info(…)` — seules ces lignes alimentent le flux de l'exécution. |
-
-La page [Étapes Python personnalisées](./custom-python.md) déroule l'écriture de la fonction sur des exemples concrets.
+La fonction reçoit ses arguments par mot-clé et, quand elle les déclare par leur nom, `connectors` (le registre des connecteurs), `ctx` (l'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`) et `settings`. Elle peut être `async` ou non. Sa valeur de retour : un `int` donne le nombre de lignes modifiées, un `dict` est conservé comme détail de l'étape, `None` convient ; une exception fait échouer l'étape. Pour écrire dans le journal de l'exécution, utiliser un logger d'un espace de noms enregistré. Le contrat complet se trouve dans [Écrire un callable](../framework/build/plugins/write-a-callable.md).
 
 ---
 
-## HTTP — `http`
+## HTTP — `http` \{#http\}
 
-Appelle un point de terminaison HTTP. Utile pour les webhooks, les API REST tierces, les microservices internes.
-
-### Champs
-
-| Champ | Obligatoire | Notes |
+| Champ | Défaut | Remarques |
 |---|---|---|
-| **`url`** | Oui | URL complète. Prend en charge la substitution `${env:VAR}` depuis le fichier d'environnement du framework. |
-| **`method`** | `GET` | L'une des valeurs `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
-| **`headers`** | `{}` | Map nom d'en-tête → valeur. |
-| **`body`** | aucun | Pour POST / PUT / PATCH. Encodé automatiquement en JSON quand il s'agit d'un dict / d'une liste. |
+| `url` | — | Requis. Utilisée telle quelle. |
+| `method` | `GET` | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`. |
+| `headers` | `{}` | Envoyés tels quels. |
+| `body` | aucun | Du texte, ou une table envoyée en JSON (avec `Content-Type: application/json` si aucun n'est défini). |
 
-### Ce qu'elle capture
-
-- Le code d'état HTTP.
-- Le temps de réponse.
-- Le corps de la réponse (tronqué à ~64 Ko dans la sortie d'exécution par précaution).
-
-### Authentification
-
-L'étape HTTP n'a pas de champ « auth » dédié — les identifiants passent par les `headers` :
-
-| Méthode d'authentification | En-tête |
-|---|---|
-| Jeton porteur | `Authorization: Bearer ${env:THIRD_PARTY_TOKEN}` |
-| Basique | `Authorization: Basic <base64>` |
-| Clé API | `X-API-Key: ${env:THIRD_PARTY_KEY}` |
-| HMAC / requêtes signées | Utilisez une étape `python` — l'étape HTTP ne signe pas les requêtes individuellement. |
-
-La substitution `${env:…}` lit le fichier d'environnement du framework — ne placez jamais de secret directement dans `jobs.toml`.
-
-### Nouvelles tentatives sur HTTP
-
-HTTP est le type d'étape qui tire le plus parti d'une politique de nouvelles tentatives. Un profil courant :
-
-```
-retry: { attempts = 3, backoff = exponential, base_seconds = 30 }
-```
-
-Couvre la limitation de débit (429), les indisponibilités passagères et les réinitialisations de connexion. La temporisation exponentielle laisse à l'amont une chance de récupérer.
-
-### Quand préférer `python`
-
-| Modèle | Pourquoi Python |
-|---|---|
-| La réponse doit être analysée en champs structurés. | L'étape `http` enregistre le corps brut — l'analyse a lieu dans une étape Python en aval, ou les deux peuvent être regroupées dans une seule étape Python. |
-| L'API nécessite la pagination. | Une étape `python` boucle ; l'étape `http` ne le peut pas. |
-| L'authentification exige des signatures calculées (AWS Sig v4, etc.). | Idem. |
+Une réponse 2xx réussit ; toute autre fait échouer l'étape avec le code. L'étape conserve le code, les 4 premiers Ko de la réponse et la durée. Les valeurs de l'environnement s'écrivent `${NOM}` dans `jobs.toml` et sont remplacées au chargement du fichier.
 
 ---
 
-## LDAP Sync — `ldap_sync`
+## Synchronisation LDAP — `ldap_sync` \{#ldap-sync\}
 
-Récupère un sous-arbre d'un serveur LDAP / Active Directory et l'upserte dans un connecteur cible.
+Lit des entrées d'un annuaire LDAP et lance une requête d'écriture d'un connecteur SQL pour chacune.
 
-### Champs
-
-| Champ | Obligatoire | Notes |
-|---|---|---|
-| **`server`** | Oui | URL du serveur LDAP (`ldap://`, `ldaps://`). |
-| **`bind_dn`** | Oui | Distinguished Name du compte de service. |
-| **`bind_password`** | Oui | Mot de passe. 🔒 chiffré. |
-| **`search_base`** | Oui | DN de base à partir duquel chercher (`ou=people,dc=corp,dc=local`). |
-| **`search_filter`** | `(objectClass=*)` | Filtre LDAP (`(&(objectClass=user)(memberOf=cn=staff,…))`). |
-| **`attributes`** | `[]` | Liste des attributs LDAP à récupérer. Vide = tous les attributs disponibles. |
-| **`target_connector`** | Oui | Connecteur SQL d'upsert. |
-| **`target_query`** | Oui | Requête d'upsert nommée sur le connecteur cible. |
-| **`mapping`** | `{}` | Map attribut LDAP → colonne cible (par ex. `{ "sAMAccountName": "user_id" }`). |
-
-### Ce qu'elle capture
-
-- Nombre d'entrées LDAP récupérées.
-- Nombre de lignes upserties.
-- Nombre de lignes obsolètes purgées (quand la requête cible prend en charge la suppression).
-
-### Quand l'utiliser
-
-LDAP Sync vise spécifiquement le **miroir d'un annuaire** dans le catalogue utilisateur / groupe d'une application. Quelques profils fréquents :
-
-| Modèle | Source | Cible |
-|---|---|---|
-| Refléter les utilisateurs AD dans l'application. | `ou=people,dc=corp` | La table utilisateur du framework. |
-| Récupérer les appartenances de groupe pour un écran de revue d'accès. | `ou=groups,dc=corp` | Une table plate `(utilisateur, groupe)`. |
-| Photographier une OU pour un rapport de conformité. | `ou=france,dc=corp` | Une table d'audit datée. |
-
-### Quand préférer `python`
-
-- Analyse d'attribut sur mesure (Windows `accountExpires` en FILETIME → date).
-- Réconciliation multi-serveurs.
-- Règles de transformation en ligne (regex sur DN, saut conditionnel).
-
-LDAP Sync vise les **80 % simples**. Pour tout traitement sur mesure, une étape `python` avec la bibliothèque `ldap3` constitue le choix naturel — et c'est exactement ce que fait la tâche `nomasx1-ldap-1` de Nomasx-1.
-
----
-
-## Désactiver une étape
-
-Chaque étape dispose d'une bascule **activée** (en haut à droite du volet d'éditeur, également présente dans la fenêtre Exécuter avec paramètres). Quand elle est désactivée :
-
-- L'exécuteur enregistre l'étape comme **`CANCELED`** dans l'historique.
-- La raison est `skipped: disabled` (visible sur la page de détail de l'exécution).
-- Les étapes restantes s'exécutent normalement.
-
-Cas d'usage :
-
-| Motif de désactivation | Endroit |
+| Champ | Remarques |
 |---|---|
-| Étape temporairement cassée ; le reste de la tâche tourne. | Éditeur — enregistré dans la définition. |
-| Rejouer uniquement les étapes 6 à 9 après correction de la donnée. | Fenêtre Exécuter avec paramètres — pour ce déclenchement uniquement. |
-| Coupe-circuit en régime permanent sur une purge destructive. | Éditeur — laisse l'étape en activation explicite. |
+| `server` | `ldaps://ad.example.com:636`. |
+| `bind_dn`, `bind_password` | Le compte de lecture ; écrire le mot de passe `${LDAP_PASSWORD}`. |
+| `search_base`, `search_filter` | Où et quoi chercher : `DC=example,DC=com`, `(objectClass=user)`. |
+| `attributes` | Les attributs à lire. |
+| `target_connector`, `target_query` | La requête d'écriture lancée pour chaque entrée. |
+| `mapping` | Attribut LDAP → paramètre de la requête. Un attribut absent donne `NULL`. |
+
+Enregistre le nombre d'entrées lues et de lignes écrites.
 
 ---
 
-## Sortie d'étape
+## Lancer une tâche — `call_job` \{#call-job\}
 
-Chaque ligne d'étape dans l'historique porte un instantané **output** — un petit blob JSON produit par l'exécuteur ou la fonction Python :
-
-| Type d'étape | Sortie typique |
-|---|---|
-| `sql_query` | `{"rows_affected": 1024}` |
-| `sql_copy` | `{"source_rows": 100000, "target_rows": 100000, "elapsed_ms": 14300}` |
-| `python` | Ce que la fonction a renvoyé (un dict). |
-| `http` | `{"status": 200, "elapsed_ms": 145, "body_preview": "..."}` |
-| `ldap_sync` | `{"fetched": 4321, "upserted": 4321, "pruned": 12}` |
-
-Une étape qui ne renvoie **rien** est plus difficile à piloter — l'historique ne peut alors pas dire *ce qui s'est passé*. Renvoyez toujours une structure.
+`target_job_id` désigne une autre tâche. L'étape la lance, attend sa fin et en prend le résultat : succès, échec ou annulation. La tâche appelée a sa propre exécution dans l'historique et reprend le niveau de journal et les paramètres d'exécution de l'appelante. Une tâche qui finirait par s'appeler elle-même est refusée.
 
 ---
 
-## Pour aller plus loin
+## Réessais et délais \{#retry\}
 
-- [Créer une tâche](./jobs/create.md) — l'éditeur de tâche, où les étapes sont assemblées.
-- [Recettes de workflow](./workflows/scheduled-sync.md) — trois modèles de bout en bout mêlant plusieurs types d'étape.
-- [Étapes Python personnalisées](./custom-python.md) — la porte de sortie Python en détail.
-- [Exécutions → Historique](./runs/history.md) — l'apparence de la sortie d'étape capturée.
+Le bloc **Politique de réessai** de la tâche (`attempts`, `backoff` fixe ou exponentiel, `base_seconds`) s'applique à chaque étape : une étape est tentée jusqu'à `attempts` fois au total (`1`, la valeur par défaut, signifie aucune nouvelle tentative), avec une attente de `base_seconds` entre deux tentatives — constante, ou doublée à chaque fois avec `exponential`. La tâche entière s'arrête après `timeout_seconds` (4 heures par défaut).

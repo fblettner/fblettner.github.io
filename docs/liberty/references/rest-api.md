@@ -1,243 +1,138 @@
 ---
 title: REST API reference
-description: "Every REST endpoint the framework exposes — grouped by domain: auth, connectors, screens, dashboards, menus, jobs, ai, admin config, healthcheck. URL, method, required permission, request body and response shape."
-keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /health, /docs]
+description: "A map of the Liberty Next REST API by domain — health, sign-in, connectors and data, screens, dashboards, menus, reports, notifications, saved views, Nomaflow jobs, change packages, access and configuration — with the access rule of each family. The exact request and response shapes are in the built-in OpenAPI pages."
+keywords: [Liberty Next, REST API, OpenAPI, endpoints, auth, sql, screens, dashboards, jobs, changesets, access, admin config, Socket.IO]
 ---
 
 # REST API reference
 
-Every concept in the framework — sign in, run a query, fetch a screen, trigger a job, talk to the assistant — is reachable through the REST surface. The frontend uses the same endpoints external integrations would, and the OpenAPI document at `/docs` (live, generated from the FastAPI route signatures) is browsable as a developer reference.
-
-This page is a domain-by-domain map of the endpoints, with the required permission, the request shape and the response shape for each. The interactive variant is at `http://${HOST}:${PORT}/docs` — the framework's bundled Swagger UI is the canonical reference for request / response schemas.
+This page maps the endpoints by domain. The exact request and response shapes are in the server's own OpenAPI pages: **`/docs`** (Swagger UI), **`/redoc`** and **`/openapi.json`** — generate typed clients from the latter.
 
 ---
 
-## Conventions
+## Conventions \{#conventions\}
 
-- **Base path** — the framework serves the API at the **root of the bound origin**: `https://liberty.example.com/api/...` and `https://liberty.example.com/admin/...`.
-- **Authentication** — every endpoint requires a `Bearer` token in the `Authorization` header, except `POST /auth/login`, `POST /auth/refresh`, the OIDC pair and `GET /api/health`.
-- **Content type** — JSON in / JSON out unless stated. Errors carry a `{ "detail": "..." }` body with a non-2xx status.
-- **Language** — `X-Liberty-Lang: fr` overrides the response's labels for endpoints that include them (screens, dictionary, menus, errors).
-- **Permission codes** are the same ones documented under [Roles & permissions](../framework/build/secure/roles-and-permissions.md). `*` is wildcard; `sql:billing:*` matches any query of the `billing` connector.
-
----
-
-## Health
-
-| Method | Path | Permission | Response |
-|---|---|---|---|
-| `GET` | `/api/health` | none (public) | `{ "ok": true, "version": "0.42.0" }` |
-
-Useful for liveness probes. Doesn't touch the database.
+- **Authentication** — `Authorization: Bearer <access token>` on every call, except `/health`, `/ready`, `/info`, `/api/theme`, `POST /auth/login`, `POST /auth/refresh` and the OIDC pair.
+- **Access rules** — data endpoints check the permission of what they run (`sql:<connector>:<query>`, `api:<connector>:<endpoint>`), and SQL reads and writes apply the caller's [data scope](../framework/build/secure/roles-and-permissions.md#data-scope). Everything under **`/admin/`** is reserved to superusers.
+- **Language** — `X-Liberty-Lang: fr` (else `Accept-Language`) chooses the language of labels in screens, dictionary and menus.
+- **Pool** — `X-Liberty-Pool: <pool>` runs a multi-pool connector's queries on another pool of its set.
+- **Errors** — a JSON `{"detail": …}` body with a non-2xx status. A database error gives regular users the driver's message and an `error_id`; the statement itself is never echoed to them.
+- **Request id** — every response carries `X-Request-ID`; the server log lines of that request carry the same id.
 
 ---
 
-## Auth
+## Health \{#health\}
 
-| Method | Path | Permission | Body | Response |
-|---|---|---|---|---|
-| `POST` | `/auth/login` | public | `{ "username", "password" }` | `{ "access_token", "refresh_token", "token_type": "Bearer", "expires_in": 900 }` |
-| `POST` | `/auth/refresh` | public (cookie / body) | `{ "refresh_token" }` | Same as `/auth/login`. |
-| `POST` | `/auth/logout` | authenticated | — | `{ "ok": true }`. Invalidates the refresh token. |
-| `GET` | `/auth/me` | authenticated | — | `{ "username", "display_name", "roles", "permissions": [...] }`. |
-| `GET` | `/auth/oidc/login` | public | — | 302 to the IdP. |
-| `GET` | `/auth/oidc/callback` | public | query | 302 to `/`. Sets the local session. |
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/health` | Liveness: `{"status": "ok", "version"}`. |
+| `GET` | `/ready` | Readiness: `200` when the framework database answers, `503` otherwise. |
+| `GET` | `/info` | Version, counts and flags; names and details for a signed-in caller. |
 
-See [Authentication](../framework/build/secure/sign-in.md) for the OIDC flow.
+See [Health endpoints](../monitoring/health-endpoints.md).
 
 ---
 
-## Connectors & data
+## Sign-in and profile \{#auth\}
 
-### SQL connectors
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/auth/login` | `{username, password}` → access and refresh tokens. `429` after too many failures. |
+| `POST` | `/auth/refresh` | A refresh token → a new pair. The refresh token presented is consumed: keep the new one. |
+| `GET` | `/auth/me` | The token's identity: roles, permissions, attributes, data scope. |
+| `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
+| `POST` | `/auth/change-password` | Change one's own password (local users). |
+| `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/connectors` | `connectors:read` | List every connector with type + status. |
-| `GET` | `/api/connectors/{name}` | `connectors:read` | Connector definition + discovered schema. |
-| `POST` | `/api/sql/{pool}/_schema` | `connectors:read` | Introspect the schema of one pool (table list, column list). |
-| `GET` | `/api/sql/{connector}/{query}` | `sql:{connector}:{query}` | Execute a read query. Query params bind to the connector's params. |
-| `POST` | `/api/sql/{connector}/{query}` | same | Same as GET but with a JSON body for complex param maps. |
-| `POST` | `/api/sql/{connector}/{query}:write` | `sql:{connector}:{query}:write` | Execute a write query. Body is the param map. |
-
-### HTTP / API connectors
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `POST` | `/api/http/{connector}/{endpoint}` | `api:{connector}:{endpoint}` | Call a named endpoint. Body carries the param map. |
-
-### Excel export
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `POST` | `/api/screens/{app}/{screen_id}/export` | `screen:{app}:{id}` | Export the screen's current view as XLSX. Body accepts the active filters. Response is `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`. |
+See [Sign-in](../framework/build/secure/sign-in.md).
 
 ---
 
-## Screens
+## Connectors and data \{#data\}
 
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/screens` | `screens:read` | List every screen across every app. |
-| `GET` | `/api/screens/{app}` | `screens:read` | Screens for one app. |
-| `GET` | `/api/screens/{app}/{screen_id}` | `screen:{app}:{id}` | Screen definition + grid columns + dialog fields. |
-| `POST` | `/api/screens/{app}/{screen_id}/lock` | `screen:{app}:{id}` | Acquire a record lock — `{ "key": {...} }`. |
-| `DELETE` | `/api/screens/{app}/{screen_id}/lock` | same | Release the record lock. |
-
----
-
-## Dashboards & charts
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/dashboards` | `dashboards:read` | List every dashboard. |
-| `GET` | `/api/dashboards/{id}` | `dashboard:{id}` | Dashboard layout + per-panel chart references. |
-| `GET` | `/api/charts` | `charts:read` | List every chart. |
-| `GET` | `/api/charts/{id}` | `chart:{id}` | Chart definition + bound data (when called with `?include_data=true`). |
-| `POST` | `/api/charts/{id}/data` | `chart:{id}` | Refresh a chart's data with a parameter map. |
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/connectors`, `/api/connectors/{connector}` | The connectors and their queries / endpoints. |
+| `GET` | `/api/sql/{connector}/{query}` | Run a read query; query-string parameters bind to it, with filters, paging and sorting. |
+| `POST` | `/api/sql/{connector}/{query}` | Run a write query with a JSON body. |
+| `GET` | `/api/sql/{connector}/_schemas`, `/_schema` | Schemas and tables of the connector's database. |
+| `POST` | `/api/sql/{connector}/_import` | Import rows (the grid's Excel import). |
+| `POST` | `/api/http/{connector}/{endpoint}` | Call an API connector's endpoint. |
+| `GET` | `/api/actions`, `/api/actions/{action_id}` | Shared actions. |
+| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Plugin functions callable from screens. |
 
 ---
 
-## Menus
+## Screens, dashboards, menus \{#screens\}
 
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/menus` | authenticated | Every menu tree the caller can see, pruned per permission. |
-| `GET` | `/api/menus/{app}` | authenticated | One app's menu tree. |
-
----
-
-## Dictionary
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/dictionary` | authenticated | Every column, lookup and label, localised per `X-Liberty-Lang`. |
-| `GET` | `/api/dictionary/lookups/{name}` | authenticated | A single lookup's value set. |
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/screens`, `/api/screens/{app}`, `/api/screens/{app}/{screen_id}` | Screen definitions, localised. |
+| `POST` | `/api/screens/{app}/{screen_id}/export` | Excel export of the screen's current view. |
+| `GET` | `/api/dashboards`, `/api/dashboards/{dashboard_id}` | Dashboards and their widgets. |
+| `GET` | `/api/charts`, `/api/charts/{chart_id}` | Saved charts. |
+| `GET` | `/api/menus`, `/api/menus/{app}` | Menu trees, pruned to what the caller may open. |
+| `GET` | `/api/theme` | Branding and UI defaults (public). |
+| `GET` / `PUT` / `DELETE` | `/api/views/{kind}` | Saved grid views. |
 
 ---
 
-## i18n
+## Reports, notifications, licence \{#other\}
 
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/i18n/{lang}` | authenticated | Bundled language pack for `lang`. Includes common + per-app overrides. |
-| `GET` | `/api/i18n/_revisions` | authenticated | The revision string of each loaded pack. The frontend uses it as a cache key. |
-
----
-
-## Jobs (Nomaflow) \{#jobs\}
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/jobs` | `jobs:read` | Job catalog + last run status per job. |
-| `GET` | `/admin/jobs/{name}` | `job:{name}` | One job's definition + last 50 runs. |
-| `POST` | `/admin/jobs/{name}/run` | `job:{name}` | Trigger a manual run. Body accepts `params` overrides. Returns `{ "run_id" }`. |
-| `GET` | `/admin/jobs/runs` | `jobs:read` | List runs across every job — filterable by `job`, `status`, `from`, `to`. |
-| `GET` | `/admin/jobs/runs/{run_id}` | `job:{name}` | Full run detail with steps + the latest 1000 log lines. |
-| `POST` | `/admin/jobs/runs/{run_id}/abort` | `job:{name}` | Abort an in-flight run. |
-| `POST` | `/admin/jobs/runs/{run_id}/replay` | `job:{name}` | Re-run with the same params. |
-| `GET` | `/admin/jobs/runs/{run_id}/logs` | `job:{name}` | Stream the log tail. `?follow=true` upgrades to Socket.IO. |
-| `GET` | `/admin/jobs/cron-preview?expression=...` | `jobs:read` | Parse a cron expression and return the next 5 fire-times. |
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/reports`, `/api/reports/{scope}/{report_id}` | Reports and their parameters. |
+| `POST` | `/api/reports/{scope}/{report_id}/run` | Run a report (PDF or Markdown). |
+| `GET` | `/api/notifications` (`?unread=1`), `/api/notifications/unread_count` | The caller's notifications. |
+| `POST` | `/api/notifications/read` | Mark notifications read (`{ids}`, or all). |
+| `POST` | `/api/notify/fire` | Fire an action-kind notification rule (used by the `send_notification` screen action). |
+| `GET` | `/api/license` | Licence mode, customer, plan, apps, expiry. |
 
 ---
 
 ## AI assistant \{#ai\}
 
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/ai/tools` | `ai:chat` | The tool list the caller would see in chat — useful for permission debugging. |
-| `POST` | `/ai/chat` | `ai:chat` | Send a turn. Streams Server-Sent Events by default; `?stream=false` returns a single JSON response. |
-| `GET` | `/ai/conversations` | `ai:chat` | List the caller's conversations. |
-| `GET` | `/ai/conversations/{id}` | `ai:chat` | One conversation with messages, tool calls and results. |
-| `DELETE` | `/ai/conversations/{id}` | `ai:chat` | Delete a conversation. |
-| `POST` | `/ai/conversations/{id}/share` | `ai:share` | Produce a read-only share link. |
-
----
-
-## Admin config (Settings UI back-end) \{#admin-config\}
-
-Each per-section TOML follows the same shape — `<section>` is one of: `pools`, `connectors`, `dictionary`, `menus`, `screens`, `dashboards`, `charts`, `jobs`.
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/config/{section}/parsed` | `settings:{section}` | The parsed TOML as JSON. |
-| `PUT` | `/admin/config/{section}/parsed` | `settings:{section}` | Replace the parsed TOML. The server re-serialises with comment preservation. |
-| `GET` | `/admin/config/{section}/raw` | `settings:raw` | Raw TOML text. |
-| `POST` | `/admin/config/{section}/raw` | `settings:raw` | Replace the raw TOML text. |
-| `POST` | `/admin/config/connectors/{name}/test-sql` | `settings:connectors` | Execute one SQL query — body has `{ "query", "params" }`. |
-| `POST` | `/admin/config/api/test` | `settings:connectors` | Execute one HTTP endpoint. |
-| `POST` | `/admin/config/rename` | `settings:write` | Rename an entity across every file. Body: `{ "scope", "from", "to" }`. |
-| `POST` | `/admin/reload` | `settings:reload` | Reload the in-memory registries. `?scope=<section>` to narrow; defaults to `all`. |
-
----
-
-## License
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/api/license` | `license:read` | The current license payload + verification status. |
-| `POST` | `/admin/license/reload` | `license:write` | Re-read `LIBERTY_LICENSE_KEY` and re-verify the signature without a full restart. |
-
----
-
-## Users & roles
-
-| Method | Path | Permission | Description |
-|---|---|---|---|
-| `GET` | `/admin/users` | `users:read` | List every user. |
-| `GET` | `/admin/users/{username}` | `users:read` | One user with roles and effective permissions. |
-| `POST` | `/admin/users` | `users:write` | Create a user. |
-| `PUT` | `/admin/users/{username}` | `users:write` | Update display name, roles, active flag. |
-| `POST` | `/admin/users/{username}/password` | `users:write` | Set a new password. |
-| `POST` | `/admin/users/{username}/revoke` | `users:write` | Revoke every active session. |
-| `GET` | `/admin/roles` | `users:read` | List every role. |
-| `POST` | `/admin/roles` | `users:write` | Create a role. |
-| `PUT` | `/admin/roles/{name}` | `users:write` | Update permissions / inheritance / description. |
-| `DELETE` | `/admin/roles/{name}` | `users:write` | Delete a role (refused when members exist). |
-
----
-
-## Socket.IO
-
-The framework also exposes a **Socket.IO** endpoint at `/socket.io` for live updates. It is not a REST endpoint but plays the same role:
-
-| Event | Direction | Purpose |
+| Method | Path | Description |
 |---|---|---|
-| `config.reloaded` | server → client | Broadcast after a hot-reload — clients re-fetch the affected catalog. |
-| `lock.acquired` / `lock.released` | server → client | Record locks on screens (visible on the Technical dashboard). |
-| `job.run.transitioned` | server → client | A job run changed status (`running` → `succeeded` / `failed` / `aborted`). |
-| `job.run.log` | server → client | One log line from an in-flight run. Filtered per `run_id`. |
-| `pool.stats` | server → client | Periodic pool snapshot for the Technical dashboard. |
-| `ai.chat.delta` | server → client | A token chunk during an AI chat turn. |
-
-Authentication is the same Bearer token as REST, passed in the `auth` payload of the Socket.IO handshake.
+| `GET` | `/ai/tools` | The assistant's tool catalogue. |
+| `POST` | `/ai/chat` | Send the conversation (`{messages, model?}`); the answer streams back. Requires `ai:chat`. |
 
 ---
 
-## OpenAPI
+## Administration (superusers) \{#admin-config\}
 
-The full OpenAPI document is served at:
-
-- **`/docs`** — interactive Swagger UI.
-- **`/redoc`** — static Redoc view.
-- **`/openapi.json`** — the raw OpenAPI 3.1 JSON, suitable for code generation.
-
-Every endpoint is documented there with the exact request / response shape generated from the route's Pydantic models — this page is the conceptual map; the OpenAPI doc is the precise contract.
-
----
-
-## Tips & best practices
-
-- **Use `/openapi.json` to generate clients.** Tools like `openapi-typescript` or `openapi-python-client` produce typed SDKs in one command.
-- **Always pass `X-Liberty-Lang`** when displaying responses to a user. The default is `en` — labels in your locale require the header.
-- **Prefer the named-endpoint REST over raw SQL**. `GET /api/sql/billing/invoices-for-period` is auditable and permission-checked; building SQL in the client and POSTing it is neither (the framework refuses anyway — there is no "run arbitrary SQL" endpoint).
-- **Pin the `Authorization` header on every call.** The frontend has cookie fallback for the refresh token but the API surface itself requires the explicit header — easier to debug.
-- **`POST /admin/reload`** from CI after deploying configuration. A `git pull` on `liberty-apps` doesn't reach the running framework until the registry is rebuilt.
+| Family | Paths | Description |
+|---|---|---|
+| Access | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}` | Users (create, update, attributes, password) and roles (permissions, data scope). |
+| Configuration | `/admin/config/{section}/parsed` (`GET` / `PUT`) for `connectors`, `dictionary`, `menus`, `screens`, `charts`, `dashboards`, `actions`, `notifications`, `theme`, `jobs`, `app`, `reports`, `explorer`; `/admin/config/pools` | Read and save a configuration file as JSON; a save is validated, then applied. |
+| Configuration tools | `/admin/config/connectors/{connector}/test-sql`, `/admin/config/api/test`, `/admin/config/rename`, `/admin/config/move`, `/admin/config/clone-app`, `/admin/config/delete-app`, `/admin/config/integrity`, `/admin/config/schema` | Tests, cross-file renames and moves, integrity check, JSON schemas. |
+| History | `/admin/config/versions…`, `/admin/config/screen-versions…`, `/admin/upgrades`, `/admin/upgrades/{id}/report`, `/admin/release-notes` | Configuration versions, upgrade history and reports, release notes. |
+| Reload | `POST /admin/reload` | Re-read every configuration file. |
+| Packages | `/admin/find-dependencies`, `/admin/build-package`, `/admin/import-package`, `/admin/clone-with-deps`, `/admin/delete-with-deps` | Packages and dependency-aware clone and delete. |
+| Change packages | `/admin/changesets…` | See [Change packages](../nomaflow/change-packages.md#api-contract). |
+| Notifications | `POST /admin/notify/test` | Send a test through the channels. |
 
 ---
 
-## What's next
+## Nomaflow jobs (superusers) \{#jobs\}
 
-- The live API at `http://${HOST}:${PORT}/docs`.
-- [Configuration → Settings UI](../framework/configuration/settings-ui.md) — the in-browser editor that consumes the `/admin/config/*` family.
-- [Authentication → Roles & permissions](../framework/build/secure/roles-and-permissions.md) — the permission codes every endpoint checks.
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/admin/jobs` | Jobs with their state, next and last run. |
+| `POST` | `/admin/jobs/{job_id}/run` | Run now. Body (optional): `{params, op_kwargs, step_enabled, log_level}` → `{job_id, run_id, triggered_by, status: "queued"}`. |
+| `POST` | `/admin/jobs/{job_id}/upload` | Upload a file for a `file_load` step (multipart `file`). |
+| `GET` | `/admin/jobs/runs/{run_id}` | Run detail: steps, log, overrides. |
+| `POST` | `/admin/jobs/runs/{run_id}/cancel` | Cancel a run in progress. |
+| `GET` | `/admin/jobs/runs/{run_id}/files/{name}` | Download a run's file (rejected rows). |
+| `GET` | `/admin/jobs/cron-preview?schedule=…&timezone=…&count=5` | The next runs of a cron. |
+| `GET` | `/admin/jobs/callables` | Python functions available to `python` steps. |
+| `GET` / `POST` | `/admin/jobs/retention`, `/admin/jobs/retention/sweep` | Retention status; run a clean-up now. |
+| `GET` / `POST` | `/admin/jobs/missed`, `/admin/jobs/missed/check` | Missed-schedule status; run a check now. |
+
+Jobs themselves are edited through `/admin/config/jobs/parsed`.
+
+---
+
+## Socket.IO \{#socketio\}
+
+`/socket.io` carries the live updates, authenticated with the same token in the handshake: run and step state changes of Nomaflow (`job_run.state`, `step_run.state`), new notifications for the bell, record locks, and the Monitoring page's snapshots and log tail.
