@@ -134,7 +134,8 @@ Cliquer sur **＋ Ajouter un utilisateur**. L'éditeur d'utilisateur s'ouvre ave
 | **Mot de passe** | oui (pour les nouveaux utilisateurs) | Au moins 8 caractères. Enregistré sous forme de hachage Argon2id, jamais relisible. Laisser vide en modification pour conserver le mot de passe actuel. |
 | **Rôles** | non | Sélecteur de pastilles — taper ou choisir dans la liste. La liste contient chaque rôle configuré sous l'onglet Rôles. |
 | **Actif** | oui (activé par défaut) | Désactivé, l'utilisateur ne peut pas se connecter ; les sessions existantes s'arrêtent au prochain rafraîchissement de jeton. |
-| **Superutilisateur** | non | Activé, passe outre chaque vérification de permission. À utiliser avec parcimonie. |
+| **Superutilisateur** | non | Activé, passe outre chaque vérification de permission et chaque périmètre de données. À utiliser avec parcimonie. |
+| **Data-scope attributes** | non | Paires clé / valeur lues par le périmètre de données des rôles — voir [plus bas](#attributes). |
 
 Cliquer sur **Enregistrer** — l'utilisateur est créé et la fenêtre se ferme. Le nouvel utilisateur apparaît en tête de liste.
 
@@ -162,12 +163,25 @@ Cliquer sur n'importe quelle ligne d'utilisateur pour ouvrir l'éditeur avec ses
 | **Rôles** | oui | Ajouter / retirer des pastilles. |
 | **Actif** | oui | Basculer pour désactiver. |
 | **Superutilisateur** | oui | Basculer pour accorder / révoquer le statut superutilisateur. |
+| **Data-scope attributes** | oui | Voir [plus bas](#attributes). |
 
 Les enregistrements passent par `PATCH /admin/access/users/{username}` pour les mises à jour de propriétés et par `POST /admin/access/users/{username}/password` si un nouveau mot de passe a été saisi.
 
 :::tip[Quand l'utilisateur est connecté]
 Les changements n'interrompent pas la session courante. Les nouveaux rôles / le drapeau de désactivation / le mot de passe prennent effet au prochain **rafraîchissement** (dans le TTL du jeton d'accès — par défaut 1 heure) ou à la **déconnexion + reconnexion**.
 :::
+
+---
+
+## Attributs de périmètre de données \{#attributes\}
+
+Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle peut prendre ses valeurs chez l'utilisateur au lieu de les lister : une règle *Company (CO) = user.company* permet à un seul rôle de servir toutes les filiales, chaque utilisateur voyant ses propres sociétés.
+
+Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle. Le formulaire est en anglais.
+
+La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
+
+Pour les utilisateurs OIDC, les attributs peuvent venir du fournisseur d'identité à chaque connexion — voir [Se connecter](./sign-in.md#attribute-claims). En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 
@@ -196,16 +210,9 @@ Pour les installations qui veulent pré-créer des utilisateurs OIDC avec leurs 
 
 ---
 
-## Désactiver ou supprimer
+## Désactiver un utilisateur \{#deactivate\}
 
-Deux façons d'écarter un utilisateur :
-
-| Option | Effet | Quand |
-|---|---|---|
-| Basculer **Actif** sur off | L'utilisateur ne peut pas se connecter. Sa session courante continue jusqu'à expiration du jeton d'accès (par défaut 1 h), puis le rafraîchissement échoue. Rôles, historique et piste d'audit conservés. | Maintenance, congé, compte suspendu. |
-| **🗑 Supprimer** (action par ligne, avec confirmation) | L'utilisateur est retiré entièrement. Son historique est conservé (les lignes d'audit sont immuables), mais le nom d'utilisateur peut être réutilisé. | Départ, droit à l'effacement RGPD. |
-
-La désactivation est **réversible en un clic**. La suppression est définitive — un utilisateur qui se reconnecte (OIDC) verrait son compte recréé automatiquement avec le même nom d'utilisateur mais un nouvel `id` et sans report de rôles.
+Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif** sur off et enregistrer. Il ne peut plus se connecter ; sa session en cours prend fin à l'expiration de son jeton d'accès (une heure au plus), puisque le renouvellement est refusé. Rôles, attributs et historique sont conservés, et repasser **Actif** sur on rétablit le compte tel quel.
 
 ---
 
@@ -249,7 +256,7 @@ La désactivation est **réversible en un clic**. La suppression est définitive
 | Modifier le courriel d'un utilisateur OIDC revient à la connexion suivante. | Le claim de l'IdP l'emporte ; le framework rafraîchit depuis le dernier jeton. | Modifier le courriel au niveau de l'IdP. |
 | Tenter de définir un mot de passe pour un utilisateur OIDC. | Le backend rejette avec 400. | Les utilisateurs OIDC n'ont pas de mot de passe local — ils se connectent via le fournisseur. |
 | Changer le rôle d'un utilisateur ne prend pas effet immédiatement. | Le JWT de l'utilisateur contient toujours les anciens rôles. | Il rafraîchit (ou se déconnecte + reconnecte) — dans le TTL du jeton d'accès, les nouveaux rôles s'appliquent. |
-| Supprimer et recréer un utilisateur pour « le réinitialiser ». | Son historique d'audit se détache (référence désormais un nom d'utilisateur supprimé). | Utiliser la désactivation + réactivation ; ne supprimer que si l'utilisateur est vraiment parti. |
+| Un utilisateur soumis à un périmètre par attribut ne voit rien. | L'utilisateur n'a pas de valeur pour l'attribut lu par la règle. | L'ajouter dans **Data-scope attributes**. |
 | Passer un utilisateur en superutilisateur pour corriger un manque de permission. | Cela fonctionne, mais cela passe outre chaque vérification — y compris celles qu'il ne devrait pas contourner. | Ajouter plutôt la permission manquante à l'un de ses rôles. |
 
 ---

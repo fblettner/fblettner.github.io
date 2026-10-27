@@ -29,9 +29,9 @@ Open the host in a browser and Traefik routes the three paths:
 |---|---|---|
 | `/` *(catchall)* | liberty-next | Sign in with `admin` + `LIBERTY_ADMIN_PASSWORD` from `.env`. |
 | `/portainer` | Portainer CE | Empty — first browser visit becomes the admin-setup wizard. |
-| `/pgadmin` | pgAdmin 4 | Sign in with `admin@example.com` + `PGADMIN_PASSWORD` from `.env`. |
+| `/pgadmin` | pgAdmin 4 | Sign in with `admin@liberty.fr` (`PGADMIN_EMAIL`) + `PGADMIN_PASSWORD` from `.env`. |
 
-`install.sh full` generates random secrets for both passwords on first run and stores them in `.env` mode `0600`. Read them once with `grep -E '^(PGADMIN_PASSWORD|LIBERTY_ADMIN_PASSWORD)=' .env`.
+`./liberty install full` generates random secrets for both passwords on first run and stores them in `.env` mode `0600`. Read them once with `grep -E '^(PGADMIN_PASSWORD|LIBERTY_ADMIN_PASSWORD)=' .env`.
 
 ---
 
@@ -45,7 +45,7 @@ Open the host in a browser and Traefik routes the three paths:
 After the wizard, the dashboard lists every container running on the host. The Liberty stack shows up as the `liberty` Compose project (or `liberty` Swarm stack).
 
 :::warning[The first visit IS the admin setup]
-If the URL sits exposed before someone you trust visits it, the first stranger to reach it claims the admin account. Open the URL yourself right after `install.sh full` finishes, or block public access at the firewall until you've completed the wizard.
+If the URL sits exposed before someone you trust visits it, the first stranger to reach it claims the admin account. Open the URL yourself right after `./liberty install full` finishes, or block public access at the firewall until you've completed the wizard.
 :::
 
 ---
@@ -117,16 +117,16 @@ Same single URL story: open `http://<host>/pgadmin` and sign in with:
 
 | Field | Value |
 |---|---|
-| Email | `admin@example.com` (the default user provisioned by the compose) |
+| Email | `admin@liberty.fr` (the default user provisioned by the compose) |
 | Password | `PGADMIN_PASSWORD` from `.env` |
 
 The compose pre-wires two things that make the path-prefixed setup work:
 
 ```yaml title="docker-compose.full.yml (pgadmin service excerpt)"
 pgadmin:
-  image: dpage/pgadmin4:latest
+  image: dpage/pgadmin4:9.18
   environment:
-    PGADMIN_DEFAULT_EMAIL: admin@example.com
+    PGADMIN_DEFAULT_EMAIL: "${PGADMIN_EMAIL:-admin@liberty.fr}"
     PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_PASSWORD:?PGADMIN_PASSWORD is required}"
     SCRIPT_NAME: /pgadmin            # tells pgAdmin its links live under /pgadmin
   volumes:
@@ -170,7 +170,7 @@ The Liberty schema lives in the `liberty` database by default. From there it's t
 | Check that a migration created its table | pgAdmin | Servers → liberty → Databases → liberty → Schemas → public → Tables |
 | Watch live Postgres sessions | pgAdmin | Servers → liberty → *Dashboard* → Server activity |
 
-For everything else (admin password resets, license inspection, `liberty-admin` commands) the table in [Docker → Common operations](./docker.md#common-operations) still applies — those are CLI workflows.
+For everything else (admin password resets, license inspection, `liberty-admin` commands) the table in [Operations → Common tasks](./operations.md#tasks) still applies — those are CLI workflows.
 
 ---
 
@@ -208,7 +208,7 @@ Don't try to scale Portainer beyond `replicas: 1` — it stores its admin DB on 
 | **Recreating `liberty-next` to reload a TOML edit.** | Portainer's *Recreate* kills and restarts the container — and TOML changes pushed via the Settings UI are already live. Useless restart, ~10 s of downtime. | TOMLs reload on save. The framework-wide button is `POST /admin/reload` (or *Settings → Reload*). Only recreate to apply a new image tag or a `.env` change. |
 | **Restarting `pg` without first stopping `liberty-next`.** | Liberty's pool sees half its connections drop mid-query; the next requests fail until the pool recovers. | Stop `liberty-next` first (Portainer → *Stop*), restart `pg`, start `liberty-next`. Or restart the whole stack in order. |
 | **Editing env vars in Portainer.** | Portainer's env tab is read-only — there's no *Save* button. Operators sometimes copy them out, edit, paste back, and nothing happens. | Edit `.env` on the host, then *Recreate* the container so the new values are read at startup. |
-| **Exposing `/portainer` to the public internet before completing the wizard.** | The first stranger to load the page claims the admin account. | Run the wizard immediately after `install.sh full`. Or firewall the path until you have. |
+| **Exposing `/portainer` to the public internet before completing the wizard.** | The first stranger to load the page claims the admin account. | Run the wizard immediately after `./liberty install full`. Or firewall the path until you have. |
 | **Treating the Docker socket as harmless.** | It isn't — Portainer + socket = root on every container, including Liberty's env (master key, JWT secret, DB password). | Strong Portainer admin password; consider deleting the service entirely if no one needs it. |
 
 ---
@@ -218,7 +218,7 @@ Don't try to scale Portainer beyond `replicas: 1` — it stores its admin DB on 
 The bundled services are convenient, not mandatory. Remove them if:
 
 - **Compliance forbids the Docker socket inside the application stack.** Delete the `portainer:` block + `portainer-data:` volume; manage Docker from a separate, locked-down host.
-- **You have a central pgAdmin / DBeaver / DataGrip already.** Delete the `pgadmin:` block + `pgadmin-data:` volume; connect your central tool to the host's exposed `5432` port (or via SSH tunnel).
+- **You have a central pgAdmin / DBeaver / DataGrip already.** Delete the `pgadmin:` block + `pgadmin-data:` volume; connect your central tool through an SSH tunnel to `127.0.0.1:5432` on the host (PostgreSQL is published on the loopback only).
 - **You're tight on RAM (≤ 2 GB).** Each tool adds ~50–150 MB resident — small but not zero.
 
 After removing either service:

@@ -29,9 +29,9 @@ Ouvrir l'hôte dans un navigateur : Traefik route les trois chemins :
 |---|---|---|
 | `/` *(catchall)* | liberty-next | Se connecter avec `admin` + `LIBERTY_ADMIN_PASSWORD` du `.env`. |
 | `/portainer` | Portainer CE | Vide — la première visite navigateur déclenche l'assistant de configuration admin. |
-| `/pgadmin` | pgAdmin 4 | Se connecter avec `admin@example.com` + `PGADMIN_PASSWORD` du `.env`. |
+| `/pgadmin` | pgAdmin 4 | Se connecter avec `admin@liberty.fr` (`PGADMIN_EMAIL`) + `PGADMIN_PASSWORD` du `.env`. |
 
-`install.sh full` génère des secrets aléatoires pour les deux mots de passe au premier démarrage et les stocke dans `.env` en mode `0600`. Les relire une fois avec `grep -E '^(PGADMIN_PASSWORD|LIBERTY_ADMIN_PASSWORD)=' .env`.
+`./liberty install full` génère des secrets aléatoires pour les deux mots de passe au premier démarrage et les stocke dans `.env` en mode `0600`. Les relire une fois avec `grep -E '^(PGADMIN_PASSWORD|LIBERTY_ADMIN_PASSWORD)=' .env`.
 
 ---
 
@@ -45,7 +45,7 @@ Ouvrir l'hôte dans un navigateur : Traefik route les trois chemins :
 Une fois l'assistant terminé, le tableau de bord liste chaque conteneur s'exécutant sur l'hôte. La pile Liberty apparaît comme le projet Compose `liberty` (ou la pile Swarm `liberty`).
 
 :::warning[La première visite EST la configuration admin]
-Si l'URL reste exposée avant qu'une personne de confiance ne s'y connecte, le premier inconnu à l'atteindre s'approprie le compte admin. Ouvrir l'URL soi-même juste après la fin de `install.sh full`, ou bloquer l'accès public au pare-feu tant que l'assistant n'est pas terminé.
+Si l'URL reste exposée avant qu'une personne de confiance ne s'y connecte, le premier inconnu à l'atteindre s'approprie le compte admin. Ouvrir l'URL soi-même juste après la fin de `./liberty install full`, ou bloquer l'accès public au pare-feu tant que l'assistant n'est pas terminé.
 :::
 
 ---
@@ -117,16 +117,16 @@ Même logique d'URL unique : ouvrir `http://<host>/pgadmin` et se connecter avec
 
 | Champ | Valeur |
 |---|---|
-| Email | `admin@example.com` (l'utilisateur par défaut provisionné par le compose) |
+| Email | `admin@liberty.fr` (l'utilisateur par défaut provisionné par le compose) |
 | Mot de passe | `PGADMIN_PASSWORD` du `.env` |
 
 Le compose pré-câble deux éléments qui font fonctionner le montage avec préfixe de chemin :
 
 ```yaml title="docker-compose.full.yml (extrait du service pgadmin)"
 pgadmin:
-  image: dpage/pgadmin4:latest
+  image: dpage/pgadmin4:9.18
   environment:
-    PGADMIN_DEFAULT_EMAIL: admin@example.com
+    PGADMIN_DEFAULT_EMAIL: "${PGADMIN_EMAIL:-admin@liberty.fr}"
     PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_PASSWORD:?PGADMIN_PASSWORD is required}"
     SCRIPT_NAME: /pgadmin            # indique à pgAdmin que ses liens se trouvent sous /pgadmin
   volumes:
@@ -170,7 +170,7 @@ Le schéma Liberty se trouve dans la base `liberty` par défaut. À partir de l�
 | Vérifier qu'une migration a bien créé sa table | pgAdmin | Servers → liberty → Databases → liberty → Schemas → public → Tables |
 | Observer les sessions Postgres en direct | pgAdmin | Servers → liberty → *Dashboard* → Server activity |
 
-Pour tout le reste (réinitialisation de mot de passe admin, inspection de licence, commandes `liberty-admin`), le tableau de [Docker → Opérations courantes](./docker.md#common-operations) reste valable — ce sont des workflows CLI.
+Pour tout le reste (réinitialisation de mot de passe admin, inspection de licence, commandes `liberty-admin`), le tableau de [Exploitation → Tâches courantes](./operations.md#tasks) reste valable — ce sont des workflows CLI.
 
 ---
 
@@ -208,7 +208,7 @@ Ne pas tenter de monter Portainer au-delà de `replicas: 1` — il stocke sa bas
 | **Recréer `liberty-next` pour recharger une édition TOML.** | Le *Recreate* de Portainer tue puis redémarre le conteneur — or les modifications de TOML poussées via l'UI Settings sont déjà actives. Redémarrage inutile, ~10 s d'indisponibilité. | Les TOML se rechargent à l'enregistrement. Le bouton global est `POST /admin/reload` (ou *Settings → Reload*). Ne recréer que pour appliquer une nouvelle étiquette d'image ou une modification de `.env`. |
 | **Redémarrer `pg` sans arrêter `liberty-next` au préalable.** | Le pool de Liberty voit la moitié de ses connexions tomber en plein milieu d'une requête ; les requêtes suivantes échouent jusqu'à reconstitution du pool. | Arrêter `liberty-next` d'abord (Portainer → *Stop*), redémarrer `pg`, démarrer `liberty-next`. Ou redémarrer toute la pile dans l'ordre. |
 | **Éditer les variables d'environnement dans Portainer.** | L'onglet env de Portainer est en lecture seule — pas de bouton *Save*. Certains opérateurs les copient, les éditent, les recollent, et rien ne se passe. | Éditer `.env` sur l'hôte, puis *Recreate* le conteneur pour que les nouvelles valeurs soient lues au démarrage. |
-| **Exposer `/portainer` à l'Internet public avant d'avoir terminé l'assistant.** | Le premier inconnu à charger la page s'approprie le compte admin. | Lancer l'assistant immédiatement après `install.sh full`. Sinon, filtrer le chemin au pare-feu jusqu'à l'avoir fait. |
+| **Exposer `/portainer` à l'Internet public avant d'avoir terminé l'assistant.** | Le premier inconnu à charger la page s'approprie le compte admin. | Lancer l'assistant immédiatement après `./liberty install full`. Sinon, filtrer le chemin au pare-feu jusqu'à l'avoir fait. |
 | **Considérer la socket Docker comme inoffensive.** | Elle ne l'est pas — Portainer + socket = root sur chaque conteneur, y compris l'environnement Liberty (clé maîtresse, secret JWT, mot de passe DB). | Mot de passe admin Portainer fort ; envisager de supprimer le service entièrement si personne n'en a besoin. |
 
 ---
@@ -218,7 +218,7 @@ Ne pas tenter de monter Portainer au-delà de `replicas: 1` — il stocke sa bas
 Les services intégrés sont pratiques, pas obligatoires. Les retirer si :
 
 - **La conformité interdit la socket Docker dans la pile applicative.** Supprimer le bloc `portainer:` + le volume `portainer-data:` ; gérer Docker depuis un hôte séparé et verrouillé.
-- **Un pgAdmin / DBeaver / DataGrip central existe déjà.** Supprimer le bloc `pgadmin:` + le volume `pgadmin-data:` ; connecter l'outil central au port `5432` exposé par l'hôte (ou via un tunnel SSH).
+- **Un pgAdmin / DBeaver / DataGrip central existe déjà.** Supprimer le bloc `pgadmin:` + le volume `pgadmin-data:` ; connecter l'outil central par un tunnel SSH vers `127.0.0.1:5432` sur l'hôte (PostgreSQL n'est publié que sur l'interface locale).
 - **La RAM est serrée (≤ 2 Go).** Chaque outil ajoute ~50–150 Mo résidents — peu, mais pas zéro.
 
 Après suppression de l'un ou l'autre service :

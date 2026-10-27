@@ -1,302 +1,123 @@
 ---
 title: Installation — vue d'ensemble
-description: "Mettre en service Liberty Next depuis le répertoire release/ — trois variantes Docker (légère SQLite, complète à 5 services, Docker Swarm), surcouches TLS (Let's Encrypt ou certificats fournis par l'opérateur), surcouche d'applications sous licence — toutes pilotées par ./install.sh, ./install-apps.sh, ./deploy-swarm.sh et ./backup.sh. Plus une alternative pipx pour les hôtes sans Docker. L'image se trouve à ghcr.io/fblettner/liberty-next."
-keywords: [Liberty Framework, installation, déploiement, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, Docker, Compose, Swarm, légère, complète, pipx, --tag, --reset, --apps, --ssl, letsencrypt, provided, COMPOSE_FILE, ghcr.io, Traefik, Postgres, pgAdmin, Portainer]
+description: "Installer Liberty Next : choisir Docker (installation légère ou complète) ou une installation Python, lancer une commande, se connecter, ajouter la licence et les applications sous licence, activer le HTTPS. Toute l'exploitation — état, sauvegarde, mise à jour, retour arrière — passe ensuite par la même commande."
+keywords: [Liberty Next, installation, Docker, Docker Compose, pipx, commande liberty, liberty-ops, installation légère, installation complète, Swarm, licence, Nomasx-1, Nomajde]
 ---
 
 # Installation — vue d'ensemble
 
-Liberty Next est distribué sous forme d'une image OCI publique (`ghcr.io/fblettner/liberty-next`) accompagnée d'un répertoire [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) qui rassemble **trois fichiers compose** + **deux surcouches TLS** + **une surcouche d'applications** + **quatre scripts d'aide** qui les articulent. Choisir une variante, lancer une commande, et le tour est joué.
-
-| Variante | Runtime | Services | Cas d'usage |
-|---|---|---|---|
-| **Légère** | Docker Compose | liberty-next + SQLite (sur un volume) | Essai local, démo mono-utilisateur, évaluation rapide. |
-| **Complète** | Docker Compose | liberty-next + PostgreSQL 16 + Traefik + pgAdmin + Portainer | Production / staging sur un hôte unique. |
-| **Swarm** | Docker Swarm | les mêmes cinq services, avec des contraintes `deploy.*` et un réseau overlay | Swarm mono ou multi-nœud. |
-| **pipx** | Python natif | liberty-next seul (SQLite par défaut, pointable vers toute base) | Hôtes sans Docker, environnements purement Python. |
-
-Les variantes **Légère** et **Complète** peuvent être combinées avec une surcouche TLS (Let's Encrypt ou certificats fournis par l'opérateur) et avec la surcouche d'applications sous licence (plugins Nomasx-1 / Nomajde / Nomaflow). Les quatre surcouches sont articulées automatiquement par les options de `./install.sh` ; il n'y a jamais à manipuler d'option `-f` à la main.
+Liberty Next est un serveur unique — l'application web, son API et son planificateur de tâches dans un seul processus — accompagné d'une base de données et d'un dossier de fichiers de configuration. Installer, c'est choisir où ce serveur s'exécute ; tout le reste passe ensuite par **une seule commande** : `./liberty` sur un hôte Docker, `liberty-ops` sur une installation Python.
 
 ---
 
-## L'installation en 60 secondes
+## Vue d'ensemble
 
-```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
-
-./install.sh                                  # interactif — demande légère ou complète
-# OU — non interactif
-./install.sh light                            # un seul conteneur, SQLite
-./install.sh full                             # pile de production à 5 services (tag latest)
-./install.sh full --tag 7.0.2                 # pile complète, épinglée à une version précise
-```
-
-Ce que fait `install.sh` au premier lancement :
-
-| Étape | Détail |
-|---|---|
-| 1. Détecte les volumes Docker résiduels d'une installation précédente. | Si `pg-data` / `pgadmin-data` / `liberty-data` existent mais que `.env` est absent, le script REFUSE de démarrer et invite l'opérateur à relancer avec `--reset` (purge + redémarrage à neuf) ou à restaurer le `.env` précédent (les secrets gravés dans les volumes doivent correspondre). |
-| 2. Génère un `.env` avec des secrets cryptographiquement aléatoires (aucun caractère `$` — la substitution Compose ne peut pas les absorber). | Au premier lancement uniquement — les exécutions suivantes préservent un `.env` existant. |
-| 3. Écrit `COMPOSE_FILE=docker-compose.<variante>.yml[:surcouches...]` dans `.env`. | Chaque `docker compose <cmd>` ultérieur (sans `-f`) fusionne automatiquement les bons fichiers. **Critique** — l'opérateur ne doit PAS passer `-f` à la main après l'installation. |
-| 4. Récupère les images via `docker compose pull` et lance `docker compose up -d`. | Ré-exécutable sans risque — relancer sur une pile déjà active ne fait que ré-appliquer le fichier compose. |
-| 5. Attend jusqu'à 120 s que le healthcheck du conteneur passe (`GET /info`). | Annonce `healthy` quand la SPA et l'API sont prêtes. |
-| 6. Affiche l'URL de la SPA, le mot de passe `admin` généré et les URL des tableaux de bord pgAdmin / Portainer / Traefik. | Le mot de passe est également conservé dans `.env` (mode `0600`). |
-
-Pour Docker Swarm, l'équivalent est `./deploy-swarm.sh` (détaillé dans [Docker → Swarm](./docker.md#swarm)).
-
----
-
-## Les options d'install.sh à connaître
-
-| Option | Rôle |
-|---|---|
-| **`--tag <version>`** | Épingle `LIBERTY_IMAGE_TAG` au moment de l'installation (par exemple `--tag 7.0.2`). Valeur par défaut `latest` (chaque merge sur main → nouvelle release ; `latest` reflète toujours l'état courant de main). Ignorée si `.env` existe déjà — modifier la variable directement à cet endroit. |
-| **`--reset`** | `docker compose down -v` + suppression de `.env` au préalable. À utiliser quand une installation précédente a laissé un `pg-data` résiduel avec l'ancien mot de passe (l'initialisation Postgres ne s'exécute que sur un volume vierge — secrets neufs + volume résiduel = échec d'authentification permanent). |
-| **`--apps <wheel-ou-URL>`** | Après avoir monté la pile de base, enchaîne avec `install-apps.sh` sur le wheel indiqué — les applications sous licence (Nomasx-1 / Nomajde / Nomaflow) sont déployées dans la même commande. La clé de licence se définit **ensuite** via *Settings → App → License* dans l'interface (chiffrée au repos dans `app.toml`). |
-| **`--ssl letsencrypt --domain --email`** *(variante complète uniquement)* | Branche Let's Encrypt automatiquement. L'hôte doit être joignable depuis l'Internet public sur `:80`/`:443` pour le challenge TLS-ALPN. |
-| **`--ssl provided --cert-dir --cert-file --key-file`** *(variante complète uniquement)* | Branche des certificats fournis par l'opérateur (CA d'entreprise, PKI interne, installation en air-gap). `install.sh` vérifie l'existence des fichiers, monte le répertoire de certificats en bind, génère `traefik/dynamic/tls.yml`. |
-
-Les quatre options se combinent — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl` réalise en une seule commande une installation de production avec TLS et le bundle sous licence. Une fois l'interface en service, coller la clé de licence dans *Settings → App → License*. (`--license-key` a été retiré de `install.sh` — la clé se trouve désormais dans `app.toml`, chiffrée au repos, et non plus dans `.env`.)
-
-Une option de purge complète mérite également d'être connue :
-
-| Option | Rôle |
-|---|---|
-| **`--reset`** | `docker compose down` + `docker volume rm` de chaque volume de données Liberty (`pg-data`, `pgadmin-data`, `portainer-data`, `liberty-data`, `liberty-config`) + suppression de `.env`, puis **sortie immédiate**. Le volume `traefik-acme` est délibérément préservé (Let's Encrypt limite à 5 certificats par 7 jours et par ensemble de domaines — le purger à chaque cycle de réinitialisation épuiserait ce quota presque immédiatement). Combiner `--reset` avec `--apps` ou `--ssl` provoque une erreur — relancer `install.sh` avec les options souhaitées une fois la réinitialisation terminée. À utiliser quand une installation précédente a laissé des volumes résiduels dont les identifiants ne correspondent plus à un `.env` régénéré. |
-
----
-
-## Le modèle mental de COMPOSE_FILE
-
-Après `./install.sh full --ssl letsencrypt --apps <wheel>`, `.env` contient :
-
-```env title=".env (extrait)"
-COMPOSE_FILE=docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
-```
-
-Docker Compose lit `COMPOSE_FILE` à chaque commande — `docker compose ps` / `pull` / `up -d` / `down` / `logs` / `restart` fusionnent automatiquement **toutes les surcouches listées**. L'opérateur ne tape jamais `-f`.
-
-| À faire | À éviter |
-|---|---|
-| `docker compose pull && docker compose up -d` *(prend en compte chaque surcouche)* | `docker compose -f docker-compose.full.yml up -d` *(perd les surcouches apps + TLS)* |
-| `docker compose logs -f liberty-next` *(contexte fusionné)* | `docker compose -f docker-compose.full.yml logs -f` *(aucune surcouche)* |
-
-`install-apps.sh` et l'option `--ssl` **ajoutent** tous deux à `COMPOSE_FILE` — relancer `install.sh` avec un nouveau mode `--ssl` (ou enchaîner `install-apps.sh`) met la valeur à jour proprement. Une édition manuelle de `.env` est également possible ; la chaîne est séparée par des deux-points, et l'ordre compte (les surcouches s'appliquent de droite à gauche).
-
----
-
-## Les trois variantes Docker
-
-### Légère — un seul conteneur, SQLite
-
-Contenu :
-
-- Un conteneur (`liberty-next`) sur le port `8000`.
-- Base SQLite du framework (authentification + historique d'exécution Nomaflow) enregistrée sur un volume Docker.
-- Fichiers TOML édités par l'opérateur enregistrés sur un second volume — sauvegardés depuis *Settings → …* dans la SPA ; aucun bind-mount hôte n'est nécessaire.
-- **Pas** de Postgres, **pas** de Traefik, **pas** de TLS — le framework est mis à disposition directement sur `:8000`.
-
-À retenir pour les essais, les démos, l'évaluation, les installations mono-utilisateur. Les applications sous licence (Nomasx-1 / Nomajde) fonctionnent aussi sur la variante Légère quand un Postgres multi-utilisateur n'est pas requis — `./install.sh light --apps <wheel>` est pris en charge.
-
-Volumes :
-
-| Volume | Contenu |
-|---|---|
-| `liberty-data` | Base SQLite + `auth.toml` (empreintes Argon2 des mots de passe). |
-| `liberty-config` | Tous les fichiers TOML édités par l'opérateur (connecteurs / dictionnaire / menus / écrans / graphiques / tableaux de bord). |
-
-### Complète — pile de production derrière Traefik
-
-Cinq services, tous sur le port `80` de l'hôte (ou `443` une fois le TLS branché) :
-
-| Service | Chemin | Détail |
-|---|---|---|
-| **Traefik** | `/traefik` | Reverse proxy + tableau de bord. Authentification basique (par défaut `admin/admin` — **à changer** dans `traefik/dynamic/dynamic.yml`). |
-| **liberty-next** | `/` (catchall) | SPA + API + administration. Se connecte au Postgres embarqué pour la base du framework. |
-| **Postgres 16** | (interne `:5432`, exposé par défaut) | Base du framework (authentification, historique Nomaflow) et emplacement pour héberger les pools client (données Nomasx-1 / Nomajde). |
-| **pgAdmin** | `/pgadmin` | Interface graphique Postgres. |
-| **Portainer** | `/portainer` | Interface Docker. |
-
-Volumes :
-
-| Volume | Contenu |
-|---|---|
-| `liberty-config` | TOML édités par l'opérateur. |
-| `pg-data` | Fichiers de la base Postgres. |
-| `pgadmin-data` | Enregistrements et préférences pgAdmin. |
-| `portainer-data` | État Portainer. |
-| `traefik-acme` | Stockage des certificats Let's Encrypt (quand TLS Let's Encrypt est actif). |
-
-C'est la variante visée par les bundles sous licence (Nomasx-1, Nomajde) — le Postgres embarqué héberge leur pool par défaut. Voir [Déployer les applications préassemblées](./deploy-prebuilt-apps.md).
-
-### Swarm — Docker Swarm, mono ou multi-nœud
-
-Les mêmes cinq services, mais avec des clés `deploy.*`, un réseau overlay, le mode `--providers.swarm` de Traefik et les services à état épinglés à un unique manager. Déploiement / mise à jour / état avec `./deploy-swarm.sh` — `docker stack deploy` ne prend pas d'option `--env-file`, donc le script charge d'abord `.env` dans le shell.
-
-Note : les options `--apps` et `--ssl` de `install.sh` sont **réservées à Compose** — sur Swarm, les opérateurs appliquent les surcouches en éditant le fichier de stack ou en enchaînant un `docker stack deploy` séparé avec la surcouche fusionnée.
-
----
-
-## La surcouche d'applications sous licence
-
-Nomasx-1, Nomajde et les jobs Nomaflow embarqués sont livrés sous la forme d'un unique wheel **`liberty_apps-<version>-py3-none-any.whl`**. Deux chemins d'installation :
-
-### En une seule commande (hôte vierge)
-
-```bash
-./install.sh full --apps ./liberty_apps-7.0.1-py3-none-any.whl
-```
-
-L'ensemble est traité en une fois — pile de base + applications sous licence. Une fois la SPA en service, coller le JWT de licence signé par l'éditeur dans *Settings → App → License* (chiffré au repos avec la clé maître d'installation, prise en compte à la sauvegarde — les connecteurs sont reconstruits sans redémarrage). Voir [Paramètres de l'application](../framework/build/settings-app.md).
-
-### Ou en deux temps : base d'abord, applications ensuite
-
-```bash
-./install.sh full                                              # pile de base
-./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl        # ajout des applications
-```
-
-Ce que fait `install-apps.sh` :
-
-1. **Matérialise le wheel** dans `./apps/` via un conteneur `python:3.12-slim` jetable — l'hôte n'a besoin d'**aucune** installation locale de pip ou de Python. Le wheel embarque une CLI `liberty-apps install --target DIR` qui copie `config/` et `plugins/` vers la destination, en préservant les TOML édités par l'opérateur.
-2. **Met à jour `.env`** — ajoute `docker-compose.apps.yml` à `COMPOSE_FILE` et définit `APPS_HOST_PATH=<chemin absolu>`. La clé de licence n'est **pas** écrite dans `.env` — la définir via l'interface une fois les applications visibles.
-3. **Redémarre la pile** — `docker compose up -d` prend en compte la surcouche d'applications automatiquement via `COMPOSE_FILE` (sans manipulation de `-f`).
-
-Détail complet : [Déployer les applications préassemblées](./deploy-prebuilt-apps.md).
-
----
-
-## La voie pipx — sans aucun Docker
-
-Pour qui ne veut pas de conteneurs (petite installation sur un seul hôte, environnement contraint à Python) :
-
-```bash
-pipx install liberty-next
-liberty-next             # → API + SPA sur http://localhost:8000
-```
-
-pipx place Liberty Next dans son propre venv isolé, ce qui empêche ses dépendances d'entrer en conflit avec le Python système. Les quatre commandes CLI (`liberty-next`, `liberty-admin`, `liberty-license`, `liberty-crypto`) atterrissent dans le PATH. Mises à jour : `pipx upgrade liberty-next`. Voir [Serveur Python](./python-server.md).
-
-Il convient de faire pointer `LIBERTY_DB_URL` vers un Postgres existant (ou de rester sur la SQLite par défaut — `./liberty.db` dans le répertoire de travail). Les TOML de configuration sont lus depuis `./config/<name>.toml` ; définir `LIBERTY_APPS_DIR=/etc/liberty-next/` permet de les conserver à un emplacement stable.
-
----
-
-## En un coup d'œil
-
-<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="io-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="jrn-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="jrn-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="jrn-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="jrn-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="360" rx="14" fill="url(#io-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next — install.sh articule tout via COMPOSE_FILE</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="84" width="220" height="240" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="150" y="112" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LÉGÈRE</text>
-  <text x="150" y="134" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">./install.sh light</text>
-  <line x1="60" y1="148" x2="240" y2="148" stroke="#22c55e" strokeOpacity="0.3"/>
-  <text x="150" y="170" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">1 conteneur · :8000</text>
-  <text x="150" y="186" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">SQLite (volume)</text>
-  <text x="150" y="202" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">sans TLS · sans Traefik</text>
-  <text x="150" y="232" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Essai / démo / évaluation</text>
-  <text x="150" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">2 volumes à sauvegarder</text>
-
-  <rect x="272" y="84" width="220" height="240" rx="10" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="382" y="112" fill="#4a9eff" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPLÈTE</text>
-  <text x="382" y="134" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">./install.sh full</text>
-  <line x1="292" y1="148" x2="472" y2="148" stroke="#4a9eff" strokeOpacity="0.3"/>
-  <text x="382" y="170" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">5 services · :80 (ou :443)</text>
-  <text x="382" y="186" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Traefik + Postgres 16</text>
-  <text x="382" y="202" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">pgAdmin · Portainer</text>
-  <text x="382" y="232" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Production / staging</text>
-  <text x="382" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Cible des applications sous licence</text>
-
-  <rect x="504" y="84" width="220" height="240" rx="10" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="614" y="112" fill="#c084fc" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SWARM</text>
-  <text x="614" y="134" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">./deploy-swarm.sh</text>
-  <line x1="524" y1="148" x2="704" y2="148" stroke="#c084fc" strokeOpacity="0.3"/>
-  <text x="614" y="170" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">5 services · réseau overlay</text>
-  <text x="614" y="186" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">placement sur le manager</text>
-  <text x="614" y="202" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">deploy.* update_config</text>
-  <text x="614" y="232" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Swarm mono ou multi-nœud</text>
-  <text x="614" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Mises à jour glissantes intégrées</text>
-
-  <rect x="736" y="84" width="224" height="240" rx="10" fill="rgba(251,146,60,0.10)" stroke="rgba(251,146,60,0.40)"/>
-  <text x="848" y="112" fill="#fb923c" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PIPX</text>
-  <text x="848" y="134" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">pipx install liberty-next</text>
-  <line x1="756" y1="148" x2="940" y2="148" stroke="#fb923c" strokeOpacity="0.3"/>
-  <text x="848" y="170" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Docker non requis</text>
-  <text x="848" y="186" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PATH : liberty-next +</text>
-  <text x="848" y="202" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-admin / -license</text>
-  <text x="848" y="232" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Hôtes sans Docker</text>
-  <text x="848" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Environnements purement Python</text>
-
-  <rect x="40" y="338" width="920" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937"/>
-  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt;  →  articule les surcouches dans COMPOSE_FILE · licence définie via Settings → App après installation</text>
+  <rect x="10" y="14" width="1180" height="140" rx="14" fill="url(#jrn-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="30" y="70" width="172" height="64" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="116.0" y="99.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1 · Installer</text>
+  <text x="116.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">./liberty install full</text>
+  <line x1="202" y1="102" x2="224" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#jrn-flow)"/>
+  <rect x="224" y="70" width="172" height="64" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="310.0" y="99.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">2 · Se connecter</text>
+  <text x="310.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">admin + mot de passe affiché</text>
+  <line x1="396" y1="102" x2="418" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#jrn-flow)"/>
+  <rect x="418" y="70" width="172" height="64" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="504.0" y="99.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">3 · Licence et applis</text>
+  <text x="504.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">./liberty apps &lt;wheel&gt;</text>
+  <line x1="590" y1="102" x2="612" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#jrn-flow)"/>
+  <rect x="612" y="70" width="172" height="64" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="698.0" y="99.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">4 · HTTPS</text>
+  <text x="698.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">./liberty ssl letsencrypt …</text>
+  <line x1="784" y1="102" x2="806" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#jrn-flow)"/>
+  <rect x="806" y="70" width="172" height="64" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="892.0" y="99.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">5 · Exploiter</text>
+  <text x="892.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">status · doctor · backup</text>
+  <line x1="978" y1="102" x2="1000" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#jrn-flow)"/>
+  <rect x="1000" y="70" width="172" height="64" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="1086.0" y="99.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">6 · Mettre à jour</text>
+  <text x="1086.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">./liberty upgrade</text>
+  <text x="30" y="44" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Une installation Docker de bout en bout — chaque étape est une commande lancée depuis release/</text>
+  <rect x="230" y="185" width="250" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="240" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres → App → Licence</text>
+  <text x="240" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">coller la clé une fois connecté</text>
+  <line x1="230" y1="202.0" x2="450" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jrn-arrow)"/>
+  <rect x="780" y="185" width="300" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="790" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Facultatif sur un serveur de test</text>
+  <text x="790" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le HTTPS demande l'installation complète</text>
+  <line x1="780" y1="202.0" x2="690" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jrn-arrow)"/>
 </svg>
 
 ---
 
-## Variables d'environnement requises
+## Quelle installation choisir ? \{#choose\}
 
-Deux valeurs sont **obligatoires** quelle que soit la variante — `install.sh` les génère toutes deux avec `openssl rand`. Avec pipx ou un compose maison, il revient à l'opérateur de les générer.
-
-| Variable | Rôle | Comment la générer |
+| Besoin | Installation | Page |
 |---|---|---|
-| **`LIBERTY_JWT_SECRET`** | Signe chaque jeton d'accès et de rafraîchissement. Doit rester stable entre les redémarrages — une clé rotée invalide tous les jetons en cours (oblige chaque utilisateur à se reconnecter). | `python -c "import secrets;print(secrets.token_urlsafe(48))"` |
-| **`LIBERTY_MASTER_KEY`** | Clé de chiffrement au niveau du champ — chiffre les secrets (mots de passe de pool, jetons d'API) au repos dans les TOML. Doit rester identique, sans quoi les valeurs `ENC:` deviennent illisibles. | `python -c "import secrets;print(secrets.token_urlsafe(32))"` |
+| Un serveur de production ou de test pour plusieurs utilisateurs | **Docker — installation complète** : Liberty Next, PostgreSQL, Traefik (HTTPS), pgAdmin et Portainer sur un même hôte | [Docker](./docker.md#full) |
+| Un essai rapide ou une démonstration sur un poste | **Docker — installation légère** : un conteneur, SQLite | [Docker](./docker.md#light) |
+| Un hôte où Docker n'est pas autorisé | **Installation Python** avec pipx, lancée par systemd, sur un PostgreSQL existant | [Serveur Python](./python-server.md) |
+| Plusieurs nœuds dans un Docker Swarm | **Swarm** : l'installation complète adaptée à `docker stack deploy` | [Docker](./docker.md#swarm) |
 
-Variables optionnelles courantes (la liste complète se trouve dans `release/.env.example`) :
+Les applications sous licence (Nomasx-1, Nomajde) et les tâches Nomaflow livrées ont besoin de PostgreSQL : choisir l'installation complète, ou une installation Python avec un PostgreSQL existant.
 
-| Variable | Valeur par défaut | Détail |
-|---|---|---|
-| `LIBERTY_IMAGE_TAG` | `latest` | Épingler à un tag de version précis pour la stabilité (`7.0.1`, `7.0.2`, etc.). Utiliser `./install.sh --tag <ver>` pour la définir à l'installation. |
-| `LIBERTY_ADMIN_PASSWORD` | (généré, **affiché une seule fois** dans le récapitulatif d'installation) | Mot de passe d'amorçage pour l'utilisateur `admin` au premier démarrage. `install.sh` génère une valeur aléatoire, l'exporte dans le shell pour le boot, puis l'abandonne — **non** écrite dans `.env`. Aux exécutions suivantes, l'administrateur existant conserve son mot de passe ; réinitialisation via `docker exec liberty-next liberty-admin reset-admin-password`. |
-| `POSTGRES_PASSWORD` | (généré) | Variante complète uniquement — mot de passe du Postgres embarqué. |
-| `PGADMIN_PASSWORD` | (généré) | Variante complète uniquement — mot de passe administrateur pgAdmin. L'adresse e-mail par défaut est `admin@liberty.fr` (à remplacer via `PGADMIN_EMAIL`). |
-| `APPS_HOST_PATH` | (défini par `install-apps.sh`) | Chemin absolu vers le répertoire `./apps/` matérialisé. La surcouche d'applications le monte en bind à `/apps:ro`. |
-| `COMPOSE_FILE` | (défini par `install.sh` + `install-apps.sh`) | Chaîne de fichiers compose, séparés par des deux-points, que Docker Compose fusionne automatiquement. |
-| `LIBERTY_DOMAIN`, `ACME_EMAIL` | (définis par `--ssl letsencrypt`) | Nom d'hôte TLS et contact ACME. |
-| `CERT_HOST_PATH` | (défini par `--ssl provided`) | Répertoire hôte monté en bind à `/etc/certs:ro` pour les certificats de l'opérateur. |
+---
 
-La **clé de licence, la clé d'API Anthropic et le secret client OIDC** étaient auparavant des variables d'environnement (`LIBERTY_LICENSE_KEY`, `ANTHROPIC_API_KEY`, `LIBERTY_OIDC_CLIENT_SECRET`). Ces valeurs se trouvent désormais dans `app.toml`, chiffrées au repos avec la clé maître d'installation — **à modifier via *Settings → App* dans la SPA** une fois la pile en service. La voie par variable d'environnement reste disponible en repli (définir la variable et la référencer depuis `app.toml` sous la forme `${VAR}`). Voir [Paramètres de l'application](../framework/build/settings-app.md).
+## Installer en trois commandes \{#quickstart\}
 
-:::info[À propos du `$` dans les mots de passe]
-Docker Compose applique aussi la substitution `${VAR}` à chaque valeur de `.env` — un `$` littéral dans un mot de passe est absorbé (par exemple `POSTGRES_PASSWORD=foo$bar` devient `foo`, Compose cherchant à étendre `$bar`). Il est recommandé de générer des mots de passe sans `$` (ce que fait `install.sh`), ou bien d'échapper chaque `$` en `$$`.
+Sur un hôte Linux équipé de Docker et du plugin Compose :
+
+```bash
+git clone https://github.com/fblettner/liberty-next.git
+cd liberty-next/release
+./liberty install full          # ou : ./liberty install light
+```
+
+La commande génère les secrets, démarre l'ensemble, attend qu'il réponde et affiche les informations de connexion. Ouvrir `http://<hôte>/` (port `8000` pour l'installation légère), se connecter en **`admin`** avec le mot de passe affiché : le serveur est prêt.
+
+Ensuite, dans cet ordre et seulement si besoin :
+
+1. **Licence** — *Paramètres → App → License* : coller la clé reçue.
+2. **Applications sous licence** — `./liberty apps liberty_apps-<version>-py3-none-any.whl` ([Applications sous licence](./deploy-prebuilt-apps.md)).
+3. **HTTPS** — `./liberty ssl letsencrypt --domain liberty.example.com --email ops@example.com` ([HTTPS et Traefik](./traefik.md)).
+
+---
+
+## Une seule commande \{#one-command\}
+
+Toute opération sur une installation Docker passe par `release/liberty`, lancée depuis le dossier `release/` :
+
+| Commande | Pour |
+|---|---|
+| `./liberty install [light\|full]` | Installer (une fois). |
+| `./liberty status` | Voir les versions, l'état de santé, les migrations en attente, la dernière mise à jour. |
+| `./liberty doctor` | Lister ce qui ne va pas et comment le corriger. |
+| `./liberty apps <wheel>` | Ajouter ou actualiser les applications sous licence. |
+| `./liberty ssl letsencrypt\|provided\|off` | Activer le HTTPS, changer de mode ou le désactiver. |
+| `./liberty backup` / `restore <dossier>` | Sauvegarder et restaurer tout ce que contient l'installation. |
+| `./liberty upgrade` / `rollback` | Mettre à jour, avec une sauvegarde préalable ; annuler la dernière mise à jour. |
+
+Une installation Python dispose des mêmes verbes dans `liberty-ops`. La référence complète se trouve sur [Exploitation](./operations.md).
+
+:::warning[Ne jamais lancer `docker compose -f …` à la main]
+L'installation enregistre dans `release/.env` les fichiers compose qu'elle utilise (installation, HTTPS, applications sous licence). Un `docker compose -f docker-compose.full.yml up -d` ne cite que le premier fichier : le conteneur redémarre sans les applications sous licence ni le HTTPS, et l'installation paraît vide. Utiliser `./liberty start`, `./liberty upgrade`… qui reprennent toujours les fichiers enregistrés.
 :::
 
 ---
 
-## À lire dans l'ordre
+## Ordre de lecture \{#read-in-order\}
 
-| Étape | Page |
-|---|---|
-| **0** | Cette vue d'ensemble. |
-| **1** | Choisir un chemin : [Docker](./docker.md) (couvre les trois variantes Docker) ou [Serveur Python](./python-server.md) (pipx). |
-| **2** | Brancher le TLS — [Traefik](./traefik.md) détaille les deux modes `--ssl` (Let's Encrypt et certificats fournis par l'opérateur). |
-| **3** | Utiliser les outils visuels embarqués — [Portainer + pgAdmin](./portainer.md). |
-| **4** | Durcissement production — OIDC, rotation JWT, sauvegardes, précautions multi-réplique : [Production](./production.md). |
-| **5** | Déployer NomaUBL / Nomasx-1 / Nomajde par-dessus : [Déployer les applications préassemblées](./deploy-prebuilt-apps.md). |
-| **6** | Quand une nouvelle version sort : [Mise à niveau](./upgrading.md). |
-
----
-
-## Vérification rapide — à quoi ressemble une installation réussie
-
-Après le chemin retenu :
-
-- `curl http://<host>:<port>/info` renvoie une charge JSON avec `version`, `frontend_built` et le décompte des écrans / menus / connecteurs chargés.
-- La SPA s'affiche sur `http://<host>:<port>/`.
-- Connexion en tant qu'`admin` avec le mot de passe affiché par `install.sh` (montré une seule fois pendant l'installation ; non conservé dans `.env`).
-- Le conteneur `liberty-next` apparaît sain dans `docker ps` (le healthcheck embarqué interroge `/info` toutes les 30 s).
-
-Si l'une de ces vérifications échoue, se rendre à la section de dépannage du chemin choisi.
-
----
-
-## La suite
-
-- [Docker](./docker.md) — les trois variantes Docker en détail, avec le pas-à-pas des scripts d'aide et la discipline `COMPOSE_FILE`.
-- [Serveur Python](./python-server.md) — installation via pipx pour les hôtes sans Docker.
-- [Production](./production.md) — TLS, sauvegardes, durcissement.
+1. [Architecture](./architecture.md) — ce qui s'exécute où, quelles données sont stockées dans quel volume.
+2. [Docker](./docker.md) ou [Serveur Python](./python-server.md) — l'installation elle-même.
+3. [Applications sous licence](./deploy-prebuilt-apps.md) — la licence, le paquet d'applications, les bases des applications.
+4. [HTTPS et Traefik](./traefik.md) — certificats et proxy inverse.
+5. [Exploitation](./operations.md) — état, diagnostic, sauvegardes, journaux, dépannage.
+6. [Mise à jour et retour arrière](./upgrading.md) — passer à une nouvelle version.
+7. [Liste de contrôle de production](./production.md) — ce qu'il faut vérifier avant l'arrivée des utilisateurs.

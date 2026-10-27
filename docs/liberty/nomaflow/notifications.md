@@ -1,253 +1,254 @@
 ---
 title: Notifications
-description: "Route Nomaflow job events — success, failure, long-run — to Slack, email or generic webhooks. Configure channels once at framework level; jobs pick recipients."
-keywords: [Nomaflow, notifications, Slack, email, webhook, on failure, long run, alerts, Liberty Framework]
+description: "Liberty Next notifications: rules that react to a screen write, a Nomaflow job event (failure, success, cancel, missed schedule, long run) or a screen action, and deliver to the in-app bell, by e-mail or through a connector query or endpoint. SMTP account, recipients, placeholders, job alerts."
+keywords: [Liberty Next, Nomaflow, notifications, alerts, bell, inbox, e-mail, SMTP, notifications.toml, job failure, missed schedule, long run, send_notification, webhook]
 ---
 
 # Notifications
 
-A failing job that nobody knows about is a worse problem than a failing job. Nomaflow's notification layer routes job events — failures, long-running detections, optional successes — to **Slack**, **email** or **generic webhooks**.
-
-The setup is layered:
-
-1. **Transports** (Slack workspace, SMTP server, webhook URLs) are configured **once at framework level** — they're a property of the install, not the job.
-2. **Job alerts blocks** decide *which events* to emit and *who* to address.
-3. **Routing** picks a transport for each (job tag, recipient) pair.
-
-This page covers the wiring end-to-end.
+A notification tells someone that something happened: a period was closed, a nightly job failed, a schedule was missed. **Rules** decide when; **channels** decide how — the bell in the application, an e-mail, or a call to a connector.
 
 ---
 
-## Transports — framework-level setup
+## At a glance
 
-Open *Settings → Notifications*. The page lists every configured channel.
-
-<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="nt-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="ntf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ntf-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ntf-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="ntf-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="280" rx="14" fill="url(#nt-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Notifications</text>
-  <text x="40" y="66" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Outbound channels for job events.</text>
-  <line x1="20" y1="82" x2="980" y2="82" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="100" width="300" height="180" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SLACK</text>
-  <text x="56" y="148" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Webhook URL · 🔒 encrypted</text>
-  <rect x="56" y="158" width="260" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="66" y="173" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">https://hooks.slack.com/services/T0…/B0…/x…</text>
-  <text x="56" y="200" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Default channel</text>
-  <rect x="56" y="210" width="140" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="66" y="225" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">#nomaflow-alerts</text>
-  <rect x="56" y="244" width="80" height="22" rx="4" fill="rgba(34,197,94,0.18)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="96" y="259" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✓ Test ping</text>
-
-  <rect x="350" y="100" width="300" height="180" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="366" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
-  <text x="366" y="148" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SMTP host · port · 🔒 password</text>
-  <rect x="366" y="158" width="260" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="376" y="173" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">smtp.corp.local · 587 · …</text>
-  <text x="366" y="200" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Default from</text>
-  <rect x="366" y="210" width="180" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="376" y="225" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">nomaflow@corp.local</text>
-  <rect x="366" y="244" width="80" height="22" rx="4" fill="rgba(34,197,94,0.18)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="406" y="259" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✓ Test mail</text>
-
-  <rect x="660" y="100" width="300" height="180" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="676" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WEBHOOK</text>
-  <text x="676" y="148" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">URL · headers · 🔒 secret</text>
-  <rect x="676" y="158" width="260" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="686" y="173" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">https://opsgenie.corp.local/webhook</text>
-  <text x="676" y="200" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Auth header</text>
-  <rect x="676" y="210" width="180" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="686" y="225" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Authorization: …</text>
-  <rect x="676" y="244" width="80" height="22" rx="4" fill="rgba(34,197,94,0.18)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="716" y="259" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✓ Test POST</text>
+  <rect x="220" y="10" width="780" height="520" rx="14" fill="url(#ntf-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="230" y="20" width="210" height="500" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="242" y="32" width="78" height="22" rx="5" fill="url(#ntf-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="281.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add rule</text>
+  <rect x="240" y="70" width="190" height="52" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="250" y="88" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">period_closed</text>
+  <text x="250" y="102" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">screen · insert, update</text>
+  <text x="250" y="115" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">portal email</text>
+  <rect x="240" y="132" width="190" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="150" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">job_failed</text>
+  <text x="250" y="164" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">job</text>
+  <text x="250" y="177" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="240" y="194" width="190" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="212" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">ask_review</text>
+  <text x="250" y="226" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">fired by a screen action</text>
+  <text x="250" y="239" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="450" y="20" width="540" height="500" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="464" y="42" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">[notifications.period_closed]</text>
+  <text x="464" y="66" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Rule id</text>
+  <rect x="464" y="72" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="86.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">period_closed</text>
+  <text x="630" y="66" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Label</text>
+  <rect x="630" y="72" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="640" y="86.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Period closed</text>
+  <rect x="830" y="78" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M832.5,83.5 L834.8,85.8 L838.8,81" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="847" y="87" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Enabled</text>
+  <text x="464" y="118" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TRIGGER</text>
+  <rect x="464" y="124" width="295" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="465" y="125" width="100" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="515.0" y="139.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">A screen event</text>
+  <line x1="566" y1="129" x2="566" y2="143" stroke="#334155" strokeWidth="1"/>
+  <text x="608.5" y="139.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">A job event</text>
+  <line x1="651" y1="129" x2="651" y2="143" stroke="#334155" strokeWidth="1"/>
+  <text x="705.0" y="139.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">A screen action</text>
+  <text x="464" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">App</text>
+  <rect x="464" y="172" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="186.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">sales ▾</text>
+  <text x="600" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Screen</text>
+  <rect x="600" y="172" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="610" y="186.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">period_status ▾</text>
+  <text x="770" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Events</text>
+  <rect x="770" y="177" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="787" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">insert</text>
+  <rect x="830" y="177" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M832.5,182.5 L834.8,184.8 L838.8,180" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="847" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">update</text>
+  <rect x="895" y="177" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="912" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">delete</text>
+  <text x="464" y="214" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Only when the written row has (AND)</text>
+  <rect x="464" y="220" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="234.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">STATUS</text>
+  <rect x="594" y="220" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="604" y="234.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">closed</text>
+  <text x="464" y="262" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DELIVERY</text>
+  <rect x="464" y="273" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M466.5,278.5 L468.8,280.8 L472.8,276" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="481" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="530" y="273" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M532.5,278.5 L534.8,280.8 L538.8,276" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="547" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="590" y="273" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="607" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">action</text>
+  <text x="464" y="304" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Recipients</text>
+  <rect x="464" y="310" width="103" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="515.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">role: controllers</text>
+  <rect x="580" y="310" width="73" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="616.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">user: alice</text>
+  <rect x="664" y="310" width="149" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="738.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">email: finance@example.com</text>
+  <text x="464" y="350" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MESSAGE</text>
+  <text x="464" y="368" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Subject</text>
+  <rect x="464" y="374" width="500" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="388.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Period &#123;PERIOD&#125; closed by &#123;USER&#125;</text>
+  <text x="464" y="412" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Body</text>
+  <rect x="464" y="418" width="500" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="432.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Company &#123;COMPANY&#125;: the period is now read-only.</text>
+  <text x="464" y="456" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Link (a route the notification opens)</text>
+  <rect x="464" y="462" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="476.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">/screen/sales/period_status</text>
+  <rect x="750" y="488" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="791.5" y="502.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Send a test</text>
+  <rect x="850" y="488" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="877.5" y="502.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="916" y="488" width="44" height="22" rx="5" fill="url(#ntf-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="938.0" y="502.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rules</text>
+  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">trigger · channels</text>
+  <line x1="210" y1="77.0" x2="240" y2="96" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="10" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three triggers</text>
+  <text x="20" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">screen write, job, action</text>
+  <line x1="210" y1="177.0" x2="464" y2="136" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="10" y="240" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row condition</text>
+  <text x="20" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">field = value, ANDed</text>
+  <line x1="210" y1="257.0" x2="464" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="1010" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1020" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Channels</text>
+  <text x="1020" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bell, e-mail, query/endpoint</text>
+  <line x1="1010" y1="277.0" x2="640" y2="278" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="1010" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1020" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recipients</text>
+  <text x="1020" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">user:, role:, email:</text>
+  <line x1="1010" y1="347.0" x2="850" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="1010" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1020" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Placeholders</text>
+  <text x="1020" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;COLUMN&#125;, &#123;USER&#125;, &#123;JOB&#125;…</text>
+  <line x1="1010" y1="417.0" x2="964" y2="386" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="520" y="556" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="530" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Send a test</text>
+  <text x="530" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sample values, unsaved form</text>
+  <line x1="750" y1="573.0" x2="780" y2="512" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
 </svg>
 
-Each transport carries:
+---
 
-| Field | Notes |
-|---|---|
-| **URL / host** | Slack webhook URL · SMTP host:port · generic webhook URL. |
-| **Credentials** | 🔒 encrypted at rest (Slack URL counts as a secret; SMTP password; webhook bearer / signing secret). |
-| **Default recipient** | The channel / address / endpoint used when a job's alerts block doesn't specify recipients. |
-| **Test button** | Sends a one-line "test from Nomaflow" message — confirms the wiring works **before** a real failure puts it to the test. |
+## What users see \{#inbox\}
 
-### Slack
+- **The bell** in the header shows the number of unread notifications, updated live. Its menu lists the latest six; **Mark all read** and **View all** are at the bottom. Clicking a notification marks it read and opens its link.
+- **The Notifications page** (from **View all**) lists them with **All** / **Unread** tabs and **Mark all read**.
 
-The default mapping: Slack receives a one-line message styled with the job's state colour (red for failure, yellow for long-run, green for success).
-
-| Setting | Required | Notes |
-|---|---|---|
-| **Webhook URL** | Yes | Get this from *Slack admin → Apps → Incoming Webhooks*. One webhook can fan-out to multiple channels through Slack's own routing. |
-| **Default channel** | No | Overrides the channel baked into the webhook. Use `#nomaflow-alerts` if you have one. |
-| **Username** | No | The bot name. Defaults to "Nomaflow". |
-| **Icon emoji** | No | Defaults to `:gear:`. |
-
-### Email
-
-Standard SMTP. The framework sends a small HTML message with a link back to the Run detail page.
-
-| Setting | Required | Notes |
-|---|---|---|
-| **Host** | Yes | SMTP server hostname. |
-| **Port** | Yes | 587 for STARTTLS, 465 for TLS. |
-| **Username / Password** | If the server requires auth. | Password is 🔒 encrypted. |
-| **Default from** | Yes | Address the mail comes from. |
-| **TLS mode** | Defaults to STARTTLS. | Pick TLS for legacy servers that need it. |
-
-### Generic webhook
-
-For OpsGenie, PagerDuty, Mattermost, your own dispatcher — anything that accepts a JSON POST.
-
-| Setting | Required | Notes |
-|---|---|---|
-| **URL** | Yes | The endpoint. |
-| **Headers** | No | Auth headers, content-type override. Header values can be 🔒 encrypted. |
-| **Body template** | No | Override the default body shape. Variables: `${job_id}`, `${run_id}`, `${state}`, `${error}`, `${started_at}`. |
-
-The default body shape:
-
-```json
-{
-  "job_id": "reporting-nightly-sync",
-  "run_id": "run_a8c4d",
-  "state": "FAILED",
-  "triggered_by": "cron",
-  "started_at": "2026-05-26T02:00:00Z",
-  "finished_at": "2026-05-26T02:14:22Z",
-  "error": "OperationalError: …",
-  "url": "https://liberty.corp.local/nomaflow/runs/run_a8c4d/"
-}
-```
-
-The `url` is the link operators click to reach the Run detail page directly.
+Each user sees only their own notifications.
 
 ---
 
-## Job alerts block
+## The e-mail account \{#smtp\}
 
-Inside the Job editor's **Alerts** section:
+E-mail goes through the SMTP server set in **Settings → App → Notifications (email)**:
 
 | Field | Default | Notes |
 |---|---|---|
-| **`on_failure`** | `true` (when the block exists) | Emit on a `FAILED` run. The most common setting — leave it on. |
-| **`on_long_run_minutes`** | none | Emit a warning if the run is still `RUNNING` after N minutes. The run keeps going — this is a heads-up, not an abort. |
-| **`recipients`** | `[]` | Channel-specific identifiers. Empty = use the transport's default recipient. |
+| Notifications enabled | on | Off: no rule fires. |
+| SMTP host, Port | —, `587` | Without a host, only the bell works. |
+| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* or *None*. Changing it sets the usual port. |
+| Timeout (s) | `20` | |
+| User, Password | — | The password is encrypted with the install's master key. |
+| From address | the user | Falls back to the user name when empty. |
 
-### Recipients per transport
-
-The `recipients` field is **type-aware** — same string can map to several transports.
-
-| Transport | Recipient format | Example |
-|---|---|---|
-| Slack | `#channel` or `@user` | `["#data-oncall", "@alice"]` |
-| Email | RFC 5322 address | `["data-team@corp.local"]` |
-| Webhook | Endpoint id (registered at framework level) | `["opsgenie-data"]` |
-
-When a job is fired and an alert is due, the framework iterates over the recipient list. Each recipient matches one transport (by format / by registration); each matched transport gets the alert.
-
-### When `recipients` is empty
-
-The transport's default recipient is used (`#nomaflow-alerts` for Slack, the SMTP default-from for mail, the webhook's primary URL). This is the right default for most installs — *one* job-level place sets policy, transports decide.
-
-### Per-transport routing by tag
-
-Some installs want different teams to receive different jobs. The framework's notification routing supports tag rules:
-
-| Job tag | Routes to | Configured in |
-|---|---|---|
-| `team-data` | Slack `#data-team` | *Settings → Notifications → Routing rules*. |
-| `team-security` | Email `security@corp.local` | Same. |
-| `team-platform` | PagerDuty webhook | Same. |
-
-A job tagged `team-data, etl` flows through both the `team-data` rule and any tag-less default. The rule engine de-duplicates so a single recipient doesn't get the same message twice.
+E-mails are plain text: the subject, then the body. The link of a rule is used by the bell, not by the e-mail.
 
 ---
 
-## What events emit what
+## Rules \{#rules\}
 
-| Event | Triggered by | Default level |
+Rules are edited in **Settings → Notifications** and saved in `notifications.toml` — a change applies without a restart. **Send a test** sends the rule being edited, even unsaved, with sample values to its recipients.
+
+### Triggers
+
+| Trigger | Fires when | Settings |
 |---|---|---|
-| **Run failed** | `on_failure = true` (default). | High — pages people. |
-| **Run long-running** | `on_long_run_minutes = N` set, run still in flight past N. | Medium — warning. |
-| **Run succeeded** | Set `on_success = true` (off by default — most installs don't want it). | Low. |
-| **Job re-enabled / disabled** | Operator toggled the catalogue card. | Low — informational, off by default. |
-| **Run cancelled by user** | Operator clicked ✕ Cancel. | Low — visible in the run history; alert is opt-in. |
+| **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
+| **A job event** | A Nomaflow run ends. | Jobs (empty = every job) and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes. |
+| **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
 
-`on_success` is intentionally off by default. A job that runs hourly successfully ten thousand times a year shouldn't generate ten thousand "OK!" messages. Turn it on for **high-value jobs** where success itself is news ("the monthly report was delivered").
+`long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
 
----
+### Channels
 
-## Anatomy of a failure alert
-
-When a run fails:
-
-1. The runner writes the `FAILED` state to the run row.
-2. The notifications layer reads the job's alerts block.
-3. For each matched recipient, it builds a transport-specific message:
-
-| Transport | Message |
+| Channel | Delivers |
 |---|---|
-| **Slack** | One-line red message: ❌ *reporting-nightly-sync run failed at step copy-orders · OperationalError: connection refused* with a "View run" link. |
-| **Email** | Subject: `[Nomaflow] FAILED reporting-nightly-sync`. Body: same one-liner plus the full traceback as a code block, plus a link. |
-| **Webhook** | JSON POST as described above. |
+| `portal` | A notification in the bell of each recipient user. |
+| `email` | An e-mail to each recipient that has an address. |
+| `action` | Runs a query (SQL connector) or calls an endpoint (API connector) with the message's values — to post to Teams or a webhook, or to write a log table. Its parameters are the event's values plus `SUBJECT`, `BODY` and `RULE`. |
 
-4. The HTTP / SMTP call is **fire-and-forget**. If the upstream is unreachable, the notification fails — but the run's failure is already recorded. Nomaflow doesn't retry notification delivery (a flaky notification path shouldn't fail a job).
+A channel that fails is logged and does not stop the others. Sending runs in the background: a save or a job never waits for the mail server.
 
-The framework log records every notification attempt with its outcome — search there if a recipient reports "I didn't get the page".
+### Recipients
 
----
-
-## Sending success alerts conditionally
-
-A common pattern: alert on success **only** for jobs where success itself matters. Two ways to do it:
-
-| Pattern | How |
+| Form | Means |
 |---|---|
-| **Per-job flag**. | Set `on_success = true` in the job's alerts block. Fires on every successful run. |
-| **In-step push**. | Add an HTTP step at the end of the job that POSTs to the webhook. Fires only when the preceding steps succeed (because steps run in order). Gives you full control over the message body. |
+| `user:alice` | That user. |
+| `role:controllers` | Every active user holding the role. |
+| `email:finance@example.com` | An address — e-mail only. |
 
-The second pattern is what the [Scheduled DB sync recipe](./workflows/scheduled-sync.md#step-4--add-the-success-notification) uses — the success notification is just another step.
+In the editor, pick users and roles from the list or type an address.
 
----
+### Placeholders
 
-## Quiet hours
+Subject, body and link take `{NAME}` placeholders, written in any case:
 
-Some installs don't want pages at 03:00 for *low-priority* jobs. Two approaches:
-
-| Pattern | Behaviour |
+| Trigger | Placeholders |
 |---|---|
-| **Tag-based routing**. | A `low-priority` tag routes to email (no page); a `high-priority` tag routes to PagerDuty (pages). The setting is per job. |
-| **Recipient-side rules**. | The recipient channel (PagerDuty's own service policies, Slack's notification preferences) handles quiet hours. Nomaflow always sends; the receiver mutes. |
+| Screen event | Every column of the written row, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
+| Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule. |
+| Screen action | The values passed by the action, plus `USER`. |
 
-The second approach scales better — Nomaflow has one notification policy (alert on every failure), the receivers decide what to do with it. Adding a "quiet hours" mode to Nomaflow itself would multiply the moving parts.
+An unknown placeholder is left as written.
+
+### In TOML
+
+```toml title="notifications.toml"
+[notifications.period_closed]
+label = "Period closed"
+trigger = { kind = "screen", app = "sales", screen = "period_status", events = ["update"], when = [{ field = "STATUS", value = "closed" }] }
+channels = ["portal", "email"]
+recipients = ["role:controllers", "email:finance@example.com"]
+subject = "Period {PERIOD} closed by {USER}"
+body = "Company {COMPANY}: the period is now read-only."
+link = "/screen/sales/period_status"
+
+[notifications.job_failed]
+trigger = { kind = "job", events = ["failure", "missed"] }
+channels = ["email"]
+recipients = ["role:ops"]
+subject = "{JOB}: {STATE}"
+body = "{ERROR}"
+```
 
 ---
 
-## Common pitfalls
+## A job's own alerts \{#job-alerts\}
 
-| Mistake | Symptom | Fix |
-|---|---|---|
-| Webhook URL stored in plain text in `jobs.toml`. | URL leaks into version control. | Always store at framework level (🔒 encrypted), reference by transport name. |
-| Test button green, real alert never lands. | Network blocks production-time traffic that the test allowed. | Check firewall rules; the test uses the same transport but at config save time. |
-| `on_success = true` on every job. | Channel is full of green ticks; failures get lost in the noise. | Turn off `on_success` except where it matters. |
-| `on_long_run_minutes = 1` on an ETL that always takes 5. | Spurious warnings every night. | Tune to the job's normal runtime + headroom. |
-| Multiple recipients on the same channel. | Same message delivered twice. | The de-dup engine should catch this; if not, narrow the recipients list. |
+A job can also warn on failure without a rule, from the **Alerts** block of the job editor:
 
----
+```toml title="jobs.toml"
+[jobs.alerts]
+on_failure = true
+recipients = ["role:ops", "user:alice"]
+```
 
-## Inspecting notification history
-
-The framework log records every notification dispatch with its outcome (`SENT`, `FAILED_TRANSPORT`, `FAILED_DELIVERY`). Search the log for `notification` to find delivery issues.
-
-For a long-term audit (six months back: who got paged for what?), some installs add a small **notification audit table** populated by a Python helper. The framework doesn't ship this by default — most teams find the framework log sufficient.
+On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address. For a long run, use a rule with the `long_run` event.
 
 ---
 
-## What's next
+## Tips \{#tips\}
 
-- [Administration](./administration.md) — restart behaviour and multi-replica notifications.
-- [Recipe — Scheduled DB sync](./workflows/scheduled-sync.md) — uses the failure alert path end-to-end.
-- [Custom Python steps](./custom-python.md) — push notifications from within a step.
+- Start with one rule: `failure` and `missed` on every job, to the operations role.
+- Prefer roles to named users: the rule follows team changes.
+- Use **Send a test** after changing the SMTP account.
+- Keep the bell for what needs action; send the rest by e-mail to a shared box.

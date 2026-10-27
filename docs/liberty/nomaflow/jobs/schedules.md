@@ -1,229 +1,187 @@
 ---
 title: Schedules
-description: "Cron syntax for Nomaflow, the timezone rule, the Schedule view that previews upcoming fires across every job, and the patterns most installs settle on."
-keywords: [Nomaflow, cron, schedule, timezone, calendar, fire preview, recurrence, Liberty Framework]
+description: "When Nomaflow jobs run: the five-field cron syntax and its day-of-week numbering, timezones, the preview of the next runs, the Schedule view, schedulable presets, and missed schedules recorded as MISSED runs."
+keywords: [Nomaflow, cron, schedule, timezone, Schedule view, presets, missed schedules, MISSED, grace, Liberty Next]
 ---
 
 # Schedules
 
-A **schedule** is when a job auto-fires. The whole framework speaks **cron** — a five-field expression that's been the default scheduler vocabulary for forty years. This page walks through the syntax, the timezone rule, the live preview the editor renders, and the **Schedule view** that shows upcoming fires across every job.
-
-For the broader mental model (job → schedule → run), see [Concepts](../concepts.md).
+A job runs on its own **schedule** — a cron expression and a timezone — and on the schedules of its **presets**. A job without any schedule runs only when someone clicks **Run**.
 
 ---
 
-## Cron at a glance
+## Cron in Nomaflow \{#cron\}
 
-A cron expression has **five required fields** plus an optional sixth for seconds:
+A schedule has **five fields**:
 
 ```
 ┌──── minute (0-59)
 │ ┌── hour (0-23)
 │ │ ┌── day of month (1-31)
 │ │ │ ┌── month (1-12)
-│ │ │ │ ┌── day of week (0=Sunday, 6=Saturday)
-│ │ │ │ │ ┌── second (optional, 0-59)
+│ │ │ │ ┌── day of week (mon-sun)
 0 2 * * *
 ```
 
-The most common patterns:
-
-| Goal | Cron |
-|---|---|
-| Every minute (use for a smoke test, not steady state). | `* * * * *` |
-| Every 5 minutes. | `*/5 * * * *` |
-| Every hour, on the hour. | `0 * * * *` |
-| Every hour at minute :15. | `15 * * * *` |
-| Every day at 02:00. | `0 2 * * *` |
-| Every day at 02:30. | `30 2 * * *` |
-| Every weekday (Mon-Fri) at 09:00. | `0 9 * * 1-5` |
-| Every Monday at 09:30. | `30 9 * * 1` |
-| The 1st of every month at midnight. | `0 0 1 * *` |
-| Every quarter (1st of Jan/Apr/Jul/Oct) at 03:00. | `0 3 1 1,4,7,10 *` |
-| Twice a day (08:00 and 20:00). | `0 8,20 * * *` |
-
----
-
-## The four operators
-
 | Operator | Meaning | Example |
 |---|---|---|
-| **`*`** | "every value in the range". | `* * * * *` = every minute. |
-| **`,`** | List specific values. | `0 6,12,18 * * *` = at 06:00, 12:00, 18:00. |
-| **`-`** | Range. | `0 9 * * 1-5` = weekdays at 09:00. |
-| **`/`** | Step. | `*/10 * * * *` = every 10 minutes; `0 */2 * * *` = every two hours on the hour. |
+| `*` | every value | `* * * * *` — every minute |
+| `,` | a list | `0 6,12,18 * * *` — at 06:00, 12:00 and 18:00 |
+| `-` | a range | `0 9 * * mon-fri` — weekdays at 09:00 |
+| `/` | a step | `*/10 * * * *` — every 10 minutes |
 
-You can combine them: `5,15,25,35,45,55 9-17 * * 1-5` = every 10 minutes between 09:00 and 17:00, weekdays only. (Equivalent and tidier: `*/10 9-17 * * 1-5`.)
-
----
-
-## Day-of-month vs day-of-week
-
-If **both** day-of-month and day-of-week are constrained, the cron fires when **either** matches — *not* both. This matches the traditional Unix cron behaviour and is the only quirk worth memorising.
-
-| Cron | When it fires |
-|---|---|
-| `0 9 15 * *` | The 15th of every month at 09:00. |
-| `0 9 * * 1` | Every Monday at 09:00. |
-| `0 9 15 * 1` | The 15th of every month **OR** any Monday — at 09:00. |
-
-For "Monday the 15th only", you can't express it with cron alone — let the job fire on Mondays and skip in a first step:
-
-```python
-# python step: only proceed on the 15th
-from datetime import date
-def main(**kwargs):
-    if date.today().day != 15:
-        return {"skipped": "not the 15th"}
-    # ... real work
-```
-
----
-
-## Timezones
-
-The cron is evaluated in the **timezone you pick on the job**, not the framework's host timezone. This matters when the host runs on UTC but the business operates in Paris (or Sydney, or Mumbai).
-
-| Setting | When the job fires |
-|---|---|
-| `0 2 * * *`, timezone `UTC` | 02:00 UTC every day — 03:00 / 04:00 Paris depending on DST. |
-| `0 2 * * *`, timezone `Europe/Paris` | 02:00 Paris every day — 00:00 / 01:00 UTC depending on DST. |
-
-**Daylight Saving Time** is handled correctly when an IANA name is used: the scheduler skips or duplicates the cron firing as the wall clock jumps. With a fixed offset (`Etc/GMT+1`) DST is ignored — the job fires at the same UTC moment year-round.
-
-:::tip[Picking a timezone]
-Use the IANA name for the operating region (`Europe/Paris`, `America/New_York`, `Asia/Tokyo`). Use `UTC` only for jobs where wall-clock time genuinely doesn't matter (an hourly cleanup, a smoke test).
+:::warning[Write the days of the week as names]
+The scheduler numbers the days of the week from **0 = Monday** to **6 = Sunday** — not like Unix cron, where 0 is Sunday. `0 9 * * 1` runs on **Tuesday**. Write `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`): the names leave no doubt, and the preview under the field confirms the days.
 :::
 
----
+When both the day of the month and the day of the week are set, **both** must match: `0 9 15 * mon` runs on a 15th that falls on a Monday.
 
-## The live preview
-
-The Job editor renders the **next three fire times** under the cron input as you type. It re-renders on every keystroke, so a malformed expression shows immediately ("invalid cron").
-
-| Cron | Preview |
+| Need | Cron |
 |---|---|
-| `0 2 * * *` (timezone Paris, today is Wed 17:00 Paris) | Thu 02:00 · Fri 02:00 · Sat 02:00 |
-| `30 9 * * 1` | next Mon 09:30 · the following Mon 09:30 · etc. |
-| `*/5 * * * *` | in 4 minutes · in 9 minutes · in 14 minutes |
-| `0 25 * * *` | *(invalid — hour 25)* |
-
-When the preview reads something different than you expected, you caught a bug **before** saving the job.
+| Every 5 minutes | `*/5 * * * *` |
+| Every hour at :15 | `15 * * * *` |
+| Every day at 02:00 | `0 2 * * *` |
+| Weekdays at 09:00 | `0 9 * * mon-fri` |
+| Every Monday at 06:00 | `0 6 * * mon` |
+| The 1st of every month at 07:00 | `0 7 1 * *` |
+| Every quarter (1st of Jan, Apr, Jul, Oct) at 03:00 | `0 3 1 1,4,7,10 *` |
 
 ---
 
-## The Schedule view
+## In the job editor \{#editor\}
 
-The **Jobs** page has a **📅 Schedule view** button in the toolbar. It opens a calendar of every upcoming fire across every enabled job — useful when you have ten cron jobs and want to spot collisions.
+The **Schedule (cron)** field of the job editor offers ready-made choices — **Manual**, **Hourly**, **Daily**, **Weekly**, **Monthly** — and a free cron. Under the field, **Next runs** lists the next five runs in the job's timezone; it is recomputed shortly after each change, and an invalid expression is reported there.
 
-<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+**Timezone** is an IANA name (`Europe/Paris`, `America/New_York`). The schedule is evaluated in that timezone, daylight saving time included: `0 2 * * *` in `Europe/Paris` runs at 02:00 Paris time all year round.
+
+---
+
+## The Schedule view \{#schedule-view\}
+
+**Schedule** in the Jobs toolbar lists every schedule, by next run:
+
+<svg viewBox="0 0 1200 390" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="sv-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sch-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sch-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sch-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="320" rx="14" fill="url(#sv-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomaflow · Schedule</text>
-  <text x="40" y="66" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Upcoming fires for the next 7 days across all enabled jobs.</text>
-  <line x1="20" y1="82" x2="980" y2="82" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="60" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MON 27</text>
-  <rect x="60" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="68" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="60" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="68" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="60" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="68" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <text x="260" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TUE 28</text>
-  <rect x="260" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="268" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="260" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="268" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="260" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="268" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <text x="460" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WED 29</text>
-  <rect x="460" y="118" width="180" height="22" rx="4" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="468" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="460" y="144" width="180" height="22" rx="4" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="468" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:45 · nomasx1-security-1</text>
-  <rect x="460" y="170" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="468" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <text x="468" y="218" fill="#f59e0b" fontSize="10" fontFamily="system-ui, sans-serif">⚠ two heavy jobs at 02:30/02:45 — collision risk</text>
-
-  <text x="660" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THU 30</text>
-  <rect x="660" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="668" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="660" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="668" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="660" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="668" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <rect x="40" y="252" width="920" height="72" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="58" y="276" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LEGEND</text>
-  <rect x="58" y="288" width="12" height="12" rx="2" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="76" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">ETL</text>
-  <rect x="120" y="288" width="12" height="12" rx="2" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="138" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Reporting</text>
-  <rect x="206" y="288" width="12" height="12" rx="2" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="224" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Audit</text>
-  <rect x="276" y="288" width="12" height="12" rx="2" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="294" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Collision flagged</text>
+  <rect x="220" y="14" width="760" height="370" rx="14" fill="url(#sch-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Schedule</text>
+  <text x="240" y="64" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Every job, by when it next runs</text>
+  <text x="240" y="92" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UPCOMING (4)</text>
+  <rect x="240" y="100" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JOB</text>
+  <text x="500" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHEDULE</text>
+  <text x="700" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NEXT RUN</text>
+  <text x="850" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LAST RUN</text>
+  <rect x="240" y="132" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="148.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load</text>
+  <text x="500" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <text x="700" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">tomorrow 02:00</text>
+  <rect x="850" y="137.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="148.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="240" y="162" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="178.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load · month-end</text>
+  <text x="500" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
+  <text x="700" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">01/11 06:00</text>
+  <text x="850" y="178.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="240" y="192" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="208.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">nomajde-daily-sync</text>
+  <text x="500" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">30 2 ∗ ∗ ∗</text>
+  <text x="700" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">tomorrow 02:30</text>
+  <rect x="850" y="197.0" width="46" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="873.0" y="208.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">MISSED</text>
+  <rect x="240" y="222" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="238.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">config-versions-purge</text>
+  <text x="500" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 3 ∗ ∗ ∗</text>
+  <text x="700" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">tomorrow 03:00</text>
+  <rect x="850" y="227.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="238.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="240" y="274" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MANUAL / DISABLED (2)</text>
+  <rect x="240" y="282" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JOB</text>
+  <text x="500" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHEDULE</text>
+  <text x="700" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NEXT RUN</text>
+  <text x="850" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LAST RUN</text>
+  <rect x="240" y="314" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">nomasx1-init-db</text>
+  <text x="500" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="700" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="850" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="240" y="344" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">reporting-refresh (disabled)</text>
+  <text x="500" y="360.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
+  <text x="700" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="850" y="349.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="360.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="10" y="130" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One row per schedule</text>
+  <text x="20" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the job's cron + each preset</text>
+  <line x1="210" y1="147.0" x2="260" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Missed fire</text>
+  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">recorded as a MISSED run</text>
+  <line x1="1000" y1="207.0" x2="920" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Not firing</text>
+  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">manual, or disabled</text>
+  <line x1="210" y1="317.0" x2="280" y2="352" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
 </svg>
 
-Each chip is a fire — click it to jump to the job's catalogue card. Chips are coloured by tag (the calendar uses the first tag the job carries). Hours where two heavy jobs would run at the same time are flagged with a warning — Nomaflow doesn't enforce serial execution, but the calendar helps you avoid overlap.
+| Group | Content |
+|---|---|
+| **Upcoming** | One row per active schedule — the job's own, and one per preset with a schedule (the preset's name is shown next to the job). Columns: Job, Schedule, Next run, Last run. |
+| **Manual / disabled** | Jobs without a schedule, and schedules that are set but switched off — marked *(disabled)*. |
 
 ---
 
 ## Schedulable presets \{#schedulable-presets\}
 
-A **preset** — a saved set of run parameters (params, `op_kwargs`, step toggles, log level) — can carry its own **cron + timezone**. The scheduler then fires the job on that schedule *with the preset's parameters*, so one job runs on several schedules with different inputs, without cloning it.
+A **preset** is a saved set of run parameters (parameters, step arguments, steps switched on or off, log level), created from the **Run with parameters** window with **Save as preset**. In the job editor, the **Presets & schedules** section gives each preset its own **Schedule (cron)** and **Timezone**, and a **Schedule enabled** checkbox.
 
-Each preset has its own **enable** toggle, **independent of the job's `Enabled`**: an enabled preset fires even when the job's own schedule is off (the job's `Enabled` gates only the job's own cron). The Schedule view lists **one row per schedule** — the job's cron plus each preset's — and marks a scheduled-but-disabled trigger, so it's clear why one isn't firing.
+The scheduler then runs the job on that schedule with the preset's parameters: one job, several schedules, different inputs — a nightly full load and an hourly incremental of the same ETL, for instance.
 
-Use it for the common "same job, different windows" case — a nightly full run and an hourly incremental of the same ETL, each a preset with its own cron and parameters.
+A preset's schedule is independent of the job's **Enabled** switch: an enabled preset runs even when the job's own schedule is off.
+
+:::info[Cloning a job]
+**Clone** creates a disabled copy without the job's own schedule, but the presets keep their schedules and their *Schedule enabled* state: review them in the copy before saving it.
+:::
 
 ---
 
-## Patterns most installs settle on
+## Missed schedules \{#missed\}
 
-| Workload | Schedule | Why |
+A run can fail to happen: the server was stopped at that time, or the previous run of the same job was still in progress. Nomaflow checks for such gaps and records each one as a run in state **MISSED**, with the expected time, in the run history and as the job's last run. A rule on the `missed` event can warn someone — see [Notifications](../notifications.md).
+
+The **Missed schedules** panel of the Jobs page (next to the retention panel) shows the policy and the last check, and **Check now** runs a check at once.
+
+| Setting | Default | Meaning |
 |---|---|---|
-| **Nightly ETLs** | `0 2 * * *` to `0 4 * * *` | Off-peak. Stagger when you have several — e.g. ETL A at 02:00, ETL B at 02:30, ETL C at 03:00. |
-| **Hourly syncs** | `15 * * * *` | Avoid `0 * * * *` — every other piece of software in the building fires on the hour. |
-| **Weekly audits** | `0 6 * * 1` | Monday morning so the report's fresh when humans arrive. |
-| **Monthly reports** | `0 7 1 * *` | Early on the 1st, before the morning rush. |
-| **Continuous polling** | `*/5 * * * *` | 5 minutes is the floor for steady state — finer cadences hammer the framework. |
-| **Smoke tests** | `* * * * *` | Only enable temporarily — leaves a lot of run rows in 24 hours. |
+| **Check** | on | Switches the check on or off. |
+| **Grace (min)** | 10 | A run started within this delay after the expected time — a scheduled one, or a manual one — counts for it. |
+| **Check interval (min)** | 5 | How often the check runs. |
+| **Look back (hours)** | 24 | How far back a check looks, at most. A job that never ran is checked from the scheduler's start only. |
+
+The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recorded once: a restart does not report it again.
 
 ---
 
-## Anti-patterns
-
-| Don't | Because |
-|---|---|
-| Schedule every job at `0 0 * * *` (midnight). | Several heavy jobs starting at the same moment can saturate the framework. Stagger by 15-30 minutes. |
-| Use `* * * * *` for steady state. | A run-per-minute fills the history fast and rarely matches a real business need. |
-| Set a schedule when the job is operator-driven. | Leave it manual-only — the catalogue still shows it, ▶ Run still works, no surprise fires at 3 AM. |
-| Mix day-of-month and day-of-week. | Cron's OR semantics will surprise you. Pick one. |
-| Hard-code DST offsets. | Use the IANA timezone name; DST is handled. |
-
----
-
-## Disabling a schedule temporarily
-
-Two ways to pause a job's auto-fires without losing the config:
+## Pausing a schedule \{#pause\}
 
 | Option | Effect |
 |---|---|
-| **Enable toggle off** on the catalogue card. | Schedule ignored. Manual ▶ Run still works. Reversible in one click. |
-| **Empty the cron** in the editor. | Schedule removed entirely. Manual ▶ Run still works. The "manual-only" state is permanent until you re-add a schedule. |
-
-For a maintenance window or a release freeze, the **enable toggle** is the right tool — minimal config churn, fully reversible.
+| The job's **Enabled** switch on the Jobs page | The job's own schedule stops. **Run** still works; preset schedules keep running unless switched off. |
+| **Manual** in the Schedule field | The job's own schedule is removed. |
+| **Schedule enabled** off on a preset | That preset's schedule stops. |
 
 ---
 
-## What's next
+## Tips \{#tips\}
 
-- [Create a job](./create.md) — the full Job editor (the schedule input lives in its ② Schedule section).
-- [Catalogue](./catalog.md) — the Jobs page, where the schedule chip and next-run hint are surfaced.
-- [Administration](../administration.md) — multi-replica setup, scheduler lock, restart behaviour.
+- Spread heavy jobs over the night (02:00, 02:30, 03:00) rather than starting them all at midnight.
+- Prefer `15 * * * *` to `0 * * * *` for hourly jobs: many other systems run on the hour.
+- Use a timezone name, never a fixed offset, so that daylight saving time is followed.
+- Check the **Next runs** preview after every change: it is the quickest way to catch a wrong day.

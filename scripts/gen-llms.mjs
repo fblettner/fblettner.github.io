@@ -73,7 +73,7 @@ const SECTIONS = [
     exact: true,
   },
   {en: 'Liberty Next — framework', fr: 'Liberty Next — framework',
-   match: ['liberty/framework/', 'liberty/installation/', 'liberty/monitoring/', 'liberty/technical/', 'liberty/references/']},
+   match: ['liberty/framework/', 'liberty/installation/', 'liberty/monitoring/', 'liberty/references/']},
   {en: 'Nomaflow — scheduling and orchestration', fr: 'Nomaflow — planification et orchestration', match: ['liberty/nomaflow/']},
   {en: 'Nomasx-1 — security and licence compliance', fr: 'Nomasx-1 — sécurité et conformité des licences', match: ['liberty/nomasx1/']},
   {en: 'Nomajde — JD Edwards companion', fr: 'Nomajde — application compagnon JD Edwards', match: ['liberty/nomajde/']},

@@ -1,464 +1,55 @@
 ---
-title: Running in production
-description: "Production hardening of the Full Docker / Swarm layouts — TLS, password rotation, OIDC, backups, Postgres tuning."
-keywords: [Liberty Framework, production, hardening, TLS, OIDC, JWT secret, master key, backups, Postgres tuning, multi-replica]
+title: Production checklist
+description: "What to check before a Liberty Next server goes into production: pinned release, HTTPS, passwords, secrets kept off the server, exposed ports, sign-in protection, backups, logs, monitoring — and what the shipped Docker layouts already harden for you."
+keywords: [Liberty Next, production, hardening, checklist, HTTPS, secrets, _FILE, non-root, PostgreSQL port, Traefik password, login throttle, backups, JSON logs, request id, monitoring]
 ---
 
-# Running in production
+# Production checklist
 
-This page is a hardening overlay on top of the [Full Docker layout](./docker.md#full) or the [Swarm layout](./docker.md#swarm). Both layouts ship from the repository's `release/` directory and are driven by `install.sh` / `install-apps.sh` / `deploy-swarm.sh` / `backup.sh`. The job of this page is to walk every knob you should turn before the install is allowed to face users — TLS, default passwords, OIDC, the long-lived secrets, backups, Postgres durability, scaling caveats.
-
-It does **not** repeat the install steps — read [Docker](./docker.md) first.
-
-:::info[COMPOSE_FILE discipline]
-After `install.sh` (and optionally `install-apps.sh`) runs, `.env` carries a `COMPOSE_FILE=docker-compose.full.yml[:overlays...]` line. Every `docker compose <cmd>` (with NO `-f` flag) auto-merges every overlay listed. The commands on this page follow that convention — never type `-f` after install. See [Docker → COMPOSE_FILE discipline](./docker.md#compose-file-discipline).
-:::
+The shipped layouts are already hardened; this page lists what they do for you and what is left to decide before users arrive. `./liberty doctor` (or `liberty-ops doctor`) checks most of it — run it last.
 
 ---
 
-## 1 — Pick the layout
+## Already done by the Docker layouts \{#built-in\}
 
-| Layout | Production-ready? | When |
-|---|---|---|
-| **Light** ([docker.md#light](./docker.md#light)) | No — SQLite, no TLS, no licensed connectors. | Local trial, single-user demo. |
-| **Full** ([docker.md#full](./docker.md#full)) | Yes. | Single host. Five services behind Traefik. The layout licensed bundles (Nomasx-1, Nomajde, NomaUBL) deploy against. |
-| **Swarm** ([docker.md#swarm](./docker.md#swarm)) | Yes. | Single-node swarm (one VM, staging) or multi-node swarm. Same services as Full, ported to Swarm grammar. Pick by ops style — both cover production. |
-
-The rest of this page assumes Full or Swarm. Bare-metal systemd, Podman from-scratch and Kubernetes from-scratch are no longer the recommended paths — the `release/` workflow IS the production path.
-
----
-
-## 2 — Required env vars (and the `$` substitution caveat)
-
-Every secret lives in `release/.env`. `install.sh` generates it with random values that avoid `$` characters; if you set values by hand, mind the caveat below.
-
-| Variable | Purpose | Notes |
-|---|---|---|
-| `LIBERTY_IMAGE_TAG` | Pin the image version. | See [section 3](#3--pin-the-image-tag). |
-| `LIBERTY_JWT_SECRET` | Signs every access token. | Rotating it invalidates all outstanding tokens — see [section 7](#7--jwt-secret-rotation). |
-| `LIBERTY_MASTER_KEY` | Decrypts `ENC:` values in TOML — including the license key, AI key and OIDC client secret stored in `app.toml`. | MUST stay constant — see [section 8](#8--master-key-handling). |
-| `LIBERTY_ADMIN_PASSWORD` | Bootstrap password for the local `admin` user. | `install.sh` generates one + prints it once during the first boot — not stored in `.env`. Reset later via `docker exec liberty-next liberty-admin reset-admin-password` or `liberty-admin set-password admin <new>` — see [section 5](#5--change-every-default-password). |
-| `POSTGRES_PASSWORD` | Postgres superuser password. | Full / Swarm only. |
-| `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` | pgAdmin sign-in. | Default email is `admin@liberty.fr` — change both. |
-| `LIBERTY_DOMAIN` / `ACME_EMAIL` | TLS hostname + Let's Encrypt contact. | See [section 4](#4--wire-tls). |
-
-The **license key, Anthropic API key and OIDC client secret** are no longer env vars in the recommended setup. They live in `app.toml` encrypted at rest with `LIBERTY_MASTER_KEY` — edit them via *Settings → App* in the SPA (see [section 6](#6--licensekeyaiandoidcvia-settings-app)). The env-var path (`LIBERTY_LICENSE_KEY` / `ANTHROPIC_API_KEY` / `LIBERTY_OIDC_CLIENT_SECRET` referenced from `app.toml` as `${VAR}`) still works as a fallback for installs that prefer secret-manager storage.
-
-### The `$` substitution caveat
-
-Docker Compose interpolates `$VAR` and `${VAR}` inside `.env` values. A literal `$` in a password becomes empty (or worse, the value of an unrelated variable). Two safe paths:
-
-| Approach | How |
+| Protection | Detail |
 |---|---|
-| **Generate without `$`** *(recommended)* | `install.sh` already does this — every random password it writes is `$`-free. |
-| **Escape as `$$`** | If you must keep a `$` in a password, double it: `POSTGRES_PASSWORD=ab$$cd` becomes `ab$cd` inside the container. |
-
-If sign-in or DB connection fails right after a manual `.env` edit, suspect this first.
-
----
-
-## 3 — Pin the image tag
-
-`install.sh` defaults to `:latest`. Acceptable for the first install (you want the freshest image), unacceptable for production: a `docker compose pull` six months later picks up a major version you didn't sign off on.
-
-Pin at install time:
-
-```bash
-./install.sh full --tag 7.0.2
-```
-
-Or, on an existing install, edit `.env`:
-
-```env title=".env"
-LIBERTY_IMAGE_TAG=7.0.2
-```
-
-Roll forward on your cadence:
-
-```bash
-# Compose
-cd /opt/liberty-next/release
-./backup.sh                              # always snapshot first
-# bump LIBERTY_IMAGE_TAG in .env, then:
-docker compose pull                       # COMPOSE_FILE merges overlays automatically
-docker compose up -d
-
-# Swarm
-./backup.sh
-# bump LIBERTY_IMAGE_TAG in .env, then:
-./deploy-swarm.sh
-```
-
-Never run `latest` in prod. Full upgrade procedure: [Upgrading](./upgrading.md).
+| The server does not run as root | The container fixes the ownership of its volumes, then runs as `liberty` (uid 1000). `LIBERTY_RUN_AS_ROOT=1` turns this off. |
+| PostgreSQL is not on the network | Published on `127.0.0.1` only. `POSTGRES_BIND=0.0.0.0` in `.env` opens it — then protect it with a firewall. |
+| Random secrets per install | Master key, JWT secret, PostgreSQL, pgAdmin and Traefik dashboard passwords are generated by the installation. |
+| HTTPS done properly | With `./liberty ssl …`, HTTP is redirected to HTTPS and security headers are sent. |
+| Health that means something | The healthcheck asks the database (`/ready`), not just the process. |
+| Sign-in throttle | After 10 failed sign-ins for a user within 5 minutes (50 from one address), sign-in answers *429* for a while. See [Sign-in](../framework/build/secure/sign-in.md#throttle). |
+| No SQL in error messages | Regular users get the database error line and an error id; the statement itself goes to the log only when the pool's `debug_sql` is on. |
+| Known images | Every image is pinned to a version, and each release is scanned for known vulnerabilities before publication. |
 
 ---
 
-## 4 — Wire TLS
+## Before going live \{#checklist\}
 
-The Full layout ships Traefik fronting every service. TLS is wired by `install.sh --ssl <mode>` — two modes, **no manual compose edits**. The deep walk-through (Compose vs Swarm, mode switching, multi-cert SNI) lives at [Traefik](./traefik.md).
-
-### Mode A — Let's Encrypt (public-internet hosts)
-
-```bash
-./install.sh full --ssl letsencrypt \
-    --domain liberty.example.com \
-    --email ops@example.com
-```
-
-Requirements:
-
-1. The domain resolves to this host (DNS A / AAAA record).
-2. `:80` and `:443` are reachable from the public internet — the TLS-ALPN challenge needs both open.
-3. `ACME_EMAIL` is a real address you read (Let's Encrypt sends expiry warnings).
-
-What it does: appends `docker-compose.tls-letsencrypt.yml` to `COMPOSE_FILE` in `.env`, sets the two env vars, brings the stack up. Traefik fetches the cert on the first HTTPS request and persists it in the `traefik-acme` volume.
-
-### Mode B — Operator-provided certs (corporate / air-gapped)
-
-```bash
-./install.sh full --ssl provided \
-    --domain liberty.internal.example.com \
-    --cert-dir  /etc/pki/tls \
-    --cert-file liberty.crt \
-    --key-file  liberty.key
-```
-
-Requirements: a directory on the host with the `.crt` (or `.pem`) + the private key; the cert is valid for `--domain`. `install.sh` validates both files exist before continuing.
-
-What it does: appends `docker-compose.tls-provided.yml`, sets `CERT_HOST_PATH`, generates `traefik/dynamic/tls.yml` referencing the cert + key filenames (gitignored — edit it for multi-cert / SNI), brings the stack up.
-
-### Switching modes
-
-Re-run `./install.sh full --ssl <new-mode> ...`. The script swaps the overlay in `COMPOSE_FILE`, rewrites or removes `tls.yml`, and `docker compose up -d` picks the new config. State (cert volume, host cert dir) is preserved.
-
-### Swarm
-
-`install.sh --ssl` is **Compose-only**. Swarm operators apply the TLS overlay manually:
-
-```bash
-docker stack deploy \
-  -c docker-compose.swarm.yml \
-  -c docker-compose.tls-letsencrypt.yml \
-  liberty
-```
-
-(With `LIBERTY_DOMAIN` + `ACME_EMAIL` exported into the shell first — `deploy-swarm.sh` sources `.env` automatically.)
+- [ ] **Pin the release**: `./liberty upgrade --tag <version>` — never `latest` in production. See [Upgrade and rollback](./upgrading.md).
+- [ ] **HTTPS on**: `./liberty ssl letsencrypt …` or `provided …`, or your own proxy in front. See [HTTPS and Traefik](./traefik.md).
+- [ ] **Passwords changed and stored**: the `admin` password (`liberty-admin set-password admin`), the pgAdmin and Traefik dashboard passwords printed by the installation.
+- [ ] **Secrets kept off the server**: a copy of `release/.env` (or `secrets.env`) in your vault. Without the master key, a restored configuration cannot decrypt its passwords. For Docker or Kubernetes secrets, give `LIBERTY_MASTER_KEY_FILE=/run/secrets/…` instead of the value.
+- [ ] **Licence** pasted in **Settings → App → License**, and its expiry date noted.
+- [ ] **Sign-in**: OpenID Connect set up if the company has an identity provider ([Sign-in](../framework/build/secure/sign-in.md)); a second superuser so that one lost password does not lock the install.
+- [ ] **Roles** reviewed: who sees which menus, and which rows ([Roles and permissions](../framework/build/secure/roles-and-permissions.md)).
+- [ ] **Backups scheduled and copied off the server** ([Operations](./operations.md#backup)), and **one restore tested**.
+- [ ] **Tools**: Portainer and pgAdmin are reachable on the same address as the application. Remove them from the stack, or restrict them in Traefik, if nobody needs them.
+- [ ] **Notifications**: the SMTP account in **Settings → App → Notifications (email)** and a rule for failed jobs ([Notifications](../nomaflow/notifications.md)).
+- [ ] **Monitoring**: an external probe on `/ready` ([Health endpoints](../monitoring/health-endpoints.md)).
+- [ ] **`./liberty doctor` answers *no problems found***.
 
 ---
 
-## 5 — Change every default password
+## Logs \{#logs\}
 
-`install.sh` generates random secrets for the values it controls; three passwords still ship with known defaults and **must** be changed before the install faces users.
-
-| Where | Default | Change |
-|---|---|---|
-| **Traefik dashboard** | `admin/admin` | Bcrypt-hash a new password, paste into `release/traefik/dynamic/dynamic.yml`. `file.watch=true` reloads in seconds — no restart needed. |
-| **pgAdmin** | `admin@liberty.fr / PGADMIN_PASSWORD` from `.env` | Set `PGADMIN_EMAIL` to a real address and rotate `PGADMIN_PASSWORD`. Restart the `pgadmin` service. |
-| **liberty-next admin** | random value printed once by `install.sh` (not stored in `.env`) | Run `liberty-admin set-password` (or `reset-admin-password` for a fresh random value). |
-
-### Traefik dashboard
-
-```bash
-docker run --rm httpd:alpine htpasswd -nbB admin "<your-password>"
-# admin:$2y$05$abc...
-```
-
-Paste the single line of output into `release/traefik/dynamic/dynamic.yml` under `http.middlewares.traefik-auth.basicAuth.users`.
-
-### pgAdmin
-
-```env title=".env"
-PGADMIN_EMAIL=ops@example.com
-PGADMIN_PASSWORD=<new-strong-password>
-```
-
-```bash
-# Compose
-docker compose up -d pgadmin                                      # COMPOSE_FILE picks the right files
-
-# Swarm
-./deploy-swarm.sh
-```
-
-### liberty-next admin
-
-```bash
-# Compose — reset to a fresh random password (printed once)
-docker exec liberty-next liberty-admin reset-admin-password
-
-# Compose — set a specific password
-docker compose exec liberty-next liberty-admin set-password admin <new>
-
-# Swarm
-docker exec $(docker ps -qf name=liberty_liberty-next) \
-    liberty-admin set-password admin <new>
-```
-
-Once changed, the Argon2 hash lives in `auth.toml` on the `liberty-config` volume. `LIBERTY_ADMIN_PASSWORD` is a first-boot-only seed — `install.sh` exports it to the shell for the boot, then drops it.
+- Every response carries an `X-Request-ID` header, and every log line written for that request carries the same id: give it when reporting a problem.
+- For a log collector, `log_format = "json"` in the `[app]` section of `app.toml` writes one JSON object per line.
+- The container log is rotated by Docker for PostgreSQL (3 × 100 MB). For the other containers, set a rotation in the Docker daemon (`/etc/docker/daemon.json`).
 
 ---
 
-## 6 — License key, AI and OIDC via Settings → App \{#6--licensekeyaiandoidcvia-settings-app\}
+## Keep one replica \{#replicas\}
 
-Three production-grade secrets live in `app.toml` now, encrypted at rest with `LIBERTY_MASTER_KEY` (AES-256-GCM, `ENC:` prefix). They're edited via the SPA's **Settings → App** screen — **no `.env` edits, no service restart**. Full editor walkthrough: [App settings](../framework/build/settings-app.md).
-
-| Section | What lives there | What happens on save |
-|---|---|---|
-| **License** | Vendor-signed RS256 JWT that unlocks the licensed connectors (Nomasx-1, Nomajde, NomaUBL). | Connector registry rebuilt in place. Licensed connectors that were filtered out at startup reappear; ones the new key no longer covers are dropped. No restart. |
-| **AI Assistant → Anthropic API key** | `sk-ant-…` for Anthropic. Plus every AI knob (model, tool exposure, system prompt, web-fetch allowlist, per-call limits). | Assistant rebuilt; next chat turn uses the new config. |
-| **OpenID Connect (SSO)** | discovery_url, client_id, client_secret, scopes, claim mappings, optional proxy redirect overrides. | OIDC handler rebuilt; next sign-in uses the new config. Active sessions (signed by `LIBERTY_JWT_SECRET`) are unaffected. |
-
-Sensitive fields use the **reveal-to-edit** pattern: while masked, they show dots + a *Replace* button; the wire payload sends `""` so an inadvertent save preserves the on-disk encrypted value. Click *Replace* to enter a new value. See [App settings → Masked secrets](../framework/build/settings-app.md#masked-secrets--the-reveal-to-edit-pattern).
-
-### Why this matters in production
-
-| Before | Now |
-|---|---|
-| License rotation required a `.env` edit + container restart. | UI rotation, no restart, no outage. |
-| Anthropic key rotation required a restart. | UI rotation, next chat turn uses the new key. |
-| OIDC client-secret rotation required a `.env` edit + restart. | UI rotation, no active-session impact. |
-| Secrets sat in `.env` (mode 0600 — still on disk plaintext). | Encrypted at rest in `app.toml` with the install master key. |
-
-### Env-var fallback
-
-For installs that prefer the secret in a secret manager (Kubernetes Secrets, Docker Secrets, Vault), the env-var path still works:
-
-```toml title="app.toml — env-var references resolved at startup"
-[license]
-key = "${LIBERTY_LICENSE_KEY}"
-
-[ai]
-api_key = "${ANTHROPIC_API_KEY}"
-
-[oidc]
-client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"
-```
-
-Set the env vars in the container's environment, restart. The UI's *License* / *AI api_key* / *OIDC client_secret* fields then show as *configured* but **read-only** (the framework doesn't write back to env-var-resolved values). Clear the `${VAR}` references first if you want UI management.
-
-### Local sign-in stays as the fallback
-
-Don't disable local sign-in once OIDC is configured — the `admin` user keeps working when OIDC is down (provider outage, misconfigured client, expired client_secret). The two paths coexist; the SPA shows both on the sign-in screen when OIDC is enabled.
-
----
-
-## 7 — JWT secret rotation
-
-`LIBERTY_JWT_SECRET` signs every access + refresh token. Rotating it **invalidates every outstanding token in one move** — every user is signed out and forced to sign in again.
-
-| When to rotate | Why |
-|---|---|
-| **Incident response** | Suspected leak of the secret, or you need to instantly revoke every session. |
-| **Scheduled rotation** | Optional. If you do it, schedule a maintenance window — users will see a sign-in screen mid-session. |
-
-Otherwise leave it stable across upgrades. The value lives in `.env`; bumping it requires a `docker compose up -d liberty-next` (or `./deploy-swarm.sh`) to pick up the new value.
-
----
-
-## 8 — Master key handling
-
-`LIBERTY_MASTER_KEY` decrypts the `ENC:` values inside every TOML (database passwords, API keys, OIDC client secret in the apps repo). If it changes, every `ENC:` value becomes unreadable — the framework can't open connectors, can't verify the license, won't start.
-
-| Rule | Why |
-|---|---|
-| **MUST stay constant across restarts and upgrades.** | Changing it loses access to every encrypted secret. There is no recovery — you re-enter every connector secret by hand. |
-| **Back it up alongside the volumes.** | A volume restore without the master key is a paperweight. |
-| **Keep it out of git.** | Same threat model as a CA private key. |
-
-`backup.sh` writes a `.env.snapshot` (mode `0600`) into every backup directory — the master key rides along with the volume snapshots. Strip it before off-site sync if your storage policy forbids secrets in backups.
-
----
-
-## 9 — Backups via backup.sh
-
-`backup.sh` tar-snapshots every Liberty named volume. Safe to run while the stack is up — Docker handles read consistency. For a cold-perfect snapshot, `docker compose down` (or `./deploy-swarm.sh --rm`) first.
-
-### Weekly cron
-
-```cron title="/etc/cron.d/liberty-backup"
-0 3 * * 0  cd /opt/liberty-next/release && ./backup.sh /mnt/nas/liberty --keep 60
-```
-
-`--keep 60` deletes backups older than 60 days from the destination. Pair with off-site sync of `/mnt/nas/liberty` for disaster recovery.
-
-What ships in each run:
-
-| File | Layout |
-|---|---|
-| `liberty-config.tar.gz` | Both. |
-| `pg-data.tar.gz`, `pgadmin-data.tar.gz`, `portainer-data.tar.gz` | Full / Swarm only. |
-| `.env.snapshot` *(mode 0600)* | Carries the master key + every other secret. |
-| `docker-compose.*.yml` | The compose file(s) in this directory at backup time. |
-
-Restore walk-through: [Docker → Restore one volume](./docker.md#backups).
-
----
-
-## 10 — Postgres tuning for production
-
-The bundled Postgres in `docker-compose.full.yml` ships with two settings that trade durability for throughput. Both are fine for the typical ETL / app-server workload; flip them for strict-durability use cases.
-
-| Setting | Ships as | Tradeoff | Flip to |
-|---|---|---|---|
-| `wal_level` | `minimal` | Disables physical replication, PITR, logical decoding. Fine for single-instance + nightly `backup.sh`. | `replica` for hot standby / PITR. |
-| `synchronous_commit` | `off` | A hard crash can lose up to ~1 s of committed writes. | `on` for financial / audit workloads. |
-| `max_wal_senders` | `0` | No replication slots. | `≥ 1` if you switch `wal_level=replica`. |
-
-Tuning lives in the `postgres` service `command:` block in `docker-compose.full.yml` — inline comments call out each setting. Edit there, then `docker compose up -d pg` (or `./deploy-swarm.sh`).
-
-RAM-based sizing for `shared_buffers` / `work_mem`: see [Docker → Postgres tuning](./docker.md#full).
-
----
-
-## 11 — Comment out the Postgres host port
-
-`docker-compose.full.yml` exposes Postgres on the host:
-
-```yaml title="docker-compose.full.yml (default)"
-pg:
-  ports:
-    - "5432:5432"
-```
-
-Useful for connecting DBeaver from your laptop while bootstrapping the install. A production smell once the install is live — you've widened the attack surface to anyone who can reach the host on port 5432. Comment the block out:
-
-```yaml title="docker-compose.full.yml (production)"
-pg:
-  # ports:
-  #   - "5432:5432"
-```
-
-`docker compose up -d pg` (or `./deploy-swarm.sh`) drops the host port. pgAdmin still reaches Postgres over the internal `liberty-network` network — nothing user-facing changes.
-
----
-
-## 12 — Multi-replica caveat
-
-`liberty-next` defaults to `replicas: 1` in `docker-compose.swarm.yml`. **Don't bump it yet.**
-
-| Concern | Detail |
-|---|---|
-| **In-process Socket.IO state** | Live dashboards, the AI chat, and the job-status stream all push over Socket.IO. Two replicas without a shared backplane = clients sticky-routed to replica A miss events emitted from replica B. |
-| **No Redis adapter built in (yet).** | The fix is a Redis pub/sub adapter for Socket.IO. Not yet wired. Track the roadmap. |
-| **Sticky cookies help but aren't a substitute.** | Traefik can set a `liberty_sticky` cookie to keep one browser on one replica. That hides the symptom for individual users but doesn't fix cross-replica fan-out (a job triggered on A doesn't notify users sticky-routed to B). |
-
-Scale `liberty-next` once Redis is wired in. Until then, vertical scale (give the single replica more CPU / RAM) is the supported path. Stateful services (`pg`, `pgadmin`, `portainer`) stay at `replicas: 1` regardless — none have built-in replication.
-
----
-
-## 13 — Docker socket exposure
-
-Two services in the bundled stack mount the host Docker socket:
-
-| Service | Why | Risk |
-|---|---|---|
-| **Traefik** *(Compose: docker provider)* | Reads container labels to wire routes. Read-only mount. | A compromised Traefik can enumerate every container — but cannot start / stop / pull. |
-| **Portainer** | Full Docker UI — start, stop, pull, exec, inspect. Read-write mount. | A compromised Portainer = root on the Docker host. |
-
-Both are privileged surfaces. Two hardening moves:
-
-1. **Restrict admin access** to both. Traefik dashboard behind BasicAuth (already wired). Portainer behind a strong password + 2FA (Portainer Settings → Authentication).
-2. **Remove the portainer service entirely** if your ops standard doesn't allow `/var/run/docker.sock` in a long-lived container. Delete the `portainer` service block from `docker-compose.full.yml` (or `docker-compose.swarm.yml`), redeploy. You lose the GUI; `docker compose` / `docker service` cover the same operations from the shell.
-
-For Swarm, Traefik uses the swarm provider (`--providers.swarm`) which only managers expose — workers don't carry the socket. Compose has no equivalent constraint.
-
----
-
-## 14 — Log routing
-
-| Source | Where | How to ship |
-|---|---|---|
-| **liberty-next** | stdout. | `docker compose logs -f liberty-next` / `docker service logs -f liberty_liberty-next` / journald (via the runtime's log driver). |
-| **Postgres** | stderr → Docker `json-file` driver (rotated, 100 MB × 3 by default in the bundle). | `docker compose logs -f pg`, or switch the daemon / per-service logging driver to ship to your aggregator. |
-| **Traefik** | stdout. | Same as liberty-next. |
-| **pgAdmin / Portainer** | stdout. | Same. |
-
-For Loki / ELK / Datadog / Splunk aggregation: configure the **container runtime's logging driver** (Docker has `loki`, `fluentd`, `journald`, `gelf`, `awslogs`, etc.), not anything inside the framework. The framework writes one JSON-friendly line per event to stdout and lets the runtime own the transport.
-
-```yaml title="docker-compose.full.yml (logging override example)"
-services:
-  liberty-next:
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://loki.example.com:3100/loki/api/v1/push"
-        loki-batch-size: "400"
-```
-
-For Swarm, the same `logging:` block applies — Swarm honours it per-service.
-
----
-
-## 15 — Healthchecks
-
-liberty-next ships a built-in healthcheck wired in both compose files:
-
-```yaml title="docker-compose.full.yml (excerpt)"
-healthcheck:
-  test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/info"]
-  interval: 30s
-  timeout: 5s
-  start_period: 40s
-  retries: 3
-```
-
-| Field | Value | Why |
-|---|---|---|
-| `test` | `GET /info` | Lightweight — no DB call, no auth. |
-| `interval` | `30s` | Standard cadence. |
-| `timeout` | `5s` | Generous — `/info` returns in milliseconds. |
-| `start_period` | `40s` | Covers the first-boot `init-db` run. |
-| `retries` | `3` | One transient blip doesn't flip the status. |
-
-No need to add a healthcheck — the bundled one is correct. `docker compose ps` and `docker service ps` both surface the `healthy` / `unhealthy` state Traefik uses to gate traffic.
-
----
-
-## 16 — Monitoring
-
-Beyond the container healthcheck, the framework exposes deeper monitoring endpoints — useful for external load balancers, Kubernetes probes, and uptime-checker services.
-
-| Endpoint | Use |
-|---|---|
-| `GET /info` | Liveness — container healthcheck and LB liveness probe. |
-| `GET /api/health` | Readiness — exercises DB connectivity. Use for LB readiness probe. |
-| `GET /api/license` | License-verified probe — confirms the license JWT is still accepted. |
-
-Full surface: [Monitoring → Health endpoints](../monitoring/health-endpoints.md).
-
----
-
-## Hardening checklist
-
-Walk this list before exposing the install to users.
-
-| # | Check | Done? |
-|---|---|---|
-| 1 | Layout chosen — Full or Swarm. Not Light. | |
-| 2 | `.env` reviewed; no literal `$` in passwords. | |
-| 3 | `LIBERTY_IMAGE_TAG` pinned to a specific version. | |
-| 4 | TLS wired via Traefik + Let's Encrypt. HTTP → HTTPS redirect on. | |
-| 5 | Traefik dashboard password changed (bcrypt). | |
-| 5 | pgAdmin email + password changed. | |
-| 5 | liberty-next `admin` password changed via `liberty-admin set-password`. | |
-| 6 | OIDC wired (if SSO is in scope). Local `admin` still works as fallback. | |
-| 7 | `LIBERTY_JWT_SECRET` is the install-generated value (don't rotate without reason). | |
-| 8 | `LIBERTY_MASTER_KEY` backed up out-of-band; documented in the runbook. | |
-| 9 | `backup.sh` wired into cron, destination off-host, `--keep` set. | |
-| 10 | Postgres `wal_level` / `synchronous_commit` reviewed against the workload. | |
-| 11 | Postgres `ports: 5432:5432` commented out. | |
-| 12 | `liberty-next` left at `replicas: 1` (until Redis backplane lands). | |
-| 13 | Portainer admin account hardened (or service removed). | |
-| 14 | Log driver configured for aggregation (if applicable). | |
-| 15 | Container healthcheck reports `healthy`. | |
-| 16 | External monitor (Pingdom / UptimeRobot / k8s probe) points at `/api/health`. | |
-
----
-
-## What's next
-
-- [Docker](./docker.md) — the Full and Swarm layouts this page hardens.
-- [Traefik](./traefik.md) — deep TLS walk-through, DNS-01, multi-app routing.
-- [Upgrading](./upgrading.md) — the `pull && up -d` upgrade procedure.
-- [Monitoring → Health endpoints](../monitoring/health-endpoints.md) — LB / Kubernetes probe surface.
-- [Deploy prebuilt apps](./deploy-prebuilt-apps.md) — NomaUBL / Nomasx-1 / Nomajde on top of the hardened stack.
+Live updates (the notification bell, record locks, the assistant's answers) are held in the server process, and the sign-in throttle counts per process. Run **one** `liberty-next` instance: several replicas would show users different states.

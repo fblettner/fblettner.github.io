@@ -1,229 +1,187 @@
 ---
 title: Planifications
-description: "Syntaxe cron de Nomaflow, règle de fuseau horaire, vue calendrier qui prévisualise les prochains déclenchements de toutes les tâches, et modèles adoptés par la plupart des installations."
-keywords: [Nomaflow, cron, planification, fuseau horaire, calendrier, aperçu déclenchement, récurrence, Liberty Framework]
+description: "Quand s'exécutent les tâches Nomaflow : la syntaxe cron à cinq zones et la numérotation des jours de la semaine, les fuseaux horaires, l'aperçu des prochaines exécutions, la vue Planning, les préréglages planifiables, et les planifications manquées enregistrées comme exécutions MISSED."
+keywords: [Nomaflow, cron, planification, fuseau horaire, vue Planning, préréglages, planifications manquées, MISSED, tolérance, Liberty Next]
 ---
 
 # Planifications
 
-Une **planification** détermine quand une tâche se déclenche automatiquement. Tout le framework parle **cron** — une expression à cinq champs qui sert de vocabulaire de planification par défaut depuis quarante ans. Cette page parcourt la syntaxe, la règle de fuseau horaire, l'aperçu en direct affiché par l'éditeur, et la **vue calendrier** qui présente les prochains déclenchements de toutes les tâches.
-
-Pour le modèle mental global (tâche → planification → exécution), voir [Concepts](../concepts.md).
+Une tâche s'exécute selon sa propre **planification** — une expression cron et un fuseau horaire — et selon celles de ses **préréglages**. Une tâche sans planification ne s'exécute que par un clic sur **Exécuter**.
 
 ---
 
-## Le cron en un coup d'œil
+## Le cron dans Nomaflow \{#cron\}
 
-Une expression cron comporte **cinq champs obligatoires** et un sixième facultatif pour les secondes :
+Une planification comporte **cinq zones** :
 
 ```
 ┌──── minute (0-59)
 │ ┌── heure (0-23)
 │ │ ┌── jour du mois (1-31)
 │ │ │ ┌── mois (1-12)
-│ │ │ │ ┌── jour de semaine (0=dimanche, 6=samedi)
-│ │ │ │ │ ┌── seconde (facultatif, 0-59)
+│ │ │ │ ┌── jour de la semaine (mon-sun)
 0 2 * * *
 ```
 
-Les modèles les plus courants :
-
-| Objectif | Cron |
-|---|---|
-| Chaque minute (réservé au test rapide, pas à l'état stable). | `* * * * *` |
-| Toutes les 5 minutes. | `*/5 * * * *` |
-| Chaque heure, à l'heure pile. | `0 * * * *` |
-| Chaque heure à la minute :15. | `15 * * * *` |
-| Chaque jour à 02 h 00. | `0 2 * * *` |
-| Chaque jour à 02 h 30. | `30 2 * * *` |
-| Chaque jour ouvré (lun-ven) à 09 h 00. | `0 9 * * 1-5` |
-| Chaque lundi à 09 h 30. | `30 9 * * 1` |
-| Le 1ᵉʳ de chaque mois à minuit. | `0 0 1 * *` |
-| Chaque trimestre (1ᵉʳ de janv./avril/juil./oct.) à 03 h 00. | `0 3 1 1,4,7,10 *` |
-| Deux fois par jour (08 h 00 et 20 h 00). | `0 8,20 * * *` |
-
----
-
-## Les quatre opérateurs
-
 | Opérateur | Signification | Exemple |
 |---|---|---|
-| **`*`** | « toute valeur dans la plage ». | `* * * * *` = chaque minute. |
-| **`,`** | Liste de valeurs précises. | `0 6,12,18 * * *` = à 06 h 00, 12 h 00, 18 h 00. |
-| **`-`** | Plage. | `0 9 * * 1-5` = jours ouvrés à 09 h 00. |
-| **`/`** | Pas. | `*/10 * * * *` = toutes les 10 minutes ; `0 */2 * * *` = toutes les deux heures à l'heure pile. |
+| `*` | toutes les valeurs | `* * * * *` — chaque minute |
+| `,` | une liste | `0 6,12,18 * * *` — à 06:00, 12:00 et 18:00 |
+| `-` | un intervalle | `0 9 * * mon-fri` — en semaine à 09:00 |
+| `/` | un pas | `*/10 * * * *` — toutes les 10 minutes |
 
-Ils se combinent : `5,15,25,35,45,55 9-17 * * 1-5` = toutes les 10 minutes entre 09 h 00 et 17 h 00, jours ouvrés uniquement. (Équivalent plus propre : `*/10 9-17 * * 1-5`.)
+:::warning[Écrire les jours de la semaine en toutes lettres]
+Le planificateur numérote les jours de **0 = lundi** à **6 = dimanche** — contrairement au cron Unix, où 0 désigne le dimanche. `0 9 * * 1` s'exécute donc le **mardi**. Écrire `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`) : les noms ne laissent aucun doute, et l'aperçu sous le champ confirme les jours.
+:::
+
+Quand le jour du mois et le jour de la semaine sont tous deux renseignés, **les deux** doivent correspondre : `0 9 15 * mon` s'exécute un 15 qui tombe un lundi.
+
+| Besoin | Cron |
+|---|---|
+| Toutes les 5 minutes | `*/5 * * * *` |
+| Chaque heure à :15 | `15 * * * *` |
+| Chaque jour à 02:00 | `0 2 * * *` |
+| En semaine à 09:00 | `0 9 * * mon-fri` |
+| Chaque lundi à 06:00 | `0 6 * * mon` |
+| Le 1er de chaque mois à 07:00 | `0 7 1 * *` |
+| Chaque trimestre (1er janvier, avril, juillet, octobre) à 03:00 | `0 3 1 1,4,7,10 *` |
 
 ---
 
-## Jour du mois et jour de semaine
+## Dans l'éditeur de tâche \{#editor\}
 
-Si **les deux** champs jour-du-mois et jour-de-semaine sont contraints, le cron se déclenche dès qu'**un** des deux correspond — *pas* les deux à la fois. C'est le comportement traditionnel du cron Unix, et la seule subtilité à mémoriser.
+Le champ **Planification (cron)** de l'éditeur propose des choix tout faits — **Manuelle**, **Horaire**, **Quotidienne**, **Hebdomadaire**, **Mensuelle** — et un cron libre. Sous le champ, **Prochaines exécutions** liste les cinq prochaines exécutions dans le fuseau de la tâche ; la liste est recalculée peu après chaque modification, et une expression invalide y est signalée.
 
-| Cron | Quand il se déclenche |
-|---|---|
-| `0 9 15 * *` | Le 15 de chaque mois à 09 h 00. |
-| `0 9 * * 1` | Chaque lundi à 09 h 00. |
-| `0 9 15 * 1` | Le 15 de chaque mois **OU** tout lundi — à 09 h 00. |
-
-Pour « uniquement le lundi 15 », impossible avec le cron seul — déclenchez la tâche les lundis et filtrez dans une première étape :
-
-```python
-# étape python : ne continuer que le 15
-from datetime import date
-def main(**kwargs):
-    if date.today().day != 15:
-        return {"skipped": "not the 15th"}
-    # ... vrai traitement
-```
+**Fuseau horaire** est un nom IANA (`Europe/Paris`, `America/New_York`). La planification est évaluée dans ce fuseau, heure d'été comprise : `0 2 * * *` en `Europe/Paris` s'exécute à 02:00 heure de Paris toute l'année.
 
 ---
 
-## Fuseaux horaires
+## La vue Planning \{#schedule-view\}
 
-Le cron est évalué dans le **fuseau choisi sur la tâche**, et non dans le fuseau de l'hôte du framework. Ce point importe quand l'hôte tourne en UTC mais que l'activité métier se déroule à Paris (ou Sydney, ou Mumbai).
+**Planning**, dans la barre d'outils des Tâches, liste toutes les planifications, par prochaine exécution :
 
-| Réglage | Quand la tâche se déclenche |
+<svg viewBox="0 0 1200 390" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sch-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sch-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sch-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="370" rx="14" fill="url(#sch-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Planning</text>
+  <text x="240" y="64" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Toutes les tâches, par prochaine exécution</text>
+  <text x="240" y="92" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">À VENIR (4)</text>
+  <rect x="240" y="100" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TÂCHE</text>
+  <text x="500" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PLANIFICATION</text>
+  <text x="700" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCHAINE EXÉCUTION</text>
+  <text x="850" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DERNIÈRE EXÉCUTION</text>
+  <rect x="240" y="132" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="148.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load</text>
+  <text x="500" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <text x="700" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 02:00</text>
+  <rect x="850" y="137.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="148.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="240" y="162" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="178.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load · fin de mois</text>
+  <text x="500" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
+  <text x="700" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">01/11 06:00</text>
+  <text x="850" y="178.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="240" y="192" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="208.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">nomajde-daily-sync</text>
+  <text x="500" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">30 2 ∗ ∗ ∗</text>
+  <text x="700" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 02:30</text>
+  <rect x="850" y="197.0" width="46" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="873.0" y="208.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">MISSED</text>
+  <rect x="240" y="222" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="238.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">config-versions-purge</text>
+  <text x="500" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 3 ∗ ∗ ∗</text>
+  <text x="700" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 03:00</text>
+  <rect x="850" y="227.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="238.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="240" y="274" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MANUELLES / DÉSACTIVÉES (2)</text>
+  <rect x="240" y="282" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TÂCHE</text>
+  <text x="500" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PLANIFICATION</text>
+  <text x="700" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCHAINE EXÉCUTION</text>
+  <text x="850" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DERNIÈRE EXÉCUTION</text>
+  <rect x="240" y="314" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">nomasx1-init-db</text>
+  <text x="500" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="700" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="850" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="240" y="344" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">reporting-refresh (désactivé)</text>
+  <text x="500" y="360.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
+  <text x="700" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="850" y="349.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="880.0" y="360.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="10" y="130" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une ligne par planification</text>
+  <text x="20" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le cron de la tâche + chaque préréglage</text>
+  <line x1="210" y1="147.0" x2="260" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Planification manquée</text>
+  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">enregistrée en exécution MISSED</text>
+  <line x1="1000" y1="207.0" x2="920" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ne se déclenche pas</text>
+  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">manuelle ou désactivée</text>
+  <line x1="210" y1="317.0" x2="280" y2="352" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+</svg>
+
+| Groupe | Contenu |
 |---|---|
-| `0 2 * * *`, fuseau `UTC` | 02 h 00 UTC chaque jour — soit 03 h 00 / 04 h 00 à Paris selon l'heure d'été. |
-| `0 2 * * *`, fuseau `Europe/Paris` | 02 h 00 à Paris chaque jour — soit 00 h 00 / 01 h 00 UTC selon l'heure d'été. |
+| **À venir** | Une ligne par planification active — celle de la tâche, et une par préréglage planifié (le nom du préréglage s'affiche à côté de la tâche). Colonnes : Tâche, Planification, Prochaine exécution, Dernière exécution. |
+| **Manuelles / désactivées** | Les tâches sans planification, et les planifications définies mais désactivées — marquées *(désactivé)*. |
 
-Le **passage à l'heure d'été** est géré correctement quand un nom IANA est utilisé : le planificateur saute ou duplique le déclenchement cron au moment du saut d'horloge murale. Avec un décalage fixe (`Etc/GMT+1`), l'heure d'été est ignorée — la tâche se déclenche au même instant UTC toute l'année.
+---
 
-:::tip[Choisir un fuseau horaire]
-Utilisez le nom IANA de la zone d'exploitation (`Europe/Paris`, `America/New_York`, `Asia/Tokyo`). Réservez `UTC` aux tâches où l'heure d'horloge murale n'a réellement pas d'importance (un nettoyage horaire, un test rapide).
+## Préréglages planifiables \{#schedulable-presets\}
+
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…** (fenêtre en anglais). Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+
+Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
+
+La planification d'un préréglage ne dépend pas du switch **Activée** de la tâche : un préréglage activé s'exécute même quand la planification propre de la tâche est arrêtée.
+
+:::info[Cloner une tâche]
+**Cloner** crée une copie désactivée, sans la planification propre de la tâche, mais les préréglages gardent leurs planifications et leur état *Planning activé* : les vérifier dans la copie avant de l'enregistrer.
 :::
 
 ---
 
-## L'aperçu en direct
+## Planifications manquées \{#missed\}
 
-L'éditeur de tâche affiche les **trois prochains horaires de déclenchement** sous le champ cron au fur et à mesure de la saisie. Il se rafraîchit à chaque frappe, donc une expression mal formée se signale immédiatement (« invalid cron »).
+Une exécution peut ne pas avoir lieu : le serveur était arrêté à ce moment-là, ou l'exécution précédente de la même tâche était encore en cours. Nomaflow recherche ces manques et enregistre chacun comme une exécution à l'état **MISSED**, avec l'heure attendue, dans l'historique des exécutions et comme dernière exécution de la tâche. Une règle sur l'événement `missed` peut prévenir quelqu'un — voir [Notifications](../notifications.md).
 
-| Cron | Aperçu |
-|---|---|
-| `0 2 * * *` (fuseau Paris, aujourd'hui mercredi 17 h 00 à Paris) | jeu 02 h 00 · ven 02 h 00 · sam 02 h 00 |
-| `30 9 * * 1` | lun prochain 09 h 30 · le lundi suivant 09 h 30 · etc. |
-| `*/5 * * * *` | dans 4 minutes · dans 9 minutes · dans 14 minutes |
-| `0 25 * * *` | *(invalide — heure 25)* |
+Le panneau **Planifications manquées** de la page des Tâches (à côté du panneau de rétention) affiche la politique et le dernier contrôle, et **Contrôler maintenant** lance aussitôt un contrôle.
 
-Quand l'aperçu indique autre chose que ce qui était attendu, vous avez détecté un bogue **avant** d'enregistrer la tâche.
-
----
-
-## La vue calendrier
-
-La page **Tâches** comporte un bouton **📅 Vue calendrier** dans la barre d'outils. Il ouvre un calendrier de tous les prochains déclenchements de toutes les tâches activées — utile quand vous avez dix tâches cron et souhaitez repérer les collisions.
-
-<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <linearGradient id="sv-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-  </defs>
-  <rect x="20" y="20" width="960" height="320" rx="14" fill="url(#sv-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomaflow · Planification</text>
-  <text x="40" y="66" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Prochains déclenchements sur 7 jours pour toutes les tâches activées.</text>
-  <line x1="20" y1="82" x2="980" y2="82" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="60" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LUN 27</text>
-  <rect x="60" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="68" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="60" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="68" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="60" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="68" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <text x="260" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MAR 28</text>
-  <rect x="260" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="268" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="260" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="268" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="260" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="268" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <text x="460" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MER 29</text>
-  <rect x="460" y="118" width="180" height="22" rx="4" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="468" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="460" y="144" width="180" height="22" rx="4" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="468" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:45 · nomasx1-security-1</text>
-  <rect x="460" y="170" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="468" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <text x="468" y="218" fill="#f59e0b" fontSize="10" fontFamily="system-ui, sans-serif">⚠ deux tâches lourdes à 02 h 30 / 02 h 45 — risque de collision</text>
-
-  <text x="660" y="108" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JEU 30</text>
-  <rect x="660" y="118" width="180" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="668" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">02:30 · nomajde-daily-sync</text>
-  <rect x="660" y="144" width="180" height="22" rx="4" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="668" y="159" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">06:00 · reporting-refresh</text>
-  <rect x="660" y="170" width="180" height="22" rx="4" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="668" y="185" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">09:00 · activity-log-1</text>
-
-  <rect x="40" y="252" width="920" height="72" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="58" y="276" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LÉGENDE</text>
-  <rect x="58" y="288" width="12" height="12" rx="2" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="76" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">ETL</text>
-  <rect x="120" y="288" width="12" height="12" rx="2" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="138" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Reporting</text>
-  <rect x="206" y="288" width="12" height="12" rx="2" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="224" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Audit</text>
-  <rect x="276" y="288" width="12" height="12" rx="2" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.40)"/>
-  <text x="294" y="299" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Collision signalée</text>
-</svg>
-
-Chaque pastille représente un déclenchement — un clic dessus mène à la fiche de la tâche dans le catalogue. La couleur des pastilles vient des étiquettes (le calendrier utilise la première étiquette de la tâche). Les heures où deux tâches lourdes s'exécuteraient en même temps sont signalées par un avertissement — Nomaflow n'impose pas d'exécution sérielle, mais le calendrier aide à éviter les chevauchements.
-
----
-
-## Presets planifiables \{#schedulable-presets\}
-
-Un **preset** — un jeu de paramètres d'exécution enregistré (params, `op_kwargs`, activations de steps, niveau de log) — peut porter son propre **cron + fuseau horaire**. Le planificateur déclenche alors la tâche selon cette planification *avec les paramètres du preset* : une même tâche tourne sur plusieurs planifications avec des entrées différentes, sans clonage.
-
-Chaque preset a sa propre bascule **d'activation**, **indépendante du `Enabled` de la tâche** : un preset activé se déclenche même quand la planification propre de la tâche est coupée (le `Enabled` de la tâche ne pilote que son propre cron). La vue calendrier liste **une ligne par planification** — le cron de la tâche plus celui de chaque preset — et signale un déclencheur planifié mais désactivé, pour qu'on voie tout de suite pourquoi il ne part pas.
-
-Pratique pour le cas « même tâche, fenêtres différentes » — un run complet nocturne et un incrémental horaire du même ETL, chacun un preset avec son cron et ses paramètres.
-
----
-
-## Modèles adoptés par la plupart des installations
-
-| Charge de travail | Planification | Raison |
+| Réglage | Défaut | Signification |
 |---|---|---|
-| **ETL nocturnes** | de `0 2 * * *` à `0 4 * * *` | Hors heures de pointe. Décaler quand on en a plusieurs — par ex. ETL A à 02 h 00, ETL B à 02 h 30, ETL C à 03 h 00. |
-| **Synchronisations horaires** | `15 * * * *` | Éviter `0 * * * *` — tous les autres logiciels du bâtiment se déclenchent à l'heure pile. |
-| **Audits hebdomadaires** | `0 6 * * 1` | Le lundi matin pour que le rapport soit prêt à l'arrivée des humains. |
-| **Rapports mensuels** | `0 7 1 * *` | Tôt le 1ᵉʳ, avant l'affluence matinale. |
-| **Sondage continu** | `*/5 * * * *` | 5 minutes est le minimum en régime stable — des cadences plus fines sollicitent excessivement le framework. |
-| **Tests rapides** | `* * * * *` | À n'activer que temporairement — laisse beaucoup de lignes d'exécution en 24 heures. |
+| **Contrôle** | activé | Active ou désactive le contrôle. |
+| **Tolérance (min)** | 10 | Une exécution lancée dans ce délai après l'heure attendue — planifiée ou manuelle — compte pour elle. |
+| **Intervalle de contrôle (min)** | 5 | La fréquence du contrôle. |
+| **Fenêtre arrière (heures)** | 24 | La profondeur maximale d'un contrôle. Une tâche qui ne s'est jamais exécutée n'est contrôlée qu'à partir du démarrage du planificateur. |
+
+La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manquée n'est enregistrée qu'une fois : un redémarrage ne la signale pas de nouveau.
 
 ---
 
-## Anti-modèles
-
-| À éviter | Raison |
-|---|---|
-| Planifier toutes les tâches à `0 0 * * *` (minuit). | Plusieurs tâches lourdes démarrant au même instant peuvent saturer le framework. Décalez de 15 à 30 minutes. |
-| Utiliser `* * * * *` en régime permanent. | Une exécution par minute remplit vite l'historique et correspond rarement à un besoin métier réel. |
-| Définir une planification quand la tâche est pilotée par l'opérateur. | Laissez-la en manuel uniquement — le catalogue l'affiche toujours, ▶ Lancer fonctionne toujours, aucun déclenchement surprise à 3 h. |
-| Mélanger jour-du-mois et jour-de-semaine. | La sémantique OU du cron réservera des surprises. Choisissez l'un ou l'autre. |
-| Coder en dur les décalages d'heure d'été. | Utilisez le nom IANA du fuseau ; l'heure d'été est gérée. |
-
----
-
-## Désactiver une planification temporairement
-
-Deux façons de mettre en pause les déclenchements automatiques d'une tâche sans perdre la configuration :
+## Suspendre une planification \{#pause\}
 
 | Option | Effet |
 |---|---|
-| **Bascule d'activation désactivée** sur la fiche du catalogue. | Planification ignorée. ▶ Lancer manuel toujours opérationnel. Réversible d'un clic. |
-| **Vider le cron** dans l'éditeur. | Planification supprimée entièrement. ▶ Lancer manuel toujours opérationnel. L'état « manuel uniquement » est permanent tant qu'une planification n'a pas été réajoutée. |
-
-Pour une fenêtre de maintenance ou un gel de mise en production, la **bascule d'activation** est l'outil adapté — peu de remous sur la configuration, totalement réversible.
+| Le switch **Activée** de la tâche dans la page des Tâches | La planification propre de la tâche s'arrête. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
+| **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
+| **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
 
 ---
 
-## Pour aller plus loin
+## Conseils \{#tips\}
 
-- [Créer une tâche](./create.md) — l'éditeur de tâche complet (le champ planification se trouve dans la section ② Planification).
-- [Catalogue](./catalog.md) — la page Tâches, où la pastille de planification et l'indication de prochaine exécution apparaissent.
-- [Administration](../administration.md) — installation multi-réplicas, verrou du planificateur, comportement au redémarrage.
+- Étaler les tâches lourdes sur la nuit (02:00, 02:30, 03:00) plutôt que de toutes les lancer à minuit.
+- Préférer `15 * * * *` à `0 * * * *` pour les tâches horaires : beaucoup d'autres systèmes s'exécutent à l'heure pile.
+- Utiliser un nom de fuseau horaire, jamais un décalage fixe, pour suivre l'heure d'été.
+- Vérifier l'aperçu **Prochaines exécutions** après chaque modification : c'est le moyen le plus rapide de repérer un mauvais jour.

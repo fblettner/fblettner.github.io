@@ -8,7 +8,7 @@
     "description": "The label for category 'Installation' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Installation.link.generated-index.description": {
-    "message": "Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.",
+    "message": "Installer Liberty Next avec Docker ou Python, ajouter les applications sous licence et le HTTPS, l'exploiter au quotidien avec une seule commande, le mettre à jour, revenir en arrière, et le contrôler avant la mise en production.",
     "description": "The generated-index page description for category 'Installation' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Nomasx-1": {

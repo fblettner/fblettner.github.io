@@ -169,17 +169,17 @@ Clicking a row opens a three-tab editor on the right. The tabs are the same for 
 
 ### Connection fields
 
+The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
+
 | Field | Effect |
 |---|---|
-| **Name** | Identifier used everywhere — the URL, the permission code (`sql:<name>:*`), the AI tool name. Short, kebab-case. |
-| **App** | Dropdown of registered apps. Drives the connector's namespace and the workspace it appears in. |
-| **Type** | `SQL` here. Changing the type re-shapes the form. |
-| **Pool** | Dropdown of pools defined under *Settings → Pools*. The connector inherits the pool's URL, credentials and dialect. |
-| **Description** | Free text. Shown on the catalogue, as the tooltip on screens that pick this connector, and — crucially — in the **AI assistant tool description**. A two-sentence summary in the user's language goes a long way. |
-| **Licensed** | When *on*, the connector loads only when the [license key](./build/secure/license-key.md) lists its identifier. Used by Nomana-IT to gate vendor connectors; customer connectors leave it off. |
-| **Expose to AI assistant** | When *on*, the connector's read queries become tools the AI assistant can pick. Write queries are excluded by default. See [AI assistant](./ai-assistant.md). |
-
-The **Test connection** button (top right) hits the pool with a `SELECT 1` and reports success / failure inline — useful to confirm the pool is reachable before adding queries.
+| **Pool** | The pool the queries run on — a dropdown of the pools defined in *Settings → Pools*. The connector takes the pool's address, credentials and dialect. |
+| **Pools** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
+| **Show In Switcher** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
+| **Home** | The menu entry opened when the application is picked. |
+| **Licensed** | The connector loads only when the [licence key](./build/secure/license-key.md) covers it. |
+| **Max Rows** | Default row limit of a read; otherwise the pool's, then 1 000. A screen's or a request's limit wins. |
+| **Dd Prefix** | Length of the table prefix in column names (JD Edwards: `2`, so `ABCO`, `MCCO` and `SDCO` all carry the dictionary item `CO`). Used by a role's [data scope](./build/secure/roles-and-permissions.md#data-scope). `0`: column names are the items. |
 
 ### Query editor
 
@@ -216,28 +216,27 @@ A SQL query can carry two placeholder tokens that let the same text run against 
 
 The two are position-independent: `#SCHEMA.…#` prefixes the table, `#DBLINK.…#` suffixes it. The same query works locally (both mappings empty), against a remote schema without a link (schema mapped, dblink empty) or via a database link (both mapped) — the pool decides which shape to emit.
 
-A non-empty DB-link value must be a bare `@link` reference (starts with `@`, no whitespace, no semicolons). Anything else is refused at pool load — a config-injection guard against a DB-link value that would try to smuggle SQL past the parser.
+A non-empty DB-link value must be a bare `@link` reference (starts with `@`, letters, digits, `_`, `$`, `#` and `.` only). Anything else makes the query fail when it runs — a guard against a DB-link value that would try to smuggle SQL into the statement.
 
-### Thick-mode fetch for LOBs over a DB link
+### Oracle thick mode \{#oracle-thick\}
 
-The async database driver is *thin*-mode by default — no OCI client needed, everything runs on the event loop. Fetching a **LOB across a DB link** is the one case thin mode can't cover: the LOB comes back as a remote locator that the thin driver can't materialise, so the call fails with `ORA-22992` / `ORA-03149`.
+The Oracle driver runs in *thin* mode by default: no Oracle client needed, every call on the server's event loop. Two cases need the *thick* mode, which goes through the Oracle Instant Client:
 
-A per-connector **Thick LOB** toggle switches the read for that connector into a short-lived subprocess that turns on the thick (OCI) client *there and only there* — the subprocess fetches the rows with the LOBs materialised as bytes and returns them; the main app process stays thin and async.
+- **Native Network Encryption** (NNE) required by the database — thin mode fails with `DPY-3001`;
+- reading a **LOB across a database link** — thin mode fails with `ORA-22992` / `ORA-03149`.
 
-- The Oracle Instant Client is bundled in the framework's Docker image (amd64 and arm64), so nothing extra to install for a container deployment.
-- Bare-metal installs need the Instant Client on the host (`ORACLE_HOME` / `LD_LIBRARY_PATH` set).
-- Enable Thick LOB only on the connectors that need it — a LOB read across a DB link. Everything else stays on the async driver.
+Tick **Oracle thick mode** in **Settings → App** (section *App*) and restart the server: every Oracle pool then runs in thick mode — the setting applies to the whole server, not to one pool. PostgreSQL pools are not affected. The Instant Client is included in the Docker image (amd64 and arm64); a Python install needs it on the host.
 
 ---
 
 ### Multi-pool connectors \{#multi-pool\}
 
-One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in *Settings → Connectors → Settings…*); the same named queries and the same screens then run against any pool in the set.
+One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in the connector's **Settings** mode); the same named queries and the same screens then run against any pool in the set.
 
 The pool is chosen at runtime:
 
-- **In the app** — when the current app spans a multi-pool connector, the app switcher shows a **Pool** picker. Picking a pool re-runs that app's screens against the chosen instance. The choice is per app and persisted, and it applies only to the connectors that actually declare that pool — an app's other (single-pool) connectors keep their default rather than erroring.
-- **In jobs** — the `sql_copy` and `sql_query` [steps](../nomaflow/steps.md) take `source_pool` / `target_pool` to target a specific instance without a new connector.
+- **In the app** — when the current app spans a multi-pool connector, a **Pool** picker appears in the sidebar, under the application picker (*Default* is the connector's own pool). Picking a pool re-runs that app's screens against the chosen instance. The choice is kept per app in the browser, and it applies only to the connectors that declare that pool — an app's other (single-pool) connectors keep their default rather than erroring.
+- **In jobs** — a `sql_copy` step takes `pool` in its `source` or `target` block, a `sql_query` step takes `pool`, to target a specific instance without a new connector ([steps](../nomaflow/steps.md)). These keys are set in `jobs.toml`; the step editor does not show them.
 
 The reachable set is the default `pool` plus `pools`; a request or a job can never reach a pool outside it, and only pool **names** reach the picker — never a URL or credentials. A connector with just a `pool` behaves exactly as before.
 

@@ -134,7 +134,8 @@ Click **＋ Add user**. The User editor opens with every field empty.
 | **Password** | yes (for new users) | At least 8 characters. Stored as an Argon2id hash, never readable back. Leave blank on edit to keep the current password. |
 | **Roles** | no | Chip picker — type or pick from the dropdown. The dropdown lists every role configured under the Roles tab. |
 | **Active** | yes (default on) | When off, the user can't sign in; existing sessions die on next token refresh. |
-| **Superuser** | no | When on, bypasses every permission check. Use sparingly. |
+| **Superuser** | no | When on, bypasses every permission check and every data scope. Use sparingly. |
+| **Data-scope attributes** | no | Key / value pairs read by the roles' data scope — see [below](#attributes). |
 
 Click **Save** — the user is created and the modal closes. The new user appears at the top of the list.
 
@@ -162,12 +163,25 @@ Click any user row to open the editor with their current values:
 | **Roles** | yes | Add / remove chips. |
 | **Active** | yes | Toggle to deactivate. |
 | **Superuser** | yes | Toggle to grant / revoke superuser. |
+| **Data-scope attributes** | yes | See [below](#attributes). |
 
 Saves go through `PATCH /admin/access/users/{username}` for the property updates and `POST /admin/access/users/{username}/password` if a new password was typed.
 
 :::tip[When the user is signed in]
 Changes don't break their current session. The new roles / disabled flag / password take effect on the next **refresh** (within the access token TTL — default 1 hour) or **sign-out + sign-in**.
 :::
+
+---
+
+## Data-scope attributes \{#attributes\}
+
+A role's [data scope](./roles-and-permissions.md#data-scope) can take its values from the user instead of listing them: a rule *Company (CO) = user.company* lets one role serve every subsidiary, each user seeing their own companies.
+
+In the user form, **Data-scope attributes** holds one row per attribute: a key (`company`) and a value (`00001, 00050` — a comma makes a list). **Add an attribute…** suggests the keys the roles already use. A user who lacks the attribute a rule needs sees no row through that rule.
+
+The users list shows the attributes on each card (`company=00001,00050`), and the user sees them, with their data scope in words, in their **Profile** window.
+
+For OIDC users, the attributes can come from the identity provider at every sign-in — see [Sign-in](./sign-in.md#attribute-claims). From the command line: `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 
@@ -196,16 +210,9 @@ For installs that want to pre-create OIDC users with roles already attached, scr
 
 ---
 
-## Deactivating vs deleting
+## Deactivating a user \{#deactivate\}
 
-Two ways to take a user out:
-
-| Option | Effect | When |
-|---|---|---|
-| Toggle **Active** off | User can't sign in. Their current session continues until the access token expires (default 1 h), then refresh fails. Roles, history and audit trail preserved. | Maintenance, leave of absence, suspended account. |
-| **🗑 Delete** (per-row action, with confirm) | User removed entirely. Their history is preserved (audit rows are immutable), but the username can be re-used. | Departure, GDPR right-to-erasure. |
-
-Deactivation is **reversible in one click**. Deletion is final — the user re-signing in (OIDC) would auto-create a new account with the same username but fresh `id` and no carryover of roles.
+Users are not deleted: to take someone out, switch **Active** off and save. They can no longer sign in; their current session ends when its access token expires (one hour at most), since the renewal is refused. Roles, attributes and history are kept, and switching **Active** back on restores the account as it was.
 
 ---
 
@@ -249,7 +256,7 @@ Deactivation is **reversible in one click**. Deletion is final — the user re-s
 | Editing an OIDC user's email reverts on next sign-in. | The IdP claim wins; the framework refreshes from the latest token. | Edit the email at the IdP. |
 | Trying to set a password for an OIDC user. | Backend rejects with 400. | OIDC users have no local password — they sign in through the provider. |
 | Changing a user's role doesn't take effect immediately. | The user's JWT still has the old roles. | They refresh (or sign-out + sign-in) — within the access token TTL the new roles apply. |
-| Deleting and recreating a user to "reset" them. | Their audit history detaches (now references a deleted username). | Use deactivate + reactivate; only delete when the user is truly gone. |
+| A user with an attribute-based scope sees nothing. | The user has no value for the attribute the rule reads. | Add it under **Data-scope attributes**. |
 | Marking a user superuser to fix a permission gap. | Works, but bypasses every check — including ones the user shouldn't be bypassing. | Add the missing permission to one of their roles instead. |
 
 ---

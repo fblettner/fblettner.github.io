@@ -1,325 +1,179 @@
 ---
-title: Upgrading
-description: "Upgrade a Liberty install — backup, pull the new image, up -d. Image tag pinning, Swarm rolling updates, rollback."
-keywords: [Liberty Framework, upgrade, version, pull, image tag, LIBERTY_IMAGE_TAG, rollback, backup.sh, docker compose pull, docker service update, deploy-swarm.sh, pipx upgrade, smoke test]
+title: Upgrade and rollback
+description: "Upgrade Liberty Next with one command: ./liberty upgrade (Docker) or liberty-ops upgrade (Python) checks the install, takes a backup, installs the new release and the apps, applies the schema migrations and records a report; rollback undoes it. Swarm upgrades and versioning."
+keywords: [Liberty Next, upgrade, rollback, liberty upgrade, liberty rollback, liberty-ops upgrade, migrations, liberty-admin migrate, upgrade report, Settings History Upgrades, LIBERTY_IMAGE_TAG, LIBERTY_AUTO_MIGRATE]
 ---
 
-# Upgrading
+# Upgrade and rollback
 
-A Liberty upgrade is a tag swap. Every layout — Light / Full Compose, Docker Swarm, pipx — boils down to the same three moves: **snapshot the volumes, fetch the new image (or wheel), let the stack reconcile**. Schema migrations ride inside the new image; the entrypoint applies them on boot. No manual `migrate-db`, no source checkout, no rebuild.
-
-This page covers the versioning contract, the upgrade procedure per layout, the post-upgrade smoke test and the rollback path.
+An upgrade is one command. It never starts without a fresh backup, keeps what is needed to come back, and leaves a report you can read in the application.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="upg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <marker id="upg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <marker id="upg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="upg-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="upg-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="upg-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="40" width="920" height="180" rx="14" fill="url(#upg-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Upgrade sequence — same shape for every layout</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="200" height="60" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="160" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · BACKUP</text>
-  <text x="160" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">./backup.sh — 5 s insurance</text>
-
-  <rect x="290" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="390" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · PIN + PULL</text>
-  <text x="390" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">LIBERTY_IMAGE_TAG + pull</text>
-
-  <rect x="520" y="100" width="200" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
-  <text x="620" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · UP -d</text>
-  <text x="620" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">entrypoint runs init-db</text>
-
-  <rect x="750" y="100" width="200" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
-  <text x="850" y="124" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · SMOKE TEST</text>
-  <text x="850" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">/info + sign-in + pools</text>
-
-  <line x1="260" y1="130" x2="290" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-  <line x1="490" y1="130" x2="520" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-  <line x1="720" y1="130" x2="750" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-
-  <text x="500" y="200" fill="#94a3b8" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">A clean Compose upgrade is ~30 s of downtime. Swarm rolling = zero downtime when replicas &gt; 1.</text>
+  <rect x="10" y="14" width="1180" height="140" rx="14" fill="url(#upg-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="30" y="44" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">./liberty upgrade — what one command does</text>
+  <rect x="30" y="70" width="172" height="64" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="116.0" y="99.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1 · Check</text>
+  <text x="116.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">doctor (advisory)</text>
+  <line x1="202" y1="102" x2="224" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#upg-flow)"/>
+  <rect x="224" y="70" width="172" height="64" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="310.0" y="99.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">2 · Keep image</text>
+  <text x="310.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">rollback-&lt;stamp&gt;</text>
+  <line x1="396" y1="102" x2="418" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#upg-flow)"/>
+  <rect x="418" y="70" width="172" height="64" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="504.0" y="99.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">3 · Backup</text>
+  <text x="504.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">stops here if it fails</text>
+  <line x1="590" y1="102" x2="612" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#upg-flow)"/>
+  <rect x="612" y="70" width="172" height="64" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="698.0" y="99.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">4 · Pull + recreate</text>
+  <text x="698.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">same overlays as installed</text>
+  <line x1="784" y1="102" x2="806" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#upg-flow)"/>
+  <rect x="806" y="70" width="172" height="64" rx="8" fill="rgba(168,85,247,0.10)" stroke="rgba(168,85,247,0.50)" strokeWidth="1.2"/>
+  <text x="892.0" y="99.0" fill="#c084fc" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">5 · Migrations</text>
+  <text x="892.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">apps wheel + schemas</text>
+  <line x1="978" y1="102" x2="1000" y2="102" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#upg-flow)"/>
+  <rect x="1000" y="70" width="172" height="64" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="1086.0" y="99.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">6 · Report</text>
+  <text x="1086.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">then status</text>
+  <rect x="300" y="185" width="330" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="310" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Something went wrong?</text>
+  <text x="310" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">./liberty rollback: previous image + this backup</text>
+  <line x1="300" y1="202.0" x2="480" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
+  <rect x="790" y="185" width="330" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="800" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Settings → History → Upgrades</text>
+  <text x="800" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">versions before / after, every step, migrations</text>
+  <line x1="790" y1="202.0" x2="1080" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
 </svg>
 
 ---
 
-## Versioning contract
+## Docker \{#docker\}
 
-Liberty follows **semver-ish**:
+```bash
+cd liberty-next/release
+git pull                                  # the scripts of the new release
+./liberty upgrade                         # to the latest release
+./liberty upgrade --tag 7.0.58            # or to a given release (kept in .env)
+```
 
-| Bump | What to expect |
+What the command does, in order:
+
+| Step | Detail |
 |---|---|
-| **Patch** (`0.42.0` → `0.42.1`) | Bug fixes only. No config change. No database migration. |
-| **Minor** (`0.42.x` → `0.43.0`) | New features. Backward-compatible config. Additive database migrations only — new framework tables / columns; existing rows are left alone. |
-| **Major** (`0.x` → `1.0`) | Possible breaking changes. Called out individually in the release notes; a migration guide is published alongside. |
+| 1. Check | Runs `doctor`. Problems are reported but do not stop the upgrade — an upgrade is often what fixes them. |
+| 2. Keep the image | The image now running is tagged locally `rollback-<date>` so that it can be started again. |
+| 3. Backup | `backup` of every volume and of the apps folder, kept `--keep` days (30 by default). **If the backup fails, the upgrade stops and nothing is changed.** |
+| 4. Pull and recreate | The new image is pulled and the containers recreated with the recorded compose files — HTTPS and the licensed apps stay in place. |
+| 5. Apps and migrations | With `--apps <wheel>`, the new apps bundle is installed (with its [merge plan](./deploy-prebuilt-apps.md#merge)); then the pending schema migrations are applied. |
+| 6. Report | The report is recorded and `status` is printed. |
 
-The release notes for every version live alongside the image tag — read them before bumping a minor or a major.
+Downtime is the time the container takes to restart, usually well under a minute.
 
----
+### Upgrading the licensed apps \{#apps\}
 
-## How database migrations work
-
-The container entrypoint (and the pipx systemd unit, if you wired one) runs `liberty-admin init-db` on **every boot**. The command is:
-
-- **Idempotent.** Running it twice does nothing the second time.
-- **Additive.** It creates new framework tables a newer release brings, adds missing columns, and leaves existing rows alone.
-- **Bundled.** Schema deltas ship inside the image / wheel — there is no separate `migrate-db` step to run, no SQL file to apply, no migration job to schedule.
-
-Pull a newer image, restart the stack — the schema follows.
-
-:::info[No manual migration step]
-The historical `liberty-admin migrate-db` command is gone. Everything it used to do is now part of the `init-db` that runs at startup.
-:::
-
----
-
-## Pin the image tag in production
-
-The shipped compose files default to `:latest` so a fresh install lands on the newest release. Production should pin a specific tag in `.env` so an unexpected `pull` doesn't roll the stack forward to a new minor without warning:
-
-```bash title=".env"
-LIBERTY_IMAGE_TAG=0.2.0
+```bash
+./liberty upgrade --apps ./liberty_apps-7.0.58-py3-none-any.whl
 ```
 
-Roll forward by bumping the value and re-running `pull && up -d`. Roll back by setting the previous tag and doing the same.
+Framework and apps are upgraded in one run. To refresh the apps alone, without a new framework image: `./liberty apps <wheel>`.
 
-| Tag in `.env` | Behaviour |
+---
+
+## Python install \{#python\}
+
+```bash
+liberty-ops upgrade                                       # framework to the latest release
+liberty-ops upgrade --version 7.0.58                      # a given release
+liberty-ops upgrade --apps ./liberty_apps-7.0.58-py3-none-any.whl
+```
+
+Same sequence: `doctor` → backup (the only step that can stop the upgrade) → `pipx upgrade` (or the pinned version) → the apps wheel → `liberty-admin migrate` → service restart and wait for `/ready` → report → `status`. `--no-restart` leaves the restart to you; `--backup-dest` chooses where the backup goes.
+
+Run it as the service user with its environment loaded, as for every `liberty-ops` command.
+
+---
+
+## The upgrade report \{#report\}
+
+Each `upgrade` and each `rollback` records a report: versions before and after, image tag, compose files, backup folder, `doctor` findings, the result of every step and the migrations applied. It is stored with the configuration (`.versions/upgrades/`), and on Docker a copy is also written in the backup folder.
+
+Open it in **Settings → History → Upgrades**. Each entry shows its component:
+
+| Entry | Recorded by |
 |---|---|
-| `latest` | Each `pull` may move to the newest published image — convenient for staging, risky for prod. |
-| `0.2.0` (pinned) | `pull` is a no-op once the local cache has the tag. Upgrades happen only when you edit `.env`. |
+| **Stack** | `./liberty upgrade`, `./liberty rollback`, `liberty-ops upgrade` — the report described above. |
+| **Framework**, **Apps** | A change of version noticed when the server starts — shown with the release notes of the new version. |
+| **`<app>` schema** | `liberty-admin migrate` — the migrations applied to an application database. |
+| `framework-schema` | Columns the server added to its own tables when a new release needed them. |
 
 ---
 
-## Always backup first
+## Schema migrations \{#migrations\}
 
-`backup.sh` tar-snapshots every Liberty named volume into a timestamped directory. It takes seconds and is the difference between a botched upgrade and a botched upgrade you can undo.
+The framework creates and completes its own tables when it starts. The licensed apps' databases change through **migrations** shipped in the apps wheel:
 
-```bash
-cd /opt/liberty-next/release
-./backup.sh                              # → ./backups/YYYY-MM-DD_HHMMSS/
-./backup.sh /mnt/nas/liberty             # to an off-host location
-./backup.sh --layout full                # only the full layout's volumes
-```
+- `./liberty upgrade` and `liberty-ops upgrade` apply them;
+- `./liberty status`, `./liberty doctor` and the server log at start-up say when some are pending;
+- `./liberty migrate --dry-run` lists them, `./liberty migrate` applies them;
+- with `LIBERTY_AUTO_MIGRATE=1` in `.env`, the server applies them itself at start-up.
 
-Full details on the backup format, the restore commands and a weekly cron entry: [Docker → Backups](./docker.md#backups).
+Every run is recorded in **Settings → History → Upgrades**. For a database whose recorded version is ahead of its real tables, `liberty-admin migrate --app nomasx1 --stamp <revision>` sets the version without running anything, then applies what remains — see [CLI](../references/cli.md#migrate).
 
 ---
 
-## Upgrade procedure — Light / Full (Compose)
-
-Identical for both layouts. Two equivalent commands; pick by taste.
-
-### Option A — re-run `./install.sh <layout>` (recommended)
+## Rollback \{#rollback\}
 
 ```bash
-cd /opt/liberty-next/release
-
-./backup.sh             # 1 — snapshot (always)
-./install.sh full       # 2 — sees existing .env, skips secret generation,
-                        #     pulls new images, runs `docker compose up -d`,
-                        #     waits for healthy, prints the summary
+./liberty rollback            # asks for confirmation
+./liberty rollback --yes
 ```
 
-`install.sh` is **idempotent on re-runs**. When `.env` already exists it:
+The command starts again the image kept before the last upgrade and restores the backup taken just before it. **Everything written since that backup is lost** — hence the confirmation. The report of the upgrade is kept, and the rollback gets its own.
 
-- Logs `.env already exists — keeping it` and **skips secret generation** (no risk of regenerating `LIBERTY_MASTER_KEY` and losing every encrypted value).
-- Runs `docker compose pull` then `docker compose up -d` against the `COMPOSE_FILE` chain in `.env`.
-- Waits for `liberty-next`'s healthcheck (`/info`) to report healthy.
-- Prints the summary — the *Sign in to Liberty as* line now reads *password unchanged from the original install* (the first-boot admin password was a one-shot — your existing login still works). The pgAdmin password is re-printed from `.env` as a reminder.
+On a Python install, `liberty-ops rollback` reinstalls the previous framework version and restores the backup taken before the upgrade. pipx keeps no copy of the previous apps wheel: pass it with `--apps <previous wheel>` to downgrade the apps too.
 
-Use the same layout you installed with — passing the wrong one (`./install.sh light` on a full install or vice-versa) starts the wrong compose file.
+To go back further than the last upgrade: `./liberty restore <backup folder>` and `./liberty upgrade --tag <release>`.
 
-### Option B — bare `docker compose` (same effect)
+---
+
+## Docker Swarm \{#swarm\}
+
+`./liberty` does not drive a swarm. Take a backup with `./backup.sh`, then:
 
 ```bash
-cd /opt/liberty-next/release
-
-./backup.sh             # 1 — snapshot
-docker compose pull     # 2 — fetch new images (COMPOSE_FILE picks the right files)
-docker compose up -d    # 3 — recreate containers; entrypoint runs init-db
-
-# 4 — smoke test
-curl -s http://127.0.0.1:8000/info
+docker service update --image ghcr.io/fblettner/liberty-next:7.0.58 liberty_liberty-next
+docker exec -u liberty $(docker ps -qf name=liberty_liberty-next) liberty-admin migrate
+docker service rollback liberty_liberty-next      # if something is wrong
 ```
 
-Identical effect, less output, no summary printout. Use this in CI or whenever `install.sh`'s interactive niceties would get in the way.
+Or set `LIBERTY_IMAGE_TAG` in `.env` and run `./deploy-swarm.sh` again.
 
-:::info[Never pass `-f` after install]
-`COMPOSE_FILE` in `.env` carries the full chain (`docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml` after `install.sh --ssl letsencrypt --apps ...`). Passing `-f docker-compose.full.yml` manually overrides that chain and silently drops the TLS + apps overlays — the next `up -d` removes them. Stick to bare `docker compose pull` / `up -d`, or use `./install.sh`. See [Docker → COMPOSE_FILE discipline](./docker.md#compose-file-discipline).
-:::
+---
 
-What `up -d` does: Compose sees the image digest changed, recreates the `liberty-next` container in place, mounts the same named volumes, restarts it. The new entrypoint runs `liberty-admin init-db`, then starts serving. Total downtime: ~30 s on a warm host.
+## Versions \{#versions\}
 
-Other services in the stack (Postgres, pgAdmin, Portainer, Traefik) are not recreated unless their own image tag moved — `pull` is per-service and `up -d` only recreates the ones whose spec changed.
-
-### What survives the upgrade
-
-Everything operator-touched. Compose recreates the `liberty-next` container; the volumes (and the apps bind mount when the apps overlay is on) reattach to the new container intact.
-
-| State | Lives in | Preserved? |
-|---|---|---|
-| `.env` (master key, JWT secret, Postgres / pgAdmin passwords) | `release/.env` on the host | ✔ Untouched. |
-| Framework DB (auth, Nomaflow run history, licensed-app data) | `pg-data` volume | ✔ Postgres is not recreated unless its image tag moved. |
-| Operator-edited TOMLs (`app.toml` + `connectors.toml` + `screens.toml` + `menus.toml` + dashboards / charts / dictionary) | `liberty-config` volume | ✔ Mounted at `/app/config` in the new container. |
-| License key, Anthropic API key, OIDC client secret | `app.toml` (encrypted `ENC:` values with the install master key) | ✔ Lives in `liberty-config`. The new container decrypts with the unchanged `LIBERTY_MASTER_KEY` in `.env`. |
-| Let's Encrypt cert + ACME state | `traefik-acme` volume | ✔ No fresh ACME round-trip; LE rate limits aren't burned. |
-| pgAdmin server registrations + preferences | `pgadmin-data` volume | ✔ |
-| Portainer state | `portainer-data` volume | ✔ |
-| Licensed-apps bundle (Nomasx-1 / Nomajde TOMLs + plugin code) | `./apps/` bind mount on the host (set as `APPS_HOST_PATH` in `.env`) | ✔ The mount reattaches to the new container at `/apps:ro`. |
-| First-boot `LIBERTY_ADMIN_PASSWORD` | Was shown once during the original install, never written to `.env` | ✔ Existing admin user keeps its prior password. Lost it? `docker exec liberty-next liberty-admin reset-admin-password`. |
-
-### `:latest` vs pinned tag
-
-| `.env` line | What `pull` fetches |
+| Change | What to expect |
 |---|---|
-| `# LIBERTY_IMAGE_TAG=latest` *(commented — default)* | Compose defaults to `:latest`. Every `pull` may move to the newest published image — fine for staging, risky for prod. |
-| `LIBERTY_IMAGE_TAG=7.0.21` *(pinned)* | `pull` is a no-op once the local cache has the tag. Upgrades happen only when you bump the value + `pull && up -d`. |
+| Patch (`7.0.57` → `7.0.58`) | Fixes and features; the configuration stays compatible; database changes only add tables or columns. |
+| A larger step | The release notes say what to check before and after. |
 
-To pin: uncomment the line in `.env`, set the version, run `./install.sh full` (or `docker compose pull && up -d`).
-
-### When the licensed-apps wheel changes too
-
-`./install.sh full` (or `docker compose pull`) only refreshes the `liberty-next` image — not the apps bundle on the `./apps/` bind mount. For a **liberty-apps wheel update** (new Nomasx-1 / Nomajde release), use the dedicated installer:
-
-```bash
-./install-apps.sh /path/to/new-liberty_apps-X.Y.Z.whl
-docker compose restart liberty-next       # picks up the refreshed TOMLs
-```
-
-The wheel installer is idempotent — operator-edited TOMLs in `./apps/config/` are preserved unless `--force-config` is passed. See [Deploy prebuilt apps → Updating the apps later](./deploy-prebuilt-apps.md#updating-the-apps-later).
-
-Most framework upgrades are liberty-next-only — no apps wheel to refresh.
+Read the release notes before upgrading: **Settings → Release notes** shows those of the running version.
 
 ---
 
-## Upgrade procedure — Docker Swarm
+## Tips \{#tips\}
 
-Two ways. Pick one.
-
-### Option A — rolling update on the liberty-next service only
-
-```bash
-./backup.sh
-docker service update --image ghcr.io/fblettner/liberty-next:0.2.0 liberty_liberty-next
-```
-
-Swarm rolls the service per its `update_config` (`order: start-first`, `parallelism: 1`). The new task is started, health-checks, then the old task is stopped:
-
-| `liberty-next` replicas | Downtime |
-|---|---|
-| `> 1` | **Zero.** Swarm starts a new task, waits for it to be healthy, then drains the old one. |
-| `1` (default) | A brief window (~10 s) while the new task warms up — `start-first` minimises but cannot eliminate it. |
-
-The other services in the stack (`pg`, `pgadmin`, `portainer`, `traefik`) are untouched.
-
-### Option B — bump `.env` + re-run the deploy script
-
-```bash
-./backup.sh
-# edit .env: LIBERTY_IMAGE_TAG=0.2.0
-./deploy-swarm.sh
-```
-
-`docker stack deploy` reconciles the full spec — every service whose image or env changed is rolled. Re-running `./deploy-swarm.sh` IS the update mechanism in Swarm; it's the same script you used to install.
-
-Use Option B when you bump multiple service tags at once or when you've changed any other service's env.
-
-### Rollback in Swarm
-
-Swarm keeps the previous spec of every service:
-
-```bash
-docker service rollback liberty_liberty-next
-```
-
-The rollback reverses the last `service update` (or the last `stack deploy`'s effect on that service). If the new image applied a schema delta and you've been writing to it, restore from the `backup.sh` snapshot **before** rolling back — see [Rollback](#rollback) below.
-
----
-
-## Upgrade procedure — pipx
-
-```bash
-./backup.sh                              # if you keep a backup script alongside (recommended)
-pipx upgrade liberty-next
-sudo systemctl restart liberty-next      # if running under systemd
-```
-
-`pipx upgrade` swaps the wheel in the isolated venv. The restarted service runs `liberty-admin init-db` on boot — same idempotent schema sync as the container path.
-
-For the systemd unit definition, the `EnvironmentFile`, and the post-install verification: [Python server → Run under systemd](./python-server.md).
-
----
-
-## Smoke test checklist
-
-Five minutes, every upgrade.
-
-| Check | How | What to confirm |
-|---|---|---|
-| **Version bump** | `curl http://<host>/info` | `"version"` matches the tag you just pulled. |
-| **Sign-in** | Sign in as `admin`. | Local auth still works. |
-| **Screen loads** | Open at least one app screen. | Grid populates, no 500s. |
-| **Pools connected** | *Settings → Pools* | Every pool shows as *connected*. |
-| **Scheduler caught up** | *Settings → Jobs* — pick a scheduled job. | Its last run is `succeeded` (or pending — not `failed`). |
-| **License accepted** *(when `LIBERTY_LICENSE_KEY` is set)* | *Settings → License* | Shows *accepted* with the right customer name. |
-
-A failed check should hold the rollout and trigger the rollback procedure.
-
----
-
-## Rollback
-
-The same simplicity applies in reverse: point back at the previous tag, restart. The wrinkle is the database — additive schema deltas are not auto-rolled-back. In practice:
-
-| New schema is… | What to do |
-|---|---|
-| **Additive only** (new tables / columns — the common case) | Roll the image back. The old framework ignores the extra columns and keeps working. No DB restore needed. |
-| **Non-additive** (column rename, constraint added, value migrated) | Restore the volume from the `backup.sh` snapshot **before** rolling the image back. The release notes call out every non-additive migration. |
-
-### Light / Full (Compose)
-
-```bash
-# edit .env: LIBERTY_IMAGE_TAG=0.1.0    (the previous tag)
-docker compose pull                       # COMPOSE_FILE picks the right files
-docker compose up -d
-```
-
-If the schema moved forward and you need to roll back the data too, restore the relevant volume from `./backups/<timestamp>/` first — see [Docker → Backups](./docker.md#backups) for the per-volume restore command.
-
-### Swarm
-
-```bash
-docker service rollback liberty_liberty-next
-```
-
-Same caveat: if the schema diverged, restore the `pg-data` volume (after `./deploy-swarm.sh --rm`) before rolling back the service, then re-deploy.
-
-### pipx
-
-```bash
-pipx install liberty-next==0.1.0 --force
-sudo systemctl restart liberty-next
-```
-
----
-
-## Tips
-
-- **Stage the upgrade.** Run the new tag against a copy of production for a day before rolling to prod. The cost of dragging a known-bad rollout is much higher than the cost of one extra restart.
-- **Read the release notes.** Most upgrades are silent — `pull && up -d` and the smoke test passes. The few that aren't are called out explicitly. Two minutes of reading saves an hour of debugging.
-- **Don't skip multiple minors at once if you can avoid it.** Going `0.40 → 0.43` may chain deprecations that disappeared along the way. Going version by version keeps the warnings tractable.
-- **Pin in production.** `:latest` is fine for staging; production should pin `LIBERTY_IMAGE_TAG` so a routine `pull` cannot surprise you with a new minor.
-- **Watch the logs after restart.** A `WARN` line about a deprecated field is the heads-up that the next minor will break — fix it now, not later.
-
----
-
-## What's next
-
-- [Docker → Backups](./docker.md#backups) — the snapshot format, restore commands and weekly cron entry referenced above.
-- [Python server](./python-server.md) — the pipx install + systemd recipe the upgrade lands on.
-- [Production](./production.md) — hardening, OIDC, scheduler pin — the deployment shape upgrades land into.
+- Pin the release in production (`--tag`) and upgrade on purpose, a test server first.
+- Run `./liberty doctor` before the upgrade: a problem reported there is easier to fix before than after.
+- After the upgrade, sign in, open a screen of each application and run a Nomaflow job by hand.
+- Keep the backup of the upgrade until the next one has run.

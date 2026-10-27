@@ -1,290 +1,127 @@
 ---
 title: Référence des commandes CLI
-description: "Toutes les commandes CLI de Liberty — liberty-admin (utilisateurs, rôles, jobs, reload), liberty-connectors (tester les connecteurs sans la couche web), liberty-crypto (chiffrer / déchiffrer / générer une clé maître), liberty-license (vérifier / inspecter un JWT de licence). Tous les drapeaux, toutes les sorties."
-keywords: [Liberty Framework, CLI, liberty-admin, liberty-connectors, liberty-crypto, liberty-license, utilisateurs, rôles, reload, chiffrement, vérification de licence]
+description: "Tous les outils en ligne de commande de Liberty Next : liberty-admin (initialisation de la base, utilisateurs, rôles, périmètre de données, tâches d'installation, migrations de schéma), liberty-ops et ./liberty (exploitation), liberty-connectors (lancer une requête sans l'application web), liberty-crypto (valeurs ENC:), liberty-license (vérifier la clé)."
+keywords: [Liberty Next, CLI, liberty-admin, liberty-ops, liberty, liberty-connectors, liberty-crypto, liberty-license, init-db, create-user, set-scope, set-attributes, migrate, run-install-jobs]
 ---
 
 # Référence des commandes CLI
 
-Le framework livre **quatre CLI** comme points d'entrée d'un même paquet Python. Ils sont installés dans le virtualenv aux côtés du serveur, donc accessibles via `.venv/bin/<cli>` :
+L'essentiel de l'administration se fait dans **Paramètres**. Les outils en ligne de commande couvrent ce qui doit fonctionner sans l'application web : le premier démarrage, un mot de passe perdu, une configuration scriptée, l'exploitation.
 
-| CLI | Rôle |
+| Outil | Rôle |
 |---|---|
-| [`liberty-admin`](#liberty-admin) | Gestion des utilisateurs, rôles et tâches, rechargement à chaud, initialisation du schéma. |
-| [`liberty-connectors`](#liberty-connectors) | Inspecter et tester les connecteurs sans démarrer la couche web. |
-| [`liberty-crypto`](#liberty-crypto) | Chiffrer, déchiffrer, générer des clés maîtres. |
-| [`liberty-license`](#liberty-license) | Vérifier et inspecter un JWT de licence. |
+| `liberty-next` | Démarre le serveur. Adresse et port viennent de `[app]` dans `app.toml`. |
+| [`liberty-admin`](#liberty-admin) | Initialisation de la base, utilisateurs, rôles et périmètre de données, tâches d'installation, migrations de schéma. |
+| `./liberty` et `liberty-ops` | Exploitation d'une installation Docker ou Python — voir [Exploitation](../installation/operations.md). |
+| [`liberty-connectors`](#liberty-connectors) | Liste les connecteurs et lance une requête ou un endpoint. |
+| [`liberty-crypto`](#liberty-crypto) | Chiffre une valeur en chaîne `ENC:`. |
+| [`liberty-license`](#liberty-license) | Vérifie une clé de licence. |
 
-Chaque CLI lit `[default_pool]` dans `app.toml` ainsi que les mêmes variables d'environnement que le serveur. À exécuter depuis le dossier `liberty-next` (ou bien définir `LIBERTY_APPS_DIR` pour qu'ils trouvent la configuration).
+**Docker :** les lancer dans le conteneur, sous l'utilisateur `liberty` — `docker exec -u liberty liberty-next liberty-admin list-users`.
+**Installation Python :** les lancer sous l'utilisateur du service avec son environnement chargé, pour qu'ils lisent la même configuration et la même clé maître que le serveur.
 
 ---
 
-## `liberty-admin`
+## liberty-admin \{#liberty-admin\}
 
-### `init-db`
+Deux options valent pour toutes les commandes : `--config-app <app.toml>` et `--config-connectors <connectors.toml>`. Les commandes affichent du JSON.
 
-Initialise le backend d'authentification (crée `auth.toml` pour `backend = "toml"`, ou les tables `ly2_*` pour `backend = "db"`).
+### Initialisation
 
-```bash
-.venv/bin/liberty-admin init-db
-```
-
-Relançable sans risque. Les utilisateurs et les tables existants sont conservés ; seul ce qui manque est créé.
-
-### `verify-config`
-
-Valide tous les fichiers TOML sous `liberty-apps/config/` au regard des modèles Pydantic. Rapporte les erreurs d'analyse, les erreurs de validation et les erreurs de référence croisée (un écran pointant vers un connecteur absent, un menu pointant vers un écran absent).
-
-```bash
-.venv/bin/liberty-admin verify-config
-```
-
-Sort avec un code non nul à la première erreur, utile en CI avant un déploiement.
-
-### `reload`
-
-Recharge à chaud les registres TOML par section sans redémarrer le serveur.
-
-```bash
-.venv/bin/liberty-admin reload                  # toutes les sections
-.venv/bin/liberty-admin reload --scope connectors
-```
-
-Appelle `POST /admin/reload` sur `http://${HOST}:${PORT}` — le serveur doit être en cours d'exécution.
+| Commande | Effet |
+|---|---|
+| `init-db [--admin-username admin] [--password P \| --password-env VAR]` | Crée le stockage des utilisateurs (le fichier `auth.toml` ou les tables en base) et les tables manquantes du framework, puis le premier superutilisateur. Sans mot de passe, un mot de passe aléatoire est généré et affiché. Relancée, la commande ne change rien. |
+| `run-install-jobs [--force]` | Lance dans l'ordre chaque tâche Nomaflow des applications sous licence marquée comme étape d'installation (`deploy-databases`, `nomasx1-import-reference`). Les tâches déjà terminées sont ignorées, sauf avec `--force`. |
 
 ### Utilisateurs
 
-```bash
-.venv/bin/liberty-admin create-user alice --display-name "Alice Dupont" --role viewer --role editor
-.venv/bin/liberty-admin set-password alice                    # demande deux fois
-.venv/bin/liberty-admin set-active alice --inactive           # suppression logique
-.venv/bin/liberty-admin set-active alice                      # réactiver
-.venv/bin/liberty-admin list-users [--inactive]
-.venv/bin/liberty-admin show alice                            # rôles + permissions effectives
-.venv/bin/liberty-admin role-add alice manager
-.venv/bin/liberty-admin role-remove alice viewer
-.venv/bin/liberty-admin revoke alice                          # invalide toute session active
-```
-
-### Rôles
-
-```bash
-.venv/bin/liberty-admin list-roles
-.venv/bin/liberty-admin show-role editor                      # permissions + membres
-.venv/bin/liberty-admin create-role manager --inherits editor --description "..."
-.venv/bin/liberty-admin grant manager sql:billing:*
-.venv/bin/liberty-admin revoke-perm manager sql:billing:dangerous-query
-.venv/bin/liberty-admin delete-role manager                   # refusé tant qu'il reste des membres
-```
-
-### Tâches
-
-```bash
-.venv/bin/liberty-admin job list                              # toutes les tâches + dernier statut
-.venv/bin/liberty-admin job run invoices-nightly-rebuild      # exécution ponctuelle, déclenchée système
-.venv/bin/liberty-admin job run <name> --param period=2026-05 --param dry_run=true
-.venv/bin/liberty-admin job logs --follow <run-id>            # diffuse le journal d'exécution
-.venv/bin/liberty-admin job abort <run-id>
-.venv/bin/liberty-admin job history <name> [--limit 20]
-```
-
-### i18n
-
-```bash
-.venv/bin/liberty-admin i18n-diff fr                          # clés présentes dans en/ et absentes de fr/
-.venv/bin/liberty-admin i18n-export                           # exporte tous les paquets de langue sur la sortie standard
-```
-
-### Drapeaux globaux
-
-| Drapeau | Effet |
+| Commande | Effet |
 |---|---|
-| `--config <path>` | Surcharge l'emplacement de `app.toml`. |
-| `--quiet` / `-q` | Supprime les journaux d'information ; ne garde que les avertissements et les erreurs. |
-| `--json` | Formate la sortie en JSON plutôt qu'en texte lisible. |
-| `--server <url>` | Surcharge `http://${HOST}:${PORT}` pour `reload` / `job run`. |
+| `create-user <nom> [--email E] [--full-name N] [--role R]… [--attribute CLÉ=VALEUR]… [--superuser] [--password P \| --password-env VAR]` | Crée un utilisateur local. Sans mot de passe, il en génère un et l'affiche. |
+| `set-password <nom> [--password P \| --password-env VAR]` | Change un mot de passe ; sans valeur, en génère un et l'affiche. |
+| `set-active <nom> --active \| --inactive` | Active ou désactive un utilisateur. |
+| `set-attributes <nom> CLÉ=VALEUR… [--replace]` | Définit les attributs de périmètre de données de l'utilisateur. `company=00001,00050` donne une liste ; `company=` supprime la clé ; `--replace` retire les attributs non cités. |
+| `list-users` | Liste les utilisateurs. |
 
----
+### Rôles et périmètre de données
 
-## `liberty-connectors`
-
-Opère sur le catalogue de connecteurs sans la couche web — utile en script, en vérification CI et pour une inspection locale rapide.
-
-### `list`
-
-```bash
-.venv/bin/liberty-connectors list
-# default     sql    pool=default     connected
-# invoices    sql    pool=default     connected
-# crm         sql    pool=crm         connected
-# jdedwards   sql    pool=jde         offline
-# slack       http   base=https://hooks.slack.com
-```
-
-### `describe`
-
-```bash
-.venv/bin/liberty-connectors describe invoices
-# invoices — sql — pool: default
-# queries:
-#   - monthly-invoice-counts   (read)   params: month
-#   - invoices-for-period      (read)   params: from_date, to_date, status
-#   - refresh-totals:write     (write)  params: period
-# Permission codes:
-#   - sql:invoices:monthly-invoice-counts
-#   - sql:invoices:invoices-for-period
-#   - sql:invoices:refresh-totals:write
-```
-
-### `run`
-
-Exécute une requête directement sur le pool. Contourne l'authentification — réservé aux diagnostics locaux, pas aux exécutions de production.
-
-```bash
-.venv/bin/liberty-connectors run invoices invoices-for-period \
-  --param from_date=2026-04-01 --param to_date=2026-04-30 \
-  --param status=issued \
-  --limit 50
-```
-
-Sortie sous forme de tableau par défaut ; ajouter `--json` pour des lignes lisibles par machine.
-
-### `test`
-
-Résout tous les connecteurs au chargement et rapporte les échecs — test de fumée rapide en CI :
-
-```bash
-.venv/bin/liberty-connectors test
-# 4 / 5 connectors loaded
-# jdedwards: pool 'jde' unreachable — Connection refused
-```
-
-Sort avec un code non nul dès qu'un connecteur échoue.
-
-### `schema`
-
-Découvre et affiche les colonnes renvoyées par une requête :
-
-```bash
-.venv/bin/liberty-connectors schema invoices invoices-for-period
-# id            INTEGER  NOT NULL
-# number        VARCHAR(64)
-# issue_date    DATE
-# customer_id   INTEGER
-# amount_excl   DECIMAL(12,2)
-# amount_incl   DECIMAL(12,2)
-# currency      VARCHAR(3)
-# status        VARCHAR(32)
-```
-
----
-
-## `liberty-crypto`
-
-Gère la clé maître et le format de blob `ENC:`.
-
-### `genkey`
-
-```bash
-.venv/bin/liberty-crypto genkey
-# 7c4f1c2d8e3a6b9f0c1d4e5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c
-```
-
-Produit une clé AES-256 de 32 octets encodée en hexadécimal. À exporter sous `LIBERTY_MASTER_KEY`.
-
-### `encrypt` / `decrypt`
-
-```bash
-.venv/bin/liberty-crypto encrypt 's3cret!'
-# ENC:gAAAAABh1234kQ5e7…RrU=
-
-.venv/bin/liberty-crypto decrypt 'ENC:gAAAAABh1234kQ5e7…RrU='
-# s3cret!
-```
-
-Lit `LIBERTY_MASTER_KEY` dans l'environnement. La fonction de chiffrement génère un nonce neuf à chaque appel : le chiffré diffère donc à chaque exécution, même pour le même texte en clair.
-
-### `rewrap`
-
-Rechiffre toutes les valeurs `ENC:` d'un ensemble de fichiers avec la clé maître courante. Utilisé pendant la rotation — voir [Chiffrement et secrets → rotation de clé](../framework/configuration/encryption-secrets.md#key-rotation).
-
-```bash
-.venv/bin/liberty-crypto rewrap --files config/connectors.toml,config/app.toml
-# 4 ENC: values re-encrypted with the current master key
-```
-
-Relançable sans risque. Les fichiers sont réécrits sur place ; il faut commiter le diff.
-
-### `fingerprint`
-
-Affiche l'empreinte SHA-256 de la clé maître courante — utile pour vérifier que deux installations partagent la même clé sans révéler la clé elle-même.
-
-```bash
-.venv/bin/liberty-crypto fingerprint
-# 7c4f1c2d… (sha256)
-```
-
----
-
-## `liberty-license`
-
-### `verify`
-
-```bash
-.venv/bin/liberty-license verify "$LIBERTY_LICENSE_KEY"
-# license accepted
-# customer="Acme Corp" edition="enterprise"
-# expires=2026-05-19T00:00:00Z (in 30 days)
-# features.connectors: [jdedwards, sap, snowflake]
-# features.apps:       [nomajde, nomasx-1]
-```
-
-Sort avec le code zéro pour les clés valides, non nul avec le diagnostic pour les clés erronées / expirées / d'audience incorrecte.
-
-| Drapeau | Effet |
+| Commande | Effet |
 |---|---|
-| `--public-key <path>` | Surcharge la clé publique par défaut. Utilisée par les partenaires OEM qui signent avec leur propre paire de clés. |
-| `--quiet` | N'affiche que `valid` ou l'erreur ; supprime le détail lisible. |
-| `--json` | Affiche la charge utile du JWT en JSON. |
+| `create-role <nom> [--permission P]… [--description D] [--scope RÈGLE]…` | Crée un rôle, ou le met à jour. |
+| `set-scope <nom> --rule RÈGLE… \| --clear` | Remplace les règles de périmètre de données du rôle. |
+| `list-roles` | Liste les rôles avec leurs permissions et leur périmètre de données. |
 
-### `decode`
-
-Affiche la charge utile du JWT sans vérifier la signature. À utiliser uniquement pour inspection — jamais comme contrôle d'autorisation.
+Une `RÈGLE` est une table TOML en ligne ou un objet JSON, avec les clés décrites dans [Rôles et permissions → Périmètre de données](../framework/build/secure/roles-and-permissions.md#data-scope) :
 
 ```bash
-.venv/bin/liberty-license decode "$LIBERTY_LICENSE_KEY"
-# { "iss": "nomana-it", "sub": "customer-acme-corp", ... }
+liberty-admin set-scope subsidiary --rule '{dd = "CO", source = "#USER.company#", mode = "deny"}'
+liberty-admin set-scope controllers --rule '{dd = "SY", values = ["00"], exclude = true}'
+liberty-admin set-attributes alice company=00001,00050
 ```
 
----
+:::warning[Mettre à jour un rôle existant]
+`create-role` sur un rôle existant remplace ses permissions par les valeurs `--permission` fournies — aucune valeur fournie signifie aucune permission conservée. Pour ne modifier que le périmètre d'un rôle, utiliser `set-scope`.
+:::
 
-## Codes de sortie
+### Migrations de schéma \{#migrate\}
 
-Toutes les CLI suivent la même convention :
+```text
+liberty-admin migrate [--app X]… [--dry-run] [--target-connector C] [--revision head]
+                      [--plugins-dir D] [--stamp REV]
+```
 
-| Code | Signification |
+Applique les migrations de schéma en attente de chaque application sous licence (les modules `plugins/<application>/db`) et enregistre chaque exécution dans **Paramètres → History → Upgrades**.
+
+| Option | Effet |
 |---|---|
-| `0` | Succès. |
-| `1` | Entrée invalide (mauvais arguments, option requise manquante). |
-| `2` | Ressource introuvable (utilisateur, connecteur, rôle inconnu, etc.). |
-| `3` | Échec de validation (TOML qui ne s'analyse pas, signature de licence invalide, etc.). |
-| `4` | Serveur injoignable (pour les commandes qui appellent le framework en cours d'exécution). |
-| `5` | Permission refusée (lors d'une exécution contre un serveur distant). |
+| `--dry-run` | Liste les migrations en attente. Code de sortie `2` s'il y en a, `0` si tout est à jour, `1` en cas d'erreur. |
+| `--app nomasx1` | Cette application uniquement (répétable). |
+| `--target-connector C` | Le connecteur de la base à migrer (par défaut : celui de l'application). |
+| `--revision R` | S'arrêter à cette révision au lieu de la dernière. |
+| `--plugins-dir D` | L'emplacement du code des applications (par défaut : `plugins/` à côté de `LIBERTY_APPS_DIR`). |
+| `--stamp REV` | Réparation : enregistre `REV` comme révision courante de la base sans rien exécuter, puis applique ce qui reste. Demande `--app`. Pour une base dont la version enregistrée est en avance sur ses tables réelles. |
+
+`./liberty migrate` et `liberty-ops migrate` lancent cette commande.
+
+### Rapports de mise à jour
+
+`record-upgrade` enregistre un rapport de mise à jour ou de retour arrière dans l'historique des mises à jour. `./liberty upgrade`, `./liberty rollback` et `liberty-ops` l'appellent ; elle n'est pas destinée à être lancée à la main.
 
 ---
 
-## Conseils et bonnes pratiques
+## liberty-connectors \{#liberty-connectors\}
 
-- **Exécuter les CLI en CI.** `verify-config`, `connectors test` et `license verify` sont des vérifications rapides qui méritent de bloquer un déploiement.
-- **Ne pas contourner le serveur pour les écritures.** `liberty-connectors run` convient au diagnostic ; les écritures en production doivent passer par l'API REST pour respecter l'authentification et l'audit.
-- **Utiliser `--json` pour les scripts.** Chaque sortie lisible se sérialise aussi en JSON — à passer dans `jq` pour l'orchestration.
-- **Définir `LIBERTY_APPS_DIR` dans le profil shell.** Les CLI en ont besoin de la même manière que le serveur ; l'exporter une fois évite de répéter `--config` partout.
-- **Garder les CLI disponibles en production.** Un conteneur durci qui les retire complique la réponse à incident plus qu'il n'apporte d'avantage en sécurité.
+Exécute les connecteurs sans l'application web — pratique pour tester un pool ou une requête depuis le serveur.
+
+| Commande | Effet |
+|---|---|
+| `liberty-connectors list` | Pools et connecteurs. |
+| `liberty-connectors describe <connecteur>` | La définition d'un connecteur. |
+| `liberty-connectors run <connecteur> <requête ou endpoint> [-p CLÉ=VALEUR]…` | Lance une requête (connecteur SQL) ou appelle un endpoint (connecteur API) et affiche le résultat. |
+
+`--config <connectors.toml>` lit un autre fichier que celui cité dans `app.toml`.
 
 ---
 
-## Pour aller plus loin
+## liberty-crypto \{#liberty-crypto\}
 
-- [Configuration → Interface Paramètres](../framework/configuration/settings-ui.md) — l'équivalent in-app de la plupart des opérations CLI.
-- [Référence API REST](./rest-api.md) — chaque endpoint appelé par les CLI.
-- [Chiffrement et secrets](../framework/configuration/encryption-secrets.md) — les flux de travail `liberty-crypto`.
+Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l'installation. **Paramètres** chiffre de lui-même ce qu'il enregistre ; cet outil sert pour une valeur écrite à la main dans un fichier TOML.
+
+| Commande | Effet |
+|---|---|
+| `liberty-crypto encrypt [VALEUR]` | Affiche `ENC:…`. Lit la valeur sur l'entrée standard quand elle n'est pas fournie — préférable pour un mot de passe. |
+| `liberty-crypto decrypt [ENC:…]` | Affiche la valeur en clair. |
+| `liberty-crypto is-encrypted [VALEUR]` | Indique si la valeur commence par `ENC:`. |
+
+La clé vient de `[crypto] master_key` dans `app.toml` (normalement `${LIBERTY_MASTER_KEY}`) ; `--master-key` et `--config` la remplacent.
+
+---
+
+## liberty-license \{#liberty-license\}
+
+| Commande | Effet |
+|---|---|
+| `liberty-license status` | Vérifie la clé configurée dans **Paramètres → App → License** : validité, produits couverts, expiration. |
+| `liberty-license verify [CLÉ]` | Vérifie une clé passée en argument ou sur l'entrée standard, avant de la coller. |
+
+`--config` désigne un autre `app.toml`. Voir [Clé de licence](../framework/build/secure/license-key.md).

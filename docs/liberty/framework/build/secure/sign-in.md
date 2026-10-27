@@ -47,8 +47,6 @@ Both can coexist — a single install offers both buttons on the sign-in screen,
 
 When OIDC is configured, a second button appears below the local form. When OIDC isn't configured, only the local form shows.
 
-For installs that want to **force OIDC** (no local fallback), set `[auth] disable_local_login = true` in `app.toml` — the local form hides and only the OIDC button remains.
-
 ---
 
 ## Step 1 — Pick the identity backend
@@ -72,10 +70,10 @@ Both backends are managed through the **same UI** — *Settings → Access*. The
 On a fresh install with no users, run:
 
 ```bash
-liberty-admin init-db --superuser <name>
+liberty-admin init-db
 ```
 
-The command prompts for a password and creates a superuser. Sign in once, then use *Settings → Access → Users* to add others (see [Users](./users.md)).
+The command creates the `admin` superuser and prints a random password once (`--admin-username`, `--password-env` to choose them). The Docker installation runs it for you. Sign in once, then use *Settings → Access → Users* to add others (see [Users](./users.md)).
 
 ---
 
@@ -93,7 +91,7 @@ OIDC is layered on top of the chosen backend. Any OIDC-compliant provider works 
 
 ### Configuration
 
-The canonical place to configure OIDC is **Settings → App → OpenID Connect (SSO)** — every field below has a matching UI control. The client secret is encrypted at rest with the install master key (`ENC:` prefix in `app.toml`); the masked-secret reveal-to-edit pattern means the stored ciphertext is never exposed in the UI. Saving rebuilds the OIDC handler in-place — **no restart** needed; the next sign-in attempt uses the new config. See [App settings → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) for the editor walkthrough.
+The canonical place to configure OIDC is **Settings → App → OpenID Connect (SSO)** — every field below has a matching UI control. The client secret is encrypted with the install master key when saved (`ENC:` prefix in `app.toml`); the field is a masked input with a show / hide eye. Saving rebuilds the OIDC handler in-place — **no restart** needed; the next sign-in attempt uses the new config. See [App settings → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) for the editor walkthrough.
 
 The resulting `app.toml` after a UI save:
 
@@ -109,22 +107,28 @@ email_claim     = "email"
 name_claim      = "name"
 redirect_url    = ""                          # blank = auto-derived as https://<host>/auth/oidc/callback
 frontend_redirect = ""                        # blank = standard server-side flow
+attribute_claims  = { company = "company", pole = "department" }   # optional, app.toml only
 ```
 
-For installs that prefer secret-manager storage, `client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"` still works — the env var is resolved at startup, and the UI field shows as configured-but-read-only. Clear the `${VAR}` reference if you want the UI to manage the value.
+For installs that prefer secret-manager storage, write `client_secret = "${OIDC_CLIENT_SECRET}"` in `app.toml`: the variable is resolved at startup. The Settings form then shows the `${…}` reference as it is.
 
 | Field | Required | Notes |
 |---|---|---|
 | `enabled` | yes | Turn OIDC on / off. When off, the OIDC button hides from the sign-in screen. |
 | `discovery_url` | yes | The provider's `.well-known` URL. Liberty fetches once on rebuild, caches the result. |
 | `client_id` | yes | The OAuth2 client id registered with the provider. |
-| `client_secret` | yes | Set via *Settings → App → OIDC → Client secret*; encrypted at rest. Env-var fallback (`${LIBERTY_OIDC_CLIENT_SECRET}`) also supported. |
+| `client_secret` | yes | Set in *Settings → App → OpenID Connect (SSO)*; encrypted when saved. A `${VARIABLE}` reference also works. |
 | `scopes` | yes | At minimum `openid`; add `email` / `profile` to pull those claims. |
 | `username_claim` | no (defaults to `preferred_username`) | Which claim becomes the Liberty username. Falls back to `email`, then `sub` if missing. |
 | `email_claim` | no | Which claim becomes the user's email. |
 | `name_claim` | no | Which claim becomes the user's full name. |
 | `redirect_url` | no | Override only when the framework is behind a reverse proxy that rewrites the host. |
 | `frontend_redirect` | no | Set for SPA-style flows that handle tokens in the URL fragment. Standard server-side flow leaves it blank. |
+| `attribute_claims` | no | Fills the users' [data-scope attributes](./users.md#attributes) from ID token claims — see below. Set in `app.toml`; the Settings form does not show it. |
+
+### Attributes from the provider \{#attribute-claims\}
+
+`attribute_claims = { company = "company", pole = "department" }` maps a user attribute to a claim of the ID token. At every OIDC sign-in, a mapped claim sets its attribute, a mapped claim that is absent removes it, and attributes that are not mapped (set by hand in **Settings → Access → Users**) are kept. A role whose data scope reads `#USER.company#` then follows the directory.
 
 ### Register the redirect URL with the provider
 
@@ -148,6 +152,7 @@ Add it to the OAuth2 client's *Redirect URIs* in the provider's console. Without
 6. Liberty **provisions** or **updates** the local user:
    - First sign-in: a new user row is created with `provider = "oidc"`, `provider_subject = <sub>`, `username = <username_claim>`, `email`, `full_name` from claims. `is_active = true`, **no roles**.
    - Subsequent sign-ins: the email + full name fields are refreshed from the latest claims; roles stay as configured in Liberty.
+   - Every sign-in: the attributes mapped by `attribute_claims` are refreshed.
 7. Liberty mints its own JWT pair (access + refresh) and the user is signed in.
 
 The provider's tokens are **not propagated** — Liberty issues fresh tokens with its own signing key. The provider's session ends; Liberty's begins.
@@ -168,39 +173,27 @@ See [Users](./users.md) for the assignment UI.
 
 ---
 
-## Disabling local login
-
-For OIDC-only installs that want to force every user through the IdP:
-
-```toml
-[auth]
-disable_local_login = true
-```
-
-The sign-in screen hides the local form; only the OIDC button shows. **Don't disable local login until you've verified OIDC works** — locking yourself out of the only sign-in path is a frustrating recovery exercise.
-
-For an emergency rescue with `disable_local_login = true`, edit `app.toml` directly on disk to flip the flag back, restart the framework, sign in locally, then re-enable.
-
----
-
 ## Tokens — the JWT pair
 
 When sign-in succeeds (local or OIDC), Liberty mints two tokens:
 
 | Token | Default lifetime | What it carries |
 |---|---|---|
-| **Access token** | 1 hour | The user's `username`, roles list, permissions snapshot. Sent on every API call as `Authorization: Bearer <token>`. |
+| **Access token** | 1 hour | The user's `username`, roles, permissions, attributes and resolved data scope. Sent on every API call as `Authorization: Bearer <token>`. |
 | **Refresh token** | 14 days | Used at `POST /auth/refresh` to mint a new access token without re-typing credentials. |
 
 Lifetimes are configurable:
 
 ```toml
 [auth]
-access_token_ttl_seconds  = 3600     # default 1h
-refresh_token_ttl_seconds = 1209600  # default 14 days
+access_token_ttl    = 3600      # seconds, default 1 h
+refresh_token_ttl   = 1209600   # seconds, default 14 days
+refresh_reuse_grace = 60        # seconds a used refresh token is still accepted
 ```
 
 Short access TTLs (e.g. 15 minutes) make permission changes propagate faster but increase the refresh load. The default 1-hour balance fits most installs.
+
+**Refresh tokens are single-use.** Each `POST /auth/refresh` returns a new refresh token and consumes the one presented. The same token presented again more than `refresh_reuse_grace` seconds later (two browser tabs racing) is refused. An API client must store the refresh token of every reply. The renewal also reads the user again: a deactivated user is refused, and changed roles, attributes and data scope apply from that moment.
 
 ### Silent refresh
 
@@ -211,6 +204,20 @@ The refresh is **silent** — the operator never sees a "session expired" prompt
 - If the refresh itself is refused (refresh token expired or revoked), the sign-in screen takes over — this is the only path where the user has to re-authenticate.
 
 The two paths are complementary. The proactive timer covers the common case where the session is quiet enough that no request would notice the expiring token; the 401-retry catches the corner case where the timer missed (a paused tab, a device coming out of sleep). Together they make an active session survive the access token's TTL without visible interruption.
+
+---
+
+## Too many failed sign-ins \{#throttle\}
+
+After `login_max_failures` failed sign-ins for one username within `login_window_seconds` (10 in 5 minutes by default), `/auth/login` answers *429 — Too many failed logins — try again in N s* until the window has passed. From one client address the limit is five times higher. A successful sign-in clears the count for that user.
+
+```toml
+[auth]
+login_max_failures   = 10     # 0 turns the throttle off
+login_window_seconds = 300
+```
+
+The counts are kept in the server's memory: a restart clears them.
 
 ---
 
@@ -232,7 +239,6 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 | `username_claim` not present in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
 | OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Settings → Access → Users*. |
 | Forgot to enable OIDC after configuring it. | The OIDC button doesn't show. | `enabled = true`. |
-| `disable_local_login = true` without a working OIDC setup. | Nobody can sign in. | Disable the flag in `app.toml` directly on disk, restart, fix OIDC, then re-enable. |
 
 ---
 

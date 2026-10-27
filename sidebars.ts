@@ -166,16 +166,18 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Installation',
-      link: {type: 'generated-index', slug: '/liberty/installation', description: 'Stand up a Liberty server — Python source install or Docker Compose, with optional Portainer and Traefik (reverse proxy + TLS). Production hardening and the upgrade procedure.'},
+      link: {type: 'generated-index', slug: '/liberty/installation', description: 'Install Liberty Next with Docker or Python, add the licensed apps and HTTPS, run it day to day with one command, upgrade and roll back, and check it before production.'},
       items: [
         'liberty/installation/overview',
-        'liberty/installation/python-server',
+        'liberty/installation/architecture',
         'liberty/installation/docker',
-        'liberty/installation/portainer',
-        'liberty/installation/traefik',
-        'liberty/installation/production',
+        'liberty/installation/python-server',
         'liberty/installation/deploy-prebuilt-apps',
+        'liberty/installation/traefik',
+        'liberty/installation/portainer',
+        'liberty/installation/operations',
         'liberty/installation/upgrading',
+        'liberty/installation/production',
       ],
     },
     {

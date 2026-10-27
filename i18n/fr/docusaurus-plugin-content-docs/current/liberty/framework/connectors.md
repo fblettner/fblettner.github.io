@@ -169,17 +169,17 @@ Cliquer sur une ligne ouvre un éditeur à trois onglets à droite. Les onglets 
 
 ### Champs de connexion
 
+Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion. Les libellés du formulaire sont en anglais.
+
 | Champ | Effet |
 |---|---|
-| **Nom** | Identifiant utilisé partout — l'URL, le code de permission (`sql:<nom>:*`), le nom de l'outil IA. Court, en kebab-case. |
-| **Application** | Liste déroulante des applications déclarées. Détermine l'espace de noms du connecteur et l'espace de travail où il apparaît. |
-| **Type** | `SQL` ici. Changer le type remodèle le formulaire. |
-| **Pool** | Liste déroulante des pools définis sous *Paramètres → Pools*. Le connecteur hérite de l'URL, des identifiants et du dialecte du pool. |
-| **Description** | Texte libre. Affichée dans le catalogue, comme infobulle sur les écrans qui choisissent ce connecteur et — c'est crucial — dans la **description de l'outil pour l'assistant IA**. Un résumé en deux phrases dans la langue de l'utilisateur fait une vraie différence. |
-| **Sous licence** | Quand *activé*, le connecteur ne se charge que si la [clé de licence](./build/secure/license-key.md) liste son identifiant. Utilisé par Nomana-IT pour verrouiller les connecteurs éditeur ; les connecteurs client le laissent désactivé. |
-| **Exposer à l'assistant IA** | Quand *activé*, les requêtes de lecture du connecteur deviennent des outils que l'assistant IA peut choisir. Les requêtes d'écriture sont exclues par défaut. Voir [Assistant IA](./ai-assistant.md). |
-
-Le bouton **Tester la connexion** (en haut à droite) interroge le pool avec un `SELECT 1` et indique succès / échec en ligne — utile pour confirmer que le pool est joignable avant d'ajouter des requêtes.
+| **Pool** | Le pool sur lequel s'exécutent les requêtes — une liste des pools définis dans *Paramètres → Pools*. Le connecteur reprend l'adresse, les identifiants et le dialecte du pool. |
+| **Pools** | Les pools supplémentaires sur lesquels les mêmes requêtes peuvent s'exécuter — voir [Connecteurs multi-pools](#multi-pool). |
+| **Show In Switcher** | Affiche le connecteur comme une application dans le sélecteur en haut du menu latéral — avec un menu, voir [Faire d'un connecteur une application](./build/menus/make-connector-an-app.md). |
+| **Home** | L'entrée de menu ouverte quand l'application est choisie. |
+| **Licensed** | Le connecteur ne se charge que si la [clé de licence](./build/secure/license-key.md) le couvre. |
+| **Max Rows** | Nombre maximal de lignes d'une lecture par défaut ; sinon celui du pool, puis 1 000. La limite d'un écran ou d'une requête l'emporte. |
+| **Dd Prefix** | Longueur du préfixe de table dans les noms de colonnes (JD Edwards : `2`, pour que `ABCO`, `MCCO` et `SDCO` portent tous l'élément `CO`). Utilisé par le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) des rôles. `0` : les noms de colonnes sont les éléments. |
 
 ### Éditeur de requête
 
@@ -216,28 +216,27 @@ Une requête SQL peut porter deux jetons de substitution : le même texte tourne
 
 Les deux jetons sont indépendants : `#SCHEMA.…#` préfixe la table, `#DBLINK.…#` la suffixe. Une même requête tourne en local (les deux mappages vides), sur un schéma distant sans lien (schéma mappé, dblink vide), ou via un DB link (les deux mappés) — c'est le pool qui décide quelle forme émettre.
 
-Une valeur de DB link non vide doit être une référence `@lien` nue (commence par `@`, pas d'espace, pas de point-virgule). Toute autre valeur est refusée au chargement du pool — garde-fou contre une valeur qui tenterait de faire passer du SQL en douce au parseur.
+Une valeur de DB link non vide doit être une référence `@lien` nue (commence par `@`, puis uniquement lettres, chiffres, `_`, `$`, `#` et `.`). Toute autre valeur fait échouer la requête à son exécution — garde-fou contre une valeur qui tenterait d'introduire du SQL dans l'instruction.
 
-### Lecture thick-mode pour les LOB via un DB link
+### Mode thick d'Oracle \{#oracle-thick\}
 
-Le pilote de base de données asynchrone tourne en mode *thin* par défaut — pas de client OCI, tout reste sur la boucle d'événements. Lire un **LOB via un DB link** est le seul cas que le mode thin ne couvre pas : le LOB revient sous forme de locator distant que le pilote thin ne sait pas matérialiser, et l'appel échoue en `ORA-22992` / `ORA-03149`.
+Le pilote Oracle fonctionne par défaut en mode *thin* : aucun client Oracle nécessaire, chaque appel s'exécute dans la boucle d'événements du serveur. Deux cas demandent le mode *thick*, qui passe par l'Oracle Instant Client :
 
-Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dans un sous-processus court : ce sous-processus active le client thick (OCI) *là et seulement là*, récupère les lignes avec les LOB matérialisés en octets et les renvoie ; le processus principal reste thin et asynchrone.
+- le **chiffrement réseau natif** (NNE) exigé par la base — le mode thin échoue avec `DPY-3001` ;
+- la lecture d'un **LOB au travers d'un DB link** — le mode thin échoue avec `ORA-22992` / `ORA-03149`.
 
-- Le client Oracle Instant Client est embarqué dans l'image Docker du framework (amd64 et arm64) — rien à installer côté conteneur.
-- Les installations bare-metal ont besoin de l'Instant Client sur l'hôte (`ORACLE_HOME` / `LD_LIBRARY_PATH` renseignés).
-- N'activer *Thick LOB* que sur les connecteurs qui en ont besoin — une lecture de LOB via un DB link. Tout le reste garde le pilote asynchrone.
+Cocher **Oracle thick mode** dans **Paramètres → App** (section *App*) et redémarrer le serveur : tous les pools Oracle passent alors en mode thick — le réglage vaut pour tout le serveur, pas pour un pool. Les pools PostgreSQL ne sont pas concernés. L'Instant Client est inclus dans l'image Docker (amd64 et arm64) ; une installation Python en a besoin sur l'hôte.
 
 ---
 
 ### Connecteurs multi-pools \{#multi-pool\}
 
-Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans les réglages du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
+Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans le mode **Settings** du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
 
 Le pool se choisit à l'exécution :
 
-- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, le sélecteur d'applications affiche un choix **Pool**. Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est par application et enregistré, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
-- **Dans les tâches** — les [steps](../nomaflow/steps.md) `sql_copy` et `sql_query` prennent `source_pool` / `target_pool` pour cibler une instance précise, sans nouveau connecteur.
+- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, un choix **Pool** apparaît dans le menu latéral, sous le sélecteur d'applications (*Default* désigne le pool propre du connecteur ; ces deux libellés restent en anglais). Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est conservé par application dans le navigateur, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
+- **Dans les tâches** — une étape `sql_copy` accepte `pool` dans son bloc `source` ou `target`, une étape `sql_query` accepte `pool`, pour cibler une instance précise sans nouveau connecteur ([étapes](../nomaflow/steps.md)). Ces clés se définissent dans `jobs.toml` ; l'éditeur d'étape ne les affiche pas.
 
 L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
 

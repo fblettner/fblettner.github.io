@@ -1,145 +1,91 @@
 ---
-title: Accès au niveau de la ligne
-description: "Recette — donner à chaque utilisateur l'accès à ses propres lignes. Le commercial ne voit que ses clients ; le tenant ne voit que ses données. Le placeholder :session_user et une clause WHERE par requête font le travail — aucun code applicatif, aucun middleware en plus."
-keywords: [Liberty Framework, cookbook, row-level access, accès ligne, multi-tenant, session_user, sécurité, security]
+title: Accès par ligne
+description: "Recette — limiter les lignes vues par chaque utilisateur dans Liberty Next : par société, région ou tout élément du dictionnaire avec le périmètre de données d'un rôle et un attribut de l'utilisateur ; ou aux lignes dont l'utilisateur est propriétaire avec le jeton {{USER}} dans la requête."
+keywords: [Liberty Next, recette, accès par ligne, périmètre de données, attributs utilisateur, multi-société, "{{USER}}", propriétaire, sécurité]
 ---
 
-# Accès au niveau de la ligne
+# Accès par ligne
 
-## Le problème
+Deux besoins reviennent sans cesse :
 
-Dans un CRM, les commerciaux ne doivent voir que leurs propres clients. Dans un SaaS multi-tenant, chaque client ne doit voir que ses propres données. Dans une application RH, un salarié ne doit voir que ses notes de frais (son manager voit celles de son équipe).
+- **Par organisation** — une filiale voit ses sociétés, une région ses agences, le siège tout. Utiliser le **périmètre de données** d'un rôle : aucune requête à modifier.
+- **Par propriétaire** — un commercial voit les clients qu'il a créés. Utiliser le jeton **`{{USER}}`** dans la requête.
 
-Vous ne voulez pas l'appliquer dans le frontend — trop facile à contourner. Vous ne voulez pas écrire un middleware d'autorisation par connecteur — trop facile à oublier. Vous voulez que ce soit la base de données qui le fasse.
+---
 
-## Le modèle
+## Recette 1 — une société par utilisateur \{#by-company\}
 
-Chaque requête exécutée par le framework a accès à **`:session_user`** — un placeholder lié côté serveur à partir du JWT de l'appelant, jamais à partir du client. Ajouter `WHERE owner = :session_user` à une requête restreint les lignes que l'appelant peut voir, au niveau SQL, **sans aucun code de framework ou de client**.
+L'objectif : les titulaires du rôle *subsidiary* ne voient que les lignes de leurs propres sociétés, sur chaque écran, export et tableau de bord, tandis que le rôle *group* voit tout.
 
-Quelques variantes de la même idée :
+1. **Donner ses sociétés à chaque utilisateur.** Dans **Paramètres → Access → Users**, ouvrir l'utilisateur et ajouter un attribut de périmètre de données : clé `company`, valeur `00001, 00050`. (Avec OpenID Connect, l'attribut peut venir d'un claim — voir [Se connecter](../build/secure/sign-in.md#attribute-claims).)
+2. **Créer le rôle.** Dans **Paramètres → Access → Roles**, ajouter *subsidiary* et lui accorder ses menus dans l'onglet **Access**.
+3. **Ajouter la règle.** Dans l'onglet **Data scope** : **Dictionary item** `CO — Company`, **From the user's attribute** `company`, et pour *A query without this item* : **returns nothing** — un écran qui ne porte pas la société n'affiche rien plutôt que tout.
+4. **Laisser *group* sans règle** : il voit toutes les lignes.
 
-| Cas d'usage | Prédicat |
-|---|---|
-| **Une ligne par propriétaire** | `WHERE owner = :session_user` |
-| **Multi-tenant** | `WHERE tenant_id = (SELECT tenant FROM users WHERE id = :session_user)` |
-| **Le manager voit son équipe** | `WHERE owner IN (SELECT id FROM users WHERE manager = :session_user OR id = :session_user)` |
-| **Élévation par rôle** | `WHERE owner = :session_user OR :session_user IN ('admin', 'sales-manager')` |
+Chaque requête dont le résultat a une colonne société est désormais filtrée sur le serveur pour les titulaires de *subsidiary* — quel que soit l'écran, et aussi pour les exports, tableaux de bord, rapports et l'assistant. Une écriture sur une ligne d'une autre société est refusée.
 
-Le système de permissions du framework reste en place — `sql:customers:list` continue de filtrer si l'appelant peut exécuter la requête. L'accès au niveau de la ligne restreint les **lignes renvoyées par cette requête**.
+La même chose dans `auth.toml` :
 
-## La recette
+```toml title="auth.toml"
+[roles.subsidiary]
+permissions = ["menu:sales:*", "sql:sales:*"]
+scope = [{ dd = "CO", source = "#USER.company#", mode = "deny" }]
 
-### 1. Schéma — ajouter la colonne propriétaire
-
-```sql
-ALTER TABLE customers ADD COLUMN owner VARCHAR(64);
-UPDATE customers SET owner = 'alice' WHERE …;   -- backfill existing rows
+[users.alice]
+roles = ["subsidiary"]
+attributes = { company = ["00001", "00050"] }
 ```
 
-Le propriétaire est l'identifiant qui correspond à la claim `sub` du JWT — généralement le nom d'utilisateur, un e-mail ou un identifiant interne — choisissez-en un et restez cohérent.
+Variantes :
 
-### 2. Filtrer la requête de lecture
+| Besoin | Règle |
+|---|---|
+| Une liste fixe pour tout le rôle | **Fixed values** `00001, 00050` au lieu de l'attribut. |
+| Masquer certaines valeurs | **Exclude these values instead** : `SY not in 00`. |
+| Une colonne absente du dictionnaire | **Column name** `REGION` au lieu d'un élément du dictionnaire. |
+| Sur un seul connecteur | Choisir le **Connector** ; la règle ne dit rien des autres. |
+| Tables JD Edwards (`ABCO`, `MCCO`, `SDCO`…) | Définir **Dd Prefix** `2` sur le connecteur : une seule règle `CO` les atteint toutes. |
 
-```sql
-SELECT id, name, status, industry
+La référence complète se trouve sur [Rôles et permissions → Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
+
+---
+
+## Recette 2 — chacun voit ses propres lignes \{#by-owner\}
+
+Quand les lignes appartiennent à une personne plutôt qu'à une organisation, enregistrer le propriétaire dans la table et filtrer dessus dans la requête. Le jeton `{{USER}}` est remplacé sur le serveur par le nom de l'utilisateur connecté, **en majuscules**, sous forme de valeur liée — le navigateur ne peut pas le modifier.
+
+```sql title="customers_get"
+SELECT id, name, status, owner
 FROM   customers
-WHERE  owner = :session_user
-ORDER  BY name;
+WHERE  owner = {{USER}}
 ```
 
-Testez la requête en tant qu'utilisateur `admin` — résultat vide. Testez en tant qu'`alice` après lui avoir attribué la propriété de quelques lignes — seules ses lignes apparaissent.
-
-### 3. Filtrer aussi les écritures
-
-Le même schéma pour `UPDATE` et `DELETE` :
-
-```sql
--- update
-UPDATE customers SET name = :name, status = :status
-WHERE id = :id AND owner = :session_user;
-
--- delete
-DELETE FROM customers WHERE id = :id AND owner = :session_user;
+```sql title="customers_post"
+INSERT INTO customers (name, status, owner)
+VALUES (:NAME, :STATUS, {{USER}})
 ```
 
-Le garde `AND owner = :session_user` empêche l'appel API `DELETE /api/sql/customers/delete?id=42` d'aboutir quand la ligne 42 appartient à quelqu'un d'autre. La requête renvoie « 0 rows affected » ; le framework le traite comme un 404 et la réponse est exactement la même que « row doesn't exist ». Aucune fuite d'information.
-
-### 4. Forcer le propriétaire à l'insertion
-
-```sql
-INSERT INTO customers (name, status, owner, created_at)
-VALUES (:name, :status, :session_user, CURRENT_TIMESTAMP);
+```sql title="customers_put"
+UPDATE customers
+SET    name = :NAME, status = :STATUS
+WHERE  id = :ID AND owner = {{USER}}
 ```
 
-Remarquez `:session_user` au lieu de `:owner` — même si la charge utile du formulaire glisse un paramètre `owner`, le SQL l'ignore et utilise la valeur côté serveur. L'utilisateur ne peut créer que des lignes dont il est lui-même propriétaire.
+Le `AND owner = {{USER}}` des requêtes de modification et de suppression compte : sans lui, un utilisateur qui connaît l'identifiant d'une autre ligne pourrait la modifier par l'API.
 
-### 5. Élévation par rôle
+`{{LOGIN}}` donne la même valeur. Autres jetons : `{{SYSDATE}}`, `{{SYSTIME}}`, `{{SYSTIMESTAMP}}` / `{{NOW}}`, et pour les colonnes d'audit JD Edwards `{{JDEDATE}}`, `{{JDETIME}}`, `{{PID}}`, `{{JOBN}}`.
 
-Quand le manager doit tout voir, levez le prédicat selon la liste des rôles du JWT :
+Enregistrer les noms d'utilisateur en majuscules (ou comparer avec `UPPER(owner) = {{USER}}`), puisque le jeton est toujours en majuscules.
 
-```sql
-SELECT id, name, status, industry, owner
-FROM   customers
-WHERE  owner = :session_user
-   OR  'manager' = ANY(string_to_array(:session_roles, ','))
-ORDER  BY name;
-```
+---
 
-Le framework lie `:session_roles` (liste séparée par virgules des rôles de l'appelant) à chaque appel. L'expression « soit c'est la mienne, soit je suis manager » gère les deux cas dans une seule requête.
+## Laquelle choisir ? \{#choose\}
 
-Pour Oracle / SQL Server, remplacez l'astuce avec le tableau par `INSTR(:session_roles, 'manager') > 0`.
+| | Périmètre de données | `{{USER}}` dans la requête |
+|---|---|---|
+| Filtre sur | Tout élément du dictionnaire ou toute colonne, valeurs par rôle ou par utilisateur | La colonne du propriétaire |
+| Requêtes à modifier | Aucune | Chacune |
+| Couvre | Toutes les requêtes SQL, exports, tableaux de bord, rapports, assistant, écritures | Les requêtes qui portent la condition |
+| Les responsables voient plus | Leur donner un rôle sans la règle | Demande une seconde requête ou une condition sur le rôle |
 
-## Modèle multi-tenant
-
-Pour les applications SaaS / multi-tenant, le prédicat passe d'un propriétaire par ligne à un filtrage par tenant. Une configuration typique :
-
-```sql
--- The tenant lookup needs to happen inside the query (we can't trust a 'tenant' parameter from the client)
-WITH user_tenant AS (
-  SELECT tenant_id FROM ly2_users WHERE username = :session_user
-)
-SELECT *
-FROM   invoices
-WHERE  tenant_id = (SELECT tenant_id FROM user_tenant);
-```
-
-Ou avec une claim JWT personnalisée — la couche OIDC du framework rend chaque claim disponible sous `:session_<claim_name>` :
-
-```sql
-WHERE tenant_id = :session_tenant_id
-```
-
-La claim `tenant_id` est définie par l'IdP / la couche SSO ; le framework la lie comme n'importe quelle autre valeur de session.
-
-## Notes de performance
-
-| Préoccupation | Atténuation |
-|---|---|
-| **Indexer la colonne `owner`** | Critique. Chaque requête de lecture filtre dessus ; un index fait passer d'une analyse complète à une recherche sur une seule ligne. |
-| **Anti-pattern N+1** | Ne bouclez pas ligne par ligne dans l'application ; laissez une seule requête avec `WHERE owner = :session_user` renvoyer le bon ensemble. Le framework le fait naturellement. |
-| **Vues matérialisées par tenant** | Pour des tenants volumineux, une vue par tenant (`vw_invoices_tenant_42`) peut être plus performante qu'un prédicat `WHERE` générique. Changez la cible de la requête du connecteur en conséquence. |
-
-## Ce que cela vous donne
-
-| Propriété | Pourquoi |
-|---|---|
-| **Le frontend ne peut pas contourner le filtre** | Le frontend ne voit jamais les lignes des autres utilisateurs ; le filtrage par ligne est en SQL. |
-| **Les appels REST directs ne peuvent pas le contourner** | Le framework lie `:session_user` à partir du JWT vérifié, et non à partir du corps de la requête. |
-| **L'assistant IA hérite du filtre** | Le même placeholder `:session_user` s'applique aux requêtes déclenchées par l'IA. Un admin demande « how many customers do I have? » → toutes les lignes. Un commercial pose la même question → seulement ses lignes. |
-| **L'export Excel hérite du filtre** | Le point d'accès d'export exécute la même requête ; les lignes qu'il livre sont l'ensemble filtré. |
-| **La piste d'audit est préservée** | `created_by = :session_user` enregistre qui a créé chaque ligne ; personne ne peut usurper l'identité. |
-
-## Variantes
-
-| Vous voulez… | Faites ceci |
-|---|---|
-| **Lignes publiques et privées dans la même table** | `WHERE owner = :session_user OR is_public = true`. |
-| **Accès en lecture seule aux lignes d'autres propriétaires** | La requête de lecture n'a pas de `WHERE` ; les requêtes d'écriture, oui. Un commercial voit les clients de tout le monde mais ne peut modifier que les siens. |
-| **Accès limité dans le temps** | `WHERE owner = :session_user OR (shared_until > CURRENT_TIMESTAMP AND shared_with = :session_user)` — la ligne redevient privée quand le partage expire. |
-| **Visibilité de ligne par rôle** | Combinez `:session_user` avec `:session_roles` comme dans l'exemple du manager. Ou définissez des requêtes distinctes (`list-mine` / `list-team` / `list-all`) et filtrez chacune par son propre code de permission. |
-
-## Pour aller plus loin
-
-- [Authentification](../build/secure/sign-in.md) pour la liaison de `:session_user`.
-- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour la valeur `:session_roles` et les codes de permission par requête.
-- [Cookbook → Piste d'audit](./audit-trail.md) pour le modèle complémentaire `created_by`.
+Les deux se combinent : les commerciaux d'une filiale voient leurs propres clients, dans leurs sociétés.

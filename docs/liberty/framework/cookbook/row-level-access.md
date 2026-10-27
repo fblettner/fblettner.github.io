@@ -1,145 +1,91 @@
 ---
 title: Row-level access
-description: "Recipe — give each user access to only their own rows. Salesperson sees only their customers; tenant sees only their data. The :session_user placeholder and a per-query WHERE clause do the work — no app code, no extra middleware."
-keywords: [Liberty Framework, cookbook, row-level access, multi-tenant, session_user, security]
+description: "Recipe — limit the rows each user sees in Liberty Next: by company, region or any dictionary item with a role's data scope and a user attribute; or to the rows a user owns with the {{USER}} token in the query."
+keywords: [Liberty Next, cookbook, row-level access, data scope, user attributes, multi-company, "{{USER}}", owner, security]
 ---
 
 # Row-level access
 
-## The problem
+Two needs come up again and again:
 
-In a CRM, salespeople should only see their own customers. In a multi-tenant SaaS, each customer should only see their own data. In an HR app, an employee should only see their own expense claims (their manager sees their team's).
+- **By organisation** — a subsidiary sees its companies, a region its branches, the head office everything. Use a role's **data scope**: no change to any query.
+- **By owner** — a salesperson sees the customers they created. Use the **`{{USER}}`** token in the query.
 
-You don't want to enforce this in the frontend — too easy to bypass. You don't want to write an authorisation middleware per connector — too easy to forget. You want the database to do it.
+---
 
-## The pattern
+## Recipe 1 — one company per user \{#by-company\}
 
-Every query the framework runs has access to **`:session_user`** — a placeholder bound on the server from the caller's JWT, never from the client. Adding `WHERE owner = :session_user` to a query restricts the rows the caller can see, at the SQL level, **without any framework or client code involved**.
+The goal: users of the *subsidiary* role see only the rows of their own companies, on every screen, export and dashboard, while the *group* role sees everything.
 
-A few variations of the same idea:
+1. **Give each user their companies.** In **Settings → Access → Users**, open the user and add a data-scope attribute: key `company`, value `00001, 00050`. (With OpenID Connect, the attribute can come from a claim — see [Sign-in](../build/secure/sign-in.md#attribute-claims).)
+2. **Create the role.** In **Settings → Access → Roles**, add *subsidiary*, grant its menus in the **Access** tab.
+3. **Add the rule.** In the **Data scope** tab: **Dictionary item** `CO — Company`, **From the user's attribute** `company`, and *A query without this item*: **returns nothing** — a screen that does not carry the company shows nothing rather than everything.
+4. **Leave *group* without any rule**: it sees every row.
 
-| Use case | Predicate |
-|---|---|
-| **One row per owner** | `WHERE owner = :session_user` |
-| **Multi-tenant** | `WHERE tenant_id = (SELECT tenant FROM users WHERE id = :session_user)` |
-| **Manager sees team** | `WHERE owner IN (SELECT id FROM users WHERE manager = :session_user OR id = :session_user)` |
-| **Role-based escalation** | `WHERE owner = :session_user OR :session_user IN ('admin', 'sales-manager')` |
+Every query whose result has a company column is now filtered on the server for the holders of *subsidiary* — whatever the screen, and also exports, dashboards, reports and the assistant. A write on a row of another company is refused.
 
-The framework's permission system stays in place — `sql:customers:list` still gates whether the caller can run the query at all. Row-level access narrows the **rows returned by that query**.
+The same in `auth.toml`:
 
-## The recipe
+```toml title="auth.toml"
+[roles.subsidiary]
+permissions = ["menu:sales:*", "sql:sales:*"]
+scope = [{ dd = "CO", source = "#USER.company#", mode = "deny" }]
 
-### 1. Schema — add the owner column
-
-```sql
-ALTER TABLE customers ADD COLUMN owner VARCHAR(64);
-UPDATE customers SET owner = 'alice' WHERE …;   -- backfill existing rows
+[users.alice]
+roles = ["subsidiary"]
+attributes = { company = ["00001", "00050"] }
 ```
 
-The owner is whatever identifier matches the JWT's `sub` claim — typically the username, or an email, or an internal user ID — pick one and stay consistent.
+Variants:
 
-### 2. Filter the read query
+| Need | Rule |
+|---|---|
+| A fixed list for everyone in the role | **Fixed values** `00001, 00050` instead of the attribute. |
+| Hide some values instead | **Exclude these values instead**: `SY not in 00`. |
+| A column that is not in the dictionary | **Column name** `REGION` instead of a dictionary item. |
+| Only on one connector | Pick the **Connector**; the rule says nothing about the others. |
+| JD Edwards tables (`ABCO`, `MCCO`, `SDCO`…) | Set **Dd Prefix** `2` on the connector: one `CO` rule reaches all of them. |
 
-```sql
-SELECT id, name, status, industry
+The full reference is on [Roles and permissions → Data scope](../build/secure/roles-and-permissions.md#data-scope).
+
+---
+
+## Recipe 2 — each user sees their own rows \{#by-owner\}
+
+When rows belong to a person rather than to an organisation, store the owner in the table and filter on it in the query. The `{{USER}}` token is replaced on the server by the signed-in user's name, **in upper case**, as a bound value — the browser cannot change it.
+
+```sql title="customers_get"
+SELECT id, name, status, owner
 FROM   customers
-WHERE  owner = :session_user
-ORDER  BY name;
+WHERE  owner = {{USER}}
 ```
 
-Test the query as the `admin` user — empty result. Test as `alice` after assigning her ownership of some rows — only her rows return.
-
-### 3. Filter writes too
-
-The same pattern for `UPDATE` and `DELETE`:
-
-```sql
--- update
-UPDATE customers SET name = :name, status = :status
-WHERE id = :id AND owner = :session_user;
-
--- delete
-DELETE FROM customers WHERE id = :id AND owner = :session_user;
+```sql title="customers_post"
+INSERT INTO customers (name, status, owner)
+VALUES (:NAME, :STATUS, {{USER}})
 ```
 
-The `AND owner = :session_user` guard prevents the API call `DELETE /api/sql/customers/delete?id=42` from succeeding when row 42 belongs to someone else. The query returns "0 rows affected"; the framework treats this as a 404 and the response is exactly the same as "row doesn't exist". No information leak.
-
-### 4. Force the owner on insert
-
-```sql
-INSERT INTO customers (name, status, owner, created_at)
-VALUES (:name, :status, :session_user, CURRENT_TIMESTAMP);
+```sql title="customers_put"
+UPDATE customers
+SET    name = :NAME, status = :STATUS
+WHERE  id = :ID AND owner = {{USER}}
 ```
 
-Notice `:session_user` instead of `:owner` — even if the form payload sneaks an `owner` parameter, the SQL ignores it and uses the server-side value. The user can only create rows owned by themselves.
+The `AND owner = {{USER}}` of the update and delete queries matters: without it, a user who knows another row's id could change it through the API.
 
-### 5. Role-based escalation
+`{{LOGIN}}` is the same value. Other tokens: `{{SYSDATE}}`, `{{SYSTIME}}`, `{{SYSTIMESTAMP}}` / `{{NOW}}`, and for JD Edwards audit columns `{{JDEDATE}}`, `{{JDETIME}}`, `{{PID}}`, `{{JOBN}}`.
 
-When the manager should see everything, drop the predicate based on the JWT's role list:
+Store user names in upper case (or compare with `UPPER(owner) = {{USER}}`), since the token is always upper case.
 
-```sql
-SELECT id, name, status, industry, owner
-FROM   customers
-WHERE  owner = :session_user
-   OR  'manager' = ANY(string_to_array(:session_roles, ','))
-ORDER  BY name;
-```
+---
 
-The framework binds `:session_roles` (comma-separated list of the caller's roles) on every call. The expression "either it's mine or I'm a manager" handles both cases in one query.
+## Which one? \{#choose\}
 
-For Oracle / SQL Server, replace the array trick with `INSTR(:session_roles, 'manager') > 0`.
+| | Data scope | `{{USER}}` in the query |
+|---|---|---|
+| Filters on | Any dictionary item or column, values per role or per user | The owner column |
+| Queries to change | None | Each query |
+| Covers | Every SQL query, exports, dashboards, reports, assistant, writes | The queries that carry the condition |
+| Managers see more | Give them a role without the rule | Needs a second query or a condition on the role |
 
-## Multi-tenant pattern
-
-For SaaS / multi-tenant apps, the predicate moves from per-row owner to per-tenant filtering. A typical setup:
-
-```sql
--- The tenant lookup needs to happen inside the query (we can't trust a 'tenant' parameter from the client)
-WITH user_tenant AS (
-  SELECT tenant_id FROM ly2_users WHERE username = :session_user
-)
-SELECT *
-FROM   invoices
-WHERE  tenant_id = (SELECT tenant_id FROM user_tenant);
-```
-
-Or with a JWT custom claim — the framework's OIDC layer surfaces every claim under `:session_<claim_name>`:
-
-```sql
-WHERE tenant_id = :session_tenant_id
-```
-
-The `tenant_id` claim is set by the IdP / SSO layer; the framework binds it like any other session value.
-
-## Performance notes
-
-| Concern | Mitigation |
-|---|---|
-| **Index the `owner` column** | Critical. Every read query filters by it; an index turns it from full-scan to single-row lookup. |
-| **N+1 anti-pattern** | Don't loop per-row in the application; let one query with `WHERE owner = :session_user` return the right set. The framework does this naturally. |
-| **Per-tenant materialized views** | For massive tenants, a per-tenant view (`vw_invoices_tenant_42`) might outperform a generic `WHERE` predicate. Switch the connector's query target accordingly. |
-
-## What this gives you
-
-| Property | Why |
-|---|---|
-| **Frontend can't bypass the gate** | The frontend never sees rows for other users; row-level filtering is in SQL. |
-| **Direct REST calls can't bypass it** | The framework binds `:session_user` from the verified JWT, not from the request body. |
-| **The AI assistant inherits the gate** | The same `:session_user` placeholder applies to AI-triggered queries. An admin asks "how many customers do I have?" → all rows. A salesperson asks the same → their rows only. |
-| **Excel export inherits the gate** | The export endpoint runs the same query; the rows it ships are the filtered set. |
-| **Audit trail is preserved** | `created_by = :session_user` records who created each row; nobody can impersonate. |
-
-## Variations
-
-| You want… | Do this |
-|---|---|
-| **Public rows + private rows on the same table** | `WHERE owner = :session_user OR is_public = true`. |
-| **Read-only access to other-owner rows** | The read query has no `WHERE`; the write queries do. A salesperson sees everyone's customers but can only edit their own. |
-| **Time-bound access** | `WHERE owner = :session_user OR (shared_until > CURRENT_TIMESTAMP AND shared_with = :session_user)` — the row goes back to private once the share expires. |
-| **Per-role row visibility** | Combine `:session_user` with `:session_roles` as in the manager example. Or define separate queries (`list-mine` / `list-team` / `list-all`) and gate each with its own permission code. |
-
-## What's next
-
-- [Authentication](../build/secure/sign-in.md) for the `:session_user` binding.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for the `:session_roles` value and the per-query permission codes.
-- [Cookbook → Audit trail](./audit-trail.md) for the `created_by` companion pattern.
+Both can be combined: a subsidiary's salespeople see their own customers, within their companies.
