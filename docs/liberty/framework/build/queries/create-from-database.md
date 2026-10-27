@@ -18,7 +18,7 @@ The wizard is reached from **Settings → Connectors**:
 
 1. Pick a connector in the left list.
 2. Switch the right pane's mode bar to **Tables**.
-3. Click **＋ Add table** at the top-right.
+3. In the **Tables** view, click **＋ Add queries** at the top-right.
 4. A choice modal opens. Pick **Generate from DB**.
 
 The wizard then walks the connector's pool (`GET /api/sql/<connector>/_schemas`) and presents the schemas it found.
@@ -97,11 +97,11 @@ The wizard then walks the connector's pool (`GET /api/sql/<connector>/_schemas`)
   <text x="548" y="291" fill="#22c55e" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">PUT</text>
   <text x="578" y="291" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">customers_put</text>
   <text x="528" y="310" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">UPDATE public.customers</text>
-  <text x="528" y="324" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SET name = :name, email = :email,</text>
-  <text x="528" y="338" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    created_at = :created_at,</text>
-  <text x="528" y="352" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    owner_id = :owner_id,</text>
-  <text x="528" y="366" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    status = :status, region = :region</text>
-  <text x="528" y="380" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">WHERE customer_id = :customer_id_ORIGINAL</text>
+  <text x="528" y="324" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SET NAME = :NAME, EMAIL = :EMAIL,</text>
+  <text x="528" y="338" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    CREATED_AT = :CREATED_AT,</text>
+  <text x="528" y="352" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    OWNER_ID = :OWNER_ID,</text>
+  <text x="528" y="366" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    STATUS = :STATUS, REGION = :REGION</text>
+  <text x="528" y="380" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">WHERE CUSTOMER_ID = :CUSTOMER_ID_ORIGINAL</text>
 
   <line x1="20" y1="430" x2="980" y2="430" stroke="#1f2937" strokeWidth="1"/>
   <rect x="780" y="450" width="80" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
@@ -178,23 +178,23 @@ The right column shows the generated SQL for every ticked CRUD slot, live. Edit 
 
 ```sql
 -- _get : straight SELECT over the included columns
-SELECT col1, col2, …
+SELECT COL1, COL2, …
 FROM   <schema>.<table>
 
 -- _post : INSERT bound to :col placeholders
-INSERT INTO <schema>.<table> (col1, col2, …)
-VALUES                       (:col1, :col2, …)
+INSERT INTO <schema>.<table> (COL1, COL2, …)
+VALUES                       (:COL1, :COL2, …)
 
 -- _put  : UPDATE non-key columns, WHERE on key with :NAME_ORIGINAL
 UPDATE <schema>.<table>
-SET    non_key1 = :non_key1, non_key2 = :non_key2, …
-WHERE  key1 = :key1_ORIGINAL
-   AND key2 = :key2_ORIGINAL
+SET    NON_KEY1 = :NON_KEY1, NON_KEY2 = :NON_KEY2, …
+WHERE  KEY1 = :KEY1_ORIGINAL
+   AND KEY2 = :KEY2_ORIGINAL
 
 -- _delete : DELETE keyed on :NAME (the dialog binds the row's current values)
 DELETE FROM <schema>.<table>
-WHERE  key1 = :key1
-   AND key2 = :key2
+WHERE  KEY1 = :KEY1
+   AND KEY2 = :KEY2
 ```
 
 ### Why `:NAME_ORIGINAL` on UPDATE?
@@ -245,7 +245,7 @@ They land in the **Tables** tab as one row labelled `customers` with the four GE
 
 ## When to use the wizard vs hand-write
 
-| Use the wizard | Hand-write (`Add query` on Unclassified) |
+| Use the wizard | Hand-write (`Add query` in the Queries view) |
 |---|---|
 | The table exists in the DB. | The query is a custom report, an aggregate, or a stored procedure call. |
 | You want the four standard CRUD shapes. | You need a `JOIN`, a `GROUP BY`, a `RECURSIVE` CTE. |

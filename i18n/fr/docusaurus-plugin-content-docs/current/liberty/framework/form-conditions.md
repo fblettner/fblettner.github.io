@@ -1,195 +1,139 @@
 ---
 title: Conditions de formulaire
-description: "Afficher, masquer, rendre obligatoire ou désactiver un champ en fonction des valeurs en direct des autres champs du même dialogue. L'éditeur d'écrans propose trois emplacements de condition par champ — Visible quand, Obligatoire quand, Désactivé quand — avec un éditeur d'expression qui suggère les noms de champs et donne un aperçu de l'évaluation."
-keywords: [Liberty Framework, form conditions, visible when, required when, disabled when, conditional fields, screens, dialog, settings]
+description: "Tous les réglages conditionnels d'une colonne d'écran — afficher, rendre obligatoire, verrouiller, imposer une valeur, changer de règle ou ne pas écrire selon la valeur d'un autre champ — et la règle editable_when qui verrouille des lignes entières. Une seule forme de condition : un champ et une valeur, combinés par ET."
+keywords: [Liberty Next, conditions de formulaire, visible_when, required_when, disabled_when, default_when, rules_when, write_when, editable_when, disable_on_add, disable_on_edit, écrans, dialogue]
 ---
 
 # Conditions de formulaire
 
-:::info[Référence détaillée]
-Cette page documente le langage d'expression derrière `visible_when` / `required_when` / `disabled_when` — opérateurs, ordre d'évaluation, contexte de session, application côté serveur. Pour l'utilisation orientée tâche — marquer un champ comme conditionnellement visible / obligatoire / désactivé dans le constructeur de dialogues — voir [Construire → Écrans → Champs conditionnels](./build/screens/conditional-fields.md).
-:::
+Une colonne d'écran peut réagir à la valeur d'un autre champ de la même ligne : n'apparaître que pour un type d'enregistrement, devenir obligatoire, se verrouiller, prendre une valeur imposée, changer de liste de valeurs ou ne pas être écrite du tout. L'écran lui-même peut placer des lignes entières en lecture seule. Tous ces réglages reposent sur la même forme de condition.
 
-La boîte de dialogue d'édition d'un écran est une liste à plat de champs. Certains champs n'ont de sens que quand d'autres ont une valeur spécifique — un *SLA personnalisé* qui n'apparaît que sur le plan *Enterprise*, un *Email du responsable* qui n'est obligatoire qu'au-delà de 20 % de remise. Le framework permet d'exprimer cela directement dans l'**éditeur d'écrans**, sur chaque champ, via trois emplacements :
-
-| Emplacement | Effet |
-|---|---|
-| **Visible quand** | Le champ n'est rendu que quand l'expression est vraie. Quand elle est fausse, le champ est retiré du dialogue **et** écarté du payload d'enregistrement. |
-| **Obligatoire quand** | Le champ obtient l'astérisque *obligatoire* et l'enregistrement est bloqué tant que la valeur n'est pas fournie. |
-| **Désactivé quand** | Le champ est rendu mais grisé et en lecture seule. Sa valeur courante part quand même dans le payload d'enregistrement. |
-
-Les trois emplacements sont indépendants — un champ peut être visible-et-obligatoire, visible-et-désactivé, ou les trois.
+La mise en œuvre pas à pas dans l'éditeur d'écran est décrite dans [Écrans → Champs conditionnels](./build/screens/conditional-fields.md).
 
 ---
 
 ## Vue d'ensemble
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '6px 0 10px', fontWeight: 700}}>Abonnement — dialogue d'édition</div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Plan</div>
-    <div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.45)', color: '#4a9eff', fontSize: '11px', fontWeight: 600}}>Enterprise ▾</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Sièges <span style={{color: '#f87171'}}>*</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>250</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>SLA personnalisé <span style={{fontSize: '10px', opacity: 0.55, fontStyle: 'italic'}}>(visible : plan = enterprise)</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', fontSize: '11px'}}>Gold — 99,95 %</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Remise % <span style={{fontSize: '10px', opacity: 0.55, fontStyle: 'italic'}}>(désactivé : sièges &lt; 100)</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.45}}>15</span></div>
-  </div>
-  <div style={{padding: '12px 0 0', display: 'flex', justifyContent: 'flex-end', gap: '6px'}}>
-    <span style={{padding: '5px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Annuler</span>
-    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>Enregistrer</span>
-  </div>
-</div>
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="cnd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cnd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cnd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cnd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
 
-*SLA personnalisé* n'apparaît que sur le plan Enterprise ; *Remise %* est visible sur chaque plan mais verrouillé quand *Sièges* descend sous 100.
-
----
-
-## Modifier une condition
-
-Dans **Paramètres → Écrans**, ouvrir l'écran et cliquer sur le champ dans l'onglet *Champs*. L'éditeur de champ à droite présente les trois emplacements de condition, chacun avec un **éditeur d'expression** :
-
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '8px 0 10px', fontWeight: 700}}>Éditeur de champ — SLA personnalisé</div>
-  <div style={{display: 'grid', gridTemplateColumns: '140px 1fr', rowGap: '10px', columnGap: '12px', alignItems: 'center'}}>
-    <div style={{opacity: 0.75}}>Nom</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>custom_sla</span></div>
-    <div style={{opacity: 0.75}}>Libellé</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>SLA personnalisé</span></div>
-    <div style={{opacity: 0.75}}>Type</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>string ▾</span></div>
-    <div style={{opacity: 0.75}}>Visible quand</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.08)', border: '1px solid rgba(74,158,255,0.40)', fontSize: '11px', fontFamily: 'ui-monospace, monospace', color: '#60a5fa'}}>plan == 'enterprise'</span></div>
-    <div style={{opacity: 0.75}}>Obligatoire quand</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.55, fontStyle: 'italic'}}>— toujours obligatoire quand visible —</span></div>
-    <div style={{opacity: 0.75}}>Désactivé quand</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.55, fontStyle: 'italic'}}>—</span></div>
-  </div>
-</div>
-
-Chaque emplacement d'expression :
-
-- Suggère les **noms de champs** du même écran par auto-complétion.
-- Valide la syntaxe en direct — une faute de frappe (`plan = 'enterprise'` au lieu de `==`) affiche un soulignement rouge avant l'enregistrement.
-- Refuse les cycles à l'enregistrement (champ A visible-quand dépend de B, B dépend de A).
-
-Le bouton *Tester* en haut de l'éditeur de champ ouvre un petit volet d'aperçu (voir [Tester les conditions](#testing) plus bas).
-
----
-
-## Défaut conditionnel — `default_when`
-
-Un quatrième créneau, sur l'éditeur de champ, sème une valeur quand une condition devient vraie. C'est un **défaut conditionnel**, complémentaire du *Défaut* statique — à utiliser quand la valeur dépend d'un autre champ.
-
-| Champ | Effet |
-|---|---|
-| **Défaut quand** | Expression booléenne qui active la règle. Quand elle vaut vrai, la valeur ci-dessous est écrite dans le champ. |
-| **Valeur** | La valeur à écrire. Littéraux, jetons de session (`${session.user}`) et références à d'autres champs sont acceptés — évalués à la volée. |
-| **Verrou** | Contrôle si le champ reste éditable après l'écriture. |
-
-Le drapeau **Verrou** prend deux valeurs :
-
-| Verrou | Comportement |
-|---|---|
-| `true` *(défaut si omis)* | Le champ est rempli **et désactivé** tant que la condition tient — un forçage strict. L'opérateur ne peut pas surcharger. |
-| `false` | Le champ est rempli **mais reste éditable** — l'opérateur peut surcharger la valeur semée. Utile pour *proposer* une valeur par défaut que l'utilisateur peut affiner (par ex. semer une colonne de recherche à `*ALL` tout en laissant l'opérateur choisir une valeur précise). |
-
-Deux règles sur le même champ ne se cumulent pas — la première qui correspond gagne, dans l'ordre de déclaration. Quand la condition repasse à faux, la valeur semée reste si le champ était verrouillé (c'était une règle stricte) mais est effacée si le champ était resté éditable (la règle cesse de s'appliquer).
+  <rect x="260" y="14" width="680" height="360" rx="14" fill="url(#cnd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="280" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Facture 00001-1042</text>
+  <line x1="280" y1="62" x2="920" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="280" y="95" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Statut</text>
+  <rect x="480" y="80" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="94.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Annulée ▾</text>
+  <text x="280" y="137" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Motif d'annulation ∗</text>
+  <rect x="480" y="122" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="136.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Commande en double</text>
+  <text x="280" y="179" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Mode de paiement</text>
+  <rect x="480" y="164" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="178.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Virement ▾</text>
+  <text x="280" y="221" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">IBAN</text>
+  <rect x="480" y="206" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="220.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">FR76 0000 0000 0000 0000 0000 000</text>
+  <text x="280" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Plafond de crédit</text>
+  <rect x="480" y="248" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="262.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0</text>
+  <text x="890" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
+  <text x="280" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">N° de facture</text>
+  <rect x="480" y="290" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="304.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">00001-1042</text>
+  <text x="890" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
+  <rect x="750" y="340" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="785.0" y="354.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="830" y="340" width="80" height="22" rx="5" fill="url(#cnd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="870.0" y="354.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="10" y="100" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">required_when</text>
+  <text x="20" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → obligatoire</text>
+  <line x1="240" y1="117.0" x2="280" y2="136" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="10" y="200" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">visible_when</text>
+  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">affiché si PAYMENT_METHOD = TRANSFER</text>
+  <line x1="240" y1="217.0" x2="280" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="10" y="300" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">disable_on_edit</text>
+  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clé verrouillée après création</text>
+  <line x1="240" y1="317.0" x2="280" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="970" y="220" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="980" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default_when</text>
+  <text x="980" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → 0, verrouillé</text>
+  <line x1="970" y1="237.0" x2="920" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="970" y="80" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="980" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">editable_when</text>
+  <text x="980" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur l'écran : ligne en lecture seule</text>
+  <line x1="970" y1="97.0" x2="920" y2="46" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+</svg>
 
 ---
 
-## Syntaxe des expressions
+## La condition \{#condition\}
 
-Le langage d'expression est petit et sûr — comparable à une clause SQL `WHERE` mais évalué côté client.
+Une condition désigne un **champ** de la même ligne et la **valeur** attendue — ou une liste de valeurs, dont une seule suffit :
 
-| Construction | Exemple |
-|---|---|
-| **Référence de champ** | `plan`, `seats`, `discount_pct`. Référence à la valeur courante du champ portant ce *Nom* dans le même dialogue. |
-| **Littéraux** | `'enterprise'`, `5`, `true`, `false`, `null`. |
-| **Comparaisons** | `==`, `!=`, `<`, `<=`, `>`, `>=`. |
-| **Logique** | `&&`, `\|\|`, `!`. Parenthèses pour le groupement. |
-| **Appartenance** | `plan in ['team', 'enterprise']`. |
-| **Test de null** | `discount_pct == null` / `discount_pct != null`. |
-| **Prédicats de chaîne** | `name.startsWith('FR-')`, `name.endsWith('.pdf')`, `name.includes('test')`. |
-| **Longueur** | `tags.length > 0` (pour les champs *Multiple*). |
-| **Contexte de session** | `session.user`, `session.lang`, `session.roles` — le même triplet disponible aux requêtes (voir [Liaison des paramètres → Contexte de session](./build/queries/parameter-binding.md)). `session.roles` est un tableau — `'admin' in session.roles`. |
-
-Le langage **n'a pas d'appels de fonction au-delà des prédicats listés** ni d'opérateurs arithmétiques autres que la comparaison. L'intention est « expression booléenne sur l'état du formulaire », pas un langage de script.
-
----
-
-## Ordre d'évaluation
-
-Les conditions sont ré-évaluées **à chaque changement de champ** dans le dialogue. Le framework exécute les trois emplacements pour chaque champ en parallèle ; le résultat est lu une fois chaque référence résolue. Ce que cela veut dire :
-
-- **L'ordre dans lequel les champs sont listés n'a pas d'importance.** Un *Visible quand* sur le champ A peut référencer le champ B qui dépend lui-même du champ C — le résolveur réévalue l'ensemble une fois par changement.
-- **Les cycles sont refusés à l'enregistrement** — l'éditeur nomme le cycle et pointe les champs en cause.
-- **Les champs désactivés gardent leur valeur**, même si un *Visible quand* les masque ensuite. Basculer la visibilité off puis on ne remet pas la valeur à zéro.
-- **Les champs masqués perdent leur valeur à l'enregistrement.** Le payload envoyé au connecteur ne contient que les champs visibles. Cela compte quand l'INSERT/UPDATE d'un connecteur attend `NULL` pour un champ absent plutôt que la valeur tapée précédemment.
-
----
-
-## Interaction avec Défaut
-
-| Scénario | Comportement |
-|---|---|
-| Champ avec *Défaut*, devient visible | La valeur par défaut est appliquée la première fois que le champ devient visible *si* il n'a pas encore de valeur. Le masquer puis le ré-afficher garde ce que l'utilisateur a tapé entre-temps. |
-| Champ avec *Défaut*, devient masqué | La valeur n'est pas effacée en mémoire ; elle est écartée du payload d'enregistrement car le champ n'est plus rendu. |
-| Champ sans *Défaut*, devient visible | Le champ se rend vide. |
-| Champ avec *Défaut* `${session.user}`, devient visible | La valeur de session est substituée au moment de l'évaluation (même syntaxe que les valeurs par défaut de requête). |
-
-Les valeurs par défaut côté serveur (`SEQUENCE`, `SYSDATE`, `LOGIN`, `PASSWORD` — voir [Dictionnaire](./dictionary.md)) sont appliquées à l'enregistrement et **n'interagissent pas** avec les conditions.
-
----
-
-## Application côté serveur
-
-Les conditions sont évaluées **côté client** pour l'UX en direct et **ré-évaluées côté serveur** à l'enregistrement pour se prémunir contre la manipulation. L'endpoint d'enregistrement :
-
-1. Reçoit le payload de champ.
-2. Réexécute chaque condition avec les valeurs du payload.
-3. Refuse l'enregistrement quand un champ obligatoire-et-visible manque ou quand un champ désactivé est modifié (sa valeur dans le payload diffère de la valeur dernièrement envoyée au client).
-
-Les conditions sont donc des **règles métier**, pas seulement des indices UX. Un utilisateur qui ouvre l'onglet réseau et modifie le payload directement bute sur la même validation que le formulaire.
-
----
-
-## Tester les conditions \{#testing}
-
-Le bouton **Tester** de l'éditeur de champ ouvre un petit volet d'aperçu : le dialogue rempli avec les valeurs de fixture issues du `_test_row` du connecteur (ou vide quand aucun n'est configuré) ; modifier les champs dont dépendent les conditions montre le comportement en direct.
-
-Pour la logique non triviale, l'éditeur d'écran propose aussi un onglet **Cas de test**. Chaque cas de test est une paire `{ inputs, expected }` que le bouton *Exécuter les tests* rejoue :
-
-| Cas de test | Entrées | Attendu |
-|---|---|---|
-| **starter-plan** | `plan = starter`, `seats = 5` | `custom_sla = hidden`, `discount_pct = disabled`, `manager_email = hidden` |
-| **enterprise-with-discount** | `plan = enterprise`, `seats = 250`, `discount_pct = 25` | `custom_sla = visible`, `discount_pct = enabled`, `manager_email = visible+required` |
-
-Le lanceur de tests affiche une coche verte par réussite, un diff rouge par échec. Les cas de test ne sont pas utilisés à l'exécution — ils documentent la logique du formulaire et survivent mieux aux refactorings que les vérifications visuelles.
-
----
-
-## Permissions
-
-`session.roles` est le switch au niveau ligne. Un champ que seuls les superutilisateurs doivent modifier devient :
-
-```text
-Désactivé quand :  'admin' not in session.roles
+```toml
+{ field = "STATUS", value = "CANCELLED" }
+{ field = "PAYMENT_METHOD", value = ["TRANSFER", "DIRECT_DEBIT"] }
 ```
 
-L'application côté serveur rend cela sûr — un utilisateur régulier qui modifie le payload réseau bute sur la même condition.
+Un réglage porte une liste de conditions : **toutes** doivent être remplies (ET). Les valeurs se comparent comme du texte, sans les espaces de début et de fin : un code complété par des espaces reste reconnu. Les noms de champs se comparent sans tenir compte de la casse.
+
+Dans l'éditeur d'écran, chaque réglage est une liste dans l'inspecteur de la colonne : une ligne par condition, le champ étant choisi parmi les colonnes de l'écran.
 
 ---
 
-## Sous le capot
+## Réglages d'une colonne \{#column-settings\}
 
-Les conditions sont enregistrées comme chaînes d'expression sur chaque champ de l'entrée d'écran. Les opérateurs **ne modifient pas le TOML sous-jacent à la main** ; l'éditeur de champ est l'interface de référence et valide chaque expression avant l'enregistrement.
+| Réglage | Onglet de l'inspecteur | Effet |
+|---|---|---|
+| `visible_when` | Filter | **Dialogue** : le champ n'apparaît que tant que les conditions sont remplies par les valeurs du formulaire. **Grille** : la colonne disparaît quand un filtre de l'écran prend une valeur hors de la condition ; filtre vide, la colonne reste affichée. |
+| `required` / `required_when` | Edit | Le champ est signalé obligatoire (astérisque), toujours ou seulement tant que les conditions sont remplies. |
+| `disabled` / `disabled_when` | Edit | Le champ est en lecture seule, toujours ou seulement tant que les conditions sont remplies. |
+| `disable_on_add` | Edit | Lecture seule à l'ajout d'une ligne, modifiable ensuite — pour une valeur attribuée à la création. |
+| `disable_on_edit` | Edit | Lecture seule une fois la ligne créée — pour une clé qui ne doit plus changer. S'applique au dialogue et à la saisie dans la grille. |
+| `default` | Defaults | La valeur proposée à l'ajout d'une ligne. |
+| `default_when` | Defaults | Tant que sa condition est remplie, la colonne prend la valeur **default** indiquée et se verrouille. Avec **lock** désactivé, la valeur est seulement proposée et reste modifiable. Avec plusieurs règles, la première remplie l'emporte. Réappliqué à chaque changement du champ déterminant, dans le dialogue comme dans la grille. |
+| `rules_when` | Rules | Tant que sa condition est remplie, la colonne utilise une autre règle — un autre lookup, une autre énumération ou un booléen, avec ses propres paramètres de lookup et valeurs renvoyées — ou aucune (saisie libre). La première règle remplie l'emporte ; à défaut, la règle de la colonne s'applique. |
+| `write_when` | Defaults | La colonne n'est écrite que tant que les conditions sont remplies. Sinon, le serveur écrit une valeur neutre (vide ou 0) sans appliquer la valeur par défaut ni la règle du dictionnaire — pour un champ dénué de sens pour ce type de ligne. |
+
+Un réglage fixe et sa version conditionnelle se combinent simplement : liste `_when` vide, l'indicateur fixe décide ; liste renseignée, les conditions décident.
+
+---
+
+## Réglage de l'écran — `editable_when` \{#editable-when\}
+
+Défini dans l'onglet **Général** de l'éditeur d'écran, `editable_when` indique quand une ligne **existante** peut être modifiée ou supprimée :
+
+```toml
+editable_when = [{ field = "PERIOD_STATUS", value = ["OPEN", "VALIDATED"] }]
+```
+
+Une ligne qui ne remplit pas la condition passe en lecture seule : cellules non modifiables dans la grille, dialogue en consultation sans **Enregistrer** ni **Supprimer**. Le serveur refuse lui aussi toute modification de cette ligne. L'ajout de lignes n'est pas concerné.
+
+---
+
+## À l'enregistrement \{#save\}
+
+- **Champs masqués** — en mise à jour, un champ masqué par `visible_when` n'est pas envoyé : la colonne garde sa valeur enregistrée. En insertion, un champ masqué n'est envoyé que s'il porte une valeur.
+- **Champs verrouillés** — leur valeur est envoyée telle quelle.
+- **Lieu du contrôle** — `visible_when`, `required_when`, `disabled_when`, `default_when` et `rules_when` agissent dans le navigateur, au fil de la saisie. `editable_when` et `write_when` sont aussi appliqués par le serveur, quelles que soient les valeurs envoyées.
+
+---
+
+## Fenêtres de saisie des actions \{#prompts\}
+
+Les champs de la fenêtre de saisie d'une action acceptent `visible_when`, `required_when` et `disabled_when` sous la même forme, évalués sur les champs de cette fenêtre. Voir [Actions et cycle de vie](./build/screens/actions-and-lifecycle.md).
 
 ---
 
 ## Pour aller plus loin
 
-- [Concepts → Écrans](./build/screens/overview.md) — l'emplacement de l'éditeur de champ, et les autres propriétés de champ.
-- [Concepts → Dictionnaire](./dictionary.md) — règles de validation partagées qui se combinent avec ces conditions.
-- [Liaison des paramètres](./build/queries/parameter-binding.md) — comment les valeurs du dialogue circulent vers le connecteur à l'enregistrement.
+- [Écrans → Champs conditionnels](./build/screens/conditional-fields.md) — les mettre en place dans l'éditeur d'écran, avec des exemples.
+- [Écrans → Colonnes](./build/screens/columns.md) — les autres réglages d'une colonne.
+- [Dictionnaire](./dictionary.md) — les règles héritées par une colonne.

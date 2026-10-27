@@ -22,7 +22,7 @@ name = "customer_count"
 sql  = "SELECT COUNT(*) FROM customers"
 ```
 
-Une instruction, s'exécute partout. Choisissez cette forme dès que vous le pouvez.
+Une instruction, qui s'exécute partout. C'est la forme à privilégier chaque fois que possible.
 
 ### Map par dialecte
 
@@ -66,17 +66,17 @@ Le validateur impose deux règles sur la map :
 
 ## L'éditeur
 
-L'éditeur de requête unique sous **Paramètres → Connecteurs → Non classées / Séquences / Recherches** rend le champ `sql` comme un éditeur SQL. Pour passer d'une chaîne unique à une map par dialecte, éditez le TOML sous-jacent — la bascule côté formulaire est dans la feuille de route mais pas encore livrée ; pour l'instant le chemin est :
+Dans l'éditeur de requête (**Paramètres → Connecteurs**, vue Tables, Requêtes, Séquences ou Lookups), le champ **sql** est un éditeur SQL unique :
 
-1. Enregistrez d'abord la requête comme chaîne SQL unique.
-2. Éditez directement le TOML du connecteur pour convertir `sql = "..."` en bloc `[<connector>.queries.sql]` montré plus haut.
-3. Rechargez (l'Enregistrer de la page rafraîchira le formulaire à votre retour).
+1. **+ per-dialect variants** le transforme en liste de variantes, en commençant par `default (required)`, qui reprend le SQL en place.
+2. Un nom de dialecte (`oracle`, `postgresql`, `mssql`…) saisi dans le champ **dialect**, suivi d'Entrée, ajoute un éditeur pour cette variante.
+3. Le **×** à côté d'une variante la supprime ; **single** revient à une instruction unique dès qu'il ne reste que `default`.
 
-Pour l'onglet Tables (requêtes au format CRUD), l'assistant écrit toujours du SQL en chaîne unique. Si un `_get` a besoin de variantes par dialecte, générez-le d'abord avec l'assistant puis convertissez après.
+L'assistant CRUD écrit une instruction unique ; une requête générée se convertit ensuite de la même façon.
 
 ---
 
-## Quand vous en avez besoin
+## Cas d'usage
 
 Les cas classiques :
 
@@ -143,7 +143,6 @@ Trois bases, trois syntaxes, un nom de requête Liberty unique. Les écrans qui 
 ```toml
 [[connectors.reporting.queries]]
 name        = "monthly_revenue"
-type        = "custom"
 description = "Revenu agrégé des factures par mois, filtre de période sur invoice_date"
 
 [connectors.reporting.queries.sql]
@@ -194,10 +193,10 @@ Un connecteur dirigé vers un autre pool — via le flux Dupliquer l'application
 | Erreur | Symptôme | Correction |
 |---|---|---|
 | Clé `default` manquante. | Le connecteur échoue à l'analyse à l'enregistrement / au rechargement. L'erreur mentionne « a per-dialect sql map must include a 'default' key ». | Ajoutez une variante `default`. |
-| `default` vide. | Même erreur de analyse — « the 'default' sql variant must not be empty ». | Remplissez-la — même un placeholder comme `SELECT 1` suffit à passer la validation pendant que vous finissez les autres. |
+| `default` vide. | Même erreur de analyse — « the 'default' sql variant must not be empty ». | La renseigner — même un simple `SELECT 1` suffit à passer la validation le temps de finir les autres variantes. |
 | Utiliser des noms de `:placeholder` différents selon les variantes. | Certains appels lient une valeur qui n'apparaît pas dans la variante exécutée — le moteur les ignore silencieusement. | Gardez le jeu de placeholders identique sur chaque variante. Si un paramètre n'a véritablement pas de sens sur un dialecte, repensez la conception — découpez en deux requêtes nommées. |
-| Oublier `ORDER BY` sur une requête paginée. | Chaque backend a son propre ordre de lignes quand l'ordre n'est pas spécifié — la pagination produit des résultats différents sur Postgres vs Oracle. | Mettez toujours `ORDER BY` quand vous utilisez LIMIT / FETCH / TOP. |
-| SQL par dialecte sur la sortie de l'Assistant CRUD. | L'assistant écrit toujours du SQL en chaîne unique ; copier vers une map après coup peut casser la convention `:NAME_ORIGINAL` de l'Enregistrer du dialogue si vous la laissez tomber par mégarde. | À la conversion, reproduisez la convention sur chaque variante. |
+| Oublier `ORDER BY` sur une requête paginée. | Chaque backend a son propre ordre de lignes quand l'ordre n'est pas spécifié — la pagination produit des résultats différents sur Postgres vs Oracle. | Toujours ajouter un `ORDER BY` avec LIMIT / FETCH / TOP. |
+| SQL par dialecte sur la sortie de l'Assistant CRUD. | L'assistant écrit toujours du SQL en chaîne unique ; une conversion après coup peut casser la convention `:NAME_ORIGINAL` de l'enregistrement du dialogue si une variante l'oublie. | À la conversion, reprendre la convention dans chaque variante. |
 
 ---
 
@@ -206,7 +205,7 @@ Un connecteur dirigé vers un autre pool — via le flux Dupliquer l'application
 | Anti-motif | À préférer |
 |---|---|
 | Deux variantes qui ne diffèrent que par des espaces cosmétiques / l'ordre des colonnes. | Une seule chaîne SQL — laissez les opérateurs voir la cohérence. |
-| Un seul pool, pas d'autre prévu. | Une seule chaîne SQL — réintroduisez la map plus tard si vous ajoutez un jour un second dialecte. |
+| Un seul pool, pas d'autre prévu. | Une seule instruction SQL — les variantes s'ajoutent plus tard si un second dialecte apparaît. |
 | Une instruction complexe qui demande beaucoup d'ajustements par dialecte. | Deux requêtes nommées — `monthly_revenue_pg` et `monthly_revenue_oracle` — et une étape `python` unique (ou la logique d'écran) qui choisit la bonne. Plus facile à maintenir quand les variantes divergent fortement. |
 
 La map par dialecte brille pour des différences **petites et prévisibles** (troncature de date, limites de lignes, upserts). Pour de larges réécritures, des requêtes nommées séparées se lisent plus clairement.
@@ -217,4 +216,4 @@ La map par dialecte brille pour des différences **petites et prévisibles** (tr
 
 - [Concepts → Connecteurs](../../connectors.md) — la référence détaillée sur les pools et dialectes.
 - [Liaison de paramètres](./parameter-binding.md) — les paramètres `:placeholder` se comportent de manière identique sur toutes les variantes.
-- [Dupliquer une requête ou un connecteur](./clone.md) — quand vous préférez avoir deux requêtes nommées plutôt qu'une map.
+- [Dupliquer une requête ou un connecteur](./clone.md) — quand deux requêtes nommées conviennent mieux qu'une liste de variantes.

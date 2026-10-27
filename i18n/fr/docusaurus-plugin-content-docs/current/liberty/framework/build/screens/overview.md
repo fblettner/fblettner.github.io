@@ -1,6 +1,6 @@
 ---
 title: Écrans — vue d'ensemble
-description: "La page Écrans — barre de portée à gauche avec les applications, liste à plat des écrans, clic pour ouvrir les 7 onglets du Concepteur d'écran (Général / Requêtes / Colonnes / Dialogue / Actions / Menu contextuel ligne / Export)."
+description: "La page Écrans — barre de portée à gauche avec les applications, liste à plat des écrans, clic pour ouvrir les 9 onglets du Concepteur d'écran (Général / Requêtes / Colonnes / Vues / Résumé / Dialogue / Actions / Menu de ligne / Export)."
 keywords: [Liberty Framework, écrans, ScreensBuilder, Concepteur d'écran, onglets, dialogue, colonnes, actions, permissions]
 ---
 
@@ -78,7 +78,7 @@ Trois régions :
 
 Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran** qui héberge le **ScreenEditor**. L'en-tête présente *Agrandir / Restaurer* (plein écran par défaut), *Annuler* et *Enregistrer* — Enregistrer valide **uniquement les modifications de cet écran** et ferme ; Annuler demande confirmation en cas de modifications non enregistrées.
 
-À l'intérieur de la modale, sept onglets organisent l'ensemble :
+La fenêtre répartit l'ensemble en neuf onglets :
 
 <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -88,20 +88,24 @@ Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran**
   <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran · crm.customers</text>
   <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
-  <text x="90" y="98" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Général</text>
-  <rect x="148" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="198" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêtes</text>
-  <rect x="256" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="306" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
-  <rect x="364" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="414" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Dialogue</text>
-  <rect x="472" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="522" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
-  <rect x="580" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="630" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Menu ligne</text>
-  <rect x="688" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="738" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
+  <rect x="40" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
+  <text x="88" y="98" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Général</text>
+  <rect x="142" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="190" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêtes</text>
+  <rect x="244" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="292" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
+  <rect x="346" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="394" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Vues</text>
+  <rect x="448" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="496" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Résumé</text>
+  <rect x="550" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="598" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Dialogue</text>
+  <rect x="652" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="700" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
+  <rect x="754" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="802" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Menu de ligne</text>
+  <rect x="856" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="904" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
 
   <text x="40" y="138" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Contenu de l'onglet</text>
   <rect x="40" y="146" width="920" height="20" rx="4" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
@@ -111,10 +115,12 @@ Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran**
 |---|---|
 | **Général** | Identité, surcharge du connecteur, table d'audit, plafond de lignes, colonnes clés, indicateurs de comportement (chargement automatique, éditable, importable), regroupement, vue arborescente, graphique par défaut, comportement au clic sur une ligne. |
 | **Requêtes** | Les quatre références de requêtes CRUD — lecture (obligatoire), mise à jour, insertion, suppression. Le sélecteur s'alimente depuis la liste des requêtes du connecteur. |
-| **Colonnes** | Une ligne par indication de colonne — libellés, formats, valeurs par défaut, références dictionnaire, filtrage, règles d'édition. Cliquer sur une colonne pour accéder à son éditeur complet. |
+| **Colonnes** | Une ligne par indication de colonne — libellés, formats, valeurs par défaut, références au dictionnaire, filtrage, règles d'édition, conditions. Un clic sur une colonne ouvre son éditeur complet. |
+| **Vues** | Les vues partagées de la grille — dispositions de colonnes, tris et filtres publiés pour tous les utilisateurs, dont éventuellement une vue par défaut. Voir [Vues enregistrées](../../saved-views.md). |
+| **Résumé** | Les colonnes de regroupement de la [vue Résumé](../../saved-views.md#summary) et, en option, le détail des valeurs modifiées d'une ligne. |
 | **Dialogue** | Le **Constructeur visuel** — un canevas à trois colonnes style Figma (Palette / Canevas / Inspecteur) où l'on glisse des champs sur des onglets. Optionnel — un écran sans dialogue fonctionne quand même comme un tableau en lecture seule ou en édition de grille. |
 | **Actions** | Trois groupes : *Hooks de dialogue* (on_load / on_save / on_cancel), *Barre d'outils* (boutons au-dessus du tableau), *Hooks de ligne* (on_insert / on_update / on_delete). |
-| **Menu ligne** | Actions du menu contextuel ouvert par clic droit sur une ligne. |
+| **Menu de ligne** | Actions du menu contextuel ouvert par clic droit sur une ligne. |
 | **Export** | Configuration d'export xlsx multi-feuilles — optionnel. |
 
 Les pages suivantes de cette section décrivent chaque onglet comme une tâche distincte.
@@ -130,10 +136,12 @@ Les champs de premier niveau du schéma, regroupés par finalité :
 | **Identité** | `id`, `label`, `description`, `connector` *(vide = le connecteur de l'application)* |
 | **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `key_columns` |
 | **Requêtes d'écriture** | `update_query`, `insert_query`, `delete_query` |
-| **Édition et affichage** | `columns`, `editable`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Vues et résumé** | `views` (vues partagées), `summary`, `value_diff` |
+| **Paquets de modifications** | `change_tracked`, `change_entity`, `post_apply` — voir [Paquets de modifications](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (ex. `AUD_USERS` — duplique les écritures avec AUD_ACTION / AUD_USER / AUD_DATE) |
 | **Formulaire** | `dialog` *(optionnel — le formulaire posé sur le tableau)* |
-| **Actions / hooks** | `actions` (barre d'outils), `row_menu` (clic droit), `on_insert` / `on_update` / `on_delete` (hooks de ligne) |
+| **Actions / hooks** | `actions` (barre d'outils), `row_menu` (clic droit), `on_insert` / `on_update` / `on_delete` / `on_duplicate` (hooks de ligne) |
 | **Cible au clic sur une ligne** | `row_click_screen` + `row_click_connector` + `row_click_binds` *(ouvre un écran voisin comme dialogue)* OU `row_click_route` *(ouvre une route SPA)* |
 | **Export** | `export` *(configuration du classeur xlsx)* |
 

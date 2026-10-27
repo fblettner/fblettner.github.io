@@ -107,7 +107,7 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
 |---|---|
 | **Palette** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A search box narrows the list. Click an entry to add a field card on the canvas; drag an entry to drop it at a specific position. |
 | **Canvas** *(center)* | The dialog's tabs strip across the top + the field grid below. Click a tab to switch; *＋ Tab* adds one. Each field card shows the field name + a one-line summary of its key flags. The selected card has a coloured border; the inspector on the right reflects it. A separate **HIDDEN** group at the bottom collects fields with `hidden = true`. |
-| **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). Properties are rendered as a generic form; the **Lookup param binds** and **Conditional rules** sections expand inline. |
+| **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). It shows the field and its **Column configuration** — see Step 3. |
 
 ---
 
@@ -130,15 +130,15 @@ The added field becomes the selected card; the Inspector switches to its propert
 
 ### Step 3 — Tune the field properties
 
-In the Inspector:
+A dialog field displays a screen column, and the column carries every behaviour. The Inspector shows:
 
-| Field | What it does |
+| Section | What it holds |
 |---|---|
-| **`dd`** | Dictionary entry the field inherits from. Defaults to the column's name on add. |
-| **`colspan`** | How many grid cells the field spans. Defaults to 1. |
-| **`required`** / **`hidden`** / **`disabled`** | Per-dialog overrides — leave blank to inherit from the column hint (see [Columns](./columns.md)). |
-| **Lookup param binds** | Extra `:placeholder` bindings for a `LOOKUP` field. Each binding is `{param: <placeholder on the lookup query>, source: <field on this dialog>}`. The classic case: a role picker narrowed by the application id from another field. |
-| **Conditional rules** | `visible_when` / `required_when` / `disabled_when` — see [Conditional fields](./conditional-fields.md). |
+| **Field** | The field's name and, with several form tabs, the **Tab** it sits on. |
+| **Column configuration** | The column's full editor — the same as in the Columns tab: label, format, dictionary entry (`dd`), rule and lookup binds, required / read-only flags, conditions, defaults, and the field's span on the dialog grid (**Display ▸ Colspan**). A change applies to the grid as well. |
+| **Events** | The hooks wired on the screen, by event, for information. |
+
+See [Columns](./columns.md) for each setting and [Conditional fields](./conditional-fields.md) for the conditions.
 
 ### Step 4 — Add tabs
 
@@ -147,7 +147,7 @@ Click **＋ Tab** above the canvas. The new tab is empty; drag fields in from th
 | Tab name | What's on it |
 |---|---|
 | **General** | Identity + most-used fields. |
-| **Audit** | Created at, created by, updated at, updated by — often `hidden_on_add` to hide them when inserting. |
+| **Audit** | Created at, created by, updated at, updated by — often `hide_on_add` to hide the tab when inserting. |
 | **Notes** | Free-text fields. |
 | **Address** | A group of related fields (street, city, postcode, country). |
 
@@ -168,7 +168,7 @@ Two ways:
 
 | Method | Effect |
 |---|---|
-| Set `hidden = true` in the Inspector. | The card moves to the **HIDDEN** group at the bottom of the canvas. The field still binds at save time. |
+| Tick **hidden** in the column configuration (Display). | The card moves to the **HIDDEN** group at the bottom of the canvas. The field still binds at save time. |
 | Delete the field from the tab. | The field is removed from the dialog entirely. The column is still on the screen; it just doesn't surface in the form. |
 
 The "hide but keep" pattern is useful for technical columns the dialog must submit (e.g. an audit timestamp) but the user shouldn't see.
@@ -182,10 +182,10 @@ Tabs aren't all the same. Three types live under `dialog.tabs`, discriminated on
 | Type | Purpose |
 |---|---|
 | **`form`** *(default)* | A grid of editable fields — the case described above. |
-| **`nested_form`** | A child-record form embedded in the tab. The parent's PK binds into a separate read query; if a row comes back the nested form edits it, otherwise it inserts. See [Nested tabs](./nested-tabs.md). |
+| **`nested_form`** | The form of another existing screen (`form_screen`), shown in the tab; `param_binds` pass the parent's values (usually its key) to that form's queries, and it is saved with the parent's **Save**. See [Nested tabs](./nested-tabs.md). |
 | **`nested_table`** | A related-rows TableView embedded in the tab. Renders another screen's grid scoped to the parent's PK. See [Nested tabs](./nested-tabs.md). |
 
-The visual builder shows the same tab strip for all three — switching to a `nested_form` tab swaps the canvas for that tab's nested-form editor; `nested_table` shows the target-screen picker.
+The visual builder shows the same tab strip for all three — switching to a `nested_form` or `nested_table` tab shows the target-screen picker and its `param_binds`.
 
 ---
 

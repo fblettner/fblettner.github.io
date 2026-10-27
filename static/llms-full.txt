@@ -2102,7 +2102,7 @@ Open **Settings → Pools**. On a fresh install the `default` pool already point
     ✏️
   
 
-For a real install, switch to a PostgreSQL or Oracle URL — every connection-string format and option is documented under [Configuration → Environment variables](../configuration/environment-variables.md#liberty_db_url).
+For a real install, switch to a PostgreSQL or Oracle URL — every connection-string format and option is documented under [Configuration → Environment variables](../configuration/environment-variables.md#bootstrap).
 
 Then create the example table once via the SQLite shell:
 
@@ -4456,7 +4456,7 @@ The pickers on steps 2 and 3 are built for wide sources — a full JDE `F0101` s
 ## Liberty Next — Queries — overview
 Source: https://docs.nomana-it.fr/liberty/framework/build/queries/overview/
 
-How Liberty's Connectors page is organised — Tables / Unclassified / Sequences / Lookups — and the four kinds of queries each tab manages.
+How Liberty's Connectors page is organised — Settings / Tables / Queries / Sequences / Lookups — and the four kinds of queries it holds.
 
 A **query** in Liberty is a named SQL statement attached to a **connector** (which itself points at a **pool**, i.e. a database). Screens, dashboards, charts, dictionary lookups, dictionary sequences and the AI assistant all consume queries — so adding a query is the most common change you'll make in the Settings UI.
 
@@ -4472,53 +4472,50 @@ Three regions:
 |---|---|
 | **Top toolbar** | Global actions — *＋ Connector*, *Discard*, *Save*. The *Save* button writes the connector file and triggers a hot reload — no process restart needed. |
 | **Left navigation** | Two groups: *Apps* (connectors that have a menu — these are the apps users see in the top switcher) and *Data sources* (connectors that supply data but don't appear in the switcher). Click a name to open it on the right. |
-| **Right pane** | The editor for the selected connector. A mode bar across the top picks one of five views — *Settings*, *Tables*, *Unclassified*, *Sequences*, *Lookups*. |
+| **Right pane** | The editor for the selected connector. A mode bar across the top picks one of five views — *Settings…*, *Tables*, *Queries*, *Sequences*, *Lookups*. |
 
 ---
 
-## The four kinds of queries
+## The four kinds of queries \{#kinds\}
 
-Every query carries a `type` that tells the page which tab it belongs to:
+A connector keeps its queries in four sections; the section a query sits in is its kind:
 
-| Tab | `type` | What lives here |
-|---|---|---|
-| **Tables** | `table` | Queries that follow the CRUD naming convention — `<base>_get`, `<base>_put`, `<base>_post`, `<base>_delete`. The page groups them by base name and shows a row per table with four slot badges (GET / PUT / POS / DEL). |
-| **Unclassified** | `custom` | Standalone queries not tied to a table CRUD set — bulk operations, business queries, reports. Example: `monthly_revenue`, `purge_old_logs`. |
-| **Sequences** | `sequence` | Queries that generate the next value for a dictionary `[sequences.*]` rule. Typical body: `SELECT COALESCE(MAX(<col>), 0) + 1 FROM <table>`. |
-| **Lookups** | `lookup` | Queries that supply value + label pairs for a dictionary `[lookups.*]` rule. Typical body: `SELECT <value>, <label> FROM <table>`. |
+| View | What lives here |
+|---|---|
+| **Tables** | One entry per table, holding up to four queries: **get** (read), **post** (insert), **put** (update), **delete**. They are called `<table>_get`, `<table>_post`, `<table>_put`, `<table>_delete`. The list shows a row per table with its slot badges (GET / PUT / POS / DEL). |
+| **Queries** | Standalone queries outside a table's set — reports, bulk operations, queries called by actions, charts or dashboards. Example: `monthly_revenue`, `purge_old_logs`. |
+| **Sequences** | Queries that return the next number for a dictionary sequence. Typical body: `SELECT COALESCE(MAX(<col>), 0) + 1 FROM <table>`. |
+| **Lookups** | Queries that return codes and labels for a dictionary lookup. Typical body: `SELECT <value>, <label> FROM <table>`. |
 
-The tab the query falls into is decided by its `type` — not by its name. A query named `customer_balance` typed `custom` lives in Unclassified; the same name typed `lookup` lives in Lookups.
+**Change type** moves a query to another section — for example a query written under *Queries* that turns out to feed a lookup. When the move changes the query's name (a table slot becomes a standalone query, or the reverse), a warning lists the new name: screens, actions and dictionary entries that use the old name have to be updated.
 
 ---
 
-## The add buttons — one per tab
+## The add buttons — one per view \{#add\}
 
-The Add affordance is **per tab**, because each kind has its own creation flow.
-
-| Tab | Add button | What opens |
+| View | Button | What opens |
 |---|---|---|
-| **Tables** | *＋ Add table* | A choice modal: **Generate from DB** (the CRUD Wizard — introspects the pool, generates all four queries) or **Empty stub** (prompts a base name, creates a blank `<base>_get` stub). |
-| **Unclassified** | *＋ Add query* | A name prompt — creates a blank `custom` query you fill in by hand. |
-| **Sequences** | *＋ Add sequence* | The Scaffold modal — pick a table, pick a key column, get a live SQL preview, save (writes the query **and** the matching dictionary entry). |
-| **Lookups** | *＋ Add lookup* | The Scaffold modal — pick a table, pick a value column and a label column, optional WHERE filter, save (writes the query **and** the dictionary entry). |
+| **Tables** | *＋ Add queries* | A choice: **Generate from DB** (the CRUD wizard — reads the table in the database and generates the four queries) or **Empty stub** (asks for a table name and creates an empty read query). |
+| **Queries** | *＋ Add query* | A name prompt, then an empty query to fill in by hand. |
+| **Sequences** | *＋ Add sequence* | The scaffold — pick a table and a key column, see the SQL, save: it writes the query **and** the dictionary sequence. |
+| **Lookups** | *＋ Add lookup* | The scaffold — pick a table, a value column, a label column and an optional filter, save: it writes the query **and** the dictionary lookup. |
 
 The next pages walk through each path.
 
 ---
 
-## What a query carries
+## What a query carries \{#fields\}
 
-The editor form (Unclassified / Sequences / Lookups tabs) reflects the `QueryDef` shape:
+The query editor shows these fields:
 
 | Field | Required | What it does |
 |---|---|---|
-| **`name`** | Yes | Unique inside the connector. The permission string for this query is `sql:<connector>:<name>`. Read-only in the editor — use the *Rename* button (cross-file rename). |
-| **`type`** | No | `table` / `custom` / `sequence` / `lookup` — drives which tab the query appears on. Empty falls back to a name-based guess. |
-| **`sql`** | Yes | The SQL statement with `:placeholder` parameters. Can be a single string, or a per-dialect map `{ default = "…", oracle = "…" }`. The `default` variant is required when using a map. |
-| **`writable`** | No (default `false`) | When `false`, only SELECT is allowed. Flip to `true` for INSERT / UPDATE / DELETE / CALL. |
-| **`params`** | No | List of declared parameters (`name`, `label`, `default`) — gives each `:placeholder` a form input. |
-| **`label`** | No | Short name shown in dropdowns and listings. |
-| **`description`** | No | Longer text — shown on the Tables list under the base name. Use it to explain what the query returns. |
+| **Name** | Yes | Unique inside the connector. The query's permission is `sql:<connector>:<name>`. Changed with *Rename*, which updates every reference. |
+| **SQL** | Yes | The statement, with `:name` parameters. A single text, or one variant per database (`default` required) — see [Per-dialect SQL](./per-dialect-sql.md). |
+| **Writable** | No (off) | Off, only a SELECT is accepted. On for INSERT / UPDATE / DELETE / CALL. |
+| **Params** | No | Declared parameters (**name**, **label**, **default**) — a label and a default value for each `:name`. |
+| **Label** | No | Short name shown in lists. |
+| **Description** | No | What the query returns — shown under the table name in the Tables list. |
 
 ---
 
@@ -4528,8 +4525,8 @@ Saving on this page is atomic across two files when needed:
 
 | Action you took | What gets written |
 |---|---|
-| Created or edited a query under Tables / Unclassified | The connector file. |
-| Used the Scaffold for a sequence or lookup | The connector file **and** the dictionary file (the new entry under `[connectors.<name>.sequences]` or `[connectors.<name>.lookups]`). |
+| Created or edited a table or a query | The connector file. |
+| Used the scaffold for a sequence or a lookup | The connector file **and** the dictionary (the new sequence or lookup in the connector's scope). |
 | Cloned a connector (whole app) | A cross-file write that copies the dictionary overlay, screens, menu, charts and dashboards under the new name. Goes through a dedicated endpoint. |
 | Renamed a connector, a query or a table | A cross-file update that touches every reference (screens, menus, dictionary, charts, dashboards). Refuses to run when local edits aren't saved. |
 
@@ -4545,7 +4542,7 @@ After every save the framework runs a **hot reload** automatically. The new quer
 | Write a custom query (standalone, hand-written). | [Create a custom query](./create-custom.md). |
 | Make a copy of an existing query or of a whole application. | [Clone a query or a connector](./clone.md). |
 | Add a sequence (next id) or a lookup (dropdown source). | [Sequences and lookups](./sequences-and-lookups.md). |
-| Pass values to a query — both literal and bound (`#LOGIN_USER#`, source columns…). | [Parameter binding](./parameter-binding.md). |
+| Pass values to a query — fixed values, other columns, the signed-in user. | [Parameter binding](./parameter-binding.md). |
 | Ship different SQL for Postgres vs Oracle. | [Per-dialect SQL variants](./per-dialect-sql.md). |
 
 ---
@@ -4574,7 +4571,7 @@ The wizard is reached from **Settings → Connectors**:
 
 1. Pick a connector in the left list.
 2. Switch the right pane's mode bar to **Tables**.
-3. Click **＋ Add table** at the top-right.
+3. In the **Tables** view, click **＋ Add queries** at the top-right.
 4. A choice modal opens. Pick **Generate from DB**.
 
 The wizard then walks the connector's pool (`GET /api/sql/<connector>/_schemas`) and presents the schemas it found.
@@ -4651,23 +4648,23 @@ The right column shows the generated SQL for every ticked CRUD slot, live. Edit 
 
 ```sql
 -- _get : straight SELECT over the included columns
-SELECT col1, col2, …
+SELECT COL1, COL2, …
 FROM   <schema>.<table>
 
 -- _post : INSERT bound to :col placeholders
-INSERT INTO <schema>.<table> (col1, col2, …)
-VALUES                       (:col1, :col2, …)
+INSERT INTO <schema>.<table> (COL1, COL2, …)
+VALUES                       (:COL1, :COL2, …)
 
 -- _put  : UPDATE non-key columns, WHERE on key with :NAME_ORIGINAL
 UPDATE <schema>.<table>
-SET    non_key1 = :non_key1, non_key2 = :non_key2, …
-WHERE  key1 = :key1_ORIGINAL
-   AND key2 = :key2_ORIGINAL
+SET    NON_KEY1 = :NON_KEY1, NON_KEY2 = :NON_KEY2, …
+WHERE  KEY1 = :KEY1_ORIGINAL
+   AND KEY2 = :KEY2_ORIGINAL
 
 -- _delete : DELETE keyed on :NAME (the dialog binds the row's current values)
 DELETE FROM <schema>.<table>
-WHERE  key1 = :key1
-   AND key2 = :key2
+WHERE  KEY1 = :KEY1
+   AND KEY2 = :KEY2
 ```
 
 ### Why `:NAME_ORIGINAL` on UPDATE?
@@ -4718,7 +4715,7 @@ They land in the **Tables** tab as one row labelled `customers` with the four GE
 
 ## When to use the wizard vs hand-write
 
-| Use the wizard | Hand-write (`Add query` on Unclassified) |
+| Use the wizard | Hand-write (`Add query` in the Queries view) |
 |---|---|
 | The table exists in the DB. | The query is a custom report, an aggregate, or a stored procedure call. |
 | You want the four standard CRUD shapes. | You need a `JOIN`, a `GROUP BY`, a `RECURSIVE` CTE. |
@@ -4739,19 +4736,19 @@ The wizard is the right tool for **80% of operational tables**. The other 20% �
 ## Liberty Next — Create a custom query
 Source: https://docs.nomana-it.fr/liberty/framework/build/queries/create-custom/
 
-Write a standalone query by hand — the Unclassified tab, the editor form, the writable gate, the params block, the SQL editor with autocompletion.
+Write a standalone query by hand — the Queries view, the editor form, the writable switch, the params block, the SQL editor with autocompletion and tokens.
 
-When the wizard doesn't fit — analytics, reports, multi-table joins, stored-procedure calls, anything that doesn't map 1-1 to a single table — write the query by hand under the **Unclassified** tab.
+When the wizard doesn't fit — analytics, reports, multi-table joins, stored-procedure calls, anything that doesn't map 1-1 to a single table — write the query by hand in the **Queries** view.
 
-This page walks the editor form field by field, with the verified shape from the `QueryDef` schema.
+This page walks the editor form field by field.
 
 ---
 
 ## Where it lives
 
-**Settings → Connectors → pick a connector → mode bar: Unclassified → ＋ Add query**.
+**Settings → Connectors → pick a connector → mode bar: Queries → ＋ Add query**.
 
-The page prompts for a name, creates an empty `custom` query, opens its editor.
+The page prompts for a name, creates an empty query and opens its editor.
 
 ---
 
@@ -4771,7 +4768,6 @@ Naming rules:
 |---|---|
 | Letters, digits, underscores. | TOML key, URL segment and permission string in one go. |
 | Starts with a letter or underscore. | Same. |
-| Avoid the `_get` / `_put` / `_post` / `_delete` suffixes. | The Tables tab would pick it up and try to group it into a CRUD set. |
 
 Naming conventions that scale well:
 
@@ -4780,19 +4776,6 @@ Naming conventions that scale well:
 | `<entity>_<action>` | `customer_balance`, `invoice_send` |
 | `<verb>_<noun>` | `get_top_clients`, `mark_paid` |
 | `report_<topic>` | `report_monthly_revenue`, `report_overdue_invoices` |
-
-### `type`
-
-Dropdown — drives the tab classification. For a hand-written standalone query, keep `custom`. The other values move the query elsewhere on the page:
-
-| Value | Tab |
-|---|---|
-| `custom` | Unclassified (this page). |
-| `table` | Tables (only useful when the name matches the `<base>_<crud>` convention). |
-| `sequence` | Sequences. |
-| `lookup` | Lookups. |
-
-Switching `type` doesn't rewrite the query — only the page it's filed under. For sequences and lookups you usually want the [Scaffold modal](./sequences-and-lookups.md) anyway, which writes the dictionary entry alongside.
 
 ### `writable`
 
@@ -4813,9 +4796,11 @@ Three features the editor surfaces:
 
 | Feature | What it does |
 |---|---|
-| **Syntax highlighting** | Keywords coloured; mismatched brackets flagged. |
-| **Autocompletion** | Tables and columns from the connector's pool. Hit Ctrl+Space to invoke. |
-| **`:name` placeholders** | Any `:identifier` in the SQL is recognised as a bind parameter — declare it in the `params` block below. |
+| **Syntax highlighting** | Keywords coloured. |
+| **Autocompletion** | Tables after `FROM` / `JOIN` / `INTO` / `UPDATE`, columns after `<table>.`, read from the connector's pool. Ctrl+Space opens the list. |
+| **Token** | Inserts a value the server fills at execution: `{{LOGIN}}`, `{{SYSDATE}}`, `{{SYSTIME}}`, `{{SYSTIMESTAMP}}`, `{{JDEDATE}}`, `{{JDETIME}}`, `{{PID}}`, `{{JOBN}}` — see [Parameter binding](./parameter-binding.md#tokens). |
+| **Pool schemas** | Inserts a schema token of the pool, so the same SQL runs against another environment's schema. |
+| **`:name` placeholders** | Any `:identifier` in the SQL is a bind parameter — declare it in the `params` block below. |
 
 A few rules from how the engine binds:
 
@@ -4853,8 +4838,11 @@ The buttons at the top of the single-query editor:
 
 | Action | What it does | Notes |
 |---|---|---|
-| **← Back** | Returns to the Unclassified list (no save). | Unsaved edits stay in the page-level dirty state — *Save* on the top toolbar persists them. |
+| **← Back** | Returns to the Queries list (no save). | Unsaved edits stay pending — *Save* on the top toolbar writes them. |
+| **Find usages** | Lists where the query is used (screens, charts, dashboards, dictionary…). | |
 | **✎ Rename** | Cross-file rename. | Refuses on unsaved local edits; updates every reference. |
+| **Change type** | Moves the query to Tables, Sequences or Lookups. | See [the four kinds of queries](./overview.md#kinds). |
+| **Move** | Moves the query to another SQL connector and rewrites the references. | |
 | **⎘ Clone** | Per-query duplicate — prompts for new name. | Default suggestion `<name>_copy`. See [Clone a query or a connector](./clone.md). |
 | **🗑 Delete** | Removes the query from the connector. | A confirm modal first. |
 
@@ -4874,7 +4862,7 @@ There's no dedicated *Test query* tab on the SQL connector — the test path is 
 |---|---|
 | Use it from a screen. | When the next step is building the screen anyway. |
 | Hit the REST endpoint directly. | For a quick smoke test — `GET /api/sql/<connector>/<query>?from_date=2026-01-01&to_date=2026-01-31`. |
-| Ask the AI assistant. | "Show me the result of `monthly_revenue` for last month" — the assistant will run the query and return rows. Requires `ai:chat` and `sql:<connector>:<query>` permissions. |
+| Ask the AI assistant. | "Show me the result of `monthly_revenue` for last month" — when the connector is open to the assistant, it runs the read query and returns the rows. |
 
 The REST path is the fastest debug — error messages come back verbatim, and you can pass params via URL.
 
@@ -4919,7 +4907,7 @@ Each is covered below with when to use it.
 
 ## Per-query Clone
 
-A *Clone* button sits in the top-right of the single-query editor (Unclassified / Sequences / Lookups tabs). Clicking it:
+A *Clone* button sits in the top-right of the single-query editor (Queries, Sequences and Lookups views). Clicking it:
 
 1. Prompts for a new name (default `<original>_copy`).
 2. Deep-copies the query — name only differs; SQL, params, `writable`, `label`, `description`, per-dialect SQL map, every nested field is JSON-cloned and independent.
@@ -5054,15 +5042,15 @@ Both go through the **Scaffold** modal — tick a table, tick column(s), get a l
 
 The modal opens, introspects the pool, lists the schemas / tables.
 
-:::note[No table required]
-You don't have to start from a table. Skip the table pick and **write the SQL directly** in the preview, then *Use this query* — handy for a lookup whose source is a join or a hand-written `SELECT`.
+:::note[Without a table]
+The scaffold starts from a table. For a lookup or a sequence built on a join or any hand-written `SELECT`, create the record in **Settings → Dictionary** (Lookups or Sequences tab) and create its query from there — a blank query, or **Generate** from a table with the columns mapped to the record's fields.
 :::
 
 ---
 
 ## Sequence — generate the next id
 
-A *sequence* in Liberty is a query that returns one number — the next id to assign to a new row. It backs the dictionary's `SEQUENCE` rule: a screen field marked `SEQUENCE` reads from the sequence query each time the dialog opens for INSERT.
+A *sequence* in Liberty is a query that returns one number — the next id to assign to a new row. It backs the dictionary's `SEQUENCE` rule: when a row is inserted, the server runs the sequence query inside the insert's transaction and writes the result into the column.
 
 ### Field by field
 
@@ -5080,10 +5068,10 @@ A *sequence* in Liberty is a query that returns one number — the next id to as
 
 | File | Entry |
 |---|---|
-| Connector file | `{ name = "<queryName>", type = "sequence", sql = "..." }` |
+| Connector file | The query, in the connector's **Sequences** section. |
 | Dictionary file | `[connectors.<conn>.sequences.<seqId>] query = "<queryName>"`, `dd_id = "<keyCol>"`, optional `description` |
 
-The dictionary entry is what the SEQUENCE rule looks up. A column on a screen marked rule `SEQUENCE` with `sequence = "<seqId>"` calls this query when the dialog opens for INSERT and pre-fills the field with the result.
+A dictionary entry (or a screen column) with the rule `SEQUENCE` and **Rules values** = `<seqId>` gets its number from this query on each insert. With `dd_id` set, every column whose entry has that key is numbered too.
 
 ### Concurrency note
 
@@ -5098,7 +5086,7 @@ For high-concurrency workloads, define the column as a **database SEQUENCE** (Po
 
 ## Lookup — supply a dropdown's options
 
-A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the dictionary's `LOOKUP` rule: a column marked `LOOKUP` with `lookup = "<id>"` renders as a dropdown sourced from the lookup query.
+A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the dictionary's `LOOKUP` rule: a column with the rule `LOOKUP` and **Rules values** = `<lookupId>` shows the label instead of the code and offers the lookup's rows in a searchable list.
 
 ### Field by field
 
@@ -5117,18 +5105,23 @@ A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs —
 
 | File | Entry |
 |---|---|
-| Connector file | `{ name = "<queryName>", type = "lookup", sql = "..." }` |
+| Connector file | The query, in the connector's **Lookups** section. |
 | Dictionary file | `[connectors.<conn>.lookups.<lookupId>] query = "<queryName>"`, `value = "<valueCol>"`, `label = "<labelCol>"`, optional `description` |
 
 ### Cascading lookups
 
-When the dropdown should be **filtered by another field on the same screen** — e.g. *Role* depends on *Application* — the lookup needs a `:placeholder` in the WHERE clause, and the screen's column declares a `filter_from` referencing the parent. The wiring lives on the screen side ([Concepts → Form conditions](../../form-conditions.md) until the Screens build section ships); the lookup query itself just needs the `:placeholder`.
+When the list should depend on **another field of the same row** — *Role* depends on *Application* — the lookup query takes a parameter, and the screen column binds it:
+
+- in the dialog and grid editing, the column's **lookup_param_binds** — `{ param = "APP_ID", source = "APP_ID" }`;
+- in the grid's filter panel, the column's **filter_from**, which narrows the filter's options on the value of another filter.
+
+See [Parameter binding](./parameter-binding.md#where) and [Columns](../screens/columns.md).
 
 ```sql
-SELECT role_id, role_name
+SELECT ROLE_ID, ROLE_NAME
 FROM   roles
-WHERE  app_id = :app_id
-ORDER BY role_name
+WHERE  APP_ID = :APP_ID
+ORDER BY ROLE_NAME
 ```
 
 ---
@@ -5137,204 +5130,153 @@ ORDER BY role_name
 
 - [Parameter binding](./parameter-binding.md) — for sequences/lookups that take parameters from screen context.
 - [Per-dialect SQL variants](./per-dialect-sql.md) — for a lookup that hits Postgres and Oracle.
-- [Concepts → Dictionary](../../dictionary.md) — the wider reference: `SEQUENCE`, `LOOKUP`, `LOGIN`, `SYSDATE` and the other dictionary rules.
+- [Dictionary](../../dictionary.md) — every field of a lookup and a sequence, and the other rules.
 
 ---
 
 ## Liberty Next — Parameter binding
 Source: https://docs.nomana-it.fr/liberty/framework/build/queries/parameter-binding/
 
-How `:placeholder` params get values at runtime — declared defaults, screen-column sources, reserved built-ins like #LOGIN_USER# / #SYSDATE#, and per-call literal overrides.
+How a query's :name parameters get their values — declared defaults on the query, param_binds on the caller (fixed value, another field, #LOGIN_USER# / #SYSDATE# built-ins), and {{LOGIN}} / {{SYSDATE}} tokens resolved by the server.
 
-A query without parameters runs every time with the same data. A query with `:placeholder` parameters runs against different rows, scopes or filters at each call — that's where Liberty's screens, actions and dictionary rules cash in. This page covers how each `:placeholder` gets its value.
+A query with `:name` parameters runs against different rows at each call. Three things decide what each parameter receives:
 
-There are **two** moving pieces:
-
-| Piece | Where it lives | What it does |
+| Piece | Where it is set | Role |
 |---|---|---|
-| **`ParamDef`** | On the query (`params` block). | Declares a parameter — gives it a label and a default. |
-| **`ParamBind`** | On the caller (screen column, action, menu item, nested tab). | Binds a value to a parameter — literal, or sourced from another field at call time. |
+| **Params** | On the query. | Declares a parameter, with a label and a default value. |
+| **`param_binds`** | On the caller — action, lookup column, nested tab. | Binds a value to a parameter: a fixed value, or another field read at call time. |
+| **Tokens** `{{…}}` | In the SQL itself. | Values the server fills at execution: user, date, time. |
 
-The query owns the *declaration*; every caller owns the *binding*. The same query can be called from ten places with ten different bindings.
+The query owns the declaration; each caller owns its binding. The same query can be called from ten places with ten different bindings.
 
 ---
 
-## Declaring a parameter — `ParamDef`
+## Declaring a parameter \{#declare\}
 
-In the query editor's **`params`** block (Unclassified / Sequences / Lookups tab), each row is a `ParamDef`:
+The **Params** block of the query editor lists the parameters, one line each:
 
-| Field | What it does |
+| Field | Role |
 |---|---|
-| **`name`** | The `:placeholder` name in the SQL (without the colon). Matched case-insensitively. |
-| **`label`** | Form label shown above the field when a UI surfaces this parameter. Defaults to `name`. |
-| **`default`** | Pre-filled value when the caller doesn't bind one. Blank = the engine binds SQL `NULL`. |
-
-A simple example:
+| **name** | The parameter as written in the SQL, without the colon. |
+| **label** | The label shown above the input when a screen or the AI assistant asks for the value. Defaults to the name. |
+| **default** | The value bound when the caller sends none. |
 
 ```sql
 SELECT *
 FROM   invoices
-WHERE  invoice_date BETWEEN :from_date AND :to_date
-  AND  status = :status
+WHERE  invoice_date BETWEEN :FROM_DATE AND :TO_DATE
+  AND  status = :STATUS
 ```
 
-The declared params:
-
-| `name` | `label` | `default` |
+| name | label | default |
 |---|---|---|
-| `from_date` | Period start | `2026-01-01` |
-| `to_date` | Period end | `2026-12-31` |
-| `status` | Status | `OPEN` |
+| `FROM_DATE` | Period start | `2026-01-01` |
+| `TO_DATE` | Period end | `2026-12-31` |
+| `STATUS` | Status | `OPEN` |
 
-When a screen wires this query without binding any of them, the defaults are bound and the query returns 2026 invoices with status `OPEN`. When the screen binds `:from_date` to a date picker, the picker value wins over the default.
-
-You can leave the `params` block empty for ad-hoc parameters — the engine still binds whatever the caller sends. Declaring them is for **labels** and **defaults**; the engine doesn't require declaration.
+Declaring is optional: a parameter that the caller does not send and that has no default is bound to `NULL`.
 
 ---
 
-## Binding a value — `ParamBind`
+## Binding a value — `param_binds` \{#param-binds\}
 
-Wherever Liberty calls a query — a screen's read, a lookup combo, an action's `run_query`, a menu item that opens a screen with a filter, a nested-tab read — the call carries a list of `ParamBind` entries. Each binds one parameter:
+Wherever a query is called with values from the context, the caller carries a list of `param_binds`, one per parameter:
 
-| Field | What it does |
+| Field | Role |
 |---|---|
-| **`param`** | The target parameter name (the `:placeholder` on the destination query). Normalised to UPPERCASE on save. |
-| **`value`** | A literal value to bind. Set this **or** `source`, not both. |
-| **`source`** | A column / field / chain-context path read at call time. Set this **or** `value`. Normalised to UPPERCASE on save. |
-| **`default`** | Fallback bound when `source` resolves to NULL / empty at call time. Ignored in value mode. |
+| **param** | The parameter of the target query. The list offers the parameters the query declares. |
+| **value** | A fixed value. |
+| **source** | Where to read the value at call time: a column of the row, a field of the form, a value returned by an earlier step of an action (`step1.first_row.CUSTOMER_ID`), or a [built-in](#builtins). |
+| **default** | Bound when **source** gives nothing. A fixed value, a built-in or a step path. |
 
-Two modes:
-
-### Value mode — literal
+When both **value** and **source** are set, **value** is used.
 
 ```toml
-[[actions.run_query.params]]
-param = "STATUS"
-value = "PAID"
+param_binds = [
+  { param = "STATUS",     value  = "PAID" },
+  { param = "INVOICE_ID", source = "INVOICE_ID" },
+  { param = "UPMJ",       source = "UPMJ", default = "#SYSDATE#" },
+]
 ```
 
-The bound value is exactly `"PAID"`, every call. Same as if the SQL hard-coded it — only useful when one caller wants a value the others don't.
+**source** holds the **name** of a column or a field, not its value. The usual case: an action on a row passes the row's key to the query — `{ param = "INVOICE_ID", source = "INVOICE_ID" }`.
 
-### Source mode — runtime
+### Built-in sources \{#builtins\}
 
-```toml
-[[actions.run_query.params]]
-param  = "INVOICE_ID"
-source = "INVOICE_ID"
-```
+These sources are read in the browser at the time of the call:
 
-At call time, the engine reads the **`INVOICE_ID`** column of the row the user clicked (or the form field, or the chain-context path) and binds that value. The source string is **the name of a column / field**, not the value.
-
-The most common bind: a row click on a master grid passes the row's key columns to the detail screen — every key column gets a `ParamBind` with `source = "<KEY_COL>"`.
-
-### Source mode with a default
-
-```toml
-[[actions.run_query.params]]
-param   = "UPMJ"
-source  = "UPMJ"
-default = "#SYSDATE#"
-```
-
-If the source resolves to NULL / empty (the user didn't type anything in the field), the engine binds `#SYSDATE#` instead. Useful when the underlying database column shouldn't accept NULL — give the bind a sane fallback.
-
----
-
-## Reserved sources — the built-in `#…#` tokens
-
-Two source values aren't column names — they're tokens Liberty substitutes at call time:
-
-| Token | Resolves to |
+| Source | Value |
 |---|---|
-| **`#LOGIN_USER#`** | The username of the user making the call (from the JWT). |
-| **`#SYSDATE#`** | The current timestamp (`datetime.now(UTC)`) — one value per call, so two `#SYSDATE#` bindings in the same call get the same instant. |
+| `#LOGIN_USER#` (or `#LOGIN#`, `#USER#`) | The signed-in user's name. |
+| `#LOGIN_EMAIL#` (or `#EMAIL#`) | The user's e-mail address. |
+| `#LANGUAGE#` (or `#LANG#`) | The interface language. |
+| `#SYSDATE#` (or `#CURRENT_DATE#`, `#TODAY#`) | Today's date, `YYYY-MM-DD`. |
+| `#NOW#` (or `#CURRENT_TIMESTAMP#`) | The current date and time. |
+| `#CURRENT_TIME#` | The current time, `HH:MM:SS`. |
 
-Use them in `source` (not `value`) — the engine sees the `#…#` shape and resolves it instead of looking for a column of that name.
+An unknown built-in binds nothing. Use them in **source** or **default**: in **value**, the text `#LOGIN_USER#` is bound as it is.
 
-```toml
-# Row insert — stamp creator + creation timestamp from the session
-[[actions.run_query.params]]
-param  = "CREATED_BY"
-source = "#LOGIN_USER#"
+---
 
-[[actions.run_query.params]]
-param  = "CREATED_AT"
-source = "#SYSDATE#"
+## Tokens resolved by the server \{#tokens\}
+
+A writable query can write a value the server fills when it executes the statement — the browser cannot change it. The **Token** menu of the SQL editor inserts them:
+
+| Token | Value |
+|---|---|
+| `{{LOGIN}}` (or `{{USER}}`) | The signed-in user's name, in upper case. |
+| `{{SYSDATE}}` | The current date. |
+| `{{SYSTIME}}` | The current time. |
+| `{{SYSTIMESTAMP}}` (or `{{NOW}}`) | The current date and time. |
+| `{{JDEDATE}}` | Today as a JD Edwards date (CYYDDD). |
+| `{{JDETIME}}` | The current time as a JD Edwards time (HHMMSS). |
+| `{{PID}}` | The connector name, in upper case. |
+| `{{JOBN}}` | `LIBERTY`. |
+
+```sql
+UPDATE invoices
+SET    status     = 'PAID',
+       updated_by = {{LOGIN}},
+       updated_at = {{SYSTIMESTAMP}}
+WHERE  invoice_id = :INVOICE_ID
 ```
 
-For column-level pre-fill (a screen field that shows the current user when the dialog opens), use the dictionary's **`LOGIN`** and **`SYSDATE`** rules instead — they fire on the form layer, not at SQL execute time. The bind tokens are for *call-time* parameter substitution; the dictionary rules are for *form-time* field population.
+Dates and times use the server's local time, one instant per statement. In `COLUMN = {{TOKEN}}`, the value takes the column's format from the dictionary (a `jdedate` column receives CYYDDD). An unknown token makes the statement fail, so a typo does not go unnoticed.
 
 ---
 
-## Where bindings are declared in the UI
+## Where bindings are set \{#where\}
 
-| Caller | Where the binding lives |
+| Caller | Setting |
 |---|---|
-| **Screen read query** | The screen's `params` list (Settings → Screens → \ → *Params* tab). |
-| **Dialog Save (UPDATE / INSERT / DELETE)** | The screen auto-binds every key + non-key column to its same-named placeholder. You don't usually declare anything — the convention does the work. |
-| **Action `run_query`** | The action editor's `params` list. |
-| **Action `navigate`** | Same — the params bind into the destination screen's read query. |
-| **Menu item with target params** | Menu editor — the `params` list on the menu entry. |
-| **Nested-form / nested-tab read** | The nested tab's `params` list. |
-| **Lookup combo with a cascading filter** | The column's `filter_from` (which translates to a `ParamBind` under the hood). |
-
-In each case the editor surfaces a *Param* dropdown listing the destination query's declared params, a mode toggle (literal / source), and value / source inputs. The dropdown is populated from the live connectors registry — switching the destination query refreshes the list.
+| **Dialog save** (insert, update, delete) | Nothing to declare: each column is bound to the parameter of the same name, and the update's WHERE uses `:<KEY>_ORIGINAL`, the key's value when the dialog opened. |
+| **Action** (run a query, call an API or a plugin, open a screen…) | The action's `param_binds`. |
+| **Lookup column** | The column's **lookup_param_binds** (Rules tab), or the dictionary entry's **Lookup params** for fixed values. |
+| **Nested tab** | The tab's `param_binds` — typically the parent row's key. |
+| **Menu item** | **Params** (Advanced tab): fixed values passed to the target when it opens. |
+| **Dashboard** | The period and the filters bind `:PERIOD_FROM`, `:PERIOD_TO` and the filter columns — see [Dashboards](../../dashboards.md). |
 
 ---
 
-## Resolution order — what binds what
+## Resolution order \{#order\}
 
-When a query is called, the engine resolves each `:placeholder` in this order:
+For each parameter of the statement:
 
-1. The matching `ParamBind` on the caller — `value` literal, or `source` (column lookup or `#…#` token), or `default` when source is NULL / empty.
-2. The matching dictionary rule — `SYSDATE` / `LOGIN` / `SEQUENCE` / `DEFAULT` fire if the column has one (writes only — those rules don't override caller-supplied values).
-3. The query's `ParamDef.default`.
-4. SQL `NULL`.
+1. the value sent by the caller — a `param_binds` entry, the dialog's field, a menu parameter;
+2. otherwise the **default** declared on the query;
+3. otherwise `NULL`.
 
-The first match wins. So a screen that binds `:status = "PAID"` overrides the query's `default = "OPEN"`; a query that leaves `:from_date` unbound and undeclared receives SQL `NULL`.
+On a write, the dictionary rules then apply to the bound columns: `LOGIN` always replaces the value, `SYSDATE` and `DEFAULT` fill an empty value, `SEQUENCE` numbers an insert — see [Dictionary → Rules](../../dictionary.md#rules).
 
 ---
 
 ## Naming conventions
 
-| Pattern | Why |
+| Convention | Why |
 |---|---|
-| **UPPER snake case for placeholders** | The engine normalises to UPPERCASE on save and matches case-insensitively at runtime. `:USER_ID` and `:user_id` work; `:UserId` works but reads oddly next to the saved UPPERCASE form. |
-| **Match column names** | When the placeholder corresponds to a screen column, name it the same — the binding then collapses to `source = "<NAME>"` with the same value, easier to read. |
-| **`:NAME_ORIGINAL` for UPDATE WHERE** | The dialog Save convention — the column's value at dialog open. The CRUD Wizard wires this for you; hand-written `_put` queries should mirror it. |
-| **`:LOGIN_USER` / `:SYSDATE` as suffixes for audit columns** | A column named `:CREATED_BY` bound to `#LOGIN_USER#` reads obvious; `:UID` bound to `#LOGIN_USER#` reads cryptic. |
-
----
-
-## Worked example — a multi-bind action
-
-A screen for *Invoices* has a row action **Mark paid**. Clicking it on row N runs an UPDATE that:
-
-- Sets `status = 'PAID'`.
-- Sets `paid_at = SYSDATE`.
-- Sets `paid_by = <logged-in user>`.
-- Matches on the row's `INVOICE_ID`.
-
-The query (under Unclassified, `writable = true`):
-
-```sql
-UPDATE invoices
-SET    status  = :STATUS,
-       paid_at = :PAID_AT,
-       paid_by = :PAID_BY
-WHERE  invoice_id = :INVOICE_ID
-```
-
-The action editor's `params` list:
-
-| `param` | mode | value / source | default |
-|---|---|---|---|
-| `STATUS` | value | `PAID` | — |
-| `PAID_AT` | source | `#SYSDATE#` | — |
-| `PAID_BY` | source | `#LOGIN_USER#` | — |
-| `INVOICE_ID` | source | `INVOICE_ID` | — |
-
-Calling the action on a row binds each placeholder, fires the UPDATE, and the grid refreshes. No screen field input from the user — the action does its job from row context + session identity alone.
+| **Upper-case parameters** | Binds are written in upper case on save (`param`, `source`), and the CRUD wizard generates upper-case names. Keeping the SQL in upper case avoids any mismatch. |
+| **Same name as the column** | A parameter named after its column reads naturally and binds itself on a dialog save. |
+| **`:<KEY>_ORIGINAL` in an update's WHERE** | The dialog save convention; the CRUD wizard writes it, and a hand-written `_put` must do the same. |
 
 ---
 
@@ -5342,19 +5284,19 @@ Calling the action on a row binds each placeholder, fires the UPDATE, and the gr
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Set both `value` and `source`. | The save fails validation ("set exactly one of value or source"). | Pick one. |
-| `source = "#SYSDATE#"` on a SELECT screen filter. | The filter applies SYSDATE at call time — the user can't pick a date. | Don't bind. Let the user fill the field; the dictionary's SYSDATE rule pre-fills the input but the user can override. |
-| `value = "#LOGIN_USER#"`. | The literal string `"#LOGIN_USER#"` is bound — no substitution. | Use `source`, not `value`. |
-| Bind a placeholder the query doesn't have. | The engine ignores it; nothing happens, nothing fails. | Open the destination query, declare the param or pick the right placeholder name from the dropdown. |
-| Forget the `_ORIGINAL` suffix on a hand-written `_put`. | The UPDATE matches on the **edited** key, not the original — the row isn't found when the operator changed the key. | Mirror the CRUD Wizard convention: `WHERE key = :key_ORIGINAL`. |
+| `value = "#LOGIN_USER#"`. | The text `#LOGIN_USER#` is written. | Use **source**. |
+| Both **value** and **source** set. | **source** is ignored. | Keep one. |
+| `#SYSDATE#` bound to a read filter. | The user cannot pick another date. | Leave the parameter free, with a default on the query. |
+| A bind for a parameter the query does not have. | Nothing happens. | Pick the parameter from the list, which follows the query. |
+| A hand-written `_put` without `_ORIGINAL`. | Changing the key in the dialog updates no row. | `WHERE key = :KEY_ORIGINAL`. |
 
 ---
 
 ## What's next
 
-- [Per-dialect SQL variants](./per-dialect-sql.md) — for parameters that need different SQL syntax across Postgres / Oracle.
-- [Concepts → Dictionary](../../dictionary.md) — the `SEQUENCE` / `LOOKUP` / `LOGIN` / `SYSDATE` rules that pre-fill form fields.
-- [Concepts → Form conditions](../../form-conditions.md) — when a field should appear only under specific filter values.
+- [Per-dialect SQL variants](./per-dialect-sql.md) — one query, different SQL per database.
+- [Dictionary](../../dictionary.md) — the `LOGIN`, `SYSDATE`, `SEQUENCE` and `DEFAULT` rules applied on writes.
+- [Actions and lifecycle](../screens/actions-and-lifecycle.md) — the actions that call queries with `param_binds`.
 
 ---
 
@@ -5423,13 +5365,13 @@ The validator enforces two rules on the map:
 
 ## The editor
 
-The single-query editor under **Settings → Connectors → Unclassified / Sequences / Lookups** renders the `sql` field as a SQL editor. To switch from single-string to per-dialect map, edit the underlying TOML — the form-side toggle is on the roadmap but not shipped today; for now the way in is:
+In the query editor (**Settings → Connectors**, Tables, Queries, Sequences or Lookups view), the **sql** field is a single SQL editor:
 
-1. Save the query as a single SQL string first.
-2. Edit the connector TOML directly to convert `sql = "..."` into the `[<connector>.queries.sql]` block shown above.
-3. Reload (the page's Save will refresh the form when you come back).
+1. **+ per-dialect variants** turns it into a list of variants, starting with `default (required)` holding the current SQL.
+2. Type a dialect name (`oracle`, `postgresql`, `mssql`…) in the **dialect** field and press Enter: a new editor appears for that variant.
+3. The **×** next to a variant removes it; **single** goes back to one statement once only `default` remains.
 
-For the Tables tab (CRUD-shaped queries), the wizard always writes single-string SQL. If a `_get` needs per-dialect variants, generate it from the wizard first and convert afterwards.
+The CRUD wizard writes single-statement SQL; a generated query is converted the same way afterwards.
 
 ---
 
@@ -5500,7 +5442,6 @@ Three databases, three syntaxes, one Liberty query name. Screens that wire `cust
 ```toml
 [[connectors.reporting.queries]]
 name        = "monthly_revenue"
-type        = "custom"
 description = "Aggregated invoice revenue per month, period filter on invoice_date"
 
 [connectors.reporting.queries.sql]
@@ -5581,7 +5522,7 @@ The per-dialect map shines for **small, predictable** differences (date truncati
 ## Liberty Next — Screens — overview
 Source: https://docs.nomana-it.fr/liberty/framework/build/screens/overview/
 
-The Screens page — left scope bar of apps, flat list of screens, click to open the Screen Designer's 7 tabs (General / Queries / Columns / Dialog / Actions / Row menu / Export).
+The Screens page — left scope bar of apps, flat list of screens, click to open the Screen Designer's 9 tabs (General / Queries / Columns / Views / Summary / Dialog / Actions / Row menu / Export).
 
 A **screen** in Liberty is the page a user sees: a table of rows, optional filters, optional add/edit dialog, optional actions, optional row context menu. One screen = one `<base>_get` query + (optionally) `<base>_put` / `<base>_post` / `<base>_delete` for writes + a dialog form on top.
 
@@ -5605,13 +5546,15 @@ Three regions:
 
 Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes; Cancel prompts on unsaved changes.
 
-Inside the modal, seven tabs organise everything:
+Inside the modal, nine tabs organise everything:
 
 | Tab | Carries |
 |---|---|
 | **General** | Identity, connector override, audit table, row cap, key columns, behaviour flags (auto-load, editable, uploadable), grouping, treeview, default chart, row-click behaviour. |
 | **Queries** | The four CRUD query references — read (required), update, insert, delete. Picker is fed from the connector's queries list. |
-| **Columns** | One row per column hint — labels, formats, defaults, dictionary references, filtering, edit rules. Click a column to drill into its full editor. |
+| **Columns** | One row per column hint — labels, formats, defaults, dictionary references, filtering, edit rules, conditions. Click a column to drill into its full editor. |
+| **Views** | The shared views of the grid — column layouts, sorts and filters published for every user, one of them possibly the default. See [Saved views](../../saved-views.md). |
+| **Summary** | The grouping columns of the [Summary view](../../saved-views.md#summary), and the optional row-level value diff. |
 | **Dialog** | The **Visual Builder** — a three-column Figma-style canvas (Palette / Canvas / Inspector) where you drag fields onto tabs. Optional — a screen without a dialog still works as a read-only / grid-edit table. |
 | **Actions** | Three groups: *Dialog hooks* (on_load / on_save / on_cancel), *Toolbar* (buttons above the table), *Row hooks* (on_insert / on_update / on_delete). |
 | **Row menu** | Right-click context menu actions on a row. |
@@ -5630,10 +5573,12 @@ The schema's top-level fields, grouped by purpose:
 | **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
 | **Read query** | `read_query` (required), `auto_load`, `max_rows`, `key_columns` |
 | **Write queries** | `update_query`, `insert_query`, `delete_query` |
-| **Editing & display** | `columns`, `editable`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Views & summary** | `views` (shared views), `summary`, `value_diff` |
+| **Change packages** | `change_tracked`, `change_entity`, `post_apply` — see [Change packages](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (e.g. `AUD_USERS` — mirrors writes with AUD_ACTION / AUD_USER / AUD_DATE) |
 | **Form** | `dialog` *(optional — the form on top of the table)* |
-| **Actions / hooks** | `actions` (toolbar), `row_menu` (right-click), `on_insert` / `on_update` / `on_delete` (row hooks) |
+| **Actions / hooks** | `actions` (toolbar), `row_menu` (right-click), `on_insert` / `on_update` / `on_delete` / `on_duplicate` (row hooks) |
 | **Row-click target** | `row_click_screen` + `row_click_connector` + `row_click_binds` *(open a sibling screen as a dialog)* OR `row_click_route` *(open a SPA route)* |
 | **Export** | `export` *(workbook xlsx config)* |
 
@@ -5737,7 +5682,7 @@ Below the empty list, click the **＋ Add screen** button. The page prompts for 
 | Match the JD Edwards object. | `F0005` for the JDE UDC table. |
 | `<entity>_<purpose>` for screens that don't map 1-1 to a table. | `customer_balance_report`, `invoice_send_dialog`. |
 
-The id is **stable** — it's the URL segment (`/screen/<app>/<id>`), the dictionary key (`[screens.<app>.<id>]`) and the cross-file reference target. Renaming later goes through the *Rename* button on the card, which propagates the change across screens / menus / dictionary.
+The id is **stable** — it's the URL segment (`/screen/<app>/<id>`), the configuration key (`[screens.<app>.<id>]`) and the cross-file reference target. Renaming later goes through the *Rename* button on the card, which propagates the change across screens / menus / dictionary.
 
 The empty screen appears in the list; click it to open the **Screen Designer**.
 
@@ -5875,17 +5820,22 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 | **`rules`** | How to render and validate the column. `BOOLEAN` renders a checkbox, `ENUM` a dropdown, `LOOKUP` a searchable picker. Blank inherits from the dictionary. |
 | **`rules_values`** | The rule's value — `BOOLEAN` → the true marker (`Y` / `1` / `true`); `ENUM` → the enum id; `LOOKUP` → the lookup id; `SEQUENCE` / `NN` → the sequence id. |
 | **`default`** | Pre-fill value when adding a new row. |
-| **`required`** | When on, the operator must fill this column before saving. |
+| **`required`** | When on, the field is marked as required (asterisk). |
 | **`disabled`** | When on, the column is read-only — the operator sees the value but can't change it. |
+| **`disable_on_add`** / **`disable_on_edit`** | Read-only only when a row is added, or only once it exists — the second one for keys that must not change. |
+| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. |
+| **`default_when`** | A value forced (and locked, unless **lock** is off) while a condition holds. |
+| **`rules_when`** | Another rule (lookup, enum, Boolean) while a condition holds. |
+| **`write_when`** | The column is written only while a condition holds. |
 | **`lookup_param_binds`** | Narrow a `LOOKUP` rule's query by binding extra parameters. Used when the lookup depends on another field's value (e.g. picking a role narrows by the row's current application). See [Parameter binding](../queries/parameter-binding.md). |
 
 ### Primary key
 
 | Field | Notes |
 |---|---|
-| **`key`** | Mark this column as part of the row's primary key. Drives:– Excel-import update-vs-insert matching.– The dialog's edit-mode lock — key fields are read-only when editing an existing row.– The `_put` query's `:NAME_ORIGINAL` binding (the CRUD Wizard's convention). |
+| **`key`** | Mark this column as part of the row's primary key. Drives:– Excel-import update-vs-insert matching.– In add mode, a key column shows a plain input instead of its lookup list (a new key is typed, not picked).– The `_put` query's `:NAME_ORIGINAL` binding (the CRUD Wizard's convention). |
 
-Mark every column that uniquely identifies a row. Multi-column keys are supported — tick the flag on each. When the screen's `key_columns` is empty (the usual case), the runtime falls back to columns whose `key` flag is on.
+A key is not locked automatically when a row is edited: tick **disable_on_edit** (Edit tab) on the key columns that must not change once the row exists. Mark every column that uniquely identifies a row. Multi-column keys are supported — tick the flag on each. When the screen's `key_columns` is empty (the usual case), the runtime falls back to columns whose `key` flag is on.
 
 ### Filtering
 
@@ -5893,7 +5843,9 @@ Mark every column that uniquely identifies a row. Multi-column keys are supporte
 |---|---|
 | **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
-| **`visible_when`** | Show this column **in the grid** only when a filter has a specific value. Different from the dialog-side `visible_when` on fields — see [Conditional fields](./conditional-fields.md). |
+| **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
+
+The conditions are described on [Form conditions](../../form-conditions.md), with examples on [Conditional fields](./conditional-fields.md).
 
 ### A typical column
 
@@ -6002,7 +5954,7 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
 |---|---|
 | **Palette** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A search box narrows the list. Click an entry to add a field card on the canvas; drag an entry to drop it at a specific position. |
 | **Canvas** *(center)* | The dialog's tabs strip across the top + the field grid below. Click a tab to switch; *＋ Tab* adds one. Each field card shows the field name + a one-line summary of its key flags. The selected card has a coloured border; the inspector on the right reflects it. A separate **HIDDEN** group at the bottom collects fields with `hidden = true`. |
-| **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). Properties are rendered as a generic form; the **Lookup param binds** and **Conditional rules** sections expand inline. |
+| **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). It shows the field and its **Column configuration** — see Step 3. |
 
 ---
 
@@ -6025,15 +5977,15 @@ The added field becomes the selected card; the Inspector switches to its propert
 
 ### Step 3 — Tune the field properties
 
-In the Inspector:
+A dialog field displays a screen column, and the column carries every behaviour. The Inspector shows:
 
-| Field | What it does |
+| Section | What it holds |
 |---|---|
-| **`dd`** | Dictionary entry the field inherits from. Defaults to the column's name on add. |
-| **`colspan`** | How many grid cells the field spans. Defaults to 1. |
-| **`required`** / **`hidden`** / **`disabled`** | Per-dialog overrides — leave blank to inherit from the column hint (see [Columns](./columns.md)). |
-| **Lookup param binds** | Extra `:placeholder` bindings for a `LOOKUP` field. Each binding is `{param: <placeholder on the lookup query>, source: <field on this dialog>}`. The classic case: a role picker narrowed by the application id from another field. |
-| **Conditional rules** | `visible_when` / `required_when` / `disabled_when` — see [Conditional fields](./conditional-fields.md). |
+| **Field** | The field's name and, with several form tabs, the **Tab** it sits on. |
+| **Column configuration** | The column's full editor — the same as in the Columns tab: label, format, dictionary entry (`dd`), rule and lookup binds, required / read-only flags, conditions, defaults, and the field's span on the dialog grid (**Display ▸ Colspan**). A change applies to the grid as well. |
+| **Events** | The hooks wired on the screen, by event, for information. |
+
+See [Columns](./columns.md) for each setting and [Conditional fields](./conditional-fields.md) for the conditions.
 
 ### Step 4 — Add tabs
 
@@ -6042,7 +5994,7 @@ Click **＋ Tab** above the canvas. The new tab is empty; drag fields in from th
 | Tab name | What's on it |
 |---|---|
 | **General** | Identity + most-used fields. |
-| **Audit** | Created at, created by, updated at, updated by — often `hidden_on_add` to hide them when inserting. |
+| **Audit** | Created at, created by, updated at, updated by — often `hide_on_add` to hide the tab when inserting. |
 | **Notes** | Free-text fields. |
 | **Address** | A group of related fields (street, city, postcode, country). |
 
@@ -6063,7 +6015,7 @@ Two ways:
 
 | Method | Effect |
 |---|---|
-| Set `hidden = true` in the Inspector. | The card moves to the **HIDDEN** group at the bottom of the canvas. The field still binds at save time. |
+| Tick **hidden** in the column configuration (Display). | The card moves to the **HIDDEN** group at the bottom of the canvas. The field still binds at save time. |
 | Delete the field from the tab. | The field is removed from the dialog entirely. The column is still on the screen; it just doesn't surface in the form. |
 
 The "hide but keep" pattern is useful for technical columns the dialog must submit (e.g. an audit timestamp) but the user shouldn't see.
@@ -6077,10 +6029,10 @@ Tabs aren't all the same. Three types live under `dialog.tabs`, discriminated on
 | Type | Purpose |
 |---|---|
 | **`form`** *(default)* | A grid of editable fields — the case described above. |
-| **`nested_form`** | A child-record form embedded in the tab. The parent's PK binds into a separate read query; if a row comes back the nested form edits it, otherwise it inserts. See [Nested tabs](./nested-tabs.md). |
+| **`nested_form`** | The form of another existing screen (`form_screen`), shown in the tab; `param_binds` pass the parent's values (usually its key) to that form's queries, and it is saved with the parent's **Save**. See [Nested tabs](./nested-tabs.md). |
 | **`nested_table`** | A related-rows TableView embedded in the tab. Renders another screen's grid scoped to the parent's PK. See [Nested tabs](./nested-tabs.md). |
 
-The visual builder shows the same tab strip for all three — switching to a `nested_form` tab swaps the canvas for that tab's nested-form editor; `nested_table` shows the target-screen picker.
+The visual builder shows the same tab strip for all three — switching to a `nested_form` or `nested_table` tab shows the target-screen picker and its `param_binds`.
 
 ---
 
@@ -6129,373 +6081,239 @@ The dialog's title sits at the top of the modal when it opens. Set it once in th
 ## Liberty Next — Conditional fields
 Source: https://docs.nomana-it.fr/liberty/framework/build/screens/conditional-fields/
 
-Make a dialog field appear, be required or be locked only when another field has a specific value — visible_when / required_when / disabled_when on ColumnHint and ScreenField.
+Make a dialog field appear, become required, lock itself or take a forced value only when another field has a given value — set on the column from the screen editor's inspector, with worked examples.
 
-A static dialog asks the user the same questions every time. A conditional dialog asks the right ones depending on what the user has already typed — show **Bank details** only when **Payment method** is `bank_transfer`, require **Reason** only when **Status** is `cancelled`, lock **Account number** in edit mode but allow editing in add mode.
+A static dialog asks the same questions every time. A conditional dialog adapts to what the user has already chosen: show **IBAN** only for a bank transfer, mark **Cancellation reason** as required only for a cancelled order, lock the **Invoice number** once the invoice exists.
 
-Three flags on a column (or per-dialog override on a field) handle this:
-
-| Flag | What it gates |
-|---|---|
-| **`visible_when`** | Whether the field shows at all. Hidden fields don't bind values at save. |
-| **`required_when`** | Whether a value is mandatory. |
-| **`disabled_when`** | Whether the field is read-only. |
-
-Each is a list of `FieldCondition` predicates — **AND** semantics, so every predicate must match for the rule to fire.
-
----
-
-## The FieldCondition shape
-
-```toml
-{ field = "STATUS", value = "CANCELLED" }
-# or with a list — any matching value triggers the rule
-{ field = "PAYMENT_METHOD", value = ["bank_transfer", "sepa"] }
-```
-
-| Property | What it does |
-|---|---|
-| **`field`** | The other dialog field whose live value gates this rule. Referenced by its column name (case-insensitive). |
-| **`value`** | The expected value, or a list of values (any one matches). |
-
-Multiple conditions in the list = AND. To OR conditions, declare two separate fields with the same conditional rule (or use a single condition with a list of values).
+The settings and their exact behaviour are listed on [Form conditions](../../form-conditions.md). This page shows how to set them up.
 
 ---
 
 ## Where to set them
 
-Two layers carry the same flags:
+A dialog field displays a screen column, and the column carries every behaviour — the same settings drive the dialog and the grid. In the screen editor:
 
-| Layer | When |
-|---|---|
-| **Column hint** *(Columns tab)* | The rule applies to **every** dialog that surfaces this column. The right default — most fields behave the same across dialogs. |
-| **Per-dialog field** *(Inspector → Conditional rules)* | The rule applies only to **this** specific dialog. Use when one dialog needs different behaviour from the column-wide default. |
+1. Open the dialog in the [Dialog builder](./dialog-builder.md) and click the field — or select the column in the **Columns** tab.
+2. The inspector shows **Column configuration**, split into tabs: the conditions sit in **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) and **Rules** (`rules_when`).
+3. Add one line per condition: the **field** (picked from the screen's columns) and the **value**, or several values.
 
-The runtime evaluates the per-field override first; if blank, it falls back to the column-hint setting.
-
----
-
-## The Inspector's Conditional rules section
-
-When a field is selected in the [Dialog builder](./dialog-builder.md)'s canvas, the Inspector's *Conditional rules* section lets you add predicates for any of the three flags.
-
-| Section | What it does |
-|---|---|
-| **visible_when** | Show the field only when every predicate matches. Empty = fall back to the static `hidden` flag. |
-| **required_when** | Require the field only when every predicate matches. Empty = `required` decides. |
-| **disabled_when** | Lock the field only when every predicate matches. Empty = `disabled` decides. |
-
-The runtime re-evaluates the rules on every form change — type in `PAYMENT_METHOD`, the dependent fields appear / disappear / lock without a round-trip.
+All the lines of one setting must match together (AND). For an OR on the same field, list the values in one condition.
 
 ---
 
 ## Worked examples
 
-### Show fields conditionally
+### Show fields for one choice
 
-A *Payment* dialog with these columns:
-
-- `PAYMENT_METHOD` — ENUM dropdown (`cash`, `bank_transfer`, `sepa`, `card`).
-- `IBAN`, `BIC` — only relevant for `bank_transfer` / `sepa`.
-- `CARD_LAST4` — only relevant for `card`.
-
-The rules:
+A *Payment* dialog where `PAYMENT_METHOD` is a list (`CASH`, `TRANSFER`, `DIRECT_DEBIT`, `CARD`):
 
 | Column | `visible_when` |
 |---|---|
-| `IBAN` | `field=PAYMENT_METHOD, value=[bank_transfer, sepa]` |
-| `BIC` | `field=PAYMENT_METHOD, value=[bank_transfer, sepa]` |
-| `CARD_LAST4` | `field=PAYMENT_METHOD, value=card` |
+| `IBAN` | `PAYMENT_METHOD` = `TRANSFER`, `DIRECT_DEBIT` |
+| `BIC` | `PAYMENT_METHOD` = `TRANSFER`, `DIRECT_DEBIT` |
+| `CARD_LAST4` | `PAYMENT_METHOD` = `CARD` |
 
-The user picks `cash` — `IBAN` / `BIC` / `CARD_LAST4` all disappear. Switches to `bank_transfer` — `IBAN` and `BIC` appear, `CARD_LAST4` stays hidden.
+With `CASH`, none of the three fields shows. With `TRANSFER`, `IBAN` and `BIC` appear.
 
-### Require a reason on cancel
-
-A *Subscription* dialog where `CANCELLATION_REASON` should only be required when `STATUS = CANCELLED`:
+### Mark a reason as required on cancellation
 
 | Column | `required_when` |
 |---|---|
-| `CANCELLATION_REASON` | `field=STATUS, value=CANCELLED` |
+| `CANCELLATION_REASON` | `STATUS` = `CANCELLED` |
 
-The field is always visible (no `visible_when`), always editable (no `disabled_when`), but the *Save* button refuses to submit until the field has a value **if** `STATUS` is `CANCELLED`. For any other status, an empty `CANCELLATION_REASON` saves fine.
+The field always shows; it gets the required asterisk as soon as the status is `CANCELLED`.
 
-### Lock fields in edit mode for certain rows
+### Lock a key once the row exists
 
-A *Customer* dialog where the `TAX_ID` should be editable only when the row is being created (not edited):
-
-| Column | `disabled_when` |
+| Column | Setting |
 |---|---|
-| `TAX_ID` | (rule based on some marker that distinguishes add from edit — typically a row-level flag like `IS_FROZEN`) |
+| `INVOICE_NUMBER` | `disable_on_edit` ticked |
 
-When the row's `IS_FROZEN = Y`, the `TAX_ID` field is read-only. Otherwise editable. The form is the same; the behaviour adapts to the row.
+The number is typed when the invoice is added, then read-only — in the dialog and in grid editing. `disable_on_add` does the reverse, for a value assigned on creation.
 
-For a strict "lock when editing, allow when adding" without a row marker, use the per-tab `hide_on_add` / `hide_on_edit` flags or the per-field column-hint `disabled` (which locks everywhere).
+### Force a value for one kind of row
 
-### Multi-condition AND
+| Column | `default_when` |
+|---|---|
+| `CREDIT_LIMIT` | `STATUS` = `CANCELLED` → default `0`, lock on |
 
-A *Invoice* dialog where `EARLY_PAYMENT_DISCOUNT` should be required only when **both** `STATUS = OPEN` AND `AMOUNT_DUE > 1000`:
+As soon as the status becomes `CANCELLED`, the limit switches to `0` and locks. With **lock** off, `0` is only proposed and the user can change it.
 
-The first condition is straightforward (`STATUS = OPEN`). The second isn't — `FieldCondition` checks equality, not comparison. For numeric thresholds use a normalised flag column (e.g. `HIGH_VALUE = Y` computed in the read query) and condition on it.
+### Make closed periods read-only
 
-Sometimes the cleanest move is a **dictionary rule** with a default value that the user can override — let the form compute the discount and treat the field as informational rather than gating its save.
+On the screen's **General** tab:
 
----
+| Setting | Value |
+|---|---|
+| `editable_when` | `PERIOD_STATUS` = `OPEN`, `VALIDATED` |
 
-## Visible vs hidden — what happens at save
-
-A field hidden by `visible_when` is **excluded from the save payload**. The dialog Save sends only the values of currently-visible fields. The hidden field's database column either:
-
-- Keeps its existing value (UPDATE — the missing field is omitted from the SET clause).
-- Defaults to NULL or its DB default (INSERT — the missing field is omitted from the INSERT column list).
-
-This is the **intent** of conditional visibility — a field that isn't relevant to the user's choice shouldn't accidentally overwrite the database with stale or default data.
-
-For genuinely hidden-but-required fields (e.g. a `:LOGIN_USER` bound at save time), use [parameter binding](../queries/parameter-binding.md) on the `_post` / `_put` query, not a dialog field.
+A row of a closed period opens in view-only mode, and the server refuses changes to it.
 
 ---
 
-## Validation order
+## Things to know
 
-When the user clicks *Save*, the dialog checks fields in this order:
-
-1. **Visible fields with `required = true`** (or `required_when` matching) must have a value.
-2. Each field's dictionary rule fires (BOOLEAN, ENUM, LOOKUP, format).
-3. The Save dispatch fires the action chain.
-
-A failing required check shows an inline error on the field, blocks the save, doesn't fire the action chain.
-
----
-
-## Common pitfalls
-
-| Mistake | Symptom | Fix |
+| Situation | What happens | What to do |
 |---|---|---|
-| `visible_when` references a field not on any dialog tab. | The dependent field never appears (the source field's value is undefined, no condition matches). | Add the source field to the dialog, or change the condition. |
-| `visible_when` on a `key` field. | The user adds a row with no key — the INSERT fails. | Key fields should never be conditionally hidden. Lock them, don't hide. |
-| `required_when` matches but `visible_when` doesn't. | The field is required AND hidden — the user can't fill it but the save refuses. | Sync the two conditions, or drop the `required_when`. |
-| Value list with a typo. | The rule never matches. | Verify the enum values match exactly (case-sensitive). |
-| Condition references the field itself. | Infinite loop guard kicks in; the rule is ignored. | Conditions reference **other** fields, never self. |
+| The deciding field is not on the dialog. | Its value is unknown to the form: the condition never matches, and the dependent field stays hidden. | Add the deciding field to the dialog, hidden or not. |
+| `visible_when` on a key column. | A user adding a row may not see the key. | Lock a key (`disable_on_edit`); do not hide it. |
+| `required_when` matches while `visible_when` does not. | The field is required but hidden. | Keep the two conditions in line. |
+| A value with different spelling. | The condition never matches: values are compared exactly (only the surrounding spaces are ignored). | Copy the stored codes, not their labels. |
+| A threshold (`AMOUNT > 1000`). | Conditions only test equality. | Return a flag from the read query (`HIGH_VALUE = 'Y'`) and test that flag. |
 
 ---
 
 ## What's next
 
-- [Actions and lifecycle](./actions-and-lifecycle.md) — fire actions when the form loads, saves or is cancelled.
-- [Dialog builder](./dialog-builder.md) — the Visual Builder where you set these rules per field.
-- [Columns](./columns.md) — set the same rules at the column level for screen-wide defaults.
+- [Form conditions](../../form-conditions.md) — the full list of settings and where each one is checked.
+- [Columns](./columns.md) — the other column settings.
+- [Actions and lifecycle](./actions-and-lifecycle.md) — run actions when the form loads, saves or is cancelled.
 
 ---
 
 ## Liberty Next — Actions and lifecycle
 Source: https://docs.nomana-it.fr/liberty/framework/build/screens/actions-and-lifecycle/
 
-The Actions tab — toolbar buttons, row context menu, dialog hooks (on_load / on_save / on_cancel), row hooks (on_insert / on_update / on_delete), and the seven core action types.
+The Actions tab — dialog hooks (on_load / on_save / on_cancel), toolbar buttons, row hooks (on_insert / on_update / on_delete / on_duplicate), the row menu, the action types with their param_binds, prompts, chains and shared actions.
 
-A screen with a grid + a dialog covers the *static* CRUD flow. A screen with **actions** and **lifecycle hooks** extends that to anything else — run a custom query on a button click, navigate to another screen on a row click, fire a webhook after a save, refresh after a delete.
+A screen with a grid and a dialog covers the standard read and write flow. **Actions** and **lifecycle hooks** add everything else: run a query from a button, open another view from a row, call an API or a plugin after a save, refresh the grid after a delete.
 
-The **Actions** tab of the Screen Designer is where all of this is wired. Three groups, the same action shapes everywhere.
+They are set in the **Actions** and **Row menu** tabs of the screen editor, with the same action shapes everywhere.
 
 ---
 
-## The three action groups
+## Where actions fire \{#groups\}
 
-The Actions tab organises every action surface into three groups:
-
-| Group | Hooks | When they fire | ParamBind resolves against |
+| Group | Lists | When they fire | `source` reads from |
 |---|---|---|---|
-| **Dialog hooks** | `on_load`, `on_save`, `on_cancel` | While the form is open. | The live form state. |
-| **Toolbar** | `actions` (screen-level) | The user clicks a toolbar button. | The currently-selected row (empty if none). |
-| **Row hooks** | `on_insert`, `on_update`, `on_delete` | After a mutation succeeds — works whether from the dialog Save **or** the inline grid Save. | The new row (`on_insert` / `on_update`) or the deleted row (`on_delete`). |
+| **Dialog hooks** | `on_load` | Once the dialog has loaded the row (edit) or seeded the defaults (add). | The form. |
+| | `on_save` | After the dialog's main insert or update succeeds. | The form at save time. |
+| | `on_cancel` | When the dialog is closed without saving, before it closes; an error keeps it open. | The form. |
+| **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
+| **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
+| | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
+| **Row menu** *(own tab)* | `row_menu` | Each entry is a right-click menu item on a row. | The clicked row. |
 
-A separate tab — **Row menu** — carries `row_menu`: actions shown when the user right-clicks a row. ParamBinds resolve against the **clicked** row.
+Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
+
+For a left click on a row, use the **row-click** settings of the General tab (`row_click_screen` with `row_click_binds`, or `row_click_route`).
 
 ---
 
-## The seven core action types
+## Action types \{#types\}
 
-Every action has a `type` field discriminating one of seven core variants (plus four composite variants below).
+Every action has an **id** (unique in its list, also its key in a chain's context), a **label** (button caption) and **stop_on_error**.
 
-| Type | What it does | Key fields |
+| Type | What it does | Main fields |
 |---|---|---|
-| **`run_query`** | Execute a connector query (writable or read). | `connector`, `query`, `params` (ParamBinds). |
-| **`call_api`** | Call an HTTP / API connector endpoint. | `connector`, `endpoint`, `params`. |
-| **`navigate`** | Open another screen as a modal, narrowed by ParamBinds. | `connector`, `screen`, `params`. |
-| **`set_field`** | Change a dialog field's value. | `field`, `value` (literal or `source` from another field). |
-| **`confirm`** | Prompt the user for confirmation; block the chain on Cancel. | `title`, `message`, `confirm_label`. |
-| **`notify`** | Show a toast / banner. | `level` (`info` / `warning` / `error` / `success`), `message`. |
-| **`refresh`** | Re-run the screen's read query (reload the grid). | *(no fields)*. |
+| **`run_query`** | Runs a query of a connector, read or write. | `connector`, `query`, `param_binds`, `bind_result` |
+| **`call_api`** | Calls an endpoint of an API connector. | `connector`, `endpoint`, `param_binds`, `bind_result` |
+| **`call_plugin`** | Calls a server-side Python function (`module:function`), the same entry points Nomaflow runs as steps. | `callable`, `param_binds`, `bind_result` |
+| **`call_action`** | Runs a [shared action](#shared) by its id. | `ref`, `param_binds` |
+| **`navigate`** | Opens another view: a screen (`screen`) or a query (`to`), with `param_binds` passed as its parameters. | `connector`, `screen` or `to`, `param_binds` |
+| **`set_field`** | Writes a value into a form field. | `target`, `value` or `source` |
+| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Shows a message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`send_notification`** | Fires a notification rule of type *action* (e-mail, portal…). | `rule`, `param_binds` |
+| **`refresh`** | Reloads the grid. | — |
 
-The action editor's *Type* dropdown lists all seven; switching type reveals the fields appropriate to it. Target dropdowns are populated from the live connectors / screens registry — switching the destination refreshes them.
+`bind_result` keeps the rows (or the response) of the step in the chain's context, so that a later step reads them with `source = "<id>.first_row.<COLUMN>"`.
 
----
-
-## The four composite types
-
-Built on top of the seven cores — used to express more complex flows in one action entry instead of stitching many.
+### Composite types
 
 | Type | What it does |
 |---|---|
-| **`chain`** | A sequence of nested actions, each step's output available to the next via `<step_id>.first_row.<col>` references. Stops on the first error unless an action sets `stop_on_error = false`. |
-| **`if`** | Conditional branching inside a chain — runs `then` actions when the condition holds, `else` actions otherwise. |
-| **`loop`** | Iterate over an array (typically the result of a previous `run_query`) and run the body for each item. |
-| **`return`** | Bind chain-context values back into dialog fields. Used at the end of a chain to surface computed values on the form. |
+| **`chain`** | A list of steps run in order, sharing one context. |
+| **`if`** | Runs `then_steps` or `else_steps` depending on a condition: a `source`, an operator (`equals`, `not_equals`, `has_rows`, `no_rows`, `truthy`, `falsy`, `greater_than`, `less_than`) and a `value`. |
+| **`loop`** | Runs `steps` once per item of a list taken from the context (typically the rows of an earlier step). |
+| **`return`** | Copies values of the context back into the form's fields — at the end of a chain, to show computed values. |
 
-Most screens never need composites — a flat list of `run_query` + `refresh` + `notify` covers 80% of cases. Reach for `chain` when the same trigger needs to fire several queries that share intermediate values; for `if` / `loop` when the flow truly branches or iterates.
+**Wrap in chain** puts an existing action inside a `chain`, to add steps around it.
 
 ---
 
-## ParamBind context per fire
+## Values passed to an action \{#binds\}
 
-Every action carries `params` (ParamBinds). The bind resolves the right way depending on **where the action fires**:
+`run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` and `send_notification` take a list of `param_binds`: for each parameter of the target, a fixed **value**, or a **source** read at call time — a column of the row, a form field, `INPUT.<name>`, `<step>.first_row.<COLUMN>`, or a built-in such as `#LOGIN_USER#` / `#SYSDATE#` — with an optional **default**. See [Parameter binding](../queries/parameter-binding.md).
 
-| Where | `source` reads from |
+### Prompt before running \{#prompt\}
+
+`run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` and `chain` can open a small form **before** they run:
+
+| Field | Role |
 |---|---|
-| Toolbar (`actions`) | The currently-selected row's columns. If no row is selected, sources resolve to NULL (unless a `default` is set). |
-| Row menu (`row_menu`) | The clicked row's columns. |
-| Dialog `on_load` | The just-loaded form state. |
-| Dialog `on_save` | The form state at submit time (after the main write succeeded). |
-| Dialog `on_cancel` | The form state when the user pressed Cancel. |
-| Row `on_insert` / `on_update` | The new row's values. |
-| Row `on_delete` | The deleted row's values. |
-| Inside a `chain` | The chain context — `<previous_step_id>.first_row.<col>` reads the named step's output. |
+| **prompt_fields** | The inputs to ask for — each with its name, label, dictionary entry, default, required / hidden / read-only flags and conditions. |
+| **prompt_title** (and its translations) | The window's title; defaults to the action's label. |
+| **prompt_cols** | Number of columns of the form (2 by default). |
 
-The two reserved binds — `#LOGIN_USER#` and `#SYSDATE#` — work everywhere as `source` values. See [Parameter binding](../queries/parameter-binding.md) for the full reference.
+The values entered are available as `INPUT.<name>` to the action and to every later step of the same chain. **Cancel** stops the chain without an error.
 
 ---
 
-## Common patterns
+## Shared actions \{#shared\}
 
-### Refresh the grid after a write
+An action used by several screens is defined once in **Settings → Actions**: an id, a label, a description, declared **params**, optional **prompt_fields**, and its **steps** (the same action types). The page lists the shared actions with **Find usages**, **Clone** and **Delete**; a row opens the action designer.
 
-The most common toolbar action: run a stored procedure, then reload the grid so the user sees the result.
+A screen runs it with `call_action`: `ref` names the shared action, and its `param_binds` fill the action's `INPUT.<param>` values.
+
+---
+
+## Examples
+
+### Recompute, then reload the grid
 
 ```toml
 [[screens.crm.customers.actions]]
-type = "run_query"
-id = "compute_balances"
-connector = "crm"
-query = "compute_balances_post"
+type  = "chain"
+id    = "recompute"
 label = "Recompute balances"
-
-[[screens.crm.customers.actions]]
-type = "refresh"
-id = "reload_grid"
+steps = [
+  { type = "run_query", id = "compute", connector = "crm", query = "compute_balances" },
+  { type = "refresh",   id = "reload" },
+  { type = "notify",    id = "done", message = "Balances recomputed.", tone = "ok" },
+]
 ```
 
-The two actions are separate entries — they fire in order. If the first fails (write rejected, network error), the second doesn't fire and the grid is unchanged.
-
-### Confirm before destructive
-
-A *Delete row* action on the row menu, gated by a confirmation:
+### Confirm before deleting
 
 ```toml
 [[screens.crm.customers.row_menu]]
-type = "confirm"
-id = "confirm_delete"
-title = "Delete customer?"
-message = "This removes the customer and every related deal."
-
-[[screens.crm.customers.row_menu]]
-type = "run_query"
-id = "do_delete"
-connector = "crm"
-query = "customers_delete"
-
-[[screens.crm.customers.row_menu.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
+type  = "chain"
+id    = "delete_customer"
+label = "Delete customer"
+steps = [
+  { type = "confirm", id = "ask", message = "Delete this customer and its deals?", confirm_label = "Delete" },
+  { type = "run_query", id = "delete", connector = "crm", query = "customers_delete",
+    param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }] },
+  { type = "refresh", id = "reload" },
+]
 ```
 
-If the user clicks Cancel on the confirm, the chain stops; the delete doesn't fire.
+**Cancel** on the confirmation stops the chain: nothing is deleted.
 
-### Stamp audit columns on insert
-
-The screen has a column `CREATED_BY` you want filled with the current user automatically — but the dialog doesn't expose it (it's a hidden audit column). Use `on_insert`:
-
-```toml
-[[screens.crm.customers.on_insert]]
-type = "run_query"
-id = "stamp_audit"
-connector = "crm"
-query = "customers_stamp_audit"
-
-[[screens.crm.customers.on_insert.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
-
-[[screens.crm.customers.on_insert.params]]
-param = "CREATED_BY"
-source = "#LOGIN_USER#"
-```
-
-The main INSERT fires first; if it succeeds, this audit-stamp UPDATE fires with the same row's id + the session user. The screen never surfaces `CREATED_BY` in the dialog, but the column ends up populated.
-
-For audit logging that should mirror **every** write, prefer `audit_table` on the General tab — it adds `AUD_ACTION` / `AUD_USER` / `AUD_DATE` rows automatically without explicit hooks.
-
-### Notify on success
-
-Wire a `notify` after a long-running action to give the user feedback:
-
-```toml
-[[screens.crm.customers.actions]]
-type = "run_query"
-id = "export_pdf"
-connector = "crm"
-query = "customers_export_pdf"
-label = "Export to PDF"
-
-[[screens.crm.customers.actions]]
-type = "notify"
-id = "notify_done"
-level = "success"
-message = "Export complete — check your downloads."
-```
-
-`level` accepts `info` / `warning` / `error` / `success`; each renders with a different colour.
-
-### Open a sibling screen with bound filters
-
-`navigate` opens another screen as a modal, narrowed by the binds. Useful from a row menu:
+### Open the deals of a customer
 
 ```toml
 [[screens.crm.customers.row_menu]]
-type = "navigate"
-id = "view_deals"
-connector = "crm"
-screen = "deals"
-label = "View deals for this customer"
-
-[[screens.crm.customers.row_menu.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
+type        = "navigate"
+id          = "view_deals"
+label       = "View deals"
+connector   = "crm"
+screen      = "deals"
+param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }]
 ```
 
-The clicked row's `CUSTOMER_ID` binds into the deals screen's read query; the deals modal opens showing only that customer's deals.
+The **deals** screen opens with its filters seeded from the binds.
 
-For row-click (left-click, not right-click), use the General tab's **row-click behaviour** instead (`row_click_screen` + `row_click_binds`) — it's the same shape, just triggered on click.
+### Stamp audit columns
+
+For `CREATED_BY` / `CREATED_AT` columns, no hook is needed: the dictionary rules `LOGIN` and `SYSDATE`, or the `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens in the insert query, fill them on the server — see [Dictionary → Rules](../../dictionary.md#rules). To log every write in a history table, set `audit_table` on the General tab.
 
 ---
 
-## The action editor
+## Saving
 
-Each action group has an *＋ Add action* button. Clicking adds a row prompted for an action id (must be unique within the list). The editor reveals the type-specific fields:
-
-| Field | Notes |
-|---|---|
-| **id** | Unique within the action list. Used as the chain-context key (`<id>.first_row.<col>`). |
-| **type** | Dropdown — switches the available fields below. |
-| **Target** | The query / endpoint / screen the action operates on (label depends on type: *Query* for `run_query`, *Endpoint* for `call_api`, *Target query* for `navigate`). |
-| **Params** | List of ParamBinds. Click *＋ Add binding* to add one. |
-| **stop_on_error** | When false, the chain continues even if this action fails. Default true. |
-| **prompt** | Optional `PromptField` list — surfaces an input form before the action fires (e.g. ask the user for an `END_DATE` before running a report). |
-
-The **Wrap in chain** button on any action wraps it inside a `chain` — useful when you started flat and now need conditional logic or a loop.
-
----
-
-## Save flow
-
-The Actions tab edits the screen's `actions` / `row_menu` / `on_*` lists; the Screen Designer's *Save* commits all of them in one shot to `screens.toml`. Hot reload picks them up immediately — the next click on the toolbar button fires the updated action chain.
+The Actions and Row menu tabs edit the screen's lists; the screen editor's **Save** writes them with the rest of the screen and reloads the configuration — the next click runs the new version.
 
 ---
 
@@ -6503,19 +6321,19 @@ The Actions tab edits the screen's `actions` / `row_menu` / `on_*` lists; the Sc
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| `on_save` chain that fires before the main write. | The chain hits a race condition — the row doesn't exist yet. | `on_save` fires **after** the main update/insert succeeds. If the chain needs the row's new id, source it from the form state (or use `chain` with the right ordering). |
-| Toolbar action with `source = COLUMN` but no row selected. | The bind resolves to NULL; the query fails or operates on the wrong row. | Either set a `default` on the bind, or move the action to the row menu so it always fires with a row in context. |
-| `refresh` without a preceding write. | The grid reloads but nothing changed — confusing UX. | Use `refresh` after writes, or when an external action (a webhook ack) changed the data the grid shows. |
-| `confirm` after the destructive action instead of before. | The user gets a "are you sure?" prompt after the delete already fired. | `confirm` must be the **first** action in the chain. |
-| Stamping `CREATED_BY` in `on_save` but the column is required in the dialog. | The dialog Save fails because the column is empty. | Either don't make the column required in the dialog (the hook fills it), or use the dictionary's `LOGIN` rule on the column to pre-fill at form-load. |
+| Two toolbar entries meant to run one after the other. | They are two separate buttons. | Put the steps in one `chain`. |
+| A toolbar action reading `source = "CUSTOMER_ID"`. | The toolbar has no row: the value is empty. | Move the action to the row menu, or ask for the value with a prompt (`INPUT.CUSTOMER_ID`). |
+| `confirm` placed after the delete. | The question comes once the row is gone. | `confirm` first in the chain. |
+| A step reads `<id>.first_row.X` from a step without `bind_result`. | The value is empty. | Turn on `bind_result` on the step that produces the rows. |
+| `value = "#LOGIN_USER#"`. | The text is written as it is. | Use `source`. |
 
 ---
 
 ## What's next
 
-- [Nested tabs](./nested-tabs.md) — embed a child-record form or a related-rows grid.
-- [Parameter binding](../queries/parameter-binding.md) — the full ParamBind reference.
-- [Concepts → Screens](./overview.md) — deep reference for action types and lifecycle.
+- [Nested tabs](./nested-tabs.md) — embed another screen's form or grid in a dialog tab.
+- [Parameter binding](../queries/parameter-binding.md) — `param_binds`, built-ins and tokens.
+- [Notifications](../../../nomaflow/notifications.md) — the rules a `send_notification` fires.
 
 ---
 
@@ -6530,7 +6348,7 @@ Two variants:
 
 | Tab type | What it shows | When |
 |---|---|---|
-| **`nested_form`** | A child-record form: zero-or-one related row, with its own SELECT / INSERT / UPDATE queries. | When the related table has **at most one** row per parent (one-to-one or zero-to-one). |
+| **`nested_form`** | The form of another screen, for zero or one related row, saved with the parent. | When the related table has **at most one** row per parent (one-to-one or zero-to-one). |
 | **`nested_table`** | A full TableView of related rows, embedded inline — renders another screen's grid scoped to the parent's key. | When the related table has **many** rows per parent (one-to-many). |
 
 Both attach to the dialog like any other tab; the user clicks between them without leaving the form.
@@ -6554,55 +6372,40 @@ The schema's `_check` validator enforces tab id uniqueness; otherwise both types
 
 ## nested_form — a child-record form
 
-A `nested_form` tab embeds a sub-dialog that reads / writes a related table. The parent's primary key binds into the nested read query; if a row comes back, the form renders in edit mode; if not, it renders in add mode.
+A `nested_form` tab shows, inside the dialog, the **form of another existing screen**. That screen owns the read, update and insert queries and the fields; the tab only says which screen to reuse and how to pass the parent's values to it.
 
 ### Fields
 
-| Field | Notes |
+| Field | What it does |
 |---|---|
-| **`connector`** | Connector hosting the nested queries. Blank = parent's connector. |
-| **`read_query`** *(required)* | Reads the linked row. Should return 0 or 1 rows after the bind narrows it. |
-| **`update_query`** | Writes edits when a linked row already exists. |
-| **`insert_query`** | Writes a new linked row when none existed (after the bind returned 0 rows). |
-| **`param_binds`** | Bind the parent's columns into the nested queries' `:placeholder` params. Typically `:CUSTOMER_ID ← CUSTOMER_ID`. |
-| **`fields`** | The form fields, just like a regular `form` tab. Drag from the Palette. |
-| **`cols`** | Grid column count for the nested form. |
+| **`form_screen`** *(required)* | The id of the screen whose form is reused. |
+| **`connector`** | The connector of that screen. Blank = the parent screen's connector. |
+| **`param_binds`** | Bind the parent's values into the reused screen's queries — typically `CUSTOMER_ID ← CUSTOMER_ID`. |
+| **`label`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | As on any tab. |
 
 ### Behaviour
 
-When the parent dialog opens:
+1. **Editing a parent row** — the reused screen's read query runs with the bound values. A row found is shown for editing; otherwise the form starts empty.
+2. **Adding a parent row** — the form starts empty (the parent has no key yet).
+3. **Saving** — the nested form is saved by the **parent's Save**: an update when a row was loaded, an insert otherwise — only if the user typed something. On an insert, the binds take the parent's new key, including one assigned by a sequence.
+4. **Duplicating the parent** — the nested row is inserted again for the copy.
 
-1. The `read_query` fires with the parent's column values bound through `param_binds`.
-2. If a row comes back, the nested form renders in **edit mode** — fields are populated, *Save* fires `update_query`.
-3. If no row comes back, the nested form renders in **add mode** — fields are empty, *Save* fires `insert_query`.
+Fields hidden by their conditions are not written, and the bound key columns always take the parent's values.
 
-The parent's *Save* and the nested tab's *Save* are independent — saving the parent doesn't touch the nested data; saving the nested doesn't trigger the parent's Save chain. Each operates on its own row.
+### Use case — billing address
 
-### Use case — JD Edwards-specific settings
-
-A *Settings → Applications* dialog with a *JD Edwards* tab that shows up only when the application is a JDE app:
+A *Customer* dialog with a *Billing* tab that reuses the `billing_address` screen (its read, update and insert queries keyed on `CUSTOMER_ID`):
 
 ```toml
-[[screens.nomasx1.settings_applications.dialog.tabs]]
-id = "jde"
-label = "JD Edwards"
-type = "nested_form"
-read_query = "settings_jde_get"
-update_query = "settings_jde_put"
-insert_query = "settings_jde_post"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.param_binds]]
-param = "APPS_ID"
-source = "APPS_ID"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_VERSION"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_ENVIRONMENT"
+[[screens.crm.customers.dialog.tabs]]
+id          = "billing"
+label       = "Billing"
+type        = "nested_form"
+form_screen = "billing_address"
+param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }]
 ```
 
-When the user opens the Applications dialog on a JDE app (`APPS_ID` = some value), the JDE tab loads the matching settings row and lets the user edit it. For non-JDE apps where no row exists, the same tab pre-fills the form so the user can add one.
+To change the billing fields, edit the `billing_address` screen: every dialog that reuses it follows.
 
 ---
 
@@ -6695,9 +6498,9 @@ This means you can build dialogs that progressively reveal data based on the use
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| `nested_form.read_query` returns more than one row. | The form renders only the first row and silently ignores the rest. | Tighten the bind so the read returns 0 or 1. Use `nested_table` for genuine many-relationships. |
+| The reused screen's read returns more than one row. | The form shows the first one only. | Tighten the binds so the read returns 0 or 1 row; use `nested_table` for a one-to-many relation. |
 | `nested_table` without `param_binds`. | The embedded grid shows **every** row of the target — including unrelated ones. | Always bind at least the parent's foreign-key columns. |
-| `nested_form` with `insert_query` blank, no row yet exists. | The user can't add a new row — the form has nothing to fire. | Either wire `insert_query`, or pre-create the row through another flow. |
+| The reused screen has no insert query and no row exists yet. | Nothing is created on save. | Set the insert query on the reused screen. |
 | `nested_table` pointing at a screen on a different connector + missing `connector` override. | The runtime tries to resolve the target screen on the parent's connector and fails. | Set `connector` explicitly to the target screen's connector. |
 | Two nested tabs with the same id. | Save validation fails ("duplicate dialog tab id"). | Pick unique ids per dialog. |
 
@@ -10246,7 +10049,7 @@ In a new install you'll almost always pick `SQL` or `HTTP` directly. `API` is th
 
 ---
 
-## Schema discovery and column hints
+## Schema discovery and column hints \{#schema-discovery-and-column-hints\}
 
 A read query has no manually-declared column list. On first call (or when the operator clicks *Test*), the framework executes the query, looks at the cursor's column descriptions and caches them:
 
@@ -10317,20 +10120,19 @@ For CI scripts and external orchestrators, the same surface is reachable via RES
 ## Liberty Next — Dictionary
 Source: https://docs.nomana-it.fr/liberty/framework/dictionary/
 
-The dictionary holds the metadata that turns raw database columns into a readable UI — localised labels, number formats, BOOLEAN / ENUM / LOOKUP rules, form-layer defaults. Edited from Settings → Dictionary; reused everywhere a connector column is rendered.
+The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Settings → Dictionary.
 
-:::info[Deep reference]
-This page documents the dictionary metadata layer — labels, formats, BOOLEAN / ENUM / LOOKUP rules and form-layer defaults (`LOGIN`, `SYSDATE`, `SEQUENCE`, `PASSWORD`). For task-oriented use — configure columns on a screen, scaffold a sequence or a lookup — see [Build → Screens → Columns](./build/screens/columns.md) and [Build → Queries → Sequences and lookups](./build/queries/sequences-and-lookups.md).
-:::
+The **dictionary** defines each data item once: its label, its format, its rule (Boolean, list of values, lookup, sequence…), its default value and its translations. A query column that references an entry inherits that definition, so the same item reads the same way on every screen, chart and dashboard.
 
-The **dictionary** is the shared metadata layer that turns a raw column name into a readable interface. A connector query returns columns the database knows by their identifier (`customer_status`, `due_date`, `invoice_amount`); the dictionary attaches:
+It is edited from **Settings → Dictionary**, which holds five kinds of records:
 
-- A **localised label** ("Statut client", "Date d'échéance", "Montant facture").
-- A **display rule** (`BOOLEAN` toggle, `ENUM` chip, `LOOKUP` against another connector).
-- A **number / date format** ("€ 1 234,56", "dd/MM/yyyy").
-- **Form-layer defaults** for write screens (auto-fill with the current user, the current date, a generated sequence, a hashed password).
-
-Defined once in **Settings → Dictionary**, referenced by every screen, chart and dashboard that consumes the corresponding column. Change the label here and every consumer reflects it on the next render.
+| Tab | Holds |
+|---|---|
+| **Entries** | The data items: label, format, rule, default, translations. |
+| **Enums** | Fixed lists of codes and labels, for the `ENUM` rule. |
+| **Lookups** | Queries that turn a code into a label, for the `LOOKUP` rule. |
+| **Sequences** | Queries that return the next number, for the `SEQUENCE` rule. |
+| **Framework** | Overrides of the lists the builders offer (formats, rules, datasource types…). |
 
 ---
 
@@ -10338,231 +10140,192 @@ Defined once in **Settings → Dictionary**, referenced by every screen, chart a
 
 ---
 
-## Settings → Dictionary
+## Scopes \{#scopes\}
 
-The page has two tabs: **Columns** (one entry per logical column) and **Lookups** (named value sets that columns reference).
+The **Scope** chips at the top choose which part of the dictionary is shown:
 
-### Columns tab
+- **Shared** — the entries every connector can use.
+- **One scope per connector** — entries, enums, lookups and sequences that only that connector's queries see. The **+** button adds a scope for an existing connector.
 
-  
-    Settings → Dictionary · Columns
-    
-      Search column…
-      + New column
-    
-  
-  
-    NameLabel (en)TypeRuleFormat
-  
-  
-    customer_statusCustomer statusstringLOOKUP—✏️
-  
-  
-    due_dateDue datedate—dd/MM/yyyy✏️
-  
-  
-    invoice_amountInvoice amountdecimal—1 234,56 €✏️
-  
-  
-    is_activeActiveboolBOOLEAN—✏️
-  
-
-Click *+ New column* or any row to open the column editor.
+A query of the `sales` connector looks for an entry in the `sales` scope first, then in the shared scope. Two applications can therefore define the same key (`STATUS`) differently without clashing. The **Framework** tab is shared only.
 
 ---
 
-## The column editor
+## How a column uses an entry \{#column-reference\}
+
+A column of a query picks up the entry whose key matches its name (`CUSTOMER_STATUS`), or the entry named in its `dd` field when the names differ (an empty `dd` opts out). A label or format set on the column itself takes precedence over the entry's. See [Connectors → Schema discovery and column hints](./connectors.md#schema-discovery-and-column-hints).
+
+On a screen, a column can also switch off the rule it inherits by setting the rule `DISABLED` — see [Rules](#rules).
+
+---
+
+## Entries \{#entries\}
+
+The left-hand list shows each entry's key with its label underneath, and a filter field. Entry keys are written in upper case. The form on the right is split into tabs:
+
+| Tab | Field | Effect |
+|---|---|---|
+| General | **Label** | The default label, used when no translation matches the user's language. |
+| General | **Format** | How the value is displayed and entered — see [Formats](#formats). |
+| Rule | **Rules** | The rule applied to the item — see [Rules](#rules). |
+| Rule | **Rules values** | The rule's argument: the true value for `BOOLEAN`, the enum for `ENUM`, the lookup for `LOOKUP`, the sequence for `SEQUENCE`. The list changes with the rule. |
+| Rule | **False value** | `BOOLEAN` only: the value written when the box is unticked. Blank infers it from the true value (`Y` → `N`, `1` → `0`, `true` → `false`); any other true value writes NULL. |
+| Rule | **Default** | The initial value when a new row is added. |
+| Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
+| Rule | **Size** | The stored width of the item, used with **Justify** when the physical column is wider. |
+| Rule | **Lookup params** | Fixed values for the `:params` of the lookup's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the lookup declares. |
+| Translations | one line per language | The label in that language. |
+| Advanced | **Override** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
+
+The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Renaming an entry, a lookup or a sequence updates its references in the other configuration files (screens, connectors, dictionary) and reloads; it asks to save pending changes first.
+
+### Formats \{#formats\}
+
+| Format | Displayed as |
+|---|---|
+| `text`, `textarea` | Text, on one line or several. |
+| `number`, `integer`, `decimal`, `currency` | A number. |
+| `date`, `datetime`, `timestamp` | A date, with or without time. |
+| `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
+| `boolean` | A tick or a cross. |
+| `password` | A masked value. |
+| `email`, `url`, `color` | An e-mail address, a link, a colour. |
+
+The **Framework** tab can add values to this list.
+
+### Rules \{#rules\}
+
+| Rule | Effect |
+|---|---|
+| `BOOLEAN` | The value shows as a tick or a cross, and the form shows a check box. **Rules values** gives the true value (`Y`, `1`, `01`, `true`, `T`); **False value** the other one. |
+| `ENUM` | The code shows with its label from the enum named in **Rules values**; the form offers the enum's values. |
+| `LOOKUP` | The code shows with its label from the lookup named in **Rules values**; the form offers the lookup's rows in a searchable list. |
+| `SEQUENCE` | On insert, the server fills the column with the next number of the sequence named in **Rules values**, inside the same transaction. |
+| `LOGIN` | On every insert or update, the server writes the signed-in user's name, in upper case, whatever the form sent. The form shows it already filled when a row is added. |
+| `SYSDATE` | On insert or update, the server writes the current date and time (server local time) when no value was sent. The form shows today's date when a row is added. |
+| `PASSWORD` | On write, the server encrypts the value with the master key (`ENC:…`) so that it can be decrypted when used — for connection passwords stored in a table. A blank password on update leaves the stored value unchanged. Pair it with the `password` format to mask the field. |
+| `DEFAULT` | On insert or update, the **Default** value is written when the column comes empty. |
+| `DISABLED` | Set on a screen column: cancels the rule inherited from the entry for that screen (for example an import screen whose rows already carry their dates). |
+
+The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
+
+### Form-layer defaults \{#form-layer-defaults\}
+
+For an audit column, the usual pairing is:
+
+| Column | Rule |
+|---|---|
+| `CREATED_BY`, `UPDATED_BY` | `LOGIN` |
+| `CREATED_AT`, `UPDATED_AT` | `SYSDATE` |
+| `ID` | `SEQUENCE` (when the database does not number the rows itself) |
+
+These columns need not appear in the form: the server fills them on every write, and the browser cannot change the user name.
+
+---
+
+## Enums \{#enums\}
+
+An enum is a fixed list of codes, for values known in advance (`L` / `M` / `H` for a priority).
 
 | Field | Effect |
 |---|---|
-| **Name** | The dictionary key — short, snake_case (`customer_status`). Connector column hints reference this name to pick up the metadata. |
-| **Label** | A per-language map of display labels. The editor shows one input per loaded language. Falls back to the *Name* when a language is missing. |
-| **Description** | Optional. Surfaces as the tooltip on form inputs and column headers. |
-| **Type** | `string` / `int` / `float` / `decimal` / `bool` / `date` / `datetime` / `time`. Drives the default widget on screens (text input vs date picker vs checkbox). |
-| **Format** | For numbers and dates — a format string (`1 234,56 €`, `dd/MM/yyyy`). The grid cell and the form input render with this format. |
-| **Rule** | `—` (no special rendering) / `BOOLEAN` / `ENUM` / `LOOKUP` / `PASSWORD`. See [Display rules](#display-rules). |
-| **Lookup** | Visible only when *Rule* is `LOOKUP`. Dropdown of lookups defined on the *Lookups* tab. |
-| **Enum values** | Visible only when *Rule* is `ENUM`. A sortable list of `{ value, label(s), colour }` rows. |
-| **Form-layer defaults** | Optional. See [Form-layer defaults](#form-layer-defaults). |
-| **Required** | Marks the field as required by default on every form. Per-screen overrides can still relax this. |
-| **Read-only** | Marks the field as read-only by default on every form. |
+| **Label** | The name of the list. |
+| **Values** | One line per code: **Value** (the stored code), **Label** (the text shown), and **Translations** of the label. |
+| **Override** | As for entries. |
 
-A *Save* rebuilds the dictionary registry; consumers (screens, charts) re-render with the new metadata on their next refresh.
+An entry uses it with **Rules** = `ENUM` and **Rules values** = the enum's id.
+
+---
+
+## Lookups \{#lookups\}
+
+A lookup is a query whose rows turn a code into a label — for values held in a table (statuses, countries, users).
+
+| Field | Effect |
+|---|---|
+| **Description** | What the lookup returns. |
+| **Connector** | The connector of the query. Blank uses the connector of the column that references it. |
+| **Query** | The query returning the codes and labels. Buttons next to it edit the query, clone it, create one, or **generate** it from a table. |
+| **Value** | The result column holding the code. |
+| **Label** | The result column shown instead of the code. |
+| **Union sources** | Further queries, possibly on other connectors or databases, whose rows are added to the list. Each must return the same columns as the main query. |
+| **Key columns** | Columns that make the code unique when the same code has different labels (a code per company, for instance): the grid matches them against the row's columns of the same name. |
+| **Return params** | Columns that a screen column can copy into other fields of the form when a row is picked. |
+| **Display fields** | Extra columns shown next to the code and label in the list, to tell similar rows apart. |
+| **Filter fields** | Display fields that get filter chips at the top of the list. |
+| **Override** | As for entries. |
+
+The lookup's query declares its own `:params`; their values come from the entry's **Lookup params**, or from the screen column. Cascading lists are built on the screen — see [Sequences and lookups](./build/queries/sequences-and-lookups.md).
+
+---
+
+## Sequences \{#sequences\}
+
+A sequence is a query that returns the next number, typically `SELECT COALESCE(MAX(id), 0) + 1 FROM invoices`.
+
+| Field | Effect |
+|---|---|
+| **Description** | What the sequence numbers. |
+| **Connector** | The connector of the query. Blank uses the connector that fires it. |
+| **Query** | The query returning the next number. Its `:params` take their values from the row being inserted. |
+| **Dd id** | Fires the sequence for every column whose entry has this key, even without the `SEQUENCE` rule. Blank limits it to the entries pointing at it. |
+| **Params** | The parameters the query expects — for information. |
+| **Override** | As for entries. |
+
+The sequence only fires on insert, inside the insert's transaction.
+
+---
+
+## Framework \{#framework\}
+
+The builders' drop-down lists (formats, rules, datasource types, HTTP methods, column alignments…) come from lists shipped with the framework. **Override framework enum** copies one of them here to change it: the copy replaces the shipped list. Removing the override brings back the shipped values.
 
 ---
 
 ## Scan a table \{#scan-a-table\}
 
-Rather than add entries one by one, the **Scan a table** button (Columns tab toolbar) generates them from a real table. It opens the *Generate dictionary items* dialog: pick the **app** to store under, the **table to scan**, and toggle **JD Edwards connector** when the columns carry a 2-character table prefix to strip.
+**Scan a table** creates entries from a real table instead of typing them one by one. The *Generate dictionary items* dialog asks for:
 
-The scan reads the table's columns and **proposes one entry per column**, showing both what already exists and what is missing:
+- **Connector** — the connector to read;
+- **Store under (app)** — the scope the entries go to (the connector's by default);
+- **Table to scan**;
+- **JD Edwards connector** — strips the 2-character table prefix to reach the shared data item, and reads the JD Edwards data dictionary.
 
-- Entries already in the dictionary are listed but **greyed out** and tagged *(exists)* — they are never overwritten.
-- Only the **missing** entries are pre-ticked to be created.
+**Scan** lists one row per column. Columns that already have an entry are greyed out and marked *(exists)*; they are never overwritten. Missing ones are ticked. Each row can be adjusted before it is added:
 
-Each proposed row is editable in place before you accept it:
-
-| Field | What it sets |
+| Column | Content |
 |---|---|
-| **Label** | The display label (on JDE, pre-filled from the data dictionary). |
-| **Format** | The data type, inferred from the SQL column type — overridable from the list. |
-| **Rule** | An optional [display rule](#display-rules) (Boolean, Lookup, Enumeration, …). |
-| **Rule value** | The rule's argument — enabled once a Rule is set. |
-| **Lookup params** | For a `LOOKUP` rule, the lookup filter (e.g. `SY=01,RT=ST`). |
+| **Label** | Filled from the JD Edwards data dictionary on a JD Edwards connector; blank otherwise. |
+| **Format** | Inferred from the column's SQL type. |
+| **Rule** / **Rule value** | An optional rule and its argument. |
+| **Lookup params** | Values for a lookup's parameters (`TYPE=CUSTOMER`). |
 | **Default** | A default value. |
+| **Source** | Where the proposal comes from. |
 
-Tick the entries to keep and confirm; the chosen ones are written into the dictionary under the selected app. On a JDE connector the scan strips the table prefix to the shared data item and pulls the label, format, rule and default from the JD Edwards data dictionary; on any other connector the label is left blank and the format is inferred from the column type.
-
-:::note[Same scan in the assistant]
-This is the exact scan the [Screen Creation Assistant](build/screen-assistant.md) runs in its *Dictionary* step — so a screen built through the assistant arrives with its dictionary already proposed.
-:::
+**Add N item(s)** writes the ticked entries into the chosen scope and reloads the configuration. The [Screen Creation Assistant](./build/screen-assistant.md) runs the same scan in its *Dictionary* step.
 
 ---
 
-## Display rules
+## Export \{#export\}
 
-The **Rule** field changes how a column is rendered in a grid cell, in a form input and in a filter chip.
-
-### `BOOLEAN`
-
-A `bool` column renders as a chip / toggle. The form input is a switch. The filter is a tri-state pill (`All` / `Yes` / `No`).
-
-The editor exposes:
-
-| Field | Effect |
-|---|---|
-| **True label** | Defaults to "Yes" — per-language map. |
-| **False label** | Defaults to "No". |
-| **True colour** / **False colour** | Pill backgrounds in the grid. |
-
-### `ENUM`
-
-A small, **static** set of values declared on the column itself. Use when the values are known at design time and never change at runtime (e.g. `low` / `medium` / `high`).
-
-| Field per value | Effect |
-|---|---|
-| **Value** | The literal stored in the database. |
-| **Label** | Per-language display label. |
-| **Colour** | Pill background. |
-| **Order** | Drag handle to re-order. |
-
-Renders as a coloured chip in grids, a dropdown on forms, a multi-select in filters.
-
-### `LOOKUP`
-
-A **dynamic** set of values pulled from another connector query. Use when the values live in a table and may grow over time (statuses managed by an operator, country lists, etc.).
-
-The column points at a *Lookup* entry; the lookup itself is defined on the *Lookups* tab — see below.
-
-### `PASSWORD`
-
-Masks the value in grids (`••••••••`) and renders a password input on forms. On the write path, a `PASSWORD`-ruled column is **encrypted at rest** with the framework's master key — the same AES-GCM `ENC:`-prefixed blob format used for Settings-UI secrets. See [Encryption & secrets](./configuration/encryption-secrets.md).
-
-Two form conventions come with the rule:
-
-- **Blank on UPDATE preserves the stored value.** A form that submits an empty password on an update never overwrites the existing secret — the update path skips the column when the incoming value is empty. That way a user editing another field doesn't have to retype the password.
-- **Combined with the *Form-layer default* `PASSWORD`**, the framework Argon2-hashes the plaintext *before* it's encrypted at rest — the on-disk blob is an AES-GCM wrap around an Argon2 hash, and only a comparison against a caller-supplied plaintext ever recovers the hash for verification.
+**Export** downloads `dictionary_entries.xlsx`: one row per entry, every scope included, with its scope, key, label, format, rule, rule value, false value and default — handy to compare with the data dictionary of the source application.
 
 ---
 
-## Lookups tab
+## Saving
 
-A lookup is a **named query that returns `{ value, label }` rows**. Columns set *Rule = LOOKUP* + point at a lookup to render their values as labelled chips.
+**Save** checks every entry, enum, lookup and sequence, writes the file and reloads the configuration: screens show the new labels on their next refresh. **Discard** drops the unsaved changes. Settings is open to superusers only.
 
-  
-    Settings → Dictionary · Lookups
-    + New lookup
-  
-  
-    Namecustomer-statuses
-    Connectorbilling ▾
-    Querystatuses-list ▾
-    Value columncode ▾
-    Label columnlabel ▾
-    Colour columncolour ▾
-    CachePer session ▾
-  
-
-| Field | Effect |
-|---|---|
-| **Name** | Identifier referenced by column entries (`customer-statuses`). |
-| **Connector** / **Query** | The SQL connector and named read query that returns the values. |
-| **Value column** | Column in the query result that holds the stored value (what the database carries on each row). |
-| **Label column** | Column in the query result that holds the display label. Localised through the dictionary when the query joins a translations table. |
-| **Colour column** | Optional. Drives the chip background colour in grids. |
-| **Filter from** | Optional dependencies — see [cascading filters](./build/queries/parameter-binding.md). |
-| **Cache** | `None` / `Per session` / `Per request`. Drives how aggressively the framework caches the lookup. Default *Per session*. |
-
-A *Test* button at the top runs the underlying query and shows the resolved `{ value, label }` pairs — useful to confirm the columns line up.
-
----
-
-## Form-layer defaults \{#form-layer-defaults\}
-
-The **Form-layer defaults** field of the column editor lets a column auto-populate on insert / update without the user typing the value. Four special tokens are recognised:
-
-| Token | Effect at save time |
-|---|---|
-| **SEQUENCE** | Pulls the next value of a database sequence — useful for generated identifiers when the database doesn't auto-increment. |
-| **SYSDATE** | Sets the value to the server's current timestamp. |
-| **LOGIN** | Sets the value to the calling user's identifier (the JWT's `sub`). |
-| **PASSWORD** | Hashes the field's plain value with Argon2 before storing. Combined with `Rule = PASSWORD` it produces a safe-by-construction write path. |
-
-Form-layer defaults run **on the server** at save time — the client never sees them. An audit column auto-populated with `LOGIN` cannot be tampered with from the browser.
-
----
-
-## Display rules vs form-layer rules
-
-The two concepts are easy to confuse. The table:
-
-| Aspect | Display rule | Form-layer rule |
-|---|---|---|
-| **Where it runs** | On the client (renderer). | On the server (save handler). |
-| **What it changes** | How the value looks. | What the value is. |
-| **Examples** | `BOOLEAN` → chip; `ENUM` → coloured pill; `LOOKUP` → labelled chip from a table. | `LOGIN` → caller's username; `SYSDATE` → now(); `PASSWORD` → Argon2 hash. |
-| **Visible to the user?** | Yes. | No — the value is computed at save. |
-
-Both can apply to the same column. A typical *Created by* audit column has `Rule = LOOKUP` (against a users table, to show the display name) **and** `Form-layer default = LOGIN` (so the value is set automatically on insert).
-
----
-
-## Localisation
-
-Every text field in the column editor — *Label*, *Description*, *True label* / *False label*, *Enum label* — is a **per-language map**. The editor shows one input per loaded language; missing languages fall back to the resolution chain documented under [i18n](./apps/i18n.md).
-
-Operators add languages from *Settings → Languages*; new languages then appear as extra columns in the dictionary editor.
-
----
-
-## Permissions
-
-The Dictionary tab is gated by `settings:dictionary`. Lookups inherit the permission of their underlying SQL query — a caller who can't run `sql:billing:statuses-list` doesn't see the lookup values; the dropdown renders empty.
-
----
-
-## Tips & best practices
-
-- **Define a dictionary entry per logical column, not per database column.** If `customer_status` and `supplier_status` share the same lookup, one dictionary entry covers both — point both connector hints at it.
-- **Keep labels short.** Long labels truncate in grid headers. The *Description* field is the right home for explanations.
-- **Use `ENUM` when the values are known at design time, `LOOKUP` when they aren't.** A `priority` enum (`low` / `medium` / `high`) is fine inline; a `country` list belongs in a lookup.
-- **Cache lookups *Per session*.** Per-request caching adds a query on every screen open; *None* is rarely needed.
-- **Audit columns: `LOOKUP` + `LOGIN` / `SYSDATE`.** The cleanest pattern — readable on display, auto-populated on save.
-
----
-
-## Under the hood
-
-Dictionary definitions are stored in `liberty-apps/config/dictionary.toml`. Operators **do not edit this file by hand** in normal operation; the Dictionary builder is the canonical interface. The *Raw TOML* tab of [Settings → Dictionary](./configuration/settings-ui.md) is the escape hatch when a builder gap blocks an advanced edit.
+Translated labels follow the user's language; how it is chosen is described in [Translations](./apps/i18n.md).
 
 ---
 
 ## What's next
 
-- [Connectors](./connectors.md) — where column hints bind a discovered SQL column to a dictionary entry.
-- [Screens](./build/screens/overview.md) — how column metadata shapes the grid + edit dialog.
-- [Form conditions](./form-conditions.md) — conditional visibility / required / disabled rules on top of dictionary rules.
-- [Apps & Plugins → i18n](./apps/i18n.md) — adding languages.
+- [Connectors](./connectors.md) — the queries whose columns use the dictionary.
+- [Sequences and lookups](./build/queries/sequences-and-lookups.md) — build the queries behind them.
+- [Screens → Columns](./build/screens/columns.md) — per-screen settings on top of the entry.
+- [Form conditions](./form-conditions.md) — show, require or lock a field depending on other values.
 
 ---
 
@@ -10689,378 +10452,180 @@ period = { column = "DOC_DATE", default = "thisMonth" }
 ## Liberty Next — Charts
 Source: https://docs.nomana-it.fr/liberty/framework/charts/
 
-A chart wraps a connector query into a Recharts-rendered visualisation. Defined in Settings → Charts, picked from the builder by type (line, bar, column, pie, donut, area, scatter), with the axis fields, series, colours, legend and refresh interval set in the same form.
+A saved chart draws the result of a connector query as bars, lines, areas or a pie: an X column, one or more series with their colour and axis, and an aggregation. Built in Settings → Charts or saved from a screen's Chart view, then reused in dashboards.
 
-:::info[Deep reference]
-This page documents the Charts builder, every chart type (line / bar / column / area / pie / donut / scatter) and the per-type field options. The Build group doesn't currently carry a dedicated Charts subsection — this page is the canonical entry point.
-:::
+A **chart** draws the result of a connector's query: an X column, one or more series, and an aggregation for the rows that share the same X value. It is saved under a name and reused in [dashboards](./dashboards.md); the same chart settings are available on the fly in a screen's **Chart** view.
 
-A **chart** wraps a connector's named query into a visualisation. Defined in **Settings → Charts**, picked by type — line, bar, column, area, pie, donut, scatter — and reused as a panel in any number of dashboards.
-
-This page covers the Charts builder, every field on the editor and the type-specific options each chart type unlocks.
+Four types are available: **bar**, **line**, **area** and **pie**.
 
 ---
 
 ## At a glance
 
-  
-    SOURCE
-    One SQL connector + a named read query. Schema discovered at runtime.
-  
-  
-    SHAPE
-    One X-axis column, one or many series. Group-by pivots one column into N parallel series.
-  
-  
-    RENDERED IN
-    Dashboard panels and any screen that includes a chart widget.
-  
-  
-    REFRESH
-    Manual ↻ Refresh button on the panel; optional refresh interval in the editor.
-  
+---
+
+## Settings → Charts \{#list\}
+
+Charts are grouped by connector: the **scope** chips at the top pick a connector, and **Add a connector scope** opens a new one. The list shows each chart of the scope with its label, its id and an *override* badge when it is marked as a local customisation. Each row has:
+
+| Button | Effect |
+|---|---|
+| **Find usages** | The dashboards that show the chart. |
+| **Find dependencies** | Lists what the chart depends on (query, connector…) and downloads the chart with the ticked items as a package. |
+| **Rename** | Changes the chart's id. |
+| **Clone** | Copies the chart under a new id. |
+| **Delete** | Removes the chart. |
+
+**Add chart** opens the editor for a new chart in the current scope; clicking a row opens it for editing.
 
 ---
 
-## Editing a chart
+## The editor \{#editor\}
 
-In **Settings → Charts → ➕ New chart**, the editor opens with the *Type* picker at the top. Picking a type expands the form to the fields that type needs.
+The editor has two tabs.
 
-  
-    Settings → Charts → invoices-by-month
-    
-      Preview
-      Save
-    
-  
-  
-    TypeBar ▾
-    TitleInvoices issued per month
-    Connectorbilling ▾
-    Querymonthly-invoice-counts ▾
-    X axis
-    
-      
-        Fieldmonth ▾
-        LabelMonth
-        Formatyyyy-MM
-      
-    
-    Series
-    
-      
-        FieldLabelColour
-        countInvoices#4a9eff✕
-      
-      + Add series
-    
-  
-
-### Common fields
+### General \{#general\}
 
 | Field | Effect |
 |---|---|
-| **Type** | The chart type — see [Types](#types) below. Changing the type adapts the rest of the form. |
-| **Title** / **Subtitle** | Shown above the chart. Subtitle is optional. |
-| **Connector** / **Query** | The data source. Dropdowns of the connectors and their named read queries. |
-| **Parameters** | Table of fixed values for the query parameters — same shape as elsewhere. Supports the `${week.monday}` / `${month.last}` tokens documented in [Parameter binding](./build/queries/parameter-binding.md). |
-| **Height** | CSS height of the rendered chart. Default `320px`. |
-| **Legend** | Toggle + position (`bottom` / `right` / `top`). Default *on, bottom*. |
-| **Tooltip** | Toggle. Default *on*. |
-| **Grid** | Toggle. Default *on*. |
-| **Refresh interval** | Seconds between auto-refresh ticks. `0` (default) = manual only. |
+| **Id** | The chart's identifier: letters, digits, underscores and hyphens. Dashboards refer to the chart by this id. |
+| **Label** | The chart's title in lists and dashboards. |
+| **Description** | Optional. |
+| **Connector** | The connector of the scope — fixed; to move a chart to another connector, recreate it in that scope. |
+| **Query** | The read query whose result the chart draws. The buttons next to it edit the query, clone it or create a new one without leaving the editor. |
 
-### X axis
+### Chart \{#chart\}
+
+The tab loads a sample of the query's rows and draws the chart as it is set:
 
 | Field | Effect |
 |---|---|
-| **Field** | Dropdown of the columns the query returns. |
-| **Label** | Shown under the chart. |
-| **Format** | Date / number format applied to tick labels. Dates use `date-fns` syntax (`yyyy-MM`, `dd/MM`); numbers use `Intl.NumberFormat` notation. |
-| **Tick interval** | `preserveStartEnd` (default) / `auto` / an integer "keep one tick out of N". |
+| **Chart** | The type: bar, line, area or pie. |
+| **X axis** | The column along the X axis — the slice labels on a pie. |
+| **Series** | One line per Y column: the column, a colour swatch, and **L** / **R** to put the series on the left or the right Y axis. **+** adds a series. A pie uses the first series only. |
+| **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 
-### Series
+As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
 
-Series are a sortable list. Each row exposes:
-
-| Field | Effect |
-|---|---|
-| **Field** | Column returned by the query. |
-| **Label** | Legend / tooltip label. |
-| **Colour** | Hex / CSS colour. The framework picks a palette when empty. |
-| **Format** | Number format applied to tooltip and dot labels. |
-| **Axis** | `left` (default) / `right`. Use *right* for two-scale charts (e.g. count + amount). |
-| **Dot** *(line / area only)* | Toggle. Hide dots for a cleaner sparkline. |
+An X column and at least one series are required to save.
 
 ---
 
-## Types \{#types\}
+## From a screen's Chart view \{#from-a-screen\}
 
-| Type | Shape | Typical query |
-|---|---|---|
-| **Line** | One line per series, X axis horizontal. | Time series — `x = date`, series = numeric. |
-| **Area** | Same as line, area below filled. *Stacked* toggle available. | Cumulative or composition over time. |
-| **Bar** | Vertical bars per X tick. *Stacked* / *Horizontal* toggles available. | Counts per period, top-N rankings. |
-| **Column** | Alias of bar — exists for the convention "column = vertical, bar = horizontal". |
-| **Pie** / **Donut** | One slice per row; X-field labels each slice, series sizes them. | Share of a total over a small category set. |
-| **Scatter** | Two numeric axes; one dot per row. Optional *Size field* makes a bubble chart. | Correlation between two measures. |
+The **Chart** button of a screen switches the grid to a chart of the rows on display, with the same settings (type, X axis, series, aggregation). Two extras appear there:
 
-Each type-specific toggle / field appears in the editor only when the type is selected.
-
-### Type-specific options
-
-| Type | Extra fields |
-|---|---|
-| **Line / Area** | **Smooth** (monotone-cubic interpolation), **Stacked** *(area only)*, **Null handling** (`Connect` / `Gap`). |
-| **Bar / Column** | **Stacked**, **Bar size**, **Horizontal**. |
-| **Pie / Donut** | **Inner radius** *(donut only)*, **Outer radius**, **Label position** (`outside` / `inside` / `none`), **Palette**. |
-| **Scatter** | **Size field**, **Size range** (`[min_px, max_px]`). |
+- **Load saved** — applies a saved chart built on the same connector and query;
+- **Save…** — saves the current chart under an id, a label and a description, ready for dashboards. Only a superuser sees this button.
 
 ---
 
-## Group by
+## In a dashboard \{#in-a-dashboard\}
 
-The **Group by** field (in the editor's *Series* section) turns one source column into **N parallel series** without listing each series by hand. Useful when the set of values isn't known ahead of time — invoice statuses, sales reps, …
-
-| Field | Effect |
-|---|---|
-| **Group-by field** | Column whose distinct values become the series. |
-| **Y field** | Column the framework sums / takes the first value of per group. |
-| **Palette** | Array of colours used for the generated series, in order of first appearance. Falls back to the default palette when empty. |
-
-When *Group by* is set, the per-series list above collapses to a single Y field and a colour palette — the framework pivots the rows itself.
+A dashboard's **Chart** widget shows a saved chart by its id, or holds its own chart definition. A change to the saved chart shows on every dashboard that uses it. See [Dashboards](./dashboards.md).
 
 ---
 
-## Preview
+## Upgrades \{#override\}
 
-The *Preview* button (top of the editor) renders the chart inline with the current settings. The preview hits the live database (or whatever pool the connector points at) and shows the latest data — useful to confirm a colour change before saving.
-
----
-
-## Reusing a chart
-
-A saved chart is referenced by its id from any dashboard. **Define once, reference everywhere** — change the data source on the chart and every dashboard panel reflects it.
-
-In the [dashboard builder](./dashboards.md), adding a chart panel is a *Chart* dropdown of every chart on the install + a *Position* drag-and-drop on the grid.
-
----
-
-## Permissions
-
-A chart inherits the permission of its underlying query — a caller who can't run `sql:billing:monthly-invoice-counts` doesn't see the chart in a dashboard. The framework prunes the panel silently rather than rendering a 403 placeholder, so dashboards stay informative.
-
----
-
-## Under the hood
-
-Chart definitions live in `charts.toml`. Operators **do not edit this file by hand**; the Charts builder is the canonical interface. Advanced operators can reach for the *Raw TOML* tab as an escape hatch.
+The *override* badge flags a chart marked as a local customisation: an upgrade package does not overwrite it. See [Packages](./build/packages.md).
 
 ---
 
 ## What's next
 
-- [Dashboards](./dashboards.md) — how a chart lands on a dashboard panel.
-- [Parameter binding](./build/queries/parameter-binding.md) — fixed values, tokens, cascades.
-- [Concepts → Connectors](./connectors.md) — the connector that backs the chart's data.
+- [Dashboards](./dashboards.md) — put charts, figures and tables side by side.
+- [Connectors](./connectors.md) — the queries a chart reads.
+- [Saved views](./saved-views.md) — what a user can keep from a screen.
 
 ---
 
 ## Liberty Next — Form conditions
 Source: https://docs.nomana-it.fr/liberty/framework/form-conditions/
 
-Show, hide, require or disable a field based on the live values of the other fields in the same dialog. The Screens builder exposes three condition slots per field — Visible when, Required when, Disabled when — with an expression editor that suggests field names and previews the evaluation.
+Every conditional setting of a screen column — show, require, lock, force a default, change the rule or skip the write depending on another field's value — and the screen's row-level editable_when rule. One condition shape: a field and a value, ANDed.
 
-:::info[Deep reference]
-This page documents the expression language behind `visible_when` / `required_when` / `disabled_when` — operators, evaluation order, session context, server-side enforcement. For task-oriented use — mark a field as conditionally visible / required / disabled in the dialog builder — see [Build → Screens → Conditional fields](./build/screens/conditional-fields.md).
-:::
+A screen column can react to the value of another field of the same row: appear only for one kind of record, become required, lock itself, take a forced value, change its list of values, or not be written at all. The screen itself can make whole rows read-only. All these settings use the same condition shape.
 
-A screen's edit dialog is a flat list of fields. Some fields only make sense when others have a specific value — a *Custom SLA* that only appears on the *Enterprise* plan, a *Manager email* that's only required above a 20% discount. The framework lets you express this directly in the **Screens builder**, on each field, through three slots:
-
-| Slot | Effect |
-|---|---|
-| **Visible when** | The field is rendered only when the expression is true. When false, the field is removed from the dialog **and** dropped from the save payload. |
-| **Required when** | The field gets the *required* asterisk and save is blocked until the value is provided. |
-| **Disabled when** | The field is rendered but greyed out and read-only. Its current value still goes on the save payload. |
-
-The three slots are independent — a field can be visible-and-required, visible-and-disabled, or all three.
+For a step-by-step use in the screen editor, see [Screens → Conditional fields](./build/screens/conditional-fields.md).
 
 ---
 
 ## At a glance
 
-  Subscription — edit dialog
-  
-    Plan
-    Enterprise ▾
-  
-  
-    Seats *
-    250
-  
-  
-    Custom SLA (visible: plan = enterprise)
-    Gold — 99.95%
-  
-  
-    Discount %  (disabled: seats &lt; 100)
-    15
-  
-  
-    Cancel
-    Save
-  
-
-*Custom SLA* appears only on the Enterprise plan; *Discount %* is visible on every plan but locked when *Seats* drops below 100.
-
 ---
 
-## Editing a condition
+## The condition \{#condition\}
 
-In **Settings → Screens**, open the screen and click the field on the *Fields* tab. The field editor on the right exposes the three condition slots, each with an **expression editor**:
+A condition names a **field** of the same row and the **value** it must have — or a list of values, any of which matches:
 
-  Field editor — Custom SLA
-  
-    Namecustom_sla
-    LabelCustom SLA
-    Typestring ▾
-    Visible whenplan == 'enterprise'
-    Required when— always required when visible —
-    Disabled when—
-  
-
-Each expression slot:
-
-- Suggests **field names** of the same screen via auto-complete.
-- Validates the syntax live — a typo (`plan = 'enterprise'` instead of `==`) shows a red underline before save.
-- Refuses cycles at save time (field A visible-when depends on B, B depends on A).
-
-The *Test* button at the top of the field editor opens a small preview pane (see [Testing conditions](#testing) below).
-
----
-
-## Conditional default — `default_when`
-
-A fourth slot on the field editor seeds a value when a condition becomes true. It is a **conditional default**, complementing the static *Default* — use it when the value depends on another field.
-
-| Field | Effect |
-|---|---|
-| **Default when** | Boolean expression that turns the rule on. When it evaluates to true, the target value below is written into the field. |
-| **Value** | The value to write. Literals, session tokens (`${session.user}`), and references to other fields are all accepted — evaluated on the fly. |
-| **Lock** | Controls whether the field stays editable after the value is written. |
-
-The **Lock** flag has two settings:
-
-| Lock | Behaviour |
-|---|---|
-| `true` *(default when omitted)* | The field is filled **and disabled** while the condition holds — a hard forcing. The operator cannot type over it. |
-| `false` | The field is filled **but stays editable** — the operator can override the seeded value. Useful to *suggest* a default that the user can narrow (e.g. default a lookup column to `*ALL` while letting the operator pick a specific value). |
-
-Two rules on the same field don't stack — the first matching one wins in declaration order. When the condition flips back to false, the seeded value stays if the field was locked (it was a hard rule), but is cleared when the field was left editable (the rule stops applying).
-
----
-
-## Expression syntax
-
-The expression language is small and safe — comparable to a SQL `WHERE` clause but evaluated client-side.
-
-| Construct | Example |
-|---|---|
-| **Field reference** | `plan`, `seats`, `discount_pct`. Refers to the current value of the field with that *Name* in the same dialog. |
-| **Literals** | `'enterprise'`, `5`, `true`, `false`, `null`. |
-| **Comparisons** | `==`, `!=`, `<`, `<=`, `>`, `>=`. |
-| **Logical** | `&&`, `\|\|`, `!`. Parentheses for grouping. |
-| **Membership** | `plan in ['team', 'enterprise']`. |
-| **Null check** | `discount_pct == null` / `discount_pct != null`. |
-| **String predicates** | `name.startsWith('FR-')`, `name.endsWith('.pdf')`, `name.includes('test')`. |
-| **Length** | `tags.length > 0` (for *Multiple* fields). |
-| **Session context** | `session.user`, `session.lang`, `session.roles` — the same triple available to queries (see [Parameter binding → Session context](./build/queries/parameter-binding.md)). `session.roles` is an array — `'admin' in session.roles`. |
-
-The language has **no function calls beyond the listed predicates** and no arithmetic operators other than comparison. The intent is "boolean expression over form state", not a scripting language.
-
----
-
-## Evaluation order
-
-Conditions are re-evaluated **on every field change** in the dialog. The framework runs the three slots for every field in parallel; the result is read after every reference resolves. What this means:
-
-- **The order in which fields are listed doesn't matter.** A *Visible when* on field A can reference field B that itself depends on field C — the resolver runs the full pass once per change.
-- **Cycles are refused at save** — the builder names the cycle and points at the offending fields.
-- **Disabled fields keep their value**, even if a *Visible when* later hides them. Toggling visibility off then on doesn't reset the value.
-- **Hidden fields drop their value on save.** The payload sent to the connector contains only the visible fields. This matters when a connector's INSERT/UPDATE expects `NULL` for an absent field rather than the previously-typed value.
-
----
-
-## Interaction with Default
-
-| Scenario | Behaviour |
-|---|---|
-| Field has *Default*, becomes visible | The default is applied the first time the field becomes visible *if* it has no value yet. Re-hiding and re-showing keeps whatever the user typed in between. |
-| Field has *Default*, becomes hidden | The value is not cleared in memory; it is dropped from the save payload because the field is no longer rendered. |
-| Field has no *Default*, becomes visible | The field renders empty. |
-| Field has *Default* `${session.user}`, becomes visible | The session value is substituted at evaluation time (same syntax as query defaults). |
-
-Server-side defaults (`SEQUENCE`, `SYSDATE`, `LOGIN`, `PASSWORD` — see [Dictionary](./dictionary.md)) are applied on save and **don't interact** with conditions.
-
----
-
-## Server-side enforcement
-
-Conditions are evaluated **on the client** for live UX and **re-evaluated on the server** on save to defend against tampering. The save endpoint:
-
-1. Receives the field payload.
-2. Runs every condition again with the values from the payload.
-3. Refuses the save when a required-and-visible field is missing or when a disabled field is being changed (its value in the payload differs from the value last sent to the client).
-
-So conditions are **business rules**, not just UX hints. A user opening the network tab and changing the payload directly hits the same validation as the form.
-
----
-
-## Testing conditions \{#testing}
-
-The field editor's **Test** button opens a small preview pane: the dialog populated with fixture values from the connector's `_test_row` (or empty when none is configured); flipping the dependent fields shows the live condition behaviour.
-
-For non-trivial logic, the screen builder also exposes a **Test cases** tab. Each test case is a `{ inputs, expected }` pair the *Run tests* button replays:
-
-| Test case | Inputs | Expected |
-|---|---|---|
-| **starter-plan** | `plan = starter`, `seats = 5` | `custom_sla = hidden`, `discount_pct = disabled`, `manager_email = hidden` |
-| **enterprise-with-discount** | `plan = enterprise`, `seats = 250`, `discount_pct = 25` | `custom_sla = visible`, `discount_pct = enabled`, `manager_email = visible+required` |
-
-The test runner shows a green checkmark per pass, a red diff per fail. Test cases aren't used at runtime — they document the form's logic and survive refactors better than visual checks.
-
----
-
-## Permissions
-
-`session.roles` is the row-level switch. A field that only superusers should edit becomes:
-
-```text
-Disabled when:  'admin' not in session.roles
+```toml
+{ field = "STATUS", value = "CANCELLED" }
+{ field = "PAYMENT_METHOD", value = ["TRANSFER", "DIRECT_DEBIT"] }
 ```
 
-The server-side enforcement makes this safe — a regular user editing the network payload still hits the same condition.
+A setting holds a list of conditions: **all of them** must match (AND). Values are compared as text, without their leading and trailing spaces, so a code padded with spaces still matches. Field names are matched regardless of case.
+
+In the screen editor, each setting is a list on the column's inspector: one line per condition, with the field picked from the screen's columns.
 
 ---
 
-## Under the hood
+## Settings on a column \{#column-settings\}
 
-Conditions are stored as expression strings on each field of the screen entry. Operators **do not edit the underlying TOML by hand**; the field editor is the canonical interface and validates every expression before save.
+| Setting | Inspector tab | Effect |
+|---|---|---|
+| `visible_when` | Filter | **Dialog**: the field shows only while the conditions match the form's values. **Grid**: the column hides when a filter of the screen is set to a value outside the condition; with that filter empty, the column stays. |
+| `required` / `required_when` | Edit | The field is marked required (asterisk), always or only while the conditions match. |
+| `disabled` / `disabled_when` | Edit | The field is read-only, always or only while the conditions match. |
+| `disable_on_add` | Edit | Read-only when a row is added, editable afterwards — for a value assigned on creation. |
+| `disable_on_edit` | Edit | Read-only once the row exists — for a key that must not change. Applies to the dialog and to grid editing. |
+| `default` | Defaults | The value proposed when a row is added. |
+| `default_when` | Defaults | While its condition matches, the column takes the given **default** and is locked. With **lock** off, the value is only proposed and stays editable. With several rules, the first that matches wins. Re-applied when the deciding field changes, in the dialog and the grid. |
+| `rules_when` | Rules | While its condition matches, the column uses another rule — another lookup, enum or Boolean, with its own lookup parameters and returned values — or none (plain input). The first match wins; otherwise the column's own rule applies. |
+| `write_when` | Defaults | The column is written only while the conditions match. Otherwise the server writes a neutral value (blank or 0) and the dictionary default or rule is not applied — for a field that means nothing for this kind of row. |
+
+A static setting and its conditional version combine simply: when the `_when` list is empty, the static flag decides; when it is filled, the conditions decide.
+
+---
+
+## Setting on the screen — `editable_when` \{#editable-when\}
+
+Set in the **General** tab of the screen editor, `editable_when` says when an **existing** row may be changed or deleted:
+
+```toml
+editable_when = [{ field = "PERIOD_STATUS", value = ["OPEN", "VALIDATED"] }]
+```
+
+A row that does not match is read-only: plain cells in the grid, a view-only dialog without **Save** or **Delete**. The server refuses a change to such a row as well. Adding rows is not affected.
+
+---
+
+## What happens on save \{#save\}
+
+- **Hidden fields** — on an update, a field hidden by `visible_when` is not sent: the column keeps its stored value. On an insert, a hidden field is sent only when it holds a value.
+- **Locked fields** — their value is sent as it is.
+- **Where it is checked** — `visible_when`, `required_when`, `disabled_when`, `default_when` and `rules_when` act in the browser, as the user types. `editable_when` and `write_when` are applied by the server too, whatever the client sends.
+
+---
+
+## Action prompts \{#prompts\}
+
+The fields of an action's prompt dialog accept `visible_when`, `required_when` and `disabled_when` with the same shape, evaluated against the prompt's own fields. See [Actions and lifecycle](./build/screens/actions-and-lifecycle.md).
 
 ---
 
 ## What's next
 
-- [Concepts → Screens](./build/screens/overview.md) — where the field editor lives, and the other field properties.
-- [Concepts → Dictionary](./dictionary.md) — shared validation rules that combine with these conditions.
-- [Parameter binding](./build/queries/parameter-binding.md) — how the dialog values flow into the connector on save.
+- [Screens → Conditional fields](./build/screens/conditional-fields.md) — set them up in the screen editor, with examples.
+- [Screens → Columns](./build/screens/columns.md) — every other column setting.
+- [Dictionary](./dictionary.md) — the rules a column inherits.
 
 ---
 
 ## Liberty Next — Saved grid views
 Source: https://docs.nomana-it.fr/liberty/framework/saved-views/
 
-Save a data grid's columns, sort, filters and grouping as a named view — your own views follow you across devices, and an admin can publish shared views with one set as the default. Includes the Summary view — server-aggregated parent rows with lazy-loaded child rows — and day-grain filtering on timestamp columns.
+Save a data grid's columns, sort, filters and grouping as a named view — your own views follow you across devices, and an admin can publish shared views with one set as the default. Also covers the screen's Summary view — parent rows counted by the database, detail rows loaded on demand — and day-grain filtering on timestamp columns.
 
 Any data grid — a screen's table or an ad-hoc Table View — can remember how you set it up. A **view** captures the grid's full presentation and lets you switch back to it in one click:
 
@@ -11097,23 +10662,19 @@ The grid also remembers, **per device**, the last view you opened on each table 
 
 ---
 
-## Summary view
+## Summary view \{#summary\}
 
-A saved view can be marked as a **Summary view** — instead of returning every row, the grid asks the server to aggregate parent rows and returns just the roll-up. Each parent row carries a chevron; clicking it lazy-loads the underlying child rows.
+The **Summary** view is set on the screen, not saved by the user: when the screen editor's **Summary** tab lists grouping columns, the grid gains a **Summary** button next to **Table** and **Chart**.
 
-Where it fits:
+In that mode the grid shows one parent row per combination of the grouping columns, with the number of rows behind it (the count column's header is set in the same tab). The count is computed by the database over the whole result, so it stays exact even when the grid caps the rows it loads. A chevron on each parent row loads its detail rows — the screen's own query, narrowed to that group — only when it is opened.
 
-- **Accurate counts over the full set** — the aggregate runs against the whole query result, not the current page, so a group count reflects the truth even on a million-row query.
-- **Bucketing on a timestamp column** — pick **day**, **month** or **year** as the aggregation bucket; the parent row shows the bucket label and the child rows are the raw records that fell into it.
-- **Server-side heavy-lifting** — the aggregation is a `GROUP BY` executed by the pool, not a JS reduce; child rows are fetched only when their parent is expanded, keeping the payload small.
-
-The summary layout replaces the previous nested grid — expandable **sub-rows** are native, so keyboard navigation and column resizing behave like the rest of the grid.
+A date or timestamp grouping column can be bucketed by **day**, **month** or **year**: the parent row then shows the period, and the detail rows are the records that fall into it.
 
 ---
 
 ## Day-grain filter on timestamp columns
 
-Filtering a timestamp column doesn't force you to type a full `YYYY-MM-DD HH:MM:SS` bound. The column-header filter lets you pick a **day** and matches every row whose timestamp falls on that day (server-side lower / upper bound). It's the same widget that powers the Summary view's *day* bucket.
+Filtering a timestamp column doesn't force you to type a full `YYYY-MM-DD HH:MM:SS` bound. The column-header filter lets you pick a **day** and matches every row whose timestamp falls on that day (server-side lower / upper bound).
 
 ---
 

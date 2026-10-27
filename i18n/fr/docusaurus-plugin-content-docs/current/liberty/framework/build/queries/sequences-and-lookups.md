@@ -1,37 +1,37 @@
 ---
-title: Séquences et recherches
-description: "La fenêtre Scaffold — sélectionnez une table et une colonne, obtenez une requête de séquence (prochain id) ou de recherche (valeur + libellé) générée et l'entrée correspondante du dictionnaire, enregistrées en un clic."
-keywords: [Liberty Framework, séquence, recherche, scaffold, dictionnaire, prochain id, source de liste déroulante, ConnectorsBuilder]
+title: Séquences et lookups
+description: "L'assistant de génération — choix d'une table et d'une colonne, puis création en un clic d'une requête de séquence (numéro suivant) ou de lookup (code et libellé) et de l'élément correspondant du dictionnaire."
+keywords: [Liberty Next, séquence, lookup, assistant de génération, dictionnaire, numéro suivant, liste déroulante, ConnectorsBuilder]
 ---
 
-# Séquences et recherches
+# Séquences et lookups
 
-Deux motifs de requête reviennent assez souvent pour que Liberty livre un assistant dédié à chacun :
+Deux formes de requête reviennent assez souvent pour que Liberty fournisse un assistant pour chacune :
 
-| Motif | But | SQL typique |
+| Forme | Rôle | SQL typique |
 |---|---|---|
-| **Séquence** | Calculer la prochaine valeur pour une colonne id. | `SELECT COALESCE(MAX(<col>), 0) + 1 AS NEXT_ID FROM <table>` |
-| **Recherche** | Fournir des paires valeur + libellé à une liste déroulante liée à une colonne d'écran. | `SELECT <value>, <label> FROM <table> ORDER BY <label>` |
+| **Séquence** | Calculer le numéro suivant d'une colonne identifiant. | `SELECT COALESCE(MAX(<col>), 0) + 1 AS NEXT_ID FROM <table>` |
+| **Lookup** | Fournir des couples code + libellé à la liste déroulante d'une colonne d'écran. | `SELECT <value>, <label> FROM <table> ORDER BY <label>` |
 
-Tous deux passent par la fenêtre **Scaffold** — cochez une table, cochez la ou les colonnes, obtenez un aperçu SQL en direct, enregistrez. L'enregistrement écrit **deux fichiers** atomiquement : la requête dans le connecteur et l'entrée correspondante dans le dictionnaire.
+Les deux passent par l'**assistant de génération** : choix d'une table et de la ou des colonnes, aperçu du SQL en direct, enregistrement. L'enregistrement écrit **deux fichiers** d'un coup : la requête dans le connecteur et l'élément correspondant dans le dictionnaire.
 
 ---
 
-## Où les trouver
+## Accès
 
-**Paramètres → Connecteurs → sélectionnez un connecteur → barre de modes : Séquences** (ou **Recherches**) **→ ＋ Ajouter une séquence** (ou **＋ Ajouter une recherche**).
+**Paramètres → Connecteurs → choix du connecteur → barre de modes : Séquences** (ou **Lookups**) **→ ＋ Ajouter une séquence** (ou **＋ Ajouter un lookup**).
 
-La fenêtre s'ouvre, introspecte le pool et liste les schémas/tables.
+La fenêtre s'ouvre, lit le pool et liste les schémas et les tables.
 
-:::note[Aucune table requise]
-Vous n'êtes pas obligé de partir d'une table. Sautez le choix de la table et **écrivez le SQL directement** dans l'aperçu, puis *Utiliser cette requête* — pratique pour une recherche dont la source est une jointure ou un `SELECT` écrit à la main.
+:::note[Sans table]
+L'assistant part d'une table. Pour un lookup ou une séquence reposant sur une jointure ou sur un `SELECT` écrit à la main, créer l'élément dans **Paramètres → Dictionnaire** (onglet Lookups ou Séquences) et créer sa requête depuis cet élément — une requête vide, ou **Generate** à partir d'une table en associant ses colonnes aux champs de l'élément.
 :::
 
 ---
 
-## Séquence — générer le prochain id
+## Séquence — calculer le numéro suivant
 
-Une *séquence* dans Liberty est une requête qui retourne un nombre — le prochain id à attribuer à une nouvelle ligne. Elle alimente la règle `SEQUENCE` du dictionnaire : un champ d'écran marqué `SEQUENCE` lit la requête de séquence à chaque ouverture du dialogue pour un INSERT.
+Dans Liberty, une *séquence* est une requête qui renvoie un nombre : le numéro à attribuer à une nouvelle ligne. Elle sert la règle `SEQUENCE` du dictionnaire : à l'insertion d'une ligne, le serveur exécute la requête de séquence dans la transaction de l'insertion et écrit le résultat dans la colonne.
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -58,7 +58,7 @@ Une *séquence* dans Liberty est une requête qui retourne un nombre — le proc
   <rect x="200" y="184" width="360" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="212" y="199" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">get_customer_id_from_customers_get</text>
 
-  <text x="40" y="226" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Identifiant de séquence</text>
+  <text x="40" y="226" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Identifiant</text>
   <rect x="200" y="216" width="360" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="212" y="231" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">get_customer_id_from_customers</text>
 
@@ -76,46 +76,46 @@ Une *séquence* dans Liberty est une requête qui retourne un nombre — le proc
 
 ### Champ par champ
 
-| Champ | Notes |
+| Champ | Remarques |
 |---|---|
-| **Table** | La source. Le sélecteur de schéma apparaît sur les pools multi-schémas. |
-| **Colonne clé** | La colonne dont `MAX(...) + 1` donne la valeur suivante. L'introspection du pool liste chaque colonne avec son type SQL. |
-| **WHERE facultatif** | Le corps d'une clause `WHERE` (sans le mot-clé). Utilisez des paramètres `:placeholder` si le filtre doit varier par appel — par ex. `region = :region` pour cadrer la séquence par région. |
-| **Nom de la requête** | Auto-suggéré comme `get_<keyCol>_from_<table>_get` (raccourci par `slugify`). Surchargez librement. Le suffixe `_get` est une convention — les séquences sont des requêtes de lecture. |
-| **Identifiant de séquence** | La clé sous `[sequences.*]` dans le dictionnaire. Auto-suggéré comme `get_<keyCol>_from_<table>`. |
-| **Description** | Apparaît dans les listages et infobulles. Pré-remplie comme *« Récupérer \<col> depuis \<table> »*. |
-| **SQL généré** | Aperçu en direct. Modifiable — vos modifications tiennent jusqu'à ce que vous changiez les entrées colonne/table/WHERE, ce qui restaure la forme générée. |
+| **Table** | La source. Le choix du schéma apparaît sur les pools à plusieurs schémas. |
+| **Colonne clé** | La colonne dont `MAX(...) + 1` donne la valeur suivante. La liste présente chaque colonne avec son type SQL. |
+| **Clause WHERE optionnelle** | Le corps d'une clause `WHERE`, sans le mot-clé. Des paramètres `:nom` permettent de faire varier le filtre à chaque appel — par exemple `REGION = :REGION` pour une numérotation par région. |
+| **Nom de la requête** | Proposé sous la forme `get_<colonne>_from_<table>_get`, modifiable. Le suffixe `_get` est une convention : une séquence est une requête de lecture. |
+| **Identifiant** | La clé de la séquence dans le dictionnaire. Proposé sous la forme `get_<colonne>_from_<table>`. |
+| **Description** | Affichée dans les listes et les infobulles. Pré-remplie. |
+| **SQL généré — modifiable** | Aperçu en direct. Une modification manuelle est conservée tant que la table, la colonne ou la clause WHERE ne changent pas ; un changement rétablit le SQL généré. |
 
 ### Ce qui est enregistré
 
-| Fichier | Entrée |
+| Fichier | Contenu |
 |---|---|
-| Fichier connecteur | `{ name = "<queryName>", type = "sequence", sql = "..." }` |
-| Fichier dictionnaire | `[connectors.<conn>.sequences.<seqId>] query = "<queryName>"`, `dd_id = "<keyCol>"`, `description` facultative |
+| Connecteur | La requête, dans la section **Séquences** du connecteur. |
+| Dictionnaire | `[connectors.<connecteur>.sequences.<id>]` avec `query = "<nom de la requête>"`, `dd_id = "<colonne>"` et la description. |
 
-L'entrée du dictionnaire est ce que la règle SEQUENCE consulte. Une colonne d'écran marquée par la règle `SEQUENCE` avec `sequence = "<seqId>"` appelle cette requête à l'ouverture du dialogue pour un INSERT et pré-remplit le champ avec le résultat.
+Une entrée du dictionnaire (ou une colonne d'écran) dotée de la règle `SEQUENCE` et de **Rules values** = `<id>` reçoit son numéro de cette requête à chaque insertion. Avec `dd_id` renseigné, toute colonne dont l'entrée porte cette clé est numérotée elle aussi.
 
-### Note sur la concurrence
+### Accès concurrents
 
-`SELECT MAX(...) + 1` n'est **pas** atomique — deux INSERT simultanés peuvent lire le même MAX et produire une collision. Acceptable quand :
+`SELECT MAX(...) + 1` n'est **pas** atomique : deux insertions simultanées peuvent lire le même maximum et produire un doublon. C'est acceptable quand :
 
-- Votre INSERT se déroule derrière une interface transactionnelle (l'utilisateur voit un dialogue à la fois).
-- La colonne id porte une contrainte d'unicité au niveau base qui rejettera le doublon (l'écran rapporte l'erreur et l'opérateur recommence).
+- les insertions passent par l'interface, un dialogue à la fois ;
+- la colonne porte une contrainte d'unicité en base, qui rejette le doublon (l'écran affiche l'erreur et l'opérateur recommence).
 
-Pour des charges à forte concurrence, définissez la colonne comme une **SEQUENCE de base** (`SEQUENCE` Postgres, `SEQUENCE` Oracle, colonne Identity) et faites retourner `nextval(...)` à la requête de séquence — la base garantit l'unicité.
+Sous forte concurrence, mieux vaut une **séquence de la base** (`SEQUENCE` Postgres ou Oracle, colonne Identity) et une requête de séquence qui renvoie `nextval(...)` : la base garantit l'unicité.
 
 ---
 
-## Recherche — alimenter les options d'une liste déroulante
+## Lookup — alimenter une liste déroulante
 
-Une *recherche* dans Liberty est une requête qui retourne des lignes de paires *(valeur, libellé)* — la source d'une liste déroulante sur une colonne d'écran. Elle alimente la règle `LOOKUP` du dictionnaire : une colonne marquée `LOOKUP` avec `lookup = "<id>"` est rendue comme une liste déroulante alimentée par la requête de recherche.
+Dans Liberty, un *lookup* est une requête qui renvoie des couples *(code, libellé)* — la source de la liste déroulante d'une colonne. Il sert la règle `LOOKUP` du dictionnaire : une colonne dotée de la règle `LOOKUP` et de **Rules values** = `<id>` affiche le libellé à la place du code et propose les lignes du lookup dans une liste avec recherche.
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <linearGradient id="lk-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
   </defs>
   <rect x="20" y="20" width="960" height="420" rx="14" fill="url(#lk-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nouvelle recherche · [connectors.crm]</text>
+  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nouveau lookup · [connectors.crm]</text>
   <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
   <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Table</text>
@@ -140,7 +140,7 @@ Une *recherche* dans Liberty est une requête qui retourne des lignes de paires 
   <rect x="200" y="216" width="360" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="212" y="231" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">get_regions_get</text>
 
-  <text x="40" y="260" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Identifiant de recherche</text>
+  <text x="40" y="260" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Identifiant</text>
   <rect x="200" y="248" width="360" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="212" y="263" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">get_regions</text>
 
@@ -156,39 +156,44 @@ Une *recherche* dans Liberty est une requête qui retourne des lignes de paires 
 
 ### Champ par champ
 
-| Champ | Notes |
+| Champ | Remarques |
 |---|---|
-| **Table** | La source des lignes de la liste déroulante. |
-| **Colonne valeur** | Le code stocké sur la ligne quand l'utilisateur choisit une option. Le type compte — une colonne valeur `VARCHAR(8)` attend une colonne cible VARCHAR sur l'écran. |
-| **Colonne libellé** | Le texte montré à l'utilisateur. Choisissez **Identique à la colonne valeur** quand la valeur est déjà lisible (par ex. code pays affiché tel quel). |
-| **WHERE facultatif** | Corps d'une clause `WHERE` sans le mot-clé. Motifs courants : `active = 'Y'`, `deleted_at IS NULL`. Utilisez des paramètres `:placeholder` pour des recherches en cascade (par ex. n'afficher que les régions du pays sélectionné — voir [Liaison de paramètres](./parameter-binding.md)). |
-| **Nom de la requête** | Auto-suggéré comme `get_<table>_get`. |
-| **Identifiant de recherche** | La clé sous `[lookups.*]` dans le dictionnaire. Auto-suggéré comme `get_<table>`. |
-| **Description** | Apparaît dans les listages et infobulles. |
-| **SQL généré** | Aperçu en direct, modifiable. Le `ORDER BY <label>` est ajouté automatiquement — retirez-le si les lignes ont un ordre intrinsèque. |
+| **Table** | La source des lignes de la liste. |
+| **Colonne valeur** | Le code enregistré sur la ligne quand l'utilisateur choisit une option. Son type doit correspondre à celui de la colonne cible de l'écran. |
+| **Colonne libellé** | Le texte présenté à l'utilisateur. **Identique à la colonne valeur** convient quand le code est déjà lisible (un code pays affiché tel quel). |
+| **Clause WHERE optionnelle** | Le corps d'une clause `WHERE`, sans le mot-clé. Cas courants : `ACTIVE = 'Y'`, `DELETED_AT IS NULL`. Des paramètres `:nom` permettent des listes en cascade (les régions du pays choisi, par exemple — voir [Liaison de paramètres](./parameter-binding.md)). |
+| **Nom de la requête** | Proposé sous la forme `get_<table>_get`. |
+| **Identifiant** | La clé du lookup dans le dictionnaire. Proposé sous la forme `get_<table>`. |
+| **Description** | Affichée dans les listes et les infobulles. |
+| **SQL généré — modifiable** | Aperçu en direct, modifiable. L'`ORDER BY <libellé>` est ajouté d'office ; à retirer si les lignes ont déjà un ordre propre. |
 
 ### Ce qui est enregistré
 
-| Fichier | Entrée |
+| Fichier | Contenu |
 |---|---|
-| Fichier connecteur | `{ name = "<queryName>", type = "lookup", sql = "..." }` |
-| Fichier dictionnaire | `[connectors.<conn>.lookups.<lookupId>] query = "<queryName>"`, `value = "<valueCol>"`, `label = "<labelCol>"`, `description` facultative |
+| Connecteur | La requête, dans la section **Lookups** du connecteur. |
+| Dictionnaire | `[connectors.<connecteur>.lookups.<id>]` avec `query = "<nom de la requête>"`, `value = "<colonne valeur>"`, `label = "<colonne libellé>"` et la description. |
 
-### Recherches en cascade
+### Listes en cascade
 
-Quand la liste déroulante doit être **filtrée par un autre champ du même écran** — par ex. *Rôle* dépend d'*Application* — la recherche nécessite un `:placeholder` dans la clause WHERE, et la colonne de l'écran déclare un `filter_from` qui référence le parent. Le câblage côté écran se trouve dans [Concepts → Conditions de formulaire](../../form-conditions.md) (jusqu'à la sortie de la section Construire les écrans) ; la requête de recherche elle-même a juste besoin du `:placeholder`.
+Quand la liste dépend d'**un autre champ de la même ligne** — *Rôle* dépend d'*Application* —, la requête du lookup prend un paramètre et la colonne de l'écran le lie :
+
+- dans le dialogue et la saisie en grille, par le champ **lookup_param_binds** de la colonne — `{ param = "APP_ID", source = "APP_ID" }` ;
+- dans le panneau de filtres de la grille, par le champ **filter_from** de la colonne, qui restreint les options du filtre selon la valeur d'un autre filtre.
+
+Voir [Liaison de paramètres](./parameter-binding.md#where) et [Colonnes](../screens/columns.md).
 
 ```sql
-SELECT role_id, role_name
+SELECT ROLE_ID, ROLE_NAME
 FROM   roles
-WHERE  app_id = :app_id
-ORDER BY role_name
+WHERE  APP_ID = :APP_ID
+ORDER BY ROLE_NAME
 ```
 
 ---
 
-## Et ensuite
+## Pour aller plus loin
 
-- [Liaison de paramètres](./parameter-binding.md) — pour les séquences/recherches qui prennent des paramètres du contexte d'écran.
-- [Variantes SQL par dialecte](./per-dialect-sql.md) — pour une recherche qui touche Postgres et Oracle.
-- [Concepts → Dictionnaire](../../dictionary.md) — la référence plus large : `SEQUENCE`, `LOOKUP`, `LOGIN`, `SYSDATE` et les autres règles du dictionnaire.
+- [Liaison de paramètres](./parameter-binding.md) — séquences et lookups qui reçoivent des paramètres du contexte de l'écran.
+- [Variantes SQL par dialecte](./per-dialect-sql.md) — un lookup qui interroge Postgres et Oracle.
+- [Dictionnaire](../../dictionary.md) — tous les champs d'un lookup et d'une séquence, et les autres règles.

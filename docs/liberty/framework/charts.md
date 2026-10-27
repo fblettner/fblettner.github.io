@@ -1,184 +1,166 @@
 ---
 title: Charts
-description: "A chart wraps a connector query into a Recharts-rendered visualisation. Defined in Settings → Charts, picked from the builder by type (line, bar, column, pie, donut, area, scatter), with the axis fields, series, colours, legend and refresh interval set in the same form."
-keywords: [Liberty Framework, charts, Recharts, line, bar, column, area, pie, donut, scatter, dashboards, time series, group by, settings]
+description: "A saved chart draws the result of a connector query as bars, lines, areas or a pie: an X column, one or more series with their colour and axis, and an aggregation. Built in Settings → Charts or saved from a screen's Chart view, then reused in dashboards."
+keywords: [Liberty Next, charts, bar, line, area, pie, series, aggregation, dual axis, dashboards, Chart view, charts.toml]
 ---
 
 # Charts
 
-:::info[Deep reference]
-This page documents the Charts builder, every chart type (line / bar / column / area / pie / donut / scatter) and the per-type field options. The Build group doesn't currently carry a dedicated Charts subsection — this page is the canonical entry point.
-:::
+A **chart** draws the result of a connector's query: an X column, one or more series, and an aggregation for the rows that share the same X value. It is saved under a name and reused in [dashboards](./dashboards.md); the same chart settings are available on the fly in a screen's **Chart** view.
 
-A **chart** wraps a connector's named query into a visualisation. Defined in **Settings → Charts**, picked by type — line, bar, column, area, pie, donut, scatter — and reused as a panel in any number of dashboards.
-
-This page covers the Charts builder, every field on the editor and the type-specific options each chart type unlocks.
+Four types are available: **bar**, **line**, **area** and **pie**.
 
 ---
 
 ## At a glance
 
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px', margin: '24px 0'}}>
-  <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>SOURCE</div>
-    <div style={{fontSize: '12px'}}>One SQL connector + a named read query. Schema discovered at runtime.</div>
-  </div>
-  <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>SHAPE</div>
-    <div style={{fontSize: '12px'}}>One X-axis column, one or many series. Group-by pivots one column into N parallel series.</div>
-  </div>
-  <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>RENDERED IN</div>
-    <div style={{fontSize: '12px'}}>Dashboard panels and any screen that includes a chart widget.</div>
-  </div>
-  <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>REFRESH</div>
-    <div style={{fontSize: '12px'}}>Manual <strong>↻ Refresh</strong> button on the panel; optional refresh interval in the editor.</div>
-  </div>
-</div>
+<svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="cht-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cht-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cht-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cht-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="400" rx="14" fill="url(#cht-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">[charts.sales.revenue_by_month]</text>
+  <rect x="240" y="58" width="115" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="271.5" y="73.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="304" y="59" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="329.0" y="73.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Chart</text>
+  <text x="240" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Chart</text>
+  <rect x="240" y="106" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Line ▾</text>
+  <text x="366" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">X axis</text>
+  <rect x="366" y="106" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="376" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">MONTH ▾</text>
+  <text x="502" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Series</text>
+  <rect x="502" y="106" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">REVENUE ▾</text>
+  <rect x="616" y="109" width="16" height="16" rx="3" fill="#4a9eff"/>
+  <rect x="636" y="106" width="22" height="22" rx="5" fill="url(#cht-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="647.0" y="120.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
+  <rect x="660" y="106" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="671.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
+  <rect x="690" y="106" width="100" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="700" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">MARGIN ▾</text>
+  <rect x="794" y="109" width="16" height="16" rx="3" fill="#22c55e"/>
+  <rect x="814" y="106" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="825.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
+  <rect x="838" y="106" width="22" height="22" rx="5" fill="url(#cht-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="849.0" y="120.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
+  <rect x="868" y="106" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="880.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <text x="240" y="152" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Aggregate</text>
+  <rect x="240" y="158" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="172.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Sum ▾</text>
+  <rect x="240" y="196" width="720" height="200" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="280" y1="230" x2="920" y2="230" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="280" y1="270" x2="920" y2="270" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="280" y1="310" x2="920" y2="310" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="280" y1="350" x2="920" y2="350" stroke="#1f2937" strokeWidth="1"/>
+  <polyline points="333,330 440,310 547,325 653,285 760,260 867,272" fill="none" stroke="#4a9eff" strokeWidth="2.5"/>
+  <polyline points="333,300 440,290 547,312 653,270 760,262 867,280" fill="none" stroke="#22c55e" strokeWidth="2.5"/>
+  <text x="333.3333333333333" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">05</text>
+  <text x="440.0" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">06</text>
+  <text x="546.6666666666667" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">07</text>
+  <text x="653.3333333333333" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">08</text>
+  <text x="760.0" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">09</text>
+  <text x="866.6666666666666" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">10</text>
+  <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Two tabs</text>
+  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">data source, then the chart</text>
+  <line x1="210" y1="67.0" x2="240" y2="70" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+  <rect x="10" y="140" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Type and X axis</text>
+  <text x="20" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bar, line, area, pie</text>
+  <line x1="210" y1="157.0" x2="240" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+  <rect x="10" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aggregate</text>
+  <text x="20" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rows sharing the same X</text>
+  <line x1="210" y1="277.0" x2="240" y2="170" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One line per series</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">column, colour, left/right axis</text>
+  <line x1="1000" y1="77.0" x2="780" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+  <rect x="1000" y="250" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live preview</text>
+  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sample of the query's rows</text>
+  <line x1="1000" y1="267.0" x2="960" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+</svg>
 
 ---
 
-## Editing a chart
+## Settings → Charts \{#list\}
 
-In **Settings → Charts → ➕ New chart**, the editor opens with the *Type* picker at the top. Picking a type expands the form to the fields that type needs.
+Charts are grouped by connector: the **scope** chips at the top pick a connector, and **Add a connector scope** opens a new one. The list shows each chart of the scope with its label, its id and an *override* badge when it is marked as a local customisation. Each row has:
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Settings → Charts → invoices-by-month</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Preview</span>
-      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>Save</span>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px', display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
-    <div style={{opacity: 0.75}}>Type</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 600}}>Bar ▾</span></div>
-    <div style={{opacity: 0.75}}>Title</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Invoices issued per month</span></div>
-    <div style={{opacity: 0.75}}>Connector</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>billing ▾</span></div>
-    <div style={{opacity: 0.75}}>Query</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>monthly-invoice-counts ▾</span></div>
-    <div style={{opacity: 0.75, alignSelf: 'start', paddingTop: '4px'}}>X axis</div>
-    <div>
-      <div style={{display: 'grid', gridTemplateColumns: '110px 1fr 100px', gap: '6px', alignItems: 'center'}}>
-        <div style={{opacity: 0.6, fontSize: '10px'}}>Field</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>month ▾</span></div><div></div>
-        <div style={{opacity: 0.6, fontSize: '10px'}}>Label</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Month</span></div><div></div>
-        <div style={{opacity: 0.6, fontSize: '10px'}}>Format</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>yyyy-MM</span></div><div></div>
-      </div>
-    </div>
-    <div style={{opacity: 0.75, alignSelf: 'start', paddingTop: '4px'}}>Series</div>
-    <div>
-      <div style={{display: 'grid', gridTemplateColumns: '110px 1fr 80px 40px', gap: '6px', alignItems: 'center'}}>
-        <div style={{opacity: 0.6, fontSize: '10px'}}>Field</div><div style={{fontSize: '10px', opacity: 0.6}}>Label</div><div style={{fontSize: '10px', opacity: 0.6}}>Colour</div><div></div>
-        <div><span style={{padding: '3px 8px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>count</span></div><div><span style={{padding: '3px 8px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Invoices</span></div><div><span style={{padding: '3px 8px', borderRadius: '4px', border: '1px solid rgba(74,158,255,0.40)', background: 'rgba(74,158,255,0.10)', color: '#4a9eff', fontSize: '11px', fontWeight: 700}}>#4a9eff</span></div><div style={{opacity: 0.55}}>✕</div>
-      </div>
-      <div style={{marginTop: '6px'}}><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 600}}>+ Add series</span></div>
-    </div>
-  </div>
-</div>
+| Button | Effect |
+|---|---|
+| **Find usages** | The dashboards that show the chart. |
+| **Find dependencies** | Lists what the chart depends on (query, connector…) and downloads the chart with the ticked items as a package. |
+| **Rename** | Changes the chart's id. |
+| **Clone** | Copies the chart under a new id. |
+| **Delete** | Removes the chart. |
 
-### Common fields
+**Add chart** opens the editor for a new chart in the current scope; clicking a row opens it for editing.
+
+---
+
+## The editor \{#editor\}
+
+The editor has two tabs.
+
+### General \{#general\}
 
 | Field | Effect |
 |---|---|
-| **Type** | The chart type — see [Types](#types) below. Changing the type adapts the rest of the form. |
-| **Title** / **Subtitle** | Shown above the chart. Subtitle is optional. |
-| **Connector** / **Query** | The data source. Dropdowns of the connectors and their named read queries. |
-| **Parameters** | Table of fixed values for the query parameters — same shape as elsewhere. Supports the `${week.monday}` / `${month.last}` tokens documented in [Parameter binding](./build/queries/parameter-binding.md). |
-| **Height** | CSS height of the rendered chart. Default `320px`. |
-| **Legend** | Toggle + position (`bottom` / `right` / `top`). Default *on, bottom*. |
-| **Tooltip** | Toggle. Default *on*. |
-| **Grid** | Toggle. Default *on*. |
-| **Refresh interval** | Seconds between auto-refresh ticks. `0` (default) = manual only. |
+| **Id** | The chart's identifier: letters, digits, underscores and hyphens. Dashboards refer to the chart by this id. |
+| **Label** | The chart's title in lists and dashboards. |
+| **Description** | Optional. |
+| **Connector** | The connector of the scope — fixed; to move a chart to another connector, recreate it in that scope. |
+| **Query** | The read query whose result the chart draws. The buttons next to it edit the query, clone it or create a new one without leaving the editor. |
 
-### X axis
+### Chart \{#chart\}
+
+The tab loads a sample of the query's rows and draws the chart as it is set:
 
 | Field | Effect |
 |---|---|
-| **Field** | Dropdown of the columns the query returns. |
-| **Label** | Shown under the chart. |
-| **Format** | Date / number format applied to tick labels. Dates use `date-fns` syntax (`yyyy-MM`, `dd/MM`); numbers use `Intl.NumberFormat` notation. |
-| **Tick interval** | `preserveStartEnd` (default) / `auto` / an integer "keep one tick out of N". |
+| **Chart** | The type: bar, line, area or pie. |
+| **X axis** | The column along the X axis — the slice labels on a pie. |
+| **Series** | One line per Y column: the column, a colour swatch, and **L** / **R** to put the series on the left or the right Y axis. **+** adds a series. A pie uses the first series only. |
+| **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 
-### Series
+As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
 
-Series are a sortable list. Each row exposes:
-
-| Field | Effect |
-|---|---|
-| **Field** | Column returned by the query. |
-| **Label** | Legend / tooltip label. |
-| **Colour** | Hex / CSS colour. The framework picks a palette when empty. |
-| **Format** | Number format applied to tooltip and dot labels. |
-| **Axis** | `left` (default) / `right`. Use *right* for two-scale charts (e.g. count + amount). |
-| **Dot** *(line / area only)* | Toggle. Hide dots for a cleaner sparkline. |
+An X column and at least one series are required to save.
 
 ---
 
-## Types \{#types\}
+## From a screen's Chart view \{#from-a-screen\}
 
-| Type | Shape | Typical query |
-|---|---|---|
-| **Line** | One line per series, X axis horizontal. | Time series — `x = date`, series = numeric. |
-| **Area** | Same as line, area below filled. *Stacked* toggle available. | Cumulative or composition over time. |
-| **Bar** | Vertical bars per X tick. *Stacked* / *Horizontal* toggles available. | Counts per period, top-N rankings. |
-| **Column** | Alias of bar — exists for the convention "column = vertical, bar = horizontal". |
-| **Pie** / **Donut** | One slice per row; X-field labels each slice, series sizes them. | Share of a total over a small category set. |
-| **Scatter** | Two numeric axes; one dot per row. Optional *Size field* makes a bubble chart. | Correlation between two measures. |
+The **Chart** button of a screen switches the grid to a chart of the rows on display, with the same settings (type, X axis, series, aggregation). Two extras appear there:
 
-Each type-specific toggle / field appears in the editor only when the type is selected.
-
-### Type-specific options
-
-| Type | Extra fields |
-|---|---|
-| **Line / Area** | **Smooth** (monotone-cubic interpolation), **Stacked** *(area only)*, **Null handling** (`Connect` / `Gap`). |
-| **Bar / Column** | **Stacked**, **Bar size**, **Horizontal**. |
-| **Pie / Donut** | **Inner radius** *(donut only)*, **Outer radius**, **Label position** (`outside` / `inside` / `none`), **Palette**. |
-| **Scatter** | **Size field**, **Size range** (`[min_px, max_px]`). |
+- **Load saved** — applies a saved chart built on the same connector and query;
+- **Save…** — saves the current chart under an id, a label and a description, ready for dashboards. Only a superuser sees this button.
 
 ---
 
-## Group by
+## In a dashboard \{#in-a-dashboard\}
 
-The **Group by** field (in the editor's *Series* section) turns one source column into **N parallel series** without listing each series by hand. Useful when the set of values isn't known ahead of time — invoice statuses, sales reps, …
-
-| Field | Effect |
-|---|---|
-| **Group-by field** | Column whose distinct values become the series. |
-| **Y field** | Column the framework sums / takes the first value of per group. |
-| **Palette** | Array of colours used for the generated series, in order of first appearance. Falls back to the default palette when empty. |
-
-When *Group by* is set, the per-series list above collapses to a single Y field and a colour palette — the framework pivots the rows itself.
+A dashboard's **Chart** widget shows a saved chart by its id, or holds its own chart definition. A change to the saved chart shows on every dashboard that uses it. See [Dashboards](./dashboards.md).
 
 ---
 
-## Preview
+## Upgrades \{#override\}
 
-The *Preview* button (top of the editor) renders the chart inline with the current settings. The preview hits the live database (or whatever pool the connector points at) and shows the latest data — useful to confirm a colour change before saving.
-
----
-
-## Reusing a chart
-
-A saved chart is referenced by its id from any dashboard. **Define once, reference everywhere** — change the data source on the chart and every dashboard panel reflects it.
-
-In the [dashboard builder](./dashboards.md), adding a chart panel is a *Chart* dropdown of every chart on the install + a *Position* drag-and-drop on the grid.
-
----
-
-## Permissions
-
-A chart inherits the permission of its underlying query — a caller who can't run `sql:billing:monthly-invoice-counts` doesn't see the chart in a dashboard. The framework prunes the panel silently rather than rendering a 403 placeholder, so dashboards stay informative.
-
----
-
-## Under the hood
-
-Chart definitions live in `charts.toml`. Operators **do not edit this file by hand**; the Charts builder is the canonical interface. Advanced operators can reach for the *Raw TOML* tab as an escape hatch.
+The *override* badge flags a chart marked as a local customisation: an upgrade package does not overwrite it. See [Packages](./build/packages.md).
 
 ---
 
 ## What's next
 
-- [Dashboards](./dashboards.md) — how a chart lands on a dashboard panel.
-- [Parameter binding](./build/queries/parameter-binding.md) — fixed values, tokens, cascades.
-- [Concepts → Connectors](./connectors.md) — the connector that backs the chart's data.
+- [Dashboards](./dashboards.md) — put charts, figures and tables side by side.
+- [Connectors](./connectors.md) — the queries a chart reads.
+- [Saved views](./saved-views.md) — what a user can keep from a screen.

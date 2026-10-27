@@ -12,7 +12,7 @@ Two variants:
 
 | Tab type | What it shows | When |
 |---|---|---|
-| **`nested_form`** | A child-record form: zero-or-one related row, with its own SELECT / INSERT / UPDATE queries. | When the related table has **at most one** row per parent (one-to-one or zero-to-one). |
+| **`nested_form`** | The form of another screen, for zero or one related row, saved with the parent. | When the related table has **at most one** row per parent (one-to-one or zero-to-one). |
 | **`nested_table`** | A full TableView of related rows, embedded inline — renders another screen's grid scoped to the parent's key. | When the related table has **many** rows per parent (one-to-many). |
 
 Both attach to the dialog like any other tab; the user clicks between them without leaving the form.
@@ -36,95 +36,40 @@ The schema's `_check` validator enforces tab id uniqueness; otherwise both types
 
 ## nested_form — a child-record form
 
-A `nested_form` tab embeds a sub-dialog that reads / writes a related table. The parent's primary key binds into the nested read query; if a row comes back, the form renders in edit mode; if not, it renders in add mode.
-
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <linearGradient id="nf-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-  </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#nf-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Inspector · Tab "Billing" · type=nested_form</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">connector</text>
-  <rect x="200" y="80" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="95" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">(parent's connector — crm)</text>
-
-  <text x="40" y="122" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">read_query *</text>
-  <rect x="200" y="110" width="320" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="210" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_get ▾</text>
-
-  <text x="40" y="152" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">update_query</text>
-  <rect x="200" y="140" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="155" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_put ▾</text>
-
-  <text x="40" y="182" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">insert_query</text>
-  <rect x="200" y="170" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="185" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_post ▾</text>
-
-  <line x1="20" y1="208" x2="980" y2="208" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="230" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAM BINDS (parent → nested)</text>
-
-  <rect x="40" y="240" width="920" height="40" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="260" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">:CUSTOMER_ID</text>
-  <text x="180" y="260" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">←  parent column</text>
-  <text x="320" y="260" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <text x="500" y="260" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">(the parent dialog's current row)</text>
-
-  <text x="56" y="290" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">＋ Add binding</text>
-
-  <line x1="20" y1="304" x2="980" y2="304" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="324" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FIELDS</text>
-  <text x="40" y="346" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Drag fields from the Palette as on a normal form tab.</text>
-</svg>
+A `nested_form` tab shows, inside the dialog, the **form of another existing screen**. That screen owns the read, update and insert queries and the fields; the tab only says which screen to reuse and how to pass the parent's values to it.
 
 ### Fields
 
-| Field | Notes |
+| Field | What it does |
 |---|---|
-| **`connector`** | Connector hosting the nested queries. Blank = parent's connector. |
-| **`read_query`** *(required)* | Reads the linked row. Should return 0 or 1 rows after the bind narrows it. |
-| **`update_query`** | Writes edits when a linked row already exists. |
-| **`insert_query`** | Writes a new linked row when none existed (after the bind returned 0 rows). |
-| **`param_binds`** | Bind the parent's columns into the nested queries' `:placeholder` params. Typically `:CUSTOMER_ID ← CUSTOMER_ID`. |
-| **`fields`** | The form fields, just like a regular `form` tab. Drag from the Palette. |
-| **`cols`** | Grid column count for the nested form. |
+| **`form_screen`** *(required)* | The id of the screen whose form is reused. |
+| **`connector`** | The connector of that screen. Blank = the parent screen's connector. |
+| **`param_binds`** | Bind the parent's values into the reused screen's queries — typically `CUSTOMER_ID ← CUSTOMER_ID`. |
+| **`label`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | As on any tab. |
 
 ### Behaviour
 
-When the parent dialog opens:
+1. **Editing a parent row** — the reused screen's read query runs with the bound values. A row found is shown for editing; otherwise the form starts empty.
+2. **Adding a parent row** — the form starts empty (the parent has no key yet).
+3. **Saving** — the nested form is saved by the **parent's Save**: an update when a row was loaded, an insert otherwise — only if the user typed something. On an insert, the binds take the parent's new key, including one assigned by a sequence.
+4. **Duplicating the parent** — the nested row is inserted again for the copy.
 
-1. The `read_query` fires with the parent's column values bound through `param_binds`.
-2. If a row comes back, the nested form renders in **edit mode** — fields are populated, *Save* fires `update_query`.
-3. If no row comes back, the nested form renders in **add mode** — fields are empty, *Save* fires `insert_query`.
+Fields hidden by their conditions are not written, and the bound key columns always take the parent's values.
 
-The parent's *Save* and the nested tab's *Save* are independent — saving the parent doesn't touch the nested data; saving the nested doesn't trigger the parent's Save chain. Each operates on its own row.
+### Use case — billing address
 
-### Use case — JD Edwards-specific settings
-
-A *Settings → Applications* dialog with a *JD Edwards* tab that shows up only when the application is a JDE app:
+A *Customer* dialog with a *Billing* tab that reuses the `billing_address` screen (its read, update and insert queries keyed on `CUSTOMER_ID`):
 
 ```toml
-[[screens.nomasx1.settings_applications.dialog.tabs]]
-id = "jde"
-label = "JD Edwards"
-type = "nested_form"
-read_query = "settings_jde_get"
-update_query = "settings_jde_put"
-insert_query = "settings_jde_post"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.param_binds]]
-param = "APPS_ID"
-source = "APPS_ID"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_VERSION"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_ENVIRONMENT"
+[[screens.crm.customers.dialog.tabs]]
+id          = "billing"
+label       = "Billing"
+type        = "nested_form"
+form_screen = "billing_address"
+param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }]
 ```
 
-When the user opens the Applications dialog on a JDE app (`APPS_ID` = some value), the JDE tab loads the matching settings row and lets the user edit it. For non-JDE apps where no row exists, the same tab pre-fills the form so the user can add one.
+To change the billing fields, edit the `billing_address` screen: every dialog that reuses it follows.
 
 ---
 
@@ -247,9 +192,9 @@ This means you can build dialogs that progressively reveal data based on the use
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| `nested_form.read_query` returns more than one row. | The form renders only the first row and silently ignores the rest. | Tighten the bind so the read returns 0 or 1. Use `nested_table` for genuine many-relationships. |
+| The reused screen's read returns more than one row. | The form shows the first one only. | Tighten the binds so the read returns 0 or 1 row; use `nested_table` for a one-to-many relation. |
 | `nested_table` without `param_binds`. | The embedded grid shows **every** row of the target — including unrelated ones. | Always bind at least the parent's foreign-key columns. |
-| `nested_form` with `insert_query` blank, no row yet exists. | The user can't add a new row — the form has nothing to fire. | Either wire `insert_query`, or pre-create the row through another flow. |
+| The reused screen has no insert query and no row exists yet. | Nothing is created on save. | Set the insert query on the reused screen. |
 | `nested_table` pointing at a screen on a different connector + missing `connector` override. | The runtime tries to resolve the target screen on the parent's connector and fails. | Set `connector` explicitly to the target screen's connector. |
 | Two nested tabs with the same id. | Save validation fails ("duplicate dialog tab id"). | Pick unique ids per dialog. |
 

@@ -14,7 +14,7 @@ Cette page parcourt les onglets **Général** et **Requêtes** du Concepteur d'�
 
 ## Étape 1 — Enregistrer l'application, si besoin
 
-Sur **Paramètres → Écrans**, la barre de portée liste chaque application (= connecteur) qui possède déjà au moins un écran. Si le connecteur sur lequel vous voulez ajouter un écran n'y figure pas :
+Sur **Paramètres → Écrans**, la barre de portée liste chaque application (= connecteur) qui possède déjà au moins un écran. Si le connecteur qui doit recevoir l'écran n'y figure pas :
 
 1. Cliquer sur **＋ Ajouter des écrans pour un connecteur**.
 2. Sélectionner le connecteur dans la liste déroulante (seuls les connecteurs **sans** espace de nommage Écrans apparaissent — une fois enregistré, le connecteur devient une puce d'application).
@@ -34,7 +34,7 @@ Sous la liste vide, cliquer sur le bouton **＋ Ajouter un écran**. La page dem
 | Reprendre l'objet JD Edwards. | `F0005` pour la table UDC JDE. |
 | `<entité>_<finalité>` pour les écrans qui ne se mappent pas 1-1 sur une table. | `customer_balance_report`, `invoice_send_dialog`. |
 
-L'identifiant est **stable** — c'est le segment d'URL (`/screen/<app>/<id>`), la clé de dictionnaire (`[screens.<app>.<id>]`) et la cible des références entre fichiers. Le renommage ultérieur passe par le bouton *Renommer* de la carte, qui propage le changement à travers les écrans / menus / dictionnaire.
+L'identifiant est **stable** — c'est le segment d'URL (`/screen/<app>/<id>`), la clé de configuration (`[screens.<app>.<id>]`) et la cible des références entre fichiers. Le renommage ultérieur passe par le bouton *Renommer* de la carte, qui propage le changement à travers les écrans / menus / dictionnaire.
 
 L'écran vide apparaît dans la liste ; cliquer dessus pour ouvrir le **Concepteur d'écran**.
 
@@ -185,7 +185,7 @@ L'icône crayon (✎) sur chaque ligne ouvre la requête dans une modale latéra
 
 ### Sélectionner depuis la sortie de l'Assistant CRUD
 
-Si vous avez généré les quatre requêtes via l'[Assistant CRUD](../queries/create-from-database.md), elles sont déjà dans la liste déroulante — `customers_get`, `customers_put`, `customers_post`, `customers_delete`. Les câbler dans l'ordre et l'écran a un CRUD complet.
+Quand les quatre requêtes ont été générées par l'[Assistant CRUD](../queries/create-from-database.md), elles sont déjà dans la liste déroulante — `customers_get`, `customers_put`, `customers_post`, `customers_delete`. Les câbler dans l'ordre et l'écran a un CRUD complet.
 
 Pour les écrans en lecture seule (rapports, tableaux de bord, vues d'audit), laisser les trois champs d'écriture vides. La grille fonctionne quand même ; le dialogue (s'il existe) est en lecture seule ; les boutons *＋ Ajouter* / *🗑 Supprimer* disparaissent.
 

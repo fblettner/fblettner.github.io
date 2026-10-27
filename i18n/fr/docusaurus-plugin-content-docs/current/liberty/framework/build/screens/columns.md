@@ -101,17 +101,22 @@ Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé d
 | **`rules`** | Comment afficher et valider la colonne. `BOOLEAN` affiche une case à cocher, `ENUM` une liste déroulante, `LOOKUP` un sélecteur avec recherche. Vide hérite du dictionnaire. |
 | **`rules_values`** | La valeur de la règle — `BOOLEAN` → le marqueur vrai (`Y` / `1` / `true`) ; `ENUM` → l'identifiant d'énumération ; `LOOKUP` → l'identifiant de recherche ; `SEQUENCE` / `NN` → l'identifiant de séquence. |
 | **`default`** | Valeur pré-remplie à l'ajout d'une nouvelle ligne. |
-| **`required`** | Quand activé, l'opérateur doit renseigner cette colonne avant d'enregistrer. |
-| **`disabled`** | Quand activé, la colonne est en lecture seule — l'opérateur voit la valeur mais ne peut pas la modifier. |
+| **`required`** | Activé, le champ est signalé comme obligatoire (astérisque). |
+| **`disabled`** | Activé, la colonne est en lecture seule — l'opérateur voit la valeur sans pouvoir la modifier. |
+| **`disable_on_add`** / **`disable_on_edit`** | Lecture seule uniquement à l'ajout d'une ligne, ou uniquement une fois la ligne créée — le second pour les clés qui ne doivent plus changer. |
+| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. |
+| **`default_when`** | Une valeur imposée (et verrouillée, sauf si **lock** est désactivé) tant qu'une condition est remplie. |
+| **`rules_when`** | Une autre règle (lookup, énumération, booléen) tant qu'une condition est remplie. |
+| **`write_when`** | La colonne n'est écrite que tant qu'une condition est remplie. |
 | **`lookup_param_binds`** | Restreindre la requête d'une règle `LOOKUP` en liant des paramètres supplémentaires. Utilisé quand la recherche dépend de la valeur d'un autre champ (ex. choisir un rôle restreint par l'application courante de la ligne). Voir [Liaison de paramètres](../queries/parameter-binding.md). |
 
 ### Clé primaire
 
 | Champ | Notes |
 |---|---|
-| **`key`** | Marque cette colonne comme partie de la clé primaire de la ligne. Pilote :<br/>– La correspondance mise à jour-ou-insertion de l'import Excel.<br/>– Le verrouillage du mode édition du dialogue — les champs clés sont en lecture seule lors de la modification d'une ligne existante.<br/>– La liaison `:NAME_ORIGINAL` de la requête `_put` (la convention de l'Assistant CRUD). |
+| **`key`** | Marque cette colonne comme partie de la clé primaire de la ligne. Pilote :<br/>– La correspondance mise à jour-ou-insertion de l'import Excel.<br/>– En ajout, une colonne clé présente une saisie libre au lieu de sa liste de lookup (une nouvelle clé se saisit, elle ne se choisit pas).<br/>– La liaison `:NAME_ORIGINAL` de la requête `_put` (la convention de l'Assistant CRUD). |
 
-Marquer chaque colonne qui identifie une ligne de façon unique. Les clés multi-colonnes sont prises en charge — activer l'indicateur sur chacune. Quand `key_columns` de l'écran est vide (le cas habituel), le runtime retombe sur les colonnes dont l'indicateur `key` est activé.
+Une clé n'est pas verrouillée d'office à la modification d'une ligne : cocher **disable_on_edit** (onglet Edit) sur les colonnes clés qui ne doivent plus changer une fois la ligne créée. Marquer chaque colonne qui identifie une ligne de façon unique. Les clés multi-colonnes sont prises en charge — activer l'indicateur sur chacune. Quand `key_columns` de l'écran est vide (le cas habituel), le runtime retombe sur les colonnes dont l'indicateur `key` est activé.
 
 ### Filtrage
 
@@ -119,7 +124,9 @@ Marquer chaque colonne qui identifie une ligne de façon unique. Les clés multi
 |---|---|
 | **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille. |
 | **`filter_from`** | Filtre en cascade — restreint les options de cette colonne en fonction de la valeur d'un autre filtre. Sélectionne une colonne `source` (déjà filtrée) et une `column` sur le résultat de la requête de recherche que la source met en correspondance. |
-| **`visible_when`** | Affiche cette colonne **dans la grille** uniquement quand un filtre a une valeur précise. À distinguer du `visible_when` côté dialogue sur les champs — voir [Champs conditionnels](./conditional-fields.md). |
+| **`visible_when`** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans le dialogue, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
+
+Les conditions sont détaillées dans [Conditions de formulaire](../../form-conditions.md), avec des exemples dans [Champs conditionnels](./conditional-fields.md).
 
 ### Une colonne typique
 
@@ -152,7 +159,7 @@ ColumnHint.rules  → entrée DD.rule
 ColumnHint.rules_values → entrée DD.rule_values
 ```
 
-Cela signifie qu'une colonne nommée `USR_ID` sur un écran lit automatiquement son libellé, son format, sa règle de recherche et son identifiant de recherche depuis l'entrée de dictionnaire `USR_ID` (ou ce que vous avez mis dans `dd`). L'écran ne surcharge que quand **cet** écran a besoin d'un comportement différent du reste.
+Cela signifie qu'une colonne nommée `USR_ID` sur un écran lit automatiquement son libellé, son format, sa règle et l'argument de cette règle depuis l'entrée de dictionnaire `USR_ID` (ou de l'entrée indiquée dans `dd`). L'écran ne surcharge que quand **cet** écran a besoin d'un comportement différent du reste.
 
 L'onglet Colonnes est donc majoritairement **vide** pour les installations bien dictionnarisées — des entrées n'apparaissent que quand il y a quelque chose à surcharger.
 

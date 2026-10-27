@@ -23,15 +23,15 @@ Both go through the **Scaffold** modal — tick a table, tick column(s), get a l
 
 The modal opens, introspects the pool, lists the schemas / tables.
 
-:::note[No table required]
-You don't have to start from a table. Skip the table pick and **write the SQL directly** in the preview, then *Use this query* — handy for a lookup whose source is a join or a hand-written `SELECT`.
+:::note[Without a table]
+The scaffold starts from a table. For a lookup or a sequence built on a join or any hand-written `SELECT`, create the record in **Settings → Dictionary** (Lookups or Sequences tab) and create its query from there — a blank query, or **Generate** from a table with the columns mapped to the record's fields.
 :::
 
 ---
 
 ## Sequence — generate the next id
 
-A *sequence* in Liberty is a query that returns one number — the next id to assign to a new row. It backs the dictionary's `SEQUENCE` rule: a screen field marked `SEQUENCE` reads from the sequence query each time the dialog opens for INSERT.
+A *sequence* in Liberty is a query that returns one number — the next id to assign to a new row. It backs the dictionary's `SEQUENCE` rule: when a row is inserted, the server runs the sequence query inside the insert's transaction and writes the result into the column.
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -90,10 +90,10 @@ A *sequence* in Liberty is a query that returns one number — the next id to as
 
 | File | Entry |
 |---|---|
-| Connector file | `{ name = "<queryName>", type = "sequence", sql = "..." }` |
+| Connector file | The query, in the connector's **Sequences** section. |
 | Dictionary file | `[connectors.<conn>.sequences.<seqId>] query = "<queryName>"`, `dd_id = "<keyCol>"`, optional `description` |
 
-The dictionary entry is what the SEQUENCE rule looks up. A column on a screen marked rule `SEQUENCE` with `sequence = "<seqId>"` calls this query when the dialog opens for INSERT and pre-fills the field with the result.
+A dictionary entry (or a screen column) with the rule `SEQUENCE` and **Rules values** = `<seqId>` gets its number from this query on each insert. With `dd_id` set, every column whose entry has that key is numbered too.
 
 ### Concurrency note
 
@@ -108,7 +108,7 @@ For high-concurrency workloads, define the column as a **database SEQUENCE** (Po
 
 ## Lookup — supply a dropdown's options
 
-A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the dictionary's `LOOKUP` rule: a column marked `LOOKUP` with `lookup = "<id>"` renders as a dropdown sourced from the lookup query.
+A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the dictionary's `LOOKUP` rule: a column with the rule `LOOKUP` and **Rules values** = `<lookupId>` shows the label instead of the code and offers the lookup's rows in a searchable list.
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -171,18 +171,23 @@ A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs —
 
 | File | Entry |
 |---|---|
-| Connector file | `{ name = "<queryName>", type = "lookup", sql = "..." }` |
+| Connector file | The query, in the connector's **Lookups** section. |
 | Dictionary file | `[connectors.<conn>.lookups.<lookupId>] query = "<queryName>"`, `value = "<valueCol>"`, `label = "<labelCol>"`, optional `description` |
 
 ### Cascading lookups
 
-When the dropdown should be **filtered by another field on the same screen** — e.g. *Role* depends on *Application* — the lookup needs a `:placeholder` in the WHERE clause, and the screen's column declares a `filter_from` referencing the parent. The wiring lives on the screen side ([Concepts → Form conditions](../../form-conditions.md) until the Screens build section ships); the lookup query itself just needs the `:placeholder`.
+When the list should depend on **another field of the same row** — *Role* depends on *Application* — the lookup query takes a parameter, and the screen column binds it:
+
+- in the dialog and grid editing, the column's **lookup_param_binds** — `{ param = "APP_ID", source = "APP_ID" }`;
+- in the grid's filter panel, the column's **filter_from**, which narrows the filter's options on the value of another filter.
+
+See [Parameter binding](./parameter-binding.md#where) and [Columns](../screens/columns.md).
 
 ```sql
-SELECT role_id, role_name
+SELECT ROLE_ID, ROLE_NAME
 FROM   roles
-WHERE  app_id = :app_id
-ORDER BY role_name
+WHERE  APP_ID = :APP_ID
+ORDER BY ROLE_NAME
 ```
 
 ---
@@ -191,4 +196,4 @@ ORDER BY role_name
 
 - [Parameter binding](./parameter-binding.md) — for sequences/lookups that take parameters from screen context.
 - [Per-dialect SQL variants](./per-dialect-sql.md) — for a lookup that hits Postgres and Oracle.
-- [Concepts → Dictionary](../../dictionary.md) — the wider reference: `SEQUENCE`, `LOOKUP`, `LOGIN`, `SYSDATE` and the other dictionary rules.
+- [Dictionary](../../dictionary.md) — every field of a lookup and a sequence, and the other rules.

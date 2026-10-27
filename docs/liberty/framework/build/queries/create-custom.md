@@ -1,22 +1,22 @@
 ---
 title: Create a custom query
-description: "Write a standalone query by hand — the Unclassified tab, the editor form, the writable gate, the params block, the SQL editor with autocompletion."
-keywords: [Liberty Framework, custom query, hand-written SQL, Unclassified, QueryDef, writable, params]
+description: "Write a standalone query by hand — the Queries view, the editor form, the writable switch, the params block, the SQL editor with autocompletion and tokens."
+keywords: [Liberty Framework, custom query, hand-written SQL, Queries, QueryDef, writable, params]
 ---
 
 # Create a custom query
 
-When the wizard doesn't fit — analytics, reports, multi-table joins, stored-procedure calls, anything that doesn't map 1-1 to a single table — write the query by hand under the **Unclassified** tab.
+When the wizard doesn't fit — analytics, reports, multi-table joins, stored-procedure calls, anything that doesn't map 1-1 to a single table — write the query by hand in the **Queries** view.
 
-This page walks the editor form field by field, with the verified shape from the `QueryDef` schema.
+This page walks the editor form field by field.
 
 ---
 
 ## Where it lives
 
-**Settings → Connectors → pick a connector → mode bar: Unclassified → ＋ Add query**.
+**Settings → Connectors → pick a connector → mode bar: Queries → ＋ Add query**.
 
-The page prompts for a name, creates an empty `custom` query, opens its editor.
+The page prompts for a name, creates an empty query and opens its editor.
 
 ---
 
@@ -27,7 +27,7 @@ The page prompts for a name, creates an empty `custom` query, opens its editor.
     <linearGradient id="ce-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
   </defs>
   <rect x="20" y="20" width="960" height="440" rx="14" fill="url(#ce-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Connectors · [connectors.crm] · Unclassified</text>
+  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Connectors · [connectors.crm] · Queries</text>
   <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="40" y="78" width="60" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
@@ -40,9 +40,9 @@ The page prompts for a name, creates an empty `custom` query, opens its editor.
   <rect x="864" y="76" width="64" height="26" rx="4" fill="rgba(239,68,68,0.10)" stroke="rgba(239,68,68,0.40)"/>
   <text x="896" y="93" fill="#ef4444" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑 Delete</text>
 
-  <text x="40" y="128" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">type</text>
+  <text x="40" y="128" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">name</text>
   <rect x="200" y="116" width="220" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="212" y="131" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">custom ▾</text>
+  <text x="212" y="131" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">monthly_revenue</text>
 
   <text x="40" y="160" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">writable</text>
   <rect x="200" y="148" width="20" height="20" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
@@ -88,7 +88,6 @@ Naming rules:
 |---|---|
 | Letters, digits, underscores. | TOML key, URL segment and permission string in one go. |
 | Starts with a letter or underscore. | Same. |
-| Avoid the `_get` / `_put` / `_post` / `_delete` suffixes. | The Tables tab would pick it up and try to group it into a CRUD set. |
 
 Naming conventions that scale well:
 
@@ -97,19 +96,6 @@ Naming conventions that scale well:
 | `<entity>_<action>` | `customer_balance`, `invoice_send` |
 | `<verb>_<noun>` | `get_top_clients`, `mark_paid` |
 | `report_<topic>` | `report_monthly_revenue`, `report_overdue_invoices` |
-
-### `type`
-
-Dropdown — drives the tab classification. For a hand-written standalone query, keep `custom`. The other values move the query elsewhere on the page:
-
-| Value | Tab |
-|---|---|
-| `custom` | Unclassified (this page). |
-| `table` | Tables (only useful when the name matches the `<base>_<crud>` convention). |
-| `sequence` | Sequences. |
-| `lookup` | Lookups. |
-
-Switching `type` doesn't rewrite the query — only the page it's filed under. For sequences and lookups you usually want the [Scaffold modal](./sequences-and-lookups.md) anyway, which writes the dictionary entry alongside.
 
 ### `writable`
 
@@ -130,9 +116,11 @@ Three features the editor surfaces:
 
 | Feature | What it does |
 |---|---|
-| **Syntax highlighting** | Keywords coloured; mismatched brackets flagged. |
-| **Autocompletion** | Tables and columns from the connector's pool. Hit Ctrl+Space to invoke. |
-| **`:name` placeholders** | Any `:identifier` in the SQL is recognised as a bind parameter — declare it in the `params` block below. |
+| **Syntax highlighting** | Keywords coloured. |
+| **Autocompletion** | Tables after `FROM` / `JOIN` / `INTO` / `UPDATE`, columns after `<table>.`, read from the connector's pool. Ctrl+Space opens the list. |
+| **Token** | Inserts a value the server fills at execution: `{{LOGIN}}`, `{{SYSDATE}}`, `{{SYSTIME}}`, `{{SYSTIMESTAMP}}`, `{{JDEDATE}}`, `{{JDETIME}}`, `{{PID}}`, `{{JOBN}}` — see [Parameter binding](./parameter-binding.md#tokens). |
+| **Pool schemas** | Inserts a schema token of the pool, so the same SQL runs against another environment's schema. |
+| **`:name` placeholders** | Any `:identifier` in the SQL is a bind parameter — declare it in the `params` block below. |
 
 A few rules from how the engine binds:
 
@@ -170,8 +158,11 @@ The buttons at the top of the single-query editor:
 
 | Action | What it does | Notes |
 |---|---|---|
-| **← Back** | Returns to the Unclassified list (no save). | Unsaved edits stay in the page-level dirty state — *Save* on the top toolbar persists them. |
+| **← Back** | Returns to the Queries list (no save). | Unsaved edits stay pending — *Save* on the top toolbar writes them. |
+| **Find usages** | Lists where the query is used (screens, charts, dashboards, dictionary…). | |
 | **✎ Rename** | Cross-file rename. | Refuses on unsaved local edits; updates every reference. |
+| **Change type** | Moves the query to Tables, Sequences or Lookups. | See [the four kinds of queries](./overview.md#kinds). |
+| **Move** | Moves the query to another SQL connector and rewrites the references. | |
 | **⎘ Clone** | Per-query duplicate — prompts for new name. | Default suggestion `<name>_copy`. See [Clone a query or a connector](./clone.md). |
 | **🗑 Delete** | Removes the query from the connector. | A confirm modal first. |
 
@@ -191,7 +182,7 @@ There's no dedicated *Test query* tab on the SQL connector — the test path is 
 |---|---|
 | Use it from a screen. | When the next step is building the screen anyway. |
 | Hit the REST endpoint directly. | For a quick smoke test — `GET /api/sql/<connector>/<query>?from_date=2026-01-01&to_date=2026-01-31`. |
-| Ask the AI assistant. | "Show me the result of `monthly_revenue` for last month" — the assistant will run the query and return rows. Requires `ai:chat` and `sql:<connector>:<query>` permissions. |
+| Ask the AI assistant. | "Show me the result of `monthly_revenue` for last month" — when the connector is open to the assistant, it runs the read query and returns the rows. |
 
 The REST path is the fastest debug — error messages come back verbatim, and you can pass params via URL.
 

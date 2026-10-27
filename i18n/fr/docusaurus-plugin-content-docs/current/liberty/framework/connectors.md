@@ -276,7 +276,7 @@ Sur une nouvelle installation, on choisira presque toujours `SQL` ou `HTTP` dire
 
 ---
 
-## Découverte de schéma et indices de colonnes
+## Découverte de schéma et indices de colonnes \{#schema-discovery-and-column-hints\}
 
 Une requête de lecture n'a pas de liste de colonnes déclarée à la main. Au premier appel (ou quand l'opérateur clique sur *Tester*), le framework exécute la requête, regarde les descriptions de colonnes du curseur et les met en cache :
 

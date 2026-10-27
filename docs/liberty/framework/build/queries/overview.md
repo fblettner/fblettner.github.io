@@ -1,6 +1,6 @@
 ---
 title: Queries — overview
-description: "How Liberty's Connectors page is organised — Tables / Unclassified / Sequences / Lookups — and the four kinds of queries each tab manages."
+description: "How Liberty's Connectors page is organised — Settings / Tables / Queries / Sequences / Lookups — and the four kinds of queries it holds."
 keywords: [Liberty Framework, queries, connectors, CRUD, sequences, lookups, ConnectorsBuilder, Settings UI]
 ---
 
@@ -48,13 +48,13 @@ The page that manages queries is **Settings → Connectors**. This overview maps
   <rect x="350" y="152" width="68" height="24" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
   <text x="384" y="168" fill="#0b1220" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tables</text>
   <rect x="420" y="152" width="100" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="470" y="168" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Unclassified</text>
+  <text x="470" y="168" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Queries</text>
   <rect x="522" y="152" width="84" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="564" y="168" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Sequences</text>
   <rect x="608" y="152" width="80" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="648" y="168" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lookups</text>
-  <rect x="868" y="152" width="80" height="24" rx="6" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="908" y="168" fill="#22c55e" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">＋ Table</text>
+  <rect x="848" y="152" width="100" height="24" rx="6" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
+  <text x="898" y="168" fill="#22c55e" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">＋ Add queries</text>
 
   <rect x="268" y="190" width="676" height="32" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
   <text x="284" y="210" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">customers</text>
@@ -99,53 +99,50 @@ Three regions:
 |---|---|
 | **Top toolbar** | Global actions — *＋ Connector*, *Discard*, *Save*. The *Save* button writes the connector file and triggers a hot reload — no process restart needed. |
 | **Left navigation** | Two groups: *Apps* (connectors that have a menu — these are the apps users see in the top switcher) and *Data sources* (connectors that supply data but don't appear in the switcher). Click a name to open it on the right. |
-| **Right pane** | The editor for the selected connector. A mode bar across the top picks one of five views — *Settings*, *Tables*, *Unclassified*, *Sequences*, *Lookups*. |
+| **Right pane** | The editor for the selected connector. A mode bar across the top picks one of five views — *Settings…*, *Tables*, *Queries*, *Sequences*, *Lookups*. |
 
 ---
 
-## The four kinds of queries
+## The four kinds of queries \{#kinds\}
 
-Every query carries a `type` that tells the page which tab it belongs to:
+A connector keeps its queries in four sections; the section a query sits in is its kind:
 
-| Tab | `type` | What lives here |
-|---|---|---|
-| **Tables** | `table` | Queries that follow the CRUD naming convention — `<base>_get`, `<base>_put`, `<base>_post`, `<base>_delete`. The page groups them by base name and shows a row per table with four slot badges (GET / PUT / POS / DEL). |
-| **Unclassified** | `custom` | Standalone queries not tied to a table CRUD set — bulk operations, business queries, reports. Example: `monthly_revenue`, `purge_old_logs`. |
-| **Sequences** | `sequence` | Queries that generate the next value for a dictionary `[sequences.*]` rule. Typical body: `SELECT COALESCE(MAX(<col>), 0) + 1 FROM <table>`. |
-| **Lookups** | `lookup` | Queries that supply value + label pairs for a dictionary `[lookups.*]` rule. Typical body: `SELECT <value>, <label> FROM <table>`. |
+| View | What lives here |
+|---|---|
+| **Tables** | One entry per table, holding up to four queries: **get** (read), **post** (insert), **put** (update), **delete**. They are called `<table>_get`, `<table>_post`, `<table>_put`, `<table>_delete`. The list shows a row per table with its slot badges (GET / PUT / POS / DEL). |
+| **Queries** | Standalone queries outside a table's set — reports, bulk operations, queries called by actions, charts or dashboards. Example: `monthly_revenue`, `purge_old_logs`. |
+| **Sequences** | Queries that return the next number for a dictionary sequence. Typical body: `SELECT COALESCE(MAX(<col>), 0) + 1 FROM <table>`. |
+| **Lookups** | Queries that return codes and labels for a dictionary lookup. Typical body: `SELECT <value>, <label> FROM <table>`. |
 
-The tab the query falls into is decided by its `type` — not by its name. A query named `customer_balance` typed `custom` lives in Unclassified; the same name typed `lookup` lives in Lookups.
+**Change type** moves a query to another section — for example a query written under *Queries* that turns out to feed a lookup. When the move changes the query's name (a table slot becomes a standalone query, or the reverse), a warning lists the new name: screens, actions and dictionary entries that use the old name have to be updated.
 
 ---
 
-## The add buttons — one per tab
+## The add buttons — one per view \{#add\}
 
-The Add affordance is **per tab**, because each kind has its own creation flow.
-
-| Tab | Add button | What opens |
+| View | Button | What opens |
 |---|---|---|
-| **Tables** | *＋ Add table* | A choice modal: **Generate from DB** (the CRUD Wizard — introspects the pool, generates all four queries) or **Empty stub** (prompts a base name, creates a blank `<base>_get` stub). |
-| **Unclassified** | *＋ Add query* | A name prompt — creates a blank `custom` query you fill in by hand. |
-| **Sequences** | *＋ Add sequence* | The Scaffold modal — pick a table, pick a key column, get a live SQL preview, save (writes the query **and** the matching dictionary entry). |
-| **Lookups** | *＋ Add lookup* | The Scaffold modal — pick a table, pick a value column and a label column, optional WHERE filter, save (writes the query **and** the dictionary entry). |
+| **Tables** | *＋ Add queries* | A choice: **Generate from DB** (the CRUD wizard — reads the table in the database and generates the four queries) or **Empty stub** (asks for a table name and creates an empty read query). |
+| **Queries** | *＋ Add query* | A name prompt, then an empty query to fill in by hand. |
+| **Sequences** | *＋ Add sequence* | The scaffold — pick a table and a key column, see the SQL, save: it writes the query **and** the dictionary sequence. |
+| **Lookups** | *＋ Add lookup* | The scaffold — pick a table, a value column, a label column and an optional filter, save: it writes the query **and** the dictionary lookup. |
 
 The next pages walk through each path.
 
 ---
 
-## What a query carries
+## What a query carries \{#fields\}
 
-The editor form (Unclassified / Sequences / Lookups tabs) reflects the `QueryDef` shape:
+The query editor shows these fields:
 
 | Field | Required | What it does |
 |---|---|---|
-| **`name`** | Yes | Unique inside the connector. The permission string for this query is `sql:<connector>:<name>`. Read-only in the editor — use the *Rename* button (cross-file rename). |
-| **`type`** | No | `table` / `custom` / `sequence` / `lookup` — drives which tab the query appears on. Empty falls back to a name-based guess. |
-| **`sql`** | Yes | The SQL statement with `:placeholder` parameters. Can be a single string, or a per-dialect map `{ default = "…", oracle = "…" }`. The `default` variant is required when using a map. |
-| **`writable`** | No (default `false`) | When `false`, only SELECT is allowed. Flip to `true` for INSERT / UPDATE / DELETE / CALL. |
-| **`params`** | No | List of declared parameters (`name`, `label`, `default`) — gives each `:placeholder` a form input. |
-| **`label`** | No | Short name shown in dropdowns and listings. |
-| **`description`** | No | Longer text — shown on the Tables list under the base name. Use it to explain what the query returns. |
+| **Name** | Yes | Unique inside the connector. The query's permission is `sql:<connector>:<name>`. Changed with *Rename*, which updates every reference. |
+| **SQL** | Yes | The statement, with `:name` parameters. A single text, or one variant per database (`default` required) — see [Per-dialect SQL](./per-dialect-sql.md). |
+| **Writable** | No (off) | Off, only a SELECT is accepted. On for INSERT / UPDATE / DELETE / CALL. |
+| **Params** | No | Declared parameters (**name**, **label**, **default**) — a label and a default value for each `:name`. |
+| **Label** | No | Short name shown in lists. |
+| **Description** | No | What the query returns — shown under the table name in the Tables list. |
 
 ---
 
@@ -155,8 +152,8 @@ Saving on this page is atomic across two files when needed:
 
 | Action you took | What gets written |
 |---|---|
-| Created or edited a query under Tables / Unclassified | The connector file. |
-| Used the Scaffold for a sequence or lookup | The connector file **and** the dictionary file (the new entry under `[connectors.<name>.sequences]` or `[connectors.<name>.lookups]`). |
+| Created or edited a table or a query | The connector file. |
+| Used the scaffold for a sequence or a lookup | The connector file **and** the dictionary (the new sequence or lookup in the connector's scope). |
 | Cloned a connector (whole app) | A cross-file write that copies the dictionary overlay, screens, menu, charts and dashboards under the new name. Goes through a dedicated endpoint. |
 | Renamed a connector, a query or a table | A cross-file update that touches every reference (screens, menus, dictionary, charts, dashboards). Refuses to run when local edits aren't saved. |
 
@@ -172,7 +169,7 @@ After every save the framework runs a **hot reload** automatically. The new quer
 | Write a custom query (standalone, hand-written). | [Create a custom query](./create-custom.md). |
 | Make a copy of an existing query or of a whole application. | [Clone a query or a connector](./clone.md). |
 | Add a sequence (next id) or a lookup (dropdown source). | [Sequences and lookups](./sequences-and-lookups.md). |
-| Pass values to a query — both literal and bound (`#LOGIN_USER#`, source columns…). | [Parameter binding](./parameter-binding.md). |
+| Pass values to a query — fixed values, other columns, the signed-in user. | [Parameter binding](./parameter-binding.md). |
 | Ship different SQL for Postgres vs Oracle. | [Per-dialect SQL variants](./per-dialect-sql.md). |
 
 ---

@@ -276,7 +276,7 @@ In a new install you'll almost always pick `SQL` or `HTTP` directly. `API` is th
 
 ---
 
-## Schema discovery and column hints
+## Schema discovery and column hints \{#schema-discovery-and-column-hints\}
 
 A read query has no manually-declared column list. On first call (or when the operator clicks *Test*), the framework executes the query, looks at the cursor's column descriptions and caches them:
 

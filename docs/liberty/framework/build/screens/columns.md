@@ -101,17 +101,22 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 | **`rules`** | How to render and validate the column. `BOOLEAN` renders a checkbox, `ENUM` a dropdown, `LOOKUP` a searchable picker. Blank inherits from the dictionary. |
 | **`rules_values`** | The rule's value — `BOOLEAN` → the true marker (`Y` / `1` / `true`); `ENUM` → the enum id; `LOOKUP` → the lookup id; `SEQUENCE` / `NN` → the sequence id. |
 | **`default`** | Pre-fill value when adding a new row. |
-| **`required`** | When on, the operator must fill this column before saving. |
+| **`required`** | When on, the field is marked as required (asterisk). |
 | **`disabled`** | When on, the column is read-only — the operator sees the value but can't change it. |
+| **`disable_on_add`** / **`disable_on_edit`** | Read-only only when a row is added, or only once it exists — the second one for keys that must not change. |
+| **`required_when`** / **`disabled_when`** | Required or read-only only while conditions on other fields hold. |
+| **`default_when`** | A value forced (and locked, unless **lock** is off) while a condition holds. |
+| **`rules_when`** | Another rule (lookup, enum, Boolean) while a condition holds. |
+| **`write_when`** | The column is written only while a condition holds. |
 | **`lookup_param_binds`** | Narrow a `LOOKUP` rule's query by binding extra parameters. Used when the lookup depends on another field's value (e.g. picking a role narrows by the row's current application). See [Parameter binding](../queries/parameter-binding.md). |
 
 ### Primary key
 
 | Field | Notes |
 |---|---|
-| **`key`** | Mark this column as part of the row's primary key. Drives:<br/>– Excel-import update-vs-insert matching.<br/>– The dialog's edit-mode lock — key fields are read-only when editing an existing row.<br/>– The `_put` query's `:NAME_ORIGINAL` binding (the CRUD Wizard's convention). |
+| **`key`** | Mark this column as part of the row's primary key. Drives:<br/>– Excel-import update-vs-insert matching.<br/>– In add mode, a key column shows a plain input instead of its lookup list (a new key is typed, not picked).<br/>– The `_put` query's `:NAME_ORIGINAL` binding (the CRUD Wizard's convention). |
 
-Mark every column that uniquely identifies a row. Multi-column keys are supported — tick the flag on each. When the screen's `key_columns` is empty (the usual case), the runtime falls back to columns whose `key` flag is on.
+A key is not locked automatically when a row is edited: tick **disable_on_edit** (Edit tab) on the key columns that must not change once the row exists. Mark every column that uniquely identifies a row. Multi-column keys are supported — tick the flag on each. When the screen's `key_columns` is empty (the usual case), the runtime falls back to columns whose `key` flag is on.
 
 ### Filtering
 
@@ -119,7 +124,9 @@ Mark every column that uniquely identifies a row. Multi-column keys are supporte
 |---|---|
 | **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
-| **`visible_when`** | Show this column **in the grid** only when a filter has a specific value. Different from the dialog-side `visible_when` on fields — see [Conditional fields](./conditional-fields.md). |
+| **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
+
+The conditions are described on [Form conditions](../../form-conditions.md), with examples on [Conditional fields](./conditional-fields.md).
 
 ### A typical column
 

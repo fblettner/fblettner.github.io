@@ -1,20 +1,18 @@
 ---
 title: Actions and lifecycle
-description: "The Actions tab — toolbar buttons, row context menu, dialog hooks (on_load / on_save / on_cancel), row hooks (on_insert / on_update / on_delete), and the seven core action types."
-keywords: [Liberty Framework, actions, on_load, on_save, on_cancel, on_insert, on_update, on_delete, run_query, navigate, chain, ParamBind]
+description: "The Actions tab — dialog hooks (on_load / on_save / on_cancel), toolbar buttons, row hooks (on_insert / on_update / on_delete / on_duplicate), the row menu, the action types with their param_binds, prompts, chains and shared actions."
+keywords: [Liberty Next, actions, on_load, on_save, on_cancel, on_insert, on_update, on_delete, on_duplicate, run_query, call_api, call_plugin, call_action, navigate, chain, param_binds, prompt_fields]
 ---
 
 # Actions and lifecycle
 
-A screen with a grid + a dialog covers the *static* CRUD flow. A screen with **actions** and **lifecycle hooks** extends that to anything else — run a custom query on a button click, navigate to another screen on a row click, fire a webhook after a save, refresh after a delete.
+A screen with a grid and a dialog covers the standard read and write flow. **Actions** and **lifecycle hooks** add everything else: run a query from a button, open another view from a row, call an API or a plugin after a save, refresh the grid after a delete.
 
-The **Actions** tab of the Screen Designer is where all of this is wired. Three groups, the same action shapes everywhere.
+They are set in the **Actions** and **Row menu** tabs of the screen editor, with the same action shapes everywhere.
 
 ---
 
-## The three action groups
-
-The Actions tab organises every action surface into three groups:
+## Where actions fire \{#groups\}
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -34,7 +32,7 @@ The Actions tab organises every action surface into three groups:
   <text x="40" y="220" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOOLBAR — buttons above the table</text>
   <rect x="40" y="232" width="920" height="80" rx="8" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)"/>
   <text x="56" y="254" fill="#c084fc" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">actions</text>
-  <text x="56" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Run independently, no row context (or the currently-selected row when one is highlighted).</text>
+  <text x="56" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Run without row context — a prompt can ask the user for values first.</text>
   <text x="56" y="290" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">＋ Add toolbar action</text>
 
   <text x="40" y="332" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ROW HOOKS — fire after a row is mutated</text>
@@ -45,201 +43,136 @@ The Actions tab organises every action surface into three groups:
   <text x="56" y="410" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">After an edit / a delete. ParamBinds resolve against the new / deleted row's values.</text>
 </svg>
 
-| Group | Hooks | When they fire | ParamBind resolves against |
+| Group | Lists | When they fire | `source` reads from |
 |---|---|---|---|
-| **Dialog hooks** | `on_load`, `on_save`, `on_cancel` | While the form is open. | The live form state. |
-| **Toolbar** | `actions` (screen-level) | The user clicks a toolbar button. | The currently-selected row (empty if none). |
-| **Row hooks** | `on_insert`, `on_update`, `on_delete` | After a mutation succeeds — works whether from the dialog Save **or** the inline grid Save. | The new row (`on_insert` / `on_update`) or the deleted row (`on_delete`). |
+| **Dialog hooks** | `on_load` | Once the dialog has loaded the row (edit) or seeded the defaults (add). | The form. |
+| | `on_save` | After the dialog's main insert or update succeeds. | The form at save time. |
+| | `on_cancel` | When the dialog is closed without saving, before it closes; an error keeps it open. | The form. |
+| **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
+| **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
+| | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
+| **Row menu** *(own tab)* | `row_menu` | Each entry is a right-click menu item on a row. | The clicked row. |
 
-A separate tab — **Row menu** — carries `row_menu`: actions shown when the user right-clicks a row. ParamBinds resolve against the **clicked** row.
+Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
+
+For a left click on a row, use the **row-click** settings of the General tab (`row_click_screen` with `row_click_binds`, or `row_click_route`).
 
 ---
 
-## The seven core action types
+## Action types \{#types\}
 
-Every action has a `type` field discriminating one of seven core variants (plus four composite variants below).
+Every action has an **id** (unique in its list, also its key in a chain's context), a **label** (button caption) and **stop_on_error**.
 
-| Type | What it does | Key fields |
+| Type | What it does | Main fields |
 |---|---|---|
-| **`run_query`** | Execute a connector query (writable or read). | `connector`, `query`, `params` (ParamBinds). |
-| **`call_api`** | Call an HTTP / API connector endpoint. | `connector`, `endpoint`, `params`. |
-| **`navigate`** | Open another screen as a modal, narrowed by ParamBinds. | `connector`, `screen`, `params`. |
-| **`set_field`** | Change a dialog field's value. | `field`, `value` (literal or `source` from another field). |
-| **`confirm`** | Prompt the user for confirmation; block the chain on Cancel. | `title`, `message`, `confirm_label`. |
-| **`notify`** | Show a toast / banner. | `level` (`info` / `warning` / `error` / `success`), `message`. |
-| **`refresh`** | Re-run the screen's read query (reload the grid). | *(no fields)*. |
+| **`run_query`** | Runs a query of a connector, read or write. | `connector`, `query`, `param_binds`, `bind_result` |
+| **`call_api`** | Calls an endpoint of an API connector. | `connector`, `endpoint`, `param_binds`, `bind_result` |
+| **`call_plugin`** | Calls a server-side Python function (`module:function`), the same entry points Nomaflow runs as steps. | `callable`, `param_binds`, `bind_result` |
+| **`call_action`** | Runs a [shared action](#shared) by its id. | `ref`, `param_binds` |
+| **`navigate`** | Opens another view: a screen (`screen`) or a query (`to`), with `param_binds` passed as its parameters. | `connector`, `screen` or `to`, `param_binds` |
+| **`set_field`** | Writes a value into a form field. | `target`, `value` or `source` |
+| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Shows a message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`send_notification`** | Fires a notification rule of type *action* (e-mail, portal…). | `rule`, `param_binds` |
+| **`refresh`** | Reloads the grid. | — |
 
-The action editor's *Type* dropdown lists all seven; switching type reveals the fields appropriate to it. Target dropdowns are populated from the live connectors / screens registry — switching the destination refreshes them.
+`bind_result` keeps the rows (or the response) of the step in the chain's context, so that a later step reads them with `source = "<id>.first_row.<COLUMN>"`.
 
----
-
-## The four composite types
-
-Built on top of the seven cores — used to express more complex flows in one action entry instead of stitching many.
+### Composite types
 
 | Type | What it does |
 |---|---|
-| **`chain`** | A sequence of nested actions, each step's output available to the next via `<step_id>.first_row.<col>` references. Stops on the first error unless an action sets `stop_on_error = false`. |
-| **`if`** | Conditional branching inside a chain — runs `then` actions when the condition holds, `else` actions otherwise. |
-| **`loop`** | Iterate over an array (typically the result of a previous `run_query`) and run the body for each item. |
-| **`return`** | Bind chain-context values back into dialog fields. Used at the end of a chain to surface computed values on the form. |
+| **`chain`** | A list of steps run in order, sharing one context. |
+| **`if`** | Runs `then_steps` or `else_steps` depending on a condition: a `source`, an operator (`equals`, `not_equals`, `has_rows`, `no_rows`, `truthy`, `falsy`, `greater_than`, `less_than`) and a `value`. |
+| **`loop`** | Runs `steps` once per item of a list taken from the context (typically the rows of an earlier step). |
+| **`return`** | Copies values of the context back into the form's fields — at the end of a chain, to show computed values. |
 
-Most screens never need composites — a flat list of `run_query` + `refresh` + `notify` covers 80% of cases. Reach for `chain` when the same trigger needs to fire several queries that share intermediate values; for `if` / `loop` when the flow truly branches or iterates.
+**Wrap in chain** puts an existing action inside a `chain`, to add steps around it.
 
 ---
 
-## ParamBind context per fire
+## Values passed to an action \{#binds\}
 
-Every action carries `params` (ParamBinds). The bind resolves the right way depending on **where the action fires**:
+`run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` and `send_notification` take a list of `param_binds`: for each parameter of the target, a fixed **value**, or a **source** read at call time — a column of the row, a form field, `INPUT.<name>`, `<step>.first_row.<COLUMN>`, or a built-in such as `#LOGIN_USER#` / `#SYSDATE#` — with an optional **default**. See [Parameter binding](../queries/parameter-binding.md).
 
-| Where | `source` reads from |
+### Prompt before running \{#prompt\}
+
+`run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` and `chain` can open a small form **before** they run:
+
+| Field | Role |
 |---|---|
-| Toolbar (`actions`) | The currently-selected row's columns. If no row is selected, sources resolve to NULL (unless a `default` is set). |
-| Row menu (`row_menu`) | The clicked row's columns. |
-| Dialog `on_load` | The just-loaded form state. |
-| Dialog `on_save` | The form state at submit time (after the main write succeeded). |
-| Dialog `on_cancel` | The form state when the user pressed Cancel. |
-| Row `on_insert` / `on_update` | The new row's values. |
-| Row `on_delete` | The deleted row's values. |
-| Inside a `chain` | The chain context — `<previous_step_id>.first_row.<col>` reads the named step's output. |
+| **prompt_fields** | The inputs to ask for — each with its name, label, dictionary entry, default, required / hidden / read-only flags and conditions. |
+| **prompt_title** (and its translations) | The window's title; defaults to the action's label. |
+| **prompt_cols** | Number of columns of the form (2 by default). |
 
-The two reserved binds — `#LOGIN_USER#` and `#SYSDATE#` — work everywhere as `source` values. See [Parameter binding](../queries/parameter-binding.md) for the full reference.
+The values entered are available as `INPUT.<name>` to the action and to every later step of the same chain. **Cancel** stops the chain without an error.
 
 ---
 
-## Common patterns
+## Shared actions \{#shared\}
 
-### Refresh the grid after a write
+An action used by several screens is defined once in **Settings → Actions**: an id, a label, a description, declared **params**, optional **prompt_fields**, and its **steps** (the same action types). The page lists the shared actions with **Find usages**, **Clone** and **Delete**; a row opens the action designer.
 
-The most common toolbar action: run a stored procedure, then reload the grid so the user sees the result.
+A screen runs it with `call_action`: `ref` names the shared action, and its `param_binds` fill the action's `INPUT.<param>` values.
+
+---
+
+## Examples
+
+### Recompute, then reload the grid
 
 ```toml
 [[screens.crm.customers.actions]]
-type = "run_query"
-id = "compute_balances"
-connector = "crm"
-query = "compute_balances_post"
+type  = "chain"
+id    = "recompute"
 label = "Recompute balances"
-
-[[screens.crm.customers.actions]]
-type = "refresh"
-id = "reload_grid"
+steps = [
+  { type = "run_query", id = "compute", connector = "crm", query = "compute_balances" },
+  { type = "refresh",   id = "reload" },
+  { type = "notify",    id = "done", message = "Balances recomputed.", tone = "ok" },
+]
 ```
 
-The two actions are separate entries — they fire in order. If the first fails (write rejected, network error), the second doesn't fire and the grid is unchanged.
-
-### Confirm before destructive
-
-A *Delete row* action on the row menu, gated by a confirmation:
+### Confirm before deleting
 
 ```toml
 [[screens.crm.customers.row_menu]]
-type = "confirm"
-id = "confirm_delete"
-title = "Delete customer?"
-message = "This removes the customer and every related deal."
-
-[[screens.crm.customers.row_menu]]
-type = "run_query"
-id = "do_delete"
-connector = "crm"
-query = "customers_delete"
-
-[[screens.crm.customers.row_menu.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
+type  = "chain"
+id    = "delete_customer"
+label = "Delete customer"
+steps = [
+  { type = "confirm", id = "ask", message = "Delete this customer and its deals?", confirm_label = "Delete" },
+  { type = "run_query", id = "delete", connector = "crm", query = "customers_delete",
+    param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }] },
+  { type = "refresh", id = "reload" },
+]
 ```
 
-If the user clicks Cancel on the confirm, the chain stops; the delete doesn't fire.
+**Cancel** on the confirmation stops the chain: nothing is deleted.
 
-### Stamp audit columns on insert
-
-The screen has a column `CREATED_BY` you want filled with the current user automatically — but the dialog doesn't expose it (it's a hidden audit column). Use `on_insert`:
-
-```toml
-[[screens.crm.customers.on_insert]]
-type = "run_query"
-id = "stamp_audit"
-connector = "crm"
-query = "customers_stamp_audit"
-
-[[screens.crm.customers.on_insert.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
-
-[[screens.crm.customers.on_insert.params]]
-param = "CREATED_BY"
-source = "#LOGIN_USER#"
-```
-
-The main INSERT fires first; if it succeeds, this audit-stamp UPDATE fires with the same row's id + the session user. The screen never surfaces `CREATED_BY` in the dialog, but the column ends up populated.
-
-For audit logging that should mirror **every** write, prefer `audit_table` on the General tab — it adds `AUD_ACTION` / `AUD_USER` / `AUD_DATE` rows automatically without explicit hooks.
-
-### Notify on success
-
-Wire a `notify` after a long-running action to give the user feedback:
-
-```toml
-[[screens.crm.customers.actions]]
-type = "run_query"
-id = "export_pdf"
-connector = "crm"
-query = "customers_export_pdf"
-label = "Export to PDF"
-
-[[screens.crm.customers.actions]]
-type = "notify"
-id = "notify_done"
-level = "success"
-message = "Export complete — check your downloads."
-```
-
-`level` accepts `info` / `warning` / `error` / `success`; each renders with a different colour.
-
-### Open a sibling screen with bound filters
-
-`navigate` opens another screen as a modal, narrowed by the binds. Useful from a row menu:
+### Open the deals of a customer
 
 ```toml
 [[screens.crm.customers.row_menu]]
-type = "navigate"
-id = "view_deals"
-connector = "crm"
-screen = "deals"
-label = "View deals for this customer"
-
-[[screens.crm.customers.row_menu.params]]
-param = "CUSTOMER_ID"
-source = "CUSTOMER_ID"
+type        = "navigate"
+id          = "view_deals"
+label       = "View deals"
+connector   = "crm"
+screen      = "deals"
+param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }]
 ```
 
-The clicked row's `CUSTOMER_ID` binds into the deals screen's read query; the deals modal opens showing only that customer's deals.
+The **deals** screen opens with its filters seeded from the binds.
 
-For row-click (left-click, not right-click), use the General tab's **row-click behaviour** instead (`row_click_screen` + `row_click_binds`) — it's the same shape, just triggered on click.
+### Stamp audit columns
+
+For `CREATED_BY` / `CREATED_AT` columns, no hook is needed: the dictionary rules `LOGIN` and `SYSDATE`, or the `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens in the insert query, fill them on the server — see [Dictionary → Rules](../../dictionary.md#rules). To log every write in a history table, set `audit_table` on the General tab.
 
 ---
 
-## The action editor
+## Saving
 
-Each action group has an *＋ Add action* button. Clicking adds a row prompted for an action id (must be unique within the list). The editor reveals the type-specific fields:
-
-| Field | Notes |
-|---|---|
-| **id** | Unique within the action list. Used as the chain-context key (`<id>.first_row.<col>`). |
-| **type** | Dropdown — switches the available fields below. |
-| **Target** | The query / endpoint / screen the action operates on (label depends on type: *Query* for `run_query`, *Endpoint* for `call_api`, *Target query* for `navigate`). |
-| **Params** | List of ParamBinds. Click *＋ Add binding* to add one. |
-| **stop_on_error** | When false, the chain continues even if this action fails. Default true. |
-| **prompt** | Optional `PromptField` list — surfaces an input form before the action fires (e.g. ask the user for an `END_DATE` before running a report). |
-
-The **Wrap in chain** button on any action wraps it inside a `chain` — useful when you started flat and now need conditional logic or a loop.
-
----
-
-## Save flow
-
-The Actions tab edits the screen's `actions` / `row_menu` / `on_*` lists; the Screen Designer's *Save* commits all of them in one shot to `screens.toml`. Hot reload picks them up immediately — the next click on the toolbar button fires the updated action chain.
+The Actions and Row menu tabs edit the screen's lists; the screen editor's **Save** writes them with the rest of the screen and reloads the configuration — the next click runs the new version.
 
 ---
 
@@ -247,16 +180,16 @@ The Actions tab edits the screen's `actions` / `row_menu` / `on_*` lists; the Sc
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| `on_save` chain that fires before the main write. | The chain hits a race condition — the row doesn't exist yet. | `on_save` fires **after** the main update/insert succeeds. If the chain needs the row's new id, source it from the form state (or use `chain` with the right ordering). |
-| Toolbar action with `source = COLUMN` but no row selected. | The bind resolves to NULL; the query fails or operates on the wrong row. | Either set a `default` on the bind, or move the action to the row menu so it always fires with a row in context. |
-| `refresh` without a preceding write. | The grid reloads but nothing changed — confusing UX. | Use `refresh` after writes, or when an external action (a webhook ack) changed the data the grid shows. |
-| `confirm` after the destructive action instead of before. | The user gets a "are you sure?" prompt after the delete already fired. | `confirm` must be the **first** action in the chain. |
-| Stamping `CREATED_BY` in `on_save` but the column is required in the dialog. | The dialog Save fails because the column is empty. | Either don't make the column required in the dialog (the hook fills it), or use the dictionary's `LOGIN` rule on the column to pre-fill at form-load. |
+| Two toolbar entries meant to run one after the other. | They are two separate buttons. | Put the steps in one `chain`. |
+| A toolbar action reading `source = "CUSTOMER_ID"`. | The toolbar has no row: the value is empty. | Move the action to the row menu, or ask for the value with a prompt (`INPUT.CUSTOMER_ID`). |
+| `confirm` placed after the delete. | The question comes once the row is gone. | `confirm` first in the chain. |
+| A step reads `<id>.first_row.X` from a step without `bind_result`. | The value is empty. | Turn on `bind_result` on the step that produces the rows. |
+| `value = "#LOGIN_USER#"`. | The text is written as it is. | Use `source`. |
 
 ---
 
 ## What's next
 
-- [Nested tabs](./nested-tabs.md) — embed a child-record form or a related-rows grid.
-- [Parameter binding](../queries/parameter-binding.md) — the full ParamBind reference.
-- [Concepts → Screens](./overview.md) — deep reference for action types and lifecycle.
+- [Nested tabs](./nested-tabs.md) — embed another screen's form or grid in a dialog tab.
+- [Parameter binding](../queries/parameter-binding.md) — `param_binds`, built-ins and tokens.
+- [Notifications](../../../nomaflow/notifications.md) — the rules a `send_notification` fires.

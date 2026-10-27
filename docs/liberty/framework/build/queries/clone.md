@@ -20,7 +20,7 @@ Each is covered below with when to use it.
 
 ## Per-query Clone
 
-A *Clone* button sits in the top-right of the single-query editor (Unclassified / Sequences / Lookups tabs). Clicking it:
+A *Clone* button sits in the top-right of the single-query editor (Queries, Sequences and Lookups views). Clicking it:
 
 1. Prompts for a new name (default `<original>_copy`).
 2. Deep-copies the query — name only differs; SQL, params, `writable`, `label`, `description`, per-dialect SQL map, every nested field is JSON-cloned and independent.

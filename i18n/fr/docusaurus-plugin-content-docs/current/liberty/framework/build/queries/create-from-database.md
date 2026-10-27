@@ -1,14 +1,14 @@
 ---
-title: Créer depuis une table de base
+title: Créer depuis une table de la base
 description: "L'Assistant CRUD — pointez Liberty sur une table existante, cochez les colonnes, obtenez les quatre requêtes CRUD générées et enregistrées en un clic."
 keywords: [Liberty Framework, requêtes, CRUD, assistant, générer depuis la base, introspection, ConnectorsBuilder]
 ---
 
 # Créer depuis une table de base
 
-Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Vous le pointez sur un schéma et une table, cochez les colonnes que l'écran doit voir, marquez celles qui identifient une ligne, et Liberty écrit les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) à votre place — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver. Les **identifiants de colonnes et noms de liaison générés sont en majuscules** (comme l'assistant SELECT) : les colonnes JDE ressortent en majuscules.
+Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Il suffit de lui désigner un schéma et une table, de cocher les colonnes que l'écran doit afficher et de marquer celles qui identifient une ligne : Liberty écrit alors les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver. Les **identifiants de colonnes et noms de liaison générés sont en majuscules** (comme l'assistant SELECT) : les colonnes JDE ressortent en majuscules.
 
-C'est le chemin recommandé pour toute table déjà existante. À éviter uniquement quand la table n'existe pas encore ou quand vous voulez du SQL écrit à la main — voir [Créer une requête personnalisée](./create-custom.md).
+C'est le chemin recommandé pour toute table déjà existante. À éviter uniquement quand la table n'existe pas encore ou quand le SQL doit être écrit à la main — voir [Créer une requête personnalisée](./create-custom.md).
 
 ---
 
@@ -16,10 +16,10 @@ C'est le chemin recommandé pour toute table déjà existante. À éviter unique
 
 L'assistant est accessible depuis **Paramètres → Connecteurs** :
 
-1. Sélectionnez un connecteur dans la liste de gauche.
-2. Basculez la barre de modes du volet droit sur **Tables**.
-3. Cliquez sur **＋ Ajouter une table** en haut à droite.
-4. Une fenêtre de choix s'ouvre. Sélectionnez **Générer depuis la base**.
+1. Choisir un connecteur dans la liste de gauche.
+2. Dans la barre de modes du volet droit, choisir **Tables**.
+3. Cliquer sur **＋ Ajouter des requêtes** en haut à droite.
+4. Une fenêtre de choix s'ouvre. Choisir **Générer depuis la BDD**.
 
 L'assistant parcourt alors le pool du connecteur (`GET /api/sql/<connector>/_schemas`) et présente les schémas trouvés.
 
@@ -97,11 +97,11 @@ L'assistant parcourt alors le pool du connecteur (`GET /api/sql/<connector>/_sch
   <text x="548" y="291" fill="#22c55e" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">PUT</text>
   <text x="578" y="291" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">customers_put</text>
   <text x="528" y="310" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">UPDATE public.customers</text>
-  <text x="528" y="324" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SET name = :name, email = :email,</text>
-  <text x="528" y="338" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    created_at = :created_at,</text>
-  <text x="528" y="352" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    owner_id = :owner_id,</text>
-  <text x="528" y="366" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    status = :status, region = :region</text>
-  <text x="528" y="380" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">WHERE customer_id = :customer_id_ORIGINAL</text>
+  <text x="528" y="324" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SET NAME = :NAME, EMAIL = :EMAIL,</text>
+  <text x="528" y="338" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    CREATED_AT = :CREATED_AT,</text>
+  <text x="528" y="352" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    OWNER_ID = :OWNER_ID,</text>
+  <text x="528" y="366" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    STATUS = :STATUS, REGION = :REGION</text>
+  <text x="528" y="380" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">WHERE CUSTOMER_ID = :CUSTOMER_ID_ORIGINAL</text>
 
   <line x1="20" y1="430" x2="980" y2="430" stroke="#1f2937" strokeWidth="1"/>
   <rect x="780" y="450" width="80" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
@@ -116,7 +116,7 @@ L'assistant parcourt alors le pool du connecteur (`GET /api/sql/<connector>/_sch
 
 Le sélecteur de schéma n'apparaît que si le pool en compte plusieurs. PostgreSQL avec un seul `public` et SQLite le sautent ; Oracle (plusieurs schémas) l'exige.
 
-L'assistant récupère les schémas de manière différée — l'ouverture initiale liste juste les noms, le parcours table par table d'un schéma a lieu après votre choix. Sur un pool Oracle volumineux, ce comportement épargne la dizaine de secondes que prendrait un parcours multi-schémas complet.
+L'assistant récupère les schémas de manière différée — l'ouverture initiale liste juste les noms, le parcours table par table d'un schéma n'a lieu qu'une fois le schéma choisi. Sur un pool Oracle volumineux, ce comportement épargne la dizaine de secondes que prendrait un parcours multi-schémas complet.
 
 ---
 
@@ -157,7 +157,7 @@ Une ligne avec **au moins une** clé est requise pour que UPDATE / DELETE produi
 
 ## Étape 5 — Choisir les requêtes à émettre
 
-Quatre cases à cocher — **SELECT (`_get`)**, **UPDATE (`_put`)**, **INSERT (`_post`)**, **DELETE (`_delete`)**. Cochez celles dont la table a besoin.
+Quatre cases à cocher — **SELECT (`_get`)**, **UPDATE (`_put`)**, **INSERT (`_post`)**, **DELETE (`_delete`)**. Cocher celles dont la table a besoin.
 
 | Motif | À cocher |
 |---|---|
@@ -172,34 +172,34 @@ La requête **SELECT** est toujours émise — au minimum, l'écran a besoin de 
 
 ## Étape 6 — Lire l'aperçu, surcharger au besoin
 
-La colonne de droite affiche le SQL généré pour chaque emplacement CRUD coché, en direct. Modifiez n'importe quel aperçu directement — votre modification prime sur la génération automatique tant que vous ne changez pas la sélection de colonnes/clés, ce qui restaure la version générée.
+La colonne de droite affiche le SQL généré pour chaque emplacement CRUD coché, en direct. Chaque aperçu se modifie directement : la modification prime sur la génération automatique tant que la sélection des colonnes ou des clés ne change pas — un changement rétablit la version générée.
 
 ### Les quatre formes
 
 ```sql
 -- _get : SELECT direct sur les colonnes incluses
-SELECT col1, col2, …
+SELECT COL1, COL2, …
 FROM   <schema>.<table>
 
 -- _post : INSERT lié à des placeholders :col
-INSERT INTO <schema>.<table> (col1, col2, …)
-VALUES                       (:col1, :col2, …)
+INSERT INTO <schema>.<table> (COL1, COL2, …)
+VALUES                       (:COL1, :COL2, …)
 
 -- _put  : UPDATE des colonnes non-clés, WHERE sur la clé avec :NAME_ORIGINAL
 UPDATE <schema>.<table>
-SET    non_key1 = :non_key1, non_key2 = :non_key2, …
-WHERE  key1 = :key1_ORIGINAL
-   AND key2 = :key2_ORIGINAL
+SET    NON_KEY1 = :NON_KEY1, NON_KEY2 = :NON_KEY2, …
+WHERE  KEY1 = :KEY1_ORIGINAL
+   AND KEY2 = :KEY2_ORIGINAL
 
 -- _delete : DELETE sur la clé avec :NAME (le dialogue lie les valeurs actuelles de la ligne)
 DELETE FROM <schema>.<table>
-WHERE  key1 = :key1
-   AND key2 = :key2
+WHERE  KEY1 = :KEY1
+   AND KEY2 = :KEY2
 ```
 
 ### Pourquoi `:NAME_ORIGINAL` sur UPDATE ? \{#why-name_original-on-update\}
 
-L'Enregistrer d'un dialogue envoie deux instantanés de chaque colonne clé : la valeur actuelle (`:key1`) et celle qu'avait la ligne à l'ouverture du dialogue (`:key1_ORIGINAL`). L'UPDATE filtre sur l'*originale* pour que la ligne soit retrouvée même quand l'opérateur a modifié la clé elle-même. L'Assistant CRUD câble cette convention pour vous — si vous écrivez plus tard un `_put` à la main, reproduisez-la.
+L'Enregistrer d'un dialogue envoie deux instantanés de chaque colonne clé : la valeur actuelle (`:key1`) et celle qu'avait la ligne à l'ouverture du dialogue (`:key1_ORIGINAL`). L'UPDATE filtre sur l'*originale* pour que la ligne soit retrouvée même quand l'opérateur a modifié la clé elle-même. L'assistant CRUD applique cette convention ; un `_put` écrit plus tard à la main doit la reproduire.
 
 ---
 
@@ -219,16 +219,16 @@ Les quatre nouvelles requêtes apparaissent dans l'onglet **Tables** regroupées
 
 | Erreur | Cause | Correction |
 |---|---|---|
-| *Sélectionnez une table.* | Aucune table sélectionnée. | Sélectionnez-en une. |
-| *Nommez la table.* | Le champ **nom de base** est vide (déduit du nom de la table ; effacez-le pour le surcharger). | Saisissez un nom de base — lettres, chiffres, tirets bas. |
-| *Incluez au moins une colonne.* | Toutes les colonnes ont été décochées. | Cochez-en au moins une. |
+| *Sélectionnez une table.* | Aucune table sélectionnée. | En choisir une. |
+| *Nommez la table.* | Le champ **nom de base** est vide (déduit du nom de la table ; à effacer pour le remplacer). | Saisir un nom de base — lettres, chiffres, tirets bas. |
+| *Incluez au moins une colonne.* | Toutes les colonnes ont été décochées. | En cocher au moins une. |
 | *La requête de lecture (\_get) est obligatoire.* | SELECT a été décoché. | Recochez-le. |
-| *Choisissez au moins une colonne clé pour UPDATE / DELETE.* | UPDATE ou DELETE est coché mais aucune colonne n'a CLÉ activée. | Marquez la ou les colonnes clés. |
-| *Une requête nommée « X » existe déjà.* | Le nom de base produit un `<base>_get` (ou `_put` / `_post` / `_delete`) en collision avec une requête existante sur ce connecteur. | Choisissez un autre nom de base, ou supprimez d'abord l'ancienne. |
+| *Choisissez au moins une colonne clé pour UPDATE / DELETE.* | UPDATE ou DELETE est coché mais aucune colonne n'a CLÉ activée. | Marquer la ou les colonnes clés. |
+| *Une requête nommée « X » existe déjà.* | Le nom de base produit un `<base>_get` (ou `_put` / `_post` / `_delete`) en collision avec une requête existante sur ce connecteur. | Choisir un autre nom de base, ou supprimer d'abord l'ancienne requête. |
 
 ---
 
-## Ce que vous venez de bâtir
+## Résultat
 
 Pour une table `customers` avec `customer_id` comme clé, l'assistant a généré quatre requêtes :
 
@@ -245,7 +245,7 @@ Elles atterrissent dans l'onglet **Tables** sur une ligne libellée `customers` 
 
 ## Quand utiliser l'assistant ou écrire à la main
 
-| Utiliser l'assistant | Écrire à la main (`Ajouter une requête` sur Non classées) |
+| Utiliser l'assistant | Écrire à la main (`Ajouter une requête` dans la vue Requêtes) |
 |---|---|
 | La table existe en base. | La requête est un rapport personnalisé, un agrégat ou un appel de procédure stockée. |
 | Vous voulez les quatre formes CRUD standard. | Vous avez besoin d'un `JOIN`, d'un `GROUP BY`, d'une CTE `RECURSIVE`. |

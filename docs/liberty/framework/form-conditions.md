@@ -1,195 +1,139 @@
 ---
 title: Form conditions
-description: "Show, hide, require or disable a field based on the live values of the other fields in the same dialog. The Screens builder exposes three condition slots per field — Visible when, Required when, Disabled when — with an expression editor that suggests field names and previews the evaluation."
-keywords: [Liberty Framework, form conditions, visible when, required when, disabled when, conditional fields, screens, dialog, settings]
+description: "Every conditional setting of a screen column — show, require, lock, force a default, change the rule or skip the write depending on another field's value — and the screen's row-level editable_when rule. One condition shape: a field and a value, ANDed."
+keywords: [Liberty Next, form conditions, visible_when, required_when, disabled_when, default_when, rules_when, write_when, editable_when, disable_on_add, disable_on_edit, screens, dialog]
 ---
 
 # Form conditions
 
-:::info[Deep reference]
-This page documents the expression language behind `visible_when` / `required_when` / `disabled_when` — operators, evaluation order, session context, server-side enforcement. For task-oriented use — mark a field as conditionally visible / required / disabled in the dialog builder — see [Build → Screens → Conditional fields](./build/screens/conditional-fields.md).
-:::
+A screen column can react to the value of another field of the same row: appear only for one kind of record, become required, lock itself, take a forced value, change its list of values, or not be written at all. The screen itself can make whole rows read-only. All these settings use the same condition shape.
 
-A screen's edit dialog is a flat list of fields. Some fields only make sense when others have a specific value — a *Custom SLA* that only appears on the *Enterprise* plan, a *Manager email* that's only required above a 20% discount. The framework lets you express this directly in the **Screens builder**, on each field, through three slots:
-
-| Slot | Effect |
-|---|---|
-| **Visible when** | The field is rendered only when the expression is true. When false, the field is removed from the dialog **and** dropped from the save payload. |
-| **Required when** | The field gets the *required* asterisk and save is blocked until the value is provided. |
-| **Disabled when** | The field is rendered but greyed out and read-only. Its current value still goes on the save payload. |
-
-The three slots are independent — a field can be visible-and-required, visible-and-disabled, or all three.
+For a step-by-step use in the screen editor, see [Screens → Conditional fields](./build/screens/conditional-fields.md).
 
 ---
 
 ## At a glance
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '6px 0 10px', fontWeight: 700}}>Subscription — edit dialog</div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Plan</div>
-    <div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.45)', color: '#4a9eff', fontSize: '11px', fontWeight: 600}}>Enterprise ▾</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Seats <span style={{color: '#f87171'}}>*</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>250</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Custom SLA <span style={{fontSize: '10px', opacity: 0.55, fontStyle: 'italic'}}>(visible: plan = enterprise)</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', fontSize: '11px'}}>Gold — 99.95%</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '10px', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{opacity: 0.7, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em'}}>Discount %  <span style={{fontSize: '10px', opacity: 0.55, fontStyle: 'italic'}}>(disabled: seats &lt; 100)</span></div>
-    <div><span style={{padding: '4px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.45}}>15</span></div>
-  </div>
-  <div style={{padding: '12px 0 0', display: 'flex', justifyContent: 'flex-end', gap: '6px'}}>
-    <span style={{padding: '5px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Cancel</span>
-    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>Save</span>
-  </div>
-</div>
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="cnd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cnd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cnd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cnd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
 
-*Custom SLA* appears only on the Enterprise plan; *Discount %* is visible on every plan but locked when *Seats* drops below 100.
-
----
-
-## Editing a condition
-
-In **Settings → Screens**, open the screen and click the field on the *Fields* tab. The field editor on the right exposes the three condition slots, each with an **expression editor**:
-
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '8px 0 10px', fontWeight: 700}}>Field editor — Custom SLA</div>
-  <div style={{display: 'grid', gridTemplateColumns: '140px 1fr', rowGap: '10px', columnGap: '12px', alignItems: 'center'}}>
-    <div style={{opacity: 0.75}}>Name</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>custom_sla</span></div>
-    <div style={{opacity: 0.75}}>Label</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Custom SLA</span></div>
-    <div style={{opacity: 0.75}}>Type</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>string ▾</span></div>
-    <div style={{opacity: 0.75}}>Visible when</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.08)', border: '1px solid rgba(74,158,255,0.40)', fontSize: '11px', fontFamily: 'ui-monospace, monospace', color: '#60a5fa'}}>plan == 'enterprise'</span></div>
-    <div style={{opacity: 0.75}}>Required when</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.55, fontStyle: 'italic'}}>— always required when visible —</span></div>
-    <div style={{opacity: 0.75}}>Disabled when</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.55, fontStyle: 'italic'}}>—</span></div>
-  </div>
-</div>
-
-Each expression slot:
-
-- Suggests **field names** of the same screen via auto-complete.
-- Validates the syntax live — a typo (`plan = 'enterprise'` instead of `==`) shows a red underline before save.
-- Refuses cycles at save time (field A visible-when depends on B, B depends on A).
-
-The *Test* button at the top of the field editor opens a small preview pane (see [Testing conditions](#testing) below).
-
----
-
-## Conditional default — `default_when`
-
-A fourth slot on the field editor seeds a value when a condition becomes true. It is a **conditional default**, complementing the static *Default* — use it when the value depends on another field.
-
-| Field | Effect |
-|---|---|
-| **Default when** | Boolean expression that turns the rule on. When it evaluates to true, the target value below is written into the field. |
-| **Value** | The value to write. Literals, session tokens (`${session.user}`), and references to other fields are all accepted — evaluated on the fly. |
-| **Lock** | Controls whether the field stays editable after the value is written. |
-
-The **Lock** flag has two settings:
-
-| Lock | Behaviour |
-|---|---|
-| `true` *(default when omitted)* | The field is filled **and disabled** while the condition holds — a hard forcing. The operator cannot type over it. |
-| `false` | The field is filled **but stays editable** — the operator can override the seeded value. Useful to *suggest* a default that the user can narrow (e.g. default a lookup column to `*ALL` while letting the operator pick a specific value). |
-
-Two rules on the same field don't stack — the first matching one wins in declaration order. When the condition flips back to false, the seeded value stays if the field was locked (it was a hard rule), but is cleared when the field was left editable (the rule stops applying).
+  <rect x="260" y="14" width="680" height="360" rx="14" fill="url(#cnd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="280" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · Invoice 00001-1042</text>
+  <line x1="280" y1="62" x2="920" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="280" y="95" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Status</text>
+  <rect x="480" y="80" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="94.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Cancelled ▾</text>
+  <text x="280" y="137" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Cancellation reason ∗</text>
+  <rect x="480" y="122" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="136.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Duplicate order</text>
+  <text x="280" y="179" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Payment method</text>
+  <rect x="480" y="164" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="178.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Transfer ▾</text>
+  <text x="280" y="221" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">IBAN</text>
+  <rect x="480" y="206" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="220.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">FR76 0000 0000 0000 0000 0000 000</text>
+  <text x="280" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Credit limit</text>
+  <rect x="480" y="248" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="262.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0</text>
+  <text x="890" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
+  <text x="280" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Invoice number</text>
+  <rect x="480" y="290" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="490" y="304.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">00001-1042</text>
+  <text x="890" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
+  <rect x="750" y="340" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="785.0" y="354.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="830" y="340" width="80" height="22" rx="5" fill="url(#cnd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="870.0" y="354.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="10" y="100" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">required_when</text>
+  <text x="20" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → required</text>
+  <line x1="240" y1="117.0" x2="280" y2="136" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="10" y="200" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">visible_when</text>
+  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shown when PAYMENT_METHOD = TRANSFER</text>
+  <line x1="240" y1="217.0" x2="280" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="10" y="300" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">disable_on_edit</text>
+  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">key locked once created</text>
+  <line x1="240" y1="317.0" x2="280" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="970" y="220" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="980" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default_when</text>
+  <text x="980" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → 0, locked</text>
+  <line x1="970" y1="237.0" x2="920" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="970" y="80" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="980" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">editable_when</text>
+  <text x="980" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on the screen: whole row read-only</text>
+  <line x1="970" y1="97.0" x2="920" y2="46" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+</svg>
 
 ---
 
-## Expression syntax
+## The condition \{#condition\}
 
-The expression language is small and safe — comparable to a SQL `WHERE` clause but evaluated client-side.
+A condition names a **field** of the same row and the **value** it must have — or a list of values, any of which matches:
 
-| Construct | Example |
-|---|---|
-| **Field reference** | `plan`, `seats`, `discount_pct`. Refers to the current value of the field with that *Name* in the same dialog. |
-| **Literals** | `'enterprise'`, `5`, `true`, `false`, `null`. |
-| **Comparisons** | `==`, `!=`, `<`, `<=`, `>`, `>=`. |
-| **Logical** | `&&`, `\|\|`, `!`. Parentheses for grouping. |
-| **Membership** | `plan in ['team', 'enterprise']`. |
-| **Null check** | `discount_pct == null` / `discount_pct != null`. |
-| **String predicates** | `name.startsWith('FR-')`, `name.endsWith('.pdf')`, `name.includes('test')`. |
-| **Length** | `tags.length > 0` (for *Multiple* fields). |
-| **Session context** | `session.user`, `session.lang`, `session.roles` — the same triple available to queries (see [Parameter binding → Session context](./build/queries/parameter-binding.md)). `session.roles` is an array — `'admin' in session.roles`. |
-
-The language has **no function calls beyond the listed predicates** and no arithmetic operators other than comparison. The intent is "boolean expression over form state", not a scripting language.
-
----
-
-## Evaluation order
-
-Conditions are re-evaluated **on every field change** in the dialog. The framework runs the three slots for every field in parallel; the result is read after every reference resolves. What this means:
-
-- **The order in which fields are listed doesn't matter.** A *Visible when* on field A can reference field B that itself depends on field C — the resolver runs the full pass once per change.
-- **Cycles are refused at save** — the builder names the cycle and points at the offending fields.
-- **Disabled fields keep their value**, even if a *Visible when* later hides them. Toggling visibility off then on doesn't reset the value.
-- **Hidden fields drop their value on save.** The payload sent to the connector contains only the visible fields. This matters when a connector's INSERT/UPDATE expects `NULL` for an absent field rather than the previously-typed value.
-
----
-
-## Interaction with Default
-
-| Scenario | Behaviour |
-|---|---|
-| Field has *Default*, becomes visible | The default is applied the first time the field becomes visible *if* it has no value yet. Re-hiding and re-showing keeps whatever the user typed in between. |
-| Field has *Default*, becomes hidden | The value is not cleared in memory; it is dropped from the save payload because the field is no longer rendered. |
-| Field has no *Default*, becomes visible | The field renders empty. |
-| Field has *Default* `${session.user}`, becomes visible | The session value is substituted at evaluation time (same syntax as query defaults). |
-
-Server-side defaults (`SEQUENCE`, `SYSDATE`, `LOGIN`, `PASSWORD` — see [Dictionary](./dictionary.md)) are applied on save and **don't interact** with conditions.
-
----
-
-## Server-side enforcement
-
-Conditions are evaluated **on the client** for live UX and **re-evaluated on the server** on save to defend against tampering. The save endpoint:
-
-1. Receives the field payload.
-2. Runs every condition again with the values from the payload.
-3. Refuses the save when a required-and-visible field is missing or when a disabled field is being changed (its value in the payload differs from the value last sent to the client).
-
-So conditions are **business rules**, not just UX hints. A user opening the network tab and changing the payload directly hits the same validation as the form.
-
----
-
-## Testing conditions \{#testing}
-
-The field editor's **Test** button opens a small preview pane: the dialog populated with fixture values from the connector's `_test_row` (or empty when none is configured); flipping the dependent fields shows the live condition behaviour.
-
-For non-trivial logic, the screen builder also exposes a **Test cases** tab. Each test case is a `{ inputs, expected }` pair the *Run tests* button replays:
-
-| Test case | Inputs | Expected |
-|---|---|---|
-| **starter-plan** | `plan = starter`, `seats = 5` | `custom_sla = hidden`, `discount_pct = disabled`, `manager_email = hidden` |
-| **enterprise-with-discount** | `plan = enterprise`, `seats = 250`, `discount_pct = 25` | `custom_sla = visible`, `discount_pct = enabled`, `manager_email = visible+required` |
-
-The test runner shows a green checkmark per pass, a red diff per fail. Test cases aren't used at runtime — they document the form's logic and survive refactors better than visual checks.
-
----
-
-## Permissions
-
-`session.roles` is the row-level switch. A field that only superusers should edit becomes:
-
-```text
-Disabled when:  'admin' not in session.roles
+```toml
+{ field = "STATUS", value = "CANCELLED" }
+{ field = "PAYMENT_METHOD", value = ["TRANSFER", "DIRECT_DEBIT"] }
 ```
 
-The server-side enforcement makes this safe — a regular user editing the network payload still hits the same condition.
+A setting holds a list of conditions: **all of them** must match (AND). Values are compared as text, without their leading and trailing spaces, so a code padded with spaces still matches. Field names are matched regardless of case.
+
+In the screen editor, each setting is a list on the column's inspector: one line per condition, with the field picked from the screen's columns.
 
 ---
 
-## Under the hood
+## Settings on a column \{#column-settings\}
 
-Conditions are stored as expression strings on each field of the screen entry. Operators **do not edit the underlying TOML by hand**; the field editor is the canonical interface and validates every expression before save.
+| Setting | Inspector tab | Effect |
+|---|---|---|
+| `visible_when` | Filter | **Dialog**: the field shows only while the conditions match the form's values. **Grid**: the column hides when a filter of the screen is set to a value outside the condition; with that filter empty, the column stays. |
+| `required` / `required_when` | Edit | The field is marked required (asterisk), always or only while the conditions match. |
+| `disabled` / `disabled_when` | Edit | The field is read-only, always or only while the conditions match. |
+| `disable_on_add` | Edit | Read-only when a row is added, editable afterwards — for a value assigned on creation. |
+| `disable_on_edit` | Edit | Read-only once the row exists — for a key that must not change. Applies to the dialog and to grid editing. |
+| `default` | Defaults | The value proposed when a row is added. |
+| `default_when` | Defaults | While its condition matches, the column takes the given **default** and is locked. With **lock** off, the value is only proposed and stays editable. With several rules, the first that matches wins. Re-applied when the deciding field changes, in the dialog and the grid. |
+| `rules_when` | Rules | While its condition matches, the column uses another rule — another lookup, enum or Boolean, with its own lookup parameters and returned values — or none (plain input). The first match wins; otherwise the column's own rule applies. |
+| `write_when` | Defaults | The column is written only while the conditions match. Otherwise the server writes a neutral value (blank or 0) and the dictionary default or rule is not applied — for a field that means nothing for this kind of row. |
+
+A static setting and its conditional version combine simply: when the `_when` list is empty, the static flag decides; when it is filled, the conditions decide.
+
+---
+
+## Setting on the screen — `editable_when` \{#editable-when\}
+
+Set in the **General** tab of the screen editor, `editable_when` says when an **existing** row may be changed or deleted:
+
+```toml
+editable_when = [{ field = "PERIOD_STATUS", value = ["OPEN", "VALIDATED"] }]
+```
+
+A row that does not match is read-only: plain cells in the grid, a view-only dialog without **Save** or **Delete**. The server refuses a change to such a row as well. Adding rows is not affected.
+
+---
+
+## What happens on save \{#save\}
+
+- **Hidden fields** — on an update, a field hidden by `visible_when` is not sent: the column keeps its stored value. On an insert, a hidden field is sent only when it holds a value.
+- **Locked fields** — their value is sent as it is.
+- **Where it is checked** — `visible_when`, `required_when`, `disabled_when`, `default_when` and `rules_when` act in the browser, as the user types. `editable_when` and `write_when` are applied by the server too, whatever the client sends.
+
+---
+
+## Action prompts \{#prompts\}
+
+The fields of an action's prompt dialog accept `visible_when`, `required_when` and `disabled_when` with the same shape, evaluated against the prompt's own fields. See [Actions and lifecycle](./build/screens/actions-and-lifecycle.md).
 
 ---
 
 ## What's next
 
-- [Concepts → Screens](./build/screens/overview.md) — where the field editor lives, and the other field properties.
-- [Concepts → Dictionary](./dictionary.md) — shared validation rules that combine with these conditions.
-- [Parameter binding](./build/queries/parameter-binding.md) — how the dialog values flow into the connector on save.
+- [Screens → Conditional fields](./build/screens/conditional-fields.md) — set them up in the screen editor, with examples.
+- [Screens → Columns](./build/screens/columns.md) — every other column setting.
+- [Dictionary](./dictionary.md) — the rules a column inherits.

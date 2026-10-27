@@ -12,7 +12,7 @@ Deux variantes :
 
 | Type d'onglet | Ce qu'il affiche | Quand |
 |---|---|---|
-| **`nested_form`** | Un formulaire d'enregistrement enfant : zéro ou une ligne liée, avec ses propres requêtes SELECT / INSERT / UPDATE. | Quand la table liée a **au plus une** ligne par parent (un-vers-un ou zéro-vers-un). |
+| **`nested_form`** | Le formulaire d'un autre écran, pour zéro ou une ligne liée, enregistré avec le parent. | Quand la table liée a **au plus une** ligne par parent (un-vers-un ou zéro-vers-un). |
 | **`nested_table`** | Une TableView complète des lignes liées, intégrée en ligne — affiche la grille d'un autre écran restreinte à la clé du parent. | Quand la table liée a **plusieurs** lignes par parent (un-vers-plusieurs). |
 
 Les deux s'attachent au dialogue comme n'importe quel autre onglet ; l'utilisateur clique entre eux sans quitter le formulaire.
@@ -36,95 +36,40 @@ Le validateur `_check` du schéma impose l'unicité des identifiants d'onglet ; 
 
 ## nested_form — un formulaire d'enregistrement enfant
 
-Un onglet `nested_form` intègre un sous-dialogue qui lit / écrit une table liée. La clé primaire du parent se lie à la requête de lecture imbriquée ; si une ligne revient, le formulaire s'affiche en mode édition ; sinon, en mode ajout.
-
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <linearGradient id="nf-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-  </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#nf-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Inspecteur · Onglet "Facturation" · type=nested_form</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">connector</text>
-  <rect x="200" y="80" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="95" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">(connecteur du parent — crm)</text>
-
-  <text x="40" y="122" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">read_query *</text>
-  <rect x="200" y="110" width="320" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="210" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_get ▾</text>
-
-  <text x="40" y="152" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">update_query</text>
-  <rect x="200" y="140" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="155" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_put ▾</text>
-
-  <text x="40" y="182" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">insert_query</text>
-  <rect x="200" y="170" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="185" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">billing_address_post ▾</text>
-
-  <line x1="20" y1="208" x2="980" y2="208" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="230" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIAISONS DE PARAMÈTRES (parent → imbriqué)</text>
-
-  <rect x="40" y="240" width="920" height="40" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="260" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">:CUSTOMER_ID</text>
-  <text x="180" y="260" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">←  colonne parent</text>
-  <text x="320" y="260" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <text x="500" y="260" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">(la ligne courante du dialogue parent)</text>
-
-  <text x="56" y="290" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">＋ Ajouter une liaison</text>
-
-  <line x1="20" y1="304" x2="980" y2="304" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="324" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHAMPS</text>
-  <text x="40" y="346" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Glisser des champs depuis la Palette comme sur un onglet de formulaire normal.</text>
-</svg>
+Un onglet `nested_form` affiche, dans le dialogue, le **formulaire d'un autre écran existant**. C'est cet écran qui porte les requêtes de lecture, de mise à jour et d'insertion ainsi que les champs ; l'onglet indique seulement l'écran à réutiliser et la façon de lui transmettre les valeurs du parent.
 
 ### Champs
 
-| Champ | Notes |
+| Champ | Rôle |
 |---|---|
-| **`connector`** | Connecteur qui héberge les requêtes imbriquées. Vide = connecteur du parent. |
-| **`read_query`** *(obligatoire)* | Lit la ligne liée. Doit retourner 0 ou 1 ligne après que la liaison la restreint. |
-| **`update_query`** | Écrit les modifications quand une ligne liée existe déjà. |
-| **`insert_query`** | Écrit une nouvelle ligne liée quand aucune n'existait (après que la liaison a retourné 0 ligne). |
-| **`param_binds`** | Lie les colonnes du parent aux paramètres `:placeholder` des requêtes imbriquées. Typiquement `:CUSTOMER_ID ← CUSTOMER_ID`. |
-| **`fields`** | Les champs du formulaire, comme sur un onglet `form` normal. Glisser depuis la Palette. |
-| **`cols`** | Nombre de colonnes de la grille pour le formulaire imbriqué. |
+| **`form_screen`** *(obligatoire)* | L'identifiant de l'écran dont le formulaire est réutilisé. |
+| **`connector`** | Le connecteur de cet écran. Vide = le connecteur de l'écran parent. |
+| **`param_binds`** | Lie les valeurs du parent aux requêtes de l'écran réutilisé — en général `CUSTOMER_ID ← CUSTOMER_ID`. |
+| **`label`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | Comme sur tout onglet. |
 
 ### Comportement
 
-Quand le dialogue parent s'ouvre :
+1. **Modification d'une ligne parent** — la requête de lecture de l'écran réutilisé s'exécute avec les valeurs liées. Une ligne trouvée s'affiche en modification ; sinon le formulaire démarre vide.
+2. **Ajout d'une ligne parent** — le formulaire démarre vide (le parent n'a pas encore de clé).
+3. **Enregistrement** — le formulaire imbriqué est enregistré par le bouton **Enregistrer** du parent : mise à jour si une ligne avait été chargée, insertion sinon — seulement si l'utilisateur a saisi quelque chose. À l'insertion, les liaisons reçoivent la nouvelle clé du parent, y compris une clé attribuée par une séquence.
+4. **Duplication du parent** — la ligne imbriquée est insérée à nouveau pour la copie.
 
-1. La `read_query` se déclenche avec les valeurs des colonnes du parent liées via `param_binds`.
-2. Si une ligne revient, le formulaire imbriqué s'affiche en **mode édition** — les champs sont renseignés, *Enregistrer* déclenche `update_query`.
-3. Si aucune ligne ne revient, le formulaire imbriqué s'affiche en **mode ajout** — les champs sont vides, *Enregistrer* déclenche `insert_query`.
+Les champs masqués par leurs conditions ne sont pas écrits, et les colonnes clés liées prennent toujours les valeurs du parent.
 
-L'*Enregistrer* du parent et l'*Enregistrer* de l'onglet imbriqué sont indépendants — enregistrer le parent ne touche pas aux données imbriquées ; enregistrer l'imbriqué ne déclenche pas la chaîne Enregistrer du parent. Chacun opère sur sa propre ligne.
+### Cas d'usage — adresse de facturation
 
-### Cas d'usage — paramètres spécifiques JD Edwards
-
-Un dialogue *Paramètres → Applications* avec un onglet *JD Edwards* qui n'apparaît que quand l'application est une application JDE :
+Un dialogue *Client* avec un onglet *Facturation* qui réutilise l'écran `billing_address` (ses requêtes de lecture, de mise à jour et d'insertion portent sur `CUSTOMER_ID`) :
 
 ```toml
-[[screens.nomasx1.settings_applications.dialog.tabs]]
-id = "jde"
-label = "JD Edwards"
-type = "nested_form"
-read_query = "settings_jde_get"
-update_query = "settings_jde_put"
-insert_query = "settings_jde_post"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.param_binds]]
-param = "APPS_ID"
-source = "APPS_ID"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_VERSION"
-
-[[screens.nomasx1.settings_applications.dialog.tabs.fields]]
-name = "JDE_ENVIRONMENT"
+[[screens.crm.customers.dialog.tabs]]
+id          = "billing"
+label       = "Facturation"
+type        = "nested_form"
+form_screen = "billing_address"
+param_binds = [{ param = "CUSTOMER_ID", source = "CUSTOMER_ID" }]
 ```
 
-Quand l'utilisateur ouvre le dialogue Applications sur une application JDE (`APPS_ID` = une valeur), l'onglet JDE charge la ligne de paramètres correspondante et permet à l'utilisateur de la modifier. Pour les applications non-JDE où aucune ligne n'existe, le même onglet pré-remplit le formulaire pour que l'utilisateur puisse en ajouter une.
+Pour modifier les champs de facturation, il suffit de modifier l'écran `billing_address` : tous les dialogues qui le réutilisent suivent.
 
 ---
 
@@ -247,9 +192,9 @@ Cela permet de construire des dialogues qui révèlent progressivement les donn�
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| `nested_form.read_query` retourne plus d'une ligne. | Le formulaire n'affiche que la première ligne et ignore silencieusement le reste. | Resserrer la liaison pour que la lecture retourne 0 ou 1. Utiliser `nested_table` pour les véritables relations un-vers-plusieurs. |
+| La lecture de l'écran réutilisé renvoie plus d'une ligne. | Le formulaire n'affiche que la première. | Resserrer les liaisons pour que la lecture renvoie 0 ou 1 ligne ; utiliser `nested_table` pour une relation un-vers-plusieurs. |
 | `nested_table` sans `param_binds`. | La grille intégrée affiche **toutes** les lignes de la cible — y compris les lignes non liées. | Toujours lier au moins les colonnes clé étrangère du parent. |
-| `nested_form` avec `insert_query` vide, aucune ligne n'existe encore. | L'utilisateur ne peut pas ajouter de nouvelle ligne — le formulaire n'a rien à déclencher. | Câbler `insert_query`, ou pré-créer la ligne via un autre flux. |
+| L'écran réutilisé n'a pas de requête d'insertion et aucune ligne n'existe. | Rien n'est créé à l'enregistrement. | Renseigner la requête d'insertion de l'écran réutilisé. |
 | `nested_table` pointant sur un écran d'un autre connecteur + surcharge `connector` manquante. | Le runtime tente de résoudre l'écran cible sur le connecteur du parent et échoue. | Renseigner `connector` explicitement sur le connecteur de l'écran cible. |
 | Deux onglets imbriqués avec le même id. | La validation à l'enregistrement échoue (« identifiant d'onglet de dialogue en double »). | Choisir des identifiants uniques par dialogue. |
 

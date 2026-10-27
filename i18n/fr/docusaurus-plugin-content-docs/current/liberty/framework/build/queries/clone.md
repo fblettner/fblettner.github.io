@@ -6,7 +6,7 @@ keywords: [Liberty Framework, dupliquer requête, duplication, dupliquer connect
 
 # Dupliquer une requête ou un connecteur
 
-La page Connecteurs de Liberty propose **trois** dispositifs de duplication, chacun avec une portée différente. Ils se ressemblent — boutons Dupliquer juxtaposés — mais touchent des fichiers différents et demandent des saisies différentes. Choisissez le bon, sans quoi vous écrirez plus que prévu.
+La page Connecteurs de Liberty propose **trois** dispositifs de duplication, chacun avec une portée différente. Ils se ressemblent — boutons Cloner juxtaposés — mais touchent des fichiers différents et demandent des saisies différentes. Mieux vaut choisir le bon : chacun écrit plus ou moins de choses.
 
 | Dispositif | Portée | Fichiers touchés |
 |---|---|---|
@@ -20,12 +20,12 @@ Chacun est détaillé ci-dessous avec ses cas d'usage.
 
 ## Duplication par requête
 
-Un bouton *Dupliquer* se trouve en haut à droite de l'éditeur de requête unique (onglets Non classées / Séquences / Recherches). Le clic :
+Un bouton *Cloner* se trouve en haut à droite de l'éditeur de requête unique (vues Requêtes, Séquences et Lookups). Le clic :
 
 1. Demande un nouveau nom (par défaut `<original>_copy`).
 2. Copie en profondeur la requête — seul le nom diffère ; SQL, params, `writable`, `label`, `description`, map SQL par dialecte, chaque champ imbriqué est cloné en JSON et indépendant.
 3. Ajoute la copie à la liste des requêtes du connecteur.
-4. Sélectionne la copie pour que vous puissiez l'éditer immédiatement.
+4. Sélectionne la copie, prête à être modifiée.
 
 La page est alors modifiée — appuyez sur **Enregistrer** dans la barre d'outils du haut pour persister.
 
@@ -33,9 +33,9 @@ La page est alors modifiée — appuyez sur **Enregistrer** dans la barre d'outi
 
 | Motif | Pourquoi dupliquer |
 |---|---|
-| Vous voulez une variante d'une requête existante — même forme, filtre différent. | La copie préserve les params et le SQL par dialecte ; vous n'éditez que la clause WHERE. |
-| Vous avez besoin d'un `_v2` d'une requête pendant que l'ancienne reste en place. | Permet à un écran de continuer à utiliser l'ancienne requête pendant qu'un nouvel écran câble la nouvelle. |
-| Vous expérimentez. | Dupliquez, malmenez la copie, conservez l'original à l'abri. |
+| Une variante d'une requête existante — même forme, filtre différent. | La copie conserve les params et les variantes SQL ; seule la clause WHERE reste à modifier. |
+| Un `_v2` d'une requête, l'ancienne restant en place. | Permet à un écran de continuer à utiliser l'ancienne requête pendant qu'un nouvel écran câble la nouvelle. |
+| Un essai. | La copie se modifie librement, l'original reste intact. |
 
 ### Ce qui change — et ce qui ne change pas
 
@@ -44,13 +44,13 @@ La page est alors modifiée — appuyez sur **Enregistrer** dans la barre d'outi
 | SQL, params, writable, label, description, map par dialecte. | Seul le `name`. |
 | | Les références multi-fichiers vers l'original — elles continuent de pointer sur l'original. La copie est une toute nouvelle requête que personne ne référence encore. |
 
-Si vous voulez que les références soient **déplacées** vers la copie, c'est un Renommer, pas une Duplication (et le Renommage est destructif — il supprime l'ancien nom une fois les références reportées).
+Pour **reporter** les références sur la copie, il faut un Renommer, pas une Duplication (et le Renommage est destructif — il supprime l'ancien nom une fois les références reportées).
 
 ---
 
 ## Dupliquer une table
 
-Quand le volet droit est en mode **Tables**, chaque ligne porte une icône *Dupliquer* (l'icône de copie à droite des badges d'emplacement CRUD). Le clic :
+Quand le volet droit est en mode **Tables**, chaque ligne porte une icône *Cloner* (l'icône de copie à droite des badges d'emplacement CRUD). Le clic :
 
 1. Demande un nouveau nom de base (par défaut `<base>_copy`).
 2. Copie en profondeur **chaque emplacement CRUD** de la table — `<base>_get` → `<copy>_get`, `<base>_put` → `<copy>_put`, etc. Seuls les emplacements présents sont dupliqués (une table en lecture seule avec seulement `_get` produit une seule copie de requête).
@@ -73,7 +73,7 @@ La duplication est une copie ponctuelle — les éditions futures de l'original 
 
 La plus grosse des trois. Accessible depuis :
 
-- Le bouton **Dupliquer** dans l'onglet *Paramètres* du volet droit quand un connecteur de classe Applications est sélectionné, ou
+- Le bouton **Cloner** dans l'onglet *Paramètres* du volet droit quand un connecteur de classe Applications est sélectionné, ou
 - Ce même bouton Dupliquer pour n'importe quel connecteur — la fenêtre permet de choisir lequel dupliquer.
 
 La fenêtre demande trois valeurs :
@@ -84,7 +84,7 @@ La fenêtre demande trois valeurs :
 | **Nouveau nom** | La nouvelle clé de connecteur (minuscules, commence par une lettre — mêmes règles d'identifiant qu'ailleurs). |
 | **Pool** | Le pool sur lequel le nouveau connecteur doit s'exécuter. Doit déjà exister dans *Paramètres → Pools*. |
 
-Cliquer sur **Dupliquer** déclenche une copie multi-fichiers via un endpoint dédié. Liberty :
+Cliquer sur **Cloner** déclenche une copie multi-fichiers via un endpoint dédié. Liberty :
 
 1. Copie l'entrée du **connecteur** vers la nouvelle clé, avec le nouveau pool câblé.
 2. Copie la **surcouche dictionnaire** du connecteur (le bloc `[connectors.<source>]` du dictionnaire).
@@ -129,4 +129,4 @@ La bannière de statut indique le nombre d'entrées copiées ; d'éventuels aver
 
 - [Liaison de paramètres](./parameter-binding.md) — une fois la copie faite, la requête dupliquée peut nécessiter des valeurs liées différentes de l'originale.
 - [Variantes SQL par dialecte](./per-dialect-sql.md) — pour « même requête, SQL différent » sans duplication.
-- [Séquences et recherches](./sequences-and-lookups.md) — pour ajouter une séquence ou une recherche à l'application dupliquée.
+- [Séquences et lookups](./sequences-and-lookups.md) — pour ajouter une séquence ou un lookup à l'application dupliquée.

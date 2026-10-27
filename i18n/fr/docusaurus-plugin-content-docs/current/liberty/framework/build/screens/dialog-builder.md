@@ -107,7 +107,7 @@ Un écran sans dialogue fonctionne quand même comme un tableau en lecture seule
 |---|---|
 | **Palette** *(à gauche)* | Source des nouveaux champs. Deux sous-onglets : **Dictionnaire** (chaque entrée disponible dans la portée du connecteur courant) et **Colonnes** (chaque colonne que retourne la requête de lecture). Une zone de recherche restreint la liste. Cliquer sur une entrée ajoute une carte de champ sur le canevas ; faire glisser une entrée pour la déposer à un emplacement précis. |
 | **Canevas** *(au centre)* | La barre d'onglets du dialogue en haut + la grille de champs en dessous. Cliquer sur un onglet pour basculer ; *＋ Onglet* en ajoute un. Chaque carte de champ affiche le nom du champ + un résumé sur une ligne de ses indicateurs clés. La carte sélectionnée a une bordure colorée ; l'inspecteur à droite la reflète. Un groupe **MASQUÉ** distinct en bas rassemble les champs avec `hidden = true`. |
-| **Inspecteur** *(à droite)* | Les propriétés du champ sélectionné (ou un éditeur d'action par onglet quand une action d'onglet est sélectionnée — mutuellement exclusifs). Les propriétés sont rendues sous forme de formulaire générique ; les sections **Liaisons de paramètres lookup** et **Règles conditionnelles** se déploient en ligne. |
+| **Inspecteur** *(à droite)* | Les propriétés du champ sélectionné (ou un éditeur d'action par onglet quand une action d'onglet est sélectionnée — mutuellement exclusifs). Il présente le champ et la **Configuration de la colonne** — voir l'étape 3. |
 
 ---
 
@@ -124,21 +124,21 @@ Deux moyens :
 | Méthode | Quand |
 |---|---|
 | **Cliquer sur une entrée de Dictionnaire / colonne dans la Palette** | Ajoute une carte de champ à la fin de la grille de l'onglet courant. |
-| **Glisser une entrée de Dictionnaire / colonne sur le Canevas** | Dépose la carte de champ là où vous la relâchez — utile pour insérer en milieu de grille. |
+| **Glisser une entrée de Dictionnaire / colonne sur le Canevas** | Dépose la carte de champ à l'endroit où elle est relâchée — utile pour insérer en milieu de grille. |
 
 Le champ ajouté devient la carte sélectionnée ; l'Inspecteur bascule sur ses propriétés. Mettre `colspan` pour l'élargir (la grille fait par défaut 2 colonnes ; un champ `colspan = 2` remplit la ligne).
 
 ### Étape 3 — Régler les propriétés du champ
 
-Dans l'Inspecteur :
+Un champ de dialogue affiche une colonne de l'écran, et c'est la colonne qui porte tous les comportements. L'Inspecteur présente :
 
-| Champ | Rôle |
+| Section | Contenu |
 |---|---|
-| **`dd`** | Entrée de dictionnaire dont le champ hérite. Par défaut le nom de la colonne à l'ajout. |
-| **`colspan`** | Combien de cellules de grille le champ occupe. Par défaut 1. |
-| **`required`** / **`hidden`** / **`disabled`** | Surcharges par dialogue — laisser vide pour hériter de l'indication de colonne (voir [Colonnes](./columns.md)). |
-| **Liaisons de paramètres lookup** | Liaisons `:placeholder` supplémentaires pour un champ `LOOKUP`. Chaque liaison est `{param: <placeholder sur la requête de recherche>, source: <champ sur ce dialogue>}`. Le cas classique : un sélecteur de rôle restreint par l'identifiant d'application provenant d'un autre champ. |
-| **Règles conditionnelles** | `visible_when` / `required_when` / `disabled_when` — voir [Champs conditionnels](./conditional-fields.md). |
+| **Champ** | Le nom du champ et, s'il y a plusieurs onglets de formulaire, l'**onglet** où il se trouve. |
+| **Configuration de la colonne** | L'éditeur complet de la colonne — le même que dans l'onglet Colonnes : libellé, format, entrée du dictionnaire (`dd`), règle et liaisons du lookup, indicateurs obligatoire / lecture seule, conditions, valeurs par défaut, et largeur du champ sur la grille du dialogue (**Display ▸ Colspan**). Une modification vaut aussi pour la grille. |
+| **Événements** | Les hooks câblés sur l'écran, par événement, pour information. |
+
+Chaque réglage est décrit dans [Colonnes](./columns.md), les conditions dans [Champs conditionnels](./conditional-fields.md).
 
 ### Étape 4 — Ajouter des onglets
 
@@ -147,7 +147,7 @@ Cliquer sur **＋ Onglet** au-dessus du canevas. Le nouvel onglet est vide ; y g
 | Nom d'onglet | Contenu |
 |---|---|
 | **Général** | Identité + champs les plus utilisés. |
-| **Audit** | Créé le, créé par, mis à jour le, mis à jour par — souvent `hidden_on_add` pour les masquer à l'insertion. |
+| **Audit** | Créé le, créé par, mis à jour le, mis à jour par — souvent `hide_on_add` pour masquer l'onglet à l'insertion. |
 | **Notes** | Champs en texte libre. |
 | **Adresse** | Un groupe de champs liés (rue, ville, code postal, pays). |
 
@@ -168,7 +168,7 @@ Deux moyens :
 
 | Méthode | Effet |
 |---|---|
-| Mettre `hidden = true` dans l'Inspecteur. | La carte passe dans le groupe **MASQUÉ** en bas du canevas. Le champ reste lié à l'enregistrement. |
+| Cocher **hidden** dans la configuration de la colonne (Display). | La carte passe dans le groupe **MASQUÉ** en bas du canevas. Le champ reste lié à l'enregistrement. |
 | Supprimer le champ de l'onglet. | Le champ est retiré du dialogue entièrement. La colonne reste sur l'écran ; elle ne remonte simplement pas dans le formulaire. |
 
 Le patron « masquer mais conserver » est utile pour les colonnes techniques que le dialogue doit soumettre (ex. un horodatage d'audit) mais que l'utilisateur ne doit pas voir.
@@ -182,10 +182,10 @@ Les onglets ne sont pas tous identiques. Trois types résident sous `dialog.tabs
 | Type | Finalité |
 |---|---|
 | **`form`** *(défaut)* | Une grille de champs éditables — le cas décrit ci-dessus. |
-| **`nested_form`** | Un formulaire d'enregistrement enfant intégré dans l'onglet. La clé primaire du parent se lie à une requête de lecture distincte ; si une ligne revient, le formulaire imbriqué la modifie, sinon il insère. Voir [Onglets imbriqués](./nested-tabs.md). |
+| **`nested_form`** | Le formulaire d'un autre écran existant (`form_screen`), affiché dans l'onglet ; les `param_binds` transmettent les valeurs du parent (en général sa clé) aux requêtes de ce formulaire, enregistré avec le bouton **Enregistrer** du parent. Voir [Onglets imbriqués](./nested-tabs.md). |
 | **`nested_table`** | Une TableView de lignes liées intégrée dans l'onglet. Affiche la grille d'un autre écran restreinte à la clé primaire du parent. Voir [Onglets imbriqués](./nested-tabs.md). |
 
-Le constructeur visuel affiche la même barre d'onglets pour les trois — basculer sur un onglet `nested_form` remplace le canevas par l'éditeur de formulaire imbriqué de cet onglet ; `nested_table` affiche le sélecteur d'écran cible.
+Le constructeur visuel affiche la même barre d'onglets pour les trois — un onglet `nested_form` ou `nested_table` présente le choix de l'écran cible et ses `param_binds`.
 
 ---
 

@@ -1,200 +1,149 @@
 ---
 title: Parameter binding
-description: "How `:placeholder` params get values at runtime — declared defaults, screen-column sources, reserved built-ins like #LOGIN_USER# / #SYSDATE#, and per-call literal overrides."
-keywords: [Liberty Framework, parameter binding, ParamBind, source, value, LOGIN_USER, SYSDATE, default, query params]
+description: "How a query's :name parameters get their values — declared defaults on the query, param_binds on the caller (fixed value, another field, #LOGIN_USER# / #SYSDATE# built-ins), and {{LOGIN}} / {{SYSDATE}} tokens resolved by the server."
+keywords: [Liberty Next, parameter binding, ParamDef, param_binds, source, value, default, LOGIN_USER, SYSDATE, tokens, "{{LOGIN}}", "{{SYSDATE}}"]
 ---
 
 # Parameter binding
 
-A query without parameters runs every time with the same data. A query with `:placeholder` parameters runs against different rows, scopes or filters at each call — that's where Liberty's screens, actions and dictionary rules cash in. This page covers how each `:placeholder` gets its value.
+A query with `:name` parameters runs against different rows at each call. Three things decide what each parameter receives:
 
-There are **two** moving pieces:
-
-| Piece | Where it lives | What it does |
+| Piece | Where it is set | Role |
 |---|---|---|
-| **`ParamDef`** | On the query (`params` block). | Declares a parameter — gives it a label and a default. |
-| **`ParamBind`** | On the caller (screen column, action, menu item, nested tab). | Binds a value to a parameter — literal, or sourced from another field at call time. |
+| **Params** | On the query. | Declares a parameter, with a label and a default value. |
+| **`param_binds`** | On the caller — action, lookup column, nested tab. | Binds a value to a parameter: a fixed value, or another field read at call time. |
+| **Tokens** `{{…}}` | In the SQL itself. | Values the server fills at execution: user, date, time. |
 
-The query owns the *declaration*; every caller owns the *binding*. The same query can be called from ten places with ten different bindings.
+The query owns the declaration; each caller owns its binding. The same query can be called from ten places with ten different bindings.
 
 ---
 
-## Declaring a parameter — `ParamDef`
+## Declaring a parameter \{#declare\}
 
-In the query editor's **`params`** block (Unclassified / Sequences / Lookups tab), each row is a `ParamDef`:
+The **Params** block of the query editor lists the parameters, one line each:
 
-| Field | What it does |
+| Field | Role |
 |---|---|
-| **`name`** | The `:placeholder` name in the SQL (without the colon). Matched case-insensitively. |
-| **`label`** | Form label shown above the field when a UI surfaces this parameter. Defaults to `name`. |
-| **`default`** | Pre-filled value when the caller doesn't bind one. Blank = the engine binds SQL `NULL`. |
-
-A simple example:
+| **name** | The parameter as written in the SQL, without the colon. |
+| **label** | The label shown above the input when a screen or the AI assistant asks for the value. Defaults to the name. |
+| **default** | The value bound when the caller sends none. |
 
 ```sql
 SELECT *
 FROM   invoices
-WHERE  invoice_date BETWEEN :from_date AND :to_date
-  AND  status = :status
+WHERE  invoice_date BETWEEN :FROM_DATE AND :TO_DATE
+  AND  status = :STATUS
 ```
 
-The declared params:
-
-| `name` | `label` | `default` |
+| name | label | default |
 |---|---|---|
-| `from_date` | Period start | `2026-01-01` |
-| `to_date` | Period end | `2026-12-31` |
-| `status` | Status | `OPEN` |
+| `FROM_DATE` | Period start | `2026-01-01` |
+| `TO_DATE` | Period end | `2026-12-31` |
+| `STATUS` | Status | `OPEN` |
 
-When a screen wires this query without binding any of them, the defaults are bound and the query returns 2026 invoices with status `OPEN`. When the screen binds `:from_date` to a date picker, the picker value wins over the default.
-
-You can leave the `params` block empty for ad-hoc parameters — the engine still binds whatever the caller sends. Declaring them is for **labels** and **defaults**; the engine doesn't require declaration.
+Declaring is optional: a parameter that the caller does not send and that has no default is bound to `NULL`.
 
 ---
 
-## Binding a value — `ParamBind`
+## Binding a value — `param_binds` \{#param-binds\}
 
-Wherever Liberty calls a query — a screen's read, a lookup combo, an action's `run_query`, a menu item that opens a screen with a filter, a nested-tab read — the call carries a list of `ParamBind` entries. Each binds one parameter:
+Wherever a query is called with values from the context, the caller carries a list of `param_binds`, one per parameter:
 
-| Field | What it does |
+| Field | Role |
 |---|---|
-| **`param`** | The target parameter name (the `:placeholder` on the destination query). Normalised to UPPERCASE on save. |
-| **`value`** | A literal value to bind. Set this **or** `source`, not both. |
-| **`source`** | A column / field / chain-context path read at call time. Set this **or** `value`. Normalised to UPPERCASE on save. |
-| **`default`** | Fallback bound when `source` resolves to NULL / empty at call time. Ignored in value mode. |
+| **param** | The parameter of the target query. The list offers the parameters the query declares. |
+| **value** | A fixed value. |
+| **source** | Where to read the value at call time: a column of the row, a field of the form, a value returned by an earlier step of an action (`step1.first_row.CUSTOMER_ID`), or a [built-in](#builtins). |
+| **default** | Bound when **source** gives nothing. A fixed value, a built-in or a step path. |
 
-Two modes:
-
-### Value mode — literal
+When both **value** and **source** are set, **value** is used.
 
 ```toml
-[[actions.run_query.params]]
-param = "STATUS"
-value = "PAID"
+param_binds = [
+  { param = "STATUS",     value  = "PAID" },
+  { param = "INVOICE_ID", source = "INVOICE_ID" },
+  { param = "UPMJ",       source = "UPMJ", default = "#SYSDATE#" },
+]
 ```
 
-The bound value is exactly `"PAID"`, every call. Same as if the SQL hard-coded it — only useful when one caller wants a value the others don't.
+**source** holds the **name** of a column or a field, not its value. The usual case: an action on a row passes the row's key to the query — `{ param = "INVOICE_ID", source = "INVOICE_ID" }`.
 
-### Source mode — runtime
+### Built-in sources \{#builtins\}
 
-```toml
-[[actions.run_query.params]]
-param  = "INVOICE_ID"
-source = "INVOICE_ID"
-```
+These sources are read in the browser at the time of the call:
 
-At call time, the engine reads the **`INVOICE_ID`** column of the row the user clicked (or the form field, or the chain-context path) and binds that value. The source string is **the name of a column / field**, not the value.
-
-The most common bind: a row click on a master grid passes the row's key columns to the detail screen — every key column gets a `ParamBind` with `source = "<KEY_COL>"`.
-
-### Source mode with a default
-
-```toml
-[[actions.run_query.params]]
-param   = "UPMJ"
-source  = "UPMJ"
-default = "#SYSDATE#"
-```
-
-If the source resolves to NULL / empty (the user didn't type anything in the field), the engine binds `#SYSDATE#` instead. Useful when the underlying database column shouldn't accept NULL — give the bind a sane fallback.
-
----
-
-## Reserved sources — the built-in `#…#` tokens
-
-Two source values aren't column names — they're tokens Liberty substitutes at call time:
-
-| Token | Resolves to |
+| Source | Value |
 |---|---|
-| **`#LOGIN_USER#`** | The username of the user making the call (from the JWT). |
-| **`#SYSDATE#`** | The current timestamp (`datetime.now(UTC)`) — one value per call, so two `#SYSDATE#` bindings in the same call get the same instant. |
+| `#LOGIN_USER#` (or `#LOGIN#`, `#USER#`) | The signed-in user's name. |
+| `#LOGIN_EMAIL#` (or `#EMAIL#`) | The user's e-mail address. |
+| `#LANGUAGE#` (or `#LANG#`) | The interface language. |
+| `#SYSDATE#` (or `#CURRENT_DATE#`, `#TODAY#`) | Today's date, `YYYY-MM-DD`. |
+| `#NOW#` (or `#CURRENT_TIMESTAMP#`) | The current date and time. |
+| `#CURRENT_TIME#` | The current time, `HH:MM:SS`. |
 
-Use them in `source` (not `value`) — the engine sees the `#…#` shape and resolves it instead of looking for a column of that name.
+An unknown built-in binds nothing. Use them in **source** or **default**: in **value**, the text `#LOGIN_USER#` is bound as it is.
 
-```toml
-# Row insert — stamp creator + creation timestamp from the session
-[[actions.run_query.params]]
-param  = "CREATED_BY"
-source = "#LOGIN_USER#"
+---
 
-[[actions.run_query.params]]
-param  = "CREATED_AT"
-source = "#SYSDATE#"
+## Tokens resolved by the server \{#tokens\}
+
+A writable query can write a value the server fills when it executes the statement — the browser cannot change it. The **Token** menu of the SQL editor inserts them:
+
+| Token | Value |
+|---|---|
+| `{{LOGIN}}` (or `{{USER}}`) | The signed-in user's name, in upper case. |
+| `{{SYSDATE}}` | The current date. |
+| `{{SYSTIME}}` | The current time. |
+| `{{SYSTIMESTAMP}}` (or `{{NOW}}`) | The current date and time. |
+| `{{JDEDATE}}` | Today as a JD Edwards date (CYYDDD). |
+| `{{JDETIME}}` | The current time as a JD Edwards time (HHMMSS). |
+| `{{PID}}` | The connector name, in upper case. |
+| `{{JOBN}}` | `LIBERTY`. |
+
+```sql
+UPDATE invoices
+SET    status     = 'PAID',
+       updated_by = {{LOGIN}},
+       updated_at = {{SYSTIMESTAMP}}
+WHERE  invoice_id = :INVOICE_ID
 ```
 
-For column-level pre-fill (a screen field that shows the current user when the dialog opens), use the dictionary's **`LOGIN`** and **`SYSDATE`** rules instead — they fire on the form layer, not at SQL execute time. The bind tokens are for *call-time* parameter substitution; the dictionary rules are for *form-time* field population.
+Dates and times use the server's local time, one instant per statement. In `COLUMN = {{TOKEN}}`, the value takes the column's format from the dictionary (a `jdedate` column receives CYYDDD). An unknown token makes the statement fail, so a typo does not go unnoticed.
 
 ---
 
-## Where bindings are declared in the UI
+## Where bindings are set \{#where\}
 
-| Caller | Where the binding lives |
+| Caller | Setting |
 |---|---|
-| **Screen read query** | The screen's `params` list (Settings → Screens → \<screen> → *Params* tab). |
-| **Dialog Save (UPDATE / INSERT / DELETE)** | The screen auto-binds every key + non-key column to its same-named placeholder. You don't usually declare anything — the convention does the work. |
-| **Action `run_query`** | The action editor's `params` list. |
-| **Action `navigate`** | Same — the params bind into the destination screen's read query. |
-| **Menu item with target params** | Menu editor — the `params` list on the menu entry. |
-| **Nested-form / nested-tab read** | The nested tab's `params` list. |
-| **Lookup combo with a cascading filter** | The column's `filter_from` (which translates to a `ParamBind` under the hood). |
-
-In each case the editor surfaces a *Param* dropdown listing the destination query's declared params, a mode toggle (literal / source), and value / source inputs. The dropdown is populated from the live connectors registry — switching the destination query refreshes the list.
+| **Dialog save** (insert, update, delete) | Nothing to declare: each column is bound to the parameter of the same name, and the update's WHERE uses `:<KEY>_ORIGINAL`, the key's value when the dialog opened. |
+| **Action** (run a query, call an API or a plugin, open a screen…) | The action's `param_binds`. |
+| **Lookup column** | The column's **lookup_param_binds** (Rules tab), or the dictionary entry's **Lookup params** for fixed values. |
+| **Nested tab** | The tab's `param_binds` — typically the parent row's key. |
+| **Menu item** | **Params** (Advanced tab): fixed values passed to the target when it opens. |
+| **Dashboard** | The period and the filters bind `:PERIOD_FROM`, `:PERIOD_TO` and the filter columns — see [Dashboards](../../dashboards.md). |
 
 ---
 
-## Resolution order — what binds what
+## Resolution order \{#order\}
 
-When a query is called, the engine resolves each `:placeholder` in this order:
+For each parameter of the statement:
 
-1. The matching `ParamBind` on the caller — `value` literal, or `source` (column lookup or `#…#` token), or `default` when source is NULL / empty.
-2. The matching dictionary rule — `SYSDATE` / `LOGIN` / `SEQUENCE` / `DEFAULT` fire if the column has one (writes only — those rules don't override caller-supplied values).
-3. The query's `ParamDef.default`.
-4. SQL `NULL`.
+1. the value sent by the caller — a `param_binds` entry, the dialog's field, a menu parameter;
+2. otherwise the **default** declared on the query;
+3. otherwise `NULL`.
 
-The first match wins. So a screen that binds `:status = "PAID"` overrides the query's `default = "OPEN"`; a query that leaves `:from_date` unbound and undeclared receives SQL `NULL`.
+On a write, the dictionary rules then apply to the bound columns: `LOGIN` always replaces the value, `SYSDATE` and `DEFAULT` fill an empty value, `SEQUENCE` numbers an insert — see [Dictionary → Rules](../../dictionary.md#rules).
 
 ---
 
 ## Naming conventions
 
-| Pattern | Why |
+| Convention | Why |
 |---|---|
-| **UPPER snake case for placeholders** | The engine normalises to UPPERCASE on save and matches case-insensitively at runtime. `:USER_ID` and `:user_id` work; `:UserId` works but reads oddly next to the saved UPPERCASE form. |
-| **Match column names** | When the placeholder corresponds to a screen column, name it the same — the binding then collapses to `source = "<NAME>"` with the same value, easier to read. |
-| **`:NAME_ORIGINAL` for UPDATE WHERE** | The dialog Save convention — the column's value at dialog open. The CRUD Wizard wires this for you; hand-written `_put` queries should mirror it. |
-| **`:LOGIN_USER` / `:SYSDATE` as suffixes for audit columns** | A column named `:CREATED_BY` bound to `#LOGIN_USER#` reads obvious; `:UID` bound to `#LOGIN_USER#` reads cryptic. |
-
----
-
-## Worked example — a multi-bind action
-
-A screen for *Invoices* has a row action **Mark paid**. Clicking it on row N runs an UPDATE that:
-
-- Sets `status = 'PAID'`.
-- Sets `paid_at = SYSDATE`.
-- Sets `paid_by = <logged-in user>`.
-- Matches on the row's `INVOICE_ID`.
-
-The query (under Unclassified, `writable = true`):
-
-```sql
-UPDATE invoices
-SET    status  = :STATUS,
-       paid_at = :PAID_AT,
-       paid_by = :PAID_BY
-WHERE  invoice_id = :INVOICE_ID
-```
-
-The action editor's `params` list:
-
-| `param` | mode | value / source | default |
-|---|---|---|---|
-| `STATUS` | value | `PAID` | — |
-| `PAID_AT` | source | `#SYSDATE#` | — |
-| `PAID_BY` | source | `#LOGIN_USER#` | — |
-| `INVOICE_ID` | source | `INVOICE_ID` | — |
-
-Calling the action on a row binds each placeholder, fires the UPDATE, and the grid refreshes. No screen field input from the user — the action does its job from row context + session identity alone.
+| **Upper-case parameters** | Binds are written in upper case on save (`param`, `source`), and the CRUD wizard generates upper-case names. Keeping the SQL in upper case avoids any mismatch. |
+| **Same name as the column** | A parameter named after its column reads naturally and binds itself on a dialog save. |
+| **`:<KEY>_ORIGINAL` in an update's WHERE** | The dialog save convention; the CRUD wizard writes it, and a hand-written `_put` must do the same. |
 
 ---
 
@@ -202,16 +151,16 @@ Calling the action on a row binds each placeholder, fires the UPDATE, and the gr
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Set both `value` and `source`. | The save fails validation ("set exactly one of value or source"). | Pick one. |
-| `source = "#SYSDATE#"` on a SELECT screen filter. | The filter applies SYSDATE at call time — the user can't pick a date. | Don't bind. Let the user fill the field; the dictionary's SYSDATE rule pre-fills the input but the user can override. |
-| `value = "#LOGIN_USER#"`. | The literal string `"#LOGIN_USER#"` is bound — no substitution. | Use `source`, not `value`. |
-| Bind a placeholder the query doesn't have. | The engine ignores it; nothing happens, nothing fails. | Open the destination query, declare the param or pick the right placeholder name from the dropdown. |
-| Forget the `_ORIGINAL` suffix on a hand-written `_put`. | The UPDATE matches on the **edited** key, not the original — the row isn't found when the operator changed the key. | Mirror the CRUD Wizard convention: `WHERE key = :key_ORIGINAL`. |
+| `value = "#LOGIN_USER#"`. | The text `#LOGIN_USER#` is written. | Use **source**. |
+| Both **value** and **source** set. | **source** is ignored. | Keep one. |
+| `#SYSDATE#` bound to a read filter. | The user cannot pick another date. | Leave the parameter free, with a default on the query. |
+| A bind for a parameter the query does not have. | Nothing happens. | Pick the parameter from the list, which follows the query. |
+| A hand-written `_put` without `_ORIGINAL`. | Changing the key in the dialog updates no row. | `WHERE key = :KEY_ORIGINAL`. |
 
 ---
 
 ## What's next
 
-- [Per-dialect SQL variants](./per-dialect-sql.md) — for parameters that need different SQL syntax across Postgres / Oracle.
-- [Concepts → Dictionary](../../dictionary.md) — the `SEQUENCE` / `LOOKUP` / `LOGIN` / `SYSDATE` rules that pre-fill form fields.
-- [Concepts → Form conditions](../../form-conditions.md) — when a field should appear only under specific filter values.
+- [Per-dialect SQL variants](./per-dialect-sql.md) — one query, different SQL per database.
+- [Dictionary](../../dictionary.md) — the `LOGIN`, `SYSDATE`, `SEQUENCE` and `DEFAULT` rules applied on writes.
+- [Actions and lifecycle](../screens/actions-and-lifecycle.md) — the actions that call queries with `param_binds`.

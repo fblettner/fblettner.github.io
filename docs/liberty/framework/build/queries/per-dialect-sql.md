@@ -66,13 +66,13 @@ The validator enforces two rules on the map:
 
 ## The editor
 
-The single-query editor under **Settings → Connectors → Unclassified / Sequences / Lookups** renders the `sql` field as a SQL editor. To switch from single-string to per-dialect map, edit the underlying TOML — the form-side toggle is on the roadmap but not shipped today; for now the way in is:
+In the query editor (**Settings → Connectors**, Tables, Queries, Sequences or Lookups view), the **sql** field is a single SQL editor:
 
-1. Save the query as a single SQL string first.
-2. Edit the connector TOML directly to convert `sql = "..."` into the `[<connector>.queries.sql]` block shown above.
-3. Reload (the page's Save will refresh the form when you come back).
+1. **+ per-dialect variants** turns it into a list of variants, starting with `default (required)` holding the current SQL.
+2. Type a dialect name (`oracle`, `postgresql`, `mssql`…) in the **dialect** field and press Enter: a new editor appears for that variant.
+3. The **×** next to a variant removes it; **single** goes back to one statement once only `default` remains.
 
-For the Tables tab (CRUD-shaped queries), the wizard always writes single-string SQL. If a `_get` needs per-dialect variants, generate it from the wizard first and convert afterwards.
+The CRUD wizard writes single-statement SQL; a generated query is converted the same way afterwards.
 
 ---
 
@@ -143,7 +143,6 @@ Three databases, three syntaxes, one Liberty query name. Screens that wire `cust
 ```toml
 [[connectors.reporting.queries]]
 name        = "monthly_revenue"
-type        = "custom"
 description = "Aggregated invoice revenue per month, period filter on invoice_date"
 
 [connectors.reporting.queries.sql]

@@ -1,201 +1,93 @@
 ---
 title: Champs conditionnels
-description: "Faire apparaître un champ de dialogue, le rendre obligatoire ou le verrouiller uniquement quand un autre champ a une valeur précise — visible_when / required_when / disabled_when sur ColumnHint et ScreenField."
-keywords: [Liberty Framework, champs conditionnels, visible_when, required_when, disabled_when, FieldCondition, logique de formulaire]
+description: "Faire apparaître un champ de dialogue, le rendre obligatoire, le verrouiller ou lui imposer une valeur uniquement quand un autre champ a une valeur donnée — réglé sur la colonne depuis l'inspecteur de l'éditeur d'écran, avec des exemples."
+keywords: [Liberty Next, champs conditionnels, visible_when, required_when, disabled_when, default_when, disable_on_edit, editable_when, éditeur d'écran, dialogue]
 ---
 
 # Champs conditionnels
 
-Un dialogue statique pose les mêmes questions à l'utilisateur à chaque fois. Un dialogue conditionnel pose les bonnes questions selon ce que l'utilisateur a déjà saisi — afficher **Coordonnées bancaires** uniquement quand **Mode de paiement** est `bank_transfer`, exiger **Motif** uniquement quand **Statut** est `cancelled`, verrouiller **Numéro de compte** en mode édition mais autoriser la modification en mode ajout.
+Un dialogue figé pose toujours les mêmes questions. Un dialogue conditionnel s'adapte aux choix déjà faits : afficher **IBAN** pour un virement uniquement, signaler **Motif d'annulation** comme obligatoire pour une commande annulée seulement, verrouiller le **Numéro de facture** une fois la facture créée.
 
-Trois indicateurs sur une colonne (ou une surcharge par dialogue sur un champ) gèrent cela :
-
-| Indicateur | Ce qu'il pilote |
-|---|---|
-| **`visible_when`** | Si le champ s'affiche. Les champs masqués ne lient pas de valeurs à l'enregistrement. |
-| **`required_when`** | Si une valeur est obligatoire. |
-| **`disabled_when`** | Si le champ est en lecture seule. |
-
-Chacun est une liste de prédicats `FieldCondition` — sémantique **ET**, donc chaque prédicat doit correspondre pour que la règle se déclenche.
+Les réglages et leur comportement exact sont détaillés dans [Conditions de formulaire](../../form-conditions.md). Cette page en montre la mise en place.
 
 ---
 
-## La forme FieldCondition
+## Où les régler
 
-```toml
-{ field = "STATUS", value = "CANCELLED" }
-# ou avec une liste — toute valeur qui correspond déclenche la règle
-{ field = "PAYMENT_METHOD", value = ["bank_transfer", "sepa"] }
-```
+Un champ de dialogue affiche une colonne de l'écran, et c'est la colonne qui porte tous les comportements — les mêmes réglages pilotent le dialogue et la grille. Dans l'éditeur d'écran :
 
-| Propriété | Rôle |
-|---|---|
-| **`field`** | L'autre champ du dialogue dont la valeur en direct pilote cette règle. Référencé par son nom de colonne (insensible à la casse). |
-| **`value`** | La valeur attendue, ou une liste de valeurs (toute correspondance suffit). |
+1. Ouvrir le dialogue dans le [Constructeur de dialogue](./dialog-builder.md) et cliquer sur le champ — ou sélectionner la colonne dans l'onglet **Colonnes**.
+2. L'inspecteur affiche **Configuration de la colonne**, répartie en onglets libellés en anglais : les conditions se trouvent dans **Filter** (`visible_when`), **Edit** (`required_when`, `disabled_when`, `disable_on_add`, `disable_on_edit`), **Defaults** (`default_when`, `write_when`) et **Rules** (`rules_when`).
+3. Ajouter une ligne par condition : le **champ** (choisi parmi les colonnes de l'écran) et la **valeur**, ou plusieurs valeurs.
 
-Plusieurs conditions dans la liste = ET. Pour OU des conditions, déclarer deux champs distincts avec la même règle conditionnelle (ou utiliser une condition unique avec une liste de valeurs).
+Toutes les lignes d'un même réglage doivent être remplies ensemble (ET). Pour un OU sur un même champ, lister les valeurs dans une seule condition.
 
 ---
 
-## Où les définir
+## Exemples
 
-Deux couches portent les mêmes indicateurs :
+### Afficher des champs pour un choix donné
 
-| Couche | Quand |
-|---|---|
-| **Indication de colonne** *(onglet Colonnes)* | La règle s'applique à **chaque** dialogue qui présente cette colonne. Le bon défaut — la plupart des champs se comportent pareil entre dialogues. |
-| **Champ par dialogue** *(Inspecteur → Règles conditionnelles)* | La règle s'applique uniquement à **ce** dialogue précis. À utiliser quand un dialogue a besoin d'un comportement différent du défaut au niveau colonne. |
-
-Le runtime évalue d'abord la surcharge par champ ; si vide, il retombe sur le paramètre de l'indication de colonne.
-
----
-
-## La section Règles conditionnelles de l'Inspecteur
-
-Quand un champ est sélectionné sur le canevas du [Constructeur de dialogue](./dialog-builder.md), la section *Règles conditionnelles* de l'Inspecteur permet d'ajouter des prédicats pour chacun des trois indicateurs.
-
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <linearGradient id="cf-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-  </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#cf-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Inspecteur · IBAN · Règles conditionnelles</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="40" y="88" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">visible_when (ET)</text>
-  <rect x="40" y="100" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="120" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Champ</text>
-  <rect x="120" y="110" width="220" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="130" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">PAYMENT_METHOD ▾</text>
-  <text x="360" y="120" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Valeur</text>
-  <rect x="420" y="110" width="280" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="430" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">bank_transfer, sepa</text>
-  <rect x="720" y="110" width="22" height="22" rx="4" fill="rgba(239,68,68,0.10)" stroke="rgba(239,68,68,0.40)"/>
-  <text x="731" y="125" fill="#ef4444" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <text x="56" y="148" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">＋ Ajouter une condition</text>
-
-  <text x="40" y="178" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">required_when (ET)</text>
-  <rect x="40" y="190" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="210" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Champ</text>
-  <rect x="120" y="200" width="220" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="130" y="215" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">PAYMENT_METHOD ▾</text>
-  <text x="360" y="210" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Valeur</text>
-  <rect x="420" y="200" width="280" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="430" y="215" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">bank_transfer</text>
-  <text x="56" y="238" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">＋ Ajouter une condition</text>
-
-  <text x="40" y="268" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">disabled_when (ET)</text>
-  <rect x="40" y="280" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="300" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Champ</text>
-  <rect x="120" y="290" width="220" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="130" y="305" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">STATUS ▾</text>
-  <text x="360" y="300" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Valeur</text>
-  <rect x="420" y="290" width="280" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="430" y="305" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">LOCKED, ARCHIVED</text>
-  <text x="56" y="328" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">＋ Ajouter une condition</text>
-</svg>
-
-| Section | Rôle |
-|---|---|
-| **visible_when** | Affiche le champ uniquement quand chaque prédicat correspond. Vide = retombe sur l'indicateur statique `hidden`. |
-| **required_when** | Rend le champ obligatoire uniquement quand chaque prédicat correspond. Vide = `required` décide. |
-| **disabled_when** | Verrouille le champ uniquement quand chaque prédicat correspond. Vide = `disabled` décide. |
-
-Le runtime réévalue les règles à chaque modification du formulaire — saisir dans `PAYMENT_METHOD`, les champs dépendants apparaissent / disparaissent / se verrouillent sans aller-retour.
-
----
-
-## Exemples concrets
-
-### Afficher des champs sous condition
-
-Un dialogue *Paiement* avec ces colonnes :
-
-- `PAYMENT_METHOD` — liste déroulante ENUM (`cash`, `bank_transfer`, `sepa`, `card`).
-- `IBAN`, `BIC` — pertinents uniquement pour `bank_transfer` / `sepa`.
-- `CARD_LAST4` — pertinent uniquement pour `card`.
-
-Les règles :
+Un dialogue *Paiement* où `PAYMENT_METHOD` est une liste (`CASH`, `TRANSFER`, `DIRECT_DEBIT`, `CARD`) :
 
 | Colonne | `visible_when` |
 |---|---|
-| `IBAN` | `field=PAYMENT_METHOD, value=[bank_transfer, sepa]` |
-| `BIC` | `field=PAYMENT_METHOD, value=[bank_transfer, sepa]` |
-| `CARD_LAST4` | `field=PAYMENT_METHOD, value=card` |
+| `IBAN` | `PAYMENT_METHOD` = `TRANSFER`, `DIRECT_DEBIT` |
+| `BIC` | `PAYMENT_METHOD` = `TRANSFER`, `DIRECT_DEBIT` |
+| `CARD_LAST4` | `PAYMENT_METHOD` = `CARD` |
 
-L'utilisateur choisit `cash` — `IBAN` / `BIC` / `CARD_LAST4` disparaissent tous. Bascule sur `bank_transfer` — `IBAN` et `BIC` apparaissent, `CARD_LAST4` reste masqué.
+Avec `CASH`, aucun des trois champs n'apparaît. Avec `TRANSFER`, `IBAN` et `BIC` s'affichent.
 
-### Exiger un motif à l'annulation
-
-Un dialogue *Abonnement* où `CANCELLATION_REASON` n'est obligatoire que quand `STATUS = CANCELLED` :
+### Rendre un motif obligatoire à l'annulation
 
 | Colonne | `required_when` |
 |---|---|
-| `CANCELLATION_REASON` | `field=STATUS, value=CANCELLED` |
+| `CANCELLATION_REASON` | `STATUS` = `CANCELLED` |
 
-Le champ est toujours visible (pas de `visible_when`), toujours éditable (pas de `disabled_when`), mais le bouton *Enregistrer* refuse de soumettre tant que le champ n'a pas de valeur **si** `STATUS` est `CANCELLED`. Pour tout autre statut, un `CANCELLATION_REASON` vide passe sans souci.
+Le champ reste toujours affiché ; il reçoit l'astérisque des champs obligatoires dès que le statut vaut `CANCELLED`.
 
-### Verrouiller des champs en mode édition pour certaines lignes
+### Verrouiller une clé après création
 
-Un dialogue *Client* où `TAX_ID` ne doit être éditable qu'à la création de la ligne (pas en modification) :
-
-| Colonne | `disabled_when` |
+| Colonne | Réglage |
 |---|---|
-| `TAX_ID` | (règle basée sur un marqueur qui distingue ajout et modification — typiquement un indicateur au niveau ligne comme `IS_FROZEN`) |
+| `INVOICE_NUMBER` | `disable_on_edit` coché |
 
-Quand `IS_FROZEN = Y` sur la ligne, le champ `TAX_ID` est en lecture seule. Sinon éditable. Le formulaire est le même ; le comportement s'adapte à la ligne.
+Le numéro se saisit à l'ajout de la facture, puis passe en lecture seule — dans le dialogue comme dans la grille. `disable_on_add` fait l'inverse, pour une valeur attribuée à la création.
 
-Pour un strict « verrouiller en édition, autoriser en ajout » sans marqueur de ligne, utiliser les indicateurs `hide_on_add` / `hide_on_edit` par onglet ou le `disabled` de l'indication de colonne par champ (qui verrouille partout).
+### Imposer une valeur pour un type de ligne
 
-### ET multi-conditions
+| Colonne | `default_when` |
+|---|---|
+| `CREDIT_LIMIT` | `STATUS` = `CANCELLED` → valeur `0`, verrouillage actif |
 
-Un dialogue *Facture* où `EARLY_PAYMENT_DISCOUNT` ne doit être obligatoire que quand **à la fois** `STATUS = OPEN` ET `AMOUNT_DUE > 1000` :
+Dès que le statut passe à `CANCELLED`, le plafond prend la valeur `0` et se verrouille. Avec **lock** désactivé, `0` est seulement proposé et reste modifiable.
 
-La première condition est directe (`STATUS = OPEN`). La seconde non — `FieldCondition` vérifie l'égalité, pas la comparaison. Pour des seuils numériques, utiliser une colonne d'indicateur normalisée (ex. `HIGH_VALUE = Y` calculée dans la requête de lecture) et conditionner sur celle-ci.
+### Placer les périodes clôturées en lecture seule
 
-Parfois, le mouvement le plus propre est une **règle dictionnaire** avec une valeur par défaut que l'utilisateur peut surcharger — laisser le formulaire calculer la remise et traiter le champ comme informatif plutôt que de verrouiller son enregistrement.
+Dans l'onglet **Général** de l'éditeur d'écran :
 
----
+| Réglage | Valeur |
+|---|---|
+| `editable_when` | `PERIOD_STATUS` = `OPEN`, `VALIDATED` |
 
-## Visible vs masqué — ce qui se passe à l'enregistrement
-
-Un champ masqué par `visible_when` est **exclu de la charge utile d'enregistrement**. L'Enregistrer du dialogue n'envoie que les valeurs des champs actuellement visibles. La colonne de base de données du champ masqué :
-
-- Conserve sa valeur existante (UPDATE — le champ manquant est omis de la clause SET).
-- Prend la valeur NULL ou son défaut BD (INSERT — le champ manquant est omis de la liste des colonnes INSERT).
-
-C'est l'**intention** de la visibilité conditionnelle — un champ qui n'est pas pertinent pour le choix de l'utilisateur ne doit pas accidentellement écraser la base de données avec des données obsolètes ou par défaut.
-
-Pour les champs véritablement masqués mais obligatoires (ex. un `:LOGIN_USER` lié à l'enregistrement), utiliser la [liaison de paramètres](../queries/parameter-binding.md) sur la requête `_post` / `_put`, pas un champ de dialogue.
+Une ligne d'une période clôturée s'ouvre en consultation, et le serveur en refuse toute modification.
 
 ---
 
-## Ordre de validation
+## Points d'attention
 
-Quand l'utilisateur clique sur *Enregistrer*, le dialogue vérifie les champs dans cet ordre :
-
-1. **Les champs visibles avec `required = true`** (ou `required_when` qui correspond) doivent avoir une valeur.
-2. La règle dictionnaire de chaque champ se déclenche (BOOLEAN, ENUM, LOOKUP, format).
-3. La distribution Enregistrer déclenche la chaîne d'actions.
-
-Une vérification d'obligation qui échoue affiche une erreur en ligne sur le champ, bloque l'enregistrement, ne déclenche pas la chaîne d'actions.
-
----
-
-## Pièges courants
-
-| Erreur | Symptôme | Correction |
+| Situation | Conséquence | Solution |
 |---|---|---|
-| `visible_when` référence un champ qui n'est sur aucun onglet du dialogue. | Le champ dépendant n'apparaît jamais (la valeur du champ source est indéfinie, aucune condition ne correspond). | Ajouter le champ source au dialogue ou changer la condition. |
-| `visible_when` sur un champ `key`. | L'utilisateur ajoute une ligne sans clé — l'INSERT échoue. | Les champs clés ne doivent jamais être masqués sous condition. Les verrouiller, pas les masquer. |
-| `required_when` correspond mais `visible_when` ne correspond pas. | Le champ est obligatoire ET masqué — l'utilisateur ne peut pas le remplir mais l'enregistrement refuse. | Synchroniser les deux conditions ou supprimer le `required_when`. |
-| Liste de valeurs avec une coquille. | La règle ne correspond jamais. | Vérifier que les valeurs d'énumération correspondent exactement (sensible à la casse). |
-| Condition qui référence le champ lui-même. | La protection anti-boucle s'active ; la règle est ignorée. | Les conditions référencent **d'autres** champs, jamais elles-mêmes. |
+| Le champ déterminant ne figure pas dans le dialogue. | Le formulaire ignore sa valeur : la condition n'est jamais remplie et le champ dépendant reste masqué. | Ajouter le champ déterminant au dialogue, masqué ou non. |
+| `visible_when` sur une colonne clé. | À l'ajout d'une ligne, la clé peut ne pas apparaître. | Verrouiller une clé (`disable_on_edit`) plutôt que la masquer. |
+| `required_when` rempli alors que `visible_when` ne l'est pas. | Le champ est obligatoire mais masqué. | Aligner les deux conditions. |
+| Une valeur orthographiée différemment. | La condition n'est jamais remplie : la comparaison est exacte (seuls les espaces autour sont ignorés). | Reprendre les codes stockés, pas leurs libellés. |
+| Un seuil (`AMOUNT > 1000`). | Les conditions ne testent que l'égalité. | Renvoyer un indicateur depuis la requête de lecture (`HIGH_VALUE = 'Y'`) et tester cet indicateur. |
 
 ---
 
-## Étapes suivantes
+## Pour aller plus loin
 
+- [Conditions de formulaire](../../form-conditions.md) — la liste complète des réglages et le lieu de chaque contrôle.
+- [Colonnes](./columns.md) — les autres réglages d'une colonne.
 - [Actions et cycle de vie](./actions-and-lifecycle.md) — déclencher des actions au chargement, à l'enregistrement ou à l'annulation du formulaire.
-- [Constructeur de dialogue](./dialog-builder.md) — le Constructeur visuel où l'on définit ces règles par champ.
-- [Colonnes](./columns.md) — définir les mêmes règles au niveau de la colonne pour des défauts à l'échelle de l'écran.

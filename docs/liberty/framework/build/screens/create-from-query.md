@@ -34,7 +34,7 @@ Below the empty list, click the **＋ Add screen** button. The page prompts for 
 | Match the JD Edwards object. | `F0005` for the JDE UDC table. |
 | `<entity>_<purpose>` for screens that don't map 1-1 to a table. | `customer_balance_report`, `invoice_send_dialog`. |
 
-The id is **stable** — it's the URL segment (`/screen/<app>/<id>`), the dictionary key (`[screens.<app>.<id>]`) and the cross-file reference target. Renaming later goes through the *Rename* button on the card, which propagates the change across screens / menus / dictionary.
+The id is **stable** — it's the URL segment (`/screen/<app>/<id>`), the configuration key (`[screens.<app>.<id>]`) and the cross-file reference target. Renaming later goes through the *Rename* button on the card, which propagates the change across screens / menus / dictionary.
 
 The empty screen appears in the list; click it to open the **Screen Designer**.
 

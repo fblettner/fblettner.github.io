@@ -1,6 +1,6 @@
 ---
 title: Screens — overview
-description: "The Screens page — left scope bar of apps, flat list of screens, click to open the Screen Designer's 7 tabs (General / Queries / Columns / Dialog / Actions / Row menu / Export)."
+description: "The Screens page — left scope bar of apps, flat list of screens, click to open the Screen Designer's 9 tabs (General / Queries / Columns / Views / Summary / Dialog / Actions / Row menu / Export)."
 keywords: [Liberty Framework, screens, ScreensBuilder, Screen Designer, tabs, dialog, columns, actions, permissions]
 ---
 
@@ -78,7 +78,7 @@ Three regions:
 
 Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes; Cancel prompts on unsaved changes.
 
-Inside the modal, seven tabs organise everything:
+Inside the modal, nine tabs organise everything:
 
 <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -88,20 +88,24 @@ Inside the modal, seven tabs organise everything:
   <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer · crm.customers</text>
   <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
-  <text x="90" y="98" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <rect x="148" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="198" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Queries</text>
-  <rect x="256" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="306" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
-  <rect x="364" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="414" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Dialog</text>
-  <rect x="472" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="522" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
-  <rect x="580" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="630" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Row menu</text>
-  <rect x="688" y="80" width="100" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="738" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
+  <rect x="40" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
+  <text x="88" y="98" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="142" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="190" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Queries</text>
+  <rect x="244" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="292" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="346" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="394" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
+  <rect x="448" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="496" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Summary</text>
+  <rect x="550" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="598" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Dialog</text>
+  <rect x="652" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="700" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
+  <rect x="754" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="802" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Row menu</text>
+  <rect x="856" y="80" width="96" height="28" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
+  <text x="904" y="98" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
 
   <text x="40" y="138" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Tab content</text>
   <rect x="40" y="146" width="920" height="20" rx="4" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
@@ -111,7 +115,9 @@ Inside the modal, seven tabs organise everything:
 |---|---|
 | **General** | Identity, connector override, audit table, row cap, key columns, behaviour flags (auto-load, editable, uploadable), grouping, treeview, default chart, row-click behaviour. |
 | **Queries** | The four CRUD query references — read (required), update, insert, delete. Picker is fed from the connector's queries list. |
-| **Columns** | One row per column hint — labels, formats, defaults, dictionary references, filtering, edit rules. Click a column to drill into its full editor. |
+| **Columns** | One row per column hint — labels, formats, defaults, dictionary references, filtering, edit rules, conditions. Click a column to drill into its full editor. |
+| **Views** | The shared views of the grid — column layouts, sorts and filters published for every user, one of them possibly the default. See [Saved views](../../saved-views.md). |
+| **Summary** | The grouping columns of the [Summary view](../../saved-views.md#summary), and the optional row-level value diff. |
 | **Dialog** | The **Visual Builder** — a three-column Figma-style canvas (Palette / Canvas / Inspector) where you drag fields onto tabs. Optional — a screen without a dialog still works as a read-only / grid-edit table. |
 | **Actions** | Three groups: *Dialog hooks* (on_load / on_save / on_cancel), *Toolbar* (buttons above the table), *Row hooks* (on_insert / on_update / on_delete). |
 | **Row menu** | Right-click context menu actions on a row. |
@@ -130,10 +136,12 @@ The schema's top-level fields, grouped by purpose:
 | **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
 | **Read query** | `read_query` (required), `auto_load`, `max_rows`, `key_columns` |
 | **Write queries** | `update_query`, `insert_query`, `delete_query` |
-| **Editing & display** | `columns`, `editable`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Views & summary** | `views` (shared views), `summary`, `value_diff` |
+| **Change packages** | `change_tracked`, `change_entity`, `post_apply` — see [Change packages](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (e.g. `AUD_USERS` — mirrors writes with AUD_ACTION / AUD_USER / AUD_DATE) |
 | **Form** | `dialog` *(optional — the form on top of the table)* |
-| **Actions / hooks** | `actions` (toolbar), `row_menu` (right-click), `on_insert` / `on_update` / `on_delete` (row hooks) |
+| **Actions / hooks** | `actions` (toolbar), `row_menu` (right-click), `on_insert` / `on_update` / `on_delete` / `on_duplicate` (row hooks) |
 | **Row-click target** | `row_click_screen` + `row_click_connector` + `row_click_binds` *(open a sibling screen as a dialog)* OR `row_click_route` *(open a SPA route)* |
 | **Export** | `export` *(workbook xlsx config)* |
 
