@@ -48,7 +48,7 @@ Un écran sans dialogue fonctionne quand même comme un tableau en lecture seule
   <rect x="370" y="112" width="76" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="408" y="129" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Adresse</text>
   <rect x="452" y="112" width="60" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="482" y="129" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Onglet</text>
+  <text x="482" y="129" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Ajouter un onglet</text>
 
   <rect x="288" y="148" width="200" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="298" y="166" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
@@ -106,7 +106,7 @@ Un écran sans dialogue fonctionne quand même comme un tableau en lecture seule
 | Région | Rôle |
 |---|---|
 | **Palette** *(à gauche)* | Source des nouveaux champs. Deux sous-onglets : **Dictionnaire** (chaque entrée disponible dans la portée du connecteur courant) et **Colonnes** (chaque colonne que retourne la requête de lecture). Une zone de recherche restreint la liste. Cliquer sur une entrée ajoute une carte de champ sur le canevas ; faire glisser une entrée pour la déposer à un emplacement précis. |
-| **Canevas** *(au centre)* | La barre d'onglets du dialogue en haut + la grille de champs en dessous. Cliquer sur un onglet pour basculer ; *＋ Onglet* en ajoute un. Chaque carte de champ affiche le nom du champ + un résumé sur une ligne de ses indicateurs clés. La carte sélectionnée a une bordure colorée ; l'inspecteur à droite la reflète. Un groupe **MASQUÉ** distinct en bas rassemble les champs avec `hidden = true`. |
+| **Canevas** *(au centre)* | La barre d'onglets du dialogue en haut + la grille de champs en dessous. Cliquer sur un onglet pour basculer ; *＋ Ajouter un onglet* en ajoute un. Chaque carte de champ affiche le nom du champ + un résumé sur une ligne de ses indicateurs clés. La carte sélectionnée a une bordure colorée ; l'inspecteur à droite la reflète. Un groupe **MASQUÉ** distinct en bas rassemble les champs avec `hidden = true`. |
 | **Inspecteur** *(à droite)* | Les propriétés du champ sélectionné (ou un éditeur d'action par onglet quand une action d'onglet est sélectionnée — mutuellement exclusifs). Il présente le champ et la **Configuration de la colonne** — voir l'étape 3. |
 
 ---
@@ -142,7 +142,7 @@ Chaque réglage est décrit dans [Colonnes](./columns.md), les conditions dans [
 
 ### Étape 4 — Ajouter des onglets
 
-Cliquer sur **＋ Onglet** au-dessus du canevas. Le nouvel onglet est vide ; y glisser des champs depuis la Palette. Patrons d'onglets courants :
+Cliquer sur **＋ Ajouter un onglet** au-dessus du canevas. Le nouvel onglet est vide ; y glisser des champs depuis la Palette. Patrons d'onglets courants :
 
 | Nom d'onglet | Contenu |
 |---|---|

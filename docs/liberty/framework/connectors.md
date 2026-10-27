@@ -1,173 +1,144 @@
 ---
 title: Connectors
-description: "A connector defines how the framework reaches a data source. Built and edited from Settings → Connectors — three types (SQL, HTTP, API), each with a dedicated builder. Schema is discovered at runtime from the live query; nothing is hand-typed about column types."
-keywords: [Liberty Framework, connector, SQL, HTTP, API, settings, pool, named query, endpoint, schema discovery, write query, licensed]
+description: "A connector is how Liberty Next reaches a data source: a SQL connector holds the named queries of a database pool, an API connector the named endpoints of a web API. Edited in Settings → Connectors; a connector with a menu is an app."
+keywords: [Liberty Next, connector, SQL, API, pool, named query, endpoint, tables, queries, sequences, lookups, permissions, multi-pool, Oracle thick]
 ---
 
 # Connectors
 
-:::info[Deep reference]
-This page documents how the connector engine discovers schema at runtime, manages the connector registry and gates permissions. For task-oriented walkthroughs — create a query, clone a connector, scaffold a sequence or a lookup — see [Build → Queries](./build/queries/overview.md) and [Build → Menus → Make a connector an app](./build/menus/make-connector-an-app.md).
-:::
+A **connector** is how Liberty Next reaches a data source. Every screen, chart, dashboard, action, job step and assistant answer names the connector and the query — or the endpoint — it uses.
 
-A **connector** is the bridge between the framework and a data source — a database, an HTTP API, or a third-party service. Connectors are created and edited from **Settings → Connectors**, one entry per source. Every screen, dashboard, chart, job step and AI tool that needs data names a connector to use.
-
-The framework supports three connector types:
-
-| Type | What it reaches | Editor |
+| Type | Reaches | Holds |
 |---|---|---|
-| **SQL** | A relational database via a [pool](./configuration/settings-ui.md). Each connector groups a set of **named queries** — read and write. | Settings → Connectors → *SQL* sub-tab |
-| **HTTP** | A REST / GraphQL endpoint. Each connector groups a set of **named endpoints** with method + path + auth. | Settings → Connectors → *HTTP* sub-tab |
-| **API** | A generic remote service whose calls are dispatched to either SQL or HTTP under the hood (compatibility variant). | Settings → Connectors → *API* sub-tab |
+| **SQL** | A database, through a [pool](#pools). | Named **queries**, in four kinds: tables, queries, sequences, lookups. |
+| **API** | A web API (REST, JSON). | Named **endpoints**: method, path, headers, body, response mapping. |
 
-The schema of every read query / endpoint response is **discovered at runtime** — the framework asks the database or the API "what columns / fields does this return?" on first use and caches the answer. No column type, length or position is ever typed by hand.
+A connector that has a menu is an **app** — see [Apps](./apps/overview.md).
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="cn-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
-    <linearGradient id="cn-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="cnp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cnp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cnp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cnp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="40" width="920" height="280" rx="14" fill="url(#cn-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">From operator to query — the connector lifecycle</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="200" height="80" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="160" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · CREATE</text>
-  <text x="160" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Settings → Connectors</text>
-  <text x="160" y="158" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New connector</text>
-  <text x="160" y="174" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontStyle="italic">pick a type</text>
-
-  <rect x="280" y="100" width="200" height="80" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
-  <text x="380" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · DEFINE</text>
-  <text x="380" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">connection details</text>
-  <text x="380" y="158" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">named queries / endpoints</text>
-  <text x="380" y="174" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">parameters · column hints</text>
-
-  <rect x="500" y="100" width="200" height="80" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
-  <text x="600" y="124" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · TEST</text>
-  <text x="600" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Run a query — first 50 rows</text>
-  <text x="600" y="158" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">framework discovers the schema</text>
-  <text x="600" y="174" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontStyle="italic">columns surfaced as chips</text>
-
-  <rect x="720" y="100" width="220" height="80" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="830" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · USE</text>
-  <text x="830" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">picked from any screen,</text>
-  <text x="830" y="158" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">chart, dashboard, job step</text>
-  <text x="830" y="174" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">or by the AI assistant</text>
-
-  <line x1="260" y1="140" x2="280" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#cn-arrow)"/>
-  <line x1="480" y1="140" x2="500" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#cn-arrow)"/>
-  <line x1="700" y1="140" x2="720" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#cn-arrow)"/>
-
-  <rect x="60" y="210" width="880" height="80" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="76" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RUNTIME — once saved, the framework registers the connector and reloads its caller surfaces</text>
-  <text x="76" y="254" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Schema is discovered on first call; labels and formats come from the dictionary</text>
-  <text x="76" y="272" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Permissions are derived from the connector name and the query name (sql:&lt;c&gt;:&lt;q&gt; / api:&lt;c&gt;:&lt;e&gt;)</text>
+  <rect x="220" y="14" width="760" height="410" rx="14" fill="url(#cnp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Connectors</text>
+  <rect x="710" y="28" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="751.5" y="42.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Connector</text>
+  <rect x="799" y="28" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="829.5" y="42.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
+  <rect x="866" y="28" width="44" height="22" rx="5" fill="url(#cnp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="888.0" y="42.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="74" width="170" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="96" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPS</text>
+  <rect x="246" y="104" width="158" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="256" y="119" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">▣ crm</text>
+  <text x="256" y="145" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▣ sales</text>
+  <text x="252" y="178" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA SOURCES</text>
+  <text x="256" y="199" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">⛁ reporting</text>
+  <text x="256" y="223" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">⛁ warehouse</text>
+  <text x="256" y="247" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">⇄ crm_api</text>
+  <text x="426" y="92" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">crm · SQL</text>
+  <rect x="426" y="104" width="331" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="463.0" y="119.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Settings…</text>
+  <rect x="501" y="105" width="55" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="528.5" y="119.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tables</text>
+  <line x1="557" y1="109" x2="557" y2="123" stroke="#334155" strokeWidth="1"/>
+  <text x="588.5" y="119.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Queries</text>
+  <line x1="620" y1="109" x2="620" y2="123" stroke="#334155" strokeWidth="1"/>
+  <text x="657.0" y="119.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Sequences</text>
+  <line x1="694" y1="109" x2="694" y2="123" stroke="#334155" strokeWidth="1"/>
+  <text x="725.5" y="119.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lookups</text>
+  <rect x="830" y="104" width="130" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="895.0" y="118.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add queries</text>
+  <rect x="426" y="146" width="534" height="32" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="438" y="166" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="546" y="166" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <rect x="820" y="153" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="835.0" y="165.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">GET</text>
+  <rect x="853" y="153" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="868.0" y="165.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PUT</text>
+  <rect x="886" y="153" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="901.0" y="165.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">POS</text>
+  <rect x="919" y="153" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="934.0" y="165.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DEL</text>
+  <rect x="426" y="186" width="534" height="32" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="438" y="206" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">deals</text>
+  <text x="546" y="206" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Deals</text>
+  <rect x="820" y="193" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="835.0" y="205.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">GET</text>
+  <rect x="853" y="193" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="868.0" y="205.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PUT</text>
+  <rect x="886" y="193" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="901.0" y="205.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">POS</text>
+  <rect x="919" y="193" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="934.0" y="205.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DEL</text>
+  <rect x="426" y="226" width="534" height="32" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="438" y="246" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">activities</text>
+  <text x="546" y="246" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Activities</text>
+  <rect x="820" y="233" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="835.0" y="245.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">GET</text>
+  <rect x="853" y="233" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="868.0" y="245.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PUT</text>
+  <rect x="886" y="233" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="901.0" y="245.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">POS</text>
+  <rect x="919" y="233" width="30" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="934.0" y="245.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DEL</text>
+  <rect x="10" y="90" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Apps and data sources</text>
+  <text x="20" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a connector with a menu is an app</text>
+  <line x1="210" y1="107.0" x2="240" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnp-arrow)"/>
+  <rect x="10" y="250" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">API connector</text>
+  <text x="20" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">base URL, auth, endpoints</text>
+  <line x1="210" y1="267.0" x2="252" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnp-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five views</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">settings and four kinds of queries</text>
+  <line x1="1000" y1="77.0" x2="640" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnp-arrow)"/>
+  <rect x="1000" y="200" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A table</text>
+  <text x="1010" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">read, update, insert, delete</text>
+  <line x1="1000" y1="217.0" x2="960" y2="162" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnp-arrow)"/>
 </svg>
 
 ---
 
-## The catalogue — Settings → Connectors
+## Settings → Connectors \{#page\}
 
-The page lists every connector on the install. Each row shows the connector type, the pool / base URL, the connection status (a live probe) and the number of declared queries / endpoints.
+The left list has two groups: **Apps** (connectors with a menu) and **Data sources** (the others). **＋ Connector** creates one (name, type SQL or API); the right pane edits the selected connector. **Save** writes `connectors.toml` and applies the change without a restart; **Discard** drops the pending changes. The connector's own buttons — **Clone** (with its dictionary scope, screens, menu, charts and dashboards), **Rename** (every reference rewritten), **Delete** (with everything that belongs to it) — are on its settings view.
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Settings → Connectors</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>App ▾</span>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Type ▾</span>
-      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ New connector</span>
-    </div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 70px 1.6fr 80px 110px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
-    <div>Name</div><div>Type</div><div>Target</div><div>Queries</div><div>Status</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 70px 1.6fr 80px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing</div>
-    <div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>sql</span></div>
-    <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.85}}>pool: default</div>
-    <div>12</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.10)', color: '#4ade80'}}>connected</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 70px 1.6fr 80px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>crm</div>
-    <div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600}}>http</span></div>
-    <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.85}}>https://crm.example.com</div>
-    <div>8</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.10)', color: '#4ade80'}}>connected</span></div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 70px 1.6fr 80px 110px', padding: '10px 14px', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>jdedwards <span style={{marginLeft: '6px', padding: '1px 6px', borderRadius: '999px', fontSize: '9px', fontWeight: 700, background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc'}}>licensed</span></div>
-    <div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>sql</span></div>
-    <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.85}}>pool: jde</div>
-    <div>56</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.10)', color: '#f87171'}}>offline</span></div>
-  </div>
-</div>
+### Pools \{#pools\}
 
-Toolbar filters narrow the list by *App* and *Type*. **+ New connector** opens the editor on a blank entry; clicking any row opens the editor on that connector.
+A pool is a database connection, defined in **Settings → Pools** and shared by the connectors that use it:
 
-| Status pill | Meaning |
+| Field | Effect |
 |---|---|
-| **connected** | The live probe to the pool / base URL succeeded within the last 30 seconds. |
-| **offline** | The probe failed. The connector still appears, but every query against it will fail until the source comes back. |
-| **licensed** *(badge)* | Marked with `Licensed = true`. Only loads when the [license key](./build/secure/license-key.md) carries it. |
+| **Url** | The connection URL (`postgresql+asyncpg://user@host:5432/db`, `oracle+oracledb://user@host:1521/?service_name=…`). Picking a **Dialect** first fills a template. `${VARIABLE}` accepted. |
+| **Password** | Kept out of the URL; encrypted when saved. |
+| **Dialect** | `postgresql`, `oracle`, `sqlite`, `mysql`, `mssql`… — derived from the URL when empty; chooses a query's [per-dialect variant](./build/queries/per-dialect-sql.md). |
+| **Schemas**, **DB Links** | The values of the `#SCHEMA.<NAME>#` and `#DBLINK.<NAME>#` tokens — see [below](#schema-and-db-link-tokens). |
+| **Pool size**, **Max overflow**, **Pool pre ping**, **Pool recycle** | Connections kept open, extra connections under load, liveness check, recycling. |
+| **Max rows** | Default row limit of the pool's reads (1 000 when empty). |
+| **Arraysize** | Oracle: rows fetched per round trip; raise it (500–1 000) for large reads. |
+| **Trim strings** | Removes the trailing spaces of fixed-length text (Oracle `CHAR`, JD Edwards). |
+| **Coalesce nulls** | On writes, replaces empty values with a space or 0 (Oracle `NOT NULL` text columns). |
+| **Debug sql** | Logs every statement run on the pool. |
 
 ---
 
-## The connector editor
+## SQL connector \{#sql\}
 
-Clicking a row opens a three-tab editor on the right. The tabs are the same for every type, but each tab's content adapts to the picked *Type*.
+The mode bar of a SQL connector has five views: **Settings…**, **Tables**, **Queries**, **Sequences**, **Lookups**. The four query views are described on [Queries — overview](./build/queries/overview.md).
 
-| Tab | Purpose |
-|---|---|
-| **Connection** | How the framework reaches the source — pool / base URL, authentication, common headers. |
-| **Queries / Endpoints** | The named queries (SQL) or endpoints (HTTP/API) that callers reference. |
-| **Permissions** | Read-only summary — which permission codes this connector generates, who currently carries them. |
-
----
-
-## SQL connector
-
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Settings → Connectors → billing</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Test connection</span>
-      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>Save & reload</span>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Connection</div>
-    <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
-      <div style={{opacity: 0.75}}>Name</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>billing</span></div>
-      <div style={{opacity: 0.75}}>App</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>billing ▾</span></div>
-      <div style={{opacity: 0.75}}>Type</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '11px', fontWeight: 600}}>SQL ▾</span></div>
-      <div style={{opacity: 0.75}}>Pool</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>default ▾</span></div>
-      <div style={{opacity: 0.75}}>Description</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Invoices, credit notes and the dunning workflow.</span></div>
-      <div style={{opacity: 0.75}}>Licensed</div><div><span style={{padding: '4px 12px', borderRadius: '999px', background: 'rgba(94,94,94,0.10)', border: '1px solid rgba(255,255,255,0.20)', fontSize: '11px', fontWeight: 600, opacity: 0.7}}>○ Off</span></div>
-      <div style={{opacity: 0.75}}>Expose to AI assistant</div><div><span style={{padding: '4px 12px', borderRadius: '999px', background: 'rgba(50,215,75,0.12)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '11px', fontWeight: 600}}>● On</span></div>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px'}}>
-    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff'}}>Queries · 12</div>
-      <span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.40)', color: '#4a9eff', fontSize: '11px', fontWeight: 700}}>+ Add query</span>
-    </div>
-    <div style={{display: 'grid', gridTemplateColumns: '1.6fr 70px 80px 40px', rowGap: '4px', alignItems: 'center', fontSize: '11px'}}>
-      <div>monthly-invoice-counts</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>read</span></div><div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.6}}>1 param</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
-      <div>invoices-for-period</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>read</span></div><div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.6}}>3 params</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
-      <div>refresh-totals</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(255,159,10,0.10)', border: '1px solid rgba(255,159,10,0.40)', color: '#fb923c', fontSize: '10px', fontWeight: 600}}>write</span></div><div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.6}}>1 param</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
-    </div>
-  </div>
-</div>
-
-### Connection fields \{#connection-fields\}
+### Settings \{#connection-fields\}
 
 The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
 
@@ -182,29 +153,19 @@ The **Settings** mode of a SQL connector (the *Settings* button of the connector
 
 ### Query editor
 
-Clicking *+ Add query* or an existing row opens the query editor:
+Clicking **＋ Add query** or an existing query opens the query editor:
 
 | Field | Effect |
 |---|---|
-| **Name** | Identifier of the query — surfaces in the URL (`/api/sql/billing/<name>`), the permission code (`sql:billing:<name>`) and the AI tool name. |
-| **Label** | Human display label — appears in the menu builder picker, screen builder picker, etc. |
-| **Operation** | `Read` / `Write`. *Write* queries get the `:write` suffix on their permission code. |
-| **SQL** | The query body. A Monaco editor with SQL syntax highlighting, schema-aware autocomplete (column names from the pool), and parameter highlighting (`:name` placeholders). |
-| **Dialect overrides** | Optional per-dialect variants (`oracle`, `postgresql`, `sqlite`) for cases where the canonical `SELECT` doesn't translate. The framework picks the right one based on the pool's dialect. |
-| **Description** | Two-sentence summary. Shown on the screen builder pickers and in the AI assistant tool description. |
-| **Parameters** | Sub-table — see [Parameter binding](./build/queries/parameter-binding.md) for every field. |
-| **Column hints** | Optional sub-table. Each row binds a result column to a dictionary entry: *Column* (dropdown of columns the *Test* button discovered) + *Dictionary* (dropdown of dictionary entries). Drives labels, formats, enums, lookups. Columns without a hint fall back to the column name as the label. |
+| **Name** | Identifier of the query — used in the URL (`/api/sql/billing/<name>`) and the permission (`sql:billing:<name>`). |
+| **SQL** | The statement, with `:name` parameters and `{{TOKEN}}` server values. One text, or one variant per database — see [Per-dialect SQL](./build/queries/per-dialect-sql.md). |
+| **Writable** | Off: only a SELECT is accepted. On: INSERT / UPDATE / DELETE / CALL / MERGE. |
+| **Params** | The declared parameters (name, label, default) — see [Parameter binding](./build/queries/parameter-binding.md). |
+| **Label**, **Description** (Advanced) | Shown in the pickers, and read by the AI assistant to choose its queries. |
 
-The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it. A failing query shows a **concise error summary with an expandable detail** — the SQL and the bound parameters in readable blocks, one bind per line.
+The SQL editor highlights the syntax, completes table and column names from the pool, and has a **Token** menu (`{{LOGIN}}`, `{{SYSDATE}}`…) and a **Pool schemas** menu. The editor's buttons — **Find usages**, **Rename**, **Change type**, **Move**, **Clone**, **Delete** — are described on [Create a custom query](./build/queries/create-custom.md).
 
-The framework uses the discovered schema to:
-
-- Build grid columns on screens.
-- Validate column hints (a hint pointing at a column that no longer exists is flagged red).
-- Type-coerce parameter values before binding.
-- Feed the AI assistant's tool schema with the right field shapes.
-
-### Schema and DB-link tokens
+### Schema and DB-link tokens \{#schema-and-db-link-tokens\}
 
 A SQL query can carry two placeholder tokens that let the same text run against any pool — local or remote — without maintaining a per-environment variant of the query:
 
@@ -241,103 +202,77 @@ The reachable set is the default `pool` plus `pools`; a request or a job can nev
 
 ---
 
-## HTTP connector
+## API connector \{#api\}
 
-The form re-shapes when *Type* is set to `HTTP`. The pool dropdown disappears; a *Base URL* + *Authentication* block takes its place.
+An API connector calls a web API. Its editor has five tabs, labelled in English:
+
+| Tab | Content |
+|---|---|
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Authentication** | **Auth type**: *None*, *Basic* (user and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint, request body and headers, token field, token lifetime). Secrets are encrypted when saved. |
+| **Endpoints** | The named endpoints — see below. |
+| **Webhooks** | Not available yet: external systems cannot push events into Liberty Next. |
+| **Test** | **Test connection** checks the authentication; **Run** calls an endpoint with parameter values and shows the response. Nothing is saved. |
+
+An endpoint has:
 
 | Field | Effect |
 |---|---|
-| **Base URL** | Origin of the API (e.g. `https://crm.example.com`). The endpoints below are appended to this. |
-| **Authentication** | `None` / `Basic` / `Bearer` / `OAuth2`. Each picks a sub-form. *Basic* asks for user + 🔒 password; *Bearer* takes a 🔒 token; *OAuth2* asks for the token endpoint, client id, 🔒 client secret and the scope list. |
-| **Headers** | Common headers applied to every endpoint — e.g. a static `User-Agent` or an `X-Tenant`. |
-| **Default timeout** | Seconds before a call is aborted. Default 30. |
+| **Name** | Used in the URL (`/api/http/<connector>/<name>`) and the permission (`api:<connector>:<name>`). |
+| **Method**, **URL path** | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`…; the path is appended to the base URL (an absolute URL bypasses it). |
+| **Headers**, **Query params** | Added to the connector's; values accept `{{placeholders}}`. |
+| **Body template**, **Body Content-Type** | The request body, with `{{placeholders}}`. |
+| **Response field**, **Response mappings** | A dot path into the JSON response (`data.0.id`), or several named paths; blank returns the whole response. |
+| **Parameters** | The declared `{{placeholders}}`, with label and default. |
+| **Label**, **Description** | Shown in the pickers and to the AI assistant. |
 
-The endpoints sub-table replaces the SQL queries:
-
-| Field | Effect |
-|---|---|
-| **Name** | Endpoint identifier — surfaces in the URL (`/api/http/<connector>/<name>`), the permission code (`api:<connector>:<name>`) and the AI tool name. |
-| **Label** / **Description** | Same as for SQL queries. |
-| **Method** | `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
-| **Path** | Path appended to the base URL. Supports `:name` placeholders bound from parameters. |
-| **Body template** | For non-`GET` methods, a JSON template. Supports `${name}` substitution from parameters. |
-| **Parameters** | Same shape as for SQL — see [Parameter binding](./build/queries/parameter-binding.md). |
-| **Response shape** | Auto-detected when the *Test* button is used; the operator can refine the discovered shape (rename keys, group nested fields) to align it with what consumers expect. |
-
-The **▶ Test** button issues the call live with the configured authentication and parameter defaults; the response body is shown formatted, with the discovered shape surfaced as chips below.
-
----
-
-## API connector
-
-`API` is a hybrid type kept for compatibility with installs that route some calls to SQL and others to HTTP under a single connector name. The editor exposes both *Queries* and *Endpoints* sub-tables; the *Operation* field on each entry picks the underlying engine.
-
-In a new install you'll almost always pick `SQL` or `HTTP` directly. `API` is the path when consolidating multiple legacy connectors under one umbrella.
+Endpoints are called by screen actions (`call_api`), menu entries (type `endpoint`), notification rules (`action` channel), plugins (`connectors.api(…).call(…)`) and — when allowed — the AI assistant. A Nomaflow `http` step calls a URL directly, without a connector.
 
 ---
 
 ## Schema discovery and column hints \{#schema-discovery-and-column-hints\}
 
-A read query has no manually-declared column list. On first call (or when the operator clicks *Test*), the framework executes the query, looks at the cursor's column descriptions and caches them:
+A query has no declared column list: the columns are those the database returns when it runs. How a column looks on a screen is decided, in this order, by:
 
-| Field discovered | What the framework records |
-|---|---|
-| **Column name** | Used as the default label when no dictionary hint applies. |
-| **Database type** | Drives the type-coercion of parameter values on subsequent calls. |
-| **Nullable / not nullable** | Used by screens to decide whether the column gets a "required" asterisk. |
-| **Length / precision** | Surfaced as constraints on the field editor (max-length on a string, max-digits on a decimal). |
+1. the **column settings of the screen** (Columns tab) — label, format, width, rule, conditions;
+2. the **dictionary entry** whose key is the column's name, or the one named in the column's `dd` field — label per language, format, rule (Boolean, enum, lookup…);
+3. otherwise the column's name and the default display for its type.
 
-The **Column hints** sub-table is where you override the default. A hint maps a discovered column to a [dictionary](./dictionary.md) entry — that's how the column gets a localised label, a boolean / enum / lookup rule, a number format, etc.
-
-You don't have to declare a hint for every column; columns without a hint render with the raw database name and the default widget for their type.
+A column does not need a setting of its own: a dictionary entry with its name is enough. See [Dictionary](./dictionary.md#column-reference) and [Screens → Columns](./build/screens/columns.md).
 
 ---
 
 ## Permissions
 
-Every connector generates a **permission code per query / endpoint**:
+Each query and each endpoint has its own permission:
 
-| Code template | Granted to |
+| Permission | Allows |
 |---|---|
-| `sql:<connector>:<query>` | Run the read query. |
-| `sql:<connector>:<query>:write` | Run the write query. |
-| `api:<connector>:<endpoint>` | Call the HTTP endpoint. |
+| `sql:<connector>:<query>` | Running the query — read or write alike. |
+| `api:<connector>:<endpoint>` | Calling the endpoint. |
 
-The codes appear on the *Permissions* tab of the connector editor and in the **Permission picker** of [Settings → Roles](./build/secure/roles-and-permissions.md). Wildcards `sql:billing:*` and `api:crm:*` are supported.
-
-The connector itself isn't gated — what's gated is each call. A user with no permissions sees no queries; a user with `sql:billing:*` sees every read + write of the billing connector.
+They are granted through roles: allowing a menu entry grants what it opens, and **Beyond the menus** grants a query, an endpoint or a whole connector — patterns such as `sql:billing:report_*` are accepted. See [Roles & permissions](./build/secure/roles-and-permissions.md).
 
 ---
 
-## Hot-reload behaviour
+## Tips
 
-A *Save & reload* on the connector editor rebuilds the connector registry in place — every consumer (screens, charts, dashboards, AI tools) picks up the change on its next render. Requests already in flight finish on the previous version; no abort is needed. See [Hot-reload](./configuration/hot-reload.md) for the full contract.
-
----
-
-## Tips & best practices
-
-- **Always click *Test* before *Save*.** A query that the database refuses at execution time is the most common cause of broken screens. The *Test* button catches it early.
-- **Write a good *Description*.** It surfaces in the AI assistant, the menu builder, the screen builder — two sentences in the user's language pays for itself many times.
-- **Prefix queries with the entity** — `invoices-list`, `invoices-by-status`, `invoice-detail`. Makes the catalogue self-documenting.
-- **Keep read and write paths separate.** Don't write `INSERT INTO ... RETURNING ...` as a read query; the framework's permission model gates writes separately for a reason.
-- **Use column hints sparingly.** A column that just needs its database name is fine without a hint — define hints only when the dictionary adds value (a localised label, a format, a lookup).
-- **Set *Licensed* off on customer connectors.** Reserve the badge for vendor-shipped connectors that need a key.
+- **Name queries after the entity** — `invoices_get`, `invoices_by_status_get` — the lists read themselves.
+- **Describe the queries** the AI assistant should use: label and description (Advanced tab).
+- **Prefer the dictionary to per-screen labels**: one entry serves every screen.
+- **Keep secrets out of the files** with `${VARIABLE}` references when a secrets manager is used — see [Encryption & secrets](./configuration/encryption-secrets.md).
 
 ---
 
 ## Under the hood
 
-Connector definitions are stored in `liberty-apps/config/connectors.toml` (or `liberty-next/config/connectors.toml` when `LIBERTY_APPS_DIR` is unset). Operators **do not edit this file by hand** in normal operation; the Connectors builder is the canonical interface. The *Raw TOML* tab of [Settings → Connectors](./configuration/settings-ui.md) is the escape hatch for the rare case where the builder doesn't cover a field.
-
-For CI scripts and external orchestrators, the same surface is reachable via REST at `/admin/config/connectors/*` — see [REST API reference](../references/rest-api.md#admin-config).
+Connectors and pools are stored in `connectors.toml`, in the apps configuration folder. The Settings pages are the normal way to edit them; the same configuration is reachable through the REST API under `/admin/config/connectors` — see [REST API](../references/rest-api.md#admin-config).
 
 ---
 
 ## What's next
 
-- [Dictionary](./dictionary.md) — per-column metadata: labels, formats, enums, lookups.
-- [Parameter binding](./build/queries/parameter-binding.md) — declared parameters, defaults, cascading filters.
-- [Screens](./build/screens/overview.md) — turn a connector into a grid + edit dialog.
-- [Charts](./charts.md) — wrap a query into a visualisation.
-- [Encryption & secrets](./configuration/encryption-secrets.md) — the 🔒 toggle on passwords / tokens.
+- [Queries — overview](./build/queries/overview.md) — the four kinds of queries and their editors.
+- [Dictionary](./dictionary.md) — labels, formats and lists of values of the columns.
+- [Parameter binding](./build/queries/parameter-binding.md) — parameters, built-ins and tokens.
+- [Screens](./build/screens/overview.md) — grids and dialogs on the queries.

@@ -1861,7 +1861,7 @@ L'exemple utilise le pool `default` et une petite table `tasks`.
 
 ## Étape 1 — Le pool \{#pool\}
 
-Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#connection-fields).
+Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#pools).
 
 Créer la table d'exemple avec n'importe quel client SQL connecté à cette base :
 
@@ -1912,7 +1912,7 @@ Les colonnes de la grille viennent de la requête de lecture ; leurs libellés e
 ## Étape 4 — L'entrée de menu \{#menu\}
 
 1. **Paramètres → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
-2. **＋ Item**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
+2. **＋ Élément**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
 3. Enregistrer.
 
 Maintenant doté d'un menu, `tasks` est une application : il apparaît dans le sélecteur d'application, et son menu latéral affiche **Tâches**. Un clic ouvre la grille : une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide. Voir [Construire l'arbre](../build/menus/build-the-tree.md) et [Transformer un connecteur en application](../build/menus/make-connector-an-app.md).
@@ -2107,46 +2107,40 @@ Le contrat complet des variables d'environnement est documenté dans [Configurat
 ## Liberty Next — Étape 1 — Mise en place du projet CRM
 Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/setup/
 
-Démarrez le tutoriel Construire un CRM : installez le framework, créez une app crm vide, préparez les tables de la base que nous utiliserons sur les six étapes. État final : framework opérationnel, admin connecté, trois tables vides prêtes pour les clients, les affaires et les activités.
+Début du tutoriel CRM : les tables des clients, affaires et activités, des données d'exemple, et le connecteur crm qui deviendra l'application. À l'issue de l'étape : le framework en service, un superutilisateur connecté, les tables prêtes.
 
-Ce tutoriel vous guide à travers la construction d'une application **Customer Relationship Management** opérationnelle sur Liberty Framework — six étapes, d'une installation vide à une application déployée avec des écrans, un tableau de bord, une connexion OIDC, un assistant IA et une tâche planifiée.
+Ce tutoriel construit une petite application de **gestion de la relation client** sur Liberty Next, en six étapes : écrans, listes de valeurs, tableau de bord, rôles, assistant IA et tâche planifiée. Tout se fait depuis les Paramètres.
 
-À la fin de cette étape, vous aurez un framework opérationnel, une app `crm` vide enregistrée et les trois tables de base que nous utiliserons tout au long du parcours. Temps estimé : **10 minutes**.
+Cette première étape prépare la base de données et crée le connecteur `crm`.
 
 ---
 
 ## Ce que nous construisons
 
-Sur les six étapes :
-
-| Étape | Ce que nous ajoutons | Le concept du framework qu'elle enseigne |
+| Étape | Ajout | Notions abordées |
 |---|---|---|
-| **1 — Mise en place** *(cette page)* | App vide + trois tables de base. | App / Pool — quelles données nous allons interroger. |
-| **[2 — Clients](./02-customers.md)** | Premier écran — liste des clients avec dialogue d'édition. | Connecteur / Écran — la surface principale du framework. |
-| **[3 — Affaires](./03-deals.md)** | Deuxième écran avec FK vers les clients + une sous-grille Activités. | Lookups / Relations — comment les entités se référencent entre elles. |
-| **[4 — Tableau de bord](./04-dashboard.md)** | Tableau de bord du pipeline commercial avec KPI + graphique + drill-down. | Tableau de bord / Graphiques — résumer les données. |
-| **[5 — Auth](./05-auth.md)** | Deux rôles + connexion OIDC. | Authentification / Rôles — qui voit quoi. |
-| **[6 — IA + Tâches](./06-ai-and-jobs.md)** | Assistant IA sur les données + tâche de synthèse nocturne. | IA / Nomaflow — accès en langage naturel + travail planifié. |
-
-Le domaine CRM est volontairement générique — trois entités, des relations reconnaissables, aucune spécificité éditeur. Une fois le motif assimilé, la même approche s'applique à votre domaine réel, quel qu'il soit.
+| **1 — Mise en place** *(cette page)* | Tables, données d'exemple, connecteur `crm`. | Pools et connecteurs. |
+| **[2 — Clients](./02-customers.md)** | L'écran Clients et le menu de l'application. | Requêtes générées depuis une table, écrans, menus. |
+| **[3 — Affaires](./03-deals.md)** | Les affaires liées aux clients, avec leurs activités dans un onglet. | Dictionnaire, listes de valeurs, onglets imbriqués. |
+| **[4 — Tableau de bord](./04-dashboard.md)** | Un tableau de bord du pipeline. | Indicateurs, graphiques, période. |
+| **[5 — Rôles](./05-auth.md)** | Rôles, utilisateurs, périmètre de données, connexion d'entreprise. | Qui voit quoi. |
+| **[6 — IA et tâches](./06-ai-and-jobs.md)** | L'assistant IA et une tâche quotidienne. | Assistant, Nomaflow, notifications. |
 
 ---
 
 ## Prérequis
 
-| Ce qu'il vous faut | Pourquoi |
+| Besoin | Raison |
 |---|---|
-| **Liberty Framework installé en local** | Suivez [Démarrage → Installation](../../installation/python-server.md) jusqu'à « Vérifier l'installation ». Le framework doit être joignable sur `http://127.0.0.1:8000` avec l'utilisateur `admin` connecté. |
-| **PostgreSQL ou le SQLite intégré** | Le tutoriel utilise du SQL générique ; les deux conviennent. SQLite démarre plus vite (déjà câblé). |
-| **Un client SQL** | `psql` pour PostgreSQL ou `sqlite3` pour SQLite. Tout outil qui permet d'exécuter un `CREATE TABLE`. |
+| **Liberty Next installé** | Voir [Installation](../../installation/overview.md). |
+| **Un compte superutilisateur** | Les Paramètres sont réservés aux superutilisateurs. |
+| **Un client SQL** | Pour créer les tables — `psql`, DBeaver, ou tout client connecté à la base du pool `default`. |
 
-Si vous n'avez pas encore installé le framework, faites-le d'abord et revenez ici.
+Le pool `default` pointe vers la base PostgreSQL fournie sur une installation Docker, ou vers un fichier SQLite local sur une installation Python sans PostgreSQL. Le SQL ci-dessous est écrit pour PostgreSQL ; sous SQLite, remplacer `SERIAL` par `INTEGER`.
 
 ---
 
-## Créer les tables de la base
-
-Connectez-vous à votre base (`sqlite3 liberty.db` pour SQLite, `psql` pour PostgreSQL) et exécutez :
+## Créer les tables
 
 ```sql
 CREATE TABLE customers (
@@ -2154,1469 +2148,550 @@ CREATE TABLE customers (
   name          VARCHAR(255) NOT NULL,
   industry      VARCHAR(64),
   country       VARCHAR(2),
-  status        VARCHAR(32) NOT NULL DEFAULT 'active',
+  status        VARCHAR(16) NOT NULL DEFAULT 'ACTIVE',
   primary_email VARCHAR(255),
   created_by    VARCHAR(64),
-  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at    TIMESTAMP,
   updated_by    VARCHAR(64),
   updated_at    TIMESTAMP
 );
 
+CREATE TABLE deal_stages (
+  code  VARCHAR(16) PRIMARY KEY,
+  label VARCHAR(64) NOT NULL,
+  ord   INTEGER NOT NULL
+);
+
 CREATE TABLE deals (
-  id            SERIAL PRIMARY KEY,
-  customer_id   INTEGER NOT NULL REFERENCES customers(id),
-  name          VARCHAR(255) NOT NULL,
-  stage         VARCHAR(32) NOT NULL DEFAULT 'qualified',
-  amount        DECIMAL(12,2) NOT NULL DEFAULT 0,
-  currency      VARCHAR(3)   NOT NULL DEFAULT 'EUR',
-  close_date    DATE,
-  owner         VARCHAR(64),
-  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id          SERIAL PRIMARY KEY,
+  customer_id INTEGER NOT NULL REFERENCES customers(id),
+  name        VARCHAR(255) NOT NULL,
+  stage       VARCHAR(16) NOT NULL DEFAULT 'QUALIFIED' REFERENCES deal_stages(code),
+  amount      DECIMAL(12,2) NOT NULL DEFAULT 0,
+  close_date  DATE,
+  owner       VARCHAR(64),
+  updated_at  TIMESTAMP
 );
 
 CREATE TABLE activities (
-  id            SERIAL PRIMARY KEY,
-  deal_id       INTEGER NOT NULL REFERENCES deals(id),
-  kind          VARCHAR(32) NOT NULL,
-  notes         TEXT,
-  happened_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  recorded_by   VARCHAR(64)
+  id          SERIAL PRIMARY KEY,
+  deal_id     INTEGER NOT NULL REFERENCES deals(id),
+  kind        VARCHAR(16) NOT NULL,
+  notes       VARCHAR(2000),
+  happened_at TIMESTAMP NOT NULL,
+  recorded_by VARCHAR(64)
 );
 
--- Une petite table de référence pour les étapes des affaires
-CREATE TABLE deal_stages (
-  code   VARCHAR(32) PRIMARY KEY,
-  label  VARCHAR(64) NOT NULL,
-  colour VARCHAR(16),
-  ord    INT NOT NULL DEFAULT 0
-);
+INSERT INTO deal_stages (code, label, ord) VALUES
+  ('QUALIFIED', 'Qualifiée', 10), ('PROPOSAL', 'Proposition', 20),
+  ('NEGOTIATION', 'Négociation', 30), ('WON', 'Gagnée', 40), ('LOST', 'Perdue', 50);
 
-INSERT INTO deal_stages(code, label, colour, ord) VALUES
-  ('qualified',   'Qualified',    '#60a5fa', 10),
-  ('proposal',    'Proposal',     '#c084fc', 20),
-  ('negotiation', 'Negotiation',  '#fb923c', 30),
-  ('won',         'Won',          '#4ade80', 40),
-  ('lost',        'Lost',         '#f87171', 50);
+INSERT INTO customers (name, industry, country, primary_email) VALUES
+  ('ACME Industries', 'Industrie',  'FR', 'contact@acme.example'),
+  ('Beta SARL',       'Logistique', 'FR', 'ventes@beta.example'),
+  ('Gamma SA',        'Services',   'BE', 'bonjour@gamma.example');
 
--- Quelques clients pour tester
-INSERT INTO customers(name, industry, country, primary_email) VALUES
-  ('Acme Industries SA', 'manufacturing', 'FR', 'contact@acme.example'),
-  ('Globex Logistics',   'logistics',     'DE', 'sales@globex.example'),
-  ('Initech Services',   'services',      'FR', 'hello@initech.example');
-
-INSERT INTO deals(customer_id, name, stage, amount, currency, close_date) VALUES
-  (1, 'Annual contract renewal', 'proposal',    45000.00, 'EUR', '2026-07-15'),
-  (1, 'Add-on training package', 'qualified',    8500.00, 'EUR', '2026-08-30'),
-  (2, 'Logistics platform Q3',   'negotiation', 120000.00, 'EUR', '2026-09-10'),
-  (3, 'Support contract',        'won',         18000.00, 'EUR', '2026-06-01');
-```
-
-Sur SQLite, remplacez `SERIAL PRIMARY KEY` par `INTEGER PRIMARY KEY AUTOINCREMENT` et `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` par `DATETIME DEFAULT CURRENT_TIMESTAMP`. Le reste passe tel quel.
-
-Vérification rapide :
-
-```sql
-SELECT count(*) FROM customers;  -- → 3
+INSERT INTO deals (customer_id, name, stage, amount, close_date) VALUES
+  (1, 'Renouvellement du contrat annuel', 'PROPOSAL',     45000, '2026-11-15'),
+  (1, 'Offre de formation',               'QUALIFIED',     8500, '2026-12-10'),
+  (2, 'Plateforme logistique',            'NEGOTIATION', 120000, '2026-11-30'),
+  (3, 'Contrat de support',               'WON',          18000, '2026-10-05');
 ```
 
 ---
 
-## Enregistrer l'app `crm`
+## Créer le connecteur `crm`
 
-Ouvrez le framework dans votre navigateur, connectez-vous en tant que `admin`, cliquez sur l'icône engrenage (en haut à droite) pour ouvrir **Paramètres**. Basculez sur l'onglet **Applications** et cliquez sur **+ Nouvelle application**.
+Un **connecteur** regroupe sous un nom les requêtes d'une base de données. Dès qu'il aura un menu, il deviendra l'**application** `crm`.
 
-  Paramètres → Applications → + Nouvelle application
-  
-    Idcrm
-    Nom affichéCRM
-    DescriptionGestion de la relation client — app du tutoriel
-    Icôneusers ▾
-    Ordre10
-  
-  
-    Annuler
-    Enregistrer
-  
+1. Ouvrir **Paramètres → Connecteurs**, cliquer sur **＋ Connecteur**.
+2. Nom `crm`, type **SQL**, pool `default`. Enregistrer.
 
-Cliquez sur **Enregistrer**. Le framework consigne les métadonnées de l'app. Rien de visible ne change encore — les apps n'apparaissent dans le sélecteur d'espace de travail qu'une fois qu'elles ont un menu (nous en ajouterons un à l'[Étape 2](./02-customers.md)).
+Le connecteur apparaît sous *Sources de données* dans la liste de gauche : il n'a pas encore de menu. Il passera sous *Applications* à l'[étape 2](./02-customers.md).
 
-### Ce qui vient de se passer
-
-Vous avez déclaré un **espace de nommage**. À partir de maintenant, chaque connecteur, écran, menu, tableau de bord et tâche que nous créons portera `app = "crm"` pour que le framework les regroupe sous cet espace de travail.
-
-Vous n'avez normalement pas besoin de déclarer l'app à l'avance — elle serait créée à la première référence. Nous le faisons maintenant pour fixer le *Nom affiché*, l'*Icône* et l'*Ordre* ; sinon le sélecteur d'espace de travail afficherait l'identifiant brut.
+Pour travailler sur une autre base que celle du framework, ajouter d'abord un pool dans **Paramètres → Pools** avec son URL, puis le choisir ici — voir [Connecteurs](../connectors.md#pools).
 
 ---
 
-## Utiliser le pool par défaut
+## Vérifications
 
-Nous ne créons pas de nouveau pool — le **pool `default`** livré avec le framework pointe vers votre SQLite local (ou ce que vous avez configuré dans `app.toml`). Pour un tutoriel mono-machine, c'est suffisant.
-
-Pour confirmer, ouvrez **Paramètres → Pools**. Vous devriez voir une ligne, `default`, avec le statut **Connecté**.
-
-Si vous avez exécuté le SQL ci-dessus sur une autre base, rendez-vous dans **Paramètres → Pools → + Nouveau pool** et ajoutez-la maintenant — la suite du tutoriel suppose un pool que le framework peut joindre. Le nom du pool sera référencé à l'[Étape 2](./02-customers.md) quand nous construirons le connecteur.
-
----
-
-## Vérifier
-
-| Vérification | Comment |
+| Vérification | Moyen |
 |---|---|
-| Framework joignable | `http://127.0.0.1:8000` retourne la page d'accueil. |
-| Admin connecté | Le coin haut droite affiche le chip `admin`. |
-| Tables de la base présentes | `SELECT count(*) FROM customers;` retourne 3. |
-| App `crm` enregistrée | *Paramètres → Applications* liste `crm`. |
-| Pool connecté | *Paramètres → Pools* affiche `default` (ou votre pool personnalisé) en **Connecté**. |
+| Tables créées | `SELECT count(*) FROM customers;` renvoie 3. |
+| Connecteur créé | **Paramètres → Connecteurs** liste `crm` sous *Sources de données*. |
 
----
-
-## Ce que vous avez maintenant
-
-Rien de visible encore — mais les fondations sont en place : une app enregistrée, un pool joignable, trois tables avec des données initiales. L'étape suivante transforme cela en un véritable écran.
-
-→ **[Étape 2 — L'écran Clients](./02-customers.md)** — définissez votre premier connecteur, construisez l'écran Clients, ajoutez-le au menu.
+→ **[Étape 2 — L'écran Clients](./02-customers.md)** : les requêtes, le premier écran et le menu.
 
 ---
 
 ## Liberty Next — Étape 2 — L'écran Clients
 Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/customers/
 
-Construisez le premier écran du CRM : un connecteur SQL qui lit + écrit la table customers, un écran qui le transforme en grille + dialogue d'édition, et une entrée de menu qui l'ouvre. Illustre le flux complet pool → connecteur → écran → menu.
+Premier écran du CRM : les requêtes des clients générées par l'assistant CRUD, des colonnes d'audit renseignées par le serveur, un écran avec grille et dialogue de modification, et le menu qui fait du connecteur crm une application.
 
-Place au premier écran. Nous allons câbler la table `customers` en une interface opérationnelle : vue liste avec filtres, dialogue d'édition, enregistrement / ajout / suppression. Trois onglets de Paramètres concernés — *Connecteurs*, *Écrans*, *Menus* — environ 10 minutes de clics.
-
-À la fin de cette étape, l'entrée *Clients* apparaît dans la barre latérale et cliquer sur une ligne ouvre un dialogue modifiable. Temps estimé : **15 minutes**.
+La table `customers` devient un écran : une grille avec filtres, un dialogue de modification, l'ajout et la suppression. Trois endroits des Paramètres, dans cet ordre : **Connecteurs** (les requêtes), **Écrans** (l'interface), **Menus** (l'entrée qui l'ouvre).
 
 ---
 
-## Ce que nous faisons et pourquoi
+## Les requêtes
 
-Le modèle mental du framework : **un connecteur sait dialoguer avec une source de données ; un écran sait la rendre ; un menu la rend accessible**. Trois concepts, trois onglets de Paramètres, dans cet ordre.
+1. **Paramètres → Connecteurs**, sélectionner `crm`, choisir **Tables** dans la barre de modes.
+2. **＋ Ajouter des requêtes → Générer depuis la BDD**, choisir la table `customers`.
+3. Garder toutes les colonnes, cocher **clé** sur `ID`, conserver les quatre instructions. Enregistrer.
 
-Pourquoi cet ordre compte :
+Le connecteur contient désormais `customers_get`, `customers_post`, `customers_put` et `customers_delete`. Deux ajustements dans l'éditeur de requête :
 
-1. Le **connecteur** porte le SQL — à la fois la requête de lecture qui alimente la grille et les requêtes d'écriture qui gèrent enregistrement / ajout / suppression. Il se définit en premier parce que tout en aval le référence.
-2. L'**écran** enveloppe le connecteur en UI. Il a besoin que le connecteur existe déjà (l'écran le choisit dans une liste déroulante).
-3. L'entrée de **menu** a besoin que l'écran existe déjà (même raison).
-
-Sauter d'un onglet à l'autre n'est pas un problème — mais le flux naturel va de gauche à droite.
-
----
-
-## Définir le connecteur customers
-
-Ouvrez **Paramètres → Connecteurs → + Nouveau connecteur**.
-
-### Sous-formulaire Connexion
-
-  Connexion
-  
-    Nomcustomers
-    Appcrm ▾
-    TypeSQL ▾
-    Pooldefault ▾
-    DescriptionComptes clients — lister, modifier, désactiver.
-  
-
-La *Description* compte plus qu'il n'y paraît : elle apparaît dans le catalogue, dans la liste d'outils de l'assistant IA (Étape 6) et comme infobulle quand d'autres opérateurs référencent ce connecteur. Deux phrases, dans la langue de l'utilisateur.
-
-### Sous-formulaire Requêtes
-
-Il nous faut quatre requêtes : une de lecture, trois d'écriture.
-
-#### Requête de lecture — `list`
-
-Cliquez sur **+ Ajouter une requête** dans la section *Requêtes*.
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `list` |
-| **Libellé** | `Lister les clients` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
-| **Description** | `Retourne chaque client avec son statut, son secteur et son contact principal.` |
+- **`customers_post`** — la base numérote les lignes (`SERIAL`) : retirer `ID` de l'insertion, et renseigner la création :
 
 ```sql
-SELECT id,
-       name,
-       industry,
-       country,
-       status,
-       primary_email,
-       created_at,
-       updated_at
-FROM   customers
-ORDER BY name;
+INSERT INTO customers (NAME, INDUSTRY, COUNTRY, STATUS, PRIMARY_EMAIL, CREATED_BY, CREATED_AT)
+VALUES (:NAME, :INDUSTRY, :COUNTRY, :STATUS, :PRIMARY_EMAIL, {{LOGIN}}, {{SYSTIMESTAMP}})
 ```
 
-Cliquez sur **▶ Tester**. Le framework exécute la requête, affiche les trois lignes initiales et découvre le schéma. Huit chips de colonnes apparaissent en bas — `id`, `name`, `industry`, `country`, `status`, `primary_email`, `created_at`, `updated_at`. À retenir ; nous les utiliserons dans l'écran.
-
-#### Requête d'écriture — `create`
-
-Cliquez de nouveau sur **+ Ajouter une requête**.
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `create` |
-| **Opération** | Écriture |
-| **SQL** | La requête ci-dessous |
-
-```sql
-INSERT INTO customers (name, industry, country, status, primary_email, created_by, created_at)
-VALUES (:name, :industry, :country, :status, :primary_email, :session_user, CURRENT_TIMESTAMP)
-RETURNING id;
-```
-
-À noter, `:session_user` — le placeholder que le framework lie à la claim `sub` du JWT (l'identifiant de l'utilisateur appelant). C'est ainsi que les colonnes d'audit se remplissent sans faire confiance au client.
-
-Dans la sous-table **Paramètres**, déclarez `name`, `industry`, `country`, `status`, `primary_email` — tous en `string`, aucun obligatoire (le formulaire décidera).
-
-#### Requête d'écriture — `update`
+- **`customers_put`** — ne pas toucher aux colonnes de création, et renseigner la modification :
 
 ```sql
 UPDATE customers
-SET    name = :name,
-       industry = :industry,
-       country = :country,
-       status = :status,
-       primary_email = :primary_email,
-       updated_by = :session_user,
-       updated_at = CURRENT_TIMESTAMP
-WHERE  id = :id;
+SET NAME = :NAME, INDUSTRY = :INDUSTRY, COUNTRY = :COUNTRY, STATUS = :STATUS,
+    PRIMARY_EMAIL = :PRIMARY_EMAIL, UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
 ```
 
-Déclarez un paramètre `id` (`int`, obligatoire) et les cinq mêmes paramètres métier.
+`{{LOGIN}}` et `{{SYSTIMESTAMP}}` sont renseignés par le serveur — nom de l'utilisateur et heure courante — quelles que soient les valeurs envoyées par le formulaire. Enregistrer la page des connecteurs.
 
-#### Requête d'écriture — `delete`
-
-```sql
-DELETE FROM customers WHERE id = :id;
-```
-
-Un seul paramètre — `id`, `int`, obligatoire.
-
-### Enregistrer le connecteur
-
-Cliquez sur **Enregistrer et recharger** en haut à droite. Le catalogue affiche désormais une ligne `customers` sous l'app *crm*, statut **Connecté**, avec **4 requêtes**.
-
-### Ce qui vient de se passer
-
-Vous avez créé la **première surface** du CRM : une définition réutilisable pour lire et écrire les données client. Tout ce qui aura besoin des données client à partir de maintenant — écrans, tableaux de bord, graphiques, tâches, l'assistant IA — référencera ce connecteur plutôt que de réécrire le SQL.
-
-Les quatre requêtes ont aussi généré quatre **codes de permission** automatiquement :
-
-- `sql:customers:list` — requis pour exécuter la requête de lecture.
-- `sql:customers:create:write` / `sql:customers:update:write` / `sql:customers:delete:write` — requis pour chacune des opérations d'écriture.
-
-Aujourd'hui l'utilisateur `admin` porte tous les codes via le joker `*`, donc rien n'est filtré. L'étape 5 introduit de vrais rôles.
+Chaque requête a sa propre permission — `sql:crm:customers_get`, `sql:crm:customers_put`… — utilisée à l'[étape 5](./05-auth.md). Les superutilisateurs les ont toutes.
 
 ---
 
-## Construire l'écran Clients
+## L'écran
 
-Ouvrez **Paramètres → Écrans → + Nouvel écran**.
+1. **Paramètres → Écrans → ＋ Ajouter une portée**, choisir `crm` : la pastille `crm` apparaît.
+2. **＋ Ajouter un écran**, identifiant `customers`, puis cliquer sur la carte pour ouvrir l'éditeur d'écran.
 
-### Sous-formulaire Général
-
-| Champ | Valeur |
+| Onglet | Réglage |
 |---|---|
-| **Id** | `crm/customers` (Id de la forme `app/name`) |
-| **Titre** | `Clients` |
-| **App** | `crm` *(pré-rempli depuis l'Id)* |
-| **Description** | `Liste des comptes clients avec dialogue d'édition en ligne.` |
-| **Colonnes clés** | `id` *(multi-sélection ; un seul ici)* |
-| **Taille de page par défaut** | `50` |
-| **Modifiable** | ✓ *(activé — débloque Ajouter / Modifier / Supprimer)* |
+| **Général** | Libellé `Clients`. |
+| **Requêtes** | Lecture `customers_get`, mise à jour `customers_put`, insertion `customers_post`, suppression `customers_delete`. |
+| **Colonnes** | **Importer depuis la requête de lecture**, puis : donner un libellé à chaque colonne, masquer `ID`, `CREATED_BY`, `CREATED_AT`, `UPDATED_BY` (**hidden**), cocher **filter** sur `STATUS`, `COUNTRY` et `INDUSTRY`. |
+| **Dialogue** | Un onglet `Détails` avec `NAME`, `INDUSTRY`, `COUNTRY`, `STATUS`, `PRIMARY_EMAIL`. |
 
-### Sous-formulaire Connecteur de lecture
-
-| Champ | Valeur |
-|---|---|
-| **Connecteur** | `customers` ▾ |
-| **Requête** | `list` ▾ |
-| **Tri par défaut** | `name`, ascendant |
-
-Un bouton *Aperçu* en haut exécute la requête et affiche les colonnes découvertes. Nous en choisirons certaines juste après.
-
-### Sous-formulaire Grille
-
-Le framework propose les colonnes découvertes dans une palette à gauche ; glissez celles à conserver dans la mise en page à droite.
-
-Pour une vue par défaut propre, incluez :
-
-| Colonne | Libellé | Notes |
-|---|---|---|
-| `name` | Nom | Colonne large. |
-| `industry` | Secteur | |
-| `country` | Pays | |
-| `primary_email` | E-mail | |
-| `status` | Statut | Nous l'afficherons en chip coloré à l'[Étape 3](./03-deals.md) via le dictionnaire. |
-| `updated_at` | Dernière modification | Aligné à droite. |
-
-Laissez `id`, `created_at`, `created_by`, `updated_by` dans le catalogue (l'opérateur peut les ajouter à la demande) mais décochés dans la vue par défaut.
-
-### Sous-formulaire Dialogue
-
-L'onglet *Dialogue* définit ce qui se passe quand l'opérateur clique sur une ligne. Nous ajoutons **un onglet** (`Détails`) avec cinq champs.
-
-| Champ | Colonne source | Widget | Notes |
-|---|---|---|---|
-| **Nom** | `name` | Texte | Obligatoire. |
-| **Secteur** | `industry` | Texte | |
-| **Pays** | `country` | Texte | Câblé à un lookup Pays à l'Étape 3 — pour l'instant, un simple champ texte. |
-| **Statut** | `status` | Texte | Idem — deviendra une liste déroulante à l'Étape 3. |
-| **E-mail principal** | `primary_email` | Texte | |
-
-Le framework dérive le widget du type de colonne découvert (`string` → champ texte, `date` → sélecteur de date, etc.) ; pour l'instant, on garde les valeurs par défaut.
-
-### Sous-formulaire Actions
-
-Les boutons de la barre d'outils Ajouter / Modifier / Supprimer sont câblés automatiquement parce que *Modifiable* est activé. Il suffit de les pointer vers les bonnes requêtes d'écriture :
-
-| Action | Connecteur / Requête |
-|---|---|
-| **Ajouter** | `customers` / `create` |
-| **Enregistrer** *(sur le dialogue)* | `customers` / `update` |
-| **Supprimer** | `customers` / `delete` |
-
-### Enregistrer l'écran
-
-**Enregistrer et recharger**. L'écran apparaît dans le catalogue. Pour le voir, il faut encore le câbler dans la barre latérale.
+Enregistrer. Les libellés saisis sur les colonnes pourront ensuite passer dans le dictionnaire, qui sert tous les écrans — voir l'[étape 3](./03-deals.md).
 
 ---
 
-## Câbler le menu
+## Le menu
 
-Ouvrez **Paramètres → Menus**. Vous devriez voir une ou deux lignes — `_default` et peut-être un placeholder. Cliquez sur **+ Nouveau menu** s'il n'y a pas encore de menu `crm`.
+1. **Paramètres → Menus → + Ajouter une portée**, choisir `crm` : l'arborescence vide de l'application apparaît.
+2. **＋ Dossier** : libellé `Ventes`, icône `briefcase`.
+3. Sur le dossier, **Ajouter un enfant** : libellé `Clients`, type `screen`, cible `customers_get`, icône `users`.
+4. Enregistrer.
 
-Mettez le champ *App* du menu à `crm`. Le framework le reconnaît comme « le menu de l'espace de travail CRM » — une fois enregistré, le sélecteur d'espace de travail en haut de l'en-tête affiche **CRM** comme espace de travail.
-
-Puis, dans l'éditeur d'arborescence du menu, **+ Ajouter une feuille** :
-
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `Clients` |
-| **Type** | `Écran` |
-| **Écran** | `crm/customers` ▾ |
-| **Icône** | `users` *(n'importe quelle [icône Lucide](https://lucide.dev/icons))* |
-
-**Enregistrer et recharger**. La barre latérale se met à jour immédiatement via Socket.IO. Le sélecteur d'espace de travail affiche maintenant **CRM** ; un clic dessus bascule la barre latérale vers une liste contenant **Clients**.
+`crm` a désormais un menu : c'est une **application**, proposée dans le sélecteur d'application en haut du menu latéral (à partir de deux applications). Son menu affiche **Ventes → Clients**.
 
 ---
 
-## Voir le résultat
+## Résultat à l'écran
 
-Cliquez sur l'entrée **Clients** dans la barre latérale. Une grille s'affiche avec trois lignes — Acme, Globex, Initech.
+Ouvrir **Clients** : la grille présente ACME Industries, Beta SARL et Gamma SA.
 
-  
-    Clients
-    
-      ↻ Rafraîchir
-      + Ajouter
-    
-  
-  
-    NomSecteurPaysE-mailStatutDernière modification
-  
-  
-    Acme Industries SAmanufacturingFRcontact@acme.exampleactive—
-  
-  
-    Globex LogisticslogisticsDEsales@globex.exampleactive—
-  
-  
-    Initech ServicesservicesFRhello@initech.exampleactive—
-  
-
-Essayez :
-
-- **Cliquez sur une ligne** → le dialogue d'édition s'ouvre avec les cinq champs remplis.
-- **Modifiez un champ, cliquez sur Enregistrer** → la ligne se met à jour, la colonne *Dernière modification* reflète le changement.
-- **Cliquez sur + Ajouter** → le dialogue s'ouvre vide pour un nouveau client.
-- **Cliquez sur ✕ Supprimer dans le dialogue** → la ligne disparaît après confirmation.
+- Un clic sur une ligne ouvre le dialogue avec les cinq champs ; en modifier un et **Enregistrer** — *Updated by* et *Updated at* sont renseignés (les afficher par le menu **Colonnes** de la grille).
+- **＋ Ajouter** ouvre un dialogue vide pour un nouveau client.
+- **Supprimer** dans le dialogue retire la ligne.
 
 ---
 
-## Ce que vous avez maintenant
+## Bilan
 
-Un écran Clients pleinement fonctionnel — lister, modifier, ajouter, supprimer — sans écrire la moindre ligne de code frontend. L'ensemble tient sur un connecteur + un écran + une entrée de menu, le tout défini dans l'interface Paramètres.
+Un écran Clients — liste, filtres, ajout, modification, suppression — construit à partir d'une table, avec des colonnes d'audit renseignées par le serveur.
 
-L'écran a encore des aspérités à polir dans les étapes suivantes :
-
-- La colonne `status` est une chaîne libre. L'**Étape 3** la transforme en chip coloré via le dictionnaire.
-- La colonne `country` est un code à deux lettres en texte libre. L'**Étape 3** la câble à une table de lookup pour que les utilisateurs choisissent dans une liste déroulante.
-- Il n'y a pas de données liées (affaires, activités). L'**Étape 3** ajoute les Affaires avec une FK vers Clients et une sous-grille Activités.
-
-→ **[Étape 3 — Affaires et relations](./03-deals.md)** — deuxième écran avec lookups FK + le dictionnaire + une sous-grille enfant.
+→ **[Étape 3 — Affaires et relations](./03-deals.md)** : listes de valeurs du dictionnaire, affaires liées aux clients, activités dans un onglet.
 
 ---
 
 ## Liberty Next — Étape 3 — Affaires et relations
 Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/deals/
 
-Ajoutez l'écran Affaires avec un lookup clé étrangère vers les Clients, polissez le dictionnaire pour que les valeurs de statut s'affichent en chips colorés, et ajoutez une sous-grille Activités à l'intérieur du dialogue de l'affaire. Illustre les lookups, le dictionnaire et les relations parent-enfant.
+Second écran du CRM : le dictionnaire apporte libellés et listes de valeurs (une énumération pour le statut client, des lookups pour le client et l'étape d'une affaire), l'écran Affaires rattache chaque affaire à son client, et les activités de l'affaire apparaissent dans un onglet de son dialogue.
 
-L'écran Clients fonctionne mais reste brut. Dans cette étape, nous ajoutons la deuxième entité — **Affaires** — avec une référence clé étrangère vers Clients, polissons le rendu visuel via le **dictionnaire**, et ajoutons une **sous-grille Activités** à l'intérieur du dialogue de l'affaire pour que les utilisateurs puissent journaliser appels et réunions sur une affaire.
+Trois volets dans cette étape :
 
-À la fin de cette étape, le CRM compte deux écrans liés avec des chips, des listes déroulantes et une relation parent-enfant en bonne et due forme. Temps estimé : **20 minutes**.
-
----
-
-## Ce que nous faisons et pourquoi
-
-Jusqu'à présent, les valeurs brutes des colonnes remontaient telles quelles vers l'UI — un statut n'était que du texte, un pays seulement deux lettres. Les vraies applications attendent **des chips libellés, des listes déroulantes alimentées par une table, des entités liées en ligne**.
-
-Le framework règle cela via trois primitives empilées au-dessus du couple connecteur + écran que nous avons déjà construit :
-
-| Primitive | Ce qu'elle apporte | Où elle se trouve |
-|---|---|---|
-| **Entrée de dictionnaire** | Une déclaration par colonne du libellé, du format et de la *règle d'affichage* (BOOLEAN / ENUM / LOOKUP / PASSWORD). | *Paramètres → Dictionnaire → Colonnes*. |
-| **Lookup** | Une requête nommée qui retourne des paires `{ value, label }` — alimente les listes déroulantes. | *Paramètres → Dictionnaire → Lookups*. |
-| **Sous-grille dans un onglet de dialogue** | Une grille dans le dialogue, cadrée par la clé du parent. | *Paramètres → Écrans → Dialogue → Sous-grilles*. |
-
-Nous utiliserons les trois.
+1. Le **dictionnaire** : des libellés communs à tous les écrans, et des listes de valeurs au lieu de texte libre.
+2. L'écran **Affaires**, où chaque affaire choisit son client et son étape dans une liste.
+3. Les **activités** de l'affaire, dans un onglet de son dialogue.
 
 ---
 
-## Polir d'abord l'écran clients
+## Le dictionnaire
 
-Deux gains rapides sur l'écran clients que nous avons construit à l'étape précédente.
+### Les entrées tirées des tables
 
-### Ajouter `status` en ENUM dans le dictionnaire
+**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** (libellé anglais) :
 
-Ouvrez **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
+1. Connecteur `crm`, table `customers`, **Scan** : une proposition par colonne, les manquantes cochées.
+2. Renseigner le **Label** de chacune (`Nom`, `Secteur`, `Pays`, `Statut`, `E-mail`…), puis **Add**.
+3. Même chose pour `deals` et `activities`.
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `customer_status` |
-| **Libellé** | `Statut` *(carte par langue ; anglais `Status`, français `Statut`)* |
-| **Type** | `string` |
-| **Règle** | `ENUM` |
-| **Valeurs enum** | Les quatre lignes ci-dessous |
+Tous les écrans de l'application affichent désormais ces libellés — ceux saisis sur les colonnes de l'écran Clients à l'étape 2 peuvent être effacés.
 
-| Valeur | Libellé | Couleur |
-|---|---|---|
-| `active`     | Actif      | `#4ade80` *(vert)* |
-| `prospect`   | Prospect   | `#60a5fa` *(bleu)* |
-| `inactive`   | Inactif    | `#94a3b8` *(gris)* |
-| `lost`       | Perdu      | `#f87171` *(rouge)* |
+### Le statut client — une énumération
 
-**Enregistrer**. Puis ouvrez **Paramètres → Connecteurs → customers → requête `list`**, descendez jusqu'à **Indices de colonne**, et ajoutez une ligne :
+Onglet **Énumérations**, **＋ Ajouter une énumération** `CUSTOMER_STATUS`, avec les valeurs `ACTIVE` (Actif), `PROSPECT` (Prospect), `INACTIVE` (Inactif). Puis sur l'entrée `STATUS` : **Rules** `ENUM`, **Rules values** `CUSTOMER_STATUS`.
 
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `status` | `customer_status` |
+La grille affiche *Actif* au lieu de `ACTIVE`, et le dialogue propose les trois valeurs.
 
-**Enregistrer et recharger**.
+### Le client d'une affaire — un lookup
 
-Rouvrez l'écran Clients. La colonne *Statut* affiche maintenant un chip coloré — `Actif` vert pour les trois lignes initiales. Le champ *Statut* du dialogue est désormais une liste déroulante des quatre valeurs. Nous n'avons touché ni au SQL ni à l'écran.
+Un lookup remplace un code (l'identifiant du client) par un libellé (son nom), à partir d'une requête.
 
-### Câbler `country` à un lookup
+1. **Paramètres → Connecteurs → crm → Lookups → ＋ Ajouter un lookup** : table `customers`, colonne valeur `ID`, colonne libellé `NAME`. L'assistant écrit la requête et le lookup `customers` du dictionnaire.
+2. Même chose pour les étapes : table `deal_stages`, valeur `CODE`, libellé `LABEL`.
+3. Dans le dictionnaire, entrée `CUSTOMER_ID` : **Rules** `LOOKUP`, **Rules values** `customers` ; entrée `STAGE` : **Rules** `LOOKUP`, **Rules values** `deal_stages`.
 
-La colonne pays est actuellement un code à deux lettres en texte libre. Un lookup la transforme en liste déroulante avec autocomplétion.
+Enregistrer le dictionnaire. Voir [Dictionnaire](../dictionary.md) et [Séquences et lookups](../build/queries/sequences-and-lookups.md).
 
-D'abord la requête source — il faut un connecteur qui liste les pays. Nous allons profiter du connecteur **customers** en ajoutant une petite requête de référence, puisque nous n'avons pas de table pays distincte :
+---
 
-Ouvrez **Paramètres → Connecteurs → customers → + Ajouter une requête** :
+## L'écran Affaires
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `country-list` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
+1. **Connecteurs → crm → Tables → ＋ Ajouter des requêtes → Générer depuis la BDD**, table `deals`, clé `ID`. Comme à l'étape 2, retirer `ID` de `deals_post`, et ajouter `UPDATED_AT = {{SYSTIMESTAMP}}` à `deals_put`.
+2. **Écrans**, pastille `crm`, **＋ Ajouter un écran** `deals` : libellé `Affaires`, les quatre requêtes, **Importer depuis la requête de lecture** dans Colonnes, un onglet de dialogue `Affaire` avec `CUSTOMER_ID`, `NAME`, `STAGE`, `AMOUNT`, `CLOSE_DATE`, `OWNER`.
+3. **Menus**, sous *Ventes* : une entrée `Affaires`, type `screen`, cible `deals_get`, icône `trendingup`.
+
+La grille affiche le nom du client et le libellé de l'étape ; le dialogue les propose dans des listes avec recherche. Cocher **filter** sur `STAGE` et `CUSTOMER_ID` pour filtrer la grille sur ces colonnes.
+
+---
+
+## Les activités dans un onglet
+
+Les activités d'une affaire apparaissent dans son dialogue, sous forme de grille.
+
+### L'écran Activités
+
+1. **Générer depuis la BDD** sur `activities`, clé `ID`. Dans `activities_post`, retirer `ID` et enregistrer l'auteur :
 
 ```sql
--- Liste courte ISO 3166 pour le tutoriel. Dans une vraie app, ça viendrait d'une table pays.
-SELECT 'FR' AS code, 'France'         AS label UNION ALL
-SELECT 'DE',         'Germany'        UNION ALL
-SELECT 'BE',         'Belgium'        UNION ALL
-SELECT 'IT',         'Italy'          UNION ALL
-SELECT 'ES',         'Spain'          UNION ALL
-SELECT 'GB',         'United Kingdom' UNION ALL
-SELECT 'US',         'United States'  UNION ALL
-SELECT 'CA',         'Canada';
+INSERT INTO activities (DEAL_ID, KIND, NOTES, HAPPENED_AT, RECORDED_BY)
+VALUES (:DEAL_ID, :KIND, :NOTES, :HAPPENED_AT, {{LOGIN}})
 ```
 
-Cliquez sur **▶ Tester** pour confirmer les huit lignes. **Enregistrer et recharger**.
+2. Un écran `activities` sur ces requêtes, avec un dialogue contenant `KIND`, `NOTES`, `HAPPENED_AT`. Sa requête de lecture a besoin de l'identifiant de l'affaire — ajouter `WHERE DEAL_ID = :DEAL_ID` à `activities_get`.
 
-Définissez maintenant le lookup. **Paramètres → Dictionnaire → Lookups → + Nouveau lookup** :
+### L'onglet
 
-| Champ | Valeur |
+Dans l'écran `deals`, onglet **Dialogue**, **＋ Ajouter un onglet**, puis dans **Paramètres de l'onglet** :
+
+| Réglage | Valeur |
 |---|---|
-| **Nom** | `countries` |
-| **Connecteur** | `customers` ▾ |
-| **Requête** | `country-list` ▾ |
-| **Colonne valeur** | `code` |
-| **Colonne libellé** | `label` |
-| **Cache** | `Par session` |
+| Libellé de l'onglet | `Activités` |
+| Type d'onglet | *Table imbriquée* |
+| Écran cible | `activities` |
+| Liaisons de paramètres | colonne parent `ID` → paramètre `DEAL_ID` |
 
-**Enregistrer**.
-
-Retour dans **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `country_code` |
-| **Libellé** | `Pays` *(anglais `Country`, français `Pays`)* |
-| **Type** | `string` |
-| **Règle** | `LOOKUP` |
-| **Lookup** | `countries` ▾ |
-
-**Enregistrer**. Puis sur la requête `list` du connecteur customers, ajoutez un autre indice de colonne :
-
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `country` | `country_code` |
-
-**Enregistrer et recharger**.
-
-Rouvrez l'écran Clients. La colonne *Pays* affiche maintenant `France`, `Germany`, `France` (libellés résolus), et le champ *Pays* du dialogue est une liste déroulante avec autocomplétion des huit pays.
+L'onglet affiche les activités de l'affaire ouverte ; **＋ Ajouter** y crée une activité dont `DEAL_ID` est déjà renseigné. Activer **hide_on_add** sur l'onglet : une affaire en cours de création n'a pas encore d'identifiant. Voir [Onglets imbriqués](../build/screens/nested-tabs.md).
 
 ---
 
-## Construire le connecteur Affaires
+## Résultat à l'écran
 
-Même motif qu'avant — un connecteur avec quatre requêtes.
-
-Ouvrez **Paramètres → Connecteurs → + Nouveau connecteur** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `deals` |
-| **App** | `crm` |
-| **Type** | `SQL` |
-| **Pool** | `default` |
-| **Description** | `Affaires commerciales — étape du pipeline, montant, clôture attendue.` |
-
-### Requête `list`
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `list` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
-
-```sql
-SELECT d.id,
-       d.name,
-       d.customer_id,
-       c.name AS customer_name,
-       d.stage,
-       d.amount,
-       d.currency,
-       d.close_date,
-       d.owner
-FROM   deals d
-JOIN   customers c ON c.id = d.customer_id
-WHERE  (:customer_id IS NULL OR d.customer_id = :customer_id)
-  AND  (:stage       IS NULL OR d.stage = :stage)
-ORDER BY d.close_date;
-```
-
-À noter les deux paramètres optionnels — `customer_id` et `stage`. Déclarez-les dans la sous-table *Paramètres* :
-
-| Nom | Type | Obligatoire | Libellé | Lookup |
-|---|---|---|---|---|
-| `customer_id` | int    | — | Client | — |
-| `stage`       | string | — | Étape | — |
-
-Ne mettez pas de valeurs par défaut — la requête gère `NULL` avec le motif `IS NULL OR`.
-
-Cliquez sur **▶ Tester**. Quatre lignes.
-
-### Lookup pour les clients (FK)
-
-Avant les requêtes d'écriture, définissez un lookup qui permet au formulaire de l'affaire de sélectionner un client par nom.
-
-**Paramètres → Dictionnaire → Lookups → + Nouveau lookup** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `customers-list` |
-| **Connecteur** | `customers` |
-| **Requête** | `list` *(on réutilise la requête de lecture existante)* |
-| **Colonne valeur** | `id` |
-| **Colonne libellé** | `name` |
-| **Cache** | `Par session` |
-
-**Enregistrer**.
-
-Même idée pour les étapes d'affaire — réutilisez une petite requête de référence. Ajoutez au connecteur `deals` :
-
-```sql
-SELECT code, label, colour FROM deal_stages ORDER BY ord;
-```
-
-Nommez-la `stages-list`. Puis un lookup de dictionnaire qui pointe dessus (`stages`, valeur = `code`, libellé = `label`, colonne couleur = `colour` — donne aux chips leur couleur).
-
-Deux colonnes de dictionnaire référencent désormais ces lookups :
-
-| Entrée de colonne | Règle | Lookup | Description |
-|---|---|---|---|
-| `customer_id` *(réutiliser s'il existe)* | LOOKUP | `customers-list` | FK Client sur l'affaire. |
-| `deal_stage` | LOOKUP | `stages` | Étape du pipeline. |
-
-Sur les **Indices de colonne** de la requête `deals.list` :
-
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `customer_id` | `customer_id` |
-| `stage`       | `deal_stage` |
-| `amount`      | *(créez une nouvelle entrée de dictionnaire `money` : type `decimal`, format `1 234,56 €`)* |
-
-### Requêtes d'écriture
-
-```sql
--- create
-INSERT INTO deals (customer_id, name, stage, amount, currency, close_date, owner, created_at)
-VALUES (:customer_id, :name, :stage, :amount, :currency, :close_date, :session_user, CURRENT_TIMESTAMP)
-RETURNING id;
-
--- update
-UPDATE deals SET
-  customer_id = :customer_id,
-  name = :name,
-  stage = :stage,
-  amount = :amount,
-  currency = :currency,
-  close_date = :close_date
-WHERE id = :id;
-
--- delete
-DELETE FROM deals WHERE id = :id;
-```
-
-**Enregistrer et recharger**.
+- **Clients** : le statut s'affiche par son libellé et se choisit dans une liste.
+- **Affaires** : quatre affaires, avec leur client et leur étape ; filtrer sur *Négociation*.
+- Ouvrir *Plateforme logistique*, onglet **Activités**, **＋ Ajouter** : enregistrer un appel. *Recorded by* contient le nom de l'utilisateur.
 
 ---
 
-## Construire l'écran Affaires
+## Bilan
 
-**Paramètres → Écrans → + Nouvel écran** :
+Deux écrans liés, des libellés et des listes de valeurs partagés par le dictionnaire, et des lignes enfants dans un dialogue.
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm/deals` |
-| **Titre** | `Affaires` |
-| **App** | `crm` |
-| **Colonnes clés** | `id` |
-| **Modifiable** | ✓ |
-
-### Connecteur de lecture
-
-| Champ | Valeur |
-|---|---|
-| **Connecteur** | `deals` |
-| **Requête** | `list` |
-| **Tri par défaut** | `close_date` ascendant |
-
-### Colonnes de la grille
-
-| Colonne | Notes |
-|---|---|
-| `name` | Le libellé de l'affaire. |
-| `customer_name` | Issu de la JOIN. |
-| `stage` | Rendu en chip coloré via le dictionnaire. |
-| `amount` | Rendu en `1 234,56 €` via le dictionnaire. |
-| `close_date` | Formaté en `dd/MM/yyyy` (l'Étape 4 polira ça). |
-
-### Champs du dialogue
-
-Un onglet — `Détails` — avec :
-
-- `customer_id` (liste déroulante LOOKUP vers customers)
-- `name`
-- `stage` (liste déroulante LOOKUP vers stages)
-- `amount`
-- `currency`
-- `close_date`
-
-### Actions
-
-Ajouter → `deals/create`, Enregistrer → `deals/update`, Supprimer → `deals/delete`.
-
-**Enregistrer et recharger**.
-
-Ajoutez la feuille au menu **crm** (Paramètres → Menus → crm → + Ajouter une feuille), qui pointe vers `crm/deals` avec l'icône `briefcase`. **Enregistrer et recharger**.
-
-L'écran Affaires apparaît dans la barre latérale.
-
----
-
-## Ajouter une sous-grille Activités
-
-La table activities stocke des notes liées aux affaires. Plutôt qu'un écran de premier niveau distinct, nous allons intégrer les activités **à l'intérieur** du dialogue d'affaire pour que l'utilisateur voie l'historique d'une affaire à l'endroit même où il la modifie.
-
-### Connecteur activities
-
-```sql
--- activities.list
-SELECT id, deal_id, kind, notes, happened_at, recorded_by
-FROM   activities
-WHERE  deal_id = :deal_id
-ORDER BY happened_at DESC;
-
--- activities.create
-INSERT INTO activities (deal_id, kind, notes, happened_at, recorded_by)
-VALUES (:deal_id, :kind, :notes, CURRENT_TIMESTAMP, :session_user)
-RETURNING id;
-
--- activities.delete
-DELETE FROM activities WHERE id = :id;
-```
-
-Câblez la colonne `kind` comme une entrée de dictionnaire ENUM avec les valeurs `call`, `meeting`, `email`, `note` (couleurs différentes).
-
-### Câbler la sous-grille
-
-Ouvrez l'**écran Affaires** → **onglet Dialogue** → **+ Ajouter un onglet** :
-
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `Activités` |
-| **Contenu** | `Sous-grille` *(bascule l'onglet du mode « champs » au mode « grille »)* |
-
-Dans le panneau sous-grille :
-
-| Champ | Valeur |
-|---|---|
-| **Connecteur** | `activities` |
-| **Requête** | `list` |
-| **Liaison des paramètres** | `deal_id ← <parent>.id` *(le framework lie automatiquement l'`id` du dialogue parent au paramètre `deal_id` de la sous-grille)* |
-| **Modifiable** | ✓ |
-| **Connecteur / requête Ajouter** | `activities` / `create` |
-| **Connecteur / requête Supprimer** | `activities` / `delete` |
-
-La sous-grille met automatiquement en forme sa grille à partir de la requête `list` (`kind`, `notes`, `happened_at`, `recorded_by`) et son mini-dialogue à partir des colonnes.
-
-**Enregistrer et recharger**.
-
----
-
-## Voir le résultat
-
-Ouvrez **CRM → Affaires**, cliquez sur l'affaire *Globex Logistics*. Le dialogue s'ouvre avec deux onglets — *Détails* (les champs que nous avons câblés) et *Activités* (vide pour les données initiales).
-
-Basculez sur l'onglet *Activités*, cliquez sur **+ Ajouter**, saisissez une note `meeting` rapide. Enregistrez. L'activité apparaît dans la sous-grille ; la colonne *Enregistré par* est `admin` (rempli par la valeur par défaut `LOGIN` de la couche formulaire).
-
-Essayez la colonne nom du client dans la grille Affaires — un clic sur la valeur style chip ouvre l'écran Clients pré-filtré sur ce client. (Comportement obtenu gratuitement parce que la colonne `customer_id` est un `LOOKUP` sur la liste des clients.)
-
----
-
-## Ce que vous avez maintenant
-
-Deux écrans, une relation parent-enfant, un rendu poli via le dictionnaire. Le CRM commence à prendre forme.
-
-Ce qui manque encore :
-
-- Une **vue d'ensemble** — KPI et un graphique qui résument le pipeline. À venir à l'[Étape 4](./04-dashboard.md).
-- De **vrais rôles** — aujourd'hui tout est réservé à l'admin. À venir à l'[Étape 5](./05-auth.md).
-- L'**IA** et les **tâches planifiées** — à venir à l'[Étape 6](./06-ai-and-jobs.md).
-
-→ **[Étape 4 — Tableau de bord du pipeline commercial](./04-dashboard.md)** — KPI, graphique, drill-down.
+→ **[Étape 4 — Tableau de bord](./04-dashboard.md)** : le pipeline d'un coup d'œil.
 
 ---
 
 ## Liberty Next — Étape 4 — Tableau de bord du pipeline commercial
 Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/dashboard/
 
-Posez un tableau de bord au-dessus des données Affaires existantes : quatre KPI, un graphique en barres empilées par étape, une table « activités récentes », tous partageant un filtre de période et permettant le drill-down vers l'écran Affaires. Illustre les tableaux de bord, les graphiques et la barre de filtres partagée.
+Ajouter au CRM un tableau de bord du pipeline : requêtes d'agrégation, indicateurs comparés à la période précédente, graphique en barres enregistré du pipeline par étape, table des dernières activités, et l'entrée de menu qui l'ouvre.
 
-Deux écrans couvrent la vue opérationnelle. Nous posons maintenant un **tableau de bord** par-dessus — la vue à vol d'oiseau attendue par les managers quand ils ouvrent le CRM le matin. Quatre KPI, un graphique, une table « activités récentes », tous partageant un filtre de période qui se propage à chaque panneau.
-
-À la fin de cette étape, le CRM compte une page `Vue d'ensemble du pipeline` qui visualise les mêmes données de trois façons. Temps estimé : **15 minutes**.
+Un tableau de bord réunit le pipeline sur une page : montant en cours, montant gagné sur la période, nombre d'affaires en cours, pipeline par étape et dernières activités.
 
 ---
 
-## Ce que nous faisons et pourquoi
+## Les requêtes
 
-Un écran répond à « montre-moi les lignes » ; un tableau de bord répond à « **résume** les lignes ». Les deux s'alimentent des mêmes données — les requêtes du connecteur que nous avons déjà, plus quelques requêtes d'agrégation à ajouter.
+Dans **Paramètres → Connecteurs → crm → Requêtes**, **＋ Ajouter une requête** pour chacune :
 
-Les [tableaux de bord](../dashboards.md) du framework sont une grille responsive 12 colonnes ; les [graphiques](../charts.md) enveloppent une requête SQL en une visualisation. Une **barre de filtres partagée** en haut du tableau de bord pousse une valeur (une période, une région, une étape) dans chaque panneau qui déclare le même paramètre. Le drill-down ouvre l'écran correspondant pré-filtré.
+```sql
+-- open_deals_get — affaires en cours
+SELECT ID, AMOUNT FROM deals WHERE STAGE NOT IN ('WON', 'LOST')
 
-Nous allons construire :
+-- won_deals_get — affaires gagnées sur la période du tableau de bord
+SELECT ID, AMOUNT, CLOSE_DATE FROM deals
+WHERE STAGE = 'WON' AND CLOSE_DATE BETWEEN :PERIOD_FROM AND :PERIOD_TO
 
-| Panneau | Type | Source |
+-- pipeline_by_stage_get — montant par étape
+SELECT s.LABEL AS STAGE, s.ORD, SUM(d.AMOUNT) AS AMOUNT
+FROM deals d JOIN deal_stages s ON s.CODE = d.STAGE
+WHERE d.STAGE NOT IN ('WON', 'LOST')
+GROUP BY s.LABEL, s.ORD ORDER BY s.ORD
+
+-- recent_activities_get — dernières activités
+SELECT a.HAPPENED_AT, c.NAME AS CUSTOMER, d.NAME AS DEAL, a.KIND, a.RECORDED_BY
+FROM activities a JOIN deals d ON d.ID = a.DEAL_ID JOIN customers c ON c.ID = d.CUSTOMER_ID
+ORDER BY a.HAPPENED_AT DESC
+```
+
+`:PERIOD_FROM` et `:PERIOD_TO` reçoivent la période choisie sur le tableau de bord.
+
+---
+
+## Le graphique
+
+**Paramètres → Graphiques**, portée `crm`, **Add chart** :
+
+| Onglet | Réglage |
+|---|---|
+| General | Identifiant `pipeline_by_stage`, libellé `Pipeline par étape`, requête `pipeline_by_stage_get`. |
+| Chart | **Barres**, axe X `STAGE`, une série `AMOUNT`, agrégation **Somme**. |
+
+Voir [Graphiques](../charts.md).
+
+---
+
+## Le tableau de bord
+
+**Paramètres → Tableaux de bord**, application `crm`, ajouter un tableau de bord `pipeline`, titre `Pipeline commercial` :
+
+- **Période** : **Add a period**, ouverture sur *Ce mois-ci*, colonne de date `CLOSE_DATE`.
+- **Widgets** (**Add widget**), dans cet ordre :
+
+| Widget | Réglages | Largeur |
 |---|---|---|
-| **Valeur totale du pipeline** | Stat | Somme du `amount` des affaires ouvertes. |
-| **Affaires gagnées sur la période** | Stat | Décompte des affaires `stage='won'` qui clôturent dans la période. |
-| **Taille moyenne d'affaire** | Stat | Moyenne du `amount` sur la période. |
-| **Taux de réussite** | Stat | Gagnées / (gagnées + perdues) sur la période. |
-| **Pipeline par étape** | Graphique en barres | `GROUP BY stage` sur la période. |
-| **Activités récentes** | Table | 10 dernières lignes de `activities`. |
+| Indicateur *Pipeline en cours* | Requête `open_deals_get`, colonne `AMOUNT`, agrégation `sum`. | 4 |
+| Indicateur *Gagné* | Requête `won_deals_get`, colonne `AMOUNT`, agrégation `sum`, **Compare with the previous period**. | 4 |
+| Indicateur *Affaires en cours* | Requête `open_deals_get`, colonne `ID`, agrégation `count`. | 4 |
+| Graphique | Le graphique enregistré `pipeline_by_stage`. | 8, hauteur 2 |
+| Table *Dernières activités* | Requête `recent_activities_get`, 10 lignes au plus. | 4, hauteur 2 |
+
+Enregistrer. L'éditeur est en anglais. Voir [Tableaux de bord](../dashboards.md).
 
 ---
 
-## Ajouter les requêtes d'agrégation
+## L'entrée de menu
 
-Ouvrez **Paramètres → Connecteurs → deals → + Ajouter une requête** et ajoutez quatre requêtes de lecture.
-
-### `pipeline-total`
-
-```sql
-SELECT COALESCE(SUM(amount), 0) AS total
-FROM   deals
-WHERE  stage NOT IN ('won', 'lost')
-  AND  (:close_from IS NULL OR close_date >= :close_from)
-  AND  (:close_to   IS NULL OR close_date <= :close_to);
-```
-
-Paramètres : `close_from` (date), `close_to` (date), aucun obligatoire.
-
-### `deals-won`
-
-```sql
-SELECT COUNT(*) AS count
-FROM   deals
-WHERE  stage = 'won'
-  AND  (:close_from IS NULL OR close_date >= :close_from)
-  AND  (:close_to   IS NULL OR close_date <= :close_to);
-```
-
-### `avg-deal-size`
-
-```sql
-SELECT COALESCE(AVG(amount), 0) AS avg
-FROM   deals
-WHERE  stage = 'won'
-  AND  (:close_from IS NULL OR close_date >= :close_from)
-  AND  (:close_to   IS NULL OR close_date <= :close_to);
-```
-
-### `win-rate`
-
-```sql
-SELECT CASE
-         WHEN COUNT(*) = 0 THEN 0
-         ELSE 100.0 * SUM(CASE WHEN stage = 'won' THEN 1 ELSE 0 END) / COUNT(*)
-       END AS pct
-FROM   deals
-WHERE  stage IN ('won', 'lost')
-  AND  (:close_from IS NULL OR close_date >= :close_from)
-  AND  (:close_to   IS NULL OR close_date <= :close_to);
-```
-
-### `by-stage`
-
-```sql
-SELECT stage, COUNT(*) AS count, SUM(amount) AS total
-FROM   deals
-WHERE  (:close_from IS NULL OR close_date >= :close_from)
-  AND  (:close_to   IS NULL OR close_date <= :close_to)
-GROUP BY stage
-ORDER BY stage;
-```
-
-Testez chacune — elles retournent toutes des nombres compte tenu des données initiales. **Enregistrer et recharger**.
+**Paramètres → Menus**, application `crm`, en tête d'arborescence : **＋ Élément**, libellé `Pipeline`, type `dashboard`, cible `crm.pipeline`, icône `barchart`. La placer au-dessus du dossier *Ventes* et la désigner comme **home** du connecteur (Paramètres → Connecteurs → crm) pour que l'application s'ouvre dessus.
 
 ---
 
-## Définir un graphique pour « Pipeline par étape »
+## Résultat à l'écran
 
-Le **graphique** du framework est une définition réutilisable posée entre une requête SQL et un panneau de tableau de bord. Ouvrez **Paramètres → Graphiques → + Nouveau graphique** :
+Ouvrir **Pipeline** :
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-pipeline-by-stage` |
-| **Titre** | `Pipeline par étape` |
-| **Type** | `Barre` |
-| **Connecteur** | `deals` |
-| **Requête** | `by-stage` |
-| **Axe X** | `stage` (libellé `Étape`) — réglez le lookup sur `stages` pour que le graphique affiche les libellés lisibles avec leurs couleurs. |
-| **Série** | Une série : champ `count`, libellé `Affaires`, couleur depuis la colonne couleur de l'étape. |
-| **Group by** *(optionnel)* | Laisser vide. |
+- les trois indicateurs ; *Gagné* affiche son évolution par rapport à la période précédente ;
+- les barres du pipeline par étape ;
+- les dernières activités, dont celle enregistrée à l'étape 3.
 
-Cliquez sur **▶ Aperçu**. Un petit graphique en barres apparaît avec une barre par étape (les 4 lignes initiales produisent 4 barres).
-
-**Enregistrer**.
+Passer la période sur *Cette année* : l'indicateur *Gagné* suit. **↻** recharge tous les widgets.
 
 ---
 
-## Construire le tableau de bord
+## Bilan
 
-**Paramètres → Tableaux de bord → + Nouveau tableau de bord** :
+Un tableau de bord qui répond à la question « où en est le pipeline ? » sans ouvrir d'écran, sur les mêmes requêtes et les mêmes permissions que le reste de l'application.
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-pipeline-overview` |
-| **Titre** | `Vue d'ensemble du pipeline` |
-| **App** | `crm` |
-| **Description** | `KPI du pipeline commercial et répartition par étape.` |
-
-### Barre de filtres partagée
-
-En haut de l'éditeur, ajoutez deux entrées de filtre dont chaque panneau héritera :
-
-| Nom | Type | Défaut | Libellé |
-|---|---|---|---|
-| `close_from` | date | `${month.first}` | De |
-| `close_to` | date | `${month.last}` | À |
-
-Les jetons `${month.first}` et `${month.last}` se résolvent en premier / dernier jour du mois courant côté serveur — réévalués à chaque appel, pour que le tableau de bord suive le calendrier.
-
-### Panneaux
-
-Glissez depuis la palette vers la mise en page 12 colonnes :
-
-#### Ligne 1 — quatre panneaux stat (3 colonnes chacun)
-
-| Panneau | Type | Connecteur / Requête | Valeur | Format |
-|---|---|---|---|---|
-| **Valeur totale du pipeline** | Stat | `deals` / `pipeline-total` | `total` | `1 234,56 €` |
-| **Affaires gagnées** | Stat | `deals` / `deals-won` | `count` | `1 234` |
-| **Taille moyenne d'affaire** | Stat | `deals` / `avg-deal-size` | `avg` | `1 234,56 €` |
-| **Taux de réussite** | Stat | `deals` / `win-rate` | `pct` | `12.3 %` |
-
-Les surcharges de paramètres de chaque panneau stat héritent de la barre de filtres partagée — le framework câble `close_from` et `close_to` automatiquement.
-
-#### Ligne 2 — Pipeline par étape (8 colonnes) + Activités récentes (4 colonnes)
-
-| Panneau | Type | Source | Réglages |
-|---|---|---|---|
-| **Pipeline par étape** | Graphique | Le graphique `crm-pipeline-by-stage` que nous avons construit. | Écran de drill-down : `crm/deals` *(cliquer sur une barre ouvre l'écran Affaires pré-filtré sur cette étape)*. |
-| **Activités récentes** | Table | Connecteur `activities`, requête `recent` à créer, qui retourne les 10 dernières lignes triées par `happened_at DESC`. | Action au clic : ouvrir `crm/deals` filtré sur le `deal_id` de l'activité. |
-
-Pour la table *Activités récentes*, ajoutez une requête `activities.recent` :
-
-```sql
-SELECT a.kind, a.notes, a.happened_at, d.name AS deal_name, c.name AS customer_name
-FROM   activities a
-JOIN   deals d     ON d.id = a.deal_id
-JOIN   customers c ON c.id = d.customer_id
-ORDER BY a.happened_at DESC
-LIMIT 10;
-```
-
-### Enregistrer et ajouter au menu
-
-**Enregistrer** le tableau de bord.
-
-Puis **Paramètres → Menus → crm** → **+ Ajouter une feuille** en haut de l'arborescence (pour en faire la première entrée vue par les utilisateurs) :
-
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `Vue d'ensemble du pipeline` |
-| **Type** | `Tableau de bord` |
-| **Tableau de bord** | `crm-pipeline-overview` |
-| **Icône** | `bar-chart-3` |
-
-**Enregistrer et recharger**.
+→ **[Étape 5 — Rôles et connexion](./05-auth.md)** : qui voit quoi.
 
 ---
 
-## Voir le résultat
-
-Cliquez sur **Vue d'ensemble du pipeline** dans la barre latérale. L'affichage attendu :
-
-  
-    De : 01/05/2026
-    À : 31/05/2026
-    ↻ Rafraîchir
-  
-  
-    
-      Total pipeline
-      173 500,00 €
-    
-    
-      Affaires gagnées
-      1
-    
-    
-      Taille moyenne
-      18 000,00 €
-    
-    
-      Taux de réussite
-      100.0 %
-    
-  
-  
-    
-      Pipeline par étape
-      (graphique en barres — 4 barres, une par étape)
-    
-    
-      Activités récentes
-      📅 meeting · Globex Logisticsil y a 3 jours
-    
-  
-
-Essayez :
-
-- **Cliquez sur une barre** → l'écran Affaires s'ouvre pré-filtré sur cette étape.
-- **Cliquez sur une ligne dans Activités récentes** → le dialogue de l'affaire correspondante s'ouvre.
-- **Modifiez les dates De / À** → chaque panneau se réaffiche.
-
----
-
-## Ce que vous avez maintenant
-
-Le CRM compte trois entrées navigables — vue d'ensemble, clients, affaires — qui couvrent le parcours complet « regarder les données / regarder les lignes ».
-
-Deux choses manquent encore :
-
-- Tout est réservé à l'admin. Les vraies applications ont besoin de **rôles** et idéalement d'une **connexion OIDC**. Étape 5.
-- L'**assistant IA** du framework peut déjà répondre à des questions sur les données affaires (parce que *Exposer à l'IA* était activé par défaut) ; nous vérifierons et polirons. Le CRM bénéficie aussi d'une **tâche nocturne** qui signale les affaires stagnantes. Étape 6.
-
-→ **[Étape 5 — Rôles et SSO](./05-auth.md)** — séparez les utilisateurs en rôles, câblez OIDC.
-
----
-
-## Liberty Next — Étape 5 — Rôles et SSO
+## Liberty Next — Étape 5 — Rôles et connexion
 Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/auth/
 
-Séparez le CRM entre les rôles Sales (édition complète), Manager (lecture + tableau de bord) et Admin. Câblez la connexion OIDC sur un fournisseur d'identité réel. Illustre les rôles, les permissions, OIDC et les codes de permission par appel générés par le framework.
+Décider qui voit quoi dans le CRM : un rôle de consultation et un rôle commercial construits sur l'arborescence du menu de l'application, les écritures accordées hors menus, deux utilisateurs de test, un périmètre de données par pays issu d'un attribut utilisateur, et la connexion avec le fournisseur d'identité de l'entreprise.
 
-Le CRM fonctionne mais chaque utilisateur est `admin`. Les vraies applications ont au moins deux profils — opérateurs qui modifient, observateurs qui lisent — et de plus en plus, ils se connectent via le **fournisseur d'identité de l'entreprise** (Authentik, Keycloak, Azure AD, Okta) plutôt qu'avec un mot de passe par app.
-
-Cette étape sépare le CRM en trois rôles et ajoute la connexion OIDC. Temps estimé : **15 minutes**.
+Jusqu'ici, tout s'est fait en superutilisateur, qui voit tout. Cette étape ajoute deux rôles, deux utilisateurs pour les tester, un périmètre de données et la connexion avec le compte d'entreprise.
 
 ---
 
-## Ce que nous faisons et pourquoi
+## Deux rôles
 
-Le modèle de contrôle d'accès du framework a deux moitiés :
+**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. L'éditeur est en anglais. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
-| Moitié | Où elle se trouve |
+### `crm-viewer` — consulte le CRM
+
+| Réglage | Valeur |
 |---|---|
-| **Ce qui peut être fait** — codes de permission atomiques générés automatiquement par requête, écran, tableau de bord, tâche. | Les codes apparaissent dans l'onglet *Permissions* de chaque éditeur. On ne les saisit pas. |
-| **Qui peut le faire** — rôles qui regroupent des permissions, affectés à des utilisateurs. | *Paramètres → Rôles* + *Paramètres → Utilisateurs*. |
+| Base | **No access** |
+| Menus | **Allow** sur le dossier *Ventes* de l'application `crm` et sur *Pipeline*. |
 
-Cette séparation permet de définir les rôles une fois et de les affecter à plusieurs utilisateurs, sans jamais toucher aux codes de permission individuels à la main.
+Les titulaires voient les écrans et le tableau de bord, mais toute écriture est refusée : les requêtes d'écriture (`customers_put`, `deals_post`…) ne sont pas accordées.
 
-Pour le CRM, nous mettons en place trois rôles :
+### `crm-sales` — travaille les affaires
 
-| Rôle | Ce qu'il peut faire |
+| Réglage | Valeur |
 |---|---|
-| **`crm-viewer`** | Voir le tableau de bord et les écrans, sans édition. |
-| **`crm-sales`** | Lire + écrire tout sur les clients, affaires, activités. |
-| **`crm-admin`** | Comme `crm-sales` + accès à l'interface Paramètres. |
+| Base | **No access** |
+| Menus | **Allow** sur *Ventes* et *Pipeline*. |
+| Beyond the menus | **Allow** — Connector (all queries) — `crm`. |
 
-Ensuite, nous ajouterons un backend OIDC pour que les utilisateurs se connectent avec l'IdP de l'entreprise.
+La règle sur le connecteur accorde toutes les requêtes de `crm`, écritures comprises. **Save** pour chaque rôle.
 
 ---
 
-## Inspecter les codes de permission déjà en place
+## Deux utilisateurs
 
-Ouvrez **Paramètres → Connecteurs → customers → onglet Permissions**. Les quatre codes générés automatiquement par le connecteur s'affichent :
+**Paramètres → Access → Users → ＋ Add user** :
 
-| Code | Généré pour |
-|---|---|
-| `sql:customers:list` | La requête de lecture. |
-| `sql:customers:create:write` | L'insertion. |
-| `sql:customers:update:write` | La mise à jour. |
-| `sql:customers:delete:write` | La suppression. |
+| Utilisateur | Rôle | Attribut |
+|---|---|---|
+| `alice` | `crm-viewer` | — |
+| `bob` | `crm-sales` | `country = FR` |
 
-Idem pour `deals` et `activities`. Plus quelques-uns issus du tableau de bord et du menu :
-
-| Code | Généré pour |
-|---|---|
-| `screen:crm:customers` | Visiter l'écran Clients (contrôle au niveau page). |
-| `screen:crm:deals` | Idem pour Affaires. |
-| `dashboard:crm-pipeline-overview` | Le tableau de bord. |
-| `menu:crm:*` | Les feuilles du menu crm. |
-
-Le framework fournit des **jokers** — `sql:customers:*` couvre chaque requête customer, `screen:crm:*` couvre chaque écran CRM. Nous utiliserons des jokers pour les définitions de rôle.
+Donner un mot de passe à chacun. Connectée en `alice` dans une fenêtre de navigation privée : le CRM affiche *Ventes* et *Pipeline* ; la modification d'un client est refusée. Connecté en `bob` : les dialogues enregistrent. Voir [Utilisateurs](../build/secure/users.md).
 
 ---
 
-## Définir `crm-viewer`
+## Un périmètre de données — le pays de chaque commercial
 
-**Paramètres → Rôles → + Nouveau rôle** :
+Bob ne doit voir que les clients de son pays.
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-viewer` |
-| **Nom affiché** | `CRM viewer` |
-| **Description** | `Accès en lecture seule aux écrans CRM et au tableau de bord du pipeline.` |
-
-Dans la section *Permissions accordées*, cliquez sur **+ Ajouter une permission** et ajoutez les codes correspondant à un accès en lecture seule :
-
-| Code | Ce qu'il accorde |
-|---|---|
-| `sql:customers:list` | Lire les clients. |
-| `sql:deals:*` *(joker)* | Lire toutes les requêtes deals — y compris les agrégats qui alimentent le tableau de bord. Nous n'ajoutons pas les codes `:write`. |
-| `sql:activities:list` | Lire les activités. |
-| `screen:crm:customers` | Visiter l'écran Clients. |
-| `screen:crm:deals` | Visiter l'écran Affaires. |
-| `dashboard:crm-pipeline-overview` | Visiter le tableau de bord. |
-| `menu:crm:*` | Voir l'espace de travail CRM + chaque feuille à l'intérieur. Les écrans / tableaux de bord eux-mêmes sont contrôlés ; une feuille sans permission sur sa cible est cachée de toute façon. |
-| `chart:crm-pipeline-by-stage` | Voir le graphique (sinon le panneau disparaît). |
-
-**Enregistrer**.
-
-Un `crm-viewer` en lecture seule est désormais possible. Sans aucun code `:write`, le framework rend chaque écran en **mode lecture seule** — boutons Ajouter / Modifier / Supprimer cachés, le dialogue s'ouvre en mode consultation.
-
----
-
-## Définir `crm-sales`
-
-**+ Nouveau rôle** à nouveau :
-
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-sales` |
-| **Nom affiché** | `CRM sales` |
-| **Description** | `Accès complet lecture + écriture sur clients, affaires et activités.` |
-| **Hérite de** | `crm-viewer` |
-
-En héritant de `crm-viewer`, on récupère chaque code de lecture sans rien ajouter ; il suffit de joindre les écritures :
-
-| Code | Ce qu'il accorde |
-|---|---|
-| `sql:customers:create:write` |
-| `sql:customers:update:write` |
-| `sql:customers:delete:write` |
-| `sql:deals:create:write` |
-| `sql:deals:update:write` |
-| `sql:deals:delete:write` |
-| `sql:activities:create:write` |
-| `sql:activities:delete:write` |
-
-**Enregistrer**.
-
----
-
-## Définir `crm-admin`
-
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-admin` |
-| **Nom affiché** | `CRM admin` |
-| **Hérite de** | `crm-sales` |
-
-| Code | Ce qu'il accorde |
-|---|---|
-| `settings:read` | Le lien Paramètres apparaît dans l'en-tête. |
-| `settings:connectors` | Modifier les connecteurs. |
-| `settings:screens` | Modifier les écrans. |
-| `settings:menus` | Modifier les menus. |
-| `settings:dashboards` | Modifier les tableaux de bord. |
-| `settings:charts` | Modifier les graphiques. |
-| `settings:dictionary` | Modifier le dictionnaire. |
-| `settings:reload` | Le bouton *Enregistrer et recharger* fonctionne. |
-| `users:read` + `users:write` | Gérer les utilisateurs (utile quand OIDC créera de nouveaux utilisateurs). |
-
-À noter, nous **n'accordons pas** `settings:framework` ni `settings:raw` — réservés à l'utilisateur `admin` de la plateforme.
-
-**Enregistrer**.
-
----
-
-## Créer deux utilisateurs pour tester
-
-**Paramètres → Utilisateurs → + Nouvel utilisateur** :
-
-| Utilisateur | Rôles |
-|---|---|
-| `sales-alice` | `crm-sales` |
-| `viewer-bob`  | `crm-viewer` |
-
-Définissez un mot de passe à chacun, puis déconnectez-vous de `admin` et reconnectez-vous en tant que `sales-alice`. Vous devriez voir :
-
-- Le sélecteur d'espace de travail affiche **CRM** (le seul espace qu'Alice peut voir).
-- **Vue d'ensemble du pipeline**, **Clients**, **Affaires** dans la barre latérale.
-- Boutons Modifier / Ajouter / Supprimer présents.
-- **Pas de lien Paramètres** dans l'en-tête.
-
-Connectez-vous en tant que `viewer-bob` :
-
-- Les trois mêmes entrées de barre latérale (il peut les voir).
-- Boutons Modifier / Ajouter / Supprimer **cachés** — les écrans s'affichent en lecture seule.
-- Un clic sur une ligne ouvre le dialogue en mode consultation (pas de bouton Enregistrer).
-- Saisir `/settings` dans l'URL → 403.
-
-L'élagage du framework est silencieux : aucun message ne signale l'absence de droit, les contrôles ne sont simplement pas là.
-
----
-
-## Câbler la connexion OIDC
-
-OIDC transforme le fournisseur d'identité de l'entreprise en backend d'authentification de Liberty. Les utilisateurs se connectent une fois, déconnexion unique, audit centralisé. Nous le mettons en place avec **Authentik** comme exemple — la procédure est identique pour Keycloak, Azure AD, Okta.
-
-### Sur Authentik
-
-1. Créez un **OAuth2/OpenID Provider** dans l'admin Authentik.
-2. Réglez le **Redirect URI** sur `http://127.0.0.1:8000/auth/oidc/callback` (production : la vraie URL publique).
-3. Notez le **Client ID** + le **Client secret** générés par Authentik.
-4. Créez une **Application** liée au provider ; choisissez les **groupes** à exposer dans le token (nous les mapperons sur les rôles Liberty).
-
-### Sur Liberty
-
-Ouvrez **Paramètres → Framework → Authentification** et activez **OIDC activé**. Remplissez :
-
-| Champ | Valeur |
-|---|---|
-| **Issuer URL** | `https://auth.example.com/application/o/liberty/` *(le slash final compte dans Authentik)* |
-| **Client ID** | le client id Authentik |
-| **Client secret** | le client secret Authentik *(chiffré au repos)* |
-| **Redirect URI** | `http://127.0.0.1:8000/auth/oidc/callback` |
-| **Claim e-mail** | `email` |
-| **Claim groupes** | `groups` |
-| **Auto-provisionnement** | ✓ *(crée l'utilisateur Liberty à la première connexion SSO)* |
-
-Cliquez sur le bouton **▶ Tester la connexion**. Un nouvel onglet s'ouvre, la page de connexion d'Authentik apparaît, vous vous authentifiez, l'onglet renvoie « OIDC test successful » avec les claims résolus (email, groupes) pour confirmer la justesse du mapping.
-
-**Enregistrer et recharger**.
-
-### Mapper les groupes IdP aux rôles Liberty
-
-Le framework mappe le `groups_claim` 1:1 sur les identifiants de rôles Liberty. Un groupe Authentik nommé `crm-sales` devient donc le rôle Liberty `crm-sales` que nous avons déjà défini. Veillez à la correspondance des noms — c'est toute la configuration du mapping.
-
-Déconnectez-vous de `admin`. La page de connexion affiche maintenant un bouton **Se connecter avec SSO** à côté du formulaire identifiant/mot de passe. Cliquez dessus, authentifiez-vous sur Authentik, et vous revenez au framework avec les rôles que la claim de groupe de l'IdP a résolus.
-
-Quand `Auto-provisionnement` est activé (c'est le cas), les utilisateurs qui se connectent en SSO pour la première fois sont créés sur place avec les bons rôles. Pas de pré-inscription nécessaire.
-
----
-
-## Deux choses à savoir sur OIDC
-
-| Élément | Pourquoi ça compte |
-|---|---|
-| **Le backend local reste disponible.** | Le formulaire identifiant/mot de passe fonctionne toujours pour l'utilisateur `admin`. Utile quand l'IdP est en panne — vous pouvez entrer dans Liberty en mode bris-de-glace sans dépendre de la disponibilité d'Authentik. |
-| **Les groupes IdP font foi.** | Si vous retirez un utilisateur du groupe `crm-sales` dans Authentik, sa prochaine connexion le laisse sans `crm-sales`. L'enregistrement utilisateur reste dans Liberty (sans rôles) ; l'IdP décide qui a accès. |
-
----
-
-## Ce que vous avez maintenant
-
-Le CRM a de vrais rôles, de vrais utilisateurs, un vrai SSO. Deux profils d'opérateurs voient des choses différentes ; un manager qui ne fait que consulter obtient une expérience en lecture seule par construction.
-
-Dernière couche à ajouter : l'**accès IA** aux données et une **tâche nocturne** qui maintient l'hygiène du pipeline en signalant les affaires stagnantes.
-
-→ **[Étape 6 — Assistant IA et tâches planifiées](./06-ai-and-jobs.md)**.
-
----
-
-## Liberty Next — Étape 6 — Assistant IA et tâches planifiées
-Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/ai-and-jobs/
-
-Câblez l'assistant IA pour qu'il puisse répondre à des questions en langage naturel sur les données du CRM, et ajoutez une tâche Nomaflow nocturne qui signale les affaires sans activité depuis 14 jours. Illustre la génération d'outils IA, le périmètre des permissions pour l'assistant et le modèle de tâches Nomaflow.
-
-Deux dernières couches achèvent le CRM :
-
-- **Assistant IA** — accès en langage naturel aux données du CRM, cadré sur ce que l'utilisateur appelant peut voir.
-- **Une tâche planifiée** — s'exécute chaque nuit, trouve les affaires sans activité depuis 14 jours, envoie un résumé à Slack.
-
-À la fin de cette étape, le CRM est fonctionnellement complet. Temps estimé : **15 minutes**.
-
----
-
-## Mettre en place l'assistant IA
-
-L'[assistant IA](../ai-assistant.md) du framework est un modèle Anthropic Claude avec **tool use** activé. Chaque requête de connecteur que l'utilisateur appelant peut exécuter devient un outil que l'assistant peut choisir. Vous posez une question ; le modèle exécute les bonnes requêtes ; il répond.
-
-### Configurer le fournisseur
-
-Placez `ANTHROPIC_API_KEY` dans votre environnement (récupérez-en une sur https://console.anthropic.com → API keys), puis redémarrez le framework. Ouvrez **Paramètres → Framework → IA** pour confirmer que le champ affiche « Provider: Anthropic / API key: ✓ configured ».
-
-Modèle par défaut : `claude-sonnet-4-6`. Conservez-le.
-
-### Confirmer que les connecteurs sont exposés
-
-Nous avons activé *Exposer à l'assistant IA* sur les connecteurs `customers` et `deals` lors de leur création aux étapes 2 et 3 (activé par défaut). Pour confirmer, ouvrez **Paramètres → Connecteurs → customers** — la bascule doit être **activée**.
-
-Ouvrez la même vue pour `deals` et `activities`. Veillez à ce que les trois soient activés.
-
-Puis ouvrez **GET /ai/tools** dans un nouvel onglet (ou `liberty-admin ai-tools` en CLI). Une liste s'affiche :
-
-```
-customers__list           — Retourne chaque client avec son statut, son secteur et son contact principal.
-deals__list               — Affaires commerciales — étape du pipeline, montant, clôture attendue.
-deals__pipeline_total     — …
-deals__by_stage           — …
-activities__list          — …
-```
-
-Seules les requêtes de **lecture** apparaissent par défaut. Les requêtes d'écriture sont exclues, sauf si l'entrée du connecteur l'autorise explicitement (et si l'appelant porte la permission `ai:write`).
-
-### Accorder `ai:chat` au rôle
-
-Ouvrez **Paramètres → Rôles → crm-sales** et **+ Ajouter une permission** : `ai:chat`. Enregistrer.
-
-Idem pour `crm-admin`. Laissez `crm-viewer` sans, pour l'instant.
-
-### Essayer
-
-Déconnectez-vous, reconnectez-vous en tant que `sales-alice`. L'icône 💬 **Chat** apparaît dans l'en-tête. Cliquez dessus.
-
-Essayez quelques questions :
-
-> *« Combien d'affaires sont dans le pipeline en ce moment ? »*
-
-L'assistant choisit le bon outil (`deals__pipeline_total`), l'exécute, lit le résultat et répond :
-
-> *« Il y a 173 500 € de valeur de pipeline ouverte sur 3 affaires (hors gagnées/perdues). »*
-
-L'appel d'outil est visible en ligne — dépliez-le pour voir les paramètres et les lignes retournées.
-
-> *« Quels clients n'ont aucune affaire ces 30 derniers jours ? »*
-
-L'assistant enchaîne `customers__list` et `deals__list`, combine les résultats dans son raisonnement, et répond avec les bons clients — en proposant éventuellement un suivi.
-
-> *« Supprime l'affaire Globex. »*
-
-Refusé. L'assistant n'a pas accès aux requêtes d'écriture — `deals__delete` ne figure pas dans sa liste d'outils parce que le connecteur n'a pas autorisé cette exposition.
-
-### Ce que l'assistant peut et ne peut pas faire
-
-| Action | Autorisé ? |
-|---|---|
-| Lire toute requête que l'appelant peut exécuter. | ✓ |
-| Combiner plusieurs requêtes pour répondre à une question complexe. | ✓ |
-| Rendre la réponse dans la langue de l'utilisateur (utilise `session.lang`). | ✓ |
-| Exécuter une requête d'écriture. | Uniquement quand le connecteur + le rôle l'autorisent tous deux (`expose_to_ai` + permission `ai:write`). |
-| Accéder à des données pour lesquelles l'appelant n'a pas la permission. | ✗ — la liste d'outils est par appelant, les contrôles de permission s'appliquent. |
-
-Les motifs d'accès au niveau ligne du framework (`WHERE owner = :session_user`) se propagent automatiquement à l'assistant : si l'utilisateur humain ne voit que ses propres clients, l'IA aussi pour son compte.
-
----
-
-## Ajouter la tâche des affaires stagnantes
-
-Une pratique courante d'hygiène de pipeline : signaler les affaires qui n'ont pas bougé depuis deux semaines. Le moteur [Tâches / Nomaflow](../../nomaflow/overview.md) du framework exécute le travail planifié in-process ; nous ajoutons une tâche qui se déclenche chaque nuit.
-
-### Ajouter la requête de détection
-
-Ouvrez **Paramètres → Connecteurs → deals → + Ajouter une requête** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `stale-deals` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
+1. Faire porter le pays par les affaires : dans `deals_get`, joindre le client et sélectionner son pays :
 
 ```sql
-SELECT d.id, d.name, c.name AS customer_name, d.stage, d.amount,
-       MAX(a.happened_at) AS last_activity
-FROM   deals d
-JOIN   customers c ON c.id = d.customer_id
-LEFT JOIN activities a ON a.deal_id = d.id
-WHERE  d.stage NOT IN ('won', 'lost')
-GROUP BY d.id, d.name, c.name, d.stage, d.amount
-HAVING MAX(a.happened_at) IS NULL
-    OR MAX(a.happened_at) < (CURRENT_DATE - INTERVAL '14 days');
+SELECT d.ID, d.CUSTOMER_ID, d.NAME, d.STAGE, d.AMOUNT, d.CLOSE_DATE, d.OWNER, c.COUNTRY
+FROM deals d JOIN customers c ON c.ID = d.CUSTOMER_ID
 ```
 
-Testez — les affaires sans activité récente s'affichent (probablement toutes vu les données initiales).
+2. Dans le rôle `crm-sales`, onglet **Data scope**, une règle : colonne `COUNTRY`, connecteur `crm`, **From the user's attribute** `country`. Enregistrer.
 
-### Construire la tâche
-
-**Paramètres → Tâches → + Nouvelle tâche** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `crm-flag-stale-deals` |
-| **App** | `crm` |
-| **Description** | `Trouver les affaires sans activité depuis 14+ jours ; résumé envoyé à Slack.` |
-| **Planification** | `0 8 * * 1-5` *(08:00 en semaine)* |
-| **Fuseau horaire** | `Europe/Paris` |
-| **Activé** | ✓ |
-| **Instance unique** | ✓ |
-| **Timeout** | 60 secondes |
-
-### Ajouter trois étapes
-
-#### Étape 1 — récupérer les affaires stagnantes
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `fetch-stale` |
-| **Type** | `SQL Query` |
-| **Connecteur / Requête** | `deals` / `stale-deals` |
-| **Alias de résultat** | `stale` |
-
-Le résultat de la première étape est référencé par la suivante via `${steps.fetch-stale.rows}`.
-
-#### Étape 2 — protection en cas de résultat vide
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `check-empty` |
-| **Type** | `Python` |
-| **Callable** | `crm.alerts:format_stale_message` |
-| **Kwargs** | `rows = ${steps.fetch-stale.rows}` |
-| **Condition** | `${steps.fetch-stale.row_count} > 0` |
-
-Quand il n'y a pas d'affaire stagnante, la *Condition* est fausse et l'étape est sautée — la tâche se termine en `succeeded` sans envoyer de message Slack.
-
-Un petit module Python est nécessaire. Créez `liberty-apps/plugins/crm/__init__.py` et `liberty-apps/plugins/crm/alerts.py` :
-
-```python
-# liberty-apps/plugins/crm/alerts.py
-def format_stale_message(*, rows, **ctx):
-    """Format the list of stale deals as a Slack-friendly message."""
-    lines = ["🟡 *Affaires sans activité depuis 14+ jours*", ""]
-    for r in rows:
-        last = r.get("last_activity") or "jamais"
-        lines.append(f"• *{r['name']}* — {r['customer_name']} · €{r['amount']:,.0f} · dernière activité : {last}")
-    return {"text": "\n".join(lines), "rows_affected": len(rows)}
-```
-
-#### Étape 3 — poster sur Slack
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `slack-notify` |
-| **Type** | `HTTP` |
-| **Variante** | `Raw URL` |
-| **Méthode** | `POST` |
-| **URL** | `https://hooks.slack.com/services/T0/B0/XXXXX` *(votre webhook)* |
-| **Corps** | `{ "text": "${steps.check-empty.text}" }` |
-| **Condition** | `${steps.fetch-stale.row_count} > 0` |
-
-### Notifications en cas d'échec
-
-Dans la section *Notifications* de la tâche, réglez :
-
-| Champ | Valeur |
-|---|---|
-| **En cas d'échec** | `slack:#ops-alerts` |
-
-Ainsi, si la tâche elle-même est en erreur (base de données indisponible, Slack 500), le canal ops est notifié — pas perdu dans le log d'exécution.
-
-### Enregistrer et déclencher manuellement
-
-**Enregistrer et recharger**. Cliquez sur le bouton **▶ Lancer maintenant** en haut de l'éditeur de tâche pour tester sans attendre 08:00. L'historique d'exécution s'ouvre ; les trois étapes apparaissent dans l'ordre ; le log défile en direct.
+Bob se déconnecte puis se reconnecte : Clients et Affaires n'affichent plus que les clients français — ACME Industries et Beta SARL — et une écriture hors de son périmètre est refusée. Le périmètre est appliqué par le serveur, aux écrans, au tableau de bord comme à l'assistant IA. Le rôle d'Alice n'a pas de règle : elle voit toujours tout. Voir [Rôles et permissions → Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
 
 ---
 
-## Vérifier
+## Se connecter avec le compte d'entreprise
 
-| Vérification | Comment |
-|---|---|
-| **L'assistant IA fonctionne pour `sales-alice`** | Connectez-vous comme Alice, ouvrez `/chat`, demandez « combien d'affaires sont dans le pipeline ? ». Obtenez une réponse chiffrée avec l'appel d'outil visible. |
-| **`crm-viewer` ne voit pas l'assistant** | Connectez-vous comme Bob, l'icône 💬 est cachée. |
-| **La tâche des affaires stagnantes s'exécute avec succès** | *Paramètres → Tâches → crm-flag-stale-deals* → l'historique d'exécution affiche le déclenchement manuel avec le statut `succeeded`. |
-| **Le canal Slack a reçu le message** | (Ou le log d'exécution affiche le message formaté dans la sortie de l'étape `check-empty`.) |
-| **La tâche se déclenchera demain à 08:00** | L'aperçu *5 prochaines exécutions* de la tâche montre les exécutions à venir. |
+Pour que les utilisateurs se connectent avec leur compte d'entreprise (Entra ID, Keycloak, Okta…), renseigner **Paramètres → App → OpenID Connect (SSO)** avec les valeurs de l'application déclarée chez le fournisseur. Un bouton **Se connecter avec OIDC** apparaît sur la page de connexion ; les nouveaux utilisateurs arrivent sans rôle, et un administrateur leur attribue `crm-viewer` ou `crm-sales`.
+
+L'attribut `country` peut venir de l'annuaire grâce à `attribute_claims` — le périmètre de données suit alors l'annuaire. Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
 
 ---
 
-## Ce que vous avez maintenant
+## Bilan
 
-Une application CRM complète construite de bout en bout sur Liberty Framework :
+Deux rôles taillés dans le menu de l'application, des utilisateurs qui voient leur part, et des lignes filtrées par le serveur selon chaque utilisateur.
 
-- **Trois écrans** — Clients, Affaires, Activités (sous-grille).
-- **Un tableau de bord** — Vue d'ensemble du pipeline avec quatre KPI, un graphique et un fil d'activité récente.
-- **Trois rôles** — viewer, sales, admin — avec connexion OIDC mappée depuis la claim groupes de l'IdP.
-- **Un assistant IA** qui répond à des questions en langage naturel sur les données, cadré par rôle.
-- **Une tâche planifiée** qui signale les affaires stagnantes et poste sur Slack chaque matin de semaine.
+→ **[Étape 6 — IA et tâches](./06-ai-and-jobs.md)** : des questions en langage courant et une tâche quotidienne.
 
-Temps total sur les six étapes : environ **90 minutes** pour un premier passage, ~30 pour quelqu'un qui l'a déjà fait. Lignes de code écrites : **les requêtes SQL**, **un court fichier Python** (`alerts.py`) et un client secret placé dans l'environnement (chiffré au repos). Le reste est de la configuration.
+---
+
+## Liberty Next — Étape 6 — Assistant IA et tâche quotidienne
+Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/ai-and-jobs/
+
+Finaliser le CRM : l'assistant IA répond aux questions à partir des requêtes du CRM, dans les droits de chaque utilisateur, et une tâche Nomaflow signale chaque matin les affaires en sommeil et prévient l'équipe commerciale.
+
+Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questions en langage courant, et une **tâche Nomaflow** qui repère les affaires laissées sans nouvelles et prévient l'équipe commerciale.
+
+---
+
+## L'assistant IA
+
+### Réglages
+
+**Paramètres → App → AI Assistant** : **Enabled**, la **Anthropic API key**, le **Model**, et **Allowed connectors** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
+
+### Accès
+
+Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **AI Assistant** en haut à droite.
+
+### Descriptions
+
+L'assistant choisit ses requêtes d'après leur libellé et leur description. Sur les requêtes de lecture du CRM (onglet Advanced de l'éditeur de requête), écrire deux phrases — ce que contiennent les lignes, à quelles questions la requête répond :
+
+| Requête | Description |
+|---|---|
+| `customers_get` | `Clients avec secteur, pays, statut et e-mail. Pour les questions sur le portefeuille clients.` |
+| `deals_get` | `Affaires avec client, étape, montant et date de clôture prévue. Pour les questions sur le pipeline.` |
+| `pipeline_by_stage_get` | `Montant en cours par étape du pipeline. Pour les questions de répartition du pipeline.` |
+
+### Essai
+
+En Bob : *Quelles affaires sont en négociation ?* — *Quel est le montant en cours par étape ?* — *Quels clients n'ont aucune affaire ?*
+
+L'assistant n'exécute que des requêtes de lecture, avec les droits et le périmètre de données de Bob : il ne voit que les clients français, et ne modifie jamais les données. Voir [Donner accès aux données à l'assistant IA](../cookbook/expose-to-ai.md).
+
+---
+
+## Une tâche quotidienne — les affaires en sommeil
+
+Une affaire sans mise à jour depuis 14 jours est signalée, et l'équipe commerciale reçoit une notification.
+
+### La requête
+
+Ajouter une colonne `stalled` aux affaires, puis une requête d'écriture `flag_stalled_deals` :
+
+```sql
+ALTER TABLE deals ADD stalled VARCHAR(1) DEFAULT 'N';
+```
+
+```sql
+UPDATE deals SET STALLED = 'Y'
+WHERE STAGE NOT IN ('WON', 'LOST')
+  AND COALESCE(UPDATED_AT, CURRENT_TIMESTAMP - INTERVAL '30' DAY) < CURRENT_TIMESTAMP - INTERVAL '14' DAY
+  AND STALLED = 'N'
+```
+
+Ajouter `STALLED = 'N'` à `deals_put` : toute modification d'une affaire efface le signalement.
+
+### La tâche
+
+**Nomaflow → Jobs → + New job** :
+
+| Champ | Valeur |
+|---|---|
+| Id | `crm-stalled-deals` |
+| Description | `Signale les affaires sans nouvelles depuis 14 jours.` |
+| Schedule | `0 8 * * 0-4` — 8 h, du lundi au vendredi (le jour 0 est le lundi) |
+| Timezone | `Europe/Paris` |
+| Étape | **Add step: `sql_query`**, nom `flag-stalled`, connecteur `crm`, requête `flag_stalled_deals`. |
+| Alerts | **Send alerts**, **On failure**, destinataires `user:<identifiant>`. |
+
+Enregistrer, puis **Run with parameters** pour l'exécuter une fois : le détail de l'exécution indique les lignes mises à jour. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
+
+### La notification
+
+**Paramètres → Notifications**, une règle :
+
+| Champ | Valeur |
+|---|---|
+| Déclencheur | Un événement de tâche — tâche `crm-stalled-deals`, événement `succeeded`. |
+| Canaux | `portal` |
+| Destinataires | `role:crm-sales` |
+| Objet | `{ROWS} affaires sans nouvelles depuis 14 jours` |
+
+L'équipe commerciale la trouve chaque matin dans la cloche. Un filtre sur `STALLED` dans l'écran Affaires les liste. Voir [Notifications](../../nomaflow/notifications.md).
+
+---
+
+## Bilan
+
+Un CRM complet construit depuis les Paramètres :
+
+- **Des écrans** — Clients, Affaires, et les Activités de chaque affaire.
+- **Un tableau de bord** — le pipeline avec indicateurs, graphique et dernières activités.
+- **Des rôles** — consultation et commercial, avec un périmètre de données par pays, et la connexion d'entreprise.
+- **Un assistant IA** sur les requêtes du CRM, dans les droits de chaque utilisateur.
+- **Une tâche quotidienne** qui signale les affaires en sommeil, avec une notification.
+
+Le seul code écrit est du SQL.
 
 ---
 
 ## Pour aller plus loin
 
-| Vous voulez… | Lisez |
+| Objectif | À lire |
 |---|---|
-| **Appliquer le même motif à SAP / NetSuite / autre ERP** | Même recette, pointez le pool sur la base ERP. Pour JD Edwards spécifiquement, l'app packagée [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) livre déjà tous les écrans. |
-| **Déployer ce CRM en production** | [Déploiement → Mise en production](../../installation/production.md). |
-| **Trouver une recette précise** | [Cookbook](../cookbook/crud-existing-table.md). |
-| **Approfondir un concept** | Les pages [Concepts](../connectors.md) ont désormais une intro « Quoi / Pourquoi / Quand ». |
-| **Voir d'autres cas d'usage** | [Ce que vous pouvez construire](../what-you-can-build.md). |
+| Appliquer la démarche à une autre base ou à un ERP | [Cas d'usage](../what-you-can-build.md) |
+| Passer le CRM en production | [Liste de contrôle de production](../../installation/production.md) |
+| Le transférer vers un autre environnement | [Packages](../build/packages.md) |
+| Trouver une recette précise | [Cookbook](../cookbook/crud-existing-table.md) |
 
 ---
 
@@ -5665,7 +4740,7 @@ Un écran sans dialogue fonctionne quand même comme un tableau en lecture seule
 | Région | Rôle |
 |---|---|
 | **Palette** *(à gauche)* | Source des nouveaux champs. Deux sous-onglets : **Dictionnaire** (chaque entrée disponible dans la portée du connecteur courant) et **Colonnes** (chaque colonne que retourne la requête de lecture). Une zone de recherche restreint la liste. Cliquer sur une entrée ajoute une carte de champ sur le canevas ; faire glisser une entrée pour la déposer à un emplacement précis. |
-| **Canevas** *(au centre)* | La barre d'onglets du dialogue en haut + la grille de champs en dessous. Cliquer sur un onglet pour basculer ; *＋ Onglet* en ajoute un. Chaque carte de champ affiche le nom du champ + un résumé sur une ligne de ses indicateurs clés. La carte sélectionnée a une bordure colorée ; l'inspecteur à droite la reflète. Un groupe **MASQUÉ** distinct en bas rassemble les champs avec `hidden = true`. |
+| **Canevas** *(au centre)* | La barre d'onglets du dialogue en haut + la grille de champs en dessous. Cliquer sur un onglet pour basculer ; *＋ Ajouter un onglet* en ajoute un. Chaque carte de champ affiche le nom du champ + un résumé sur une ligne de ses indicateurs clés. La carte sélectionnée a une bordure colorée ; l'inspecteur à droite la reflète. Un groupe **MASQUÉ** distinct en bas rassemble les champs avec `hidden = true`. |
 | **Inspecteur** *(à droite)* | Les propriétés du champ sélectionné (ou un éditeur d'action par onglet quand une action d'onglet est sélectionnée — mutuellement exclusifs). Il présente le champ et la **Configuration de la colonne** — voir l'étape 3. |
 
 ---
@@ -5701,7 +4776,7 @@ Chaque réglage est décrit dans [Colonnes](./columns.md), les conditions dans [
 
 ### Étape 4 — Ajouter des onglets
 
-Cliquer sur **＋ Onglet** au-dessus du canevas. Le nouvel onglet est vide ; y glisser des champs depuis la Palette. Patrons d'onglets courants :
+Cliquer sur **＋ Ajouter un onglet** au-dessus du canevas. Le nouvel onglet est vide ; y glisser des champs depuis la Palette. Patrons d'onglets courants :
 
 | Nom d'onglet | Contenu |
 |---|---|
@@ -6716,7 +5791,7 @@ Cinq types de feuilles :
 | **`screen`** | Un écran conçu. | La requête de lecture de l'écran, choisie parmi les écrans conçus. | Le connecteur qui le possède. Vide = le connecteur de l'application. |
 | **`query`** | La même vue en grille, choisie parmi les requêtes brutes. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = le connecteur de l'application. |
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
-| **`dashboard`** | Un tableau de bord (graphiques + KPI). | Un id de tableau de bord. | NE doit PAS être renseigné (les tableaux de bord résident dans un espace de noms plat). |
+| **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
 
 Cette page détaille chacun avec des exemples concrets.
@@ -6826,8 +5901,8 @@ Un tableau de bord est une page de graphiques et de KPI déclarée dans `[dashbo
 | Champ | Notes |
 |---|---|
 | **`type`** | `dashboard`. |
-| **`target`** | L'id du tableau de bord (correspond à une clé `[dashboards.<id>]`). La liste déroulante liste tous les tableaux de bord. |
-| **`connector`** | **Ne doit pas être renseigné**. Les tableaux de bord résident dans un espace de noms plat ; le validateur rejette un `connector` égaré. |
+| **`target`** | `<app>.<id>` — le tableau de bord `[dashboards.<app>.<id>]`, par exemple `crm.pipeline`. La liste déroulante présente tous les tableaux de bord. |
+| **`connector`** | **Ne doit pas être renseigné** — l'application fait partie de la cible ; le validateur refuse un `connector` superflu. |
 | **`params`** | Optionnel. Pré-remplit les filtres du tableau de bord. |
 
 ### Quand l'utiliser
@@ -6846,10 +5921,10 @@ label = "Deals dashboard"
 l.fr = "Tableau de bord des affaires"
 icon = "chart-bar"
 type = "dashboard"
-target = "deals_overview"
+target = "crm.deals_overview"
 ```
 
-Ouvre le tableau de bord dont l'id est `deals_overview` — noter l'absence de champ `connector`.
+Ouvre le tableau de bord `deals_overview` de l'application `crm` — noter l'absence de champ `connector`.
 
 ---
 
@@ -9548,23 +8623,16 @@ Les réglages de couverture et de page des rapports PDF : auteur, couleurs princ
 ## Liberty Next — Connecteurs
 Source: https://docs.nomana-it.fr/fr/liberty/framework/connectors/
 
-Un connecteur définit la manière dont le framework atteint une source de données. Créé et modifié depuis Paramètres → Connecteurs — trois types (SQL, HTTP, API), chacun avec son éditeur dédié. Le schéma est découvert à l'exécution à partir de la requête live ; rien n'est saisi à la main pour le type des colonnes.
+Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les endpoints nommés d'une API web. Modifiés dans Paramètres → Connecteurs ; un connecteur doté d'un menu est une application.
 
-:::info[Référence détaillée]
-Cette page documente la façon dont le moteur de connecteurs découvre le schéma à l'exécution, gère le registre des connecteurs et applique les permissions. Pour des parcours orientés tâche — créer une requête, dupliquer un connecteur, échafauder une séquence ou une recherche — voir [Construire → Requêtes](./build/queries/overview.md) et [Construire → Menus → Transformer un connecteur en application](./build/menus/make-connector-an-app.md).
-:::
+Un **connecteur** est le moyen par lequel Liberty Next atteint une source de données. Chaque écran, graphique, tableau de bord, action, étape de tâche et réponse de l'assistant désigne le connecteur et la requête — ou l'endpoint — qu'il utilise.
 
-Un **connecteur** est le pont entre le framework et une source de données — une base de données, une API HTTP ou un service tiers. Les connecteurs sont créés et modifiés depuis **Paramètres → Connecteurs**, une entrée par source. Chaque écran, tableau de bord, graphique, étape de job et outil IA qui a besoin de données désigne un connecteur à utiliser.
-
-Le framework prend en charge trois types de connecteurs :
-
-| Type | Cible | Éditeur |
+| Type | Atteint | Contient |
 |---|---|---|
-| **SQL** | Une base de données relationnelle via un [pool](./configuration/settings-ui.md). Chaque connecteur regroupe un ensemble de **requêtes nommées** — lecture et écriture. | Paramètres → Connecteurs → sous-onglet *SQL* |
-| **HTTP** | Un endpoint REST / GraphQL. Chaque connecteur regroupe un ensemble d'**endpoints nommés** avec méthode + chemin + authentification. | Paramètres → Connecteurs → sous-onglet *HTTP* |
-| **API** | Un service distant générique dont les appels sont aiguillés vers SQL ou HTTP en interne (variante de compatibilité). | Paramètres → Connecteurs → sous-onglet *API* |
+| **SQL** | Une base de données, par un [pool](#pools). | Des **requêtes** nommées, de quatre types : tables, requêtes, séquences, lookups. |
+| **API** | Une API web (REST, JSON). | Des **endpoints** nommés : méthode, chemin, en-têtes, corps, extraction de la réponse. |
 
-Le schéma de chaque requête de lecture / réponse d'endpoint est **découvert à l'exécution** — le framework demande à la base ou à l'API "quelles colonnes / quels champs retournes-tu ?" lors du premier appel et met la réponse en cache. Aucun type, longueur ou position de colonne n'est jamais saisi à la main.
+Un connecteur doté d'un menu est une **application** — voir [Applications](./apps/overview.md).
 
 ---
 
@@ -9572,99 +8640,34 @@ Le schéma de chaque requête de lecture / réponse d'endpoint est **découvert 
 
 ---
 
-## Le catalogue — Paramètres → Connecteurs
+## Paramètres → Connecteurs \{#page\}
 
-La page liste tous les connecteurs de l'installation. Chaque ligne affiche le type de connecteur, le pool / URL de base, l'état de la connexion (sonde live) et le nombre de requêtes / endpoints déclarés.
+La liste de gauche a deux groupes : **Applications** (connecteurs dotés d'un menu) et **Sources de données** (les autres). **＋ Connecteur** en crée un (nom, type SQL ou API) ; le volet de droite modifie le connecteur sélectionné. **Enregistrer** écrit `connectors.toml` et applique la modification sans redémarrage ; **Abandonner** annule les modifications en attente. Les boutons propres au connecteur — **Cloner** (avec sa portée du dictionnaire, ses écrans, son menu, ses graphiques et tableaux de bord), **Renommer** (toutes les références réécrites), **Supprimer** (avec tout ce qui lui appartient) — se trouvent sur sa vue de réglages.
 
-  
-    Paramètres → Connecteurs
-    
-      Application ▾
-      Type ▾
-      + Nouveau connecteur
-    
-  
-  
-    NomTypeCibleRequêtesStatut
-  
-  
-    billing
-    sql
-    pool : default
-    12
-    connecté
-  
-  
-    crm
-    http
-    https://crm.example.com
-    8
-    connecté
-  
-  
-    jdedwards sous licence
-    sql
-    pool : jde
-    56
-    hors ligne
-  
+### Pools \{#pools\}
 
-Les filtres de la barre d'outils restreignent la liste par *Application* et par *Type*. **+ Nouveau connecteur** ouvre l'éditeur sur une entrée vierge ; cliquer sur une ligne ouvre l'éditeur sur ce connecteur.
+Un pool est une connexion à une base de données, définie dans **Paramètres → Pools** et partagée par les connecteurs qui l'utilisent :
 
-| Pastille de statut | Signification |
+| Champ | Effet |
 |---|---|
-| **connecté** | La sonde live vers le pool / l'URL de base a réussi dans les 30 dernières secondes. |
-| **hors ligne** | La sonde a échoué. Le connecteur reste affiché, mais toute requête sur lui échouera tant que la source ne sera pas revenue. |
-| **sous licence** *(badge)* | Marqué avec `Licensed = true`. Ne se charge que si la [clé de licence](./build/secure/license-key.md) le contient. |
+| **Url** | L'URL de connexion (`postgresql+asyncpg://user@hôte:5432/base`, `oracle+oracledb://user@hôte:1521/?service_name=…`). Choisir d'abord un **Dialect** remplit un modèle. `${VARIABLE}` accepté. |
+| **Password** | Tenu hors de l'URL ; chiffré à l'enregistrement. |
+| **Dialect** | `postgresql`, `oracle`, `sqlite`, `mysql`, `mssql`… — déduit de l'URL s'il est vide ; choisit la [variante par dialecte](./build/queries/per-dialect-sql.md) d'une requête. |
+| **Schemas**, **DB Links** | Les valeurs des jetons `#SCHEMA.<NOM>#` et `#DBLINK.<NOM>#` — voir [plus bas](#schema-and-db-link-tokens). |
+| **Pool size**, **Max overflow**, **Pool pre ping**, **Pool recycle** | Connexions gardées ouvertes, connexions supplémentaires sous charge, contrôle de validité, recyclage. |
+| **Max rows** | Limite de lignes par défaut des lectures du pool (1 000 si vide). |
+| **Arraysize** | Oracle : lignes lues par aller-retour ; à relever (500 à 1 000) pour les gros volumes. |
+| **Trim strings** | Retire les espaces de fin des textes de longueur fixe (Oracle `CHAR`, JD Edwards). |
+| **Coalesce nulls** | À l'écriture, remplace les valeurs vides par un espace ou 0 (colonnes texte Oracle `NOT NULL`). |
+| **Debug sql** | Journalise chaque instruction exécutée sur le pool. |
 
 ---
 
-## L'éditeur de connecteur
+## Connecteur SQL \{#sql\}
 
-Cliquer sur une ligne ouvre un éditeur à trois onglets à droite. Les onglets sont identiques pour chaque type, mais le contenu de chaque onglet s'adapte au *Type* choisi.
+La barre de modes d'un connecteur SQL propose cinq vues : **Paramètres…**, **Tables**, **Requêtes**, **Séquences**, **Lookups**. Les quatre vues de requêtes sont décrites dans [Requêtes — vue d'ensemble](./build/queries/overview.md).
 
-| Onglet | Rôle |
-|---|---|
-| **Connexion** | Comment le framework atteint la source — pool / URL de base, authentification, en-têtes communs. |
-| **Requêtes / Endpoints** | Les requêtes nommées (SQL) ou endpoints (HTTP/API) que référencent les appelants. |
-| **Permissions** | Synthèse en lecture seule — codes de permission générés par ce connecteur et utilisateurs qui les portent. |
-
----
-
-## Connecteur SQL
-
-  
-    Paramètres → Connecteurs → billing
-    
-      Tester la connexion
-      Enregistrer et recharger
-    
-  
-  
-    Connexion
-    
-      Nombilling
-      Applicationbilling ▾
-      TypeSQL ▾
-      Pooldefault ▾
-      DescriptionFactures, avoirs et workflow de relance.
-      Sous licence○ Désactivé
-      Exposer à l'assistant IA● Activé
-    
-  
-  
-    
-      Requêtes · 12
-      + Ajouter requête
-    
-    
-      monthly-invoice-countslecture1 paramModifier
-      invoices-for-periodlecture3 paramsModifier
-      refresh-totalsécriture1 paramModifier
-    
-  
-
-### Champs de connexion \{#connection-fields\}
+### Réglages \{#connection-fields\}
 
 Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion. Les libellés du formulaire sont en anglais.
 
@@ -9679,29 +8682,19 @@ Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du con
 
 ### Éditeur de requête
 
-Cliquer sur *+ Ajouter requête* ou sur une ligne existante ouvre l'éditeur de requête :
+**＋ Ajouter une requête**, ou un clic sur une requête existante, ouvre l'éditeur de requête :
 
 | Champ | Effet |
 |---|---|
-| **Nom** | Identifiant de la requête — apparaît dans l'URL (`/api/sql/billing/<nom>`), le code de permission (`sql:billing:<nom>`) et le nom de l'outil IA. |
-| **Libellé** | Libellé d'affichage humain — apparaît dans le sélecteur de l'éditeur de menus, dans le sélecteur de l'éditeur d'écrans, etc. |
-| **Opération** | `Lecture` / `Écriture`. Les requêtes *Écriture* reçoivent le suffixe `:write` sur leur code de permission. |
-| **SQL** | Corps de la requête. Éditeur Monaco avec coloration SQL, autocomplétion sensible au schéma (noms de colonnes depuis le pool) et mise en évidence des paramètres (placeholders `:nom`). |
-| **Surcharges de dialecte** | Variantes optionnelles par dialecte (`oracle`, `postgresql`, `sqlite`) pour les cas où le `SELECT` canonique ne se traduit pas. Le framework choisit la bonne en fonction du dialecte du pool. |
-| **Description** | Résumé en deux phrases. Affiché dans les sélecteurs de l'éditeur d'écrans et dans la description de l'outil pour l'assistant IA. |
-| **Paramètres** | Sous-table — voir [Liaison des paramètres](./build/queries/parameter-binding.md) pour chaque champ. |
-| **Indices de colonnes** | Sous-table optionnelle. Chaque ligne lie une colonne du résultat à une entrée du dictionnaire : *Colonne* (liste déroulante des colonnes découvertes par le bouton *Tester*) + *Dictionnaire* (liste déroulante des entrées du dictionnaire). Détermine libellés, formats, énumérations, recherches. Les colonnes sans indice retombent sur le nom de la colonne comme libellé. |
+| **Name** | Identifiant de la requête — utilisé dans l'URL (`/api/sql/billing/<nom>`) et dans la permission (`sql:billing:<nom>`). |
+| **SQL** | L'instruction, avec ses paramètres `:nom` et ses valeurs serveur `{{JETON}}`. Un texte unique, ou une variante par base de données — voir [Variantes SQL par dialecte](./build/queries/per-dialect-sql.md). |
+| **Writable** | Désactivé : seul un SELECT est accepté. Activé : INSERT / UPDATE / DELETE / CALL / MERGE. |
+| **Params** | Les paramètres déclarés (nom, libellé, valeur par défaut) — voir [Liaison de paramètres](./build/queries/parameter-binding.md). |
+| **Label**, **Description** (Advanced) | Affichés dans les listes de choix, et lus par l'assistant IA pour choisir ses requêtes. |
 
-Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent. Une requête en échec affiche un **résumé d'erreur concis avec un détail dépliable** — le SQL et les paramètres liés en blocs lisibles, une liaison par ligne.
+L'éditeur SQL colore la syntaxe, complète les noms de tables et de colonnes à partir du pool, et propose un menu **Token** (`{{LOGIN}}`, `{{SYSDATE}}`…) et un menu **Pool schemas**. Les boutons de l'éditeur — **Find usages**, **Renommer**, **Changer le type**, **Déplacer**, **Cloner**, **Supprimer** — sont décrits dans [Créer une requête personnalisée](./build/queries/create-custom.md).
 
-Le framework utilise le schéma découvert pour :
-
-- Construire les colonnes de grille sur les écrans.
-- Valider les indices de colonnes (un indice qui pointe sur une colonne disparue est signalé en rouge).
-- Convertir les valeurs des paramètres au bon type avant la liaison.
-- Alimenter le schéma d'outil de l'assistant IA avec les bons types de champs.
-
-### Jetons de schéma et de DB link
+### Jetons de schéma et de DB link \{#schema-and-db-link-tokens\}
 
 Une requête SQL peut porter deux jetons de substitution : le même texte tourne alors sur n'importe quel pool — local ou distant — sans qu'il faille maintenir une variante de la requête par environnement.
 
@@ -9738,106 +8731,80 @@ L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou 
 
 ---
 
-## Connecteur HTTP
+## Connecteur API \{#api\}
 
-Le formulaire se remodèle quand *Type* vaut `HTTP`. La liste déroulante du pool disparaît ; un bloc *URL de base* + *Authentification* prend sa place.
+Un connecteur API appelle une API web. Son éditeur comporte cinq onglets, libellés en anglais :
+
+| Onglet | Contenu |
+|---|---|
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Authentication** | **Auth type** : *None*, *Basic* (utilisateur et mot de passe), *Bearer* (jeton fixe), *API Key* (nom de l'en-tête et clé), *OAuth2 / JWT* (endpoint de jeton, corps et en-têtes de la demande, champ du jeton, durée de vie). Les secrets sont chiffrés à l'enregistrement. |
+| **Endpoints** | Les endpoints nommés — voir ci-dessous. |
+| **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |
+| **Test** | **Tester la connexion** vérifie l'authentification ; **Run** appelle un endpoint avec des valeurs de paramètres et affiche la réponse. Rien n'est enregistré. |
+
+Un endpoint comporte :
 
 | Champ | Effet |
 |---|---|
-| **URL de base** | Origine de l'API (par exemple `https://crm.example.com`). Les endpoints ci-dessous y sont concaténés. |
-| **Authentification** | `Aucune` / `Basic` / `Bearer` / `OAuth2`. Chaque choix ouvre un sous-formulaire. *Basic* demande utilisateur + mot de passe chiffré au repos ; *Bearer* prend un jeton chiffré au repos ; *OAuth2* demande l'endpoint de jeton, le client id, le client secret chiffré au repos et la liste de scopes. |
-| **En-têtes** | En-têtes communs appliqués à chaque endpoint — par exemple un `User-Agent` statique ou un `X-Tenant`. |
-| **Timeout par défaut** | Secondes avant qu'un appel ne soit interrompu. Par défaut 30. |
+| **Name** | Utilisé dans l'URL (`/api/http/<connecteur>/<nom>`) et dans la permission (`api:<connecteur>:<nom>`). |
+| **Method**, **URL path** | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`… ; le chemin s'ajoute à l'URL de base (une URL absolue la remplace). |
+| **Headers**, **Query params** | Ajoutés à ceux du connecteur ; les valeurs acceptent des `{{variables}}`. |
+| **Body template**, **Body Content-Type** | Le corps de la requête, avec des `{{variables}}`. |
+| **Response field**, **Response mappings** | Un chemin dans la réponse JSON (`data.0.id`), ou plusieurs chemins nommés ; vide, la réponse entière est renvoyée. |
+| **Parameters** | Les `{{variables}}` déclarées, avec libellé et valeur par défaut. |
+| **Label**, **Description** | Affichés dans les listes de choix et à l'assistant IA. |
 
-La sous-table des endpoints remplace les requêtes SQL :
-
-| Champ | Effet |
-|---|---|
-| **Nom** | Identifiant de l'endpoint — apparaît dans l'URL (`/api/http/<connecteur>/<nom>`), le code de permission (`api:<connecteur>:<nom>`) et le nom de l'outil IA. |
-| **Libellé** / **Description** | Identiques aux requêtes SQL. |
-| **Méthode** | `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
-| **Chemin** | Chemin concaténé à l'URL de base. Accepte des placeholders `:nom` liés aux paramètres. |
-| **Modèle de corps** | Pour les méthodes non `GET`, un modèle JSON. Accepte une substitution `${nom}` depuis les paramètres. |
-| **Paramètres** | Même structure que pour SQL — voir [Liaison des paramètres](./build/queries/parameter-binding.md). |
-| **Forme de réponse** | Auto-détectée quand le bouton *Tester* est utilisé ; l'opérateur peut affiner la forme découverte (renommer des clés, regrouper des champs imbriqués) pour l'aligner sur ce qu'attendent les consommateurs. |
-
-Le bouton **▶ Tester** lance l'appel en live avec l'authentification configurée et les valeurs par défaut des paramètres ; le corps de la réponse s'affiche formaté, avec la forme découverte présentée en chips en dessous.
-
----
-
-## Connecteur API
-
-`API` est un type hybride conservé pour la compatibilité avec les installations qui aiguillent certains appels vers SQL et d'autres vers HTTP sous un même nom de connecteur. L'éditeur propose à la fois les sous-tables *Requêtes* et *Endpoints* ; le champ *Opération* sur chaque entrée choisit le moteur sous-jacent.
-
-Sur une nouvelle installation, on choisira presque toujours `SQL` ou `HTTP` directement. `API` est le chemin quand il faut consolider plusieurs connecteurs hérités sous un même chapeau.
+Les endpoints sont appelés par les actions d'écran (`call_api`), les entrées de menu (type `endpoint`), les règles de notification (canal `action`), les plugins (`connectors.api(…).call(…)`) et — s'il y est autorisé — l'assistant IA. Une étape Nomaflow `http` appelle directement une URL, sans connecteur.
 
 ---
 
 ## Découverte de schéma et indices de colonnes \{#schema-discovery-and-column-hints\}
 
-Une requête de lecture n'a pas de liste de colonnes déclarée à la main. Au premier appel (ou quand l'opérateur clique sur *Tester*), le framework exécute la requête, regarde les descriptions de colonnes du curseur et les met en cache :
+Une requête ne déclare pas de liste de colonnes : ses colonnes sont celles que renvoie la base à l'exécution. L'apparence d'une colonne sur un écran est déterminée, dans cet ordre, par :
 
-| Information découverte | Ce que le framework enregistre |
-|---|---|
-| **Nom de colonne** | Utilisé comme libellé par défaut si aucun indice de dictionnaire ne s'applique. |
-| **Type base de données** | Pilote la conversion de type des valeurs de paramètres sur les appels suivants. |
-| **Nullable / non nullable** | Utilisé par les écrans pour décider si la colonne reçoit un astérisque "obligatoire". |
-| **Longueur / précision** | Affiché comme contrainte sur l'éditeur de champ (longueur max sur une chaîne, nombre max de chiffres sur un décimal). |
+1. les **réglages de colonne de l'écran** (onglet Colonnes) — libellé, format, largeur, règle, conditions ;
+2. l'**entrée du dictionnaire** dont la clé est le nom de la colonne, ou celle indiquée dans le champ `dd` de la colonne — libellé par langue, format, règle (booléen, énumération, lookup…) ;
+3. à défaut, le nom de la colonne et l'affichage par défaut de son type.
 
-La sous-table **Indices de colonnes** est l'endroit où surcharger les valeurs par défaut. Un indice associe une colonne découverte à une entrée de [dictionnaire](./dictionary.md) — c'est ainsi que la colonne reçoit un libellé localisé, une règle boolean / enum / recherche, un format numérique, etc.
-
-Il n'est pas nécessaire de déclarer un indice pour chaque colonne ; les colonnes sans indice s'affichent avec le nom brut de la base et le widget par défaut associé à leur type.
+Une colonne n'a pas besoin de réglage propre : une entrée du dictionnaire portant son nom suffit. Voir [Dictionnaire](./dictionary.md#column-reference) et [Écrans → Colonnes](./build/screens/columns.md).
 
 ---
 
 ## Permissions
 
-Chaque connecteur génère un **code de permission par requête / endpoint** :
+Chaque requête et chaque endpoint a sa propre permission :
 
-| Modèle de code | Accordé pour |
+| Permission | Autorise |
 |---|---|
-| `sql:<connecteur>:<requête>` | Exécuter la requête de lecture. |
-| `sql:<connecteur>:<requête>:write` | Exécuter la requête d'écriture. |
-| `api:<connecteur>:<endpoint>` | Appeler l'endpoint HTTP. |
+| `sql:<connecteur>:<requête>` | L'exécution de la requête — en lecture comme en écriture. |
+| `api:<connecteur>:<endpoint>` | L'appel de l'endpoint. |
 
-Les codes apparaissent sur l'onglet *Permissions* de l'éditeur de connecteur et dans le **sélecteur de permissions** de [Paramètres → Rôles](./build/secure/roles-and-permissions.md). Les wildcards `sql:billing:*` et `api:crm:*` sont pris en charge.
-
-Le connecteur lui-même n'est pas verrouillé — ce qui est verrouillé, c'est chaque appel. Un utilisateur sans permission ne voit aucune requête ; un utilisateur avec `sql:billing:*` voit chaque lecture et écriture du connecteur billing.
+Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'elle ouvre, et **Beyond the menus** accorde une requête, un endpoint ou un connecteur entier — des motifs comme `sql:billing:report_*` sont acceptés. Voir [Rôles et permissions](./build/secure/roles-and-permissions.md).
 
 ---
 
-## Comportement de rechargement à chaud
+## Conseils
 
-Un *Enregistrer et recharger* sur l'éditeur de connecteur reconstruit le registre des connecteurs sur place — chaque consommateur (écrans, graphiques, tableaux de bord, outils IA) prend en compte le changement à son prochain rendu. Les requêtes déjà en vol se terminent sur la version précédente ; aucune interruption n'est nécessaire. Voir [Rechargement à chaud](./configuration/hot-reload.md) pour le contrat complet.
-
----
-
-## Conseils et bonnes pratiques
-
-- **Toujours cliquer sur *Tester* avant *Enregistrer*.** Une requête que la base refuse à l'exécution est la cause la plus fréquente d'écrans cassés. Le bouton *Tester* la détecte tôt.
-- **Rédiger une bonne *Description*.** Elle apparaît dans l'assistant IA, dans l'éditeur de menus, dans l'éditeur d'écrans — deux phrases dans la langue de l'utilisateur sont rentabilisées plusieurs fois.
-- **Préfixer les requêtes par l'entité** — `invoices-list`, `invoices-by-status`, `invoice-detail`. Rend le catalogue auto-documenté.
-- **Séparer les chemins lecture et écriture.** Ne pas écrire `INSERT INTO ... RETURNING ...` comme requête de lecture ; le modèle de permission du framework verrouille les écritures séparément pour une bonne raison.
-- **Utiliser les indices de colonnes avec parcimonie.** Une colonne dont le nom de base suffit n'a pas besoin d'indice — définir des indices uniquement quand le dictionnaire apporte une valeur ajoutée (libellé localisé, format, recherche).
-- **Laisser *Sous licence* désactivé sur les connecteurs client.** Réserver le badge aux connecteurs livrés par l'éditeur qui exigent une clé.
+- **Nommer les requêtes d'après l'entité** — `invoices_get`, `invoices_by_status_get` — les listes se lisent d'elles-mêmes.
+- **Décrire les requêtes** que doit utiliser l'assistant IA : libellé et description (onglet Advanced).
+- **Préférer le dictionnaire aux libellés par écran** : une entrée sert tous les écrans.
+- **Tenir les secrets hors des fichiers** par des références `${VARIABLE}` quand un gestionnaire de secrets est en place — voir [Chiffrement et secrets](./configuration/encryption-secrets.md).
 
 ---
 
 ## Sous le capot
 
-Les définitions de connecteurs sont enregistrées dans `liberty-apps/config/connectors.toml` (ou `liberty-next/config/connectors.toml` quand `LIBERTY_APPS_DIR` n'est pas défini). Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur de connecteurs est l'interface de référence. L'onglet *TOML brut* de [Paramètres → Connecteurs](./configuration/settings-ui.md) est l'échappatoire pour les rares cas où l'éditeur ne couvre pas un champ.
-
-Pour les scripts CI et les orchestrateurs externes, la même surface est joignable via REST sur `/admin/config/connectors/*` — voir [Référence API REST](../references/rest-api.md#admin-config).
+Connecteurs et pools sont enregistrés dans `connectors.toml`, dans le dossier de configuration des applications. Les pages des Paramètres sont le moyen normal de les modifier ; la même configuration est accessible par l'API REST sous `/admin/config/connectors` — voir [API REST](../references/rest-api.md#admin-config).
 
 ---
 
 ## Pour aller plus loin
 
-- [Dictionnaire](./dictionary.md) — métadonnées par colonne : libellés, formats, énumérations, recherches.
-- [Liaison des paramètres](./build/queries/parameter-binding.md) — paramètres déclarés, valeurs par défaut, filtres en cascade.
-- [Écrans](./build/screens/overview.md) — transformer un connecteur en grille + dialogue d'édition.
-- [Graphiques](./charts.md) — emballer une requête en visualisation.
-- [Chiffrement et secrets](./configuration/encryption-secrets.md) — la bascule du cadenas sur les mots de passe / jetons.
+- [Requêtes — vue d'ensemble](./build/queries/overview.md) — les quatre types de requêtes et leurs éditeurs.
+- [Dictionnaire](./dictionary.md) — libellés, formats et listes de valeurs des colonnes.
+- [Liaison de paramètres](./build/queries/parameter-binding.md) — paramètres, sources intégrées et jetons.
+- [Écrans](./build/screens/overview.md) — grilles et dialogues sur les requêtes.
 
 ---
 
@@ -10442,8 +9409,9 @@ Tout ce qu'affiche une application est rangé sous le nom de son connecteur :
 | Écrans | Paramètres → Écrans, pastille de l'application | `[screens.<app>.<id>]` |
 | Menu | Paramètres → Menus, pastille de l'application | `[menus.<app>]` |
 | Graphiques | Paramètres → Graphiques, portée du connecteur | `[charts.<app>.<id>]` |
+| Tableaux de bord | Paramètres → Tableaux de bord, application | `[dashboards.<app>.<id>]` — une entrée de menu l'ouvre avec la cible `<app>.<id>`. |
 
-Les tableaux de bord et les actions partagées ont un espace de noms unique ; une entrée du menu de l'application les ouvre par leur identifiant. Les tâches Nomaflow ne sont rattachées à aucune application.
+Les actions partagées ont un espace de noms unique. Les tâches Nomaflow ne sont rattachées à aucune application.
 
 ---
 
@@ -10706,7 +9674,7 @@ table → connecteur avec 4 requêtes générées → écran → entrée de menu
 
 ### 1. Atteindre la base
 
-**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#connection-fields).
+**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#pools).
 
 ### 2. Générer les requêtes
 
@@ -10752,7 +9720,7 @@ L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les �
 
 ### 4. Ajouter l'entrée de menu
 
-**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Item** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
+**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
 
 ## Résultat
 
@@ -10859,7 +9827,7 @@ Une ligne s'accompagne d'un fichier — le contrat signé d'un client, le scan d
 
 ## L'existant
 
-Les écrans n'ont **pas de champ pièce jointe** : un dialogue ne peut ni enregistrer un fichier dans une ligne ni le restituer. Trois mécanismes couvrent les besoins courants :
+Les écrans n'ont **pas de champ pièce jointe** : un dialogue ne peut ni enregistrer un fichier dans une ligne ni le rendre téléchargeable. Trois mécanismes couvrent les besoins courants :
 
 | Besoin | Mécanisme |
 |---|---|

@@ -15,7 +15,7 @@ Five leaf kinds:
 | **`screen`** | A designed screen. | The screen's read query, picked from the designed screens. | The connector that owns it. Blank = the app's own connector. |
 | **`query`** | The same grid view, picked from the raw queries. | A SELECT query name. | The connector that owns the query. Blank = the app's own connector. |
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
-| **`dashboard`** | A dashboard (charts + KPIs). | A dashboard id. | Must NOT be set (dashboards live in a flat namespace). |
+| **`dashboard`** | A dashboard (charts + KPIs). | `<app>.<id>` of the dashboard. | Must NOT be set (the app is in the target). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
 
 This page walks each in detail with concrete examples.
@@ -123,8 +123,8 @@ A dashboard is a page of charts and KPIs declared in `[dashboards.*]`. The menu 
 | Field | Notes |
 |---|---|
 | **`type`** | `dashboard`. |
-| **`target`** | The dashboard id (matches a `[dashboards.<id>]` key). The dropdown lists every dashboard. |
-| **`connector`** | **Must not be set**. Dashboards live in a flat namespace; the validator rejects a stray `connector`. |
+| **`target`** | `<app>.<id>` — the dashboard `[dashboards.<app>.<id>]`, for example `crm.pipeline`. The dropdown lists every dashboard. |
+| **`connector`** | **Must not be set** — the app is part of the target; the validator rejects a stray `connector`. |
 | **`params`** | Optional. Pre-fill the dashboard's filters. |
 
 ### When to use
@@ -142,10 +142,10 @@ parent = "pipeline"
 label = "Deals dashboard"
 icon = "chart-bar"
 type = "dashboard"
-target = "deals_overview"
+target = "crm.deals_overview"
 ```
 
-Opens the dashboard with id `deals_overview` — note no `connector` field.
+Opens the dashboard `deals_overview` of the `crm` app — note no `connector` field.
 
 ---
 

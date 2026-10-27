@@ -50,7 +50,7 @@ The example uses the `default` pool and a small `tasks` table.
 
 ## Step 1 — The pool \{#pool\}
 
-Open **Settings → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#connection-fields).
+Open **Settings → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#pools).
 
 Create the example table with any SQL client connected to that database:
 

@@ -21,8 +21,9 @@ Tout ce qu'affiche une application est rangé sous le nom de son connecteur :
 | Écrans | Paramètres → Écrans, pastille de l'application | `[screens.<app>.<id>]` |
 | Menu | Paramètres → Menus, pastille de l'application | `[menus.<app>]` |
 | Graphiques | Paramètres → Graphiques, portée du connecteur | `[charts.<app>.<id>]` |
+| Tableaux de bord | Paramètres → Tableaux de bord, application | `[dashboards.<app>.<id>]` — une entrée de menu l'ouvre avec la cible `<app>.<id>`. |
 
-Les tableaux de bord et les actions partagées ont un espace de noms unique ; une entrée du menu de l'application les ouvre par leur identifiant. Les tâches Nomaflow ne sont rattachées à aucune application.
+Les actions partagées ont un espace de noms unique. Les tâches Nomaflow ne sont rattachées à aucune application.
 
 ---
 

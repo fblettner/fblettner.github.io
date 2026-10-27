@@ -50,7 +50,7 @@ L'exemple utilise le pool `default` et une petite table `tasks`.
 
 ## Étape 1 — Le pool \{#pool\}
 
-Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#connection-fields).
+Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#pools).
 
 Créer la table d'exemple avec n'importe quel client SQL connecté à cette base :
 
@@ -101,7 +101,7 @@ Les colonnes de la grille viennent de la requête de lecture ; leurs libellés e
 ## Étape 4 — L'entrée de menu \{#menu\}
 
 1. **Paramètres → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
-2. **＋ Item**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
+2. **＋ Élément**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
 3. Enregistrer.
 
 Maintenant doté d'un menu, `tasks` est une application : il apparaît dans le sélecteur d'application, et son menu latéral affiche **Tâches**. Un clic ouvre la grille : une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide. Voir [Construire l'arbre](../build/menus/build-the-tree.md) et [Transformer un connecteur en application](../build/menus/make-connector-an-app.md).

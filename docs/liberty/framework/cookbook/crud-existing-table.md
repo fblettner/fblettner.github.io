@@ -20,7 +20,7 @@ table → connector with 4 generated queries → screen → menu entry
 
 ### 1. Reach the database
 
-**Settings → Pools**: the `default` pool works when the table is in the framework's database; otherwise add a pool with the database's URL. See [Connectors](../connectors.md#connection-fields).
+**Settings → Pools**: the `default` pool works when the table is in the framework's database; otherwise add a pool with the database's URL. See [Connectors](../connectors.md#pools).
 
 ### 2. Generate the queries
 

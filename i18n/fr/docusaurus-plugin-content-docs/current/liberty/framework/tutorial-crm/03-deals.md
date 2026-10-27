@@ -1,366 +1,99 @@
 ---
 title: Étape 3 — Affaires et relations
-description: "Ajoutez l'écran Affaires avec un lookup clé étrangère vers les Clients, polissez le dictionnaire pour que les valeurs de statut s'affichent en chips colorés, et ajoutez une sous-grille Activités à l'intérieur du dialogue de l'affaire. Illustre les lookups, le dictionnaire et les relations parent-enfant."
-keywords: [Liberty Framework, tutoriel, CRM, affaires, lookups, dictionnaire, clé étrangère, sous-grille, activités]
+description: "Second écran du CRM : le dictionnaire apporte libellés et listes de valeurs (une énumération pour le statut client, des lookups pour le client et l'étape d'une affaire), l'écran Affaires rattache chaque affaire à son client, et les activités de l'affaire apparaissent dans un onglet de son dialogue."
+keywords: [Liberty Next, tutoriel, CRM, affaires, dictionnaire, ENUM, LOOKUP, analyser une table, nested_table, param_binds]
 ---
 
 # Étape 3 — Affaires et relations
 
-L'écran Clients fonctionne mais reste brut. Dans cette étape, nous ajoutons la deuxième entité — **Affaires** — avec une référence clé étrangère vers Clients, polissons le rendu visuel via le **dictionnaire**, et ajoutons une **sous-grille Activités** à l'intérieur du dialogue de l'affaire pour que les utilisateurs puissent journaliser appels et réunions sur une affaire.
+Trois volets dans cette étape :
 
-À la fin de cette étape, le CRM compte deux écrans liés avec des chips, des listes déroulantes et une relation parent-enfant en bonne et due forme. Temps estimé : **20 minutes**.
-
----
-
-## Ce que nous faisons et pourquoi
-
-Jusqu'à présent, les valeurs brutes des colonnes remontaient telles quelles vers l'UI — un statut n'était que du texte, un pays seulement deux lettres. Les vraies applications attendent **des chips libellés, des listes déroulantes alimentées par une table, des entités liées en ligne**.
-
-Le framework règle cela via trois primitives empilées au-dessus du couple connecteur + écran que nous avons déjà construit :
-
-| Primitive | Ce qu'elle apporte | Où elle se trouve |
-|---|---|---|
-| **Entrée de dictionnaire** | Une déclaration par colonne du libellé, du format et de la *règle d'affichage* (BOOLEAN / ENUM / LOOKUP / PASSWORD). | *Paramètres → Dictionnaire → Colonnes*. |
-| **Lookup** | Une requête nommée qui retourne des paires `{ value, label }` — alimente les listes déroulantes. | *Paramètres → Dictionnaire → Lookups*. |
-| **Sous-grille dans un onglet de dialogue** | Une grille dans le dialogue, cadrée par la clé du parent. | *Paramètres → Écrans → Dialogue → Sous-grilles*. |
-
-Nous utiliserons les trois.
+1. Le **dictionnaire** : des libellés communs à tous les écrans, et des listes de valeurs au lieu de texte libre.
+2. L'écran **Affaires**, où chaque affaire choisit son client et son étape dans une liste.
+3. Les **activités** de l'affaire, dans un onglet de son dialogue.
 
 ---
 
-## Polir d'abord l'écran clients
+## Le dictionnaire
 
-Deux gains rapides sur l'écran clients que nous avons construit à l'étape précédente.
+### Les entrées tirées des tables
 
-### Ajouter `status` en ENUM dans le dictionnaire
+**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** (libellé anglais) :
 
-Ouvrez **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
+1. Connecteur `crm`, table `customers`, **Scan** : une proposition par colonne, les manquantes cochées.
+2. Renseigner le **Label** de chacune (`Nom`, `Secteur`, `Pays`, `Statut`, `E-mail`…), puis **Add**.
+3. Même chose pour `deals` et `activities`.
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `customer_status` |
-| **Libellé** | `Statut` *(carte par langue ; anglais `Status`, français `Statut`)* |
-| **Type** | `string` |
-| **Règle** | `ENUM` |
-| **Valeurs enum** | Les quatre lignes ci-dessous |
+Tous les écrans de l'application affichent désormais ces libellés — ceux saisis sur les colonnes de l'écran Clients à l'étape 2 peuvent être effacés.
 
-| Valeur | Libellé | Couleur |
-|---|---|---|
-| `active`     | Actif      | `#4ade80` *(vert)* |
-| `prospect`   | Prospect   | `#60a5fa` *(bleu)* |
-| `inactive`   | Inactif    | `#94a3b8` *(gris)* |
-| `lost`       | Perdu      | `#f87171` *(rouge)* |
+### Le statut client — une énumération
 
-**Enregistrer**. Puis ouvrez **Paramètres → Connecteurs → customers → requête `list`**, descendez jusqu'à **Indices de colonne**, et ajoutez une ligne :
+Onglet **Énumérations**, **＋ Ajouter une énumération** `CUSTOMER_STATUS`, avec les valeurs `ACTIVE` (Actif), `PROSPECT` (Prospect), `INACTIVE` (Inactif). Puis sur l'entrée `STATUS` : **Rules** `ENUM`, **Rules values** `CUSTOMER_STATUS`.
 
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `status` | `customer_status` |
+La grille affiche *Actif* au lieu de `ACTIVE`, et le dialogue propose les trois valeurs.
 
-**Enregistrer et recharger**.
+### Le client d'une affaire — un lookup
 
-Rouvrez l'écran Clients. La colonne *Statut* affiche maintenant un chip coloré — `Actif` vert pour les trois lignes initiales. Le champ *Statut* du dialogue est désormais une liste déroulante des quatre valeurs. Nous n'avons touché ni au SQL ni à l'écran.
+Un lookup remplace un code (l'identifiant du client) par un libellé (son nom), à partir d'une requête.
 
-### Câbler `country` à un lookup
+1. **Paramètres → Connecteurs → crm → Lookups → ＋ Ajouter un lookup** : table `customers`, colonne valeur `ID`, colonne libellé `NAME`. L'assistant écrit la requête et le lookup `customers` du dictionnaire.
+2. Même chose pour les étapes : table `deal_stages`, valeur `CODE`, libellé `LABEL`.
+3. Dans le dictionnaire, entrée `CUSTOMER_ID` : **Rules** `LOOKUP`, **Rules values** `customers` ; entrée `STAGE` : **Rules** `LOOKUP`, **Rules values** `deal_stages`.
 
-La colonne pays est actuellement un code à deux lettres en texte libre. Un lookup la transforme en liste déroulante avec autocomplétion.
+Enregistrer le dictionnaire. Voir [Dictionnaire](../dictionary.md) et [Séquences et lookups](../build/queries/sequences-and-lookups.md).
 
-D'abord la requête source — il faut un connecteur qui liste les pays. Nous allons profiter du connecteur **customers** en ajoutant une petite requête de référence, puisque nous n'avons pas de table pays distincte :
+---
 
-Ouvrez **Paramètres → Connecteurs → customers → + Ajouter une requête** :
+## L'écran Affaires
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `country-list` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
+1. **Connecteurs → crm → Tables → ＋ Ajouter des requêtes → Générer depuis la BDD**, table `deals`, clé `ID`. Comme à l'étape 2, retirer `ID` de `deals_post`, et ajouter `UPDATED_AT = {{SYSTIMESTAMP}}` à `deals_put`.
+2. **Écrans**, pastille `crm`, **＋ Ajouter un écran** `deals` : libellé `Affaires`, les quatre requêtes, **Importer depuis la requête de lecture** dans Colonnes, un onglet de dialogue `Affaire` avec `CUSTOMER_ID`, `NAME`, `STAGE`, `AMOUNT`, `CLOSE_DATE`, `OWNER`.
+3. **Menus**, sous *Ventes* : une entrée `Affaires`, type `screen`, cible `deals_get`, icône `trendingup`.
+
+La grille affiche le nom du client et le libellé de l'étape ; le dialogue les propose dans des listes avec recherche. Cocher **filter** sur `STAGE` et `CUSTOMER_ID` pour filtrer la grille sur ces colonnes.
+
+---
+
+## Les activités dans un onglet
+
+Les activités d'une affaire apparaissent dans son dialogue, sous forme de grille.
+
+### L'écran Activités
+
+1. **Générer depuis la BDD** sur `activities`, clé `ID`. Dans `activities_post`, retirer `ID` et enregistrer l'auteur :
 
 ```sql
--- Liste courte ISO 3166 pour le tutoriel. Dans une vraie app, ça viendrait d'une table pays.
-SELECT 'FR' AS code, 'France'         AS label UNION ALL
-SELECT 'DE',         'Germany'        UNION ALL
-SELECT 'BE',         'Belgium'        UNION ALL
-SELECT 'IT',         'Italy'          UNION ALL
-SELECT 'ES',         'Spain'          UNION ALL
-SELECT 'GB',         'United Kingdom' UNION ALL
-SELECT 'US',         'United States'  UNION ALL
-SELECT 'CA',         'Canada';
+INSERT INTO activities (DEAL_ID, KIND, NOTES, HAPPENED_AT, RECORDED_BY)
+VALUES (:DEAL_ID, :KIND, :NOTES, :HAPPENED_AT, {{LOGIN}})
 ```
 
-Cliquez sur **▶ Tester** pour confirmer les huit lignes. **Enregistrer et recharger**.
+2. Un écran `activities` sur ces requêtes, avec un dialogue contenant `KIND`, `NOTES`, `HAPPENED_AT`. Sa requête de lecture a besoin de l'identifiant de l'affaire — ajouter `WHERE DEAL_ID = :DEAL_ID` à `activities_get`.
 
-Définissez maintenant le lookup. **Paramètres → Dictionnaire → Lookups → + Nouveau lookup** :
+### L'onglet
 
-| Champ | Valeur |
+Dans l'écran `deals`, onglet **Dialogue**, **＋ Ajouter un onglet**, puis dans **Paramètres de l'onglet** :
+
+| Réglage | Valeur |
 |---|---|
-| **Nom** | `countries` |
-| **Connecteur** | `customers` ▾ |
-| **Requête** | `country-list` ▾ |
-| **Colonne valeur** | `code` |
-| **Colonne libellé** | `label` |
-| **Cache** | `Par session` |
+| Libellé de l'onglet | `Activités` |
+| Type d'onglet | *Table imbriquée* |
+| Écran cible | `activities` |
+| Liaisons de paramètres | colonne parent `ID` → paramètre `DEAL_ID` |
 
-**Enregistrer**.
-
-Retour dans **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `country_code` |
-| **Libellé** | `Pays` *(anglais `Country`, français `Pays`)* |
-| **Type** | `string` |
-| **Règle** | `LOOKUP` |
-| **Lookup** | `countries` ▾ |
-
-**Enregistrer**. Puis sur la requête `list` du connecteur customers, ajoutez un autre indice de colonne :
-
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `country` | `country_code` |
-
-**Enregistrer et recharger**.
-
-Rouvrez l'écran Clients. La colonne *Pays* affiche maintenant `France`, `Germany`, `France` (libellés résolus), et le champ *Pays* du dialogue est une liste déroulante avec autocomplétion des huit pays.
+L'onglet affiche les activités de l'affaire ouverte ; **＋ Ajouter** y crée une activité dont `DEAL_ID` est déjà renseigné. Activer **hide_on_add** sur l'onglet : une affaire en cours de création n'a pas encore d'identifiant. Voir [Onglets imbriqués](../build/screens/nested-tabs.md).
 
 ---
 
-## Construire le connecteur Affaires
+## Résultat à l'écran
 
-Même motif qu'avant — un connecteur avec quatre requêtes.
-
-Ouvrez **Paramètres → Connecteurs → + Nouveau connecteur** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `deals` |
-| **App** | `crm` |
-| **Type** | `SQL` |
-| **Pool** | `default` |
-| **Description** | `Affaires commerciales — étape du pipeline, montant, clôture attendue.` |
-
-### Requête `list`
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `list` |
-| **Opération** | Lecture |
-| **SQL** | La requête ci-dessous |
-
-```sql
-SELECT d.id,
-       d.name,
-       d.customer_id,
-       c.name AS customer_name,
-       d.stage,
-       d.amount,
-       d.currency,
-       d.close_date,
-       d.owner
-FROM   deals d
-JOIN   customers c ON c.id = d.customer_id
-WHERE  (:customer_id IS NULL OR d.customer_id = :customer_id)
-  AND  (:stage       IS NULL OR d.stage = :stage)
-ORDER BY d.close_date;
-```
-
-À noter les deux paramètres optionnels — `customer_id` et `stage`. Déclarez-les dans la sous-table *Paramètres* :
-
-| Nom | Type | Obligatoire | Libellé | Lookup |
-|---|---|---|---|---|
-| `customer_id` | int    | — | Client | — |
-| `stage`       | string | — | Étape | — |
-
-Ne mettez pas de valeurs par défaut — la requête gère `NULL` avec le motif `IS NULL OR`.
-
-Cliquez sur **▶ Tester**. Quatre lignes.
-
-### Lookup pour les clients (FK)
-
-Avant les requêtes d'écriture, définissez un lookup qui permet au formulaire de l'affaire de sélectionner un client par nom.
-
-**Paramètres → Dictionnaire → Lookups → + Nouveau lookup** :
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `customers-list` |
-| **Connecteur** | `customers` |
-| **Requête** | `list` *(on réutilise la requête de lecture existante)* |
-| **Colonne valeur** | `id` |
-| **Colonne libellé** | `name` |
-| **Cache** | `Par session` |
-
-**Enregistrer**.
-
-Même idée pour les étapes d'affaire — réutilisez une petite requête de référence. Ajoutez au connecteur `deals` :
-
-```sql
-SELECT code, label, colour FROM deal_stages ORDER BY ord;
-```
-
-Nommez-la `stages-list`. Puis un lookup de dictionnaire qui pointe dessus (`stages`, valeur = `code`, libellé = `label`, colonne couleur = `colour` — donne aux chips leur couleur).
-
-Deux colonnes de dictionnaire référencent désormais ces lookups :
-
-| Entrée de colonne | Règle | Lookup | Description |
-|---|---|---|---|
-| `customer_id` *(réutiliser s'il existe)* | LOOKUP | `customers-list` | FK Client sur l'affaire. |
-| `deal_stage` | LOOKUP | `stages` | Étape du pipeline. |
-
-Sur les **Indices de colonne** de la requête `deals.list` :
-
-| Colonne | Entrée de dictionnaire |
-|---|---|
-| `customer_id` | `customer_id` |
-| `stage`       | `deal_stage` |
-| `amount`      | *(créez une nouvelle entrée de dictionnaire `money` : type `decimal`, format `1 234,56 €`)* |
-
-### Requêtes d'écriture
-
-```sql
--- create
-INSERT INTO deals (customer_id, name, stage, amount, currency, close_date, owner, created_at)
-VALUES (:customer_id, :name, :stage, :amount, :currency, :close_date, :session_user, CURRENT_TIMESTAMP)
-RETURNING id;
-
--- update
-UPDATE deals SET
-  customer_id = :customer_id,
-  name = :name,
-  stage = :stage,
-  amount = :amount,
-  currency = :currency,
-  close_date = :close_date
-WHERE id = :id;
-
--- delete
-DELETE FROM deals WHERE id = :id;
-```
-
-**Enregistrer et recharger**.
+- **Clients** : le statut s'affiche par son libellé et se choisit dans une liste.
+- **Affaires** : quatre affaires, avec leur client et leur étape ; filtrer sur *Négociation*.
+- Ouvrir *Plateforme logistique*, onglet **Activités**, **＋ Ajouter** : enregistrer un appel. *Recorded by* contient le nom de l'utilisateur.
 
 ---
 
-## Construire l'écran Affaires
+## Bilan
 
-**Paramètres → Écrans → + Nouvel écran** :
+Deux écrans liés, des libellés et des listes de valeurs partagés par le dictionnaire, et des lignes enfants dans un dialogue.
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm/deals` |
-| **Titre** | `Affaires` |
-| **App** | `crm` |
-| **Colonnes clés** | `id` |
-| **Modifiable** | ✓ |
-
-### Connecteur de lecture
-
-| Champ | Valeur |
-|---|---|
-| **Connecteur** | `deals` |
-| **Requête** | `list` |
-| **Tri par défaut** | `close_date` ascendant |
-
-### Colonnes de la grille
-
-| Colonne | Notes |
-|---|---|
-| `name` | Le libellé de l'affaire. |
-| `customer_name` | Issu de la JOIN. |
-| `stage` | Rendu en chip coloré via le dictionnaire. |
-| `amount` | Rendu en `1 234,56 €` via le dictionnaire. |
-| `close_date` | Formaté en `dd/MM/yyyy` (l'Étape 4 polira ça). |
-
-### Champs du dialogue
-
-Un onglet — `Détails` — avec :
-
-- `customer_id` (liste déroulante LOOKUP vers customers)
-- `name`
-- `stage` (liste déroulante LOOKUP vers stages)
-- `amount`
-- `currency`
-- `close_date`
-
-### Actions
-
-Ajouter → `deals/create`, Enregistrer → `deals/update`, Supprimer → `deals/delete`.
-
-**Enregistrer et recharger**.
-
-Ajoutez la feuille au menu **crm** (Paramètres → Menus → crm → + Ajouter une feuille), qui pointe vers `crm/deals` avec l'icône `briefcase`. **Enregistrer et recharger**.
-
-L'écran Affaires apparaît dans la barre latérale.
-
----
-
-## Ajouter une sous-grille Activités
-
-La table activities stocke des notes liées aux affaires. Plutôt qu'un écran de premier niveau distinct, nous allons intégrer les activités **à l'intérieur** du dialogue d'affaire pour que l'utilisateur voie l'historique d'une affaire à l'endroit même où il la modifie.
-
-### Connecteur activities
-
-```sql
--- activities.list
-SELECT id, deal_id, kind, notes, happened_at, recorded_by
-FROM   activities
-WHERE  deal_id = :deal_id
-ORDER BY happened_at DESC;
-
--- activities.create
-INSERT INTO activities (deal_id, kind, notes, happened_at, recorded_by)
-VALUES (:deal_id, :kind, :notes, CURRENT_TIMESTAMP, :session_user)
-RETURNING id;
-
--- activities.delete
-DELETE FROM activities WHERE id = :id;
-```
-
-Câblez la colonne `kind` comme une entrée de dictionnaire ENUM avec les valeurs `call`, `meeting`, `email`, `note` (couleurs différentes).
-
-### Câbler la sous-grille
-
-Ouvrez l'**écran Affaires** → **onglet Dialogue** → **+ Ajouter un onglet** :
-
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `Activités` |
-| **Contenu** | `Sous-grille` *(bascule l'onglet du mode « champs » au mode « grille »)* |
-
-Dans le panneau sous-grille :
-
-| Champ | Valeur |
-|---|---|
-| **Connecteur** | `activities` |
-| **Requête** | `list` |
-| **Liaison des paramètres** | `deal_id ← <parent>.id` *(le framework lie automatiquement l'`id` du dialogue parent au paramètre `deal_id` de la sous-grille)* |
-| **Modifiable** | ✓ |
-| **Connecteur / requête Ajouter** | `activities` / `create` |
-| **Connecteur / requête Supprimer** | `activities` / `delete` |
-
-La sous-grille met automatiquement en forme sa grille à partir de la requête `list` (`kind`, `notes`, `happened_at`, `recorded_by`) et son mini-dialogue à partir des colonnes.
-
-**Enregistrer et recharger**.
-
----
-
-## Voir le résultat
-
-Ouvrez **CRM → Affaires**, cliquez sur l'affaire *Globex Logistics*. Le dialogue s'ouvre avec deux onglets — *Détails* (les champs que nous avons câblés) et *Activités* (vide pour les données initiales).
-
-Basculez sur l'onglet *Activités*, cliquez sur **+ Ajouter**, saisissez une note `meeting` rapide. Enregistrez. L'activité apparaît dans la sous-grille ; la colonne *Enregistré par* est `admin` (rempli par la valeur par défaut `LOGIN` de la couche formulaire).
-
-Essayez la colonne nom du client dans la grille Affaires — un clic sur la valeur style chip ouvre l'écran Clients pré-filtré sur ce client. (Comportement obtenu gratuitement parce que la colonne `customer_id` est un `LOOKUP` sur la liste des clients.)
-
----
-
-## Ce que vous avez maintenant
-
-Deux écrans, une relation parent-enfant, un rendu poli via le dictionnaire. Le CRM commence à prendre forme.
-
-Ce qui manque encore :
-
-- Une **vue d'ensemble** — KPI et un graphique qui résument le pipeline. À venir à l'[Étape 4](./04-dashboard.md).
-- De **vrais rôles** — aujourd'hui tout est réservé à l'admin. À venir à l'[Étape 5](./05-auth.md).
-- L'**IA** et les **tâches planifiées** — à venir à l'[Étape 6](./06-ai-and-jobs.md).
-
-→ **[Étape 4 — Tableau de bord du pipeline commercial](./04-dashboard.md)** — KPI, graphique, drill-down.
+→ **[Étape 4 — Tableau de bord](./04-dashboard.md)** : le pipeline d'un coup d'œil.

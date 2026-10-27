@@ -48,7 +48,7 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
   <rect x="370" y="112" width="76" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="408" y="129" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Address</text>
   <rect x="452" y="112" width="60" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="482" y="129" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Tab</text>
+  <text x="482" y="129" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add tab</text>
 
   <rect x="288" y="148" width="200" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="298" y="166" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
@@ -106,7 +106,7 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
 | Region | What it does |
 |---|---|
 | **Palette** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A search box narrows the list. Click an entry to add a field card on the canvas; drag an entry to drop it at a specific position. |
-| **Canvas** *(center)* | The dialog's tabs strip across the top + the field grid below. Click a tab to switch; *＋ Tab* adds one. Each field card shows the field name + a one-line summary of its key flags. The selected card has a coloured border; the inspector on the right reflects it. A separate **HIDDEN** group at the bottom collects fields with `hidden = true`. |
+| **Canvas** *(center)* | The dialog's tabs strip across the top + the field grid below. Click a tab to switch; *＋ Add tab* adds one. Each field card shows the field name + a one-line summary of its key flags. The selected card has a coloured border; the inspector on the right reflects it. A separate **HIDDEN** group at the bottom collects fields with `hidden = true`. |
 | **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). It shows the field and its **Column configuration** — see Step 3. |
 
 ---
@@ -142,7 +142,7 @@ See [Columns](./columns.md) for each setting and [Conditional fields](./conditio
 
 ### Step 4 — Add tabs
 
-Click **＋ Tab** above the canvas. The new tab is empty; drag fields in from the Palette. Common tab patterns:
+Click **＋ Add tab** above the canvas. The new tab is empty; drag fields in from the Palette. Common tab patterns:
 
 | Tab name | What's on it |
 |---|---|

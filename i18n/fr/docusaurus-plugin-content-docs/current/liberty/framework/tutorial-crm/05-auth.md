@@ -1,226 +1,80 @@
 ---
-title: Étape 5 — Rôles et SSO
-description: "Séparez le CRM entre les rôles Sales (édition complète), Manager (lecture + tableau de bord) et Admin. Câblez la connexion OIDC sur un fournisseur d'identité réel. Illustre les rôles, les permissions, OIDC et les codes de permission par appel générés par le framework."
-keywords: [Liberty Framework, tutoriel, CRM, rôles, permissions, OIDC, SSO, Authentik, Keycloak]
+title: Étape 5 — Rôles et connexion
+description: "Décider qui voit quoi dans le CRM : un rôle de consultation et un rôle commercial construits sur l'arborescence du menu de l'application, les écritures accordées hors menus, deux utilisateurs de test, un périmètre de données par pays issu d'un attribut utilisateur, et la connexion avec le fournisseur d'identité de l'entreprise."
+keywords: [Liberty Next, tutoriel, CRM, rôles, permissions, arborescence de menu, hors menus, utilisateurs, périmètre de données, attributs, OIDC]
 ---
 
-# Étape 5 — Rôles et SSO
+# Étape 5 — Rôles et connexion
 
-Le CRM fonctionne mais chaque utilisateur est `admin`. Les vraies applications ont au moins deux profils — opérateurs qui modifient, observateurs qui lisent — et de plus en plus, ils se connectent via le **fournisseur d'identité de l'entreprise** (Authentik, Keycloak, Azure AD, Okta) plutôt qu'avec un mot de passe par app.
-
-Cette étape sépare le CRM en trois rôles et ajoute la connexion OIDC. Temps estimé : **15 minutes**.
-
----
-
-## Ce que nous faisons et pourquoi
-
-Le modèle de contrôle d'accès du framework a deux moitiés :
-
-| Moitié | Où elle se trouve |
-|---|---|
-| **Ce qui peut être fait** — codes de permission atomiques générés automatiquement par requête, écran, tableau de bord, tâche. | Les codes apparaissent dans l'onglet *Permissions* de chaque éditeur. On ne les saisit pas. |
-| **Qui peut le faire** — rôles qui regroupent des permissions, affectés à des utilisateurs. | *Paramètres → Rôles* + *Paramètres → Utilisateurs*. |
-
-Cette séparation permet de définir les rôles une fois et de les affecter à plusieurs utilisateurs, sans jamais toucher aux codes de permission individuels à la main.
-
-Pour le CRM, nous mettons en place trois rôles :
-
-| Rôle | Ce qu'il peut faire |
-|---|---|
-| **`crm-viewer`** | Voir le tableau de bord et les écrans, sans édition. |
-| **`crm-sales`** | Lire + écrire tout sur les clients, affaires, activités. |
-| **`crm-admin`** | Comme `crm-sales` + accès à l'interface Paramètres. |
-
-Ensuite, nous ajouterons un backend OIDC pour que les utilisateurs se connectent avec l'IdP de l'entreprise.
+Jusqu'ici, tout s'est fait en superutilisateur, qui voit tout. Cette étape ajoute deux rôles, deux utilisateurs pour les tester, un périmètre de données et la connexion avec le compte d'entreprise.
 
 ---
 
-## Inspecter les codes de permission déjà en place
+## Deux rôles
 
-Ouvrez **Paramètres → Connecteurs → customers → onglet Permissions**. Les quatre codes générés automatiquement par le connecteur s'affichent :
+**Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. L'éditeur est en anglais. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
-| Code | Généré pour |
+### `crm-viewer` — consulte le CRM
+
+| Réglage | Valeur |
 |---|---|
-| `sql:customers:list` | La requête de lecture. |
-| `sql:customers:create:write` | L'insertion. |
-| `sql:customers:update:write` | La mise à jour. |
-| `sql:customers:delete:write` | La suppression. |
+| Base | **No access** |
+| Menus | **Allow** sur le dossier *Ventes* de l'application `crm` et sur *Pipeline*. |
 
-Idem pour `deals` et `activities`. Plus quelques-uns issus du tableau de bord et du menu :
+Les titulaires voient les écrans et le tableau de bord, mais toute écriture est refusée : les requêtes d'écriture (`customers_put`, `deals_post`…) ne sont pas accordées.
 
-| Code | Généré pour |
+### `crm-sales` — travaille les affaires
+
+| Réglage | Valeur |
 |---|---|
-| `screen:crm:customers` | Visiter l'écran Clients (contrôle au niveau page). |
-| `screen:crm:deals` | Idem pour Affaires. |
-| `dashboard:crm-pipeline-overview` | Le tableau de bord. |
-| `menu:crm:*` | Les feuilles du menu crm. |
+| Base | **No access** |
+| Menus | **Allow** sur *Ventes* et *Pipeline*. |
+| Beyond the menus | **Allow** — Connector (all queries) — `crm`. |
 
-Le framework fournit des **jokers** — `sql:customers:*` couvre chaque requête customer, `screen:crm:*` couvre chaque écran CRM. Nous utiliserons des jokers pour les définitions de rôle.
+La règle sur le connecteur accorde toutes les requêtes de `crm`, écritures comprises. **Save** pour chaque rôle.
 
 ---
 
-## Définir `crm-viewer`
+## Deux utilisateurs
 
-**Paramètres → Rôles → + Nouveau rôle** :
+**Paramètres → Access → Users → ＋ Add user** :
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-viewer` |
-| **Nom affiché** | `CRM viewer` |
-| **Description** | `Accès en lecture seule aux écrans CRM et au tableau de bord du pipeline.` |
+| Utilisateur | Rôle | Attribut |
+|---|---|---|
+| `alice` | `crm-viewer` | — |
+| `bob` | `crm-sales` | `country = FR` |
 
-Dans la section *Permissions accordées*, cliquez sur **+ Ajouter une permission** et ajoutez les codes correspondant à un accès en lecture seule :
-
-| Code | Ce qu'il accorde |
-|---|---|
-| `sql:customers:list` | Lire les clients. |
-| `sql:deals:*` *(joker)* | Lire toutes les requêtes deals — y compris les agrégats qui alimentent le tableau de bord. Nous n'ajoutons pas les codes `:write`. |
-| `sql:activities:list` | Lire les activités. |
-| `screen:crm:customers` | Visiter l'écran Clients. |
-| `screen:crm:deals` | Visiter l'écran Affaires. |
-| `dashboard:crm-pipeline-overview` | Visiter le tableau de bord. |
-| `menu:crm:*` | Voir l'espace de travail CRM + chaque feuille à l'intérieur. Les écrans / tableaux de bord eux-mêmes sont contrôlés ; une feuille sans permission sur sa cible est cachée de toute façon. |
-| `chart:crm-pipeline-by-stage` | Voir le graphique (sinon le panneau disparaît). |
-
-**Enregistrer**.
-
-Un `crm-viewer` en lecture seule est désormais possible. Sans aucun code `:write`, le framework rend chaque écran en **mode lecture seule** — boutons Ajouter / Modifier / Supprimer cachés, le dialogue s'ouvre en mode consultation.
+Donner un mot de passe à chacun. Connectée en `alice` dans une fenêtre de navigation privée : le CRM affiche *Ventes* et *Pipeline* ; la modification d'un client est refusée. Connecté en `bob` : les dialogues enregistrent. Voir [Utilisateurs](../build/secure/users.md).
 
 ---
 
-## Définir `crm-sales`
+## Un périmètre de données — le pays de chaque commercial
 
-**+ Nouveau rôle** à nouveau :
+Bob ne doit voir que les clients de son pays.
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-sales` |
-| **Nom affiché** | `CRM sales` |
-| **Description** | `Accès complet lecture + écriture sur clients, affaires et activités.` |
-| **Hérite de** | `crm-viewer` |
+1. Faire porter le pays par les affaires : dans `deals_get`, joindre le client et sélectionner son pays :
 
-En héritant de `crm-viewer`, on récupère chaque code de lecture sans rien ajouter ; il suffit de joindre les écritures :
+```sql
+SELECT d.ID, d.CUSTOMER_ID, d.NAME, d.STAGE, d.AMOUNT, d.CLOSE_DATE, d.OWNER, c.COUNTRY
+FROM deals d JOIN customers c ON c.ID = d.CUSTOMER_ID
+```
 
-| Code | Ce qu'il accorde |
-|---|---|
-| `sql:customers:create:write` |
-| `sql:customers:update:write` |
-| `sql:customers:delete:write` |
-| `sql:deals:create:write` |
-| `sql:deals:update:write` |
-| `sql:deals:delete:write` |
-| `sql:activities:create:write` |
-| `sql:activities:delete:write` |
+2. Dans le rôle `crm-sales`, onglet **Data scope**, une règle : colonne `COUNTRY`, connecteur `crm`, **From the user's attribute** `country`. Enregistrer.
 
-**Enregistrer**.
+Bob se déconnecte puis se reconnecte : Clients et Affaires n'affichent plus que les clients français — ACME Industries et Beta SARL — et une écriture hors de son périmètre est refusée. Le périmètre est appliqué par le serveur, aux écrans, au tableau de bord comme à l'assistant IA. Le rôle d'Alice n'a pas de règle : elle voit toujours tout. Voir [Rôles et permissions → Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
 
 ---
 
-## Définir `crm-admin`
+## Se connecter avec le compte d'entreprise
 
-| Champ | Valeur |
-|---|---|
-| **Id** | `crm-admin` |
-| **Nom affiché** | `CRM admin` |
-| **Hérite de** | `crm-sales` |
+Pour que les utilisateurs se connectent avec leur compte d'entreprise (Entra ID, Keycloak, Okta…), renseigner **Paramètres → App → OpenID Connect (SSO)** avec les valeurs de l'application déclarée chez le fournisseur. Un bouton **Se connecter avec OIDC** apparaît sur la page de connexion ; les nouveaux utilisateurs arrivent sans rôle, et un administrateur leur attribue `crm-viewer` ou `crm-sales`.
 
-| Code | Ce qu'il accorde |
-|---|---|
-| `settings:read` | Le lien Paramètres apparaît dans l'en-tête. |
-| `settings:connectors` | Modifier les connecteurs. |
-| `settings:screens` | Modifier les écrans. |
-| `settings:menus` | Modifier les menus. |
-| `settings:dashboards` | Modifier les tableaux de bord. |
-| `settings:charts` | Modifier les graphiques. |
-| `settings:dictionary` | Modifier le dictionnaire. |
-| `settings:reload` | Le bouton *Enregistrer et recharger* fonctionne. |
-| `users:read` + `users:write` | Gérer les utilisateurs (utile quand OIDC créera de nouveaux utilisateurs). |
-
-À noter, nous **n'accordons pas** `settings:framework` ni `settings:raw` — réservés à l'utilisateur `admin` de la plateforme.
-
-**Enregistrer**.
+L'attribut `country` peut venir de l'annuaire grâce à `attribute_claims` — le périmètre de données suit alors l'annuaire. Recette complète : [Connexion OIDC](../cookbook/oidc-sso.md).
 
 ---
 
-## Créer deux utilisateurs pour tester
+## Bilan
 
-**Paramètres → Utilisateurs → + Nouvel utilisateur** :
+Deux rôles taillés dans le menu de l'application, des utilisateurs qui voient leur part, et des lignes filtrées par le serveur selon chaque utilisateur.
 
-| Utilisateur | Rôles |
-|---|---|
-| `sales-alice` | `crm-sales` |
-| `viewer-bob`  | `crm-viewer` |
-
-Définissez un mot de passe à chacun, puis déconnectez-vous de `admin` et reconnectez-vous en tant que `sales-alice`. Vous devriez voir :
-
-- Le sélecteur d'espace de travail affiche **CRM** (le seul espace qu'Alice peut voir).
-- **Vue d'ensemble du pipeline**, **Clients**, **Affaires** dans la barre latérale.
-- Boutons Modifier / Ajouter / Supprimer présents.
-- **Pas de lien Paramètres** dans l'en-tête.
-
-Connectez-vous en tant que `viewer-bob` :
-
-- Les trois mêmes entrées de barre latérale (il peut les voir).
-- Boutons Modifier / Ajouter / Supprimer **cachés** — les écrans s'affichent en lecture seule.
-- Un clic sur une ligne ouvre le dialogue en mode consultation (pas de bouton Enregistrer).
-- Saisir `/settings` dans l'URL → 403.
-
-L'élagage du framework est silencieux : aucun message ne signale l'absence de droit, les contrôles ne sont simplement pas là.
-
----
-
-## Câbler la connexion OIDC
-
-OIDC transforme le fournisseur d'identité de l'entreprise en backend d'authentification de Liberty. Les utilisateurs se connectent une fois, déconnexion unique, audit centralisé. Nous le mettons en place avec **Authentik** comme exemple — la procédure est identique pour Keycloak, Azure AD, Okta.
-
-### Sur Authentik
-
-1. Créez un **OAuth2/OpenID Provider** dans l'admin Authentik.
-2. Réglez le **Redirect URI** sur `http://127.0.0.1:8000/auth/oidc/callback` (production : la vraie URL publique).
-3. Notez le **Client ID** + le **Client secret** générés par Authentik.
-4. Créez une **Application** liée au provider ; choisissez les **groupes** à exposer dans le token (nous les mapperons sur les rôles Liberty).
-
-### Sur Liberty
-
-Ouvrez **Paramètres → Framework → Authentification** et activez **OIDC activé**. Remplissez :
-
-| Champ | Valeur |
-|---|---|
-| **Issuer URL** | `https://auth.example.com/application/o/liberty/` *(le slash final compte dans Authentik)* |
-| **Client ID** | le client id Authentik |
-| **Client secret** | le client secret Authentik *(chiffré au repos)* |
-| **Redirect URI** | `http://127.0.0.1:8000/auth/oidc/callback` |
-| **Claim e-mail** | `email` |
-| **Claim groupes** | `groups` |
-| **Auto-provisionnement** | ✓ *(crée l'utilisateur Liberty à la première connexion SSO)* |
-
-Cliquez sur le bouton **▶ Tester la connexion**. Un nouvel onglet s'ouvre, la page de connexion d'Authentik apparaît, vous vous authentifiez, l'onglet renvoie « OIDC test successful » avec les claims résolus (email, groupes) pour confirmer la justesse du mapping.
-
-**Enregistrer et recharger**.
-
-### Mapper les groupes IdP aux rôles Liberty
-
-Le framework mappe le `groups_claim` 1:1 sur les identifiants de rôles Liberty. Un groupe Authentik nommé `crm-sales` devient donc le rôle Liberty `crm-sales` que nous avons déjà défini. Veillez à la correspondance des noms — c'est toute la configuration du mapping.
-
-Déconnectez-vous de `admin`. La page de connexion affiche maintenant un bouton **Se connecter avec SSO** à côté du formulaire identifiant/mot de passe. Cliquez dessus, authentifiez-vous sur Authentik, et vous revenez au framework avec les rôles que la claim de groupe de l'IdP a résolus.
-
-Quand `Auto-provisionnement` est activé (c'est le cas), les utilisateurs qui se connectent en SSO pour la première fois sont créés sur place avec les bons rôles. Pas de pré-inscription nécessaire.
-
----
-
-## Deux choses à savoir sur OIDC
-
-| Élément | Pourquoi ça compte |
-|---|---|
-| **Le backend local reste disponible.** | Le formulaire identifiant/mot de passe fonctionne toujours pour l'utilisateur `admin`. Utile quand l'IdP est en panne — vous pouvez entrer dans Liberty en mode bris-de-glace sans dépendre de la disponibilité d'Authentik. |
-| **Les groupes IdP font foi.** | Si vous retirez un utilisateur du groupe `crm-sales` dans Authentik, sa prochaine connexion le laisse sans `crm-sales`. L'enregistrement utilisateur reste dans Liberty (sans rôles) ; l'IdP décide qui a accès. |
-
----
-
-## Ce que vous avez maintenant
-
-Le CRM a de vrais rôles, de vrais utilisateurs, un vrai SSO. Deux profils d'opérateurs voient des choses différentes ; un manager qui ne fait que consulter obtient une expérience en lecture seule par construction.
-
-Dernière couche à ajouter : l'**accès IA** aux données et une **tâche nocturne** qui maintient l'hygiène du pipeline en signalant les affaires stagnantes.
-
-→ **[Étape 6 — Assistant IA et tâches planifiées](./06-ai-and-jobs.md)**.
+→ **[Étape 6 — IA et tâches](./06-ai-and-jobs.md)** : des questions en langage courant et une tâche quotidienne.

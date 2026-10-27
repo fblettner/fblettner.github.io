@@ -15,7 +15,7 @@ Cinq types de feuilles :
 | **`screen`** | Un écran conçu. | La requête de lecture de l'écran, choisie parmi les écrans conçus. | Le connecteur qui le possède. Vide = le connecteur de l'application. |
 | **`query`** | La même vue en grille, choisie parmi les requêtes brutes. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = le connecteur de l'application. |
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
-| **`dashboard`** | Un tableau de bord (graphiques + KPI). | Un id de tableau de bord. | NE doit PAS être renseigné (les tableaux de bord résident dans un espace de noms plat). |
+| **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
 
 Cette page détaille chacun avec des exemples concrets.
@@ -125,8 +125,8 @@ Un tableau de bord est une page de graphiques et de KPI déclarée dans `[dashbo
 | Champ | Notes |
 |---|---|
 | **`type`** | `dashboard`. |
-| **`target`** | L'id du tableau de bord (correspond à une clé `[dashboards.<id>]`). La liste déroulante liste tous les tableaux de bord. |
-| **`connector`** | **Ne doit pas être renseigné**. Les tableaux de bord résident dans un espace de noms plat ; le validateur rejette un `connector` égaré. |
+| **`target`** | `<app>.<id>` — le tableau de bord `[dashboards.<app>.<id>]`, par exemple `crm.pipeline`. La liste déroulante présente tous les tableaux de bord. |
+| **`connector`** | **Ne doit pas être renseigné** — l'application fait partie de la cible ; le validateur refuse un `connector` superflu. |
 | **`params`** | Optionnel. Pré-remplit les filtres du tableau de bord. |
 
 ### Quand l'utiliser
@@ -145,10 +145,10 @@ label = "Deals dashboard"
 l.fr = "Tableau de bord des affaires"
 icon = "chart-bar"
 type = "dashboard"
-target = "deals_overview"
+target = "crm.deals_overview"
 ```
 
-Ouvre le tableau de bord dont l'id est `deals_overview` — noter l'absence de champ `connector`.
+Ouvre le tableau de bord `deals_overview` de l'application `crm` — noter l'absence de champ `connector`.
 
 ---
 

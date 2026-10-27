@@ -21,8 +21,9 @@ Everything an app shows is filed under its connector's name:
 | Screens | Settings → Screens, the app's chip | `[screens.<app>.<id>]` |
 | Menu | Settings → Menus, the app's chip | `[menus.<app>]` |
 | Charts | Settings → Charts, the connector's scope | `[charts.<app>.<id>]` |
+| Dashboards | Settings → Dashboards, the app | `[dashboards.<app>.<id>]` — a menu item opens it with the target `<app>.<id>`. |
 
-Dashboards and shared actions have a single namespace; a menu item of the app opens them by id. Nomaflow jobs are not tied to an app.
+Shared actions have a single namespace. Nomaflow jobs are not tied to an app.
 
 ---
 

@@ -20,7 +20,7 @@ table → connecteur avec 4 requêtes générées → écran → entrée de menu
 
 ### 1. Atteindre la base
 
-**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#connection-fields).
+**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#pools).
 
 ### 2. Générer les requêtes
 
@@ -66,7 +66,7 @@ L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les �
 
 ### 4. Ajouter l'entrée de menu
 
-**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Item** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
+**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
 
 ## Résultat
 
