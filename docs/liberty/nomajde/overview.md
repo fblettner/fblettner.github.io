@@ -319,17 +319,16 @@ The User Management grid, with the editable user record, the attached roles and 
 
 ## The application map
 
-The sidebar splits the day-to-day work into five sections.
+The menu follows the work, from the home page to the maintenance jobs.
 
 | Section | What it covers |
 |---|---|
-| **Dashboard** | Daily activity summary — open transactions, running jobs, recent users, latest alerts. |
-| **Master Data** | UDC types and UDC codes, Address Book, customers, suppliers, items, GL accounts. Every grid supports filter, sort, inline edit and Excel upload. |
-| **Security Maintenance** | User Management, Role Management, Role Relationships, Environments, Security Workbench. The full JDE security catalogue, condensed into five screens with grid editing and a guided Import / Merge workflow. |
-| **Transactions** | AP, AR, GL grids with filters and drill-through to the underlying detail. |
-| **Reporting** | Schedule BIP jobs from one form, archive of past runs, distribution by e-mail. |
-| **Monitoring** | Live transaction counters, the JDE job-control queue as a grid, performance indicators (DB latency, AIS response time, throughput). |
-| **Settings** | Environment definitions, AIS endpoint, e-mail server, archive retention. |
+| **Overview** | The [home page](./home.md): what Nomajde does, the live figures of the JD Edwards instance, the entry points of each domain. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security and development data, and of the models shipped by the JD Edwards presets. |
+| **Master Data** | UDC types and UDC codes. Every grid supports filter, sort, inline edit and Excel upload. |
+| **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
+| **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
+| **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |
 
 ---
 

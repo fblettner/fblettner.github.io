@@ -192,6 +192,7 @@ const sidebars: SidebarsConfig = {
 
   nomaflowSidebar: [
     'liberty/nomaflow/overview',
+    'liberty/nomaflow/dashboard',
     'liberty/nomaflow/getting-started',
     'liberty/nomaflow/concepts',
     {
@@ -202,6 +203,7 @@ const sidebars: SidebarsConfig = {
         'liberty/nomaflow/jobs/catalog',
         'liberty/nomaflow/jobs/create',
         'liberty/nomaflow/jobs/schedules',
+        'liberty/nomaflow/jobs/run-from-menu',
       ],
     },
     'liberty/nomaflow/steps',
@@ -242,6 +244,7 @@ const sidebars: SidebarsConfig = {
     'liberty/nomasx1/overview',
     'liberty/nomasx1/audit-synthesis',
     'liberty/nomasx1/data-explorer',
+    'liberty/nomasx1/jobs',
     {
       type: 'category',
       label: 'Security',
@@ -417,6 +420,8 @@ const sidebars: SidebarsConfig = {
 
   nomajdeSidebar: [
     'liberty/nomajde/overview',
+    'liberty/nomajde/home',
+    'liberty/nomajde/data-explorer',
     {
       type: 'category',
       label: 'Master Data',
@@ -436,6 +441,7 @@ const sidebars: SidebarsConfig = {
         'liberty/nomajde/security-maintenance/security-workbench',
       ],
     },
+    'liberty/nomajde/jobs',
   ],
 
   nomaublSidebar: [

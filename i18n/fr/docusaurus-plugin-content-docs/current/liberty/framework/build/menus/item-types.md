@@ -1,6 +1,6 @@
 ---
 title: Types d'éléments
-description: "Les cinq types de feuilles — screen / query / endpoint / dashboard / page — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun."
+description: "Les six types de feuilles — screen / query / endpoint / dashboard / page / job — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun."
 keywords: [Liberty Framework, élément de menu, query, endpoint, dashboard, page, target, connector, feuille, dossier]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Framework, élément de menu, query, endpoint, dashboard, pag
 
 Un élément de menu est soit un **dossier** (sans `type`), soit une **feuille** qui ouvre quelque chose. Le `type` de la feuille décide ce qu'est ce quelque chose et ce que signifient les champs `target` / `connector`.
 
-Cinq types de feuilles :
+Six types de feuilles :
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
@@ -17,6 +17,7 @@ Cinq types de feuilles :
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
+| **`job`** | La page d'une tâche Nomaflow : ses fichiers et paramètres, Lancer, le journal en direct, les exécutions précédentes. | L'identifiant de la tâche. | NE doit PAS être renseigné. |
 
 Cette page détaille chacun avec des exemples concrets.
 
@@ -221,7 +222,7 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 
 ### L'explorateur de données \{#explorer\}
 
-`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer. Une entrée **Explorateur de données** dans chaque dossier fonctionnel du menu, chacune sur son propre modèle, mène directement aux bonnes données.
+`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer.
 
 ### Quand l'utiliser
 
@@ -251,6 +252,33 @@ target = "/nomaflow"
 ```
 
 Une feuille *Ordonnanceur de tâches* dans le dossier Opérations de l'application `crm`, qui pointe vers la route principale du produit Nomaflow.
+
+---
+
+## `job` — lancer une tâche Nomaflow \{#job\}
+
+Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui n'administrent pas Nomaflow : un sélecteur de fichier par étape de chargement qui en attend un, les paramètres que la tâche déclare pour ses utilisateurs, **Lancer**, le journal suivi en direct et les exécutions précédentes.
+
+### Champs
+
+| Champ | Valeur |
+|---|---|
+| **`type`** | `job` — *Job (run it, follow its log)* dans la liste des types. |
+| **`target`** | L'identifiant de la tâche. La liste présente chaque tâche avec la première ligne de sa description. |
+| **`connector`** | NE doit PAS être renseigné. |
+
+L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Beyond the menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
+
+### Exemple
+
+```toml title="menus.toml"
+[[menus.sales.items]]
+id = "import_sales"
+parent = "import"
+label = "Fichier ventes (un mois)"
+type = "job"
+target = "sales-load-month"
+```
 
 ---
 

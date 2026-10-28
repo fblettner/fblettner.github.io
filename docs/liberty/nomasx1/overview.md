@@ -327,16 +327,17 @@ A second example: a Segregation-of-Duties summary by user, with the conflicts ra
 
 ## The application map
 
-The sidebar splits the day-to-day work into six sections plus the configuration area.
+The sidebar splits the day-to-day work into seven sections plus the configuration area.
 
 | Section | What it covers |
 |---|---|
 | **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
-| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards; also in the Security, Conflicts and Licenses folders. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
 | **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed Licenses, Usage Report, Financial Report. |
+| **Jobs** | [Collect the security data or the licence transactions](./jobs.md) on demand, with a live log. |
 | **Settings** | Source-system definitions (applications, JDE schemas, Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
 
 ---

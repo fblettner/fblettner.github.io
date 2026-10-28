@@ -1,6 +1,6 @@
 ---
 title: Item types
-description: "The five leaf kinds — screen / query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each."
+description: "The six leaf kinds — screen / query / endpoint / dashboard / page / job — what each opens, the target field's shape, the connector rule, and when to reach for each."
 keywords: [Liberty Framework, menu item, screen, query, endpoint, dashboard, page, target, connector, leaf, folder]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Framework, menu item, screen, query, endpoint, dashboard, pag
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Five leaf kinds:
+Six leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
@@ -17,6 +17,7 @@ Five leaf kinds:
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | `<app>.<id>` of the dashboard. | Must NOT be set (the app is in the target). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
+| **`job`** | The page of a Nomaflow job: its files and parameters, Run, the live log, the previous runs. | The job id. | Must NOT be set. |
 
 This page walks each in detail with concrete examples.
 
@@ -218,7 +219,7 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 
 ### The Data Explorer \{#explorer\}
 
-`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch. A **Data Explorer** entry in each functional folder of the menu, each on its own model, takes users straight to the right data.
+`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch.
 
 ### When to use
 
@@ -246,6 +247,33 @@ target = "/nomaflow"
 ```
 
 A *Job scheduler* leaf in the `crm` app's Operations folder, pointing at the Nomaflow product's main route.
+
+---
+
+## `job` — run a Nomaflow job \{#job\}
+
+A `job` leaf opens the page of a Nomaflow job for users who do not administer Nomaflow: a file picker per load step that needs a file, the parameters the job declares for its users, **Run**, the log followed live and the previous runs.
+
+### Fields
+
+| Field | Value |
+|---|---|
+| **`type`** | `job` — *Job (run it, follow its log)* in the type list. |
+| **`target`** | The job id. The dropdown lists every job with the first line of its description. |
+| **`connector`** | Must NOT be set. |
+
+The item needs the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
+
+### Example
+
+```toml title="menus.toml"
+[[menus.sales.items]]
+id = "import_sales"
+parent = "import"
+label = "Sales file (one month)"
+type = "job"
+target = "sales-load-month"
+```
 
 ---
 

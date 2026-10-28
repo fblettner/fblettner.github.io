@@ -1,12 +1,12 @@
 ---
 title: Assistant IA
-description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton AI Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
+description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
 keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, api_call, scaffold, périmètre de données]
 ---
 
 # Assistant IA
 
-**AI Assistant**, à droite de la barre du haut, ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
+**Assistant**, à droite de la barre du haut (et en bas du menu latéral), ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
 
 ---
 
@@ -131,18 +131,20 @@ Exemples : *Combien de commandes ouvertes par société ce mois-ci ?* — *Quels
 
 Tant qu'un écran de données est l'onglet actif, chaque message emporte ce que l'utilisateur a sous les yeux : l'application, l'écran et sa requête de lecture, les filtres actifs, le nombre de lignes chargées et leurs colonnes, et la dernière ligne cliquée (ou dont le menu de ligne a été ouvert). *Cet écran*, *ces lignes* ou *la ligne sélectionnée* se comprennent sans autre précision, et l'assistant relance la requête de l'écran lui-même quand il lui faut davantage de données.
 
+Sur la page de l'**explorateur de données**, le contexte est le modèle et l'analyse en cours (entité, lignes, mesures, période) ou l'analyse enregistrée ouverte : *Enregistre ceci comme analyse* ou *Fais un tableau de bord de ces analyses* se comprennent sans autre précision.
+
 Une pastille sous l'en-tête du panneau montre ce qui est envoyé — *Page : Lignes de vente · filtres : 2 · la ligne cliquée*. Son **×** suspend l'envoi de la page tant que l'utilisateur y reste. Le contexte est limité à 4 000 caractères.
 
 ---
 
 ## Questions de départ \{#starters\}
 
-Sur une conversation vide, le panneau propose des questions adaptées à l'endroit où se trouve l'utilisateur : celles de l'écran en cours, à défaut celles de l'application, à défaut celles prévues partout. Une application peut les regrouper par rubriques, affichées en pastilles au-dessus des questions ; après une réponse, les relances prennent leur place.
+Sur une conversation vide, le panneau propose des questions adaptées à l'endroit où se trouve l'utilisateur : celles de l'écran en cours (ou de la page de l'explorateur de données), à défaut celles de l'application, à défaut celles prévues partout — l'emplacement le plus précis qui a des questions l'emporte. Une application peut les regrouper par rubriques, affichées en pastilles au-dessus des questions ; après une réponse, les relances prennent leur place. Quand une application livre ses questions en plusieurs langues, le panneau les affiche dans la langue de l'utilisateur.
 
 Les questions ont deux origines :
 
 - **Paramètres → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
-- **Paramètres → App → AI Assistant → Starter questions** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
+- **Paramètres → App → Assistant IA → Questions de départ** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
 
 ---
 
@@ -150,18 +152,20 @@ Les questions ont deux origines :
 
 | Outil | Rôle | Réglage |
 |---|---|---|
-| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Connector tools** (activé par défaut). |
-| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Connector tools**. |
+| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Outils connecteurs** (activé par défaut). |
+| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs**. |
+| `explorer_models`, `explorer_fields`, `explorer_query` | Listent les modèles de l'[explorateur de données](./explorer/overview.md) et leurs champs, puis calculent un total, un classement, une tendance ou une comparaison sur un modèle — lignes, mesures, filtres, période, tri, N premiers (100 lignes par défaut, 10 000 au plus) — dans le périmètre de données de l'utilisateur. | Activés par défaut. |
+| `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | Listent les analyses et tableaux de bord enregistrés de l'utilisateur, et enregistrent ce qu'il demande : une analyse est exécutée une fois avant d'être stockée, ce qui écarte un champ erroné ; un tableau de bord réunit des analyses enregistrées sous forme de tuiles. Les deux restent **privés**, sauf demande de partage. | Activés par défaut. |
 | `describe_instance` | Résume le contenu de l'installation : applications, menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
-| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Operations tools** (désactivé par défaut). |
-| `api_call` | Appelle un endpoint d'un connecteur d'API. | **API tool** (désactivé par défaut — un endpoint peut modifier des données). |
-| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Scaffold tools** (désactivé par défaut). |
-| Lecture web | Lit les pages des domaines autorisés. | **Allowed domains** (aucun par défaut). |
+| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut). |
+| `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
+| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut). |
+| Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
 L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
 
-Les **Operations tools** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
+Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
 
 ---
 
@@ -181,14 +185,14 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 | **Questions de départ par écran** | **+ un écran…** ajoute un écran et ses propres questions. |
 | **Procédures** | **Ajouter une procédure** : un **Id** (lettres, chiffres, `_` et `-`, unique dans l'application), un **titre** — ce que la procédure permet de faire, l'assistant choisit une procédure d'après lui —, **quand elle s'applique** (une ligne, facultatif) et **la procédure** en Markdown. |
 
-L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Paramètres → App → AI Assistant** l'emportent sur celles de l'application, emplacement par emplacement.
+L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Paramètres → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
 
 ---
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
 - L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Beyond the menus**).
-- **Allowed connectors**, dans Paramètres → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
+- **Connecteurs autorisés**, dans Paramètres → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 
@@ -196,7 +200,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Réglages \{#settings\}
 
-Dans **Paramètres → App → AI Assistant** : **Enabled**, **Anthropic API key** (chiffrée), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, les outils ci-dessus, **Allowed connectors**, et pour le panneau de discussion les **Models users may pick** et les **Starter questions**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Paramètres → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 
@@ -205,4 +209,4 @@ Dans **Paramètres → App → AI Assistant** : **Enabled**, **Anthropic API key
 - Donner aux requêtes un libellé et une description clairs (Paramètres → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
 - Écrire des requêtes de lecture dédiées aux questions fréquentes (totaux par société, par mois), plutôt que d'attendre de l'assistant qu'il agrège des milliers de lignes.
 - Écrire une procédure pour chaque démarche demandée plus d'une fois : la réponse suit alors la procédure de l'application, sans approximation.
-- Laisser **API tool** et **Operations tools** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.
+- Laisser l'**Outil API** et les **Outils d'exploitation** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.

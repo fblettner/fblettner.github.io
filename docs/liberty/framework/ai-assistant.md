@@ -1,12 +1,12 @@
 ---
 title: AI assistant
-description: "The Liberty Next AI assistant: the drawer opened from the AI Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings."
+description: "The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings."
 keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, api_call, scaffold, data scope]
 ---
 
 # AI assistant
 
-**AI Assistant**, at the right of the top bar, opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
+**Assistant**, at the right of the top bar (and at the bottom of the sidebar), opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
 
 ---
 
@@ -131,13 +131,15 @@ Examples: *How many open orders per company this month?* — *Which users have n
 
 While a data screen is the active tab, every message carries what the user is looking at: the application, the screen and its read query, the active filters, the number of rows loaded and their columns, and the row last clicked (or whose row menu was opened). *This screen*, *these rows* or *the selected row* need no further explanation, and the assistant runs the screen's own query when it needs more data.
 
+On the **Data Explorer** page, the context is the model and the analysis on the canvas (entity, rows, measures, period) or the saved analysis open: *Save this as an analysis* or *Make a dashboard of these* need no further explanation.
+
 A chip under the drawer's header shows what is sent — *Page: Sales lines · filters: 2 · the clicked row*. Its **×** stops sending the page for as long as the user stays on it. The context is limited to 4,000 characters.
 
 ---
 
 ## Starter questions \{#starters\}
 
-On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen, else those of the application, else those set for everywhere. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place.
+On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen (or of the Data Explorer page), else those of the application, else those set for everywhere — the most specific place that has questions wins. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place. When an application ships its questions in several languages, the drawer shows them in the user's language.
 
 Questions come from two sources:
 
@@ -152,6 +154,8 @@ Questions come from two sources:
 |---|---|---|
 | `list_connectors` | Lists the connectors, their queries and endpoints (descriptions, no SQL, no credentials). | **Connector tools** (on by default). |
 | `sql_query` | Runs a **read** query of a SQL connector. Write queries are always refused. | **Connector tools**. |
+| `explorer_models`, `explorer_fields`, `explorer_query` | List the [Data Explorer](./explorer/overview.md) models and their fields, then compute a total, a ranking, a trend or a comparison on a model — rows, measures, filters, period, sort, Top N (100 rows by default, 10,000 at most) — under the user's data scope. | On by default. |
+| `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | List the user's saved analyses and dashboards, and save what the user asks for: an analysis is run once before it is stored, so a wrong field is refused; a dashboard gathers saved analyses as tiles. Both are **private** unless the user asks to share them. | On by default. |
 | `describe_instance` | Summarises what the installation holds: applications, menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default). |

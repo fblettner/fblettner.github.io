@@ -15,7 +15,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 | Niveau | Réglage | Effet |
 |---|---|---|
 | **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
-| **Quels connecteurs** | **Allowed connectors**, Paramètres → App → AI Assistant. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
+| **Quels connecteurs** | **Connecteurs autorisés**, Paramètres → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
 | **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
 | **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
 | **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
@@ -28,7 +28,7 @@ Dans **Paramètres → Access → Roles**, donner au rôle des utilisateurs la r
 
 ### 2. Limiter les connecteurs
 
-Dans **Paramètres → App → AI Assistant**, renseigner **Allowed connectors** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser **API tool** désactivé, sauf si les endpoints sont en lecture seule.
+Dans **Paramètres → App → Assistant IA**, renseigner **Connecteurs autorisés** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser l'**Outil API** désactivé, sauf si les endpoints sont en lecture seule.
 
 ### 3. Décrire les requêtes
 
@@ -63,4 +63,4 @@ Se connecter avec un utilisateur du rôle, poser une question à laquelle le rô
 
 - [Assistant IA](../ai-assistant.md) — le panneau, les outils, les réglages.
 - [Rôles et permissions](../build/secure/roles-and-permissions.md) — `ai:chat` et le périmètre de données.
-- [Paramètres de l'application → AI Assistant](../build/settings-app.md#ai) — tous les réglages.
+- [Paramètres de l'application → Assistant IA](../build/settings-app.md#ai) — tous les réglages.

@@ -206,17 +206,16 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
 
 ## La carte de l'application
 
-La barre latérale découpe le travail quotidien en cinq sections.
+Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 
 | Section | Ce qu'elle couvre |
 |---|---|
-| **Tableau de bord** | Résumé d'activité du jour — transactions ouvertes, jobs en cours, utilisateurs récents, dernières alertes. |
-| **Données maîtres** | Types UDC et valeurs UDC, Address Book, clients, fournisseurs, articles, comptes GL. Chaque grille gère filtre, tri, édition en ligne et upload Excel. |
-| **Maintenance sécurité** | Gestion des utilisateurs, Gestion des rôles, Relations de rôles, Environnements, Security Workbench. Le catalogue complet de sécurité JDE, condensé en cinq écrans avec édition sur grille et workflow Importer / Fusionner guidé. |
-| **Transactions** | Grilles AP, AR, GL avec filtres et drill vers le détail. |
-| **Reporting** | Planifier des jobs BIP depuis un formulaire, archive des runs passés, distribution par courriel. |
-| **Supervision** | Compteurs de transactions en direct, file de job-control JDE sous forme de grille, indicateurs de performance (latence base, temps de réponse AIS, débit). |
-| **Paramètres** | Définitions d'environnements, endpoint AIS, serveur de courriel, rétention de l'archive. |
+| **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
+| **Données de base** | Types et codes UDC. Chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel. |
+| **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
+| **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
+| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |
 
 ---
 

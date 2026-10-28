@@ -53,6 +53,7 @@ async def refresh(*, period: str, target_connector: str,
 | `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
 | `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
 | `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
+| `app_state` | L'état vivant du serveur en cours d'exécution (applications, modèles de l'explorateur de données, dictionnaire…), pour une fonction qui agit sur la configuration elle-même — comme la tâche de rafraîchissement du dictionnaire. Fourni seulement s'il est déclaré. |
 
 La fonction peut être `async` (recommandé) ou un simple `def`, exécuté dans un thread de travail.
 

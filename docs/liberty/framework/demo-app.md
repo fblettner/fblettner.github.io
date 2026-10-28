@@ -25,15 +25,17 @@ It is a showcase, not a product: open it to see a feature at work, copy what fit
   <rect x="220" y="14" width="760" height="400" rx="14" fill="url(#dmo-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="240" y="30" width="200" height="370" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="50" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SALES DEMO</text>
-  <text x="254" y="76" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Overview</text>
-  <text x="254" y="102" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Sales</text>
-  <text x="268" y="128" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sales lines</text>
-  <text x="268" y="154" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Periods</text>
-  <text x="268" y="180" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Data Explorer</text>
-  <text x="254" y="206" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Reference data</text>
-  <text x="268" y="232" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Items</text>
-  <text x="268" y="258" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Companies</text>
-  <text x="268" y="284" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="254" y="72" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Overview</text>
+  <text x="254" y="98" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Data Explorer</text>
+  <text x="254" y="124" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Sales</text>
+  <text x="268" y="150" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sales lines</text>
+  <text x="268" y="176" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Periods</text>
+  <text x="254" y="202" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Reference data</text>
+  <text x="268" y="228" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Items</text>
+  <text x="268" y="254" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Companies</text>
+  <text x="268" y="280" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="254" y="306" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Import</text>
+  <text x="268" y="332" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Load the sample files</text>
   <rect x="464" y="40" width="506" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="476" y="48" width="63" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="507.5" y="60.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Dashboard</text>
@@ -53,23 +55,23 @@ It is a showcase, not a product: open it to see a feature at work, copy what fit
   <rect x="464" y="280" width="506" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="476" y="288" width="83" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
   <text x="517.5" y="300.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Nomaflow jobs</text>
-  <text x="476" y="322" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">file loads by partition, the monthly digest</text>
+  <text x="476" y="322" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">sample files, loads by partition, the monthly digest</text>
   <rect x="464" y="340" width="506" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="476" y="348" width="108" height="18" rx="9.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
   <text x="530.0" y="360.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Accounts and scope</text>
   <text x="476" y="382" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">group, business unit, company</text>
-  <rect x="10" y="64" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="79" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The home page</text>
-  <text x="20" y="92" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a dashboard menu entry</text>
-  <line x1="210" y1="81.0" x2="254" y2="76" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
-  <rect x="10" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read-only grid</text>
-  <text x="20" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">5,000 rows, filters first</text>
-  <line x1="210" y1="187.0" x2="268" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
-  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Reference data</text>
-  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">loaded from Excel files</text>
-  <line x1="210" y1="317.0" x2="268" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
+  <rect x="10" y="56" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The home page</text>
+  <text x="20" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a dashboard menu entry</text>
+  <line x1="210" y1="73.0" x2="254" y2="68" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
+  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read-only grid</text>
+  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">5,000 rows, filters first</text>
+  <line x1="210" y1="167.0" x2="268" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
+  <rect x="10" y="330" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Import</text>
+  <text x="20" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a job page per file</text>
+  <line x1="210" y1="347.0" x2="268" y2="334" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
   <rect x="1000" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One app, every feature</text>
   <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">built from Settings only</text>
@@ -106,38 +108,49 @@ The revenue is in each company's own currency: it is never summed across currenc
 
 ## Loading the files \{#loads\}
 
-The data arrives through Nomaflow jobs, run from **Nomaflow → Jobs** with **Run now** or **Run with parameters**:
+The **Import** folder of the menu holds the loads, each a [job page](../nomaflow/jobs/run-from-menu.md) where the user picks the file, runs it and follows its log:
 
-| Job | Does |
-|---|---|
-| `nomademo-init-db` | Creates the tables in the database of the `nomademo` pool. Can be run again. |
-| `nomademo-load-items` | Loads the item file (sheet *Items*: code, name, family, sub-family), replacing the table. |
-| `nomademo-load-companies` | Loads the company file (sheet *Companies*: code, name, business unit, region, currency), replacing the table. |
-| `nomademo-load-sales` | Loads one month of invoice lines (sheet *Sales*), chosen when the job is run. |
-| `nomademo-refresh-periods` | Rebuilds the period rows from the loaded lines, keeping their status. |
-| `nomademo-demo-accounts` | Creates the demo roles and users — see [below](#accounts). |
-| `nomademo-monthly-digest` | The monthly digest — see [below](#digest). |
+| Entry | Job | Does |
+|---|---|---|
+| **Items file** | `nomademo-load-items` | Loads the item file (sheet *Items*: code, name, family, sub-family), replacing the table. |
+| **Companies file** | `nomademo-load-companies` | Loads the company file (sheet *Companies*: code, name, business unit, region, currency), replacing the table. |
+| **Sales file (one month)** | `nomademo-load-sales` | Loads one month of invoice lines (sheet *Sales*). |
+| **Refresh periods** | `nomademo-refresh-periods` | Rebuilds the period rows from the loaded lines, keeping their status. |
+| **Load the sample files** | `nomademo-load-samples` | Loads the sample files shipped with the demo — every file at once, no upload. Run it again any time to reset the demo. |
+
+The **sample files** ship with the application: about 320 items in six families, 14 companies in six business units, and six months of invoice lines (October to March). The data is synthetic and anonymous; a reload gives the same figures.
 
 The sales load shows the [`file_load` step](../nomaflow/steps.md#file-load) at work:
 
 - it **replaces** the partitions the file carries — year, month and company — in one transaction: reloading a corrected month replaces that month only, and a failed load leaves the previous data in place;
-- a **guard** refuses the file when one of its periods is closed, with the reason in the run;
-- rejected rows are kept for download from the run;
+- a **guard** refuses the file when one of its periods is closed, with the reason in the log;
+- rejected rows are offered for download under the log;
 - the following steps add the new customers and refresh the period rows.
 
-The jobs are delivered without a schedule.
+Two more jobs are run from **Nomaflow → Jobs**: `nomademo-init-db` creates the tables, `nomademo-demo-accounts` creates the demo users ([below](#accounts)). The jobs are delivered without a schedule.
 
 ---
 
 ## The home dashboard \{#dashboard\}
 
-**Overview** is the application's home page: the [dashboard](./dashboards.md) *Sales overview*. It shows the periods loaded, the companies with sales, the invoice lines and the quantity sold; the monthly quantity, the quantity by business unit and by family, the revenue by currency; the periods table and the top items. The **Business unit** filter in the bar narrows every widget whose query returns the business unit — no screen needed behind the widgets.
+**Overview** is the application's home page: the [dashboard](./dashboards.md) *Sales overview*, built on the synthesis widgets.
+
+| Widget | Shows |
+|---|---|
+| **Invoice lines**, **Latest period**, **Periods**, **Items sold** | The figures, with a detail line: units, companies and customers; the latest period and its quantity; the periods still open; the families. |
+| **Monthly quantity by business unit** | One series per business unit, per period. |
+| **What needs attention** | The open periods to close, the companies without sales in the latest period. |
+| **Revenue by currency**, **Quantity by family** | Proportion bars — the totals first, then per business unit. The revenue is never added across currencies. |
+| **Periods** | Each period's status, who changed it and when. |
+| **Top items**, **Quantity by business unit** | The largest quantities. |
+
+The bar carries a **period** (all dates when the page opens) and a **Business unit** filter that narrows every widget whose query returns the business unit — no screen needed behind the widgets.
 
 ---
 
 ## The Data Explorer \{#explorer\}
 
-**Sales → Data Explorer** opens the [Data Explorer](./explorer/overview.md) on the *Sales* model: the invoice lines at the centre, with the item (family, sub-family), the company (business unit, currency) and the customer around them.
+**Data Explorer**, right under **Overview**, opens the [Data Explorer](./explorer/overview.md) on the *Sales* model: the invoice lines at the centre, with the item (family, sub-family), the company (business unit, currency) and the customer around them.
 
 The model ships ten shared analyses — quantity by business unit, by company, by family; revenue by currency, by business unit, by company; the monthly quantity, alone and by business unit as a pivot; the top items; the number of invoice lines — and the *Sales overview* dashboard that gathers them. They are a starting point: open one, change it, save it under another name.
 
@@ -174,16 +187,16 @@ Schedule it on the first of the month once the e-mail account is set in [Notific
 
 Both roles grant the same things: the application's queries, its Data Explorer models and the assistant. The scoped role adds a [data scope](./build/secure/roles-and-permissions.md#data-scope) on the company, whose values come from each user's *companies* attribute. Sign in as each user in turn: the same screens, dashboard, analyses and exports show other rows, the totals included.
 
-Load the companies before running this job: it reads them to fill the users' attributes.
+Load the companies (or the sample files) before running this job: it reads them to fill the users' attributes.
 
 ---
 
 ## Setting it up \{#setup\}
 
 1. In **Settings → Pools**, a pool named `nomademo` pointing at an empty database.
-2. In Nomaflow, run `nomademo-init-db`, then the item and company loads, then one or more sales months.
-3. Run `nomademo-demo-accounts`.
-4. Open **Sales demo** from the application switcher.
+2. In Nomaflow, run `nomademo-init-db`.
+3. Open **Sales demo** from the application switcher, then **Import → Load the sample files**.
+4. Run `nomademo-demo-accounts` in Nomaflow to create the demo users.
 
 ---
 

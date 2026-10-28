@@ -711,16 +711,17 @@ Un deuxième exemple : une synthèse de Séparation des tâches par utilisateur,
 
 ## La carte de l'application
 
-La barre latérale découpe le travail quotidien en six sections plus la zone de configuration.
+La barre latérale découpe le travail quotidien en sept sections plus la zone de configuration.
 
 | Section | Ce qu'elle couvre |
 |---|---|
 | **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
-| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi ; également présent dans les dossiers Sécurité, Conflits et Licences. |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
 | **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |
 | **Licences** | Contrats CSI, photographie JD Edwards, licences Oracle requises, licences acquises, rapport d'utilisation, rapport financier. |
+| **Tâches** | [Collecter les données de sécurité ou les transactions de licences](./jobs.md) à la demande, avec un journal en direct. |
 | **Paramètres** | Définitions des sources (applications, schémas JDE, catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
 
 ---
@@ -943,17 +944,16 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
 
 ## La carte de l'application
 
-La barre latérale découpe le travail quotidien en cinq sections.
+Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 
 | Section | Ce qu'elle couvre |
 |---|---|
-| **Tableau de bord** | Résumé d'activité du jour — transactions ouvertes, jobs en cours, utilisateurs récents, dernières alertes. |
-| **Données maîtres** | Types UDC et valeurs UDC, Address Book, clients, fournisseurs, articles, comptes GL. Chaque grille gère filtre, tri, édition en ligne et upload Excel. |
-| **Maintenance sécurité** | Gestion des utilisateurs, Gestion des rôles, Relations de rôles, Environnements, Security Workbench. Le catalogue complet de sécurité JDE, condensé en cinq écrans avec édition sur grille et workflow Importer / Fusionner guidé. |
-| **Transactions** | Grilles AP, AR, GL avec filtres et drill vers le détail. |
-| **Reporting** | Planifier des jobs BIP depuis un formulaire, archive des runs passés, distribution par courriel. |
-| **Supervision** | Compteurs de transactions en direct, file de job-control JDE sous forme de grille, indicateurs de performance (latence base, temps de réponse AIS, débit). |
-| **Paramètres** | Définitions d'environnements, endpoint AIS, serveur de courriel, rétention de l'archive. |
+| **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
+| **Données de base** | Types et codes UDC. Chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel. |
+| **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
+| **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
+| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |
 
 ---
 
@@ -1549,9 +1549,9 @@ Différentes équipes utilisent la plateforme pour des raisons différentes. Nom
 ## Liberty Next — Assistant IA
 Source: https://docs.nomana-it.fr/fr/liberty/framework/ai-assistant/
 
-L'assistant IA de Liberty Next : le panneau ouvert par le bouton AI Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages.
+L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages.
 
-**AI Assistant**, à droite de la barre du haut, ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
+**Assistant**, à droite de la barre du haut (et en bas du menu latéral), ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
 
 ---
 
@@ -1579,18 +1579,20 @@ Exemples : *Combien de commandes ouvertes par société ce mois-ci ?* — *Quels
 
 Tant qu'un écran de données est l'onglet actif, chaque message emporte ce que l'utilisateur a sous les yeux : l'application, l'écran et sa requête de lecture, les filtres actifs, le nombre de lignes chargées et leurs colonnes, et la dernière ligne cliquée (ou dont le menu de ligne a été ouvert). *Cet écran*, *ces lignes* ou *la ligne sélectionnée* se comprennent sans autre précision, et l'assistant relance la requête de l'écran lui-même quand il lui faut davantage de données.
 
+Sur la page de l'**explorateur de données**, le contexte est le modèle et l'analyse en cours (entité, lignes, mesures, période) ou l'analyse enregistrée ouverte : *Enregistre ceci comme analyse* ou *Fais un tableau de bord de ces analyses* se comprennent sans autre précision.
+
 Une pastille sous l'en-tête du panneau montre ce qui est envoyé — *Page : Lignes de vente · filtres : 2 · la ligne cliquée*. Son **×** suspend l'envoi de la page tant que l'utilisateur y reste. Le contexte est limité à 4 000 caractères.
 
 ---
 
 ## Questions de départ \{#starters\}
 
-Sur une conversation vide, le panneau propose des questions adaptées à l'endroit où se trouve l'utilisateur : celles de l'écran en cours, à défaut celles de l'application, à défaut celles prévues partout. Une application peut les regrouper par rubriques, affichées en pastilles au-dessus des questions ; après une réponse, les relances prennent leur place.
+Sur une conversation vide, le panneau propose des questions adaptées à l'endroit où se trouve l'utilisateur : celles de l'écran en cours (ou de la page de l'explorateur de données), à défaut celles de l'application, à défaut celles prévues partout — l'emplacement le plus précis qui a des questions l'emporte. Une application peut les regrouper par rubriques, affichées en pastilles au-dessus des questions ; après une réponse, les relances prennent leur place. Quand une application livre ses questions en plusieurs langues, le panneau les affiche dans la langue de l'utilisateur.
 
 Les questions ont deux origines :
 
 - **Paramètres → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
-- **Paramètres → App → AI Assistant → Starter questions** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
+- **Paramètres → App → Assistant IA → Questions de départ** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
 
 ---
 
@@ -1598,18 +1600,20 @@ Les questions ont deux origines :
 
 | Outil | Rôle | Réglage |
 |---|---|---|
-| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Connector tools** (activé par défaut). |
-| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Connector tools**. |
+| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Outils connecteurs** (activé par défaut). |
+| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs**. |
+| `explorer_models`, `explorer_fields`, `explorer_query` | Listent les modèles de l'[explorateur de données](./explorer/overview.md) et leurs champs, puis calculent un total, un classement, une tendance ou une comparaison sur un modèle — lignes, mesures, filtres, période, tri, N premiers (100 lignes par défaut, 10 000 au plus) — dans le périmètre de données de l'utilisateur. | Activés par défaut. |
+| `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | Listent les analyses et tableaux de bord enregistrés de l'utilisateur, et enregistrent ce qu'il demande : une analyse est exécutée une fois avant d'être stockée, ce qui écarte un champ erroné ; un tableau de bord réunit des analyses enregistrées sous forme de tuiles. Les deux restent **privés**, sauf demande de partage. | Activés par défaut. |
 | `describe_instance` | Résume le contenu de l'installation : applications, menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
-| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Operations tools** (désactivé par défaut). |
-| `api_call` | Appelle un endpoint d'un connecteur d'API. | **API tool** (désactivé par défaut — un endpoint peut modifier des données). |
-| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Scaffold tools** (désactivé par défaut). |
-| Lecture web | Lit les pages des domaines autorisés. | **Allowed domains** (aucun par défaut). |
+| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut). |
+| `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
+| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut). |
+| Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
 L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
 
-Les **Operations tools** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
+Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
 
 ---
 
@@ -1629,14 +1633,14 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 | **Questions de départ par écran** | **+ un écran…** ajoute un écran et ses propres questions. |
 | **Procédures** | **Ajouter une procédure** : un **Id** (lettres, chiffres, `_` et `-`, unique dans l'application), un **titre** — ce que la procédure permet de faire, l'assistant choisit une procédure d'après lui —, **quand elle s'applique** (une ligne, facultatif) et **la procédure** en Markdown. |
 
-L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Paramètres → App → AI Assistant** l'emportent sur celles de l'application, emplacement par emplacement.
+L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Paramètres → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
 
 ---
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
 - L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Beyond the menus**).
-- **Allowed connectors**, dans Paramètres → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
+- **Connecteurs autorisés**, dans Paramètres → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 
@@ -1644,7 +1648,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Réglages \{#settings\}
 
-Dans **Paramètres → App → AI Assistant** : **Enabled**, **Anthropic API key** (chiffrée), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, les outils ci-dessus, **Allowed connectors**, et pour le panneau de discussion les **Models users may pick** et les **Starter questions**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Paramètres → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 
@@ -1653,7 +1657,7 @@ Dans **Paramètres → App → AI Assistant** : **Enabled**, **Anthropic API key
 - Donner aux requêtes un libellé et une description clairs (Paramètres → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
 - Écrire des requêtes de lecture dédiées aux questions fréquentes (totaux par société, par mois), plutôt que d'attendre de l'assistant qu'il agrège des milliers de lignes.
 - Écrire une procédure pour chaque démarche demandée plus d'une fois : la réponse suit alors la procédure de l'application, sans approximation.
-- Laisser **API tool** et **Operations tools** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.
+- Laisser l'**Outil API** et les **Outils d'exploitation** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.
 
 ---
 
@@ -1671,7 +1675,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 | Niveau | Réglage | Effet |
 |---|---|---|
 | **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
-| **Quels connecteurs** | **Allowed connectors**, Paramètres → App → AI Assistant. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
+| **Quels connecteurs** | **Connecteurs autorisés**, Paramètres → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
 | **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
 | **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
 | **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
@@ -1684,7 +1688,7 @@ Dans **Paramètres → Access → Roles**, donner au rôle des utilisateurs la r
 
 ### 2. Limiter les connecteurs
 
-Dans **Paramètres → App → AI Assistant**, renseigner **Allowed connectors** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser **API tool** désactivé, sauf si les endpoints sont en lecture seule.
+Dans **Paramètres → App → Assistant IA**, renseigner **Connecteurs autorisés** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser l'**Outil API** désactivé, sauf si les endpoints sont en lecture seule.
 
 ### 3. Décrire les requêtes
 
@@ -1719,7 +1723,7 @@ Se connecter avec un utilisateur du rôle, poser une question à laquelle le rô
 
 - [Assistant IA](../ai-assistant.md) — le panneau, les outils, les réglages.
 - [Rôles et permissions](../build/secure/roles-and-permissions.md) — `ai:chat` et le périmètre de données.
-- [Paramètres de l'application → AI Assistant](../build/settings-app.md#ai) — tous les réglages.
+- [Paramètres de l'application → Assistant IA](../build/settings-app.md#ai) — tous les réglages.
 
 ---
 
@@ -1946,38 +1950,49 @@ Le chiffre d'affaires est exprimé dans la devise de chaque société : il n'est
 
 ## Le chargement des fichiers \{#loads\}
 
-Les données arrivent par des tâches Nomaflow, lancées depuis **Nomaflow → Tâches** avec **Exécuter** ou **Run with parameters** :
+Le dossier **Import** du menu regroupe les chargements, chacun sous forme de [page de tâche](../nomaflow/jobs/run-from-menu.md) où l'utilisateur choisit le fichier, lance la tâche et suit son journal :
 
-| Tâche | Rôle |
-|---|---|
-| `nomademo-init-db` | Crée les tables dans la base du pool `nomademo`. Peut être relancée. |
-| `nomademo-load-items` | Charge le fichier des articles (feuille *Items* : code, nom, famille, sous-famille), en remplaçant la table. |
-| `nomademo-load-companies` | Charge le fichier des sociétés (feuille *Companies* : code, nom, business unit, région, devise), en remplaçant la table. |
-| `nomademo-load-sales` | Charge un mois de lignes de facture (feuille *Sales*), choisi au lancement de la tâche. |
-| `nomademo-refresh-periods` | Reconstruit les lignes de période à partir des lignes chargées, en conservant leur statut. |
-| `nomademo-demo-accounts` | Crée les rôles et les utilisateurs de démonstration — voir [plus bas](#accounts). |
-| `nomademo-monthly-digest` | La synthèse mensuelle — voir [plus bas](#digest). |
+| Entrée | Tâche | Rôle |
+|---|---|---|
+| **Fichier articles** | `nomademo-load-items` | Charge le fichier des articles (feuille *Items* : code, nom, famille, sous-famille), en remplaçant la table. |
+| **Fichier sociétés** | `nomademo-load-companies` | Charge le fichier des sociétés (feuille *Companies* : code, nom, business unit, région, devise), en remplaçant la table. |
+| **Fichier ventes (un mois)** | `nomademo-load-sales` | Charge un mois de lignes de facture (feuille *Sales*). |
+| **Recalculer les périodes** | `nomademo-refresh-periods` | Reconstruit les lignes de période à partir des lignes chargées, en conservant leur statut. |
+| **Charger les fichiers d'exemple** | `nomademo-load-samples` | Charge les fichiers d'exemple livrés avec la démo — tous à la fois, sans envoi de fichier. À relancer à tout moment pour réinitialiser la démo. |
+
+Les **fichiers d'exemple** sont livrés avec l'application : environ 320 articles répartis en six familles, 14 sociétés dans six business units, et six mois de lignes de facture (d'octobre à mars). Les données sont synthétiques et anonymes ; un rechargement redonne les mêmes chiffres.
 
 Le chargement des ventes montre l'[étape `file_load`](../nomaflow/steps.md#file-load) en situation :
 
 - il **remplace** les partitions présentes dans le fichier — année, mois et société — en une seule transaction : recharger un mois corrigé ne remplace que ce mois, et un chargement en échec laisse les données précédentes en place ;
-- une **garde** refuse le fichier dès que l'une de ses périodes est clôturée, avec le motif dans l'exécution ;
-- les lignes rejetées restent téléchargeables depuis l'exécution ;
+- une **garde** refuse le fichier dès que l'une de ses périodes est clôturée, avec le motif dans le journal ;
+- les lignes rejetées sont proposées au téléchargement sous le journal ;
 - les étapes suivantes ajoutent les nouveaux clients et actualisent les lignes de période.
 
-Les tâches sont livrées sans planification.
+Deux autres tâches se lancent depuis **Nomaflow → Tâches** : `nomademo-init-db` crée les tables, `nomademo-demo-accounts` crée les utilisateurs de démonstration ([plus bas](#accounts)). Les tâches sont livrées sans planification.
 
 ---
 
 ## Le tableau de bord d'accueil \{#dashboard\}
 
-**Vue d'ensemble** est la page d'accueil de l'application : le [tableau de bord](./dashboards.md) *Sales overview*. Il présente les périodes chargées, les sociétés ayant des ventes, les lignes de facture et la quantité vendue ; la quantité par mois, par business unit et par famille, le chiffre d'affaires par devise ; le tableau des périodes et les articles les plus vendus. Le filtre **Business unit** de la barre restreint chaque widget dont la requête renvoie la business unit — sans écran derrière les widgets.
+**Vue d'ensemble** est la page d'accueil de l'application : le [tableau de bord](./dashboards.md) *Vue d'ensemble des ventes*, construit avec les widgets de synthèse.
+
+| Widget | Contenu |
+|---|---|
+| **Lignes de facture**, **Dernière période**, **Périodes**, **Articles vendus** | Les chiffres, avec une ligne de détail : unités, sociétés et clients ; la dernière période et sa quantité ; les périodes encore ouvertes ; les familles. |
+| **Quantité mensuelle par pôle** | Une série par business unit, par période. |
+| **Ce qui demande attention** | Les périodes ouvertes à clôturer, les sociétés sans vente sur la dernière période. |
+| **Chiffre d'affaires par devise**, **Quantité par famille** | Des barres de proportion — les totaux d'abord, puis par business unit. Le chiffre d'affaires n'est jamais additionné d'une devise à l'autre. |
+| **Périodes** | Le statut de chaque période, l'auteur et la date du changement. |
+| **Meilleurs articles**, **Quantité par pôle** | Les plus fortes quantités. |
+
+La barre porte une **période** (toutes les dates à l'ouverture) et un filtre **Business unit** qui restreint chaque widget dont la requête renvoie la business unit — sans écran derrière les widgets.
 
 ---
 
 ## L'explorateur de données \{#explorer\}
 
-**Ventes → Explorateur de données** ouvre l'[explorateur de données](./explorer/overview.md) sur le modèle *Sales* : les lignes de facture au centre, entourées de l'article (famille, sous-famille), de la société (business unit, devise) et du client.
+**Explorateur de données**, juste sous **Vue d'ensemble**, ouvre l'[explorateur de données](./explorer/overview.md) sur le modèle *Sales* : les lignes de facture au centre, entourées de l'article (famille, sous-famille), de la société (business unit, devise) et du client.
 
 Le modèle livre dix analyses partagées — quantité par business unit, par société, par famille ; chiffre d'affaires par devise, par business unit, par société ; quantité mensuelle, seule et croisée par business unit ; articles les plus vendus ; nombre de lignes de facture — ainsi que le tableau de bord *Sales overview* qui les réunit. Elles servent de point de départ : en ouvrir une, la modifier, l'enregistrer sous un autre nom.
 
@@ -2014,16 +2029,16 @@ La planifier le premier du mois, une fois le compte de messagerie renseigné dan
 
 Les deux rôles accordent les mêmes droits : les requêtes de l'application, ses modèles d'exploration et l'assistant. Le rôle restreint ajoute un [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) sur la société, dont les valeurs proviennent de l'attribut *companies* de chaque utilisateur. En se connectant successivement avec chacun, les mêmes écrans, tableau de bord, analyses et exports montrent d'autres lignes, totaux compris.
 
-Charger les sociétés avant de lancer cette tâche : elle les lit pour renseigner les attributs des utilisateurs.
+Charger les sociétés (ou les fichiers d'exemple) avant de lancer cette tâche : elle les lit pour renseigner les attributs des utilisateurs.
 
 ---
 
 ## Mise en place \{#setup\}
 
 1. Dans **Paramètres → Pools**, un pool nommé `nomademo` qui pointe vers une base vide.
-2. Dans Nomaflow, lancer `nomademo-init-db`, puis les chargements des articles et des sociétés, puis un ou plusieurs mois de ventes.
-3. Lancer `nomademo-demo-accounts`.
-4. Ouvrir **Sales demo** depuis le sélecteur d'applications.
+2. Dans Nomaflow, lancer `nomademo-init-db`.
+3. Ouvrir **Sales demo** depuis le sélecteur d'applications, puis **Import → Charger les fichiers d'exemple**.
+4. Lancer `nomademo-demo-accounts` dans Nomaflow pour créer les utilisateurs de démonstration.
 
 ---
 
@@ -4106,11 +4121,11 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
 
 ### Réglages
 
-**Paramètres → App → AI Assistant** : **Enabled**, la **Anthropic API key**, le **Model**, et **Allowed connectors** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
+**Paramètres → App → Assistant IA** : **Activé**, la **Clé API Anthropic**, le **Modèle**, et **Connecteurs autorisés** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
 
 ### Accès
 
-Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **AI Assistant** en haut à droite.
+Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
 
 ### Descriptions
 
@@ -5526,6 +5541,7 @@ La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, e
 | Rule | **Default** | La valeur initiale d'une nouvelle ligne. |
 | Rule | **Justify** | Pour les colonnes caractères de longueur fixe : `right_blank` (cadrage à droite, complété par des espaces) ou `right_zero` (cadrage à droite, complété par des zéros). Appliqué aux valeurs écrites et aux clés de la clause WHERE. Vide = cadrage à gauche. |
 | Rule | **Size** | La longueur de stockage de la donnée, utilisée avec **Justify** quand la colonne physique est plus large. |
+| Rule | **Decimals** | Pour `jdenumber`, le nombre de décimales implicites de l'entier stocké ; pour les autres formats numériques, le nombre de décimales affichées (0 à 9). |
 | Rule | **Lookup params** | Des valeurs fixes pour les `:params` de la requête du lookup (par exemple `TYPE = CUSTOMER`). Les clés proposées sont les paramètres déclarés par le lookup. |
 | Translations | une ligne par langue | Le libellé dans cette langue. |
 | Advanced | **Override** | Marque l'entrée comme personnalisation locale : un package de mise à jour ne l'écrase pas. |
@@ -5540,6 +5556,7 @@ La barre de l'élément propose **Find usages**, **Renommer**, **Cloner** et **S
 | `number`, `integer`, `decimal`, `currency` | Un nombre. |
 | `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. |
 | `jdedate`, `jdetime` | Une date (CYYDDD) ou une heure (HHMMSS) JD Edwards, affichée comme une date ou une heure ordinaire. |
+| `jdenumber` | Un montant JD Edwards stocké sans sa virgule : avec **Decimals** à 2, la valeur stockée `12345` se lit et se saisit `123,45`, puis s'écrit de nouveau `12345`. Les filtres se saisissent en unités réelles ; les totaux et les lignes de détail de l'explorateur de données sont ramenés à la même échelle. L'[analyse](#scan-a-table) d'une table JD Edwards renseigne les décimales d'après le dictionnaire de données. |
 | `boolean` | Une coche ou une croix. |
 | `password` | Une valeur masquée. |
 | `email`, `url`, `color` | Du texte, affiché tel quel. |
@@ -5768,7 +5785,9 @@ Un **preset de catalogue** est un point de départ prêt à l'emploi : une table
 Les presets sont des fichiers gérés par l'opérateur, sous le répertoire `presets/` du déploiement ; chaque fichier porte une ou plusieurs entrées `[[presets]]` avec une table de base et ses tables jointes. C'est de la configuration, pas du code — ajoutez les vôtres pour amorcer les écrans que votre équipe construit le plus souvent.
 
 :::info[Spécifique à JDE]
-Liberty Apps inclut un catalogue **JD Edwards Address Book** (`config/presets/jdedwards/address_book.toml`) : la table maître `F0101` jointe en LEFT au who's-who, aux téléphones, e-mails, adresses, au client et au fournisseur, plus chaque table liée comme preset de base à part entière. Les conditions de jointure s'écrivent par **data item** (ex. `F0101.AN8`) ; l'assistant résout le préfixe JDE jusqu'à la colonne réelle (`ABAN8`, `AIAN8`, …) pour remplir les jointures. Une table de preset peut nommer une `query` (un `SELECT * FROM <table>` déjà défini sur le connecteur) : l'assistant lit alors ses colonnes en décrivant cette requête — bien plus rapide sur un gros catalogue JDE.
+Liberty Apps livre neuf catalogues JD Edwards, construits d'après les modèles de données Oracle E1 : **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Manufacturing**, **Product Data Management** et **Product Costing**. Les préréglages *complets* de chaque domaine (le grand livre fournisseurs avec fournisseur, adresse et société ; la commande client avec lignes, client, article et établissement…) fournissent aussi un modèle prêt à l'emploi à l'[explorateur de données](../explorer/model.md#preset).
+
+Le catalogue **Address Book** (`config/presets/jdedwards/address_book.toml`) : la table maître `F0101` jointe en LEFT au who's-who, aux téléphones, e-mails, adresses, au client et au fournisseur, plus chaque table liée comme preset de base à part entière. Les conditions de jointure s'écrivent par **data item** (ex. `F0101.AN8`) ; l'assistant résout le préfixe JDE jusqu'à la colonne réelle (`ABAN8`, `AIAN8`, …) pour remplir les jointures. Une table de preset peut nommer une `query` (un `SELECT * FROM <table>` déjà défini sur le connecteur) : l'assistant lit alors ses colonnes en décrivant cette requête — bien plus rapide sur un gros catalogue JDE.
 :::
 
 ---
@@ -6555,7 +6574,7 @@ Ils se règlent dans les onglets **Actions** et **Menu de ligne** de l'éditeur 
 | **Barre d'outils** | `actions` | Chaque entrée est un bouton au-dessus de la grille. | Aucune ligne ; valeurs saisies dans `INPUT.<nom>`. |
 | **Hooks de ligne** | `on_insert`, `on_update`, `on_delete` | Après le succès de l'écriture — depuis le dialogue ou la saisie en grille. | La ligne créée, ou la ligne supprimée. |
 | | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
-| **Menu de ligne** *(onglet dédié)* | `row_menu` | Chaque entrée est un élément du menu contextuel d'une ligne. | La ligne cliquée. |
+| **Menu de ligne** *(onglet dédié)* | `row_menu` | Chaque entrée est un élément du menu d'une ligne : clic droit, ou poignée ⋯ en début de ligne. | La ligne cliquée. |
 
 Un hook exécute sa liste dans l'ordre et s'arrête à la première erreur, sauf si une action a **stop_on_error** désactivé. Une entrée de barre d'outils ou de menu de ligne correspond à une seule action : pour enchaîner plusieurs étapes depuis un même bouton, passer par une `chain`.
 
@@ -6581,6 +6600,17 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`refresh`** | Recharge la grille. | — |
 
 `bind_result` conserve les lignes (ou la réponse) de l'étape dans le contexte de la chaîne : une étape suivante les lit avec `source = "<id>.first_row.<COLONNE>"`.
+
+### La poignée de ligne et la navigation \{#drill\}
+
+Un écran doté d'actions de menu de ligne affiche une petite poignée au début de chaque ligne, pour garder les actions à portée de main sur un tableau large :
+
+- avec plusieurs actions, la poignée (**⋯**, *Actions de la ligne*) ouvre le même menu que le clic droit ;
+- avec une seule action `navigate`, la poignée (une flèche de retour) la déclenche aussitôt — son infobulle reprend le libellé de l'action.
+
+**Cellules en lien.** Le réglage **drill** d'une colonne (Paramètres → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
+
+**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Paramètres → App](../settings-app.md#app), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
 
 ### Types composites
 
@@ -7508,11 +7538,11 @@ Le filtre est insensible à la casse et trouve la sous-chaîne n'importe où dan
 ## Liberty Next — Types d'éléments
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/menus/item-types/
 
-Les cinq types de feuilles — screen / query / endpoint / dashboard / page — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun.
+Les six types de feuilles — screen / query / endpoint / dashboard / page / job — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun.
 
 Un élément de menu est soit un **dossier** (sans `type`), soit une **feuille** qui ouvre quelque chose. Le `type` de la feuille décide ce qu'est ce quelque chose et ce que signifient les champs `target` / `connector`.
 
-Cinq types de feuilles :
+Six types de feuilles :
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
@@ -7521,6 +7551,7 @@ Cinq types de feuilles :
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
+| **`job`** | La page d'une tâche Nomaflow : ses fichiers et paramètres, Lancer, le journal en direct, les exécutions précédentes. | L'identifiant de la tâche. | NE doit PAS être renseigné. |
 
 Cette page détaille chacun avec des exemples concrets.
 
@@ -7675,7 +7706,7 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 
 ### L'explorateur de données \{#explorer\}
 
-`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer. Une entrée **Explorateur de données** dans chaque dossier fonctionnel du menu, chacune sur son propre modèle, mène directement aux bonnes données.
+`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer.
 
 ### Quand l'utiliser
 
@@ -7705,6 +7736,33 @@ target = "/nomaflow"
 ```
 
 Une feuille *Ordonnanceur de tâches* dans le dossier Opérations de l'application `crm`, qui pointe vers la route principale du produit Nomaflow.
+
+---
+
+## `job` — lancer une tâche Nomaflow \{#job\}
+
+Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui n'administrent pas Nomaflow : un sélecteur de fichier par étape de chargement qui en attend un, les paramètres que la tâche déclare pour ses utilisateurs, **Lancer**, le journal suivi en direct et les exécutions précédentes.
+
+### Champs
+
+| Champ | Valeur |
+|---|---|
+| **`type`** | `job` — *Job (run it, follow its log)* dans la liste des types. |
+| **`target`** | L'identifiant de la tâche. La liste présente chaque tâche avec la première ligne de sa description. |
+| **`connector`** | NE doit PAS être renseigné. |
+
+L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Beyond the menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
+
+### Exemple
+
+```toml title="menus.toml"
+[[menus.sales.items]]
+id = "import_sales"
+parent = "import"
+label = "Fichier ventes (un mois)"
+type = "job"
+target = "sales-load-month"
+```
 
 ---
 
@@ -8204,11 +8262,13 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | Widget | Affiche | Réglages |
 |---|---|---|
 | **KPI** | Un chiffre calculé sur toutes les lignes d'une requête. | Connecteur, requête, colonne, agrégation (`count`, `sum`, `avg`, `min`, `max`, ou `none` pour la valeur de la première ligne), format, et **comparaison avec la période précédente**. |
-| **Figure** (chiffre) | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Value column**, **Format**, **Unit**, **Sub line**. |
-| **List** (liste) | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Title column** (obligatoire), **Subtitle column**, **Value column**, format, unité, **Count column** et **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
-| **Bars** (barres) | Un classement avec une barre de proportion sous chaque ligne. | **Label column** et **Value column** (obligatoires), **Sub label column**, format, unité, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
-| **Chart** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
+| **Chiffre** | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Colonne de valeur**, **Format**, **Unité**, **Ligne secondaire**. |
+| **Liste** | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Colonne de titre** (obligatoire), **Colonne de sous-titre**, **Colonne de valeur**, format, unité, **Colonne de compte** et **Libellé du compte**, **Colonne de tonalité**, **Colonne d'étiquette**, **Lignes affichées**. |
+| **Barres** | Un classement avec une barre de proportion sous chaque ligne. | **Colonne de libellé** et **Colonne de valeur** (obligatoires), **Colonne de sous-libellé**, format, unité, **Barre en part de**, **Note sous les barres**, **Lignes affichées**. |
+| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
+| **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
+| **Liens** | Une carte de points d'entrée : des éléments du menu de l'application du tableau de bord, ou des adresses web. | **Liens par ligne** (1 à 4) ; pour chaque lien, un **Élément de menu** ou une **URL**, une **Icône**, un **Libellé** (vide : celui de l'élément de menu) et une **Description**. |
 
 Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche.
 
@@ -8216,13 +8276,21 @@ Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le res
 
 Ces trois widgets font d'un tableau de bord une **page de synthèse** : les chiffres qui comptent, ce qui demande une décision et les proportions, chacun lu par une requête écrite pour lui.
 
-- **Format** : *Number*, *Integer*, *Currency* (euros, sans décimales pour un montant rond) ou *Percent* — un ratio entre 0 et 1, affiché en pourcentage. L'**unité** suit le chiffre (`utilisateurs`, `lignes`) ; une devise porte son propre symbole.
-- **Sub line** (chiffre) : une phrase dont les marqueurs sont remplis à partir de la première ligne, `{COLONNE}` ou `{COLONNE:format}` — `{ENABLED:integer} actifs · {DISABLED:integer} désactivés` donne *380 actifs · 32 désactivés*. Un marqueur qui nomme une colonne inconnue reste tel quel.
-- **Tone column** (liste) : une colonne valant `ok`, `warn`, `error` ou `info` colore la pastille en vert, orange, rouge ou bleu ; toute autre valeur donne une pastille grise. La requête décide du ton — une période clôturée, un montant au-delà d'un seuil.
-- **Count wording** (liste) : le texte autour de la colonne de comptage, `{n} lignes de conflit`. La **Tag column** affiche sa valeur sous forme d'étiquette à côté du titre, dans le ton de la ligne.
-- **Bar as a share of** (barres) : **The total of the rows** — les barres totalisent 100 % — ou **The largest row**, qui occupe la barre entière.
+- **Format** : *Nombre*, *Entier*, *Monnaie* (euros, sans décimales pour un montant rond) ou *Pourcentage (0–1)* — un ratio entre 0 et 1, affiché en pourcentage. L'**unité** suit le chiffre (`utilisateurs`, `lignes`) ; une devise porte son propre symbole.
+- **Ligne secondaire** (chiffre) : une phrase dont les marqueurs sont remplis à partir de la première ligne, `{COLONNE}` ou `{COLONNE:format}` — `{ENABLED:integer} actifs · {DISABLED:integer} désactivés` donne *380 actifs · 32 désactivés*. Un marqueur qui nomme une colonne inconnue reste tel quel.
+- **Colonne de tonalité** (liste) : une colonne valant `ok`, `warn`, `error` ou `info` colore la pastille en vert, orange, rouge ou bleu ; toute autre valeur donne une pastille grise. La requête décide du ton — une période clôturée, un montant au-delà d'un seuil.
+- **Libellé du compte** (liste) : le texte autour de la colonne de compte, `{n} lignes de conflit`. La **Colonne d'étiquette** affiche sa valeur sous forme d'étiquette à côté du titre, dans le ton de la ligne.
+- **Barre en part de** (barres) : **Le total des lignes** — les barres totalisent 100 % — ou **La plus grande ligne**, qui occupe la barre entière.
 
 L'éditeur affiche un aperçu du widget dès que le connecteur, la requête et les colonnes obligatoires sont choisis.
+
+### Texte et liens \{#text-links\}
+
+Ces deux widgets font d'un tableau de bord la **page d'accueil d'une application** : quelques lignes sur ce qu'elle fait, les chiffres, puis par où commencer.
+
+- Un widget **Texte** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son texte, sans barre de défilement ; plus étroit, il défile dans sa tuile.
+- Un widget **Liens** n'affiche que les éléments de menu que l'utilisateur peut ouvrir : une entrée que ses rôles n'accordent pas disparaît de la carte. Une URL s'ouvre dans un nouvel onglet du navigateur. Un lien vers une URL exige un libellé.
+- À l'export, un texte garde son Markdown et une carte de liens devient un tableau (*Lien*, *Description*).
 
 ---
 
@@ -8234,7 +8302,7 @@ Un tableau de bord peut porter une **période** : un sélecteur de dates dans sa
 - **Une période libre** : choisir une date de début puis une date de fin dans le calendrier de deux mois, puis **Appliquer**.
 - **Base de dates** : quand le tableau de bord propose plusieurs dates (*Date du document*, *Payée le*), un choix **Date** en bas du panneau indique celle à laquelle s'applique la période.
 
-Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Paramètres → App → Default period (dashboards)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
+Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Paramètres → App → Période par défaut (tableaux de bord)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
 
 ### Ce que reçoivent les requêtes
 
@@ -8256,7 +8324,7 @@ Une requête qui ne les cite pas n'est pas concernée. Quand la période désign
 
 ### Comparer un indicateur
 
-Avec **Compare with the previous period** coché, un KPI relance sa requête sur la période précédente et affiche sous le chiffre l'évolution — en pourcentage, en points pour un KPI en pourcentage — en vert ou en rouge, ainsi que la valeur précédente. Rien n'est comparé sur *Toutes les dates*.
+Avec **Comparer avec la période précédente** coché, un KPI relance sa requête sur la période précédente et affiche sous le chiffre l'évolution — en pourcentage, en points pour un KPI en pourcentage — en vert ou en rouge, ainsi que la valeur précédente. Rien n'est comparé sur *Toutes les dates*.
 
 ---
 
@@ -8264,13 +8332,15 @@ Avec **Compare with the previous period** coché, un KPI relance sa requête sur
 
 Un tableau de bord peut aussi porter des **filtres**, présentés comme des listes déroulantes dans sa barre. Chaque filtre a un libellé, un élément du dictionnaire, une requête qui fournit ses choix (colonne de valeur et colonne de libellé), et une valeur par défaut facultative. Choisir une valeur recharge chaque widget dont la requête renvoie une colonne portant cet élément — par l'écran du widget, ou directement d'après les colonnes du résultat : une colonne du nom de l'élément, ou de ce nom précédé du préfixe de colonnes du connecteur. Les autres widgets restent tels quels. Une période dont la colonne de date est donnée par un élément du dictionnaire retrouve sa colonne de la même façon.
 
+Dans l'éditeur, chaque filtre indique les widgets qu'il atteint — *Atteint : …*, avec *pas : …* pour les autres — ou *N'atteint aucun widget* quand aucune colonne ne porte l'élément du dictionnaire.
+
 Avec **Tous**, rien n'est filtré : une requête qui renvoie d'abord une ligne de total, puis une ligne par valeur, affiche les totaux dans ses widgets chiffre et liste.
 
 ---
 
 ## Actualisation et cache \{#cache\}
 
-Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Paramètres → App → Dashboard cache (seconds, 0 = none)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
+Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Paramètres → App → Cache des tableaux de bord (secondes, 0 = aucun)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
 
 ---
 
@@ -8283,6 +8353,7 @@ Les boutons **Excel** et **PDF**, à côté de **↻**, exportent ce que montre 
 | Mise en page | Une feuille par widget ; les KPI réunis sur une feuille *Chiffres clés*. | Une page de garde avec le tableau de bord, la période et les filtres, puis les widgets à la suite. |
 | KPI, chiffre | Une ligne de valeurs. | Une carte, la ligne de détail en petits caractères sous le chiffre. |
 | Liste, barres, table | Ses lignes. | Un tableau. |
+| Texte, liens | Le texte ; les liens en lignes. | Le texte ; un tableau des liens. |
 | Graphique | Son tableau de données. | Le graphique dessiné, avec sa légende et les valeurs sur les barres. |
 
 Un widget dont la requête échoue devient une section d'erreur ; le reste de l'export est produit. Les nombres suivent la langue du lecteur (`1 234,5` / `1,234.5`). La charte PDF se règle dans [Paramètres → App](./build/settings-app.md#branding).
@@ -8296,9 +8367,11 @@ Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter o
 | Partie | Contenu |
 |---|---|
 | Général | Titre, description. |
-| Période | **Add a period** : *Opens on* (un préréglage, ou *App default*), *Date column* ou *dictionary item*, et des **Date bases** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
-| Filtres | Les listes déroulantes de la barre. |
-| Widgets | **Add widget** : Chart, KPI, Table, **Figure**, **List** ou **Bars**. Chaque widget a un **Subtitle**. Chaque widget a des boutons pour le rétrécir ou l'élargir (W−, W+), le réduire ou l'agrandir en hauteur (H−, H+), et l'avancer ou le reculer dans la grille. |
+| Période | **Ajouter une période** : *S'ouvre sur* (un préréglage, ou la valeur de l'application), *Colonne de date* ou *élément du dictionnaire*, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
+| Filtres | **Ajouter un filtre** : les listes déroulantes de la barre. |
+| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte** ou **Liens**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
+
+Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
 
 Pour rendre le tableau de bord accessible, ajouter une entrée **dashboard** à un menu ([Menus](./build/menus/item-types.md)) ; sa permission est `dashboard:<application>.<id>`.
 
@@ -8391,7 +8464,7 @@ L'onglet charge un échantillon des lignes de la requête et dessine le graphiqu
 | **Graphique** | Le type : barres, courbe, aire ou camembert. |
 | **Axe X** | La colonne portée par l'axe X — les libellés des parts pour un camembert. |
 | **Series** | Une ligne par colonne Y : la colonne, une pastille de couleur, et **L** / **R** pour placer la série sur l'axe Y de gauche ou de droite. **+** ajoute une série. Un camembert n'utilise que la première série. |
-| **Pivot by** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. |
+| **Pivoter par** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. |
 | **Agréger** | La façon de combiner les lignes de même valeur X : **Somme**, **Moyenne**, **Compte** (compte les lignes, sans tenir compte de la valeur Y), **Min**, **Max**, ou **Aucune (par ligne)** pour conserver chaque ligne — pour une série chronologique dont l'axe X est déjà unique. |
 
 L'axe Y affiche des graduations abrégées (1,2 k, 27,5 M, selon la langue du navigateur) ; l'infobulle donne le chiffre complet. Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. La légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
@@ -8555,6 +8628,14 @@ Un préréglage de l'assistant de création d'écran déclare déjà un ensemble
 
 Les entités déjà déclarées sont conservées et complétées ; une clé, des mesures, une date par défaut ou une cardinalité réglées à la main restent en place. Il reste à ajuster ce qui doit l'être, puis **Enregistrer**. Choisir de nouveau le préréglage remplit encore le modèle.
 
+L'application du préréglage crée aussi les entrées de dictionnaire qui manquent à ses tables — sur une source JD Edwards, à partir de son dictionnaire de données : *Préréglage appliqué : 6 entités · 42 entrées de dictionnaire créées*.
+
+### Modèles fournis par un préréglage \{#shipped\}
+
+Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Paramètres → Explorateur. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
+
+Pour modifier un tel modèle, ajouter un modèle dans Paramètres → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
+
 ---
 
 ## Points d'attention
@@ -8564,6 +8645,7 @@ Les entités déjà déclarées sont conservées et complétées ; une clé, des
 | Une entité n'est pas reliée au pivot. | L'enregistrement est refusé, avec le nom des entités isolées. | Ajouter la relation manquante. |
 | La requête de l'entité attend des paramètres. | L'explorateur l'exécute sans paramètre. | Rattacher l'entité à une requête sans paramètre. |
 | Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Paramètres → Connecteurs. |
+| Des champs affichent leur nom de colonne brut. | Ces colonnes n'ont pas d'entrée de dictionnaire. | Sur la page de l'explorateur, un superutilisateur voit *N colonne(s) sans entrée de dictionnaire affichent leur nom de colonne* et **Créer les entrées depuis le dictionnaire de données** les crée en un clic. |
 
 ## Pour aller plus loin
 
@@ -9107,6 +9189,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the
 | API endpoint | Un endpoint d'un connecteur API. |
 | Dashboard | Un tableau de bord. |
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
+| Tâche | Une tâche Nomaflow : son entrée de menu et sa page — fichiers, paramètres, lancement, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | L'assistant. |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
@@ -9434,9 +9517,9 @@ La clé peut aussi venir de la variable d'environnement `LIBERTY_LICENSE_KEY`, p
 ## Liberty Next — Paramètres de l'application
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/settings-app/
 
-Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, journaux, langue, valeurs par défaut de l'interface, rechargement à chaud, mode thick d'Oracle), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage.
+Paramètres → App dans Liberty Next : les six sections — Application (nom, adresse, journaux, langue, valeurs par défaut de l'interface, onglets, navigation, rechargement à chaud, mode épais d'Oracle), Licence, Assistant IA, Notifications (e-mail), OpenID Connect (SSO), Charte des PDF — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage.
 
-**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -9446,56 +9529,60 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 
 ---
 
-## App \{#app\}
+## Application \{#app\}
 
 | Champ | Remarques |
 |---|---|
-| **App name** | Le nom de l'application. |
-| **Bind host**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
-| **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
-| **Default language** | Langue des libellés quand une requête n'en indique pas. |
-| **Default period (dashboards)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
-| **Grid page size** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
-| **Dashboard cache (seconds, 0 = none)** | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord (60 par défaut). |
-| **Hot-reload config TOML files on change** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
-| **Oracle thick mode (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+| **Nom de l'application** | Le nom de l'application. |
+| **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
+| **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
+| **Langue par défaut** | Langue des libellés quand une requête n'en indique pas. |
+| **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
+| **Taille de page des grilles** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
+| **Cache des tableaux de bord (secondes, 0 = aucun)** | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord (60 par défaut). |
+| **Plusieurs onglets à la fois (sinon : une page à la fois)** | Activé par défaut. Désactivé : ouvrir une page remplace la page courante. |
+| **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets Paramètres, Surveillance et d'exécution restent ouverts. |
+| **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme l'onglet le plus ancien. |
+| **Les navigations s'ouvrent dans l'onglet courant (…)** | Désactivé par défaut. Activé : la navigation depuis une ligne s'ouvre en panneau dans l'onglet courant, avec un fil d'Ariane et **Retour**, sauf si l'action en décide autrement — voir [Actions](./screens/actions-and-lifecycle.md#drill). |
+| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
+| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
 
-Quand un changement enregistré demande un redémarrage, la page l'indique : *Saved. Restart the server to apply the new settings.*
-
----
-
-## License \{#license\}
-
-**License key** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
+Quand un changement enregistré demande un redémarrage, la page l'indique : *Enregistré. Redémarrez le serveur pour appliquer les nouveaux réglages.*
 
 ---
 
-## AI Assistant \{#ai\}
+## Licence \{#license\}
+
+**Clé de licence** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
+
+---
+
+## Assistant IA \{#ai\}
 
 | Champ | Remarques |
 |---|---|
-| **Enabled** | L'assistant répond ; les utilisateurs ont besoin de la permission `ai:chat`. |
-| **Anthropic API key** | Sans elle, l'assistant indique qu'il n'est pas configuré. |
-| **Model**, **Effort**, **Max tokens**, **Adaptive thinking** | Le modèle, la profondeur de raisonnement et la longueur des réponses. |
-| **Max tool iterations** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
-| **Request timeout (s)** | 120 par défaut. |
-| **System prompt** | Vide : les consignes intégrées. |
-| **Connector tools** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
-| **API tool** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
-| **Scaffold tools** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
-| **Allowed connectors** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
-| **Allowed domains**, **Max fetches per turn** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
-| **Operations tools** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
-| **Models users may pick** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
-| **Starter questions** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
+| **Activé** | L'assistant répond ; les utilisateurs ont besoin de la permission `ai:chat`. |
+| **Clé API Anthropic** | Sans elle, l'assistant indique qu'il n'est pas configuré. |
+| **Modèle**, **Effort**, **Jetons maximum**, **Réflexion adaptative** | Le modèle, la profondeur de raisonnement et la longueur des réponses. |
+| **Itérations d'outils maximum** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
+| **Délai de la requête (s)** | 120 par défaut. |
+| **Invite système** | Vide : les consignes intégrées. |
+| **Outils connecteurs** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
+| **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
+| **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
+| **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
+| **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
+| **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
+| **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
+| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
 
 Voir [Assistant IA](../ai-assistant.md).
 
 ---
 
-## Notifications (email) \{#notifications\}
+## Notifications (e-mail) \{#notifications\}
 
-**Notifications enabled**, puis le **Server** (SMTP host, Port, Encryption — STARTTLS, TLS implicite ou aucun —, Timeout), le **Account** (User, Password) et **Sending** (From address, Keep read notifications — en jours, `0` = sans limite). Voir [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications activées**, puis le **Serveur** (Hôte SMTP, Port, Chiffrement — STARTTLS, SSL / TLS implicite ou aucun —, Délai), le **Compte** (Utilisateur, Mot de passe) et l'**Envoi** (Adresse d'expédition, Conserver les notifications lues — en jours, `0` = toujours). Voir [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -9503,17 +9590,17 @@ Voir [Assistant IA](../ai-assistant.md).
 
 | Champ | Remarques |
 |---|---|
-| **Enabled** | Affiche le bouton OIDC sur la page de connexion. |
-| **Discovery URL** | Le `.well-known/openid-configuration` du fournisseur. |
-| **Client ID**, **Client secret**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
-| **Username claim**, **Email claim**, **Name claim** | Les claims de l'ID token qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
-| **Redirect URL override (proxy)**, **Frontend redirect** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
+| **Activé** | Affiche le bouton OIDC sur la page de connexion. |
+| **URL de découverte** | Le `.well-known/openid-configuration` du fournisseur. |
+| **ID client**, **Secret client**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
+| **Revendication identifiant**, **Revendication e-mail**, **Revendication nom** | Les revendications du jeton d'identité qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
+| **URL de redirection (proxy)**, **Redirection frontend** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
 
-Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
+Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur. Voir [Se connecter](./secure/sign-in.md#oidc).
 
 ---
 
-## PDF branding \{#branding\}
+## Charte des PDF \{#branding\}
 
 Les réglages de couverture et de page des rapports PDF : auteur, couleurs principales, textes de couverture, pied de page. Les champs vides gardent les valeurs par défaut du framework.
 
@@ -10459,15 +10546,16 @@ async def purge_old_sessions(
 
 ## Ce que le framework auto-injecte
 
-Trois kwargs sont auto-injectés **quand la fonction les déclare par leur nom** (l'exécuteur inspecte la `signature` pour décider). Une fonction qui ne les déclare pas ne les reçoit tout simplement pas — pas de `TypeError`.
+Quatre kwargs sont auto-injectés **quand la fonction les déclare par leur nom** (l'exécuteur inspecte la `signature` pour décider). Une fonction qui ne les déclare pas ne les reçoit tout simplement pas — pas de `TypeError`.
 
 | Kwarg | Type | Ce qu'il apporte |
 |---|---|---|
 | **`connectors`** | `ConnectorRegistry` | Accès à tous les pools SQL et API définis dans `connectors.toml`. `connectors.pools.engine("default")` retourne le moteur asynchrone SQLAlchemy. |
 | **`ctx`** | `RunContext` | L'état par exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Passer `ctx.run_id` aux logs / écritures d'audit pour les aligner avec l'enregistrement d'exécution Nomaflow. |
 | **`settings`** | `Settings` | Configuration vivante — `settings.connectors.config_path`, `settings.app`, etc. Utile pour les callables qui opèrent sur les fichiers de configuration eux-mêmes. |
+| **`app_state`** | l'état du serveur | L'état vivant du serveur en cours d'exécution — les applications, les modèles de l'explorateur de données, le dictionnaire. Pour les callables qui agissent sur la configuration en service, comme `liberty.jobs.dictionary:refresh_model_dictionary`. Absent hors d'un serveur en cours d'exécution. |
 
-Une fonction qui avale des kwargs arbitraires (`**_`) reçoit **les trois** qu'elle les demande ou non. Une fonction qui en nomme certains explicitement et refuse le reste (pas de `**`) ne reçoit que ceux qu'elle a nommés.
+Une fonction qui avale des kwargs arbitraires (`**_`) reçoit **les quatre** qu'elle les demande ou non. Une fonction qui en nomme certains explicitement et refuse le reste (pas de `**`) ne reçoit que ceux qu'elle a nommés.
 
 ### La couche op_kwargs
 
@@ -12661,6 +12749,43 @@ Les tâches elles-mêmes se modifient par `/admin/config/jobs/parsed`.
 
 # === Nomaflow — planification et orchestration ===
 
+## Nomaflow — Tableau de bord Vue d'ensemble
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/dashboard/
+
+Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche et les dernières exécutions — sur les 7 derniers jours par défaut.
+
+**Vue d'ensemble**, première entrée du menu de Nomaflow, donne aux exploitants l'état de l'ordonnanceur en un coup d'œil : l'issue des exécutions, ce qui a échoué ou a été manqué, ce qui est en cours d'exécution, les tâches les plus actives et les plus lentes, et les dernières exécutions.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La période \{#period\}
+
+La page s'ouvre sur **7 derniers jours** ; le sélecteur de période de la barre propose les autres préréglages et une période libre. Chaque widget la suit, sauf **En cours**, qui montre toujours l'instant présent. **Excel** et **PDF** exportent la page avec sa période — voir [Tableaux de bord → Export](../framework/dashboards.md#export).
+
+---
+
+## Les widgets \{#widgets\}
+
+| Widget | Contenu |
+|---|---|
+| **Exécutions** — par issue | Les exécutions démarrées sur la période : réussies · en échec · annulées. |
+| **Échecs** — exécutions terminées en erreur | Les exécutions en échec, le nombre de tâches concernées et les planifications manquées. |
+| **En cours** — en ce moment | En exécution · en attente. |
+| **Durée moyenne** — exécutions terminées | La durée moyenne, et la plus longue. |
+| **Exécutions par jour** | Une barre par jour, par issue. |
+| **Ce qui demande attention** | Par tâche : les échecs avec leur dernière erreur, les planifications manquées, les exécutions en cours depuis plus d'une heure — en rouge pour un échec, en orange pour le reste, avec la date de la dernière occurrence. |
+| **Exécutions par tâche** | La part des exécutions de chaque tâche sur la période. |
+| **Durée moyenne par tâche** | En secondes, les plus lentes d'abord. |
+| **Dernières exécutions** | Les dernières exécutions, avec leur état ; l'erreur, ou le déclencheur, sous chacune. |
+
+Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md).
+
+---
+
 ## Nomaflow — Concepts
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/concepts/
 
@@ -13007,6 +13132,85 @@ La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manq
 
 ---
 
+## Nomaflow — Lancer une tâche depuis le menu d'une application
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/run-from-menu/
+
+Une entrée de menu de type job place une tâche Nomaflow dans le menu d'une application : l'utilisateur choisit les fichiers et les paramètres demandés, lance la tâche, suit son journal en direct et retrouve les exécutions précédentes — sans accès à Nomaflow lui-même. La permission de la tâche, les paramètres utilisateur, les fichiers et l'historique.
+
+Une entrée de menu de type **job** place une tâche Nomaflow dans le menu d'une application, à l'intention des utilisateurs qui n'administrent pas Nomaflow : la personne qui charge le fichier des ventes du mois, le responsable sécurité qui collecte les données de sécurité avant une revue. L'entrée ouvre la page propre à la tâche — les fichiers attendus, ses paramètres, **Lancer**, le journal suivi en direct et les exécutions précédentes. Rien d'autre de Nomaflow n'apparaît.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La page de la tâche \{#page\}
+
+| Partie | Contenu |
+|---|---|
+| Titre et description | Le libellé de l'entrée de menu, puis la description de la tâche. |
+| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. |
+| Fichiers | Un sélecteur par étape `file_load` qui attend un fichier — **Fichier pour l'étape « load »**, avec la feuille quand l'étape en nomme une. Formats acceptés : `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. Une étape dotée de son propre chemin ou d'un dossier surveillé ne demande rien : elle lit son fichier. |
+| **Lancer** | Envoie les fichiers et démarre l'exécution. *Choisissez d'abord le ou les fichiers.* ou *« Société » est obligatoire.* quand un élément manque. Une seule exécution à la fois : tant qu'une exécution est en cours, le bouton reste en attente. |
+| **Journal** | L'état de l'exécution et son journal, rafraîchi toutes les 2 secondes tant que l'exécution est en attente ou en cours, l'erreur en rouge. **Fichiers de l'exécution** propose les fichiers produits — les lignes rejetées d'un chargement. |
+| **Exécutions précédentes** | Les 20 dernières exécutions : début, état, durée, auteur (ou déclencheur, pour une exécution planifiée), lignes traitées et début de l'erreur. Un clic sur une exécution affiche son journal. |
+
+L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouvent dans l'[historique des exécutions](../runs/history.md), et ses notifications et alertes s'appliquent.
+
+---
+
+## Placer une tâche dans un menu \{#menu\}
+
+Dans **Paramètres → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+
+---
+
+## Qui peut la lancer \{#access\}
+
+L'entrée et sa page demandent la permission `job:<id>` — dans **Paramètres → Access → Roles**, bloc **Beyond the menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
+
+Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
+
+---
+
+## Paramètres utilisateur \{#user-params\}
+
+Une tâche déclare dans `jobs.toml` ce qu'un utilisateur peut régler en la lançant depuis sa page. Toute autre valeur est refusée ; les autres réglages de l'exploitant restent hors de portée.
+
+```toml title="jobs.toml"
+[[jobs.user_params]]
+name = "models"
+label = "Explorer model (blank = every model)"
+l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
+step = "refresh"
+choices_from = "explorer_models:nomajde"
+```
+
+| Clé | Rôle |
+|---|---|
+| `name` | L'argument de l'étape qui reçoit la valeur. |
+| `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
+| `step` | L'étape qui reçoit la valeur. |
+| `default` | La valeur préremplie. |
+| `required` | `true` : la tâche ne démarre pas sans valeur. |
+| `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
+| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application. |
+
+Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique.
+
+---
+
+## Ce que livrent les applications \{#shipped\}
+
+| Application | Dossier | Tâches |
+|---|---|---|
+| Nomasx-1 | **Tâches** | Collecter la sécurité, Collecter les licences — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
+| Nomajde | **Tâches** | Refusionner la sécurité (paquet de changements), Refusionner la sécurité (tous les rôles), Rafraîchir le dictionnaire (modèles Explorateur) — voir [Tâches de Nomajde](../../nomajde/jobs.md). |
+| Démo des ventes | **Import** | Fichier articles, Fichier sociétés, Fichier ventes (un mois), Recalculer les périodes, Charger les fichiers d'exemple — voir [La démo des ventes](../../framework/demo-app.md#loads). |
+
+---
+
 ## Nomaflow — Étapes
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/steps/
 
@@ -13088,7 +13292,7 @@ Charge un classeur Excel (`.xlsx`, `.xlsm`) ou un fichier texte (`.csv`, `.txt`,
 
 Le fichier vient, par ordre de priorité :
 
-1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Run with parameters** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une) ;
+1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Run with parameters** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
 2. **de `path`** — un chemin sur le serveur, qui peut contenir `${params.x}` (un paramètre d'exécution), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx` ;
 3. **d'un dossier surveillé** — `watch_dir` et `watch_pattern` (`*.xlsx`) : chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur.
 
@@ -14607,6 +14811,7 @@ async def refresh(*, period: str, target_connector: str,
 | `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
 | `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
 | `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
+| `app_state` | L'état vivant du serveur en cours d'exécution (applications, modèles de l'explorateur de données, dictionnaire…), pour une fonction qui agit sur la configuration elle-même — comme la tâche de rafraîchissement du dictionnaire. Fourni seulement s'il est déclaré. |
 
 La fonction peut être `async` (recommandé) ou un simple `def`, exécuté dans un thread de travail.
 
@@ -14886,9 +15091,9 @@ Le `/ready` du serveur répond quand la base du framework — qui contient l'his
 ## Nomasx-1 — Vue d'ensemble — Synthèse d'audit
 Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/audit-synthesis/
 
-La page d'accueil de Nomasx-1 : le tableau de bord Audit synthesis — utilisateurs, rôles, conflits de séparation des tâches et exposition de licences en un coup d'œil, les conflits par rafraîchissement et par processus, les constats qui demandent une décision, le détail par processus et par composant de licence, la fraîcheur des données, l'activité et les utilisateurs les plus en conflit — avec un filtre par application, une période et l'export Excel / PDF.
+La page d'accueil de Nomasx-1 : le tableau de bord Synthèse d'audit — utilisateurs, rôles, conflits de séparation des tâches et exposition de licences en un coup d'œil, les conflits par rafraîchissement et par processus, les constats qui demandent une décision, le détail par processus et par composant de licence, la fraîcheur des données, l'activité et les utilisateurs les plus en conflit — avec un filtre par application, une période et l'export Excel / PDF.
 
-**Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre l'**Audit synthesis** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
+**Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre la **Synthèse d'audit** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
 
 ---
 
@@ -14911,10 +15116,10 @@ La page d'accueil de Nomasx-1 : le tableau de bord Audit synthesis — utilisate
 
 | Carte | Chiffre | Ligne de détail |
 |---|---|---|
-| **Users** — comptes déclarés | Les comptes collectés. | Actifs · désactivés · **dormants** : actifs sans connexion depuis 90 jours. |
-| **Roles** — rôles définis et leur attribution | Les rôles définis. | Attribués · **orphelins** (attribués à personne) · utilisateurs titulaires de plus de 10 rôles, avec le maximum. |
-| **Segregation of duties** — utilisateurs en conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
-| **Licence exposure** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
+| **Utilisateurs** — comptes déclarés | Les comptes collectés. | Actifs · désactivés · **dormants** : actifs sans connexion depuis 90 jours. |
+| **Rôles** — rôles définis et leur affectation | Les rôles définis. | Attribués · **orphelins** (attribués à personne) · utilisateurs titulaires de plus de 10 rôles, avec le maximum. |
+| **Séparation des tâches** — utilisateurs porteurs d'un conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
+| **Exposition licences** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
 
 L'exposition s'appuie sur les [licences souscrites](./licenses/subscribed.md) et le [catalogue de prix](./settings/pricing/pricing.md) : un composant sans prix compte pour zéro.
 
@@ -14926,18 +15131,18 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 
 | Constat | Action attendue |
 |---|---|
-| **Active SoD violations** — ou *No SoD violation*, ou *No SoD matrix defined* | Les règles de la matrice déclenchées sur l'ensemble des règles, et les associations privilégiées. Rouge dès qu'un utilisateur privilégié est concerné. Sans matrice, la définir dans [Paramètres → SoD](./settings/sod/matrix.md). |
-| **Self-conflicting roles** | Un rôle accorde à lui seul les deux côtés d'une paire incompatible : corriger le rôle règle le cas de tous ses titulaires. |
-| **Conflicting role combinations** | Des paires de rôles qui ne contreviennent à la séparation des tâches que détenues ensemble : séparer les fonctions ou revoir les attributions. |
-| **Components over subscription** | Plus d'utilisateurs disposant de droits que de licences : acheter, ou retirer des droits. Le montant est l'exposition ; rouge à partir de 250 000, orange à partir de 25 000. |
-| **Privileged accounts** | Accès de super-utilisateur : vérifier que chacun a un titulaire, une justification et une revue trimestrielle. |
-| **Dormant enabled accounts** | Aucune connexion depuis 90 jours, dont les comptes jamais utilisés : désactiver ou recertifier. |
-| **Generic / shared accounts** | Les actions ne peuvent pas être imputées à une personne : les remplacer par des comptes nominatifs. |
-| **\*PUBLIC object grants** | Des objets ouverts par défaut à tous les utilisateurs : vérifier qu'aucun ne correspond à une transaction sensible. |
-| **Enabled accounts without roles** | Un provisionnement incomplet, ou des comptes à désactiver. |
-| **Direct user-level grants** | Des droits accordés à un utilisateur plutôt qu'à un rôle, hors du contrôle d'accès par rôle. |
-| **Users with more than 10 roles** | Une accumulation de rôles : ajuster, puis relancer la détection. |
-| **Orphan roles** | Des rôles attribués à personne : les supprimer ou les réaffecter. |
+| **Violations SoD actives** — ou *Aucune violation SoD*, ou *Aucune matrice SoD définie* | Les règles de la matrice déclenchées sur l'ensemble des règles, et les associations privilégiées. Rouge dès qu'un utilisateur privilégié est concerné. Sans matrice, la définir dans [Paramètres → SoD](./settings/sod/matrix.md). |
+| **Rôles auto-conflictuels** | Un rôle accorde à lui seul les deux côtés d'une paire incompatible : corriger le rôle règle le cas de tous ses titulaires. |
+| **Combinaisons de rôles en conflit** | Des paires de rôles qui ne contreviennent à la séparation des tâches que détenues ensemble : séparer les fonctions ou revoir les attributions. |
+| **Composants au-delà de la souscription** | Plus d'utilisateurs disposant de droits que de licences : acheter, ou retirer des droits. Le montant est l'exposition ; rouge à partir de 250 000, orange à partir de 25 000. |
+| **Comptes à privilèges** | Accès de super-utilisateur : vérifier que chacun a un titulaire, une justification et une revue trimestrielle. |
+| **Comptes actifs dormants** | Aucune connexion depuis 90 jours, dont les comptes jamais utilisés : désactiver ou recertifier. |
+| **Comptes génériques / partagés** | Les actions ne peuvent pas être imputées à une personne : les remplacer par des comptes nominatifs. |
+| **Droits sur \*PUBLIC** | Des objets ouverts par défaut à tous les utilisateurs : vérifier qu'aucun ne correspond à une transaction sensible. |
+| **Comptes actifs sans rôle** | Un provisionnement incomplet, ou des comptes à désactiver. |
+| **Droits attribués directement à l'utilisateur** | Des droits accordés à un utilisateur plutôt qu'à un rôle, hors du contrôle d'accès par rôle. |
+| **Utilisateurs à plus de 10 rôles** | Une accumulation de rôles : ajuster, puis relancer la détection. |
+| **Rôles orphelins** | Des rôles attribués à personne : les supprimer ou les réaffecter. |
 
 ---
 
@@ -14945,12 +15150,12 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 
 | Widget | Contenu |
 |---|---|
-| **Conflicts per refresh** | Les lignes de conflit à chaque rafraîchissement SoD de la période, empilées par processus métier — la tendance de la remédiation. |
-| **Per process** | Les utilisateurs en conflit par processus métier, avec le nombre de lignes de conflit ; en rouge quand des utilisateurs privilégiés en font partie. |
-| **Per licence component** | Les utilisateurs disposant de droits par composant, face à la quantité souscrite. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
-| **Data freshness** | La dernière collecte par module, avec son ancienneté : vert sous 2 jours, orange sous 8, rouge au-delà. Une ligne rouge signale des chiffres anciens. |
-| **Transacting users per month** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
-| **Users with the most conflicts** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |
+| **Conflits par rafraîchissement** | Les lignes de conflit à chaque rafraîchissement SoD de la période, empilées par processus métier — la tendance de la remédiation. |
+| **Par processus** | Les utilisateurs en conflit par processus métier, avec le nombre de lignes de conflit ; en rouge quand des utilisateurs privilégiés en font partie. |
+| **Par composant de licence** | Les utilisateurs disposant de droits par composant, face à la quantité souscrite. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
+| **Fraîcheur des données** | La dernière collecte par module, avec son ancienneté : vert sous 2 jours, orange sous 8, rouge au-delà. Une ligne rouge signale des chiffres anciens. |
+| **Utilisateurs transactionnels par mois** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
+| **Utilisateurs les plus en conflit** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |
 
 Le détail derrière chaque widget se trouve dans les écrans : [Conflits](./applications/conflicts/summary.md), [Utilisateurs](./security/users.md), [Rôles](./security/roles.md), [Rapport d'utilisation](./licenses/usage-report.md), [Rapport financier](./licenses/financial-report.md).
 
@@ -14972,7 +15177,7 @@ Chaque widget ne s'affiche que si l'utilisateur peut lancer sa requête : sans a
 ## Nomasx-1 — Explorateur de données
 Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/data-explorer/
 
-L'analyse libre des données de Nomasx-1 dans l'explorateur de données : trois modèles — Sécurité, Séparation des tâches, Conformité des licences — chacun avec ses analyses partagées et son tableau de bord prêts à l'emploi, accessibles depuis le menu de chaque domaine.
+L'analyse libre des données de Nomasx-1 dans l'explorateur de données : trois modèles — Sécurité, Séparation des tâches, Conformité des licences — chacun avec ses analyses partagées et son tableau de bord prêts à l'emploi.
 
 L'**explorateur de données** permet aux équipes conformité et licences d'analyser elles-mêmes les données de Nomasx-1, sans nouvel écran : lignes, mesures, filtres et période choisis dans une liste de champs, présentés en tableau, en croisé, en graphique ou en KPI, puis enregistrés, partagés, réunis en tableau de bord et exportés en Excel ou en PDF. Il lit les données collectées sur **toutes les applications connectées**, avec les mêmes droits que les écrans.
 
@@ -14986,14 +15191,7 @@ Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du 
 
 ## Où le trouver \{#menu\}
 
-| Entrée de menu | Ouvre |
-|---|---|
-| **Explorateur de données** (premier niveau) | L'explorateur, avec tous les modèles de Nomasx-1 dans son sélecteur. |
-| **Sécurité → Explorateur de données** | Le modèle *Security*. |
-| **Applications → Conflits → Explorateur de données** | Le modèle *Segregation of duties*. |
-| **Licences → Explorateur de données** | Le modèle *Licence compliance*. |
-
-Le sélecteur de modèle permet d'en changer à tout moment.
+**Explorateur de données**, juste sous **Vue d'ensemble** dans le menu de Nomasx-1, ouvre l'explorateur avec les trois modèles de Nomasx-1 dans son sélecteur. Le sélecteur passe d'un modèle à l'autre à tout moment ; les analyses et tableaux de bord suivent le modèle.
 
 ---
 
@@ -15048,6 +15246,38 @@ Les analyses et tableaux de bord ci-dessus sont **partagés** : tout utilisateur
 
 - [Vue d'ensemble — Synthèse d'audit](./audit-synthesis.md) — la page de synthèse.
 - [Analyses enregistrées et tableaux de bord](../framework/explorer/saved-and-dashboards.md) — enregistrer, partager, exporter.
+
+---
+
+## Nomasx-1 — Tâches
+Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/jobs/
+
+Le dossier Tâches du menu de Nomasx-1 : collecter à la demande les données de sécurité et les transactions de licences d'une application connectée, suivre le journal en direct et retrouver les exécutions précédentes — sans ouvrir Nomaflow.
+
+Le dossier **Tâches**, en bas du menu de Nomasx-1, permet à l'équipe conformité de rafraîchir elle-même les données — avant une revue, après une série de modifications dans le système source — sans ouvrir Nomaflow. Chaque entrée ouvre la page de la tâche : **Lancer**, le journal suivi en direct, les exécutions précédentes avec leur auteur.
+
+Les collectes planifiées continuent de s'exécuter normalement ; ces entrées lancent les mêmes tâches à la demande.
+
+---
+
+## Les entrées \{#entries\}
+
+| Entrée | Tâche | Rafraîchit |
+|---|---|---|
+| **Collecter la sécurité** | [`nomasx1-security-1`](../nomaflow/bundled-jobs.md#nomasx1-security-1) | Les utilisateurs, rôles, affectations, menus et droits effectifs de l'application — tout ce qui figure sous **Sécurité** et **Applications**, ainsi que les chiffres de la [synthèse d'audit](./audit-synthesis.md). |
+| **Collecter les licences** | [`nomasx1-license-1`](../nomaflow/bundled-jobs.md#nomasx1-license-1) | Les transactions des utilisateurs — la base de l'usage des licences sous **Licences** et du modèle *Licence compliance* de l'[explorateur de données](./data-explorer.md). |
+
+Après une collecte, **Dernière collecte** et la liste *Fraîcheur des données* de la synthèse d'audit affichent la nouvelle date.
+
+:::info[Spécifique à JDE]
+Les deux tâches lisent JD Edwards EnterpriseOne. Pour un autre système source, la collecte est celle que fournit son connecteur.
+:::
+
+---
+
+## Qui peut les lancer \{#access\}
+
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes. Voir [Lancer une tâche depuis le menu d'une application](../nomaflow/jobs/run-from-menu.md).
 
 ---
 
@@ -18588,6 +18818,119 @@ Double-cliquer une ligne pour modifier la ligne du price book.
 
 # === Nomajde — application compagnon JD Edwards ===
 
+## Nomajde — Vue d'ensemble — la page d'accueil
+Source: https://docs.nomana-it.fr/fr/liberty/nomajde/home/
+
+La page d'accueil de Nomajde : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards EnterpriseOne (utilisateurs, rôles, enregistrements de sécurité, codes UDC, objets) et les points d'entrée de chaque domaine — données de base, maintenance de la sécurité, développement, analyse et tâches.
+
+**Vue d'ensemble**, première entrée du menu de Nomajde, est la page sur laquelle s'ouvre l'application : à quoi sert Nomajde, les chiffres de l'instance JD Edwards EnterpriseOne à laquelle elle est reliée, et une carte de points d'entrée par domaine.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Contenu \{#content\}
+
+| Partie | Contenu |
+|---|---|
+| Présentation | Ce que fait Nomajde, domaine par domaine : le travail que JD Edwards répartit sur de nombreux écrans, réuni dans quelques grilles avec recherche, écrit directement dans JD Edwards, chaque modification gardant trace de son auteur, de sa date et de l'écran d'origine. |
+| **Utilisateurs** | Les profils utilisateur JD Edwards, avec le nombre de rôles et de relations de rôles. |
+| **Enregistrements de sécurité** | Les enregistrements du Security Workbench (F00950), avec le nombre d'environnements. |
+| **Codes UDC** | Les codes définis par l'utilisateur (F0005), avec le nombre de types UDC. |
+| **Objets** | Les objets de l'Object Librarian (F9860). |
+| **Données de base** | [Types UDC](./master-data/udc-types.md), [Codes UDC](./master-data/udc-codes.md). |
+| **Maintenance de la sécurité** | [Gestion des utilisateurs](./security-maintenance/user-management.md), User Preferences, [Affectations Rôles](./security-maintenance/role-management.md), [Relations de rôles](./security-maintenance/role-relationships.md), [Environnements](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
+| **Développement** | Object Librarian, Data Dictionary, Références croisées — en lecture. |
+| **Analyse et tâches** | L'[explorateur de données](./data-explorer.md), les [tâches](./jobs.md) et la page produit. |
+
+Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page.
+
+---
+
+## Points d'entrée et droits \{#access\}
+
+Une carte ne présente que les entrées que l'utilisateur peut ouvrir : une entrée que ses rôles n'accordent pas n'apparaît pas. La page produit s'ouvre dans un nouvel onglet du navigateur.
+
+---
+
+## Voir aussi
+
+- [Nomajde](./overview.md) — le produit.
+- [Explorateur de données](./data-explorer.md) — analyser les données de sécurité et de développement.
+
+---
+
+## Nomajde — Explorateur de données
+Source: https://docs.nomana-it.fr/fr/liberty/nomajde/data-explorer/
+
+L'analyse libre des données de sécurité et de développement de JD Edwards EnterpriseOne dans l'explorateur de données de Nomajde : les modèles Sécurité et Développement, leurs analyses et leur tableau de bord livrés, les modèles fournis par les préréglages JDE, et les libellés du dictionnaire de données.
+
+**Explorateur de données**, juste sous **Vue d'ensemble** dans le menu de Nomajde, ouvre l'explorateur sur les données de JD Edwards EnterpriseOne : lignes, mesures, filtres et période choisis dans une liste de champs, présentés en tableau, en croisé, en graphique ou en KPI, puis enregistrés, partagés, réunis en tableau de bord et exportés. Les chiffres sont lus en direct dans JD Edwards, avec les droits de l'utilisateur.
+
+Le fonctionnement de l'explorateur est décrit dans la [documentation de Liberty Next](../framework/explorer/analysis.md). Cette page présente ce que livre Nomajde.
+
+---
+
+## Sécurité \{#security\}
+
+Les utilisateurs (F0092) avec leur nom du carnet d'adresses, leurs relations de rôles (F95921) et leurs rôles (F00926), leurs enregistrements de sécurité (F00950) et leur sécurité UDO (F00950W), leurs environnements (F0093).
+
+**Analyses** : *Users*, *Users by type*, *Users by language*, *Users with the most roles*, *Users per role*, *Security records by type*, *Secured objects per user or role*, *Environments per user*.
+
+**Tableau de bord** *Security overview* : les utilisateurs par type, les rôles qui comptent le plus de membres, les utilisateurs qui cumulent le plus de rôles, les enregistrements de sécurité par type.
+
+---
+
+## Développement \{#development\}
+
+L'Object Librarian (F9860) : les objets par type et par code produit.
+
+**Analyses** : *Objects by type*, *Objects by product code*.
+
+---
+
+## Modèles fournis par les préréglages JDE \{#presets\}
+
+Les préréglages JD Edwards de l'[assistant de création d'écran](../framework/build/screen-assistant.md) fournissent aussi à l'explorateur des modèles prêts à l'emploi, construits d'après les modèles de données Oracle E1 : la table pivot et les tables qui s'y rattachent.
+
+| Domaine | Modèles |
+|---|---|
+| Carnet d'adresses | Address Book — fiche complète (fiche principale, contacts, client, fournisseur). |
+| Comptabilité générale | Account Ledger (F0911), Account Balances (F0902). |
+| Comptabilité fournisseurs | A/P Ledger (F0411), Payments (F0413). |
+| Comptabilité clients | Customer Ledger (F03B11), Receipts (F03B13). |
+| Stocks | Item (F4101). |
+| Ventes | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Production | Work Order (F4801), Production Cost (F3102). |
+| Données techniques | Bill of Material (F3002), Routing (F3003). |
+| Calcul des coûts | Item Cost Components (F30026). |
+
+Ils figurent dans le sélecteur de modèle avec les autres ; l'en-tête de la page indique *fourni par le préréglage « … »*. Ils sont construits à la première utilisation. Pour en adapter un, un superutilisateur ajoute un modèle dans **Paramètres → Explorateur** à partir du même préréglage, puis le modifie.
+
+Les montants JD Edwards s'affichent en unités réelles : les décimales du dictionnaire de données s'appliquent aux tableaux, aux totaux et aux filtres.
+
+---
+
+## Libellés issus du dictionnaire de données \{#dictionary\}
+
+Une colonne sans entrée de dictionnaire affiche son nom de colonne brut. Un superutilisateur voit sur la page de l'explorateur combien de colonnes sont dans ce cas, et **Créer les entrées depuis le dictionnaire de données** les complète en un clic à partir du dictionnaire de données JD Edwards (description, type, décimales, liste UDC). La [tâche de rafraîchissement du dictionnaire](./jobs.md#dictionary) fait de même pour tous les modèles, ou pour un seul.
+
+---
+
+## L'assistant sur cette page \{#ai\}
+
+Sur la page de l'explorateur, l'assistant propose de créer ce que l'utilisateur décrit : *Crée une analyse des utilisateurs par rôle*, *Crée un tableau de bord avec les analyses de ce modèle*. Il construit l'analyse sur le modèle, la vérifie en l'exécutant, puis l'enregistre — en privé, sauf demande de partage. Voir [Assistant IA](../framework/ai-assistant.md#tools).
+
+---
+
+## Qui voit quoi \{#access\}
+
+Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Beyond the menus* du rôle). Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse.
+
+---
+
 ## Nomajde — Types UDC
 Source: https://docs.nomana-it.fr/fr/liberty/nomajde/master-data/udc-types/
 
@@ -19221,6 +19564,41 @@ C'est ce qui rend une promotion de sécurité JDE reproductible : associez-y le 
 - **Upload Excel** pour les lots de sécurité livrés par l'intégrateur. Le flux *Ajouter* gère les lignes unitaires ; l'upload est fait pour les dizaines de lignes qui accompagnent un nouveau module.
 - **Une interdiction sur *Toutes actions* avec `Utilisateur = *PUBLIC` plus des autorisations ciblées sur les rôles** est le motif JDE standard. La grille permet de vérifier facilement que l'interdiction est en place pour chaque objet.
 - **Après des changements en masse**, exécuter *Nomasx-1 → Applications → Droits* pour confirmer que les droits effectifs correspondent à l'intention — le workbench montre ce qui est paramétré, *Droits* montre ce que JDE calcule à la connexion.
+
+---
+
+## Nomajde — Tâches
+Source: https://docs.nomana-it.fr/fr/liberty/nomajde/jobs/
+
+Le dossier Tâches du menu de Nomajde : refusionner la sécurité JD Edwards des rôles touchés par un paquet de changements ou de tous les rôles, et rafraîchir le dictionnaire de données des modèles de l'explorateur — à la demande, avec un journal en direct.
+
+Le dossier **Tâches**, en bas du menu de Nomajde, lance à la demande les tâches de maintenance de JD Edwards sans ouvrir Nomaflow. Chaque entrée ouvre la page de la tâche : ses paramètres, **Lancer**, le journal suivi en direct, les exécutions précédentes avec leur auteur. Voir [Lancer une tâche depuis le menu d'une application](../nomaflow/jobs/run-from-menu.md).
+
+---
+
+## Refusionner la sécurité (paquet de changements) \{#remerge\}
+
+Refusionne la sécurité JD Edwards — Security Workbench, sécurité UDO, filtrage des menus — des rôles parents touchés par le paquet de changements actif, une fois par parent. À lancer après l'application d'un paquet qui modifie des rôles ou des relations de rôles. Détails : [`nomajde-remerge-security`](../nomaflow/bundled-jobs.md#nomajde-remerge-security).
+
+## Refusionner la sécurité (tous les rôles) \{#remerge-all\}
+
+Refusionne la sécurité de tous les rôles parents actifs, indépendamment du paquet de changements — après un import en masse, ou pour rattraper une refusion oubliée. Sur une instance volumineuse, l'opération prend plusieurs minutes. Détails : [`nomajde-remerge-security-all`](../nomaflow/bundled-jobs.md#nomajde-remerge-security-all).
+
+## Rafraîchir le dictionnaire (modèles Explorateur) \{#dictionary\}
+
+Crée les entrées de dictionnaire qui manquent aux modèles de l'[explorateur de données](./data-explorer.md), à partir du dictionnaire de données JD Edwards (F9200 / F9202 / F9210 : description, type, décimales, liste UDC), une analyse par table. Les libellés apparaissent aussitôt, sans redémarrage.
+
+| Paramètre | Rôle |
+|---|---|
+| **Modèle Explorateur (vide = tous les modèles)** | L'un des modèles de Nomajde, ou vide pour tous. |
+
+Le journal liste, par modèle, les tables analysées et les entrées créées.
+
+---
+
+## Qui peut les lancer \{#access\}
+
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
 
 ---
 

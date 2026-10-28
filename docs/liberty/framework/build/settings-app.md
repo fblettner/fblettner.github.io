@@ -106,6 +106,10 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
 | **Dashboard cache (seconds, 0 = none)** | How long a reopened dashboard reuses its widgets' results (default 60). |
+| **Several tabs at once (off: one page at a time)** | On by default. Off: opening a page replaces the current one. |
+| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the Settings, Monitoring and run tabs stay. |
+| **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
+| **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
 | **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
 | **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
 

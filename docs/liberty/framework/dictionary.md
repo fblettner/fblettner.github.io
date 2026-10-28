@@ -171,6 +171,7 @@ The left-hand list shows each entry's key with its label underneath, and a filte
 | Rule | **Default** | The initial value when a new row is added. |
 | Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
 | Rule | **Size** | The stored width of the item, used with **Justify** when the physical column is wider. |
+| Rule | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
 | Rule | **Lookup params** | Fixed values for the `:params` of the lookup's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the lookup declares. |
 | Translations | one line per language | The label in that language. |
 | Advanced | **Override** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
@@ -185,6 +186,7 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 | `number`, `integer`, `decimal`, `currency` | A number. |
 | `date`, `datetime`, `timestamp` | A date, with or without time. |
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
+| `jdenumber` | A JD Edwards amount stored without its decimal point: with **Decimals** = 2, the stored `12345` reads and is entered as `123.45`, and is written back as `12345`. Filters are typed in real units; the Data Explorer totals and detail rows are scaled the same way. The [scan](#scan-a-table) of a JD Edwards table fills the decimals from the data dictionary. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
 | `email`, `url`, `color` | Text, shown as entered. |

@@ -47,15 +47,16 @@ async def purge_old_sessions(
 
 ## Ce que le framework auto-injecte
 
-Trois kwargs sont auto-injectés **quand la fonction les déclare par leur nom** (l'exécuteur inspecte la `signature` pour décider). Une fonction qui ne les déclare pas ne les reçoit tout simplement pas — pas de `TypeError`.
+Quatre kwargs sont auto-injectés **quand la fonction les déclare par leur nom** (l'exécuteur inspecte la `signature` pour décider). Une fonction qui ne les déclare pas ne les reçoit tout simplement pas — pas de `TypeError`.
 
 | Kwarg | Type | Ce qu'il apporte |
 |---|---|---|
 | **`connectors`** | `ConnectorRegistry` | Accès à tous les pools SQL et API définis dans `connectors.toml`. `connectors.pools.engine("default")` retourne le moteur asynchrone SQLAlchemy. |
 | **`ctx`** | `RunContext` | L'état par exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Passer `ctx.run_id` aux logs / écritures d'audit pour les aligner avec l'enregistrement d'exécution Nomaflow. |
 | **`settings`** | `Settings` | Configuration vivante — `settings.connectors.config_path`, `settings.app`, etc. Utile pour les callables qui opèrent sur les fichiers de configuration eux-mêmes. |
+| **`app_state`** | l'état du serveur | L'état vivant du serveur en cours d'exécution — les applications, les modèles de l'explorateur de données, le dictionnaire. Pour les callables qui agissent sur la configuration en service, comme `liberty.jobs.dictionary:refresh_model_dictionary`. Absent hors d'un serveur en cours d'exécution. |
 
-Une fonction qui avale des kwargs arbitraires (`**_`) reçoit **les trois** qu'elle les demande ou non. Une fonction qui en nomme certains explicitement et refuse le reste (pas de `**`) ne reçoit que ceux qu'elle a nommés.
+Une fonction qui avale des kwargs arbitraires (`**_`) reçoit **les quatre** qu'elle les demande ou non. Une fonction qui en nomme certains explicitement et refuse le reste (pas de `**`) ne reçoit que ceux qu'elle a nommés.
 
 ### La couche op_kwargs
 

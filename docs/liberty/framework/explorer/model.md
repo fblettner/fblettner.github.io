@@ -302,6 +302,14 @@ A Screen Assistant preset already declares a set of tables and their joins. Pick
 
 Entities already declared are kept and completed; a key, measures, a default date or a cardinality set by hand stay as they are. Then adjust what is needed and **Save**. Picking the preset again fills the model once more.
 
+Applying the preset also creates the dictionary entries its tables lack — on a JD Edwards source, from its data dictionary: *Preset applied: 6 entities · 42 dictionary entries created*.
+
+### Models shipped by a preset \{#shipped\}
+
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+
+To change such a model, add a model in Settings → Explorer from the same preset: the declared model replaces the shipped one.
+
 ---
 
 ## Things to know
@@ -312,6 +320,7 @@ Entities already declared are kept and completed; a key, measures, a default dat
 | The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
 | No column is discovered. | The query failed or returned nothing. | Check the query in Settings → Connectors. |
 | A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
+| Fields show their raw column name. | The columns have no dictionary entry. | On the explorer page, a superuser sees *N column(s) have no dictionary entry and show their column name* and **Create the entries from the data dictionary** creates them in one click. |
 
 ## What's next
 

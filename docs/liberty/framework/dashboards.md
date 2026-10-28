@@ -118,6 +118,8 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
+| **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
+| **Links** | A card of entry points: menu items of the dashboard's application, or web addresses. | **Links per row** (1 to 4); per link a **Menu item** or a **URL**, an **Icon**, a **Label** (blank: the menu item's) and a **Description**. |
 
 A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
 
@@ -235,6 +237,14 @@ These three widgets turn a dashboard into a **synthesis page**: the figures that
 
 The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
 
+### Text and Links \{#text-links\}
+
+These two widgets turn a dashboard into the **home page of an application**: a few lines on what it does, the figures, then where to go.
+
+- A **Text** widget the full width of the grid (12 columns) takes the height of its text, with no scroll bar; a narrower one scrolls within its tile.
+- A **Links** widget only shows the menu items the user may open: an entry their roles do not grant disappears from the card. A URL opens in a new browser tab. A URL link needs a label.
+- In an export, a text keeps its Markdown and a links card becomes a table (*Link*, *Description*).
+
 ---
 
 ## The period \{#period\}
@@ -275,6 +285,8 @@ With **Compare with the previous period** ticked, a KPI runs its query a second 
 
 A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
 
+In the editor, each filter says which widgets it reaches — *Reaches: …*, with *not: …* for the others — or *Reaches no widget* when no column carries the dictionary item.
+
 With **All**, nothing is filtered: a query that returns one total row first, then one row per value, shows the totals in its Figure and List widgets.
 
 ---
@@ -294,6 +306,7 @@ The **Excel** and **PDF** buttons, next to **↻**, export what the bar holds: t
 | Layout | One sheet per widget; the KPIs together on a *Key figures* sheet. | A cover with the dashboard, the period and the filters, then the widgets one after the other. |
 | KPI, Figure | A row of values. | A card, with the sub line in small type under the figure. |
 | List, Bars, Table | Its rows. | A table. |
+| Text, Links | The text; the links as rows. | The text; a table of the links. |
 | Chart | Its data table. | The chart drawn, with a legend and the values on the bars. |
 
 A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Settings → App](./build/settings-app.md#branding).
@@ -309,7 +322,9 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text** or **Links**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+
+A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
 
 To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 

@@ -53,6 +53,7 @@ async def refresh(*, period: str, target_connector: str,
 | `connectors` | The connector registry — run a connector's named queries or endpoints. Given only if the function declares it. |
 | `ctx` | The run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (rows of the previous step). Given only if declared. |
 | `settings` | The server settings. Given only if declared. |
+| `app_state` | The running server's live state (applications, Data Explorer models, dictionary…), for a function that acts on the configuration itself — the dictionary refresh job does. Given only if declared. |
 
 The function may be `async` (recommended) or a plain `def`, which runs in a worker thread.
 

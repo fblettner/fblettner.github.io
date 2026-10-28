@@ -113,11 +113,13 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | Widget | Affiche | Réglages |
 |---|---|---|
 | **KPI** | Un chiffre calculé sur toutes les lignes d'une requête. | Connecteur, requête, colonne, agrégation (`count`, `sum`, `avg`, `min`, `max`, ou `none` pour la valeur de la première ligne), format, et **comparaison avec la période précédente**. |
-| **Figure** (chiffre) | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Value column**, **Format**, **Unit**, **Sub line**. |
-| **List** (liste) | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Title column** (obligatoire), **Subtitle column**, **Value column**, format, unité, **Count column** et **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
-| **Bars** (barres) | Un classement avec une barre de proportion sous chaque ligne. | **Label column** et **Value column** (obligatoires), **Sub label column**, format, unité, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
-| **Chart** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
+| **Chiffre** | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Colonne de valeur**, **Format**, **Unité**, **Ligne secondaire**. |
+| **Liste** | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Colonne de titre** (obligatoire), **Colonne de sous-titre**, **Colonne de valeur**, format, unité, **Colonne de compte** et **Libellé du compte**, **Colonne de tonalité**, **Colonne d'étiquette**, **Lignes affichées**. |
+| **Barres** | Un classement avec une barre de proportion sous chaque ligne. | **Colonne de libellé** et **Colonne de valeur** (obligatoires), **Colonne de sous-libellé**, format, unité, **Barre en part de**, **Note sous les barres**, **Lignes affichées**. |
+| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
+| **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
+| **Liens** | Une carte de points d'entrée : des éléments du menu de l'application du tableau de bord, ou des adresses web. | **Liens par ligne** (1 à 4) ; pour chaque lien, un **Élément de menu** ou une **URL**, une **Icône**, un **Libellé** (vide : celui de l'élément de menu) et une **Description**. |
 
 Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche.
 
@@ -227,13 +229,21 @@ Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le res
 
 Ces trois widgets font d'un tableau de bord une **page de synthèse** : les chiffres qui comptent, ce qui demande une décision et les proportions, chacun lu par une requête écrite pour lui.
 
-- **Format** : *Number*, *Integer*, *Currency* (euros, sans décimales pour un montant rond) ou *Percent* — un ratio entre 0 et 1, affiché en pourcentage. L'**unité** suit le chiffre (`utilisateurs`, `lignes`) ; une devise porte son propre symbole.
-- **Sub line** (chiffre) : une phrase dont les marqueurs sont remplis à partir de la première ligne, `{COLONNE}` ou `{COLONNE:format}` — `{ENABLED:integer} actifs · {DISABLED:integer} désactivés` donne *380 actifs · 32 désactivés*. Un marqueur qui nomme une colonne inconnue reste tel quel.
-- **Tone column** (liste) : une colonne valant `ok`, `warn`, `error` ou `info` colore la pastille en vert, orange, rouge ou bleu ; toute autre valeur donne une pastille grise. La requête décide du ton — une période clôturée, un montant au-delà d'un seuil.
-- **Count wording** (liste) : le texte autour de la colonne de comptage, `{n} lignes de conflit`. La **Tag column** affiche sa valeur sous forme d'étiquette à côté du titre, dans le ton de la ligne.
-- **Bar as a share of** (barres) : **The total of the rows** — les barres totalisent 100 % — ou **The largest row**, qui occupe la barre entière.
+- **Format** : *Nombre*, *Entier*, *Monnaie* (euros, sans décimales pour un montant rond) ou *Pourcentage (0–1)* — un ratio entre 0 et 1, affiché en pourcentage. L'**unité** suit le chiffre (`utilisateurs`, `lignes`) ; une devise porte son propre symbole.
+- **Ligne secondaire** (chiffre) : une phrase dont les marqueurs sont remplis à partir de la première ligne, `{COLONNE}` ou `{COLONNE:format}` — `{ENABLED:integer} actifs · {DISABLED:integer} désactivés` donne *380 actifs · 32 désactivés*. Un marqueur qui nomme une colonne inconnue reste tel quel.
+- **Colonne de tonalité** (liste) : une colonne valant `ok`, `warn`, `error` ou `info` colore la pastille en vert, orange, rouge ou bleu ; toute autre valeur donne une pastille grise. La requête décide du ton — une période clôturée, un montant au-delà d'un seuil.
+- **Libellé du compte** (liste) : le texte autour de la colonne de compte, `{n} lignes de conflit`. La **Colonne d'étiquette** affiche sa valeur sous forme d'étiquette à côté du titre, dans le ton de la ligne.
+- **Barre en part de** (barres) : **Le total des lignes** — les barres totalisent 100 % — ou **La plus grande ligne**, qui occupe la barre entière.
 
 L'éditeur affiche un aperçu du widget dès que le connecteur, la requête et les colonnes obligatoires sont choisis.
+
+### Texte et liens \{#text-links\}
+
+Ces deux widgets font d'un tableau de bord la **page d'accueil d'une application** : quelques lignes sur ce qu'elle fait, les chiffres, puis par où commencer.
+
+- Un widget **Texte** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son texte, sans barre de défilement ; plus étroit, il défile dans sa tuile.
+- Un widget **Liens** n'affiche que les éléments de menu que l'utilisateur peut ouvrir : une entrée que ses rôles n'accordent pas disparaît de la carte. Une URL s'ouvre dans un nouvel onglet du navigateur. Un lien vers une URL exige un libellé.
+- À l'export, un texte garde son Markdown et une carte de liens devient un tableau (*Lien*, *Description*).
 
 ---
 
@@ -245,7 +255,7 @@ Un tableau de bord peut porter une **période** : un sélecteur de dates dans sa
 - **Une période libre** : choisir une date de début puis une date de fin dans le calendrier de deux mois, puis **Appliquer**.
 - **Base de dates** : quand le tableau de bord propose plusieurs dates (*Date du document*, *Payée le*), un choix **Date** en bas du panneau indique celle à laquelle s'applique la période.
 
-Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Paramètres → App → Default period (dashboards)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
+Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Paramètres → App → Période par défaut (tableaux de bord)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
 
 ### Ce que reçoivent les requêtes
 
@@ -267,7 +277,7 @@ Une requête qui ne les cite pas n'est pas concernée. Quand la période désign
 
 ### Comparer un indicateur
 
-Avec **Compare with the previous period** coché, un KPI relance sa requête sur la période précédente et affiche sous le chiffre l'évolution — en pourcentage, en points pour un KPI en pourcentage — en vert ou en rouge, ainsi que la valeur précédente. Rien n'est comparé sur *Toutes les dates*.
+Avec **Comparer avec la période précédente** coché, un KPI relance sa requête sur la période précédente et affiche sous le chiffre l'évolution — en pourcentage, en points pour un KPI en pourcentage — en vert ou en rouge, ainsi que la valeur précédente. Rien n'est comparé sur *Toutes les dates*.
 
 ---
 
@@ -275,13 +285,15 @@ Avec **Compare with the previous period** coché, un KPI relance sa requête sur
 
 Un tableau de bord peut aussi porter des **filtres**, présentés comme des listes déroulantes dans sa barre. Chaque filtre a un libellé, un élément du dictionnaire, une requête qui fournit ses choix (colonne de valeur et colonne de libellé), et une valeur par défaut facultative. Choisir une valeur recharge chaque widget dont la requête renvoie une colonne portant cet élément — par l'écran du widget, ou directement d'après les colonnes du résultat : une colonne du nom de l'élément, ou de ce nom précédé du préfixe de colonnes du connecteur. Les autres widgets restent tels quels. Une période dont la colonne de date est donnée par un élément du dictionnaire retrouve sa colonne de la même façon.
 
+Dans l'éditeur, chaque filtre indique les widgets qu'il atteint — *Atteint : …*, avec *pas : …* pour les autres — ou *N'atteint aucun widget* quand aucune colonne ne porte l'élément du dictionnaire.
+
 Avec **Tous**, rien n'est filtré : une requête qui renvoie d'abord une ligne de total, puis une ligne par valeur, affiche les totaux dans ses widgets chiffre et liste.
 
 ---
 
 ## Actualisation et cache \{#cache\}
 
-Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Paramètres → App → Dashboard cache (seconds, 0 = none)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
+Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Paramètres → App → Cache des tableaux de bord (secondes, 0 = aucun)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
 
 ---
 
@@ -294,6 +306,7 @@ Les boutons **Excel** et **PDF**, à côté de **↻**, exportent ce que montre 
 | Mise en page | Une feuille par widget ; les KPI réunis sur une feuille *Chiffres clés*. | Une page de garde avec le tableau de bord, la période et les filtres, puis les widgets à la suite. |
 | KPI, chiffre | Une ligne de valeurs. | Une carte, la ligne de détail en petits caractères sous le chiffre. |
 | Liste, barres, table | Ses lignes. | Un tableau. |
+| Texte, liens | Le texte ; les liens en lignes. | Le texte ; un tableau des liens. |
 | Graphique | Son tableau de données. | Le graphique dessiné, avec sa légende et les valeurs sur les barres. |
 
 Un widget dont la requête échoue devient une section d'erreur ; le reste de l'export est produit. Les nombres suivent la langue du lecteur (`1 234,5` / `1,234.5`). La charte PDF se règle dans [Paramètres → App](./build/settings-app.md#branding).
@@ -307,9 +320,11 @@ Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter o
 | Partie | Contenu |
 |---|---|
 | Général | Titre, description. |
-| Période | **Add a period** : *Opens on* (un préréglage, ou *App default*), *Date column* ou *dictionary item*, et des **Date bases** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
-| Filtres | Les listes déroulantes de la barre. |
-| Widgets | **Add widget** : Chart, KPI, Table, **Figure**, **List** ou **Bars**. Chaque widget a un **Subtitle**. Chaque widget a des boutons pour le rétrécir ou l'élargir (W−, W+), le réduire ou l'agrandir en hauteur (H−, H+), et l'avancer ou le reculer dans la grille. |
+| Période | **Ajouter une période** : *S'ouvre sur* (un préréglage, ou la valeur de l'application), *Colonne de date* ou *élément du dictionnaire*, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
+| Filtres | **Ajouter un filtre** : les listes déroulantes de la barre. |
+| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte** ou **Liens**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
+
+Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
 
 Pour rendre le tableau de bord accessible, ajouter une entrée **dashboard** à un menu ([Menus](./build/menus/item-types.md)) ; sa permission est `dashboard:<application>.<id>`.
 

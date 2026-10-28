@@ -51,7 +51,7 @@ They are set in the **Actions** and **Row menu** tabs of the screen editor, with
 | **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
 | **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
 | | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
-| **Row menu** *(own tab)* | `row_menu` | Each entry is a right-click menu item on a row. | The clicked row. |
+| **Row menu** *(own tab)* | `row_menu` | Each entry is a menu item on a row: right-click, or the ⋯ handle at the start of the row. | The clicked row. |
 
 Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
 
@@ -77,6 +77,17 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`refresh`** | Reloads the grid. | — |
 
 `bind_result` keeps the rows (or the response) of the step in the chain's context, so that a later step reads them with `source = "<id>.first_row.<COLUMN>"`.
+
+### The row handle and drill-downs \{#drill\}
+
+A screen with row-menu actions shows a small handle at the start of every row, so the actions stay in reach on a wide table:
+
+- with several actions, the handle (**⋯**, *Row actions*) opens the same menu as the right-click;
+- with a single `navigate` action, the handle (a return arrow) fires it at once — its tooltip is the action's label.
+
+**Link cells.** A column's **drill** setting (Settings → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
+
+**Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Settings → App](../settings-app.md#app), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
 
 ### Composite types
 

@@ -1,6 +1,6 @@
 ---
 title: Explorateur de données
-description: "L'analyse libre des données de Nomasx-1 dans l'explorateur de données : trois modèles — Sécurité, Séparation des tâches, Conformité des licences — chacun avec ses analyses partagées et son tableau de bord prêts à l'emploi, accessibles depuis le menu de chaque domaine."
+description: "L'analyse libre des données de Nomasx-1 dans l'explorateur de données : trois modèles — Sécurité, Séparation des tâches, Conformité des licences — chacun avec ses analyses partagées et son tableau de bord prêts à l'emploi."
 keywords: [Nomasx-1, explorateur de données, analyse, tableau croisé, sécurité, utilisateurs, rôles, séparation des tâches, SoD, conflits, conformité des licences, exposition financière, tableau de bord]
 ---
 
@@ -26,15 +26,15 @@ Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du 
   <rect x="240" y="30" width="190" height="360" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="50" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOMASX-1</text>
   <text x="254" y="74" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Vue d'ensemble</text>
-  <text x="254" y="98" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
-  <text x="254" y="122" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Sécurité</text>
-  <text x="266" y="146" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
-  <text x="266" y="170" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Utilisateurs</text>
-  <text x="254" y="194" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Applications</text>
-  <text x="266" y="218" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Conflits</text>
-  <text x="278" y="242" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
-  <text x="254" y="266" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Licences</text>
-  <text x="266" y="290" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
+  <text x="254" y="100" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
+  <text x="254" y="126" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Rapports</text>
+  <text x="254" y="152" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Dernière collecte</text>
+  <text x="254" y="178" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Sécurité</text>
+  <text x="254" y="204" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Applications</text>
+  <text x="254" y="230" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Database</text>
+  <text x="254" y="256" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Licences</text>
+  <text x="254" y="282" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Paramètres</text>
+  <text x="254" y="308" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▸ Tâches</text>
   <text x="450" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur de données</text>
   <rect x="750" y="34" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="760" y="48.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Séparation des tâches · nomasx1 · sod ▾</text>
@@ -74,14 +74,10 @@ Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du 
   <text x="620" y="348" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">conflits, activités, rôles, risques, tendance</text>
   <text x="462" y="368" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">• Conformité des licences</text>
   <text x="620" y="368" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">transactions, composants, usage, exposition</text>
-  <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tous les modèles</text>
-  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entrée de premier niveau</text>
-  <line x1="210" y1="77.0" x2="252" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxe-arrow)"/>
-  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un modèle par dossier</text>
-  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Sécurité, Conflits, Licences</text>
-  <line x1="210" y1="167.0" x2="266" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxe-arrow)"/>
+  <rect x="10" y="84" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une seule entrée</text>
+  <text x="20" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sous Vue d'ensemble, tous les modèles</text>
+  <line x1="210" y1="101.0" x2="252" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxe-arrow)"/>
   <rect x="1000" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choix du modèle</text>
   <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">changer à tout moment</text>
@@ -100,14 +96,7 @@ Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du 
 
 ## Où le trouver \{#menu\}
 
-| Entrée de menu | Ouvre |
-|---|---|
-| **Explorateur de données** (premier niveau) | L'explorateur, avec tous les modèles de Nomasx-1 dans son sélecteur. |
-| **Sécurité → Explorateur de données** | Le modèle *Security*. |
-| **Applications → Conflits → Explorateur de données** | Le modèle *Segregation of duties*. |
-| **Licences → Explorateur de données** | Le modèle *Licence compliance*. |
-
-Le sélecteur de modèle permet d'en changer à tout moment.
+**Explorateur de données**, juste sous **Vue d'ensemble** dans le menu de Nomasx-1, ouvre l'explorateur avec les trois modèles de Nomasx-1 dans son sélecteur. Le sélecteur passe d'un modèle à l'autre à tout moment ; les analyses et tableaux de bord suivent le modèle.
 
 ---
 

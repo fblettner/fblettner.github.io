@@ -67,7 +67,7 @@ Two additions: the **AI assistant**, so that users ask questions in plain langua
 
 ### Access
 
-In the `crm-sales` role, **Beyond the menus**: **Allow** — *AI assistant*. Save. Bob now has an **AI Assistant** button at the top right.
+In the `crm-sales` role, **Beyond the menus**: **Allow** — *AI assistant*. Save. Bob now has an **Assistant** button at the top right.
 
 ### Descriptions
 

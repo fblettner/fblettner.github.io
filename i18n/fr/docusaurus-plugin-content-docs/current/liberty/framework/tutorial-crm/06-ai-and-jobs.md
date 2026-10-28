@@ -63,11 +63,11 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
 
 ### Réglages
 
-**Paramètres → App → AI Assistant** : **Enabled**, la **Anthropic API key**, le **Model**, et **Allowed connectors** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
+**Paramètres → App → Assistant IA** : **Activé**, la **Clé API Anthropic**, le **Modèle**, et **Connecteurs autorisés** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
 
 ### Accès
 
-Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **AI Assistant** en haut à droite.
+Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
 
 ### Descriptions
 

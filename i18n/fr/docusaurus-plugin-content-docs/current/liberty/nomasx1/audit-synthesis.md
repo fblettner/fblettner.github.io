@@ -1,12 +1,12 @@
 ---
 title: Vue d'ensemble — Synthèse d'audit
-description: "La page d'accueil de Nomasx-1 : le tableau de bord Audit synthesis — utilisateurs, rôles, conflits de séparation des tâches et exposition de licences en un coup d'œil, les conflits par rafraîchissement et par processus, les constats qui demandent une décision, le détail par processus et par composant de licence, la fraîcheur des données, l'activité et les utilisateurs les plus en conflit — avec un filtre par application, une période et l'export Excel / PDF."
+description: "La page d'accueil de Nomasx-1 : le tableau de bord Synthèse d'audit — utilisateurs, rôles, conflits de séparation des tâches et exposition de licences en un coup d'œil, les conflits par rafraîchissement et par processus, les constats qui demandent une décision, le détail par processus et par composant de licence, la fraîcheur des données, l'activité et les utilisateurs les plus en conflit — avec un filtre par application, une période et l'export Excel / PDF."
 keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, séparation des tâches, SoD, exposition de licences, comptes dormants, comptes privilégiés, fraîcheur des données, export, PDF]
 ---
 
 # Vue d'ensemble — Synthèse d'audit
 
-**Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre l'**Audit synthesis** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
+**Vue d'ensemble**, première entrée du menu de Nomasx-1, ouvre la **Synthèse d'audit** : sur une seule page, les comptes, les conflits de séparation des tâches et la position de licences de chaque application connectée, ce qui demande une décision, et la fraîcheur des données. C'est la page à ouvrir avant une revue interne, et celle à exporter pour un comité de pilotage.
 
 ---
 
@@ -157,10 +157,10 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
 
 | Carte | Chiffre | Ligne de détail |
 |---|---|---|
-| **Users** — comptes déclarés | Les comptes collectés. | Actifs · désactivés · **dormants** : actifs sans connexion depuis 90 jours. |
-| **Roles** — rôles définis et leur attribution | Les rôles définis. | Attribués · **orphelins** (attribués à personne) · utilisateurs titulaires de plus de 10 rôles, avec le maximum. |
-| **Segregation of duties** — utilisateurs en conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
-| **Licence exposure** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
+| **Utilisateurs** — comptes déclarés | Les comptes collectés. | Actifs · désactivés · **dormants** : actifs sans connexion depuis 90 jours. |
+| **Rôles** — rôles définis et leur affectation | Les rôles définis. | Attribués · **orphelins** (attribués à personne) · utilisateurs titulaires de plus de 10 rôles, avec le maximum. |
+| **Séparation des tâches** — utilisateurs porteurs d'un conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
+| **Exposition licences** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
 
 L'exposition s'appuie sur les [licences souscrites](./licenses/subscribed.md) et le [catalogue de prix](./settings/pricing/pricing.md) : un composant sans prix compte pour zéro.
 
@@ -172,18 +172,18 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 
 | Constat | Action attendue |
 |---|---|
-| **Active SoD violations** — ou *No SoD violation*, ou *No SoD matrix defined* | Les règles de la matrice déclenchées sur l'ensemble des règles, et les associations privilégiées. Rouge dès qu'un utilisateur privilégié est concerné. Sans matrice, la définir dans [Paramètres → SoD](./settings/sod/matrix.md). |
-| **Self-conflicting roles** | Un rôle accorde à lui seul les deux côtés d'une paire incompatible : corriger le rôle règle le cas de tous ses titulaires. |
-| **Conflicting role combinations** | Des paires de rôles qui ne contreviennent à la séparation des tâches que détenues ensemble : séparer les fonctions ou revoir les attributions. |
-| **Components over subscription** | Plus d'utilisateurs disposant de droits que de licences : acheter, ou retirer des droits. Le montant est l'exposition ; rouge à partir de 250 000, orange à partir de 25 000. |
-| **Privileged accounts** | Accès de super-utilisateur : vérifier que chacun a un titulaire, une justification et une revue trimestrielle. |
-| **Dormant enabled accounts** | Aucune connexion depuis 90 jours, dont les comptes jamais utilisés : désactiver ou recertifier. |
-| **Generic / shared accounts** | Les actions ne peuvent pas être imputées à une personne : les remplacer par des comptes nominatifs. |
-| **\*PUBLIC object grants** | Des objets ouverts par défaut à tous les utilisateurs : vérifier qu'aucun ne correspond à une transaction sensible. |
-| **Enabled accounts without roles** | Un provisionnement incomplet, ou des comptes à désactiver. |
-| **Direct user-level grants** | Des droits accordés à un utilisateur plutôt qu'à un rôle, hors du contrôle d'accès par rôle. |
-| **Users with more than 10 roles** | Une accumulation de rôles : ajuster, puis relancer la détection. |
-| **Orphan roles** | Des rôles attribués à personne : les supprimer ou les réaffecter. |
+| **Violations SoD actives** — ou *Aucune violation SoD*, ou *Aucune matrice SoD définie* | Les règles de la matrice déclenchées sur l'ensemble des règles, et les associations privilégiées. Rouge dès qu'un utilisateur privilégié est concerné. Sans matrice, la définir dans [Paramètres → SoD](./settings/sod/matrix.md). |
+| **Rôles auto-conflictuels** | Un rôle accorde à lui seul les deux côtés d'une paire incompatible : corriger le rôle règle le cas de tous ses titulaires. |
+| **Combinaisons de rôles en conflit** | Des paires de rôles qui ne contreviennent à la séparation des tâches que détenues ensemble : séparer les fonctions ou revoir les attributions. |
+| **Composants au-delà de la souscription** | Plus d'utilisateurs disposant de droits que de licences : acheter, ou retirer des droits. Le montant est l'exposition ; rouge à partir de 250 000, orange à partir de 25 000. |
+| **Comptes à privilèges** | Accès de super-utilisateur : vérifier que chacun a un titulaire, une justification et une revue trimestrielle. |
+| **Comptes actifs dormants** | Aucune connexion depuis 90 jours, dont les comptes jamais utilisés : désactiver ou recertifier. |
+| **Comptes génériques / partagés** | Les actions ne peuvent pas être imputées à une personne : les remplacer par des comptes nominatifs. |
+| **Droits sur \*PUBLIC** | Des objets ouverts par défaut à tous les utilisateurs : vérifier qu'aucun ne correspond à une transaction sensible. |
+| **Comptes actifs sans rôle** | Un provisionnement incomplet, ou des comptes à désactiver. |
+| **Droits attribués directement à l'utilisateur** | Des droits accordés à un utilisateur plutôt qu'à un rôle, hors du contrôle d'accès par rôle. |
+| **Utilisateurs à plus de 10 rôles** | Une accumulation de rôles : ajuster, puis relancer la détection. |
+| **Rôles orphelins** | Des rôles attribués à personne : les supprimer ou les réaffecter. |
 
 ---
 
@@ -191,12 +191,12 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 
 | Widget | Contenu |
 |---|---|
-| **Conflicts per refresh** | Les lignes de conflit à chaque rafraîchissement SoD de la période, empilées par processus métier — la tendance de la remédiation. |
-| **Per process** | Les utilisateurs en conflit par processus métier, avec le nombre de lignes de conflit ; en rouge quand des utilisateurs privilégiés en font partie. |
-| **Per licence component** | Les utilisateurs disposant de droits par composant, face à la quantité souscrite. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
-| **Data freshness** | La dernière collecte par module, avec son ancienneté : vert sous 2 jours, orange sous 8, rouge au-delà. Une ligne rouge signale des chiffres anciens. |
-| **Transacting users per month** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
-| **Users with the most conflicts** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |
+| **Conflits par rafraîchissement** | Les lignes de conflit à chaque rafraîchissement SoD de la période, empilées par processus métier — la tendance de la remédiation. |
+| **Par processus** | Les utilisateurs en conflit par processus métier, avec le nombre de lignes de conflit ; en rouge quand des utilisateurs privilégiés en font partie. |
+| **Par composant de licence** | Les utilisateurs disposant de droits par composant, face à la quantité souscrite. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
+| **Fraîcheur des données** | La dernière collecte par module, avec son ancienneté : vert sous 2 jours, orange sous 8, rouge au-delà. Une ligne rouge signale des chiffres anciens. |
+| **Utilisateurs transactionnels par mois** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
+| **Utilisateurs les plus en conflit** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |
 
 Le détail derrière chaque widget se trouve dans les écrans : [Conflits](./applications/conflicts/summary.md), [Utilisateurs](./security/users.md), [Rôles](./security/roles.md), [Rapport d'utilisation](./licenses/usage-report.md), [Rapport financier](./licenses/financial-report.md).
 

@@ -1,12 +1,12 @@
 ---
 title: Paramètres de l'application
-description: "Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, journaux, langue, valeurs par défaut de l'interface, rechargement à chaud, mode thick d'Oracle), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage."
+description: "Paramètres → App dans Liberty Next : les six sections — Application (nom, adresse, journaux, langue, valeurs par défaut de l'interface, onglets, navigation, rechargement à chaud, mode épais d'Oracle), Licence, Assistant IA, Notifications (e-mail), OpenID Connect (SSO), Charte des PDF — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage."
 keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, SMTP, OpenID Connect, SSO, habillage PDF, période par défaut, taille de page, Oracle thick]
 ---
 
 # Paramètres de l'application
 
-**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -95,56 +95,60 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 
 ---
 
-## App \{#app\}
+## Application \{#app\}
 
 | Champ | Remarques |
 |---|---|
-| **App name** | Le nom de l'application. |
-| **Bind host**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
-| **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
-| **Default language** | Langue des libellés quand une requête n'en indique pas. |
-| **Default period (dashboards)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
-| **Grid page size** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
-| **Dashboard cache (seconds, 0 = none)** | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord (60 par défaut). |
-| **Hot-reload config TOML files on change** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
-| **Oracle thick mode (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+| **Nom de l'application** | Le nom de l'application. |
+| **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
+| **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
+| **Langue par défaut** | Langue des libellés quand une requête n'en indique pas. |
+| **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
+| **Taille de page des grilles** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
+| **Cache des tableaux de bord (secondes, 0 = aucun)** | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord (60 par défaut). |
+| **Plusieurs onglets à la fois (sinon : une page à la fois)** | Activé par défaut. Désactivé : ouvrir une page remplace la page courante. |
+| **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets Paramètres, Surveillance et d'exécution restent ouverts. |
+| **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme l'onglet le plus ancien. |
+| **Les navigations s'ouvrent dans l'onglet courant (…)** | Désactivé par défaut. Activé : la navigation depuis une ligne s'ouvre en panneau dans l'onglet courant, avec un fil d'Ariane et **Retour**, sauf si l'action en décide autrement — voir [Actions](./screens/actions-and-lifecycle.md#drill). |
+| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
+| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
 
-Quand un changement enregistré demande un redémarrage, la page l'indique : *Saved. Restart the server to apply the new settings.*
-
----
-
-## License \{#license\}
-
-**License key** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
+Quand un changement enregistré demande un redémarrage, la page l'indique : *Enregistré. Redémarrez le serveur pour appliquer les nouveaux réglages.*
 
 ---
 
-## AI Assistant \{#ai\}
+## Licence \{#license\}
+
+**Clé de licence** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
+
+---
+
+## Assistant IA \{#ai\}
 
 | Champ | Remarques |
 |---|---|
-| **Enabled** | L'assistant répond ; les utilisateurs ont besoin de la permission `ai:chat`. |
-| **Anthropic API key** | Sans elle, l'assistant indique qu'il n'est pas configuré. |
-| **Model**, **Effort**, **Max tokens**, **Adaptive thinking** | Le modèle, la profondeur de raisonnement et la longueur des réponses. |
-| **Max tool iterations** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
-| **Request timeout (s)** | 120 par défaut. |
-| **System prompt** | Vide : les consignes intégrées. |
-| **Connector tools** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
-| **API tool** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
-| **Scaffold tools** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
-| **Allowed connectors** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
-| **Allowed domains**, **Max fetches per turn** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
-| **Operations tools** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
-| **Models users may pick** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
-| **Starter questions** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
+| **Activé** | L'assistant répond ; les utilisateurs ont besoin de la permission `ai:chat`. |
+| **Clé API Anthropic** | Sans elle, l'assistant indique qu'il n'est pas configuré. |
+| **Modèle**, **Effort**, **Jetons maximum**, **Réflexion adaptative** | Le modèle, la profondeur de raisonnement et la longueur des réponses. |
+| **Itérations d'outils maximum** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
+| **Délai de la requête (s)** | 120 par défaut. |
+| **Invite système** | Vide : les consignes intégrées. |
+| **Outils connecteurs** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
+| **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
+| **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
+| **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
+| **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
+| **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
+| **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
+| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
 
 Voir [Assistant IA](../ai-assistant.md).
 
 ---
 
-## Notifications (email) \{#notifications\}
+## Notifications (e-mail) \{#notifications\}
 
-**Notifications enabled**, puis le **Server** (SMTP host, Port, Encryption — STARTTLS, TLS implicite ou aucun —, Timeout), le **Account** (User, Password) et **Sending** (From address, Keep read notifications — en jours, `0` = sans limite). Voir [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications activées**, puis le **Serveur** (Hôte SMTP, Port, Chiffrement — STARTTLS, SSL / TLS implicite ou aucun —, Délai), le **Compte** (Utilisateur, Mot de passe) et l'**Envoi** (Adresse d'expédition, Conserver les notifications lues — en jours, `0` = toujours). Voir [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -152,17 +156,17 @@ Voir [Assistant IA](../ai-assistant.md).
 
 | Champ | Remarques |
 |---|---|
-| **Enabled** | Affiche le bouton OIDC sur la page de connexion. |
-| **Discovery URL** | Le `.well-known/openid-configuration` du fournisseur. |
-| **Client ID**, **Client secret**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
-| **Username claim**, **Email claim**, **Name claim** | Les claims de l'ID token qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
-| **Redirect URL override (proxy)**, **Frontend redirect** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
+| **Activé** | Affiche le bouton OIDC sur la page de connexion. |
+| **URL de découverte** | Le `.well-known/openid-configuration` du fournisseur. |
+| **ID client**, **Secret client**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
+| **Revendication identifiant**, **Revendication e-mail**, **Revendication nom** | Les revendications du jeton d'identité qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
+| **URL de redirection (proxy)**, **Redirection frontend** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
 
-Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur.toml`. Voir [Se connecter](./secure/sign-in.md#oidc).
+Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur. Voir [Se connecter](./secure/sign-in.md#oidc).
 
 ---
 
-## PDF branding \{#branding\}
+## Charte des PDF \{#branding\}
 
 Les réglages de couverture et de page des rapports PDF : auteur, couleurs principales, textes de couverture, pied de page. Les champs vides gardent les valeurs par défaut du framework.
 

@@ -171,6 +171,7 @@ La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, e
 | Rule | **Default** | La valeur initiale d'une nouvelle ligne. |
 | Rule | **Justify** | Pour les colonnes caractères de longueur fixe : `right_blank` (cadrage à droite, complété par des espaces) ou `right_zero` (cadrage à droite, complété par des zéros). Appliqué aux valeurs écrites et aux clés de la clause WHERE. Vide = cadrage à gauche. |
 | Rule | **Size** | La longueur de stockage de la donnée, utilisée avec **Justify** quand la colonne physique est plus large. |
+| Rule | **Decimals** | Pour `jdenumber`, le nombre de décimales implicites de l'entier stocké ; pour les autres formats numériques, le nombre de décimales affichées (0 à 9). |
 | Rule | **Lookup params** | Des valeurs fixes pour les `:params` de la requête du lookup (par exemple `TYPE = CUSTOMER`). Les clés proposées sont les paramètres déclarés par le lookup. |
 | Translations | une ligne par langue | Le libellé dans cette langue. |
 | Advanced | **Override** | Marque l'entrée comme personnalisation locale : un package de mise à jour ne l'écrase pas. |
@@ -185,6 +186,7 @@ La barre de l'élément propose **Find usages**, **Renommer**, **Cloner** et **S
 | `number`, `integer`, `decimal`, `currency` | Un nombre. |
 | `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. |
 | `jdedate`, `jdetime` | Une date (CYYDDD) ou une heure (HHMMSS) JD Edwards, affichée comme une date ou une heure ordinaire. |
+| `jdenumber` | Un montant JD Edwards stocké sans sa virgule : avec **Decimals** à 2, la valeur stockée `12345` se lit et se saisit `123,45`, puis s'écrit de nouveau `12345`. Les filtres se saisissent en unités réelles ; les totaux et les lignes de détail de l'explorateur de données sont ramenés à la même échelle. L'[analyse](#scan-a-table) d'une table JD Edwards renseigne les décimales d'après le dictionnaire de données. |
 | `boolean` | Une coche ou une croix. |
 | `password` | Une valeur masquée. |
 | `email`, `url`, `color` | Du texte, affiché tel quel. |

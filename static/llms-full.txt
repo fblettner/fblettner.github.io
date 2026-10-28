@@ -711,16 +711,17 @@ A second example: a Segregation-of-Duties summary by user, with the conflicts ra
 
 ## The application map
 
-The sidebar splits the day-to-day work into six sections plus the configuration area.
+The sidebar splits the day-to-day work into seven sections plus the configuration area.
 
 | Section | What it covers |
 |---|---|
 | **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
-| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards; also in the Security, Conflicts and Licenses folders. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
 | **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed Licenses, Usage Report, Financial Report. |
+| **Jobs** | [Collect the security data or the licence transactions](./jobs.md) on demand, with a live log. |
 | **Settings** | Source-system definitions (applications, JDE schemas, Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
 
 ---
@@ -951,17 +952,16 @@ The User Management grid, with the editable user record, the attached roles and 
 
 ## The application map
 
-The sidebar splits the day-to-day work into five sections.
+The menu follows the work, from the home page to the maintenance jobs.
 
 | Section | What it covers |
 |---|---|
-| **Dashboard** | Daily activity summary — open transactions, running jobs, recent users, latest alerts. |
-| **Master Data** | UDC types and UDC codes, Address Book, customers, suppliers, items, GL accounts. Every grid supports filter, sort, inline edit and Excel upload. |
-| **Security Maintenance** | User Management, Role Management, Role Relationships, Environments, Security Workbench. The full JDE security catalogue, condensed into five screens with grid editing and a guided Import / Merge workflow. |
-| **Transactions** | AP, AR, GL grids with filters and drill-through to the underlying detail. |
-| **Reporting** | Schedule BIP jobs from one form, archive of past runs, distribution by e-mail. |
-| **Monitoring** | Live transaction counters, the JDE job-control queue as a grid, performance indicators (DB latency, AIS response time, throughput). |
-| **Settings** | Environment definitions, AIS endpoint, e-mail server, archive retention. |
+| **Overview** | The [home page](./home.md): what Nomajde does, the live figures of the JD Edwards instance, the entry points of each domain. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security and development data, and of the models shipped by the JD Edwards presets. |
+| **Master Data** | UDC types and UDC codes. Every grid supports filter, sort, inline edit and Excel upload. |
+| **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
+| **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
+| **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |
 
 ---
 
@@ -1578,9 +1578,9 @@ Oracle BI Publisher is the reporting solution to author, manage, and deliver all
 ## Liberty Next — AI assistant
 Source: https://docs.nomana-it.fr/liberty/framework/ai-assistant/
 
-The Liberty Next AI assistant: the drawer opened from the AI Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings.
+The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings.
 
-**AI Assistant**, at the right of the top bar, opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
+**Assistant**, at the right of the top bar (and at the bottom of the sidebar), opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
 
 ---
 
@@ -1608,13 +1608,15 @@ Examples: *How many open orders per company this month?* — *Which users have n
 
 While a data screen is the active tab, every message carries what the user is looking at: the application, the screen and its read query, the active filters, the number of rows loaded and their columns, and the row last clicked (or whose row menu was opened). *This screen*, *these rows* or *the selected row* need no further explanation, and the assistant runs the screen's own query when it needs more data.
 
+On the **Data Explorer** page, the context is the model and the analysis on the canvas (entity, rows, measures, period) or the saved analysis open: *Save this as an analysis* or *Make a dashboard of these* need no further explanation.
+
 A chip under the drawer's header shows what is sent — *Page: Sales lines · filters: 2 · the clicked row*. Its **×** stops sending the page for as long as the user stays on it. The context is limited to 4,000 characters.
 
 ---
 
 ## Starter questions \{#starters\}
 
-On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen, else those of the application, else those set for everywhere. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place.
+On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen (or of the Data Explorer page), else those of the application, else those set for everywhere — the most specific place that has questions wins. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place. When an application ships its questions in several languages, the drawer shows them in the user's language.
 
 Questions come from two sources:
 
@@ -1629,6 +1631,8 @@ Questions come from two sources:
 |---|---|---|
 | `list_connectors` | Lists the connectors, their queries and endpoints (descriptions, no SQL, no credentials). | **Connector tools** (on by default). |
 | `sql_query` | Runs a **read** query of a SQL connector. Write queries are always refused. | **Connector tools**. |
+| `explorer_models`, `explorer_fields`, `explorer_query` | List the [Data Explorer](./explorer/overview.md) models and their fields, then compute a total, a ranking, a trend or a comparison on a model — rows, measures, filters, period, sort, Top N (100 rows by default, 10,000 at most) — under the user's data scope. | On by default. |
+| `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | List the user's saved analyses and dashboards, and save what the user asks for: an analysis is run once before it is stored, so a wrong field is refused; a dashboard gathers saved analyses as tiles. Both are **private** unless the user asks to share them. | On by default. |
 | `describe_instance` | Summarises what the installation holds: applications, menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default). |
@@ -1975,38 +1979,49 @@ The revenue is in each company's own currency: it is never summed across currenc
 
 ## Loading the files \{#loads\}
 
-The data arrives through Nomaflow jobs, run from **Nomaflow → Jobs** with **Run now** or **Run with parameters**:
+The **Import** folder of the menu holds the loads, each a [job page](../nomaflow/jobs/run-from-menu.md) where the user picks the file, runs it and follows its log:
 
-| Job | Does |
-|---|---|
-| `nomademo-init-db` | Creates the tables in the database of the `nomademo` pool. Can be run again. |
-| `nomademo-load-items` | Loads the item file (sheet *Items*: code, name, family, sub-family), replacing the table. |
-| `nomademo-load-companies` | Loads the company file (sheet *Companies*: code, name, business unit, region, currency), replacing the table. |
-| `nomademo-load-sales` | Loads one month of invoice lines (sheet *Sales*), chosen when the job is run. |
-| `nomademo-refresh-periods` | Rebuilds the period rows from the loaded lines, keeping their status. |
-| `nomademo-demo-accounts` | Creates the demo roles and users — see [below](#accounts). |
-| `nomademo-monthly-digest` | The monthly digest — see [below](#digest). |
+| Entry | Job | Does |
+|---|---|---|
+| **Items file** | `nomademo-load-items` | Loads the item file (sheet *Items*: code, name, family, sub-family), replacing the table. |
+| **Companies file** | `nomademo-load-companies` | Loads the company file (sheet *Companies*: code, name, business unit, region, currency), replacing the table. |
+| **Sales file (one month)** | `nomademo-load-sales` | Loads one month of invoice lines (sheet *Sales*). |
+| **Refresh periods** | `nomademo-refresh-periods` | Rebuilds the period rows from the loaded lines, keeping their status. |
+| **Load the sample files** | `nomademo-load-samples` | Loads the sample files shipped with the demo — every file at once, no upload. Run it again any time to reset the demo. |
+
+The **sample files** ship with the application: about 320 items in six families, 14 companies in six business units, and six months of invoice lines (October to March). The data is synthetic and anonymous; a reload gives the same figures.
 
 The sales load shows the [`file_load` step](../nomaflow/steps.md#file-load) at work:
 
 - it **replaces** the partitions the file carries — year, month and company — in one transaction: reloading a corrected month replaces that month only, and a failed load leaves the previous data in place;
-- a **guard** refuses the file when one of its periods is closed, with the reason in the run;
-- rejected rows are kept for download from the run;
+- a **guard** refuses the file when one of its periods is closed, with the reason in the log;
+- rejected rows are offered for download under the log;
 - the following steps add the new customers and refresh the period rows.
 
-The jobs are delivered without a schedule.
+Two more jobs are run from **Nomaflow → Jobs**: `nomademo-init-db` creates the tables, `nomademo-demo-accounts` creates the demo users ([below](#accounts)). The jobs are delivered without a schedule.
 
 ---
 
 ## The home dashboard \{#dashboard\}
 
-**Overview** is the application's home page: the [dashboard](./dashboards.md) *Sales overview*. It shows the periods loaded, the companies with sales, the invoice lines and the quantity sold; the monthly quantity, the quantity by business unit and by family, the revenue by currency; the periods table and the top items. The **Business unit** filter in the bar narrows every widget whose query returns the business unit — no screen needed behind the widgets.
+**Overview** is the application's home page: the [dashboard](./dashboards.md) *Sales overview*, built on the synthesis widgets.
+
+| Widget | Shows |
+|---|---|
+| **Invoice lines**, **Latest period**, **Periods**, **Items sold** | The figures, with a detail line: units, companies and customers; the latest period and its quantity; the periods still open; the families. |
+| **Monthly quantity by business unit** | One series per business unit, per period. |
+| **What needs attention** | The open periods to close, the companies without sales in the latest period. |
+| **Revenue by currency**, **Quantity by family** | Proportion bars — the totals first, then per business unit. The revenue is never added across currencies. |
+| **Periods** | Each period's status, who changed it and when. |
+| **Top items**, **Quantity by business unit** | The largest quantities. |
+
+The bar carries a **period** (all dates when the page opens) and a **Business unit** filter that narrows every widget whose query returns the business unit — no screen needed behind the widgets.
 
 ---
 
 ## The Data Explorer \{#explorer\}
 
-**Sales → Data Explorer** opens the [Data Explorer](./explorer/overview.md) on the *Sales* model: the invoice lines at the centre, with the item (family, sub-family), the company (business unit, currency) and the customer around them.
+**Data Explorer**, right under **Overview**, opens the [Data Explorer](./explorer/overview.md) on the *Sales* model: the invoice lines at the centre, with the item (family, sub-family), the company (business unit, currency) and the customer around them.
 
 The model ships ten shared analyses — quantity by business unit, by company, by family; revenue by currency, by business unit, by company; the monthly quantity, alone and by business unit as a pivot; the top items; the number of invoice lines — and the *Sales overview* dashboard that gathers them. They are a starting point: open one, change it, save it under another name.
 
@@ -2043,16 +2058,16 @@ Schedule it on the first of the month once the e-mail account is set in [Notific
 
 Both roles grant the same things: the application's queries, its Data Explorer models and the assistant. The scoped role adds a [data scope](./build/secure/roles-and-permissions.md#data-scope) on the company, whose values come from each user's *companies* attribute. Sign in as each user in turn: the same screens, dashboard, analyses and exports show other rows, the totals included.
 
-Load the companies before running this job: it reads them to fill the users' attributes.
+Load the companies (or the sample files) before running this job: it reads them to fill the users' attributes.
 
 ---
 
 ## Setting it up \{#setup\}
 
 1. In **Settings → Pools**, a pool named `nomademo` pointing at an empty database.
-2. In Nomaflow, run `nomademo-init-db`, then the item and company loads, then one or more sales months.
-3. Run `nomademo-demo-accounts`.
-4. Open **Sales demo** from the application switcher.
+2. In Nomaflow, run `nomademo-init-db`.
+3. Open **Sales demo** from the application switcher, then **Import → Load the sample files**.
+4. Run `nomademo-demo-accounts` in Nomaflow to create the demo users.
 
 ---
 
@@ -4139,7 +4154,7 @@ Two additions: the **AI assistant**, so that users ask questions in plain langua
 
 ### Access
 
-In the `crm-sales` role, **Beyond the menus**: **Allow** — *AI assistant*. Save. Bob now has an **AI Assistant** button at the top right.
+In the `crm-sales` role, **Beyond the menus**: **Allow** — *AI assistant*. Save. Bob now has an **Assistant** button at the top right.
 
 ### Descriptions
 
@@ -5557,6 +5572,7 @@ The left-hand list shows each entry's key with its label underneath, and a filte
 | Rule | **Default** | The initial value when a new row is added. |
 | Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
 | Rule | **Size** | The stored width of the item, used with **Justify** when the physical column is wider. |
+| Rule | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
 | Rule | **Lookup params** | Fixed values for the `:params` of the lookup's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the lookup declares. |
 | Translations | one line per language | The label in that language. |
 | Advanced | **Override** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
@@ -5571,6 +5587,7 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 | `number`, `integer`, `decimal`, `currency` | A number. |
 | `date`, `datetime`, `timestamp` | A date, with or without time. |
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
+| `jdenumber` | A JD Edwards amount stored without its decimal point: with **Decimals** = 2, the stored `12345` reads and is entered as `123.45`, and is written back as `12345`. Filters are typed in real units; the Data Explorer totals and detail rows are scaled the same way. The [scan](#scan-a-table) of a JD Edwards table fills the decimals from the data dictionary. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
 | `email`, `url`, `color` | Text, shown as entered. |
@@ -5799,7 +5816,9 @@ A **catalog preset** is a ready-made starting point: a base table plus pre-wired
 Presets are operator-managed files under the deployment's `presets/` directory; each file holds one or more `[[presets]]` entries with a base table and its joined tables. They are configuration, not code — add your own to seed the screens your team builds most often.
 
 :::info[JDE-specific]
-Liberty Apps ships a **JD Edwards Address Book** catalog (`config/presets/jdedwards/address_book.toml`): the `F0101` master left-joined to who's-who, phones, email, addresses, customer and supplier, plus each related table as its own base preset. The join conditions are written by **data item** (e.g. `F0101.AN8`); the assistant resolves the JDE prefix to the real column (`ABAN8`, `AIAN8`, …) so the joins auto-fill. A preset table can name a `query` (a `SELECT * FROM <table>` already defined on the connector) so the assistant reads its columns by describing that query — much faster on a large JDE catalog.
+Liberty Apps ships nine JD Edwards catalogs, built from the Oracle E1 data models: **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Manufacturing**, **Product Data Management** and **Product Costing**. The *full* presets of each area (the A/P ledger with supplier, address and company; the sales order with lines, customer, item and branch…) also give the [Data Explorer](../explorer/model.md#preset) a ready-made model.
+
+The **Address Book** catalog (`config/presets/jdedwards/address_book.toml`): the `F0101` master left-joined to who's-who, phones, email, addresses, customer and supplier, plus each related table as its own base preset. The join conditions are written by **data item** (e.g. `F0101.AN8`); the assistant resolves the JDE prefix to the real column (`ABAN8`, `AIAN8`, …) so the joins auto-fill. A preset table can name a `query` (a `SELECT * FROM <table>` already defined on the connector) so the assistant reads its columns by describing that query — much faster on a large JDE catalog.
 :::
 
 ---
@@ -6586,7 +6605,7 @@ They are set in the **Actions** and **Row menu** tabs of the screen editor, with
 | **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
 | **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
 | | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
-| **Row menu** *(own tab)* | `row_menu` | Each entry is a right-click menu item on a row. | The clicked row. |
+| **Row menu** *(own tab)* | `row_menu` | Each entry is a menu item on a row: right-click, or the ⋯ handle at the start of the row. | The clicked row. |
 
 Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
 
@@ -6612,6 +6631,17 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`refresh`** | Reloads the grid. | — |
 
 `bind_result` keeps the rows (or the response) of the step in the chain's context, so that a later step reads them with `source = "<id>.first_row.<COLUMN>"`.
+
+### The row handle and drill-downs \{#drill\}
+
+A screen with row-menu actions shows a small handle at the start of every row, so the actions stay in reach on a wide table:
+
+- with several actions, the handle (**⋯**, *Row actions*) opens the same menu as the right-click;
+- with a single `navigate` action, the handle (a return arrow) fires it at once — its tooltip is the action's label.
+
+**Link cells.** A column's **drill** setting (Settings → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
+
+**Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Settings → App](../settings-app.md#app), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
 
 ### Composite types
 
@@ -7539,11 +7569,11 @@ The filter is case-insensitive and matches anywhere in the id or label. Folders 
 ## Liberty Next — Item types
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/item-types/
 
-The five leaf kinds — screen / query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each.
+The six leaf kinds — screen / query / endpoint / dashboard / page / job — what each opens, the target field's shape, the connector rule, and when to reach for each.
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Five leaf kinds:
+Six leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
@@ -7552,6 +7582,7 @@ Five leaf kinds:
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | `<app>.<id>` of the dashboard. | Must NOT be set (the app is in the target). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
+| **`job`** | The page of a Nomaflow job: its files and parameters, Run, the live log, the previous runs. | The job id. | Must NOT be set. |
 
 This page walks each in detail with concrete examples.
 
@@ -7703,7 +7734,7 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 
 ### The Data Explorer \{#explorer\}
 
-`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch. A **Data Explorer** entry in each functional folder of the menu, each on its own model, takes users straight to the right data.
+`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch.
 
 ### When to use
 
@@ -7731,6 +7762,33 @@ target = "/nomaflow"
 ```
 
 A *Job scheduler* leaf in the `crm` app's Operations folder, pointing at the Nomaflow product's main route.
+
+---
+
+## `job` — run a Nomaflow job \{#job\}
+
+A `job` leaf opens the page of a Nomaflow job for users who do not administer Nomaflow: a file picker per load step that needs a file, the parameters the job declares for its users, **Run**, the log followed live and the previous runs.
+
+### Fields
+
+| Field | Value |
+|---|---|
+| **`type`** | `job` — *Job (run it, follow its log)* in the type list. |
+| **`target`** | The job id. The dropdown lists every job with the first line of its description. |
+| **`connector`** | Must NOT be set. |
+
+The item needs the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
+
+### Example
+
+```toml title="menus.toml"
+[[menus.sales.items]]
+id = "import_sales"
+parent = "import"
+label = "Sales file (one month)"
+type = "job"
+target = "sales-load-month"
+```
 
 ---
 
@@ -8228,6 +8286,8 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
+| **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
+| **Links** | A card of entry points: menu items of the dashboard's application, or web addresses. | **Links per row** (1 to 4); per link a **Menu item** or a **URL**, an **Icon**, a **Label** (blank: the menu item's) and a **Description**. |
 
 A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
 
@@ -8242,6 +8302,14 @@ These three widgets turn a dashboard into a **synthesis page**: the figures that
 - **Bar as a share of** (Bars): **The total of the rows** — the bars add up to 100 % — or **The largest row**, which gets the full bar.
 
 The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
+
+### Text and Links \{#text-links\}
+
+These two widgets turn a dashboard into the **home page of an application**: a few lines on what it does, the figures, then where to go.
+
+- A **Text** widget the full width of the grid (12 columns) takes the height of its text, with no scroll bar; a narrower one scrolls within its tile.
+- A **Links** widget only shows the menu items the user may open: an entry their roles do not grant disappears from the card. A URL opens in a new browser tab. A URL link needs a label.
+- In an export, a text keeps its Markdown and a links card becomes a table (*Link*, *Description*).
 
 ---
 
@@ -8283,6 +8351,8 @@ With **Compare with the previous period** ticked, a KPI runs its query a second 
 
 A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
 
+In the editor, each filter says which widgets it reaches — *Reaches: …*, with *not: …* for the others — or *Reaches no widget* when no column carries the dictionary item.
+
 With **All**, nothing is filtered: a query that returns one total row first, then one row per value, shows the totals in its Figure and List widgets.
 
 ---
@@ -8302,6 +8372,7 @@ The **Excel** and **PDF** buttons, next to **↻**, export what the bar holds: t
 | Layout | One sheet per widget; the KPIs together on a *Key figures* sheet. | A cover with the dashboard, the period and the filters, then the widgets one after the other. |
 | KPI, Figure | A row of values. | A card, with the sub line in small type under the figure. |
 | List, Bars, Table | Its rows. | A table. |
+| Text, Links | The text; the links as rows. | The text; a table of the links. |
 | Chart | Its data table. | The chart drawn, with a legend and the values on the bars. |
 
 A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Settings → App](./build/settings-app.md#branding).
@@ -8317,7 +8388,9 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text** or **Links**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+
+A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
 
 To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 
@@ -8574,6 +8647,14 @@ A Screen Assistant preset already declares a set of tables and their joins. Pick
 
 Entities already declared are kept and completed; a key, measures, a default date or a cardinality set by hand stay as they are. Then adjust what is needed and **Save**. Picking the preset again fills the model once more.
 
+Applying the preset also creates the dictionary entries its tables lack — on a JD Edwards source, from its data dictionary: *Preset applied: 6 entities · 42 dictionary entries created*.
+
+### Models shipped by a preset \{#shipped\}
+
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+
+To change such a model, add a model in Settings → Explorer from the same preset: the declared model replaces the shipped one.
+
 ---
 
 ## Things to know
@@ -8584,6 +8665,7 @@ Entities already declared are kept and completed; a key, measures, a default dat
 | The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
 | No column is discovered. | The query failed or returned nothing. | Check the query in Settings → Connectors. |
 | A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
+| Fields show their raw column name. | The columns have no dictionary entry. | On the explorer page, a superuser sees *N column(s) have no dictionary entry and show their column name* and **Create the entries from the data dictionary** creates them in one click. |
 
 ## What's next
 
@@ -9127,6 +9209,7 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | API endpoint | One endpoint of an API connector. |
 | Dashboard | One dashboard. |
 | Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
+| Job | One Nomaflow job: its menu item and its page — files, parameters, run, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | The assistant. |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 
@@ -9477,6 +9560,10 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
 | **Dashboard cache (seconds, 0 = none)** | How long a reopened dashboard reuses its widgets' results (default 60). |
+| **Several tabs at once (off: one page at a time)** | On by default. Off: opening a page replaces the current one. |
+| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the Settings, Monitoring and run tabs stay. |
+| **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
+| **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
 | **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
 | **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
 
@@ -10479,15 +10566,16 @@ async def purge_old_sessions(
 
 ## What the framework auto-injects
 
-Three kwargs are auto-injected **when the function declares them by name** (the executor inspects `signature` to decide). A function that doesn't declare them simply doesn't get them — no `TypeError`.
+Four kwargs are auto-injected **when the function declares them by name** (the executor inspects `signature` to decide). A function that doesn't declare them simply doesn't get them — no `TypeError`.
 
 | Kwarg | Type | What it gives you |
 |---|---|---|
 | **`connectors`** | `ConnectorRegistry` | Access to every SQL and API pool defined in `connectors.toml`. `connectors.pools.engine("default")` returns the SQLAlchemy async engine. |
 | **`ctx`** | `RunContext` | The per-run state: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Pass `ctx.run_id` to your logs / audit writes so they line up with the Nomaflow run record. |
 | **`settings`** | `Settings` | Live config — `settings.connectors.config_path`, `settings.app`, etc. Useful for callables that operate on the config files themselves. |
+| **`app_state`** | the server state | The running server's live state — the applications, the Data Explorer models, the dictionary. For callables that act on the live configuration, such as `liberty.jobs.dictionary:refresh_model_dictionary`. Absent outside a running server. |
 
-A function that swallows arbitrary kwargs (`**_`) gets **all three** whether it asked or not. A function that names some explicitly and rejects the rest (no `**`) gets only what it named.
+A function that swallows arbitrary kwargs (`**_`) gets **all four** whether it asked or not. A function that names some explicitly and rejects the rest (no `**`) gets only what it named.
 
 ### The op_kwargs layer
 
@@ -12681,6 +12769,43 @@ Jobs themselves are edited through `/admin/config/jobs/parsed`.
 
 # === Nomaflow — scheduling and orchestration ===
 
+## Nomaflow — Overview dashboard
+Source: https://docs.nomana-it.fr/liberty/nomaflow/dashboard/
+
+The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the runs per day, what needs attention, the runs and durations per job and the latest runs — last 7 days by default.
+
+**Overview**, the first entry of the Nomaflow menu, gives the operators the state of the scheduler at a glance: how the runs ended, what failed or was missed, what is running now, which jobs are the busiest or the slowest, and the latest runs.
+
+---
+
+## At a glance
+
+---
+
+## The period \{#period\}
+
+The page opens on **Last 7 days**; the period control in the bar offers the other presets and a free range. Every widget follows it, except **In flight**, which always shows the present. **Excel** and **PDF** export the page with its period — see [Dashboards → Export](../framework/dashboards.md#export).
+
+---
+
+## The widgets \{#widgets\}
+
+| Widget | Shows |
+|---|---|
+| **Runs** — by outcome | The runs started over the period: succeeded · failed · canceled. |
+| **Failures** — runs that ended in error | The failed runs, the number of jobs concerned and the missed schedules. |
+| **In flight** — right now | Running · queued. |
+| **Average duration** — completed runs | The average duration, and the longest. |
+| **Runs per day** | One bar per day, by outcome. |
+| **What needs attention** | Per job: the failures with their last error, the missed schedules, the runs going for more than an hour — red for a failure, orange for the rest, with the date of the last occurrence. |
+| **Runs per job** | The share of the runs of each job over the period. |
+| **Average duration per job** | In seconds, the slowest first. |
+| **Recent runs** | The latest runs, with their state; the error, or the trigger, under each. |
+
+The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md).
+
+---
+
 ## Nomaflow — Concepts
 Source: https://docs.nomana-it.fr/liberty/nomaflow/concepts/
 
@@ -13027,6 +13152,85 @@ The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recor
 
 ---
 
+## Nomaflow — Run a job from an application's menu
+Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/run-from-menu/
+
+A job menu item puts a Nomaflow job in an application's menu: the user picks the files and parameters the job asks for, runs it, follows its log live and finds the previous runs — without access to Nomaflow itself. The job permission, user parameters, files and history.
+
+A **job** menu item puts a Nomaflow job in an application's menu, for users who do not administer Nomaflow: the person who loads the month's sales file, the security officer who collects the security data before a review. The item opens the job's own page — the files it needs, its parameters, **Run**, the log followed live and the previous runs. Nothing else of Nomaflow is shown.
+
+---
+
+## At a glance
+
+---
+
+## The job's page \{#page\}
+
+| Part | Content |
+|---|---|
+| Title and description | The menu item's label, then the job's description. |
+| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. |
+| Files | One picker per `file_load` step that needs a file — **File for the step “load”**, with the sheet when the step names one. Accepted: `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. A step with its own path or a watched folder asks for nothing: it reads its file. |
+| **Run** | Uploads the files and starts the run. *Pick the file(s) first.* or *“Company” is required.* when something is missing. One run at a time: while one is going, the button waits. |
+| **Log** | The run's state and its log, refreshed every 2 seconds while the run is queued or running, the error in red. **Files of the run** offers the files it produced — the rejected rows of a load. |
+| **Previous runs** | The last 20 runs: start, state, duration, who ran it (or the trigger, for a scheduled run), rows and the start of the error. A click on a run shows its log. |
+
+The run is an ordinary Nomaflow run: the operators see it in the [run history](../runs/history.md), its notifications and alerts apply.
+
+---
+
+## Putting a job in a menu \{#menu\}
+
+In **Settings → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+
+---
+
+## Who may run it \{#access\}
+
+The item and its page need the permission `job:<id>` — in **Settings → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
+
+Every holder of the permission sees **all** the runs of the job — the previous runs list, their logs and their files —, not only their own.
+
+---
+
+## User parameters \{#user-params\}
+
+A job declares in `jobs.toml` what a user may set when running it from its page. Anything else is refused; the operator's other settings stay out of reach.
+
+```toml title="jobs.toml"
+[[jobs.user_params]]
+name = "models"
+label = "Explorer model (blank = every model)"
+l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
+step = "refresh"
+choices_from = "explorer_models:nomajde"
+```
+
+| Key | Meaning |
+|---|---|
+| `name` | The step argument the value is given to. |
+| `label`, `l` | The label shown, per language. Default: the name. |
+| `step` | The step that receives the value. |
+| `default` | The pre-filled value. |
+| `required` | `true`: the job does not start without a value. |
+| `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
+| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application. |
+
+A blank value means *not set*: the step's own default applies.
+
+---
+
+## What the applications ship \{#shipped\}
+
+| Application | Folder | Jobs |
+|---|---|---|
+| Nomasx-1 | **Jobs** | Collect security, Collect licences — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
+| Nomajde | **Jobs** | Re-merge security (change package), Re-merge security (all roles), Refresh data dictionary (Explorer models) — see [Nomajde jobs](../../nomajde/jobs.md). |
+| Sales demo | **Import** | Items file, Companies file, Sales file (one month), Refresh periods, Load the sample files — see [The sales demo](../../framework/demo-app.md#loads). |
+
+---
+
 ## Nomaflow — Steps
 Source: https://docs.nomana-it.fr/liberty/nomaflow/steps/
 
@@ -13108,7 +13312,7 @@ Loads an Excel workbook (`.xlsx`, `.xlsm`) or a text file (`.csv`, `.txt`, `.tsv
 
 The file comes from, in this order of priority:
 
-1. **a file chosen when the job is run** — the **Run with parameters** window shows a file picker for each `file_load` step (the window opens for any job that has one);
+1. **a file chosen when the job is run** — the **Run with parameters** window shows a file picker for each `file_load` step (the window opens for any job that has one), and so does the job's page opened [from an application's menu](./jobs/run-from-menu.md), for the steps with neither `path` nor watched folder;
 2. **`path`** — a path on the server, which may contain `${params.x}` (a run parameter), `${run.id}` and `${job.id}`: `/data/in/sales-${params.period}.xlsx`;
 3. **a watched folder** — `watch_dir` and `watch_pattern` (`*.xlsx`): every matching file is loaded in name order, each in its own transaction, then moved to `done/` or `failed/` under a time-stamped name. A file that fails stops the run; the files after it stay in the folder. An empty folder is not an error.
 
@@ -14627,6 +14831,7 @@ async def refresh(*, period: str, target_connector: str,
 | `connectors` | The connector registry — run a connector's named queries or endpoints. Given only if the function declares it. |
 | `ctx` | The run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (rows of the previous step). Given only if declared. |
 | `settings` | The server settings. Given only if declared. |
+| `app_state` | The running server's live state (applications, Data Explorer models, dictionary…), for a function that acts on the configuration itself — the dictionary refresh job does. Given only if declared. |
 
 The function may be `async` (recommended) or a plain `def`, which runs in a worker thread.
 
@@ -14992,7 +15197,7 @@ Each widget shows only when the user may run its query: a user without access to
 ## Nomasx-1 — Data Explorer
 Source: https://docs.nomana-it.fr/liberty/nomasx1/data-explorer/
 
-Free analysis of the Nomasx-1 data in the Data Explorer: three models — Security, Segregation of duties, Licence compliance — each with its ready-made shared analyses and dashboard, reached from the menu of each domain.
+Free analysis of the Nomasx-1 data in the Data Explorer: three models — Security, Segregation of duties, Licence compliance — each with its ready-made shared analyses and dashboard.
 
 The **Data Explorer** lets compliance and licence teams analyse the Nomasx-1 data on their own, without a new screen: rows, measures, filters and a period picked from a list of fields, shown as a table, a pivot, a chart or a KPI, then saved, shared, gathered into a dashboard and exported to Excel or PDF. It reads the data collected from **every connected application**, under the same rights as the screens.
 
@@ -15006,14 +15211,7 @@ How the explorer works — fields, shelves, views, drill, calculated fields — 
 
 ## Where to find it \{#menu\}
 
-| Menu entry | Opens |
-|---|---|
-| **Data Explorer** (top level) | The explorer, with every Nomasx-1 model in its picker. |
-| **Security → Data Explorer** | The *Security* model. |
-| **Applications → Conflicts → Data Explorer** | The *Segregation of duties* model. |
-| **Licenses → Data Explorer** | The *Licence compliance* model. |
-
-The model picker lets the user switch at any time.
+**Data Explorer**, right under **Overview** in the Nomasx-1 menu, opens the explorer with the three Nomasx-1 models in its picker. The picker switches from one model to another at any time; the analyses and dashboards follow the model.
 
 ---
 
@@ -15068,6 +15266,38 @@ The analyses and dashboards above are **shared**: every user who may open the mo
 
 - [Overview — Audit synthesis](./audit-synthesis.md) — the synthesis page.
 - [Saved analyses and dashboards](../framework/explorer/saved-and-dashboards.md) — saving, sharing, exporting.
+
+---
+
+## Nomasx-1 — Jobs
+Source: https://docs.nomana-it.fr/liberty/nomasx1/jobs/
+
+The Jobs folder of the Nomasx-1 menu: collect the security data and the licence transactions of a connected application on demand, follow the log live and find the previous runs — without opening Nomaflow.
+
+The **Jobs** folder, at the bottom of the Nomasx-1 menu, lets the compliance team refresh the data themselves — before a review, after a wave of changes in the source system — without opening Nomaflow. Each entry opens the job's page: **Run**, the log followed live, the previous runs with who ran them.
+
+The scheduled collections keep running as usual; these entries run the same jobs on demand.
+
+---
+
+## The entries \{#entries\}
+
+| Entry | Job | Refreshes |
+|---|---|---|
+| **Collect security** | [`nomasx1-security-1`](../nomaflow/bundled-jobs.md#nomasx1-security-1) | Users, roles, assignments, menus and effective rights of the application — everything under **Security** and **Applications**, and the figures of the [Audit synthesis](./audit-synthesis.md). |
+| **Collect licences** | [`nomasx1-license-1`](../nomaflow/bundled-jobs.md#nomasx1-license-1) | The users' transactions — the input of the licence usage under **Licenses** and of the *Licence compliance* model of the [Data Explorer](./data-explorer.md). |
+
+After a collection, **Last Refresh** and the *Data freshness* list of the Audit synthesis show the new date.
+
+:::info[JDE-specific]
+Both jobs read JD Edwards EnterpriseOne. For another source system, the collection is the one its connector provides.
+:::
+
+---
+
+## Who may run them \{#access\}
+
+An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own. See [Run a job from an application's menu](../nomaflow/jobs/run-from-menu.md).
 
 ---
 
@@ -18692,6 +18922,119 @@ NONE
 
 # === Nomajde — JD Edwards companion ===
 
+## Nomajde — Overview — the home page
+Source: https://docs.nomana-it.fr/liberty/nomajde/home/
+
+The Nomajde home page: what Nomajde does, the live figures of the JD Edwards EnterpriseOne instance (users, roles, security records, UDC codes, objects) and the entry points of each domain — Master Data, Security Maintenance, Development, analysis and jobs.
+
+**Overview**, the first entry of the Nomajde menu, is where the application opens: what Nomajde is for, the figures of the JD Edwards EnterpriseOne instance it is connected to, and one card of entry points per domain.
+
+---
+
+## At a glance
+
+---
+
+## What it shows \{#content\}
+
+| Part | Content |
+|---|---|
+| Introduction | What Nomajde does, domain by domain: the work JD Edwards spreads across many forms gathered in a few searchable grids, written straight to JD Edwards, each change recording who, when and from which screen. |
+| **Users** | The JD Edwards user profiles, with the number of roles and of role relationships. |
+| **Security records** | The Security Workbench records (F00950), with the number of environments. |
+| **UDC codes** | The user defined codes (F0005), with the number of UDC types. |
+| **Objects** | The Object Librarian objects (F9860). |
+| **Master Data** | [UDC Types](./master-data/udc-types.md), [UDC Code](./master-data/udc-codes.md). |
+| **Security Maintenance** | [User Management](./security-maintenance/user-management.md), User Preferences, [Role Management](./security-maintenance/role-management.md), [Role Relationships](./security-maintenance/role-relationships.md), [Environments](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
+| **Development** | Object Librarian, Data Dictionary, Cross Reference — read-only. |
+| **Analysis and jobs** | The [Data Explorer](./data-explorer.md), the [jobs](./jobs.md) and the product page. |
+
+The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**).
+
+---
+
+## Entry points and rights \{#access\}
+
+A card only lists the entries the user may open: an entry their roles do not grant does not appear. The product page opens in a new browser tab.
+
+---
+
+## Related
+
+- [Nomajde](./overview.md) — the product.
+- [Data Explorer](./data-explorer.md) — analyse the security and development data.
+
+---
+
+## Nomajde — Data Explorer
+Source: https://docs.nomana-it.fr/liberty/nomajde/data-explorer/
+
+Free analysis of the JD Edwards EnterpriseOne security and development data in the Nomajde Data Explorer: the Security and Development models, their shipped analyses and dashboard, the models shipped by the JDE presets, and the data dictionary labels.
+
+**Data Explorer**, right under **Overview** in the Nomajde menu, opens the explorer on the JD Edwards EnterpriseOne data: rows, measures, filters and a period picked from a list of fields, shown as a table, a pivot, a chart or a KPI, then saved, shared, gathered into a dashboard and exported. The figures are read live from JD Edwards, under the user's rights.
+
+How the explorer works is described in the [Liberty Next documentation](../framework/explorer/analysis.md). This page lists what Nomajde ships.
+
+---
+
+## Security \{#security\}
+
+The users (F0092) with their address book name, their role relationships (F95921) and roles (F00926), their security records (F00950) and UDO security (F00950W), their environments (F0093).
+
+**Analyses**: *Users*, *Users by type*, *Users by language*, *Users with the most roles*, *Users per role*, *Security records by type*, *Secured objects per user or role*, *Environments per user*.
+
+**Dashboard** *Security overview*: users by type, the roles with the most members, the users with the most roles, the security records by type.
+
+---
+
+## Development \{#development\}
+
+The Object Librarian (F9860): the objects per type and per product code.
+
+**Analyses**: *Objects by type*, *Objects by product code*.
+
+---
+
+## Models shipped by the JDE presets \{#presets\}
+
+The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assistant.md) also give the explorer ready-made models, built from the Oracle E1 data models: the hub table with the tables joined to it.
+
+| Area | Models |
+|---|---|
+| Address Book | Address Book — full entry (master, contacts, customer, supplier). |
+| General Accounting | Account Ledger (F0911), Account Balances (F0902). |
+| Accounts Payable | A/P Ledger (F0411), Payments (F0413). |
+| Accounts Receivable | Customer Ledger (F03B11), Receipts (F03B13). |
+| Inventory | Item (F4101). |
+| Sales | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Manufacturing | Work Order (F4801), Production Cost (F3102). |
+| Product Data Management | Bill of Material (F3002), Routing (F3003). |
+| Product Costing | Item Cost Components (F30026). |
+
+They appear in the model picker with the others; the page header says *shipped by the preset “…”*. They are built at first use. To adapt one, a superuser adds a model in **Settings → Explorer** from the same preset, then changes it.
+
+JD Edwards amounts are shown in real units: the data dictionary's decimals apply in the tables, the totals and the filters.
+
+---
+
+## Labels from the data dictionary \{#dictionary\}
+
+A column without a dictionary entry shows its raw column name. A superuser sees on the explorer page how many columns are in that case, and **Create the entries from the data dictionary** fills them from the JD Edwards data dictionary (description, type, decimals, UDC lookup) in one click. The [dictionary refresh job](./jobs.md#dictionary) does the same for every model, or for one.
+
+---
+
+## The assistant on this page \{#ai\}
+
+On the explorer page, the assistant offers to create what the user describes: *Create an analysis of the users per role*, *Create a dashboard with the analyses of this model*. It builds the analysis on the model, checks it by running it, and saves it — private unless the user asks to share it. See [AI assistant](../framework/ai-assistant.md#tools).
+
+---
+
+## Who sees what \{#access\}
+
+A model is offered to the holders of a role that grants it (**Data Explorer** in the role's *Beyond the menus* rules). The row-level scope of the user's roles applies inside every analysis.
+
+---
+
 ## Nomajde — UDC Types
 Source: https://docs.nomana-it.fr/liberty/nomajde/master-data/udc-types/
 
@@ -19325,6 +19668,41 @@ This is what makes a JDE security promotion repeatable: pair it with the [`nomaj
 - **Excel upload** for SI-delivered security bundles. The standard *Add* flow handles single rows; the upload is meant for the dozens of rows that ship with a new module.
 - **A deny on *All Actions* with `User = *PUBLIC` plus targeted grants on roles** is the standard JDE pattern. The grid makes it easy to read whether the deny is in place for every object.
 - **After bulk changes**, run *Nomasx-1 → Applications → Rights* to confirm the effective rights match the intent — the workbench shows what is configured, *Rights* shows what JDE will compute at sign-on.
+
+---
+
+## Nomajde — Jobs
+Source: https://docs.nomana-it.fr/liberty/nomajde/jobs/
+
+The Jobs folder of the Nomajde menu: re-merge the JD Edwards security of the roles touched by a change package or of every role, and refresh the data dictionary of the Explorer models — run on demand with a live log.
+
+The **Jobs** folder, at the bottom of the Nomajde menu, runs the JD Edwards maintenance jobs on demand without opening Nomaflow. Each entry opens the job's page: its parameters, **Run**, the log followed live, the previous runs with who ran them. See [Run a job from an application's menu](../nomaflow/jobs/run-from-menu.md).
+
+---
+
+## Re-merge security (change package) \{#remerge\}
+
+Re-merges the JD Edwards security — Security Workbench, UDO security, menu filtering — of the parent roles touched by the active change package, each parent once. Run it after applying a package that changed roles or role relationships. Details: [`nomajde-remerge-security`](../nomaflow/bundled-jobs.md#nomajde-remerge-security).
+
+## Re-merge security (all roles) \{#remerge-all\}
+
+Re-merges the security of every active parent role, whatever the change package — after a bulk import, or to recover from a missed re-merge. On a large instance it takes several minutes. Details: [`nomajde-remerge-security-all`](../nomaflow/bundled-jobs.md#nomajde-remerge-security-all).
+
+## Refresh data dictionary (Explorer models) \{#dictionary\}
+
+Creates the dictionary entries the [Data Explorer](./data-explorer.md) models lack, from the JD Edwards data dictionary (F9200 / F9202 / F9210: description, type, decimals, UDC lookup), one scan per table. The labels show at once: no restart.
+
+| Parameter | Meaning |
+|---|---|
+| **Explorer model (blank = every model)** | One of the Nomajde models, or blank for all. |
+
+The log lists, per model, the tables scanned and the entries created.
+
+---
+
+## Who may run them \{#access\}
+
+An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own.
 
 ---
 

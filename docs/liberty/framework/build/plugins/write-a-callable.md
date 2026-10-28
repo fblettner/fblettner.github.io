@@ -47,15 +47,16 @@ async def purge_old_sessions(
 
 ## What the framework auto-injects
 
-Three kwargs are auto-injected **when the function declares them by name** (the executor inspects `signature` to decide). A function that doesn't declare them simply doesn't get them — no `TypeError`.
+Four kwargs are auto-injected **when the function declares them by name** (the executor inspects `signature` to decide). A function that doesn't declare them simply doesn't get them — no `TypeError`.
 
 | Kwarg | Type | What it gives you |
 |---|---|---|
 | **`connectors`** | `ConnectorRegistry` | Access to every SQL and API pool defined in `connectors.toml`. `connectors.pools.engine("default")` returns the SQLAlchemy async engine. |
 | **`ctx`** | `RunContext` | The per-run state: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Pass `ctx.run_id` to your logs / audit writes so they line up with the Nomaflow run record. |
 | **`settings`** | `Settings` | Live config — `settings.connectors.config_path`, `settings.app`, etc. Useful for callables that operate on the config files themselves. |
+| **`app_state`** | the server state | The running server's live state — the applications, the Data Explorer models, the dictionary. For callables that act on the live configuration, such as `liberty.jobs.dictionary:refresh_model_dictionary`. Absent outside a running server. |
 
-A function that swallows arbitrary kwargs (`**_`) gets **all three** whether it asked or not. A function that names some explicitly and rejects the rest (no `**`) gets only what it named.
+A function that swallows arbitrary kwargs (`**_`) gets **all four** whether it asked or not. A function that names some explicitly and rejects the rest (no `**`) gets only what it named.
 
 ### The op_kwargs layer
 
