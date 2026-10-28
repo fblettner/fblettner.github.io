@@ -143,8 +143,8 @@ On an empty conversation, the drawer offers questions suited to where the user i
 
 Questions come from two sources:
 
-- **Settings → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
-- **Settings → App → AI Assistant → Starter questions**: the operator's own, for everywhere, an application or an *application/screen*. They win over the application's questions for the same place.
+- **Liberty Next → Build → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
+- **Liberty Next → Administer → App → AI Assistant → Starter questions**: the operator's own, for everywhere, an application or an *application/screen*. They win over the application's questions for the same place.
 
 ---
 
@@ -175,9 +175,9 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ---
 
-## Settings → AI \{#settings-ai\}
+## Liberty Next → Build → AI \{#settings-ai\}
 
-**Settings → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
+**Liberty Next → Build → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
 
 | Part | Content |
 |---|---|
@@ -185,14 +185,14 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 | **Starter questions per screen** | **+ a screen…** adds a screen and its own questions. |
 | **Playbooks** | **Add playbook**: an **Id** (letters, digits, `_` and `-`, unique in the application), a **Title** — what the procedure achieves, the assistant picks a playbook by it —, **When it applies** (one line, optional) and **The procedure** in Markdown. |
 
-**Save** writes and reloads at once. This material travels with the application: it is installed and upgraded with it, versioned like the rest of the configuration. The questions set under **Settings → App → AI Assistant** win over the application's, place by place.
+**Save** writes and reloads at once. This material travels with the application: it is installed and upgraded with it, versioned like the rest of the configuration. The questions set under **Liberty Next → Administer → App → AI Assistant** win over the application's, place by place.
 
 ---
 
 ## Who can use it, and on what \{#access\}
 
 - The user needs the `ai:chat` permission (a role's *AI assistant* rule, in **Beyond the menus**).
-- **Allowed connectors** in Settings → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
+- **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
 - Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
 - **Model** in the drawer only offers the models allowed in the settings; the server refuses any other.
 
@@ -200,13 +200,13 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ## Settings \{#settings\}
 
-In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
+In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 
 ## Tips \{#tips\}
 
-- Give queries a clear label and description (Settings → Connectors): the assistant chooses its queries from them.
+- Give queries a clear label and description (Liberty Next → Build → Connectors): the assistant chooses its queries from them.
 - Write dedicated read queries for the questions users ask often (totals per company, per month), rather than expecting the assistant to aggregate thousands of rows.
 - Write a playbook for each procedure users ask about more than once: the answer is then the application's procedure, not a guess.
 - Keep **API tool** and **Operations tools** off unless the endpoints are read-only and the chat users are administrators.

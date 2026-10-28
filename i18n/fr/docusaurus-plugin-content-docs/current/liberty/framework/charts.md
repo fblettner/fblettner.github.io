@@ -1,6 +1,6 @@
 ---
 title: Graphiques
-description: "Un graphique enregistré représente le résultat d'une requête de connecteur en barres, courbes, aires ou camembert : une colonne X, une ou plusieurs séries avec leur couleur et leur axe, et une agrégation. Construit dans Paramètres → Graphiques ou enregistré depuis la vue Graphique d'un écran, puis réutilisé dans les tableaux de bord."
+description: "Un graphique enregistré représente le résultat d'une requête de connecteur en barres, courbes, aires ou camembert : une colonne X, une ou plusieurs séries avec leur couleur et leur axe, et une agrégation. Construit dans Liberty Next → Construire → Graphiques ou enregistré depuis la vue Graphique d'un écran, puis réutilisé dans les tableaux de bord."
 keywords: [Liberty Next, graphiques, barres, courbe, aire, camembert, séries, agrégation, double axe, tableaux de bord, vue Graphique, charts.toml]
 ---
 
@@ -91,7 +91,7 @@ Quatre types sont disponibles : **barres**, **courbe**, **aire** et **camembert*
 
 ---
 
-## Paramètres → Graphiques \{#list\}
+## Liberty Next → Construire → Graphiques \{#list\}
 
 Les graphiques sont regroupés par connecteur : les pastilles de **portée** en haut de l'écran choisissent un connecteur, et **Add a connector scope** en ajoute un. La liste affiche chaque graphique de la portée avec son libellé, son identifiant et un badge *override* quand il est marqué comme personnalisation locale. Chaque ligne propose :
 

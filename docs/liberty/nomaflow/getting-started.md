@@ -100,7 +100,7 @@ On the card, **▶ Run now**. The card shows the run in progress, then *last SUC
 
 ## 6 — Be told when it fails \{#notify\}
 
-In **Settings → Notifications**, add a rule: trigger *A job event*, job `daily-summary`, events `failure` and `missed`, channel `email`, recipient `role:ops`. See [Notifications](./notifications.md).
+In **Liberty Next → Build → Notifications**, add a rule: trigger *A job event*, job `daily-summary`, events `failure` and `missed`, channel `email`, recipient `role:ops`. See [Notifications](./notifications.md).
 
 ---
 

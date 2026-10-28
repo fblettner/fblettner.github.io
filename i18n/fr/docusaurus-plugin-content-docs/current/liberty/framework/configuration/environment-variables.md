@@ -72,8 +72,8 @@ Les Paramètres affichent une telle référence telle qu'elle est écrite. Pour 
 |---|---|
 | `LIBERTY_MASTER_KEY` | La clé de chaque valeur `ENC:`. Ne jamais la changer sur une installation existante. |
 | `LIBERTY_JWT_SECRET` | Signe les sessions. Au moins 32 caractères. |
-| `LIBERTY_LICENSE_KEY` | La clé de licence, quand elle n'est pas collée dans Paramètres → App. |
-| `ANTHROPIC_API_KEY` | La clé de l'assistant IA, quand elle n'est pas saisie dans Paramètres → App. |
+| `LIBERTY_LICENSE_KEY` | La clé de licence, quand elle n'est pas collée dans Liberty Next → Administrer → App. |
+| `ANTHROPIC_API_KEY` | La clé de l'assistant IA, quand elle n'est pas saisie dans Liberty Next → Administrer → App. |
 | `LIBERTY_APPS_DIR` | Le dossier des fichiers de configuration (connecteurs, écrans, menus…) ; les plugins sont dans `../plugins`. Voir [Architecture](../../installation/architecture.md#configuration). |
 | `LIBERTY_APP_CONFIG` | Le chemin du fichier des réglages de l'application, quand ce n'est pas `config/app.toml`. |
 | `LIBERTY_ORACLE_CLIENT_LIB` | Le dossier de l'Oracle Instant Client pour le mode thick (défini dans l'image Docker). |

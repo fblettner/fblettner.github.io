@@ -63,7 +63,7 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
 
 ### Réglages
 
-**Paramètres → App → Assistant IA** : **Activé**, la **Clé API Anthropic**, le **Modèle**, et **Connecteurs autorisés** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
+**Liberty Next → Administrer → App → Assistant IA** : **Activé**, la **Clé API Anthropic**, le **Modèle**, et **Connecteurs autorisés** `crm`. Enregistrer. Voir [Assistant IA](../ai-assistant.md).
 
 ### Accès
 
@@ -125,7 +125,7 @@ Enregistrer, puis **Exécuter avec des paramètres** pour l'exécuter une fois :
 
 ### La notification
 
-**Paramètres → Notifications**, une règle :
+**Liberty Next → Construire → Notifications**, une règle :
 
 | Champ | Valeur |
 |---|---|

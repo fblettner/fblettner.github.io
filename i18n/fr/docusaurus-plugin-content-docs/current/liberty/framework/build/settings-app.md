@@ -1,14 +1,14 @@
 ---
 title: Paramètres de l'application
-description: "Paramètres → App dans Liberty Next : les six sections — Application (nom, adresse, journaux, langue, valeurs par défaut de l'interface, onglets, navigation, rechargement à chaud, mode épais d'Oracle), Licence, Assistant IA, Notifications (e-mail), OpenID Connect (SSO), Charte des PDF — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage."
+description: "Liberty Next → Administrer → App : tous les réglages de l'installation, section par section — Application (nom, adresse, sous-chemin, langue, valeurs par défaut de l'interface, onglets, navigation, rechargement à chaud, mode épais d'Oracle), Journal du serveur, Connexion, Nomaflow, Paquets de changements, Licence, Assistant IA, Notifications (e-mail), OpenID Connect (SSO), Charte des PDF, et les valeurs de Déploiement en lecture seule — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage."
 keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, SMTP, OpenID Connect, SSO, habillage PDF, période par défaut, taille de page, Oracle thick]
 ---
 
 # Paramètres de l'application
 
-**Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Chaque section se replie — la première est ouverte — et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
 
-Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
+Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client et secret de session OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
 ---
 
@@ -101,6 +101,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 |---|---|
 | **Nom de l'application** | Le nom de l'application. |
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
+| **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent. **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
 | **Langue par défaut** | Langue des libellés quand une requête n'en indique pas. |
 | **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
@@ -114,6 +115,60 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
 
 Quand un changement enregistré demande un redémarrage, la page l'indique : *Enregistré. Redémarrez le serveur pour appliquer les nouveaux réglages.*
+
+---
+
+## Journal du serveur \{#server-log\}
+
+| Champ | Remarques |
+|---|---|
+| **Format du journal console** | `text`, une ligne lisible (par défaut), ou `json`, un objet par ligne pour un collecteur de journaux. |
+| **Garder le journal du serveur sur disque** | Activé par défaut : le journal consulté dans [Surveillance → Journal du serveur](../../monitoring/server-log.md). |
+| **Fichier journal** | Vide = `.logs/liberty.log` dans le dossier de configuration. |
+| **Taille par fichier (Mo)**, **Fichiers gardés** | La rotation : 10 Mo et 5 fichiers précédents par défaut. |
+
+**Redémarrage nécessaire** pour tous les champs de la section.
+
+---
+
+## Connexion \{#sign-in\}
+
+| Champ | Remarques |
+|---|---|
+| **Stockage des comptes** | *Fichier (auth.toml)* (par défaut) ou *Base de données*, avec son **Pool de base de données**. Changer de stockage ne déplace pas les comptes de l'un à l'autre. |
+| **Émetteur des jetons** | Le nom inscrit dans les jetons de session (`liberty-next`). |
+| **Durée d'une session (jeton d'accès) (s)** | 3600 par défaut : la durée de validité d'une session avant son renouvellement. |
+| **Durée d'une connexion (jeton de rafraîchissement) (s)** | 1 209 600 par défaut — 14 jours : la durée pendant laquelle un utilisateur reste connecté. |
+| **Tolérance de réutilisation (s)** | 60 par défaut : un renouvellement déjà utilisé reste accepté pendant ce délai — deux onglets qui se renouvellent ensemble ; `0` = usage unique strict. |
+| **Échecs de connexion avant une pause**, **Fenêtre de comptage (s)** | 10 échecs en 300 secondes suspendent les connexions de ce compte — voir [Se connecter](./secure/sign-in.md#throttle). |
+
+**Redémarrage nécessaire** pour tous les champs de la section.
+
+---
+
+## Nomaflow \{#nomaflow\}
+
+| Champ | Remarques |
+|---|---|
+| **Planificateur et exécution actifs** | Activé par défaut. Désactivé : les tâches sont listées, mais ni planifiées ni exécutées. |
+| **Pool de l'historique des exécutions** | La base de l'historique des exécutions (`default`). |
+| **Lignes de journal gardées par exécution** | 5 000 par défaut. |
+| **Espace de travail** | Vide = `.nomaflow/files` à côté de la configuration : fichiers envoyés, rejets, rapports, exports. |
+| **Téléversement maximal (Mo)** | 200 par défaut. |
+
+**Redémarrage nécessaire** pour tous les champs de la section.
+
+---
+
+## Paquets de changements \{#changesets\}
+
+| Champ | Remarques |
+|---|---|
+| **Capturer les écritures suivies dans des paquets de changements** | Activé par défaut. Désactivé : les écrans marqués pour le suivi ne capturent rien. Voir [Paquets de modifications](../../nomaflow/change-packages.md). |
+| **Pool de base de données** | L'emplacement des paquets de changements (`default`). |
+| **Garder les paquets exportés / promus (jours, 0 = toujours)** | 0 par défaut ; voir [Surveillance → Rétention](../../monitoring/retention.md). |
+
+**Redémarrage nécessaire** pour tous les champs de la section.
 
 ---
 
@@ -133,6 +188,7 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Itérations d'outils maximum** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
 | **Délai de la requête (s)** | 120 par défaut. |
 | **Invite système** | Vide : les consignes intégrées. |
+| **Outils de l'Explorateur de données** | Activé par défaut : l'assistant calcule totaux, classements et tendances sur les modèles de l'[explorateur de données](../explorer/overview.md), et enregistre analyses et tableaux de bord. |
 | **Outils connecteurs** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
 | **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
 | **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
@@ -140,7 +196,7 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
 | **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
 | **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
-| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
+| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Construire → IA](../ai-assistant.md#settings-ai)). |
 
 Voir [Assistant IA](../ai-assistant.md).
 
@@ -148,7 +204,7 @@ Voir [Assistant IA](../ai-assistant.md).
 
 ## Notifications (e-mail) \{#notifications\}
 
-**Notifications activées**, puis le **Serveur** (Hôte SMTP, Port, Chiffrement — STARTTLS, SSL / TLS implicite ou aucun —, Délai), le **Compte** (Utilisateur, Mot de passe) et l'**Envoi** (Adresse d'expédition, Conserver les notifications lues — en jours, `0` = toujours). Voir [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications activées**, puis le **Serveur** (Hôte SMTP, Port, Chiffrement — STARTTLS, SSL / TLS implicite ou aucun —, Délai), le **Compte** (Utilisateur, Mot de passe) et l'**Envoi** (Adresse d'expédition, Conserver les notifications lues — en jours, `0` = toujours). **Pool de la boîte de réception** indique où sont conservées les notifications de la cloche (`default`). Voir [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -160,6 +216,8 @@ Voir [Assistant IA](../ai-assistant.md).
 | **URL de découverte** | Le `.well-known/openid-configuration` du fournisseur. |
 | **ID client**, **Secret client**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
 | **Revendication identifiant**, **Revendication e-mail**, **Revendication nom** | Les revendications du jeton d'identité qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |
+| **Attributs depuis les claims** | Une ligne par attribut : l'attribut utilisateur ← le claim du jeton d'identité (`company` ← `org_id`). Les attributs alimentent le [périmètre de données](./secure/roles-and-permissions.md#data-scope) des rôles et sont actualisés à chaque connexion ; un claim absent du jeton retire l'attribut. |
+| **Secret de session** | Signe le cookie de connexion ; vide = le secret JWT. Chiffré. **Redémarrage nécessaire.** |
 | **URL de redirection (proxy)**, **Redirection frontend** | Seulement derrière un proxy qui réécrit l'hôte, ou pour un front qui gère lui-même les jetons. |
 
 Déclarer `https://<hôte>/auth/oidc/callback` comme URI de redirection chez le fournisseur. Voir [Se connecter](./secure/sign-in.md#oidc).
@@ -172,10 +230,16 @@ Les réglages de couverture et de page des rapports PDF : auteur, couleurs princ
 
 ---
 
+## Déploiement (lecture seule) \{#deployment\}
+
+La dernière section liste les valeurs fixées par l'installation, et non depuis cette page — la valeur en vigueur et la raison : la clé maître et le secret JWT, indiqués seulement *définis* ou *non définis*, qui viennent de l'environnement ; l'algorithme de signature des jetons ; l'emplacement de chaque fichier de configuration, qui suit l'organisation de l'installation.
+
+---
+
 ## Ailleurs que sur cette page \{#elsewhere\}
 
 | Réglage | Où |
 |---|---|
-| Pools et leurs mots de passe | Paramètres → Pools. |
-| Utilisateurs et rôles | Paramètres → Access. |
+| Pools et leurs mots de passe | Liberty Next → Administrer → Pools. |
+| Utilisateurs et rôles | Liberty Next → Administrer → Accès. |
 | La clé maître et le secret JWT | L'environnement — voir [Variables d'environnement](../configuration/environment-variables.md). |

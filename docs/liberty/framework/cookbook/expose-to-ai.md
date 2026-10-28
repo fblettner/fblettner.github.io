@@ -15,7 +15,7 @@ The [AI assistant](../ai-assistant.md) answers questions by running the connecto
 | Layer | Setting | Effect |
 |---|---|---|
 | **Who** | The `ai:chat` permission, through a role. | Without it, the user has no assistant. |
-| **Which connectors** | **Allowed connectors**, Settings → App → AI Assistant. | Empty: every connector; otherwise only those listed. |
+| **Which connectors** | **Allowed connectors**, Liberty Next → Administer → App → AI Assistant. | Empty: every connector; otherwise only those listed. |
 | **Which queries** | Read queries only. | Write queries are always refused; the assistant never writes SQL of its own. |
 | **Which rows** | The user's rights and [data scope](../build/secure/roles-and-permissions.md#data-scope). | A query run by the assistant is checked like a screen's: the user sees the same rows. |
 | **Which query to pick** | The queries' **label** and **description**. | The assistant reads them to choose. |
@@ -24,15 +24,15 @@ The [AI assistant](../ai-assistant.md) answers questions by running the connecto
 
 ### 1. Grant the assistant
 
-In **Settings → Access → Roles**, give the users' role the *AI assistant* rule (`ai:chat`), in **Beyond the menus**. See [Roles & permissions](../build/secure/roles-and-permissions.md).
+In **Liberty Next → Administer → Access → Roles**, give the users' role the *AI assistant* rule (`ai:chat`), in **Beyond the menus**. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
 ### 2. Limit the connectors
 
-In **Settings → App → AI Assistant**, fill **Allowed connectors** with the connectors whose data the assistant may read — for example the CRM's, without the HR one. Keep **API tool** off unless the endpoints only read.
+In **Liberty Next → Administer → App → AI Assistant**, fill **Allowed connectors** with the connectors whose data the assistant may read — for example the CRM's, without the HR one. Keep **API tool** off unless the endpoints only read.
 
 ### 3. Describe the queries
 
-In **Settings → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
+In **Liberty Next → Build → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
 
 | Good | Weak |
 |---|---|

@@ -15,7 +15,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 | Niveau | Réglage | Effet |
 |---|---|---|
 | **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
-| **Quels connecteurs** | **Connecteurs autorisés**, Paramètres → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
+| **Quels connecteurs** | **Connecteurs autorisés**, Liberty Next → Administrer → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
 | **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
 | **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
 | **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
@@ -24,15 +24,15 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 
 ### 1. Ouvrir l'assistant
 
-Dans **Paramètres → Access → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Beyond the menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
+Dans **Liberty Next → Administrer → Accès → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Beyond the menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ### 2. Limiter les connecteurs
 
-Dans **Paramètres → App → Assistant IA**, renseigner **Connecteurs autorisés** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser l'**Outil API** désactivé, sauf si les endpoints sont en lecture seule.
+Dans **Liberty Next → Administrer → App → Assistant IA**, renseigner **Connecteurs autorisés** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser l'**Outil API** désactivé, sauf si les endpoints sont en lecture seule.
 
 ### 3. Décrire les requêtes
 
-Dans **Paramètres → Connecteurs**, donner à chaque requête utile à l'assistant un **libellé** et une **description** (onglet Advanced). L'assistant liste les connecteurs avec leurs requêtes et leurs descriptions, puis en choisit une :
+Dans **Liberty Next → Construire → Connecteurs**, donner à chaque requête utile à l'assistant un **libellé** et une **description** (onglet Advanced). L'assistant liste les connecteurs avec leurs requêtes et leurs descriptions, puis en choisit une :
 
 | Efficace | Insuffisant |
 |---|---|

@@ -16,7 +16,7 @@ Start from the run detail: the **Error** column of the failed step, then the **L
 |---|---|
 | *step timed out after N s* | The step exceeded its `timeout_seconds` (3 600 by default). Raise it in `jobs.toml`, or split the work. |
 | *→ 404*, *→ 500* (http step) | The called URL answered with that status. |
-| A database error | Wrong credentials, a missing table, a constraint. Test the pool in **Settings → Pools** and the query on the connector page. |
+| A database error | Wrong credentials, a missing table, a constraint. Test the pool in **Liberty Next → Administer → Pools** and the query on the connector page. |
 | *cannot import module …* / *has no attribute …* (python step) | The plugin is not where `callable` says, or the server was not restarted after a change — see [Deploy and debug](../../framework/build/plugins/deploy-and-debug.md). |
 | *period … is closed* (file_load) | The step's refuse query rejected the load on purpose. |
 | *control total mismatch …* (file_load) | The loaded total differs from the expected one; nothing was written. |
@@ -56,7 +56,7 @@ SQL, HTTP, file-load and `async` Python steps stop at once. A Python function wr
 
 ## The job is missing from the list \{#missing\}
 
-`jobs.toml` was edited by hand and no longer validates: the server log names the error. A key not in the schema is refused — check the spelling against [Steps](../steps.md) and [Create a job](../jobs/create.md#toml-only). After fixing the file, **Settings → Reload config**.
+`jobs.toml` was edited by hand and no longer validates: the server log names the error. A key not in the schema is refused — check the spelling against [Steps](../steps.md) and [Create a job](../jobs/create.md#toml-only). After fixing the file, **Reload config (at the top of any Liberty Next editor page)**.
 
 ---
 

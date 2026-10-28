@@ -251,7 +251,7 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 | `nomasx1_auditor` | Toutes les lectures des données de Nomasx-1, l'explorateur de données, l'assistant IA et les deux tâches de rapport ; les rapports mensuels lui sont envoyés. |
 | `nomasx1_admin` | Tout : l'application entière, ses paramètres et toutes les tâches `nomasx1-*`. |
 
-À lancer une fois après l'installation et après chaque mise à jour, pour que les nouvelles requêtes de lecture soient accordées ; attribuer ensuite les rôles aux utilisateurs dans **Paramètres → Access**. Peut être relancée sans risque ; livrée désactivée.
+À lancer une fois après l'installation et après chaque mise à jour, pour que les nouvelles requêtes de lecture soient accordées ; attribuer ensuite les rôles aux utilisateurs dans **Liberty Next → Administrer → Accès**. Peut être relancée sans risque ; livrée désactivée.
 
 ---
 
@@ -281,7 +281,7 @@ Le **bundle de référence** curaté est livré dans `${LIBERTY_APPS_DIR}/nomasx
 
 ### `nomasx1-import-reference` \{#nomasx1-import-reference\}
 
-**Chargement d'un bundle de référence Nomasx-1 curaté dans `target_connector`.** L'opérateur doit d'abord créer l'application cible dans *Paramètres → Applications* — le pré-contrôle d'import refuse de démarrer sinon. Mettre `replace = true` pour un cycle destructif TRUNCATE puis INSERT.
+**Chargement d'un bundle de référence Nomasx-1 curaté dans `target_connector`.** L'opérateur doit d'abord créer l'application cible dans *Nomasx-1 → Paramètres → Global → Applications* — le pré-contrôle d'import refuse de démarrer sinon. Mettre `replace = true` pour un cycle destructif TRUNCATE puis INSERT.
 
 | Étape | Appelable |
 |---|---|
@@ -400,7 +400,7 @@ Pour une re-fusion partielle — uniquement les parents affectés par *cette* mo
 | **Licences** | Les licences et l'OUT — les étapes de sécurité et de SoD désactivées. |
 | **Everything** | Toutes les étapes, y compris l'annuaire, le journal d'activité, la base et les références croisées. |
 
-**Applications** — la tâche propose les applications de *Paramètres → Applications* en cases à cocher, avec **Tout**. Elle s'exécute une fois par application cochée, l'une après l'autre. Dans une planification ou un préréglage, `apps_id = "all"` collecte toutes les applications à chaque déclenchement.
+**Applications** — la tâche propose les applications de *Nomasx-1 → Paramètres → Global → Applications* en cases à cocher, avec **Tout**. Elle s'exécute une fois par application cochée, l'une après l'autre. Dans une planification ou un préréglage, `apps_id = "all"` collecte toutes les applications à chaque déclenchement.
 
 **Paramètres** — `source_connector = jdedwards`, `target_connector = nomasx1`. Deux tentatives en cas d'échec ; une alerte au-delà de 90 minutes.
 
@@ -576,10 +576,10 @@ Les tâches livrées sont **enabled = false** par défaut. Définir une planific
 |---|---|---|
 | Une tâche livrée dont les étapes ont été modifiées n'est pas mise à jour par le nouveau wheel. | La mise à jour la signale comme conservée. | Planifications, préréglages, alertes et valeurs des paramètres survivent d'eux-mêmes à une mise à jour ; garder les étapes telles que livrées, ou marquer la tâche `override = true` — voir [Déployer les applications préfabriquées](../installation/deploy-prebuilt-apps.md#merge). |
 | Une tâche de collecte échoue avec `No module named 'nomasx1'`. | Le code du plugin n'est pas dans le chemin des plugins du framework. | Exécuter `liberty-apps install --target $LIBERTY_APPS_DIR` pour matérialiser la charge ; recharger le framework. |
-| `nomasx1-import-reference` échoue avec *« target application not found »*. | Application non créée dans *Paramètres → Applications*. | Créer d'abord l'application dans l'interface ; le pré-contrôle refuse de démarrer sinon. |
+| `nomasx1-import-reference` échoue avec *« target application not found »*. | Application non créée dans *Nomasx-1 → Paramètres → Global → Applications*. | Créer d'abord l'application dans l'interface ; le pré-contrôle refuse de démarrer sinon. |
 | `deploy-databases` produit une erreur de droits refusés. | Le pool `default` ne peut créer ni bases, ni rôles. | Pointer temporairement `default` sur un superutilisateur Postgres ; revenir en arrière après l'exécution. |
 | Planification définie mais la tâche ne se déclenche pas. | La tâche est désactivée (le bundle livre `enabled = false`). | L'activer depuis sa ligne de la page des Tâches, une fois la planification définie. |
-| La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Paramètres → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
+| La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Liberty Next → Construire → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
 | L'audit trail commence à produire des milliers de lignes par minute. | La tâche a démarré au SCN 0 — relecture de l'intégralité du journal d'archive. | Exécuter `nomasx1-audit-trail-reset-scn-1` (valeur par défaut `scn = 0` → la prochaine exécution reprend sur le SCN courant) pour repartir à neuf. |
 | Les vues matérialisées affichent des données obsolètes après une correction SQL manuelle. | L'étape REFRESH_VIEWS de fin de chaîne de la tâche de collecte ne s'est pas exécutée (vous l'avez court-circuitée). | Exécuter `nomasx1-refresh-views` manuellement. |
 

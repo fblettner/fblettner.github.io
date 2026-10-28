@@ -159,7 +159,7 @@ A production install in one line:
   --apps ./liberty_apps-7.0.58-py3-none-any.whl
 ```
 
-The licence key is not an option: paste it in **Settings → App → License** once signed in.
+The licence key is not an option: paste it in **Liberty Next → Administer → App → License** once signed in.
 
 ### Running the install again \{#rerun\}
 

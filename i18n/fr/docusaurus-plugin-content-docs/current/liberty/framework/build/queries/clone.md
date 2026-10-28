@@ -137,7 +137,7 @@ La fenêtre demande trois valeurs :
 |---|---|
 | **Connecteur source** | Le connecteur à copier. Par défaut, celui qui était sélectionné. |
 | **Nouveau nom** | La nouvelle clé de connecteur (minuscules, commence par une lettre — mêmes règles d'identifiant qu'ailleurs). |
-| **Pool** | Le pool sur lequel le nouveau connecteur doit s'exécuter. Doit déjà exister dans *Paramètres → Pools*. |
+| **Pool** | Le pool sur lequel le nouveau connecteur doit s'exécuter. Doit déjà exister dans *Liberty Next → Administrer → Pools*. |
 
 Cliquer sur **Cloner** déclenche une copie multi-fichiers via un endpoint dédié. Liberty :
 
@@ -162,7 +162,7 @@ La bannière de statut indique le nombre d'entrées copiées ; d'éventuels aver
 
 | Contrainte | Pourquoi |
 |---|---|
-| Le nouveau pool doit déjà exister. | La duplication ne crée pas de bases — câblez d'abord le pool via *Paramètres → Pools*. |
+| Le nouveau pool doit déjà exister. | La duplication ne crée pas de bases — câblez d'abord le pool via *Liberty Next → Administrer → Pools*. |
 | Le connecteur source ne doit pas comporter de modifications non enregistrées. | La duplication lit depuis le disque ; les modifications locales non enregistrées seraient manquées. Le bouton est désactivé dans l'état modifié, avec une infobulle explicative. |
 | Le nouveau nom ne doit pas entrer en collision. | Le framework rejette les clés de connecteurs en doublon ; la fenêtre valide avant soumission. |
 
@@ -176,7 +176,7 @@ La bannière de statut indique le nombre d'entrées copiées ; d'éventuels aver
 | Une copie de chaque emplacement CRUD d'une table. | **Dupliquer une table**. |
 | Une copie de chaque requête + entrées de dictionnaire + écrans + menu + tableaux de bord + graphiques. | **Dupliquer l'application**. |
 | Une nouvelle requête avec le même nom pointant ailleurs. | Ne dupliquez pas — **renommez** l'existante et créez-en une nouvelle. |
-| La même requête s'exécutant sur une autre base. | Ne dupliquez pas — changez le **pool** du connecteur dans *Paramètres → Pools*, ou utilisez une **map SQL par dialecte**. |
+| La même requête s'exécutant sur une autre base. | Ne dupliquez pas — changez le **pool** du connecteur dans *Liberty Next → Administrer → Pools*, ou utilisez une **map SQL par dialecte**. |
 
 ---
 

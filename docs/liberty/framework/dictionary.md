@@ -1,6 +1,6 @@
 ---
 title: Dictionary
-description: "The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Settings → Dictionary."
+description: "The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Liberty Next → Build → Dictionary."
 keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels, formats, rules, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, translations, scan a table]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels,
 
 The **dictionary** defines each data item once: its label, its format, its rule (Boolean, list of values, lookup, sequence…), its default value and its translations. A query column that references an entry inherits that definition, so the same item reads the same way on every screen, chart and dashboard.
 
-It is edited from **Settings → Dictionary**, which holds five kinds of records:
+It is edited from **Liberty Next → Build → Dictionary**, which holds five kinds of records:
 
 | Tab | Holds |
 |---|---|

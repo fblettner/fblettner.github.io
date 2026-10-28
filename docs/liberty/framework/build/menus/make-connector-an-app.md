@@ -16,9 +16,9 @@ This page walks the wiring from both sides: the connector flag + the menu key.
 
 | Piece | Where it lives | Required for an app? |
 |---|---|---|
-| **`show_in_switcher`** | On the connector (Settings → Connectors → Settings tab). | Yes — when off, the connector exists but doesn't appear in the application picker. |
-| **`[menus.<connector>]`** | The menu file (Settings → Menus). | Yes — without a menu, the connector is treated as a *data source*, not an app. |
-| **`home`** | On the connector (Settings → Connectors → Settings tab). | Optional — sets the landing menu item when the user picks this app in the picker. |
+| **`show_in_switcher`** | On the connector (Liberty Next → Build → Connectors → Settings tab). | Yes — when off, the connector exists but doesn't appear in the application picker. |
+| **`[menus.<connector>]`** | The menu file (Liberty Next → Build → Menus). | Yes — without a menu, the connector is treated as a *data source*, not an app. |
+| **`home`** | On the connector (Liberty Next → Build → Connectors → Settings tab). | Optional — sets the landing menu item when the user picks this app in the picker. |
 
 Two separate effects, decided by different flags:
 
@@ -69,14 +69,14 @@ Set up the menu first; flip `show_in_switcher` on second. Miss the second step a
   <rect x="200" y="286" width="100" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="210" y="301" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">(default)</text>
 
-  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">For an app, also create [menus.crm] from Settings → Menus → + Add scope.</text>
+  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">For an app, also create [menus.crm] from Build → Menus → + Add scope.</text>
 </svg>
 
 ---
 
 ## Step 1 — On the connector
 
-Open **Settings → Connectors**, pick the connector, switch to the **Settings** tab. The fields relevant to "this is an app":
+Open **Liberty Next → Build → Connectors**, pick the connector, switch to the **Settings** tab. The fields relevant to "this is an app":
 
 | Field | Notes |
 |---|---|
@@ -90,7 +90,7 @@ Save the connector page — the change applies immediately (hot reload).
 
 ## Step 2 — On the menu
 
-Open **Settings → Menus**. If the connector doesn't have a menu yet, the **+ Add scope** button opens a modal listing every connector **without** a menu — pick yours. The modal:
+Open **Liberty Next → Build → Menus**. If the connector doesn't have a menu yet, the **+ Add scope** button opens a modal listing every connector **without** a menu — pick yours. The modal:
 
 - Creates a new `[menus.<connector>]` entry with no items.
 - Selects the new app chip.
@@ -168,11 +168,11 @@ A user signing in sees only the apps they have permission for — `GET /api/menu
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Connector has `show_in_switcher = true` but no menu. | The connector shows in the Connectors page's *Data sources* group; the application picker doesn't list it. | Add a menu in *Settings → Menus*. |
+| Connector has `show_in_switcher = true` but no menu. | The connector shows in the Connectors page's *Data sources* group; the application picker doesn't list it. | Add a menu in *Liberty Next → Build → Menus*. |
 | Connector has a menu but `show_in_switcher = false`. | The menu exists but the switcher hides the tile. | Either turn `show_in_switcher` on, or accept that users will reach the app by URL only. |
 | `home` points at a menu item that no longer exists. | Picking the app lands on the first visible top-level item, ignoring the stale `home`. | Re-pick a valid item — the dropdown lists the live menu items. |
 | Adding `[menus.<X>]` where `<X>` isn't a connector. | The page rejects the entry on save — the menu key must match a known connector. | Create the connector first, then attach the menu. |
-| Cloning an app but the new pool doesn't exist. | The clone modal refuses to submit. | Create the pool in *Settings → Pools* before cloning. |
+| Cloning an app but the new pool doesn't exist. | The clone modal refuses to submit. | Create the pool in *Liberty Next → Administer → Pools* before cloning. |
 
 ---
 

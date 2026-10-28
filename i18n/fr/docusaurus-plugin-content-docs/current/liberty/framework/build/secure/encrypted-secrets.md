@@ -53,9 +53,9 @@ Chaque champ secret des Paramètres est chiffré à l'enregistrement et écrit d
 
 | Champ | Paramètres |
 |---|---|
-| Mot de passe d'un pool | Paramètres → Pools |
-| Identifiants d'un connecteur API (mot de passe, jeton, secret client) | Paramètres → Connecteurs |
-| Clé de licence, clé d'API Anthropic, secret client OIDC, mot de passe SMTP | Paramètres → App |
+| Mot de passe d'un pool | Liberty Next → Administrer → Pools |
+| Identifiants d'un connecteur API (mot de passe, jeton, secret client) | Liberty Next → Construire → Connecteurs |
+| Clé de licence, clé d'API Anthropic, secret client OIDC, mot de passe SMTP | Liberty Next → Administrer → App |
 
 Un champ secret est une saisie masquée avec un œil pour en afficher le contenu. Rien à activer : une valeur enregistrée depuis les Paramètres est toujours chiffrée, et l'enregistrement est refusé quand le serveur n'a pas de clé maître.
 

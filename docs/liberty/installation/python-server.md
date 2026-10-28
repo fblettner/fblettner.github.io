@@ -205,7 +205,7 @@ liberty-ops status
 
 `liberty-ops` drives the unit named `liberty-next`; set `LIBERTY_SERVICE` if yours has another name.
 
-The server listens on `http://<host>:8000/` (the port of **Settings → App**). Sign in as **`admin`**, then paste the licence key in **Settings → App → License**. For HTTPS, put the reverse proxy of your choice in front and forward WebSocket traffic (`/socket.io`) as well.
+The server listens on `http://<host>:8000/` (the port of **Liberty Next → Administer → App**). Sign in as **`admin`**, then paste the licence key in **Liberty Next → Administer → App → License**. For HTTPS, put the reverse proxy of your choice in front and forward WebSocket traffic (`/socket.io`) as well.
 
 ---
 

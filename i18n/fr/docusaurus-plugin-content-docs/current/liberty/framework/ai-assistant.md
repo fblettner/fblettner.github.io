@@ -143,8 +143,8 @@ Sur une conversation vide, le panneau propose des questions adaptées à l'endro
 
 Les questions ont deux origines :
 
-- **Paramètres → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
-- **Paramètres → App → Assistant IA → Questions de départ** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
+- **Liberty Next → Construire → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
+- **Liberty Next → Administrer → App → Assistant IA → Questions de départ** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
 
 ---
 
@@ -175,9 +175,9 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 
 ---
 
-## Paramètres → IA \{#settings-ai\}
+## Liberty Next → Construire → IA \{#settings-ai\}
 
-**Paramètres → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
+**Liberty Next → Construire → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
 
 | Partie | Contenu |
 |---|---|
@@ -185,14 +185,14 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 | **Questions de départ par écran** | **+ un écran…** ajoute un écran et ses propres questions. |
 | **Procédures** | **Ajouter une procédure** : un **Id** (lettres, chiffres, `_` et `-`, unique dans l'application), un **titre** — ce que la procédure permet de faire, l'assistant choisit une procédure d'après lui —, **quand elle s'applique** (une ligne, facultatif) et **la procédure** en Markdown. |
 
-L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Paramètres → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
+L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Liberty Next → Administrer → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
 
 ---
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
 - L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Beyond the menus**).
-- **Connecteurs autorisés**, dans Paramètres → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
+- **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 
@@ -200,13 +200,13 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Réglages \{#settings\}
 
-Dans **Paramètres → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 
 ## Conseils \{#tips\}
 
-- Donner aux requêtes un libellé et une description clairs (Paramètres → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
+- Donner aux requêtes un libellé et une description clairs (Liberty Next → Construire → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
 - Écrire des requêtes de lecture dédiées aux questions fréquentes (totaux par société, par mois), plutôt que d'attendre de l'assistant qu'il agrège des milliers de lignes.
 - Écrire une procédure pour chaque démarche demandée plus d'une fois : la réponse suit alors la procédure de l'application, sans approximation.
 - Laisser l'**Outil API** et les **Outils d'exploitation** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.

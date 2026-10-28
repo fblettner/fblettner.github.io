@@ -1,6 +1,6 @@
 ---
 title: Connectors
-description: "A connector is how Liberty Next reaches a data source: a SQL connector holds the named queries of a database pool, an API connector the named endpoints of a web API. Edited in Settings → Connectors; a connector with a menu is an app."
+description: "A connector is how Liberty Next reaches a data source: a SQL connector holds the named queries of a database pool, an API connector the named endpoints of a web API. Edited in Liberty Next → Build → Connectors; a connector with a menu is an app."
 keywords: [Liberty Next, connector, SQL, API, pool, named query, endpoint, tables, queries, sequences, lookups, permissions, multi-pool, Oracle thick]
 ---
 
@@ -111,13 +111,13 @@ A connector that has a menu is an **app** — see [Apps](./apps/overview.md).
 
 ---
 
-## Settings → Connectors \{#page\}
+## Liberty Next → Build → Connectors \{#page\}
 
 The left list has two groups: **Apps** (connectors with a menu) and **Data sources** (the others). **＋ Connector** creates one (name, type SQL or API); the right pane edits the selected connector. **Save** writes `connectors.toml` and applies the change without a restart; **Discard** drops the pending changes. The connector's own buttons — **Clone** (with its dictionary scope, screens, menu, charts and dashboards), **Rename** (every reference rewritten), **Delete** (with everything that belongs to it) — are on its settings view.
 
 ### Pools \{#pools\}
 
-A pool is a database connection, defined in **Settings → Pools** and shared by the connectors that use it:
+A pool is a database connection, defined in **Liberty Next → Administer → Pools** and shared by the connectors that use it:
 
 | Field | Effect |
 |---|---|
@@ -144,7 +144,7 @@ The **Settings** mode of a SQL connector (the *Settings* button of the connector
 
 | Field | Effect |
 |---|---|
-| **Pool** | The pool the queries run on — a dropdown of the pools defined in *Settings → Pools*. The connector takes the pool's address, credentials and dialect. |
+| **Pool** | The pool the queries run on — a dropdown of the pools defined in *Liberty Next → Administer → Pools*. The connector takes the pool's address, credentials and dialect. |
 | **Pools** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
 | **Show In Switcher** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
 | **Home** | The menu entry opened when the application is picked. |
@@ -185,7 +185,7 @@ The Oracle driver runs in *thin* mode by default: no Oracle client needed, every
 - **Native Network Encryption** (NNE) required by the database — thin mode fails with `DPY-3001`;
 - reading a **LOB across a database link** — thin mode fails with `ORA-22992` / `ORA-03149`.
 
-Tick **Oracle thick mode** in **Settings → App** (section *App*) and restart the server: every Oracle pool then runs in thick mode — the setting applies to the whole server, not to one pool. PostgreSQL pools are not affected. The Instant Client is included in the Docker image (amd64 and arm64); a Python install needs it on the host.
+Tick **Oracle thick mode** in **Liberty Next → Administer → App** (section *App*) and restart the server: every Oracle pool then runs in thick mode — the setting applies to the whole server, not to one pool. PostgreSQL pools are not affected. The Instant Client is included in the Docker image (amd64 and arm64); a Python install needs it on the host.
 
 ---
 
@@ -266,7 +266,7 @@ They are granted through roles: allowing a menu entry grants what it opens, and 
 
 ## Under the hood
 
-Connectors and pools are stored in `connectors.toml`, in the apps configuration folder. The Settings pages are the normal way to edit them; the same configuration is reachable through the REST API under `/admin/config/connectors` — see [REST API](../references/rest-api.md#admin-config).
+Connectors and pools are stored in `connectors.toml`, in the apps configuration folder. The Liberty Next pages are the normal way to edit them; the same configuration is reachable through the REST API under `/admin/config/connectors` — see [REST API](../references/rest-api.md#admin-config).
 
 ---
 

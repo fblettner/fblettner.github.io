@@ -1,12 +1,12 @@
 ---
 title: Construire un modèle
-description: "Paramètres → Explorateur dans Liberty Next : un modèle d'exploration par magasin de données — le pivot, les entités (une requête avec sa cardinalité, sa clé, ses mesures, ses colonnes masquées et sa date par défaut), les relations sur des paires de colonnes, et un modèle rempli depuis un préréglage de l'assistant de création d'écran."
+description: "Liberty Next → Construire → Explorateur dans Liberty Next : un modèle d'exploration par magasin de données — le pivot, les entités (une requête avec sa cardinalité, sa clé, ses mesures, ses colonnes masquées et sa date par défaut), les relations sur des paires de colonnes, et un modèle rempli depuis un préréglage de l'assistant de création d'écran."
 keywords: [Liberty Next, explorateur de données, Paramètres Explorateur, modèle, pivot, entité, cardinalité, mesure, relation, jointure, préréglage, assistant de création d'écran]
 ---
 
 # Construire un modèle
 
-Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et comment les tables se rejoignent. Un superutilisateur le construit dans **Paramètres → Explorateur**, sans SQL : chaque entité lit une requête existante d'un connecteur, et les colonnes se déduisent du résultat de cette requête.
+Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et comment les tables se rejoignent. Un superutilisateur le construit dans **Liberty Next → Construire → Explorateur**, sans SQL : chaque entité lit une requête existante d'un connecteur, et les colonnes se déduisent du résultat de cette requête.
 
 ---
 
@@ -306,9 +306,9 @@ L'application du préréglage crée aussi les entrées de dictionnaire qui manqu
 
 ### Modèles fournis par un préréglage \{#shipped\}
 
-Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Paramètres → Explorateur. Dans le sélecteur de modèle, les modèles sont groupés par domaine — *JDE · Accounts Payable*, *JDE · Sales* —, les autres par application. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
+Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Liberty Next → Construire → Explorateur. Dans le sélecteur de modèle, les modèles sont groupés par domaine — *JDE · Accounts Payable*, *JDE · Sales* —, les autres par application. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
 
-Pour modifier un tel modèle, ajouter un modèle dans Paramètres → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
+Pour modifier un tel modèle, ajouter un modèle dans Liberty Next → Construire → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
 
 ---
 
@@ -318,7 +318,7 @@ Pour modifier un tel modèle, ajouter un modèle dans Paramètres → Explorateu
 |---|---|---|
 | Une entité n'est pas reliée au pivot. | L'enregistrement est refusé, avec le nom des entités isolées. | Ajouter la relation manquante. |
 | La requête de l'entité attend des paramètres. | L'explorateur l'exécute sans paramètre. | Rattacher l'entité à une requête sans paramètre. |
-| Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Paramètres → Connecteurs. |
+| Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Liberty Next → Construire → Connecteurs. |
 | Des champs affichent leur nom de colonne brut. | Ces colonnes n'ont pas d'entrée de dictionnaire. | Sur la page de l'explorateur, un superutilisateur voit *N colonne(s) sans entrée de dictionnaire affichent leur nom de colonne* et **Créer les entrées depuis le dictionnaire de données** les crée en un clic. |
 
 ## Pour aller plus loin

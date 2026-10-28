@@ -28,7 +28,7 @@ Liberty Framework est réparti entre **deux dépôts** qui coopèrent à l'exéc
   <text x="258" y="110" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">frontend/</text>
   <text x="576" y="110" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">React</text>
   <text x="258" y="132" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/app.toml</text>
-  <text x="576" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Paramètres → App</text>
+  <text x="576" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Administrer → App</text>
   <text x="258" y="154" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/auth.toml</text>
   <text x="576" y="154" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">utilisateurs, rôles</text>
   <text x="258" y="176" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">tests/</text>
@@ -97,7 +97,7 @@ liberty-next/
 │       └── api/              ← client REST
 │
 ├── config/                   ← modèles fournis + fichiers spécifiques à l'installation
-│   ├── app.toml              ← réglages de l'application — modifiés dans Paramètres → App
+│   ├── app.toml              ← réglages de l'application — modifiés dans Liberty Next → Administrer → App
 │   ├── auth.toml             ← utilisateurs locaux — créé par init-db, ignoré par git
 │   ├── *.toml.example        ← modèles pour connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← fichiers réels par section (uniquement quand LIBERTY_APPS_DIR n'est pas défini)
@@ -109,7 +109,7 @@ liberty-next/
 | Fichier | Statut | Édité par |
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Versionné | Mainteneurs du framework — *ne pas* modifier par installation. |
-| `config/app.toml` | Spécifique à l'installation | Paramètres → App. |
+| `config/app.toml` | Spécifique à l'installation | Liberty Next → Administrer → App. |
 | `config/auth.toml` | Spécifique à l'installation, ignoré par git | CLI `liberty-admin` / Paramètres. |
 | `config/*.toml.example` | Versionné | Mainteneurs du framework — modèles fournis. |
 | `config/*.toml` (sans `.example`) | Spécifique à l'installation, ignoré par git | Modifiable depuis les Paramètres quand `LIBERTY_APPS_DIR` n'est pas défini. |

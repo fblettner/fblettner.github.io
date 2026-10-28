@@ -14,7 +14,7 @@ This is the recommended path for any table that already exists. Skip it only whe
 
 ## Where it lives
 
-The wizard is reached from **Settings → Connectors**:
+The wizard is reached from **Liberty Next → Build → Connectors**:
 
 1. Pick a connector in the left list.
 2. Switch the right pane's mode bar to **Tables**.

@@ -8,7 +8,7 @@ keywords: [Liberty Framework, écrans, ScreensBuilder, Concepteur d'écran, ongl
 
 Un **écran** dans Liberty est la page que voit l'utilisateur : un tableau de lignes, des filtres optionnels, un dialogue d'ajout/modification optionnel, des actions optionnelles, un menu contextuel ligne optionnel. Un écran = une requête `<base>_get` + (optionnellement) `<base>_put` / `<base>_post` / `<base>_delete` pour les écritures + un formulaire de dialogue par-dessus.
 
-La page qui gère les écrans est **Paramètres → Écrans**. Cette vue d'ensemble la cartographie ; les pages suivantes décrivent chaque tâche.
+La page qui gère les écrans est **Liberty Next → Construire → Écrans**. Cette vue d'ensemble la cartographie ; les pages suivantes décrivent chaque tâche.
 
 ---
 

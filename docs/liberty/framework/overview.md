@@ -1,6 +1,6 @@
 ---
 title: Why Liberty Framework
-description: "Liberty Framework is a low-code platform for building internal applications — admin tools, BI dashboards, integration glue, customer portals — without writing a frontend. Define data sources and screens in the Settings UI; the framework renders the grid, the edit dialog, the dashboard, the assistant."
+description: "Liberty Framework is a low-code platform for building internal applications — admin tools, BI dashboards, integration glue, customer portals — without writing a frontend. Define data sources and screens in the Liberty Next pages; the framework renders the grid, the edit dialog, the dashboard, the assistant."
 keywords: [Liberty Framework, low-code, internal apps, admin tools, BI dashboards, why, getting started, overview]
 ---
 
@@ -10,7 +10,7 @@ You have a database. Or a JD Edwards instance. Or a SaaS API your team needs to 
 
 That's what Liberty Framework is for.
 
-You install it once, point it at your data source, and define **what people should see** through a Settings UI: which queries feed which screens, which screens belong to which menu, which dashboards aggregate what. The framework handles everything else — rendering the grid, the edit dialog, the filters, the authentication, the role pruning, the export buttons, the audit columns, the assistant, the scheduled jobs.
+You install it once, point it at your data source, and define **what people should see** through the Liberty Next pages: which queries feed which screens, which screens belong to which menu, which dashboards aggregate what. The framework handles everything else — rendering the grid, the edit dialog, the filters, the authentication, the role pruning, the export buttons, the audit columns, the assistant, the scheduled jobs.
 
 A handful of concepts (a *pool*, a *connector*, a *screen*, a *dashboard*, a *menu*) compose to cover the surface most internal applications need: CRUD over databases, KPIs and charts, role-gated access, ETL pipelines, an AI assistant that can run your queries on demand.
 
@@ -28,7 +28,7 @@ Most teams end up writing the same kind of application over and over:
 
 Writing this in React (or Angular, or Vue) is a week of work per screen. Multiply by 20 screens per app, and 5 apps per team, and the math is brutal — most of the engineering hours go into wiring forms to APIs and APIs to databases, with very little of it surfacing as actual business logic.
 
-The framework takes the opposite stance: the **schema** of every query is discovered at runtime from the database itself, the **layout** is described in a few clicks in the Settings UI, and the **rendering** — grid, dialog, dashboard, AI tool, REST surface — is the framework's job, not yours. You write SQL. You get a UI.
+The framework takes the opposite stance: the **schema** of every query is discovered at runtime from the database itself, the **layout** is described in a few clicks in the Liberty Next pages, and the **rendering** — grid, dialog, dashboard, AI tool, REST surface — is the framework's job, not yours. You write SQL. You get a UI.
 
 When something the framework doesn't cover comes up (a custom widget, a one-off page, a hand-tuned UX) the platform stays out of the way — you can wire in a React route, a custom Python step, or a raw HTTP endpoint.
 
@@ -101,7 +101,7 @@ If you'd rather start from *what you want to build*, the **[What you can build](
 
 ### 3. Reference-first
 
-If you're the type who reads documentation top-to-bottom, the **[Getting Started](../installation/python-server.md)** section walks you through installation, the file layout, the Settings UI; then the **Concepts** section explains each primitive in depth.
+If you're the type who reads documentation top-to-bottom, the **[Getting Started](../installation/python-server.md)** section walks you through installation, the file layout, the Liberty Next pages; then the **Concepts** section explains each primitive in depth.
 
 ---
 
@@ -111,7 +111,7 @@ If you're the type who reads documentation top-to-bottom, the **[Getting Started
 |---|---|
 | [Getting Started](../installation/overview.md) | Install the framework, create your first app, understand the file layout. |
 | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) | End-to-end CRM walkthrough. |
-| [Configuration](./configuration/settings-ui.md) | Settings UI, framework settings, environment variables, hot-reload, encrypted secrets. |
+| [Configuration](./configuration/settings-ui.md) | The Liberty Next workspace, framework settings, environment variables, hot-reload, encrypted secrets. |
 | [Concepts](./connectors.md) | The five framework primitives + parameter binding and form conditions, each with a "What / Why / When" intro. |
 | [Authentication](./build/secure/sign-in.md) | Local users, OIDC, JWT, roles, permissions, license keys. |
 | [Apps & Plugins](./apps/overview.md) | Multi-app organisation, custom Python plugins, internationalisation. |
@@ -144,4 +144,4 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb 
 | **See what's possible first** | [What you can build](./what-you-can-build.md). |
 | **Install the framework** | [Installation](../installation/overview.md). |
 | **Understand the concepts first** | [Concepts → Connectors](./connectors.md) is the natural entry point. |
-| **Look up a specific field** | [Settings UI](./configuration/settings-ui.md) lists every builder; each Concepts page references the relevant editor. |
+| **Look up a specific field** | [The Liberty Next workspace](./configuration/settings-ui.md) lists every editor; each Concepts page references the relevant editor. |

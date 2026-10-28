@@ -77,7 +77,7 @@ So far everything was done as a superuser, who sees everything. This step adds t
 
 ## Two roles
 
-**Settings → Access → Roles**: create each role. The **Access** tab shows the menu tree of every app, with a three-state control on each node (inherit, allow, deny); allowing a menu entry also grants the query or the dashboard it opens. See [Roles & permissions](../build/secure/roles-and-permissions.md).
+**Liberty Next → Administer → Access → Roles**: create each role. The **Access** tab shows the menu tree of every app, with a three-state control on each node (inherit, allow, deny); allowing a menu entry also grants the query or the dashboard it opens. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
 ### `crm-viewer` — reads the CRM
 
@@ -102,7 +102,7 @@ The connector rule grants every query of `crm`, writes included. **Save** each r
 
 ## Two users
 
-**Settings → Access → Users → ＋ Add user**:
+**Liberty Next → Administer → Access → Users → ＋ Add user**:
 
 | User | Role | Attribute |
 |---|---|---|
@@ -132,7 +132,7 @@ Bob signs out and in again: Customers and Deals show the French customers only �
 
 ## Sign in with the company account
 
-To let users sign in with their company account (Entra ID, Keycloak, Okta…), fill **Settings → App → OpenID Connect (SSO)** with the values of the application registered at the provider. A **Sign in with OIDC** button appears on the sign-in page; new users arrive without roles, an administrator gives them `crm-viewer` or `crm-sales`.
+To let users sign in with their company account (Entra ID, Keycloak, Okta…), fill **Liberty Next → Administer → App → OpenID Connect (SSO)** with the values of the application registered at the provider. A **Sign in with OIDC** button appears on the sign-in page; new users arrive without roles, an administrator gives them `crm-viewer` or `crm-sales`.
 
 Full recipe: [OIDC sign-in](../cookbook/oidc-sso.md).
 

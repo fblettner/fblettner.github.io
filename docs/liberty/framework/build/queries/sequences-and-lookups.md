@@ -19,12 +19,12 @@ Both go through the **Scaffold** modal — tick a table, tick column(s), get a l
 
 ## Where they live
 
-**Settings → Connectors → pick a connector → mode bar: Sequences** (or **Lookups**) **→ ＋ Add sequence** (or **＋ Add lookup**).
+**Liberty Next → Build → Connectors → pick a connector → mode bar: Sequences** (or **Lookups**) **→ ＋ Add sequence** (or **＋ Add lookup**).
 
 The modal opens, introspects the pool, lists the schemas / tables.
 
 :::note[Without a table]
-The scaffold starts from a table. For a lookup or a sequence built on a join or any hand-written `SELECT`, create the record in **Settings → Dictionary** (Lookups or Sequences tab) and create its query from there — a blank query, or **Generate** from a table with the columns mapped to the record's fields.
+The scaffold starts from a table. For a lookup or a sequence built on a join or any hand-written `SELECT`, create the record in **Liberty Next → Build → Dictionary** (Lookups or Sequences tab) and create its query from there — a blank query, or **Generate** from a table with the columns mapped to the record's fields.
 :::
 
 ---

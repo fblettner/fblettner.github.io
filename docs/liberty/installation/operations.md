@@ -100,7 +100,7 @@ Liberty Next — /opt/liberty-next/release
 | `framework`, `apps bundle` | The versions actually running. |
 | `/ready` | The readiness check of the server. |
 | `migrations` | Schema migrations of the licensed apps still to apply. |
-| `last upgrade` | The last entry of **Settings → History → Upgrades**. |
+| `last upgrade` | The last entry of **Liberty Next → Deploy → History → Upgrades**. |
 
 ---
 
@@ -188,7 +188,7 @@ Coming back with `./liberty db embedded` does not copy back what was written on 
 | Another superuser | `docker exec -u liberty liberty-next liberty-admin create-user alice --superuser` |
 | Check the licence | `docker exec -u liberty liberty-next liberty-license status` |
 | Apply the apps' schema migrations | `./liberty migrate` (`--dry-run` lists them) |
-| Reload the configuration after editing a file | **Settings → Reload config** |
+| Reload the configuration after editing a file | **Reload config (at the top of any Liberty Next editor page)** |
 | New Traefik dashboard password | `./liberty dashboard-password` |
 | A shell in the container | `docker exec -it -u liberty liberty-next bash` |
 
@@ -221,6 +221,6 @@ Run as the service user with its environment loaded (`sudo -u liberty bash -c 's
 | Sign-in answers *Too many failed logins — try again in N s* | Ten failed sign-ins in five minutes for that user (see [Sign-in](../framework/build/secure/sign-in.md)). | Wait for the time given, or reset the password. |
 | Pools fail with a decryption error | `LIBERTY_MASTER_KEY` is not the key the passwords were encrypted with. | Put back the original key (see `.env.snapshot` in a backup). |
 | The server says schema migrations are pending | A new apps release brings database changes. | `./liberty migrate`. |
-| A file changed on disk is not taken into account | Files are read at start-up or on reload. | **Settings → Reload config**. |
+| A file changed on disk is not taken into account | Files are read at start-up or on reload. | **Reload config (at the top of any Liberty Next editor page)**. |
 | Port 80 or 8000 already used | Another service holds it. | Set `TRAEFIK_HTTP_PORT` (full) or `LIBERTY_PORT` (light) in `.env`, then `./liberty start`. |
 | The install refuses to start: *stale Docker volumes* | Volumes of a previous install exist but its `.env` is gone. | Restore the old `.env`, or `./liberty install --reset` then install again. |

@@ -288,7 +288,7 @@
     "description": "The label for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Screens.link.generated-index.description": {
-    "message": "Paramètres → Écrans : relier un écran à ses requêtes, régler les colonnes, construire le dialogue, champs conditionnels, actions et hooks, onglets imbriqués, vues enregistrées.",
+    "message": "Construire → Écrans : relier un écran à ses requêtes, régler les colonnes, construire le dialogue, champs conditionnels, actions et hooks, onglets imbriqués, vues enregistrées.",
     "description": "The generated-index page description for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus": {
@@ -560,7 +560,7 @@
     "description": "The label for category 'Connectors & queries' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Connectors & queries.link.generated-index.description": {
-    "message": "Paramètres → Connecteurs : pools, connecteurs SQL et API, et leurs requêtes — générées depuis une table, écrites à la main, clonées, séquences et lookups, paramètres, variantes par dialecte.",
+    "message": "Construire → Connecteurs : pools, connecteurs SQL et API, et leurs requêtes — générées depuis une table, écrites à la main, clonées, séquences et lookups, paramètres, variantes par dialecte.",
     "description": "The generated-index page description for category 'Connectors & queries' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus & apps": {
@@ -568,7 +568,7 @@
     "description": "The label for category 'Menus & apps' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus & apps.link.generated-index.description": {
-    "message": "Paramètres → Menus et applications : ce qu'est une application, l'arborescence du menu, les types d'entrées, les permissions, les traductions et les icônes.",
+    "message": "Construire → Menus et applications : ce qu'est une application, l'arborescence du menu, les types d'entrées, les permissions, les traductions et les icônes.",
     "description": "The generated-index page description for category 'Menus & apps' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dashboards & charts": {
@@ -592,11 +592,51 @@
     "description": "The generated-index page description for category 'Administration' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dashboards & charts.link.generated-index.description": {
-    "message": "Paramètres → Tableaux de bord et Paramètres → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
+    "message": "Construire → Tableaux de bord et Construire → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
     "description": "The generated-index page description for category 'Dashboards & charts' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Data Explorer": {
     "message": "Explorateur de données",
     "description": "The label for category 'Data Explorer' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Build": {
+    "message": "Construire",
+    "description": "The label for category Build in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Build.link.generated-index.description": {
+    "message": "Liberty Next → Construire : connecteurs et requêtes, dictionnaire, écrans, menus, tableaux de bord et graphiques, l'explorateur de données, l'assistant IA et les plugins.",
+    "description": "The generated-index page description for category Build in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Administer": {
+    "message": "Administrer",
+    "description": "The label for category Administer in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Administer.link.generated-index.description": {
+    "message": "Liberty Next → Administrer : tous les réglages de l'installation, la sécurité et la connexion, les variables d'environnement, le rechargement à chaud et le chiffrement.",
+    "description": "The generated-index page description for category Administer in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Operate": {
+    "message": "Exploiter",
+    "description": "The label for category Operate in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Operate.link.generated-index.description": {
+    "message": "Liberty Next → Exploiter : la page Surveillance — vue en direct, journal du serveur, rétention — et les points de santé. Les tâches sont décrites dans la documentation de Nomaflow.",
+    "description": "The generated-index page description for category Operate in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Deploy": {
+    "message": "Déployer",
+    "description": "The label for category Deploy in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Deploy.link.generated-index.description": {
+    "message": "Liberty Next → Déployer : paquets et promotion vers une autre instance, paquets de modifications, historique de la configuration.",
+    "description": "The generated-index page description for category Deploy in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Document": {
+    "message": "Documenter",
+    "description": "The label for category Document in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Document.link.generated-index.description": {
+    "message": "Liberty Next → Documenter : la référence développeur, les rapports de documentation, la ligne de commande et l'API REST.",
+    "description": "The generated-index page description for category Document in sidebar libertySidebar"
   }
 }

@@ -43,11 +43,11 @@ CREATE TABLE expense_claims (
 
 ### 2. Status list
 
-**Settings → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
+**Liberty Next → Build → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
 
 ### 3. One query per transition
 
-In **Settings → Connectors → expenses → Queries**, three writable queries:
+In **Liberty Next → Build → Connectors → expenses → Queries**, three writable queries:
 
 ```sql
 -- submit_claim
@@ -92,7 +92,7 @@ steps = [
 
 ### 5. Who may do what
 
-Each query has its own permission: `sql:expenses:submit_claim`, `sql:expenses:approve_claim`, `sql:expenses:reject_claim`. In **Settings → Access → Roles**, grant the first one to employees and the other two to managers only: an employee who clicks *Approve* gets a refusal. See [Roles & permissions](../build/secure/roles-and-permissions.md).
+Each query has its own permission: `sql:expenses:submit_claim`, `sql:expenses:approve_claim`, `sql:expenses:reject_claim`. In **Liberty Next → Administer → Access → Roles**, grant the first one to employees and the other two to managers only: an employee who clicks *Approve* gets a refusal. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
 ### 6. Fields by state
 
@@ -109,7 +109,7 @@ And on the **General** tab, `editable_when` STATUS = `DRAFT`: once submitted, th
 
 ### 7. Notifications
 
-In **Settings → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
+In **Liberty Next → Build → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
 
 ### 8. Reminders
 

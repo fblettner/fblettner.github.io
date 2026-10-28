@@ -160,7 +160,7 @@ Le modèle livre dix analyses partagées — quantité par business unit, par so
 
 L'application livre ses [questions de départ](./ai-assistant.md#starters) sous quatre rubriques — *Sales*, *Periods*, *Loads*, *Reference data* —, par exemple *Which business unit sold the most last month?* ou *How do I reload a month that was wrong?*. L'écran *Lignes de vente* a les siennes, qui s'appuient sur le contexte de page : *Sum the quantities of the rows I see, by business unit*.
 
-Trois [procédures](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — permettent à l'assistant de guider un utilisateur dans les démarches de l'application. L'ensemble se consulte et se modifie dans **Paramètres → IA**.
+Trois [procédures](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — permettent à l'assistant de guider un utilisateur dans les démarches de l'application. L'ensemble se consulte et se modifie dans **Liberty Next → Construire → IA**.
 
 ---
 
@@ -193,7 +193,7 @@ Charger les sociétés (ou les fichiers d'exemple) avant de lancer cette tâche 
 
 ## Mise en place \{#setup\}
 
-1. Dans **Paramètres → Pools**, un pool nommé `nomademo` qui pointe vers une base vide.
+1. Dans **Liberty Next → Administrer → Pools**, un pool nommé `nomademo` qui pointe vers une base vide.
 2. Dans Nomaflow, lancer `nomademo-init-db`.
 3. Ouvrir **Sales demo** depuis le sélecteur d'applications, puis **Import → Charger les fichiers d'exemple**.
 4. Lancer `nomademo-demo-accounts` dans Nomaflow pour créer les utilisateurs de démonstration.

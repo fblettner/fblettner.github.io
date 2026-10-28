@@ -31,12 +31,12 @@ Les installations livrées sont déjà sécurisées ; cette page liste ce qu'ell
 - [ ] **Activer le HTTPS** : `./liberty ssl letsencrypt …` ou `provided …`, ou un proxy inverse existant devant. Voir [HTTPS et Traefik](./traefik.md).
 - [ ] **Changer et conserver les mots de passe** : celui d'`admin` (`liberty-admin set-password admin`), ceux de pgAdmin et du tableau de bord Traefik affichés par l'installation.
 - [ ] **Garder les secrets hors du serveur** : une copie de `release/.env` (ou de `secrets.env`) dans un coffre-fort de secrets. Sans la clé maître, une configuration restaurée ne peut pas déchiffrer ses mots de passe. Pour des secrets Docker ou Kubernetes, fournir `LIBERTY_MASTER_KEY_FILE=/run/secrets/…` au lieu de la valeur.
-- [ ] **Licence** collée dans **Paramètres → App → License**, et sa date d'expiration notée.
+- [ ] **Licence** collée dans **Liberty Next → Administrer → App → License**, et sa date d'expiration notée.
 - [ ] **Connexion** : OpenID Connect configuré si l'entreprise dispose d'un fournisseur d'identité ([Connexion](../framework/build/secure/sign-in.md)) ; un second superutilisateur, pour qu'un mot de passe perdu ne bloque pas l'installation.
 - [ ] **Rôles** revus : qui voit quels menus, et quelles lignes ([Rôles et permissions](../framework/build/secure/roles-and-permissions.md)).
 - [ ] **Sauvegardes planifiées et copiées hors du serveur** ([Exploitation](./operations.md#backup)), et **une restauration testée**.
 - [ ] **Outils** : Portainer et pgAdmin sont accessibles à la même adresse que l'application. Les retirer de l'ensemble, ou les restreindre dans Traefik, si personne n'en a besoin.
-- [ ] **Notifications** : le compte SMTP dans **Paramètres → App → Notifications (email)** et une règle pour les tâches en échec ([Notifications](../nomaflow/notifications.md)).
+- [ ] **Notifications** : le compte SMTP dans **Liberty Next → Administrer → App → Notifications (email)** et une règle pour les tâches en échec ([Notifications](../nomaflow/notifications.md)).
 - [ ] **Supervision** : une sonde externe sur `/ready` ([Points de santé](../monitoring/health-endpoints.md)).
 - [ ] **`./liberty doctor` répond *no problems found***.
 

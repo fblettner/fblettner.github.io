@@ -10,7 +10,7 @@ Most administration is done in **Settings**. The command-line tools cover what h
 
 | Tool | Purpose |
 |---|---|
-| `liberty-next` | Starts the server. Address and port come from **Settings → App**. |
+| `liberty-next` | Starts the server. Address and port come from **Liberty Next → Administer → App**. |
 | [`liberty-admin`](#liberty-admin) | Database bootstrap, users, roles and data scope, installation jobs, schema migrations. |
 | `./liberty` and `liberty-ops` | Operations on a Docker or a Python install — see [Operations](../installation/operations.md). |
 | [`liberty-connectors`](#liberty-connectors) | Lists the connectors and runs a query or an endpoint. |
@@ -72,7 +72,7 @@ liberty-admin migrate [--app X]… [--dry-run] [--target-connector C] [--revisio
                       [--plugins-dir D] [--stamp REV]
 ```
 
-Applies the pending schema migrations of each licensed app (the `plugins/<app>/db` modules) and records each run in **Settings → History → Upgrades**.
+Applies the pending schema migrations of each licensed app (the `plugins/<app>/db` modules) and records each run in **Liberty Next → Deploy → History → Upgrades**.
 
 | Option | Effect |
 |---|---|
@@ -123,7 +123,7 @@ The key comes from `LIBERTY_MASTER_KEY`; `--master-key` and `--config` override 
 
 | Command | Effect |
 |---|---|
-| `liberty-license status` | Checks the key configured in **Settings → App → License**: validity, products covered, expiry. |
+| `liberty-license status` | Checks the key configured in **Liberty Next → Administer → App → License**: validity, products covered, expiry. |
 | `liberty-license verify [KEY]` | Checks a key given as argument or on standard input, before pasting it. |
 
 `--config` names another `app.toml`. See [Licence key](../framework/build/secure/license-key.md).

@@ -8,7 +8,7 @@ keywords: [Liberty Next, roles, permissions, Settings Access, menu tree, allow, 
 
 A role answers two questions: **what** its holders may open (menus, queries, dashboards, the assistant) and **which rows** they see. Users receive roles; a user with several roles gets the sum of them.
 
-Roles are edited in **Settings → Access → Roles**. The role list is on the left; the selected role opens in a panel with two tabs: **Access** and **Data scope**.
+Roles are edited in **Liberty Next → Administer → Access → Roles**. The role list is on the left; the selected role opens in a panel with two tabs: **Access** and **Data scope**.
 
 :::info[JD Edwards roles]
 This page is about the roles of Liberty Next itself. JD Edwards EnterpriseOne roles and their security are managed in Nomajde.

@@ -72,8 +72,8 @@ Settings shows such a reference as it is written. For a secret field (a password
 |---|---|
 | `LIBERTY_MASTER_KEY` | The key of every `ENC:` value. Never change it on an existing install. |
 | `LIBERTY_JWT_SECRET` | Signs the sessions. At least 32 characters. |
-| `LIBERTY_LICENSE_KEY` | The licence key, when it is not pasted in Settings → App. |
-| `ANTHROPIC_API_KEY` | The AI assistant's key, when it is not entered in Settings → App. |
+| `LIBERTY_LICENSE_KEY` | The licence key, when it is not pasted in Liberty Next → Administer → App. |
+| `ANTHROPIC_API_KEY` | The AI assistant's key, when it is not entered in Liberty Next → Administer → App. |
 | `LIBERTY_APPS_DIR` | The folder of the configuration files (connectors, screens, menus…); the plugins are in `../plugins`. See [Architecture](../../installation/architecture.md#configuration). |
 | `LIBERTY_APP_CONFIG` | The path of the application settings file, when it is not `config/app.toml`. |
 | `LIBERTY_ORACLE_CLIENT_LIB` | The Oracle Instant Client folder for the thick mode (set in the Docker image). |

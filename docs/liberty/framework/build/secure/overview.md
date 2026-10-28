@@ -62,6 +62,6 @@ Pool passwords, API credentials, the licence key, the AI key, the OIDC secret an
 | Need | Where to handle it |
 |---|---|
 | Multi-factor authentication, password policies | The OpenID Connect provider. |
-| Mapping the provider's groups to roles | Not provided: roles are assigned in Settings → Access. |
+| Mapping the provider's groups to roles | Not provided: roles are assigned in Liberty Next → Administer → Access. |
 | Revoking one session at once | Deactivate the user (effective at the next renewal, within the hour); changing the JWT secret signs everybody out. |
 | LDAP sign-in | Through an OpenID Connect provider in front of the directory. |

@@ -251,7 +251,7 @@ One-time provisioning. Run **once** at customer-stand-up; safe to re-run (idempo
 | `nomasx1_auditor` | Every read of the Nomasx-1 data, the Data Explorer, the AI assistant and the two report jobs; the monthly reports are mailed to it. |
 | `nomasx1_admin` | Everything: the whole application, its settings and every `nomasx1-*` job. |
 
-Run it once after the install and after each upgrade, so that new read queries are granted; then assign the roles to users under **Settings → Access**. Idempotent; shipped disabled.
+Run it once after the install and after each upgrade, so that new read queries are granted; then assign the roles to users under **Liberty Next → Administer → Access**. Idempotent; shipped disabled.
 
 ---
 
@@ -281,7 +281,7 @@ The curated **reference bundle** ships in `${LIBERTY_APPS_DIR}/nomasx1-reference
 
 ### `nomasx1-import-reference` \{#nomasx1-import-reference\}
 
-**Load a curated Nomasx-1 reference bundle into `target_connector`.** Operator must create the target application in *Settings → Applications* first — the import precheck refuses to start otherwise. Set `replace = true` for a destructive TRUNCATE-then-INSERT cycle.
+**Load a curated Nomasx-1 reference bundle into `target_connector`.** Operator must create the target application in *Nomasx-1 → Settings → Global → Applications* first — the import precheck refuses to start otherwise. Set `replace = true` for a destructive TRUNCATE-then-INSERT cycle.
 
 | Step | Callable |
 |---|---|
@@ -398,7 +398,7 @@ For a partial re-merge — only the parents affected by *this* change — use `n
 | **Licences** | The licences and OUT — the security and SoD steps off. |
 | **Everything** | Every step, the directory, the activity log, the database and the cross reference included. |
 
-**Applications** — the job offers the applications of *Settings → Applications* as checkboxes, with **All**. It runs once per application ticked, one after the other. On a schedule or in a preset, `apps_id = "all"` collects every application at each fire.
+**Applications** — the job offers the applications of *Nomasx-1 → Settings → Global → Applications* as checkboxes, with **All**. It runs once per application ticked, one after the other. On a schedule or in a preset, `apps_id = "all"` collects every application at each fire.
 
 **Params** — `source_connector = jdedwards`, `target_connector = nomasx1`. Two attempts on failure; an alert after 90 minutes.
 
@@ -574,10 +574,10 @@ The bundled jobs are **enabled = false** out of the box. Set a schedule in the j
 |---|---|---|
 | A delivered job whose steps were changed is not updated by a wheel upgrade. | The upgrade lists it as kept. | Schedules, presets, alerts and parameter values survive an upgrade on their own; keep the steps as delivered, or mark the job `override = true` — see [Deploy prebuilt apps](../installation/deploy-prebuilt-apps.md#merge). |
 | Collection job fails with `No module named 'nomasx1'`. | Plugin code isn't in the framework's plugins path. | Run `liberty-apps install --target $LIBERTY_APPS_DIR` to materialise the payload; reload the framework. |
-| `nomasx1-import-reference` fails with *"target application not found"*. | Application not created in *Settings → Applications*. | Create the app in the UI first; the precheck refuses to start otherwise. |
+| `nomasx1-import-reference` fails with *"target application not found"*. | Application not created in *Nomasx-1 → Settings → Global → Applications*. | Create the app in the UI first; the precheck refuses to start otherwise. |
 | `deploy-databases` errors with permission denied. | `default` pool can't create DBs / roles. | Temporarily point `default` at a Postgres superuser; revert after the run. |
 | Schedule set but job doesn't fire. | The job is disabled (the bundle ships `enabled = false`). | Switch it on from its line on the Jobs page after setting the schedule. |
-| Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Settings → Connectors → jdedwards* — test the connection from the UI before the next run. |
+| Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Liberty Next → Build → Connectors → jdedwards* — test the connection from the UI before the next run. |
 | Audit trail starts producing thousands of rows per minute. | The job started from SCN 0 — replaying the whole archive log. | Run `nomasx1-audit-trail-reset-scn-1` (default `scn = 0` → next run picks current SCN) to start fresh. |
 | Materialised views show stale data after a custom SQL fix. | The collection job's end-of-run REFRESH_VIEWS step didn't run (you bypassed it). | Run `nomasx1-refresh-views` manually. |
 

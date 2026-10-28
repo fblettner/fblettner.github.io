@@ -12,7 +12,7 @@ Nomasx-1, Nomajde et leurs tâches Nomaflow sont livrés dans un seul wheel Pyth
 
 ## 1 — La clé de licence \{#set-the-license-key\}
 
-Se connecter avec un superutilisateur et ouvrir **Paramètres → App → License**. Coller la clé reçue et enregistrer : la clé est chiffrée avec la clé maître de l'installation et les connecteurs sous licence apparaissent aussitôt, sans redémarrage.
+Se connecter avec un superutilisateur et ouvrir **Liberty Next → Administrer → App → License**. Coller la clé reçue et enregistrer : la clé est chiffrée avec la clé maître de l'installation et les connecteurs sous licence apparaissent aussitôt, sans redémarrage.
 
 Sans clé, les applications s'installent mais leurs connecteurs sous licence restent masqués. `liberty-license status` (dans le conteneur : `docker exec -u liberty liberty-next liberty-license status`) indique ce que couvre la clé et sa date d'expiration — voir [Clé de licence](../framework/build/secure/license-key.md).
 
@@ -49,9 +49,9 @@ Sur une installation Python, les mêmes étapes tiennent en trois commandes — 
 
 ## 3 — Connecter le système source \{#source\}
 
-Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Paramètres → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer **`nomasx1-roles`** pour créer les rôles d'auditeur et d'administrateur, et la collecte — `nomasx1-collect-all` — depuis **Nomaflow** ou depuis *Nomasx-1 → Tâches*. Les tâches et leurs paramètres sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
+Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Liberty Next → Administrer → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer **`nomasx1-roles`** pour créer les rôles d'auditeur et d'administrateur, et la collecte — `nomasx1-collect-all` — depuis **Nomaflow** ou depuis *Nomasx-1 → Tâches*. Les tâches et leurs paramètres sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
 
-Nomajde écrit aussi dans JD Edwards par son serveur AIS : l'adresse, l'utilisateur et la vérification du certificat viennent des variables d'environnement `JDE_AIS_URL`, `JDE_AIS_USER` et `JDE_AIS_VERIFY_SSL` (dans `.env` ou `secrets.env`), ou se règlent directement dans **Paramètres → Connecteurs**. Une valeur réglée dans les Paramètres est conservée à chaque mise à jour.
+Nomajde écrit aussi dans JD Edwards par son serveur AIS : l'adresse, l'utilisateur et la vérification du certificat viennent des variables d'environnement `JDE_AIS_URL`, `JDE_AIS_USER` et `JDE_AIS_VERIFY_SSL` (dans `.env` ou `secrets.env`), ou se règlent directement dans **Liberty Next → Construire → Connecteurs**. Une valeur réglée dans les Paramètres est conservée à chaque mise à jour.
 
 ---
 
@@ -84,7 +84,7 @@ Les applications se mettent à jour en même temps que le framework avec `./libe
 | Vérification | Où |
 |---|---|
 | Version des applications | `./liberty status` → `apps bundle` |
-| Licence | **Paramètres → App → License** |
+| Licence | **Liberty Next → Administrer → App → License** |
 | Applications dans le sélecteur | Nomasx-1 et Nomajde apparaissent en haut du menu latéral |
 | Tâches d'installation | Historique des exécutions Nomaflow : `deploy-databases` et `nomasx1-import-reference` réussies |
 | Schéma à jour | `./liberty status` → `migrations: up to date` |
@@ -112,7 +112,7 @@ Les deux utilisent la même fusion entité par entité : une mise à jour du whe
 
 | Symptôme | Correction |
 |---|---|
-| Les applications sous licence n'apparaissent pas dans le sélecteur | Vérifier la licence dans **Paramètres → App → License** ; `./liberty doctor` vérifie que le dossier des applications figure dans les fichiers compose enregistrés. |
+| Les applications sous licence n'apparaissent pas dans le sélecteur | Vérifier la licence dans **Liberty Next → Administrer → App → License** ; `./liberty doctor` vérifie que le dossier des applications figure dans les fichiers compose enregistrés. |
 | Après un `docker compose -f … up -d` manuel, l'installation paraît vide | Le dossier des applications a été oublié. Relancer `./liberty apps <wheel>` (rien d'autre ne change) — puis s'en tenir aux commandes `./liberty`. |
 | `deploy-databases` échoue avec *permission denied* | Le pool `default` doit utiliser un rôle autorisé à créer des rôles et des bases. Dans l'installation complète, c'est le superutilisateur `liberty` fourni. |
 | Un nouvel écran de l'éditeur n'apparaît pas | Il a été conservé parce qu'il avait été modifié localement : voir la liste affichée en fin d'exécution, ou relancer avec `--force-config`. |

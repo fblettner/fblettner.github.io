@@ -8,7 +8,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, connected users, recor
 
 | Surface | Shows | For |
 |---|---|---|
-| **The Monitoring page** | What happens now: connected users, record locks, database pools, runtime, the live log. | Superusers, from the **Monitoring** entry of the sidebar. See [The Monitoring page](./dashboard.md). |
+| **The Monitoring page** | What happens now: connected users, record locks, database pools, runtime, the live log. | Superusers, from **Liberty Next → Operate → Monitoring**. See [The Monitoring page](./dashboard.md). |
 | **Server log** and **Retention** | Every line the server wrote, searchable; what the server keeps and how much it takes. | Superusers, the other two tabs of the Monitoring page. See [Server log](./server-log.md) and [Retention](./retention.md). |
 | **Health endpoints** | `/health` (the process is up), `/ready` (the framework database answers), `/info` (version and counts). | Load balancers, container healthchecks, external probes. See [Health endpoints](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, health, pending migrations, configuration problems. | Administrators on the server. See [Operations](../installation/operations.md). |

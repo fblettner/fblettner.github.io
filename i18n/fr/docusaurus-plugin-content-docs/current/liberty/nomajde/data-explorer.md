@@ -46,7 +46,7 @@ Les préréglages JD Edwards de l'[assistant de création d'écran](../framework
 | Données techniques | Bill of Material (F3002), Routing (F3003). |
 | Calcul des coûts | Item Cost Components (F30026). |
 
-Ils figurent dans le sélecteur de modèle avec les autres ; l'en-tête de la page indique *fourni par le préréglage « … »*. Ils sont construits à la première utilisation. Pour en adapter un, un superutilisateur ajoute un modèle dans **Paramètres → Explorateur** à partir du même préréglage, puis le modifie.
+Ils figurent dans le sélecteur de modèle avec les autres ; l'en-tête de la page indique *fourni par le préréglage « … »*. Ils sont construits à la première utilisation. Pour en adapter un, un superutilisateur ajoute un modèle dans **Liberty Next → Construire → Explorateur** à partir du même préréglage, puis le modifie.
 
 Les montants JD Edwards s'affichent en unités réelles : les décimales du dictionnaire de données s'appliquent aux tableaux, aux totaux et aux filtres.
 

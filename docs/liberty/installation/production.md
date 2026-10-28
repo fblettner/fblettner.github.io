@@ -31,12 +31,12 @@ The shipped layouts are already hardened; this page lists what they do for you a
 - [ ] **HTTPS on**: `./liberty ssl letsencrypt …` or `provided …`, or your own proxy in front. See [HTTPS and Traefik](./traefik.md).
 - [ ] **Passwords changed and stored**: the `admin` password (`liberty-admin set-password admin`), the pgAdmin and Traefik dashboard passwords printed by the installation.
 - [ ] **Secrets kept off the server**: a copy of `release/.env` (or `secrets.env`) in your vault. Without the master key, a restored configuration cannot decrypt its passwords. For Docker or Kubernetes secrets, give `LIBERTY_MASTER_KEY_FILE=/run/secrets/…` instead of the value.
-- [ ] **Licence** pasted in **Settings → App → License**, and its expiry date noted.
+- [ ] **Licence** pasted in **Liberty Next → Administer → App → License**, and its expiry date noted.
 - [ ] **Sign-in**: OpenID Connect set up if the company has an identity provider ([Sign-in](../framework/build/secure/sign-in.md)); a second superuser so that one lost password does not lock the install.
 - [ ] **Roles** reviewed: who sees which menus, and which rows ([Roles and permissions](../framework/build/secure/roles-and-permissions.md)).
 - [ ] **Backups scheduled and copied off the server** ([Operations](./operations.md#backup)), and **one restore tested**.
 - [ ] **Tools**: Portainer and pgAdmin are reachable on the same address as the application. Remove them from the stack, or restrict them in Traefik, if nobody needs them.
-- [ ] **Notifications**: the SMTP account in **Settings → App → Notifications (email)** and a rule for failed jobs ([Notifications](../nomaflow/notifications.md)).
+- [ ] **Notifications**: the SMTP account in **Liberty Next → Administer → App → Notifications (email)** and a rule for failed jobs ([Notifications](../nomaflow/notifications.md)).
 - [ ] **Monitoring**: an external probe on `/ready` ([Health endpoints](../monitoring/health-endpoints.md)).
 - [ ] **`./liberty doctor` answers *no problems found***.
 

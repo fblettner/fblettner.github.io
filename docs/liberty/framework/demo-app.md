@@ -160,7 +160,7 @@ The model ships ten shared analyses — quantity by business unit, by company, b
 
 The application ships its [starter questions](./ai-assistant.md#starters) under four headings — *Sales*, *Periods*, *Loads*, *Reference data* — with *Which business unit sold the most last month?* or *How do I reload a month that was wrong?*. The *Sales lines* screen has its own, which use the page context: *Sum the quantities of the rows I see, by business unit*.
 
-Three [playbooks](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — let the assistant walk a user through the application's procedures. All of it is visible and editable in **Settings → AI**.
+Three [playbooks](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — let the assistant walk a user through the application's procedures. All of it is visible and editable in **Liberty Next → Build → AI**.
 
 ---
 
@@ -193,7 +193,7 @@ Load the companies (or the sample files) before running this job: it reads them 
 
 ## Setting it up \{#setup\}
 
-1. In **Settings → Pools**, a pool named `nomademo` pointing at an empty database.
+1. In **Liberty Next → Administer → Pools**, a pool named `nomademo` pointing at an empty database.
 2. In Nomaflow, run `nomademo-init-db`.
 3. Open **Sales demo** from the application switcher, then **Import → Load the sample files**.
 4. Run `nomademo-demo-accounts` in Nomaflow to create the demo users.

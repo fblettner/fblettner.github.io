@@ -50,7 +50,7 @@ Une mise à jour tient en une commande. Elle ne démarre jamais sans une sauvega
   <text x="310" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">./liberty rollback : image précédente + cette sauvegarde</text>
   <line x1="300" y1="202.0" x2="480" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
   <rect x="790" y="185" width="330" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="800" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Settings → History → Upgrades</text>
+  <text x="800" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Déployer → Historique → Upgrades</text>
   <text x="800" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">versions avant / après, chaque étape, migrations</text>
   <line x1="790" y1="202.0" x2="1080" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
 </svg>
@@ -107,7 +107,7 @@ La lancer sous l'utilisateur du service avec son environnement chargé, comme to
 
 Chaque `upgrade` et chaque `rollback` enregistre un rapport : versions avant et après, version de l'image, fichiers compose, dossier de sauvegarde, constats de `doctor`, résultat de chaque étape et migrations appliquées. Il est stocké avec la configuration (`.versions/upgrades/`) et, avec Docker, une copie est aussi écrite dans le dossier de sauvegarde.
 
-Il se consulte dans **Paramètres → History → Upgrades**. Chaque entrée indique son composant :
+Il se consulte dans **Liberty Next → Déployer → Historique → Upgrades**. Chaque entrée indique son composant :
 
 | Entrée | Enregistrée par |
 |---|---|
@@ -127,7 +127,7 @@ Le framework crée et complète ses propres tables au démarrage. Les bases des 
 - `./liberty migrate --dry-run` les liste, `./liberty migrate` les applique ;
 - avec `LIBERTY_AUTO_MIGRATE=1` dans `.env`, le serveur les applique lui-même au démarrage.
 
-Chaque exécution est enregistrée dans **Paramètres → History → Upgrades**. Pour une base dont la version enregistrée est en avance sur ses tables réelles, `liberty-admin migrate --app nomasx1 --stamp <révision>` enregistre la version sans rien exécuter, puis applique ce qui reste — voir [CLI](../references/cli.md#migrate).
+Chaque exécution est enregistrée dans **Liberty Next → Déployer → Historique → Upgrades**. Pour une base dont la version enregistrée est en avance sur ses tables réelles, `liberty-admin migrate --app nomasx1 --stamp <révision>` enregistre la version sans rien exécuter, puis applique ce qui reste — voir [CLI](../references/cli.md#migrate).
 
 ---
 
@@ -167,7 +167,7 @@ Ou définir `LIBERTY_IMAGE_TAG` dans `.env` et relancer `./deploy-swarm.sh`.
 | Version corrective (`7.0.57` → `7.0.58`) | Corrections et fonctionnalités ; la configuration reste compatible ; les changements de base ne font qu'ajouter des tables ou des colonnes. |
 | Une étape plus importante | Les notes de version précisent ce qu'il faut vérifier avant et après. |
 
-Lire les notes de version avant de mettre à jour : **Paramètres → Release notes** affiche celles de la version en service.
+Lire les notes de version avant de mettre à jour : **Liberty Next → Documenter → Notes de version** affiche celles de la version en service.
 
 ---
 

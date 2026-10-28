@@ -8,7 +8,7 @@ keywords: [Liberty Framework, screens, ScreensBuilder, Screen Designer, tabs, di
 
 A **screen** in Liberty is the page a user sees: a table of rows, optional filters, optional add/edit dialog, optional actions, optional row context menu. One screen = one `<base>_get` query + (optionally) `<base>_put` / `<base>_post` / `<base>_delete` for writes + a dialog form on top.
 
-The page that manages screens is **Settings → Screens**. This overview maps it; the next pages walk through each task.
+The page that manages screens is **Liberty Next → Build → Screens**. This overview maps it; the next pages walk through each task.
 
 ---
 

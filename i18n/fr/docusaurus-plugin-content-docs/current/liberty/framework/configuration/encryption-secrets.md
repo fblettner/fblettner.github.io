@@ -16,9 +16,9 @@ Chaque champ secret est chiffré à l'enregistrement depuis les Paramètres :
 
 | Où | Champ |
 |---|---|
-| Paramètres → Pools | Le mot de passe du pool. |
-| Paramètres → Connecteurs (connecteurs API) | Identifiants, jetons, secrets client. |
-| Paramètres → App | La clé de licence, la clé de l'IA, le secret client OpenID Connect, le mot de passe SMTP. |
+| Liberty Next → Administrer → Pools | Le mot de passe du pool. |
+| Liberty Next → Construire → Connecteurs (connecteurs API) | Identifiants, jetons, secrets client. |
+| Liberty Next → Administrer → App | La clé de licence, la clé de l'IA, le secret client OpenID Connect, le mot de passe SMTP. |
 
 Le champ est une saisie masquée avec un œil pour en afficher le contenu. Une nouvelle valeur est toujours écrite chiffrée ; sans clé maître, l'enregistrement est refusé.
 

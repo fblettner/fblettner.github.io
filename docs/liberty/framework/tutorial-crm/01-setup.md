@@ -169,12 +169,12 @@ INSERT INTO deals (customer_id, name, stage, amount, close_date) VALUES
 
 A **connector** groups the queries of one database under a name. Once it has a menu, it becomes the `crm` **app**.
 
-1. Open **Settings → Connectors**, click **＋ Connector**.
+1. Open **Liberty Next → Build → Connectors**, click **＋ Connector**.
 2. Name `crm`, type **SQL**, pool `default`. Save.
 
 The connector appears under *Data sources* in the left list: it has no menu yet. It moves to *Apps* in [Step 2](./02-customers.md).
 
-To work on another database than the framework's, first add a pool in **Settings → Pools** with its URL, then pick it here — see [Connectors](../connectors.md#pools).
+To work on another database than the framework's, first add a pool in **Liberty Next → Administer → Pools** with its URL, then pick it here — see [Connectors](../connectors.md#pools).
 
 ---
 
@@ -183,6 +183,6 @@ To work on another database than the framework's, first add a pool in **Settings
 | Check | How |
 |---|---|
 | Tables created | `SELECT count(*) FROM customers;` returns 3. |
-| Connector created | **Settings → Connectors** lists `crm` under *Data sources*. |
+| Connector created | **Liberty Next → Build → Connectors** lists `crm` under *Data sources*. |
 
 → **[Step 2 — Customers](./02-customers.md)**: the queries, the first screen and the menu.

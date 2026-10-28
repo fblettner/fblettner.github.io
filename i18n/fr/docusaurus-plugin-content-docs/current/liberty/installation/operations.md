@@ -100,7 +100,7 @@ Liberty Next — /opt/liberty-next/release
 | `framework`, `apps bundle` | Les versions réellement en service. |
 | `/ready` | Le contrôle de disponibilité du serveur. |
 | `migrations` | Migrations de schéma des applications sous licence restant à appliquer. |
-| `last upgrade` | La dernière entrée de **Paramètres → History → Upgrades**. |
+| `last upgrade` | La dernière entrée de **Liberty Next → Déployer → Historique → Upgrades**. |
 
 ---
 
@@ -188,7 +188,7 @@ Revenir avec `./liberty db embedded` ne recopie pas ce qui a été écrit entre-
 | Un autre superutilisateur | `docker exec -u liberty liberty-next liberty-admin create-user alice --superuser` |
 | Vérifier la licence | `docker exec -u liberty liberty-next liberty-license status` |
 | Appliquer les migrations de schéma des applications | `./liberty migrate` (`--dry-run` pour les lister) |
-| Recharger la configuration après modification d'un fichier | **Paramètres → Recharger la config** |
+| Recharger la configuration après modification d'un fichier | **Recharger la config (en haut de toute page d'édition de Liberty Next)** |
 | Nouveau mot de passe du tableau de bord Traefik | `./liberty dashboard-password` |
 | Un shell dans le conteneur | `docker exec -it -u liberty liberty-next bash` |
 
@@ -221,6 +221,6 @@ Revenir avec `./liberty db embedded` ne recopie pas ce qui a été écrit entre-
 | La connexion répond *Too many failed logins — try again in N s* | Dix échecs de connexion en cinq minutes pour cet utilisateur (voir [Connexion](../framework/build/secure/sign-in.md)). | Attendre le délai indiqué, ou réinitialiser le mot de passe. |
 | Les pools échouent avec une erreur de déchiffrement | `LIBERTY_MASTER_KEY` n'est pas la clé qui a chiffré les mots de passe. | Remettre la clé d'origine (voir `.env.snapshot` dans une sauvegarde). |
 | Le serveur signale des migrations de schéma en attente | Une nouvelle version des applications modifie la base. | `./liberty migrate`. |
-| Un fichier modifié sur le disque n'est pas pris en compte | Les fichiers sont lus au démarrage ou au rechargement. | **Paramètres → Recharger la config**. |
+| Un fichier modifié sur le disque n'est pas pris en compte | Les fichiers sont lus au démarrage ou au rechargement. | **Recharger la config (en haut de toute page d'édition de Liberty Next)**. |
 | Port 80 ou 8000 déjà utilisé | Un autre service l'occupe. | Définir `TRAEFIK_HTTP_PORT` (complète) ou `LIBERTY_PORT` (légère) dans `.env`, puis `./liberty start`. |
 | L'installation refuse de démarrer : *stale Docker volumes* | Des volumes d'une installation précédente existent mais son `.env` a disparu. | Restaurer l'ancien `.env`, ou `./liberty install --reset` puis réinstaller. |

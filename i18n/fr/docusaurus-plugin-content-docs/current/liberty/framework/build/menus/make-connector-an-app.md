@@ -16,9 +16,9 @@ Cette page détaille le câblage des deux côtés : l'indicateur sur le connecte
 
 | Pièce | Où se trouve-t-elle | Requise pour une application ? |
 |---|---|---|
-| **`show_in_switcher`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur d'applications. |
-| **`[menus.<connector>]`** | Le fichier de menus (Paramètres → Menus). | Oui — sans menu, le connecteur est traité comme une *source de données*, pas une application. |
-| **`home`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
+| **`show_in_switcher`** | Sur le connecteur (Liberty Next → Construire → Connecteurs → onglet Paramètres). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur d'applications. |
+| **`[menus.<connector>]`** | Le fichier de menus (Liberty Next → Construire → Menus). | Oui — sans menu, le connecteur est traité comme une *source de données*, pas une application. |
+| **`home`** | Sur le connecteur (Liberty Next → Construire → Connecteurs → onglet Paramètres). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
 
 Deux effets distincts, déclenchés par des indicateurs différents :
 
@@ -69,14 +69,14 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
   <rect x="200" y="286" width="100" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="210" y="301" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">(par défaut)</text>
 
-  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Pour une application, créer aussi [menus.crm] depuis Paramètres → Menus → + Add scope.</text>
+  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Pour une application, créer aussi [menus.crm] depuis Construire → Menus → + Add scope.</text>
 </svg>
 
 ---
 
 ## Étape 1 — Sur le connecteur
 
-Ouvrir **Paramètres → Connecteurs**, choisir le connecteur, basculer sur l'onglet **Paramètres**. Les champs pertinents pour « ceci est une application » :
+Ouvrir **Liberty Next → Construire → Connecteurs**, choisir le connecteur, basculer sur l'onglet **Paramètres**. Les champs pertinents pour « ceci est une application » :
 
 | Champ | Notes |
 |---|---|
@@ -90,7 +90,7 @@ Enregistrer la page du connecteur — la modification s'applique immédiatement 
 
 ## Étape 2 — Sur le menu
 
-Ouvrir **Paramètres → Menus**. Si le connecteur n'a pas encore de menu, le bouton **+ Add scope** ouvre une boîte de dialogue qui liste tous les connecteurs **sans** menu — choisir le sien. La boîte de dialogue :
+Ouvrir **Liberty Next → Construire → Menus**. Si le connecteur n'a pas encore de menu, le bouton **+ Add scope** ouvre une boîte de dialogue qui liste tous les connecteurs **sans** menu — choisir le sien. La boîte de dialogue :
 
 - Crée une nouvelle entrée `[menus.<connector>]` sans éléments.
 - Sélectionne la pastille de la nouvelle application.
@@ -168,11 +168,11 @@ Un utilisateur qui se connecte ne voit que les applications pour lesquelles il a
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Connecteur avec `show_in_switcher = true` mais sans menu. | Le connecteur apparaît dans le groupe *Sources de données* de la page Connecteurs ; le sélecteur d'applications ne le liste pas. | Ajouter un menu dans *Paramètres → Menus*. |
+| Connecteur avec `show_in_switcher = true` mais sans menu. | Le connecteur apparaît dans le groupe *Sources de données* de la page Connecteurs ; le sélecteur d'applications ne le liste pas. | Ajouter un menu dans *Liberty Next → Construire → Menus*. |
 | Connecteur avec un menu mais `show_in_switcher = false`. | Le menu existe mais le sélecteur ne liste pas l'application. | Soit activer `show_in_switcher`, soit accepter que les utilisateurs n'atteindront l'application que par URL. |
 | `home` pointe vers un élément de menu qui n'existe plus. | Choisir l'application mène au le premier élément visible de premier niveau, en ignorant le `home` périmé. | Choisir de nouveau un élément valide — la liste déroulante affiche les éléments de menu actifs. |
 | Ajouter `[menus.<X>]` où `<X>` n'est pas un connecteur. | La page rejette l'entrée à l'enregistrement — la clé du menu doit correspondre à un connecteur connu. | Créer d'abord le connecteur, puis attacher le menu. |
-| Dupliquer une application mais le nouveau pool n'existe pas. | La boîte de dialogue de duplication refuse de soumettre. | Créer le pool dans *Paramètres → Pools* avant de dupliquer. |
+| Dupliquer une application mais le nouveau pool n'existe pas. | La boîte de dialogue de duplication refuse de soumettre. | Créer le pool dans *Liberty Next → Administrer → Pools* avant de dupliquer. |
 
 ---
 

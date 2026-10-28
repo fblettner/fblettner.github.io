@@ -10,18 +10,16 @@ La page **Paquets de modifications** capture chaque écriture de donnée suivie 
 
 Le même schéma convient à tout autre flux « faire les modifications ici, les rejouer là-bas » : un rafraîchissement de catalogue UDC curé, un lot de nouvelles permissions sur un écran spécifique, une mise à jour de règle de routage sur une table de configuration. Quand un écran est **`change_tracked`**, ses insertions / mises à jour / suppressions rejoignent le paquet brouillon actif en parallèle de l'écriture de production.
 
-C'est le pendant côté opérateur d'un moteur plus profond : le framework enregistre chaque écriture suivie dans les tables **`ly_change_packages`** + **`ly_change_entries`** (la **base change-set** — même pool que le framework, distincte du miroir d'audit), et le chemin d'application les rejoue sur la cible avec détection de dérive sur l'image avant.
+Derrière la page, le framework conserve chaque écriture suivie dans sa propre base — celle du framework, distincte du miroir d'audit —, et le chemin d'application les rejoue sur la cible avec détection des écarts sur l'image avant.
 
-:::info[Nouveauté du framework 2026.06]
-La page se trouve sous Nomaflow parce que le flux — *capture → revue → soumission → approbation → export → application* — est un flux, pas un réglage. L'écran Paramètres → Package existe toujours pour les tranches de configuration (écrans / éléments de menu / tableaux de bord) ; les Paquets de modifications sont l'équivalent **données**. Les deux coexistent.
-:::
+La page **Paquet** transporte des tranches de configuration (écrans, entrées de menu, tableaux de bord…) ; les Paquets de modifications transportent des **données**. Les deux se côtoient sous *Liberty Next → Déployer*.
 
 ---
 
 ## Ouvrir la page
 
-- Barre latérale → **Nomaflow → Modifications**.
-- Depuis la page Paramètres → Connecteurs, *Suivre les modifications* dans la carte de l'écran ouvre la page filtrée sur l'application correspondante.
+- **Liberty Next → Déployer → Modifications**.
+- Depuis la page Liberty Next → Construire → Connecteurs, *Suivre les modifications* dans la carte de l'écran ouvre la page filtrée sur l'application correspondante.
 
 ---
 
@@ -155,7 +153,7 @@ Chaque entrée enregistre aussi :
 | Les écritures d'un écran avec `change_tracked = false`. | Comportement par défaut. Les tables d'audit (journal de notifications, statistiques de relance) ne doivent pas polluer les paquets de promotion. |
 | Les écritures d'un job Nomaflow, d'un import en masse, du CLI. | Le suivi est par écran et passe par le chemin d'écriture de l'écran. Les jobs utilisent les appelables `j_*` directement sur le connecteur. |
 | Les lectures — aucun SELECT n'est jamais capturé. | Le paquet est un journal de *modifications*. |
-| Les écritures de métadonnées propres au framework (`ly_jobs`, `ly_users`, les tables change-set elles-mêmes). | La boucle de capture vérifie `change_tracked` sur l'écran du connecteur, pas sur la table. |
+| Les écritures de métadonnées propres au framework (tâches, utilisateurs, les paquets de modifications eux-mêmes). | La boucle de capture vérifie `change_tracked` sur l'écran du connecteur, pas sur la table. |
 
 ---
 
@@ -273,13 +271,13 @@ Un écran suivi capture **chaque** appel d'API ou de plugin qu'il déclenche (po
 Le flux qui a motivé cette fonctionnalité. Sur l'instance de **développement** :
 
 1. L'opérateur crée un rôle `PRJM_NEW`, lui attache trois menus, modifie les permissions de deux rôles existants. Chaque écriture rejoint au fil de l'eau le paquet brouillon de l'application **`JDE-PROD`**.
-2. L'opérateur ouvre *Nomaflow → Changements*, relit le brouillon. Le détail regroupe les trois rôles sous `ROLES`, les menus attachés sous `MENUS`, la sécurité touchée sous `SECURITY`. Une entrée `CALL_PLUGIN` vers `nomajde.security:j_remerge_security` est aussi capturée.
+2. L'opérateur ouvre *Liberty Next → Déployer → Modifications*, relit le brouillon. Le détail regroupe les trois rôles sous `ROLES`, les menus attachés sous `MENUS`, la sécurité touchée sous `SECURITY`. Une entrée `CALL_PLUGIN` vers `nomajde.security:j_remerge_security` est aussi capturée.
 3. L'opérateur exclut une entrée — une correction de coquille qu'il préfère annuler à la main. Il soumet, puis *Approuve*, puis *Exporte*.
 4. Le navigateur télécharge `jde-prod-security-2026-06-09.changeset.json`.
 
 Sur l'instance de **production** :
 
-5. L'opérateur ouvre *Nomaflow → Changements → Appliquer*, dépose le JSON.
+5. L'opérateur ouvre *Liberty Next → Déployer → Modifications → Appliquer*, dépose le JSON.
 6. L'essai à blanc s'exécute. Le rapport affiche 11 `would_apply` et 1 `conflict` sur le rôle `BUYER_R2` (modifié en production depuis la capture). L'opérateur coche cette ligne pour l'appliquer quand même.
 7. L'opérateur clique sur *Appliquer*. Toutes les lignes s'écrivent ; l'étape de post-application s'exécute en dernier et refusionne la sécurité des rôles parents concernés.
 8. Le journal d'import de la production enregistre le paquet avec sa somme de contrôle.
@@ -374,4 +372,4 @@ Le framework livre le moteur pour ce qui suit, mais l'interface aujourd'hui est 
 
 - [Nomaflow → Jobs intégrés → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all) — le plugin de re-fusion de sécurité le plus souvent câblé comme étape de post-application sur les promotions JDE.
 - [Nomaflow → Concepts](./concepts.md) — le modèle mental Nomaflow plus large dans lequel s'inscrivent les Paquets de modifications.
-- [Paramètres → Package](../framework/build/packages.md) — l'équivalent configuration : expédier écrans / éléments de menu / tableaux de bord entre installations. Les deux canaux coexistent.
+- [Liberty Next → Déployer → Paquet](../framework/build/packages.md) — l'équivalent configuration : expédier écrans / éléments de menu / tableaux de bord entre installations. Les deux canaux coexistent.

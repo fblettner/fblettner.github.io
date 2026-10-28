@@ -82,7 +82,7 @@ Un tableau de bord réunit le pipeline sur une page : montant en cours, montant 
 
 ## Les requêtes
 
-Dans **Paramètres → Connecteurs → crm → Requêtes**, **＋ Ajouter une requête** pour chacune :
+Dans **Liberty Next → Construire → Connecteurs → crm → Requêtes**, **＋ Ajouter une requête** pour chacune :
 
 ```sql
 -- open_deals_get — affaires en cours
@@ -110,7 +110,7 @@ ORDER BY a.HAPPENED_AT DESC
 
 ## Le graphique
 
-**Paramètres → Graphiques**, portée `crm`, **Add chart** :
+**Liberty Next → Construire → Graphiques**, portée `crm`, **Add chart** :
 
 | Onglet | Réglage |
 |---|---|
@@ -123,7 +123,7 @@ Voir [Graphiques](../charts.md).
 
 ## Le tableau de bord
 
-**Paramètres → Tableaux de bord**, application `crm`, ajouter un tableau de bord `pipeline`, titre `Pipeline commercial` :
+**Liberty Next → Construire → Tableaux de bord**, application `crm`, ajouter un tableau de bord `pipeline`, titre `Pipeline commercial` :
 
 - **Période** : **Add a period**, ouverture sur *Ce mois-ci*, colonne de date `CLOSE_DATE`.
 - **Widgets** (**Add widget**), dans cet ordre :
@@ -142,7 +142,7 @@ Enregistrer. Voir [Tableaux de bord](../dashboards.md).
 
 ## L'entrée de menu
 
-**Paramètres → Menus**, application `crm`, en tête d'arborescence : **＋ Élément**, libellé `Pipeline`, type `dashboard`, cible `crm.pipeline`, icône `barchart`. La placer au-dessus du dossier *Ventes* et la désigner comme **home** du connecteur (Paramètres → Connecteurs → crm) pour que l'application s'ouvre dessus.
+**Liberty Next → Construire → Menus**, application `crm`, en tête d'arborescence : **＋ Élément**, libellé `Pipeline`, type `dashboard`, cible `crm.pipeline`, icône `barchart`. La placer au-dessus du dossier *Ventes* et la désigner comme **home** du connecteur (Liberty Next → Construire → Connecteurs → crm) pour que l'application s'ouvre dessus.
 
 ---
 

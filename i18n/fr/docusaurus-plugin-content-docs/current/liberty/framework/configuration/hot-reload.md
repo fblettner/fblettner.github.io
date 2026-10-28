@@ -1,6 +1,6 @@
 ---
 title: Rechargement à chaud
-description: "Comment Liberty Next applique les modifications de configuration sans redémarrage : Recharger la config (POST /admin/reload), la surveillance des fichiers d'[app] hot_reload et ce qu'elle recharge pour chaque fichier, les pools, Paramètres → App, et ce qui demande encore un redémarrage."
+description: "Comment Liberty Next applique les modifications de configuration sans redémarrage : Recharger la config (POST /admin/reload), la surveillance des fichiers d'[app] hot_reload et ce qu'elle recharge pour chaque fichier, les pools, Liberty Next → Administrer → App, et ce qui demande encore un redémarrage."
 keywords: [Liberty Next, rechargement à chaud, recharger la config, admin reload, surveillance des fichiers, hot_reload, pools, redémarrage]
 ---
 
@@ -12,7 +12,7 @@ Les modifications de configuration s'appliquent sans redémarrer le serveur, de 
 
 ## Recharger la config \{#reload\}
 
-**Recharger la config**, à droite des onglets des Paramètres — ou `POST /admin/reload` (superutilisateur) — relit tous les fichiers de configuration et reconstruit à partir d'eux les connecteurs, écrans, menus, tableaux de bord, graphiques, tâches et règles de notification du serveur. Si les nouveaux fichiers ne se chargent pas, la configuration précédente reste active et l'erreur est affichée.
+**Recharger la config**, en haut de chaque page d'édition de Liberty Next — ou `POST /admin/reload` (superutilisateur) — relit tous les fichiers de configuration et reconstruit à partir d'eux les connecteurs, écrans, menus, tableaux de bord, graphiques, tâches et règles de notification du serveur. Si les nouveaux fichiers ne se chargent pas, la configuration précédente reste active et l'erreur est affichée.
 
 Les requêtes en cours se terminent avec la configuration de leur démarrage ; les suivantes utilisent la nouvelle.
 
@@ -20,7 +20,7 @@ Les requêtes en cours se terminent avec la configuration de leur démarrage ; l
 
 ## La surveillance des fichiers \{#watcher\}
 
-Avec **Hot reload** activé dans **Paramètres → App** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
+Avec **Hot reload** activé dans **Liberty Next → Administrer → App** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
 
 | Fichier | Rechargé |
 |---|---|
@@ -40,9 +40,9 @@ Une modification de pool (adresse, mot de passe, taille) n'est pas appliquée pa
 
 ---
 
-## Paramètres → App \{#app\}
+## Liberty Next → Administrer → App \{#app\}
 
-Enregistrer Paramètres → App applique aussitôt la licence, l'assistant IA, OpenID Connect, les notifications et les valeurs par défaut de l'interface. L'adresse d'écoute, le port et le niveau de journal demandent un redémarrage ; le mode thick d'Oracle aussi.
+Enregistrer Liberty Next → Administrer → App applique aussitôt la licence, l'assistant IA, OpenID Connect, les notifications et les valeurs par défaut de l'interface. L'adresse d'écoute, le port et le niveau de journal demandent un redémarrage ; le mode thick d'Oracle aussi.
 
 ---
 
@@ -50,7 +50,7 @@ Enregistrer Paramètres → App applique aussitôt la licence, l'assistant IA, O
 
 | Modification | Comment |
 |---|---|
-| Adresse, port, niveau de journal et mode thick Oracle dans **Paramètres → App** | `./liberty restart` ou `liberty-ops restart`. |
+| Adresse, port, niveau de journal et mode thick Oracle dans **Liberty Next → Administrer → App** | `./liberty restart` ou `liberty-ops restart`. |
 | Une variable d'environnement (`.env`, fichier d'environnement du service) | Un redémarrage — `./liberty restart` ne recrée rien ; pour un `.env` modifié, `./liberty start`. |
 | Le code Python d'un plugin | Un redémarrage : les modules ne sont importés qu'une fois. |
 | Une nouvelle version | `./liberty upgrade` — voir [Mise à jour et retour arrière](../../installation/upgrading.md). |

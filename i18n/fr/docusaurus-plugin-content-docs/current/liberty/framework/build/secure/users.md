@@ -1,12 +1,12 @@
 ---
 title: Utilisateurs
-description: "L'onglet Paramètres → Accès → Utilisateurs — ajouter des utilisateurs locaux, gérer les utilisateurs OIDC arrivés à la première connexion, attribuer des rôles, basculer is_active et is_superuser, réinitialiser les mots de passe."
+description: "L'onglet Liberty Next → Administrer → Accès → Utilisateurs — ajouter des utilisateurs locaux, gérer les utilisateurs OIDC arrivés à la première connexion, attribuer des rôles, basculer is_active et is_superuser, réinitialiser les mots de passe."
 keywords: [Liberty Framework, utilisateurs, AccessBuilder, utilisateur local, utilisateur OIDC, mot de passe, is_active, is_superuser, attribution de rôles]
 ---
 
 # Utilisateurs
 
-Un **utilisateur** dans Liberty est l'identité qui se connecte et porte des rôles. L'onglet Paramètres → Accès → Utilisateurs est l'endroit où créer les utilisateurs locaux, voir les utilisateurs OIDC qui se sont connectés au moins une fois, attribuer les rôles et basculer les drapeaux actif et superutilisateur.
+Un **utilisateur** dans Liberty est l'identité qui se connecte et porte des rôles. L'onglet Liberty Next → Administrer → Accès → Utilisateurs est l'endroit où créer les utilisateurs locaux, voir les utilisateurs OIDC qui se sont connectés au moins une fois, attribuer les rôles et basculer les drapeaux actif et superutilisateur.
 
 La même interface gère les deux backends d'identité (TOML / DB) et les deux sources d'identité (locale / OIDC). Les différences portent sur **les champs modifiables** : les utilisateurs OIDC n'ont pas de mot de passe (il est chez l'IdP) et leur champ `provider` est en lecture seule.
 
@@ -201,7 +201,7 @@ La séquence d'onboarding standard :
 1. La nouvelle recrue se connecte via OIDC pour la première fois.
 2. Elle arrive avec **aucun rôle** → elle voit une application vide.
 3. Elle prévient son administrateur : « je suis entré mais je ne vois rien ».
-4. L'administrateur ouvre *Paramètres → Accès → Utilisateurs*, la retrouve, attribue les bons rôles, enregistre.
+4. L'administrateur ouvre *Liberty Next → Administrer → Accès → Utilisateurs*, la retrouve, attribue les bons rôles, enregistre.
 5. L'utilisatrice rafraîchit la page (ou se déconnecte + reconnecte) et dispose alors de ses accès.
 
 Pour les installations qui veulent pré-créer des utilisateurs OIDC avec leurs rôles déjà attachés, des scripts peuvent appeler `POST /admin/access/users` avec `provider = "oidc"` et le `provider_subject` attendu (le claim `sub`). À la première connexion, le framework retrouve l'utilisateur pré-créé et l'utilise. Les installations standard sautent cette étape et attribuent les rôles après la première connexion.
@@ -218,7 +218,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 
 ### Onboarder une recrue locale
 
-1. *Paramètres → Accès → Utilisateurs → ＋ Ajouter un utilisateur*.
+1. *Liberty Next → Administrer → Accès → Utilisateurs → ＋ Ajouter un utilisateur*.
 2. Nom d'utilisateur = identifiant d'entreprise, mot de passe = une chaîne ponctuelle qu'elle changera, courriel = son adresse.
 3. Attribuer les rôles selon son équipe (`analyst`, `reporter`, …).
 4. Enregistrer.
@@ -229,12 +229,12 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 
 1. Elle se connecte via OIDC la première fois — Liberty crée automatiquement le compte.
 2. Elle signale qu'elle n'a aucun accès.
-3. *Paramètres → Accès → Utilisateurs*, la retrouver, attribuer les rôles, enregistrer.
+3. *Liberty Next → Administrer → Accès → Utilisateurs*, la retrouver, attribuer les rôles, enregistrer.
 4. Elle rafraîchit → elle est dedans.
 
 ### Changer le mot de passe d'un utilisateur (en tant qu'administrateur)
 
-1. *Paramètres → Accès → Utilisateurs*, cliquer sur l'utilisateur.
+1. *Liberty Next → Administrer → Accès → Utilisateurs*, cliquer sur l'utilisateur.
 2. Saisir le nouveau mot de passe dans le champ **Mot de passe** (8 caractères ou +).
 3. Enregistrer.
 4. Le prévenir. Il se connecte avec le nouveau mot de passe ; sa session existante continue de fonctionner jusqu'à expiration du jeton d'accès.
@@ -250,7 +250,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Utilisateur OIDC sans rôles après connexion. | Comportement attendu — l'opérateur n'en a pas encore attribué. | Ouvrir *Paramètres → Accès → Utilisateurs*, attribuer les rôles. |
+| Utilisateur OIDC sans rôles après connexion. | Comportement attendu — l'opérateur n'en a pas encore attribué. | Ouvrir *Liberty Next → Administrer → Accès → Utilisateurs*, attribuer les rôles. |
 | Modifier le courriel d'un utilisateur OIDC revient à la connexion suivante. | Le claim de l'IdP l'emporte ; le framework rafraîchit depuis le dernier jeton. | Modifier le courriel au niveau de l'IdP. |
 | Tenter de définir un mot de passe pour un utilisateur OIDC. | Le backend rejette avec 400. | Les utilisateurs OIDC n'ont pas de mot de passe local — ils se connectent via le fournisseur. |
 | Changer le rôle d'un utilisateur ne prend pas effet immédiatement. | Le JWT de l'utilisateur contient toujours les anciens rôles. | Il rafraîchit (ou se déconnecte + reconnecte) — dans le TTL du jeton d'accès, les nouveaux rôles s'appliquent. |

@@ -1,6 +1,6 @@
 ---
 title: Charts
-description: "A saved chart draws the result of a connector query as bars, lines, areas or a pie: an X column, one or more series with their colour and axis, and an aggregation. Built in Settings → Charts or saved from a screen's Chart view, then reused in dashboards."
+description: "A saved chart draws the result of a connector query as bars, lines, areas or a pie: an X column, one or more series with their colour and axis, and an aggregation. Built in Liberty Next → Build → Charts or saved from a screen's Chart view, then reused in dashboards."
 keywords: [Liberty Next, charts, bar, line, area, pie, series, aggregation, dual axis, dashboards, Chart view, charts.toml]
 ---
 
@@ -91,7 +91,7 @@ Four types are available: **bar**, **line**, **area** and **pie**.
 
 ---
 
-## Settings → Charts \{#list\}
+## Liberty Next → Build → Charts \{#list\}
 
 Charts are grouped by connector: the **scope** chips at the top pick a connector, and **Add a connector scope** opens a new one. The list shows each chart of the scope with its label, its id and an *override* badge when it is marked as a local customisation. Each row has:
 

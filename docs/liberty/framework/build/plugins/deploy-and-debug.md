@@ -124,12 +124,12 @@ Keep the server output open in another terminal: the `liberty.plugins`, `liberty
 
 ## Hot reload — what does and doesn't
 
-The framework's `POST /admin/reload` (triggered by every *Save* in the Settings UI) re-reads:
+The framework's `POST /admin/reload` (triggered by every *Save* in the Liberty Next pages) re-reads:
 
 | File | Auto-reloaded |
 |---|---|
 | `connectors.toml`, `dictionary.toml`, `screens.toml`, `menus.toml`, `dashboards.toml`, `charts.toml`, `jobs.toml` | Yes. |
-| Settings → App | Partial — most fields. Pool changes require a manual reload from the Pools page. |
+| Liberty Next → Administer → App | Partial — most fields. Pool changes require a manual reload from the Pools page. |
 | Python code in `plugins/` | **No.** |
 
 The plugin code is in Python's import cache. **Restart the framework process** to pick up code changes.

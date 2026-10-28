@@ -91,7 +91,7 @@ Une application ouverte à des utilisateurs extérieurs à l'équipe, chacun ne 
 | Rôles : menus, écrans et requêtes accessibles à chacun | [Rôles et permissions](./build/secure/roles-and-permissions.md) |
 | Périmètre de données : lignes filtrées selon les attributs de l'utilisateur, appliqué par le serveur | [Accès par ligne](./cookbook/row-level-access.md) |
 | Requêtes filtrées sur l'utilisateur connecté avec `{{LOGIN}}` | [Liaison de paramètres](./build/queries/parameter-binding.md#tokens) |
-| Nom de l'application, couleurs et polices | Paramètres → Thème |
+| Nom de l'application, couleurs et polices | Liberty Next → Administrer → Thème |
 
 ---
 

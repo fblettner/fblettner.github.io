@@ -62,6 +62,6 @@ Les mots de passe des pools, les identifiants d'API, la clé de licence, la clé
 | Besoin | Où le traiter |
 |---|---|
 | Authentification multifacteur, politique de mots de passe | Le fournisseur OpenID Connect. |
-| Correspondance entre groupes du fournisseur et rôles | Non fournie : les rôles s'attribuent dans Paramètres → Access. |
+| Correspondance entre groupes du fournisseur et rôles | Non fournie : les rôles s'attribuent dans Liberty Next → Administrer → Accès. |
 | Révoquer immédiatement une session | Désactiver l'utilisateur (effectif au prochain renouvellement, dans l'heure) ; changer le secret JWT déconnecte tout le monde. |
 | Connexion LDAP | Par un fournisseur OpenID Connect placé devant l'annuaire. |

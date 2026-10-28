@@ -6,7 +6,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
 
 # La page Surveillance
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Ses trois vues se choisissent dans une rangée de cartes en haut de page — une icône, le nom et une ligne sur l'usage de la vue. Cette page décrit la première, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
+**Liberty Next → Exploiter → Surveillance** ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Ses trois vues se choisissent dans une rangée de cartes en haut de page — une icône, le nom et une ligne sur l'usage de la vue. Cette page décrit la première, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
 
 ---
 
@@ -150,7 +150,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
 
 Une ligne par pool : **Pool**, **Dialect**, **In use** (connexions occupées), **Idle** (ouvertes et libres), **Overflow** (connexions au-delà de la taille du pool). *not opened* signifie qu'aucune requête n'a encore utilisé le pool.
 
-Toutes les connexions *In use* avec un *Overflow* supérieur à 0 : des requêtes attendent une connexion. Rechercher les requêtes lentes dans le journal, ou augmenter la taille du pool dans **Paramètres → Pools**.
+Toutes les connexions *In use* avec un *Overflow* supérieur à 0 : des requêtes attendent une connexion. Rechercher les requêtes lentes dans le journal, ou augmenter la taille du pool dans **Liberty Next → Administrer → Pools**.
 
 ---
 

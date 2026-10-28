@@ -10,18 +10,16 @@ The **Change packages** page captures every tracked data write into a grouped, r
 
 The same pattern fits every other "make changes here, replay them there" workflow: a curated UDC catalogue refresh, a batch of new permissions on a custom screen, a routing-rule update on a configuration table. As soon as a screen is **`change_tracked`**, its inserts / updates / deletes land in the active draft package alongside the production write.
 
-This is the operator-facing pairing of a deeper engine: the framework persists every tracked write into the **`ly_change_packages`** + **`ly_change_entries`** tables (the **change-set DB** — same pool as the framework, separate from the audit mirror), and the apply path replays them on the target with pre-image drift detection.
+Behind the page, the framework keeps every tracked write in its own database — the framework's, separate from the audit mirror —, and the apply path replays them on the target with pre-image drift detection.
 
-:::info[Added in framework 2026.06]
-The page lives under Nomaflow because the workflow — *capture → review → submit → approve → export → apply* — is a flow, not a setting. The Settings → Package screen still exists for config slices (screens / menu items / dashboards); Change packages is the **data** equivalent. The two coexist.
-:::
+The **Package** page carries configuration slices (screens, menu items, dashboards…); Change packages carry **data**. The two sit side by side under *Liberty Next → Deploy*.
 
 ---
 
 ## Opening the page
 
-- Sidebar → **Nomaflow → Changes**.
-- From the Settings → Connectors page, *Track changes* in the screen card opens the page filtered on the matching application.
+- **Liberty Next → Deploy → Changes**.
+- From the Liberty Next → Build → Connectors page, *Track changes* in the screen card opens the page filtered on the matching application.
 
 ---
 
@@ -155,7 +153,7 @@ Each entry also records:
 | Writes from a screen with `change_tracked = false`. | Default. Audit-only tables (notification log, retry stats) shouldn't pollute promotion bundles. |
 | Writes from a Nomaflow job, a bulk import, the CLI. | Tracking is per-screen and runs through the screen's write path. Jobs use `j_*` callables directly against the connector. |
 | Reads — no SELECT is ever captured. | The package is a *change* log. |
-| The framework's own metadata writes (`ly_jobs`, `ly_users`, the change-set tables themselves). | The capture loop checks `change_tracked` on the connector's screen, not on the table. |
+| The framework's own metadata writes (jobs, users, the change packages themselves). | The capture loop checks `change_tracked` on the connector's screen, not on the table. |
 
 ---
 
@@ -275,13 +273,13 @@ A replayed action runs in the same transaction as the surrounding row writes whe
 The motivating workflow for this feature. On the **dev** instance:
 
 1. Operator creates a role `PRJM_NEW`, attaches three menus, edits two existing roles' permissions. Every write lands in the **`JDE-PROD`** application's draft package as it happens.
-2. Operator opens *Nomaflow → Changes*, reviews the draft. The detail view shows the three roles grouped as `ROLES`, the menu attachments as `MENUS`, the touched security as `SECURITY`. A `CALL_PLUGIN` entry to `nomajde.security:j_remerge_security` is also captured.
+2. Operator opens *Liberty Next → Deploy → Changes*, reviews the draft. The detail view shows the three roles grouped as `ROLES`, the menu attachments as `MENUS`, the touched security as `SECURITY`. A `CALL_PLUGIN` entry to `nomajde.security:j_remerge_security` is also captured.
 3. Operator excludes one entry — a typo correction they want to roll back manually instead. Submits, then *Approves*, then *Exports*.
 4. The browser downloads `jde-prod-security-2026-06-09.changeset.json`.
 
 On the **prod** instance:
 
-5. Operator opens *Nomaflow → Changes → Apply*, drops the JSON in.
+5. Operator opens *Liberty Next → Deploy → Changes → Apply*, drops the JSON in.
 6. Dry-run runs. The report shows 11 `would_apply` and 1 `conflict` on the role `BUYER_R2` (someone touched it on prod since the package was captured). Operator ticks that row to apply it anyway.
 7. Operator clicks *Apply*. Every row lands; the post-apply step fires last, re-merging the security for the affected parent roles on prod.
 8. The prod-side import log records the bundle with its checksum.
@@ -376,4 +374,4 @@ The framework does ship the engine for these but the UI today is intentionally b
 
 - [Nomaflow → Bundled jobs → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all) — the security re-merge plugin most often wired as a post-apply step on JDE promotions.
 - [Nomaflow → Concepts](./concepts.md) — the broader Nomaflow mental model that Change packages sits inside.
-- [Settings → Package](../framework/build/packages.md) — the config equivalent: ship screens / menu items / dashboards between installs. The two channels coexist.
+- [Liberty Next → Deploy → Package](../framework/build/packages.md) — the config equivalent: ship screens / menu items / dashboards between installs. The two channels coexist.

@@ -1,12 +1,12 @@
 ---
 title: Config history & versioning
-description: "Every config save is snapshotted, every screen save captures its dependency closure as a restorable bundle, version changes are logged, and the bundled release notes are readable in-app — all under Settings → History."
+description: "Every config save is snapshotted, every screen save captures its dependency closure as a restorable bundle, version changes are logged, and the bundled release notes are readable in-app — all under Liberty Next → Deploy → History."
 keywords: [Liberty Framework, config history, versioning, snapshot, restore, retention purge, upgrade history, release notes, bundle, dependency closure]
 ---
 
 # Config history & versioning
 
-Liberty keeps a history of your configuration. Every time you save a config file from the Settings UI, the previous state is snapshotted; every time you save a **screen**, the framework also captures that screen *with its dependencies* as a restorable bundle. You can diff any snapshot against what is live, restore it, prune the history, and see exactly when the application version last changed — all from **Settings → History**.
+Liberty keeps a history of your configuration. Every time you save a config file from the Liberty Next pages, the previous state is snapshotted; every time you save a **screen**, the framework also captures that screen *with its dependencies* as a restorable bundle. You can diff any snapshot against what is live, restore it, prune the history, and see exactly when the application version last changed — all from **Liberty Next → Deploy → History**.
 
 ---
 
@@ -91,7 +91,7 @@ Snapshots are content-addressed, so saving a file unchanged is a no-op — the h
 
 ---
 
-## Settings → History
+## Liberty Next → Deploy → History
 
 The **History** tab has three modes:
 
@@ -125,13 +125,13 @@ The two rules are OR-combined, and the single newest version of each file is alw
 
 ## Upgrade history
 
-Each time the running application version changes, the framework records it under **Settings → History → Upgrades**: a row per component — **Framework** (Liberty Next) and **Apps** (Liberty Apps) — with the version it moved from and to. The first run of a component is logged as an *install*; later version changes as an *upgrade*. The list is recorded automatically at startup and is idempotent, so restarting at the same version adds nothing. Selecting a row shows that version's section of the release notes.
+Each time the running application version changes, the framework records it under **Liberty Next → Deploy → History → Upgrades**: a row per component — **Framework** (Liberty Next) and **Apps** (Liberty Apps) — with the version it moved from and to. The first run of a component is logged as an *install*; later version changes as an *upgrade*. The list is recorded automatically at startup and is idempotent, so restarting at the same version adds nothing. Selecting a row shows that version's section of the release notes.
 
 ---
 
 ## Release notes, in-app
 
-The **Settings → Release notes** tab is the full changelog bundled with the build. It reads the framework's release notes (and the apps' notes, when Liberty Apps is installed), with a per-version table of contents and a component switcher when more than one set is present. The changelog text is **bilingual** — it shows the French notes when the UI is in French, English otherwise.
+The **Liberty Next → Document → Release notes** tab is the full changelog bundled with the build. It reads the framework's release notes (and the apps' notes, when Liberty Apps is installed), with a per-version table of contents and a component switcher when more than one set is present. The changelog text is **bilingual** — it shows the French notes when the UI is in French, English otherwise.
 
 ---
 

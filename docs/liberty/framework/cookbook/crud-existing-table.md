@@ -20,11 +20,11 @@ table → connector with 4 generated queries → screen → menu entry
 
 ### 1. Reach the database
 
-**Settings → Pools**: the `default` pool works when the table is in the framework's database; otherwise add a pool with the database's URL. See [Connectors](../connectors.md#pools).
+**Liberty Next → Administer → Pools**: the `default` pool works when the table is in the framework's database; otherwise add a pool with the database's URL. See [Connectors](../connectors.md#pools).
 
 ### 2. Generate the queries
 
-**Settings → Connectors**: create (or pick) the SQL connector, choose the **Tables** view, then **＋ Add queries → Generate from DB**. Pick the `products` table, keep the columns to show, tick **key** on `ID`, keep the four statements and save. The wizard writes:
+**Liberty Next → Build → Connectors**: create (or pick) the SQL connector, choose the **Tables** view, then **＋ Add queries → Generate from DB**. Pick the `products` table, keep the columns to show, tick **key** on `ID`, keep the four statements and save. The wizard writes:
 
 ```sql
 -- products_get
@@ -53,7 +53,7 @@ Or give the `UPDATED_BY` / `UPDATED_AT` dictionary entries the `LOGIN` / `SYSDAT
 
 ### 3. Build the screen
 
-**Settings → Screens**, the connector's chip (**＋ Add scope** the first time), **＋ Add screen** `products`, then in the screen editor:
+**Liberty Next → Build → Screens**, the connector's chip (**＋ Add scope** the first time), **＋ Add screen** `products`, then in the screen editor:
 
 | Tab | Setting |
 |---|---|
@@ -66,7 +66,7 @@ The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3
 
 ### 4. Add the menu entry
 
-**Settings → Menus**, the connector's chip (**+ Add scope** the first time), **＋ Item**: label `Products`, type `screen`, target `products_get`. Save.
+**Liberty Next → Build → Menus**, the connector's chip (**+ Add scope** the first time), **＋ Item**: label `Products`, type `screen`, target `products_get`. Save.
 
 ## Result
 

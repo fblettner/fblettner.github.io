@@ -100,7 +100,7 @@ Sur la carte, **▶ Exécuter**. La carte montre l'exécution en cours, puis *de
 
 ## 6 — Être prévenu en cas d'échec \{#notify\}
 
-Dans **Paramètres → Notifications**, ajouter une règle : déclencheur *A job event*, tâche `daily-summary`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`. Voir [Notifications](./notifications.md).
+Dans **Liberty Next → Construire → Notifications**, ajouter une règle : déclencheur *A job event*, tâche `daily-summary`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`. Voir [Notifications](./notifications.md).
 
 ---
 

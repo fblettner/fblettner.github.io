@@ -1,6 +1,6 @@
 ---
 title: OIDC sign-in
-description: "Recipe — let users sign in with the company's identity provider (Microsoft Entra ID, Keycloak, Okta, Auth0…): register the application at the provider, fill Settings → App → OpenID Connect (SSO), then give the new users their roles."
+description: "Recipe — let users sign in with the company's identity provider (Microsoft Entra ID, Keycloak, Okta, Auth0…): register the application at the provider, fill Liberty Next → Administer → App → OpenID Connect (SSO), then give the new users their roles."
 keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, sign-in]
 ---
 
@@ -28,7 +28,7 @@ Note the **client ID**, the **client secret** and the **discovery URL** (`…/.w
 
 ### 2. Fill the settings
 
-**Settings → App → OpenID Connect (SSO)**:
+**Liberty Next → Administer → App → OpenID Connect (SSO)**:
 
 | Field | Value |
 |---|---|
@@ -42,7 +42,7 @@ Save: the change applies without a restart. See [App settings → OpenID Connect
 
 ### 3. First sign-in and roles
 
-Users appear in **Settings → Access → Users** at their first sign-in, active and **without roles**: they see an empty application until a role is given to them. The usual onboarding: the person signs in once, an administrator assigns the roles. See [Users](../build/secure/users.md).
+Users appear in **Liberty Next → Administer → Access → Users** at their first sign-in, active and **without roles**: they see an empty application until a role is given to them. The usual onboarding: the person signs in once, an administrator assigns the roles. See [Users](../build/secure/users.md).
 
 ## Check
 

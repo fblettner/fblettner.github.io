@@ -8,7 +8,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, utilisateurs c
 
 | Outil | Affiche | Pour |
 |---|---|---|
-| **La page Surveillance** | Ce qui se passe maintenant : utilisateurs connectés, verrous d'enregistrement, pools de base, runtime, journal en direct. | Les superutilisateurs, depuis l'entrée **Surveillance** du menu latéral. Voir [La page Surveillance](./dashboard.md). |
+| **La page Surveillance** | Ce qui se passe maintenant : utilisateurs connectés, verrous d'enregistrement, pools de base, runtime, journal en direct. | Les superutilisateurs, depuis **Liberty Next → Exploiter → Surveillance**. Voir [La page Surveillance](./dashboard.md). |
 | **Journal du serveur** et **Rétention** | Toutes les lignes écrites par le serveur, avec recherche ; ce que le serveur conserve et la place occupée. | Les superutilisateurs, dans les deux autres onglets de la page Surveillance. Voir [Journal du serveur](./server-log.md) et [Rétention](./retention.md). |
 | **Points de santé** | `/health` (le processus fonctionne), `/ready` (la base du framework répond), `/info` (version et compteurs). | Répartiteurs de charge, contrôles de santé des conteneurs, sondes externes. Voir [Points de santé](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, santé, migrations en attente, problèmes de configuration. | Les administrateurs sur le serveur. Voir [Exploitation](../installation/operations.md). |

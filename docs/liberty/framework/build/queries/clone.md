@@ -137,7 +137,7 @@ The modal asks for three values:
 |---|---|
 | **Source connector** | Which connector to copy from. Defaults to the one you selected. |
 | **New name** | The new connector key (lowercase, starts with a letter — same identifier rules as elsewhere). |
-| **Pool** | Which pool the new connector should run on. Must already exist in *Settings → Pools*. |
+| **Pool** | Which pool the new connector should run on. Must already exist in *Liberty Next → Administer → Pools*. |
 
 Clicking **Clone** triggers a cross-file copy through a dedicated endpoint. Liberty:
 
@@ -162,7 +162,7 @@ The status banner reports the number of entries copied; warnings (e.g. matching 
 
 | Constraint | Why |
 |---|---|
-| The new pool must already exist. | The clone doesn't create databases — wire the pool first via *Settings → Pools*. |
+| The new pool must already exist. | The clone doesn't create databases — wire the pool first via *Liberty Next → Administer → Pools*. |
 | The source connector must not have unsaved edits. | The clone reads from disk; unsaved local edits would be missed. The button is disabled in the dirty state with an explanatory tooltip. |
 | The new name must not collide. | The framework rejects duplicate connector keys; the modal validates before submit. |
 
@@ -176,7 +176,7 @@ The status banner reports the number of entries copied; warnings (e.g. matching 
 | A copy of every CRUD slot of one table. | **Duplicate table**. |
 | A copy of every query + dictionary entries + screens + menu + dashboards + charts. | **Clone app**. |
 | A new query with the same name pointing somewhere else. | Don't clone — **Rename** the existing one and create a new one. |
-| The same query running against a different database. | Don't clone — switch the connector's **pool** in *Settings → Pools*, or use a **per-dialect SQL map**. |
+| The same query running against a different database. | Don't clone — switch the connector's **pool** in *Liberty Next → Administer → Pools*, or use a **per-dialect SQL map**. |
 
 ---
 

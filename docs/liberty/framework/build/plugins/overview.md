@@ -190,7 +190,7 @@ Function signature, return shape, error handling and what the framework auto-inj
 | You're integrating with a service Liberty doesn't have a built-in step for. | The integration is HTTP or LDAP — use those step types. |
 | You're transforming data in non-SQL ways (XML parsing, PDF generation, image processing). | The transformation is SQL-only. |
 | You need to call a stored procedure with logic between calls. | A single `sql_query` step is enough. |
-| You're building tooling around the framework (CLI batch jobs, ad-hoc scripts). | The Settings UI surfaces every option you need. |
+| You're building tooling around the framework (CLI batch jobs, ad-hoc scripts). | The Liberty Next pages surfaces every option you need. |
 
 The `python` step is the **escape hatch**, not the default. Most operational workloads fit the declarative steps; reach for Python when they genuinely don't.
 
@@ -200,7 +200,7 @@ The `python` step is the **escape hatch**, not the default. Most operational wor
 
 | Change in your plugin | Picked up by | Needs |
 |---|---|---|
-| Edit `jobs.toml` (your plugin's job catalogue). | The next *Save* on the Settings UI **or** `POST /admin/reload`. | Hot reload (no restart). |
+| Edit `jobs.toml` (your plugin's job catalogue). | The next *Save* on the Liberty Next pages **or** `POST /admin/reload`. | Hot reload (no restart). |
 | Edit a `.py` file — change function code. | Python's import cache still holds the **old** version. | **Restart** the framework process. |
 | Add a new `.py` file. | Will be importable on first import after the framework starts. | **Restart** the framework process. |
 | Change a `requirements.txt` / install a new dependency. | `pip install` doesn't help — the running process already loaded its environment. | **Restart** the framework process (after `pip install`). |

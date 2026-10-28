@@ -1,6 +1,6 @@
 ---
 title: License key
-description: "The Liberty Next licence key: what it unlocks (Nomasx-1, Nomajde), where to paste it (Settings → App → License), how to check it (liberty-license, /api/license), what happens without it, and how to replace it before it expires."
+description: "The Liberty Next licence key: what it unlocks (Nomasx-1, Nomajde), where to paste it (Liberty Next → Administer → App → License), how to check it (liberty-license, /api/license), what happens without it, and how to replace it before it expires."
 keywords: [Liberty Next, licence, license key, Nomasx-1, Nomajde, Settings App, liberty-license, api license, expiry, restricted mode]
 ---
 
@@ -62,7 +62,7 @@ The framework is free to use. The licensed applications — **Nomasx-1** and **N
 
 ## Install the key \{#install\}
 
-Sign in as a superuser, open **Settings → App → License**, paste the key into **License key** and save. The key is encrypted with the install's master key, and the licensed applications load at once — no restart.
+Sign in as a superuser, open **Liberty Next → Administer → App → License**, paste the key into **License key** and save. The key is encrypted with the install's master key, and the licensed applications load at once — no restart.
 
 Before pasting it, the key can be checked from the server: `liberty-license verify <key>` (on Docker: `docker exec -u liberty liberty-next liberty-license verify <key>`).
 
@@ -87,6 +87,6 @@ Without a key, or with an expired or invalid one, the server runs in **restricte
 
 ## Replace the key \{#replace\}
 
-Note the expiry date when the key is installed. Before it expires, paste the new key in **Settings → App → License** and save: it applies at once.
+Note the expiry date when the key is installed. Before it expires, paste the new key in **Liberty Next → Administer → App → License** and save: it applies at once.
 
 The key can also come from the environment variable `LIBERTY_LICENSE_KEY`, for installs that keep secrets in an orchestrator; Settings then shows the reference as it is.

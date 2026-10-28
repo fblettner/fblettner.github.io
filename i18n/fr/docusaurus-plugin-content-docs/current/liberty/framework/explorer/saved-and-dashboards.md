@@ -141,7 +141,7 @@ En mode **Tableaux de bord**, un tableau de bord est une grille de **tuiles** su
 | KPI | Une ligne de totaux. | Des cartes. |
 | Détail | Ses lignes. | Un tableau. |
 
-Les nombres du PDF suivent la langue du lecteur (`1 234,5` / `1,234.5`). Le même document est produit quand une tâche Nomaflow rend l'analyse selon un planning — voir [Étapes → Rapport](../../nomaflow/steps.md#report). Chaque section contient au plus 3 000 lignes. La vue croisée a aussi son propre bouton Excel, qui exporte le croisé tel qu'il est affiché. La charte PDF se règle dans [Paramètres → App](../build/settings-app.md).
+Les nombres du PDF suivent la langue du lecteur (`1 234,5` / `1,234.5`). Le même document est produit quand une tâche Nomaflow rend l'analyse selon un planning — voir [Étapes → Rapport](../../nomaflow/steps.md#report). Chaque section contient au plus 3 000 lignes. La vue croisée a aussi son propre bouton Excel, qui exporte le croisé tel qu'il est affiché. La charte PDF se règle dans [Liberty Next → Administrer → App](../build/settings-app.md).
 
 ---
 

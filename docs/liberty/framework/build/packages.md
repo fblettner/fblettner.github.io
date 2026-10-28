@@ -6,7 +6,7 @@ keywords: [Liberty Framework, package, export, import, preview, promotion, targe
 
 # Packages
 
-The **Package** page (*Nomaflow → Deployment → Package*, or *Settings → Package*) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, previews what it would change, and applies it to the live config — followed by an automatic reload. With a target instance declared, the package can also be **promoted** straight to it, without handling the ZIP.
+The **Package** page (*Liberty Next → Deploy → Package*) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, previews what it would change, and applies it to the live config — followed by an automatic reload. With a target instance declared, the package can also be **promoted** straight to it, without handling the ZIP.
 
 The page offers three views, picked from cards at the top: **Build package**, **Import package** and **Promotion**. It is reserved to superusers.
 
@@ -45,7 +45,7 @@ Three sections in the left panel:
 | **Dashboards** | Every dashboard, by scope. |
 | **Explorer models** | The Data Explorer models, with their shipped analyses and dashboards. |
 | **nomaflow jobs** | The jobs of `jobs.toml`. |
-| **Notification rules** | The rules of Settings → Notifications. |
+| **Notification rules** | The rules of Liberty Next → Build → Notifications. |
 | **Shared actions** | The actions reused by several screens. |
 | **Assistant (starters, playbooks)** | What an application ships for the AI assistant — one entry per application. |
 
@@ -106,7 +106,7 @@ Worth knowing so you don't try to ship through this channel:
 
 | Not included | Where it lives instead |
 |---|---|
-| Settings → App | Per install — application settings, licence, sign-in. Never bundled. |
+| Liberty Next → Administer → App | Per install — application settings, licence, sign-in. Never bundled. |
 | `auth.toml` / DB-stored users | Per-install — carries Argon2 password hashes. Never bundled. |
 | Python plugins | Shipped with the [liberty-apps wheel](../../installation/deploy-prebuilt-apps.md) or the plugin's own release channel. |
 | Database content | Use a DB dump (or a [bundled preload job](../../nomaflow/bundled-jobs.md)). |
@@ -213,7 +213,7 @@ What travels is merged with care:
 - a **job** that already exists on the target keeps its schedule, enabled flag, timezone, presets, alerts, retry, log level and timeout; a new job arrives disabled;
 - the package is built from the files as written: unset values and `${VAR}` references travel as they are.
 
-If the reload fails after a successful apply, the file changes are kept on disk; run *Settings → Reload config* once the underlying issue is fixed.
+If the reload fails after a successful apply, the file changes are kept on disk; run *Reload config (at the top of any Liberty Next editor page)* once the underlying issue is fixed.
 
 ---
 
@@ -229,7 +229,7 @@ A **target instance** is another Liberty Next install — production, a customer
 2. the target previews the import at once — the same plan as above, computed on the target: *Preview on prod — nothing is written until you apply*;
 3. **Apply on prod** applies it there.
 
-Connectors, pools and API endpoints stay the target's unless ticked: a connector's queries still travel, merged into the target's connector. The same **Promote to…** sends an approved [change package](../../nomaflow/change-packages.md#promote).
+Connectors, pools and API endpoints stay the target's unless ticked: a connector's queries still travel, merged into the target's connector. The same **Promote to…** on *Liberty Next → Deploy → Changes* sends an approved [change package](../../nomaflow/change-packages.md#promote).
 
 The **History** of the Promotion view lists the promotions applied from this instance — when, by whom, to which target, what, and the outcome; a row opens on the target's report.
 
@@ -251,7 +251,7 @@ Pick one pattern per install — mixing both inside a single config gets confusi
 | Don't | Why |
 |---|---|
 | Move `auth.toml` between installs via the Package screen. | The screen ignores `auth.toml`. Move users via the dedicated *Users* admin (or invite them per install). |
-| Expect a package to carry Settings → App. | It does not — application settings, licence and sign-in stay on each install. |
+| Expect a package to carry Liberty Next → Administer → App. | It does not — application settings, licence and sign-in stay on each install. |
 | Ship a package with `replace_all` to a customer who has local edits without a heads-up. | The customer's screens / queries / dictionary entries are dropped. There is no automatic undo — keep a backup of the target's config tree first. |
 
 ---
@@ -274,7 +274,7 @@ Liberty also exposes a dedicated **Find dependencies** modal from any screen / m
 | Bundled `connectors.toml` (default-excluded) without checking pool names match the target. | Target's pools change unexpectedly; pre-existing queries error at next reload. | Leave connectors / pools default-excluded unless the target is brand-new. Or rename pools on the source before bundling. |
 | Built from a source with unresolved references (broken rename / deleted query). | MANIFEST.md lists items under *Missing references*. | Fix on the source (rename / delete / restore) and rebuild. The target won't get the broken references — but it also won't get the screens / queries that referenced them. |
 | A warning says the package holds values this instance cannot decrypt. | The source and the target use different master keys. | Set those values again on the target after the import, or share the master key. |
-| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload config* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
+| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Reload config (at the top of any Liberty Next editor page)* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
 
 ---
 

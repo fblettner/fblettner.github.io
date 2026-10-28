@@ -16,7 +16,7 @@ Trois points à connaître d'emblée :
 | Les menus sont stockés sous forme de **liste plate d'éléments** reliés par `parent`. | L'arbre est assemblé par le backend — plus facile à éditer à la main, conversion propre vers TOML et retour, les opérations de glisser-déposer ne modifient qu'une seule liste. |
 | Chaque clé de menu est un nom de connecteur (`[menus.<connector>]`). | Le connecteur nommé `crm` porte le menu sous `[menus.crm]` ; l'écran `customers` sur `crm` est atteint depuis une feuille avec `target = "customers_get"`. |
 
-La page qui gère les menus est **Paramètres → Menus**.
+La page qui gère les menus est **Liberty Next → Construire → Menus**.
 
 ---
 
@@ -168,12 +168,12 @@ Les doublons entre menus différents sont autorisés — `[menus.crm.security]` 
 
 **Un connecteur n'apparaît dans le sélecteur d'applications du menu latéral que quand les deux conditions sont réunies :**
 
-1. Un menu existe — `[menus.<connector>]` est configuré dans *Paramètres → Menus*.
-2. **Show In Switcher** sur le connecteur — dans *Paramètres → Connecteurs → \<connecteur> → Settings* (activé par défaut).
+1. Un menu existe — `[menus.<connector>]` est configuré dans *Liberty Next → Construire → Menus*.
+2. **Show In Switcher** sur le connecteur — dans *Liberty Next → Construire → Connecteurs → \<connecteur> → Settings* (activé par défaut).
 
 Si l'une des deux manque, le connecteur existe mais n'est pas listé. Le sélecteur lui-même n'apparaît que s'il y a plus d'une application. L'ordre habituel : configurer le menu d'abord, **puis** cocher `show_in_switcher`.
 
-À noter : le regroupement *Applications* / *Sources de données* sur la page Connecteurs se base uniquement sur l'existence d'un menu — un connecteur avec un menu mais `show_in_switcher = false` reste classé sous *Applications* à cet endroit. Ce regroupement est un confort interne à l'interface Paramètres ; le sélecteur d'applications côté utilisateur est ce que `show_in_switcher` gouverne.
+À noter : le regroupement *Applications* / *Sources de données* sur la page Connecteurs se base uniquement sur l'existence d'un menu — un connecteur avec un menu mais `show_in_switcher = false` reste classé sous *Applications* à cet endroit. Ce regroupement est un confort interne à les pages de Liberty Next ; le sélecteur d'applications côté utilisateur est ce que `show_in_switcher` gouverne.
 
 La page suivante détaille le câblage des deux côtés.
 

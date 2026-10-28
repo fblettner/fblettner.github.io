@@ -20,11 +20,11 @@ table → connecteur avec 4 requêtes générées → écran → entrée de menu
 
 ### 1. Atteindre la base
 
-**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#pools).
+**Liberty Next → Administrer → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#pools).
 
 ### 2. Générer les requêtes
 
-**Paramètres → Connecteurs** : créer (ou choisir) le connecteur SQL, passer dans la vue **Tables**, puis **＋ Ajouter des requêtes → Générer depuis la BDD**. Choisir la table `products`, garder les colonnes à afficher, cocher **clé** sur `ID`, conserver les quatre instructions et enregistrer. L'assistant écrit :
+**Liberty Next → Construire → Connecteurs** : créer (ou choisir) le connecteur SQL, passer dans la vue **Tables**, puis **＋ Ajouter des requêtes → Générer depuis la BDD**. Choisir la table `products`, garder les colonnes à afficher, cocher **clé** sur `ID`, conserver les quatre instructions et enregistrer. L'assistant écrit :
 
 ```sql
 -- products_get
@@ -53,7 +53,7 @@ Autre solution : donner aux entrées `UPDATED_BY` / `UPDATED_AT` du dictionnaire
 
 ### 3. Construire l'écran
 
-**Paramètres → Écrans**, pastille du connecteur (**＋ Ajouter une portée** la première fois), **＋ Ajouter un écran** `products`, puis dans l'éditeur d'écran :
+**Liberty Next → Construire → Écrans**, pastille du connecteur (**＋ Ajouter une portée** la première fois), **＋ Ajouter un écran** `products`, puis dans l'éditeur d'écran :
 
 | Onglet | Réglage |
 |---|---|
@@ -66,7 +66,7 @@ L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les �
 
 ### 4. Ajouter l'entrée de menu
 
-**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
+**Liberty Next → Construire → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
 
 ## Résultat
 

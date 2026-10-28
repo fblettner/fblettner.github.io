@@ -6,7 +6,7 @@ keywords: [Liberty Framework, package, export, import, aperçu, promotion, insta
 
 # Packages
 
-La page **Paquet** (*Nomaflow → Déploiement → Package*, ou *Paramètres → Paquet*) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, présente ce qu'il changerait, puis l'applique à la configuration active — suivi d'un rechargement automatique. Une fois une instance cible déclarée, le paquet peut aussi lui être **promu** directement, sans manipuler le ZIP.
+La page **Paquet** (*Liberty Next → Déployer → Paquet*) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, présente ce qu'il changerait, puis l'applique à la configuration active — suivi d'un rechargement automatique. Une fois une instance cible déclarée, le paquet peut aussi lui être **promu** directement, sans manipuler le ZIP.
 
 La page propose trois vues, choisies dans des cartes en haut de page : **Construire un paquet**, **Importer un paquet** et **Promotion**. Elle est réservée aux superutilisateurs.
 
@@ -45,7 +45,7 @@ Trois sections dans le panneau de gauche :
 | **Tableaux de bord** | Tous les tableaux de bord, par portée. |
 | **Modèles de l'Explorateur** | Les modèles de l'explorateur de données, avec leurs analyses et tableaux de bord livrés. |
 | **Tâches nomaflow** | Les tâches de `jobs.toml`. |
-| **Règles de notification** | Les règles de Paramètres → Notifications. |
+| **Règles de notification** | Les règles de Liberty Next → Construire → Notifications. |
 | **Actions partagées** | Les actions réutilisées par plusieurs écrans. |
 | **Assistant (questions, procédures)** | Ce qu'une application livre pour l'assistant IA — une entrée par application. |
 
@@ -106,7 +106,7 @@ Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer �
 
 | Non inclus | Où cela se trouve à la place |
 |---|---|
-| Paramètres → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
+| Liberty Next → Administrer → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
 | `auth.toml` / utilisateurs stockés en base | Propre à chaque installation — porte les empreintes de mot de passe Argon2. Jamais regroupé. |
 | Plugins Python | Livrés avec le [wheel liberty-apps](../../installation/deploy-prebuilt-apps.md) ou le canal de release propre au plugin. |
 | Contenu de base de données | Utiliser un dump de base (ou un [job de préchargement intégré](../../nomaflow/bundled-jobs.md)). |
@@ -213,7 +213,7 @@ Ce qui voyage est fusionné avec soin :
 - une **tâche** qui existe déjà sur la cible garde sa planification, son activation, son fuseau horaire, ses préréglages, ses alertes, ses réessais, son niveau de journal et son délai ; une nouvelle tâche arrive désactivée ;
 - le paquet est construit à partir des fichiers tels qu'écrits : les valeurs non renseignées et les références `${VAR}` voyagent telles quelles.
 
-Si le rechargement échoue après une application réussie, les modifications de fichiers restent sur disque ; lancer *Paramètres → Recharger la config* une fois la cause corrigée.
+Si le rechargement échoue après une application réussie, les modifications de fichiers restent sur disque ; lancer *Recharger la config (en haut de toute page d'édition de Liberty Next)* une fois la cause corrigée.
 
 ---
 
@@ -251,7 +251,7 @@ Il convient de choisir un schéma par installation — mélanger les deux dans u
 | À éviter | Pourquoi |
 |---|---|
 | Déplacer `auth.toml` entre installations via l'écran Package. | L'écran ignore `auth.toml`. Déplacer les utilisateurs via l'administration dédiée *Users* (ou les inviter sur chaque installation). |
-| Attendre d'un package qu'il transporte Paramètres → App. | Il ne le fait pas — réglages de l'application, licence et connexion restent propres à chaque installation. |
+| Attendre d'un package qu'il transporte Liberty Next → Administrer → App. | Il ne le fait pas — réglages de l'application, licence et connexion restent propres à chaque installation. |
 | Livrer un package en `replace_all` à un client qui a des modifications locales sans prévenir. | Les écrans / requêtes / entrées de dictionnaire du client sont supprimés. Il n'existe aucune annulation automatique — conserver d'abord une sauvegarde de l'arborescence de configuration de la cible. |
 
 ---
@@ -274,7 +274,7 @@ Liberty propose également une fenêtre modale dédiée **Find dependencies** de
 | Inclusion de `connectors.toml` (exclu par défaut) sans vérifier que les noms de pool correspondent à la cible. | Les pools de la cible changent à l'improviste ; les requêtes préexistantes échouent au prochain rechargement. | Laisser les connecteurs / pools exclus par défaut tant que la cible n'est pas toute neuve. Ou renommer les pools sur la source avant le regroupement. |
 | Construction depuis une source aux références non résolues (renommage cassé / requête supprimée). | MANIFEST.md liste des éléments sous *Missing references*. | Corriger sur la source (renommer / supprimer / restaurer) et reconstruire. La cible ne recevra pas les références cassées — mais elle ne recevra pas non plus les écrans / requêtes qui les référençaient. |
 | Un avertissement signale des valeurs que cette instance ne sait pas déchiffrer. | La source et la cible utilisent des clés maîtres différentes. | Ressaisir ces valeurs sur la cible après l'import, ou partager la clé maître. |
-| L'import a réussi mais `Appliqué et rechargé` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Paramètres → Recharger la config* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
+| L'import a réussi mais `Appliqué et rechargé` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Recharger la config (en haut de toute page d'édition de Liberty Next)* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
 
 ---
 

@@ -89,7 +89,7 @@ La table `customers` devient un écran : une grille avec filtres, un dialogue de
 
 ## Les requêtes
 
-1. **Paramètres → Connecteurs**, sélectionner `crm`, choisir **Tables** dans la barre de modes.
+1. **Liberty Next → Construire → Connecteurs**, sélectionner `crm`, choisir **Tables** dans la barre de modes.
 2. **＋ Ajouter des requêtes → Générer depuis la BDD**, choisir la table `customers`.
 3. Garder toutes les colonnes, cocher **clé** sur `ID`, conserver les quatre instructions. Enregistrer.
 
@@ -119,7 +119,7 @@ Chaque requête a sa propre permission — `sql:crm:customers_get`, `sql:crm:cus
 
 ## L'écran
 
-1. **Paramètres → Écrans → ＋ Ajouter une portée**, choisir `crm` : la pastille `crm` apparaît.
+1. **Liberty Next → Construire → Écrans → ＋ Ajouter une portée**, choisir `crm` : la pastille `crm` apparaît.
 2. **＋ Ajouter un écran**, identifiant `customers`, puis cliquer sur la carte pour ouvrir l'éditeur d'écran.
 
 | Onglet | Réglage |
@@ -135,7 +135,7 @@ Enregistrer. Les libellés saisis sur les colonnes pourront ensuite passer dans 
 
 ## Le menu
 
-1. **Paramètres → Menus → + Ajouter une portée**, choisir `crm` : l'arborescence vide de l'application apparaît.
+1. **Liberty Next → Construire → Menus → + Ajouter une portée**, choisir `crm` : l'arborescence vide de l'application apparaît.
 2. **＋ Dossier** : libellé `Ventes`, icône `briefcase`.
 3. Sur le dossier, **Ajouter un enfant** : libellé `Clients`, type `screen`, cible `customers_get`, icône `users`.
 4. Enregistrer.

@@ -122,7 +122,7 @@ For each request, the language is, in order:
 
 1. the `X-Liberty-Lang` header — the web application sends the language chosen in its interface;
 2. otherwise the first language of the browser's `Accept-Language`, without its region (`fr-CA` → `fr`);
-3. otherwise the default language of **Settings → App**.
+3. otherwise the default language of **Liberty Next → Administer → App**.
 
 When `l` has no entry for that language, `label` is used. Use lowercase codes (`fr`, not `FR`).
 

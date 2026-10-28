@@ -1,14 +1,14 @@
 ---
 title: App settings
-description: "Settings → App in Liberty Next: the six sections — App (name, address, logs, language, UI defaults, hot reload, Oracle thick mode), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — what each field does, which secrets are encrypted, and what needs a restart."
-keywords: [Liberty Next, Settings App, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
+description: "Liberty Next → Administer → App: every setting of the install, section by section — App (name, address, sub-path, language, UI defaults, hot reload, Oracle thick mode), Server log, Sign-in, Nomaflow, Change packages, License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding, and the read-only Deployment values — what each field does, which secrets are encrypted, and what needs a restart."
+keywords: [Liberty Next, Settings App, server log, sign-in, tokens, login throttle, nomaflow, change packages, sub-path, base path, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
 ---
 
 # App settings
 
-**Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once.
+**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. Each section folds — the first one is open — and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
 
-Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
+Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret and session secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
 ---
 
@@ -101,6 +101,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 |---|---|
 | **App name** | The application's name. |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
+| **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it. **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
 | **Default language** | Labels when a request names no language. |
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
@@ -114,6 +115,60 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
 
 When a saved change needs a restart, the page says *Saved. Restart the server to apply the new settings.*
+
+---
+
+## Server log \{#server-log\}
+
+| Field | Notes |
+|---|---|
+| **Console log format** | `text`, a readable line (default), or `json`, one object per line for a log shipper. |
+| **Keep the server log on disk** | On by default: the log searched in [Monitoring → Server log](../../monitoring/server-log.md). |
+| **Log file** | Blank = `.logs/liberty.log` in the configuration folder. |
+| **Size per file (MB)**, **Files kept** | The rotation: 10 MB and 5 previous files by default. |
+
+**Restart needed** for every field of the section.
+
+---
+
+## Sign-in \{#sign-in\}
+
+| Field | Notes |
+|---|---|
+| **Accounts store** | *File (auth.toml)* (default) or *Database*, with its **Database pool**. Switching does not move the accounts from one store to the other. |
+| **Token issuer** | The name written in the session tokens (`liberty-next`). |
+| **Session (access token) lifetime (s)** | 3600 by default: how long a session stays valid before it is renewed. |
+| **Sign-in (refresh token) lifetime (s)** | 1,209,600 by default — 14 days: how long a user stays signed in. |
+| **Refresh reuse grace (s)** | 60 by default: a renewal already used is still accepted for that time — two tabs renewing together; `0` = strict single use. |
+| **Failed sign-ins before a pause**, **Counting window (s)** | 10 failures within 300 seconds pause the sign-ins of that account — see [Sign-in](./secure/sign-in.md#throttle). |
+
+**Restart needed** for every field of the section.
+
+---
+
+## Nomaflow \{#nomaflow\}
+
+| Field | Notes |
+|---|---|
+| **Scheduler and runner on** | On by default. Off: the jobs are listed but neither scheduled nor run. |
+| **Run history pool** | The database of the run history (`default`). |
+| **Run log lines kept per run** | 5,000 by default. |
+| **Work area** | Blank = `.nomaflow/files` next to the configuration: uploads, rejects, reports, exports. |
+| **Largest upload (MB)** | 200 by default. |
+
+**Restart needed** for every field of the section.
+
+---
+
+## Change packages \{#changesets\}
+
+| Field | Notes |
+|---|---|
+| **Capture tracked writes into change packages** | On by default. Off: the screens marked for tracking capture nothing. See [Change packages](../../nomaflow/change-packages.md). |
+| **Database pool** | Where the change packages are kept (`default`). |
+| **Keep exported / promoted packages (days, 0 = always)** | 0 by default; see [Monitoring → Retention](../../monitoring/retention.md). |
+
+**Restart needed** for every field of the section.
 
 ---
 
@@ -134,13 +189,14 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Request timeout (s)** | Default 120. |
 | **System prompt** | Empty: the built-in instructions. |
 | **Connector tools** | The assistant may list connectors and run their **read** queries. |
+| **Data Explorer tools** | On by default: the assistant computes totals, rankings and trends on the [Data Explorer](../explorer/overview.md) models, and saves analyses and dashboards. |
 | **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 | **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
-| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Settings → AI](../ai-assistant.md#settings-ai)). |
+| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
 
 See [AI assistant](../ai-assistant.md).
 
@@ -148,7 +204,7 @@ See [AI assistant](../ai-assistant.md).
 
 ## Notifications (email) \{#notifications\}
 
-**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address, Keep read notifications — days, `0` = forever). See [Notifications](../../nomaflow/notifications.md#smtp).
+**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address, Keep read notifications — days, `0` = forever). **Inbox database pool** sets where the notifications of the bell are kept (`default`). See [Notifications](../../nomaflow/notifications.md#smtp).
 
 ---
 
@@ -161,6 +217,8 @@ See [AI assistant](../ai-assistant.md).
 | **Client ID**, **Client secret**, **Scopes** | As registered at the provider (`openid email profile` by default). |
 | **Username claim**, **Email claim**, **Name claim** | Which ID-token claims fill the user (`preferred_username`, `email`, `name`). |
 | **Redirect URL override (proxy)**, **Frontend redirect** | Only behind a proxy that rewrites the host, or for a front-end that handles the tokens itself. |
+| **Attributes from claims** | One line per attribute: the user attribute ← the ID-token claim (`company` ← `org_id`). The attributes feed the roles' [data scope](./secure/roles-and-permissions.md#data-scope) and are refreshed at every sign-in; a claim missing from the token removes the attribute. |
+| **Session secret** | Signs the sign-in cookie; blank = the JWT secret. Encrypted. **Restart needed.** |
 
 Register `https://<host>/auth/oidc/callback` as redirect URI at the provider. See [Sign-in](./secure/sign-in.md#oidc).
 
@@ -172,10 +230,16 @@ The cover and page settings of the PDF reports: author, primary colours, cover t
 
 ---
 
+## Deployment (read-only) \{#deployment\}
+
+The last section lists the values set by the installation, not from this page — the value in force and why: the master key and the JWT secret, only *set* or *not set*, which come from the environment; the token signing algorithm; the location of each configuration file, which follows the install's layout.
+
+---
+
 ## Not on this page \{#elsewhere\}
 
 | Setting | Where |
 |---|---|
-| Pools and their passwords | Settings → Pools. |
-| Users and roles | Settings → Access. |
+| Pools and their passwords | Liberty Next → Administer → Pools. |
+| Users and roles | Liberty Next → Administer → Access. |
 | The master key and the JWT secret | The environment — see [Environment variables](../configuration/environment-variables.md). |

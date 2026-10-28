@@ -46,7 +46,7 @@ The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assis
 | Product Data Management | Bill of Material (F3002), Routing (F3003). |
 | Product Costing | Item Cost Components (F30026). |
 
-They appear in the model picker with the others; the page header says *shipped by the preset “…”*. They are built at first use. To adapt one, a superuser adds a model in **Settings → Explorer** from the same preset, then changes it.
+They appear in the model picker with the others; the page header says *shipped by the preset “…”*. They are built at first use. To adapt one, a superuser adds a model in **Liberty Next → Build → Explorer** from the same preset, then changes it.
 
 JD Edwards amounts are shown in real units: the data dictionary's decimals apply in the tables, the totals and the filters.
 

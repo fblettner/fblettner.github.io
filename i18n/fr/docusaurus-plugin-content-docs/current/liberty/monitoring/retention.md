@@ -103,7 +103,7 @@ keywords: [Liberty Next, surveillance, rétention, purge, exécutions, fichiers 
 |---|---|---|
 | **Exécutions des tâches** | Les exécutions terminées avec leurs étapes et journaux, au-delà des jours conservés ou du plafond par tâche. | Nomaflow — [Rétention de l'historique](../nomaflow/administration.md#retention). |
 | **Fichiers des tâches** | Fichiers envoyés, rapports de rejets, rapports, exports, archives des dossiers surveillés. | Nomaflow — **Fichiers conservés (jours)** dans le même panneau. |
-| **Notifications** | Les notifications lues, au-delà des jours fixés. | Paramètres → App → Notifications — [Conserver les notifications lues](../nomaflow/notifications.md#smtp). |
+| **Notifications** | Les notifications lues, au-delà des jours fixés. | Liberty Next → Administrer → App → Notifications — [Conserver les notifications lues](../nomaflow/notifications.md#smtp). |
 | **Versions de configuration** | Les instantanés de configuration au-delà du nombre gardé par fichier, ou trop anciens ; le plus récent de chaque fichier reste toujours. | La [tâche `config-versions-purge`](../nomaflow/bundled-jobs.md), sinon 20 par fichier et 90 jours. |
 | **Paquets de modifications** | Les paquets exportés ou promus et les journaux d'import plus anciens que les jours fixés. Les brouillons ne sont jamais touchés. | Conservés par défaut. |
 | **Vues enregistrées** | Les vues et analyses des utilisateurs. | Jamais purgées — affichées pour leur taille. |

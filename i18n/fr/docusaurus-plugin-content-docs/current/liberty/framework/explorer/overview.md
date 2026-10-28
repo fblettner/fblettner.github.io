@@ -1,6 +1,6 @@
 ---
 title: Explorateur de données
-description: "L'explorateur de données de Liberty Next : l'analyse libre des données d'une application sans écrire de SQL — volet des champs, lignes, mesures et filtres, période, vues tableau, croisé, graphiques et KPI, lignes de détail et descente, champs calculés, analyses enregistrées, tableaux de bord et export Excel / PDF, sur un modèle défini dans Paramètres → Explorateur."
+description: "L'explorateur de données de Liberty Next : l'analyse libre des données d'une application sans écrire de SQL — volet des champs, lignes, mesures et filtres, période, vues tableau, croisé, graphiques et KPI, lignes de détail et descente, champs calculés, analyses enregistrées, tableaux de bord et export Excel / PDF, sur un modèle défini dans Liberty Next → Construire → Explorateur."
 keywords: [Liberty Next, explorateur de données, analyse, tableau croisé, reporting, BI libre-service, mesures, dimensions, descente, magasin de données]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, explorateur de données, analyse, tableau croisé, repo
 
 L'explorateur de données permet aux utilisateurs d'analyser seuls les données d'une application : choix des champs, regroupements, filtres, période, puis lecture du résultat en tableau, en tableau croisé, en graphique ou en cartes KPI — sans écrire de requête. Il s'applique à toute application connectée dont les données passent par un connecteur SQL.
 
-Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d'un **modèle**, dans **Paramètres → Explorateur**. Les utilisateurs ouvrent ensuite l'explorateur depuis la **boussole** de l'en-tête, visible dès qu'au moins un modèle leur est accessible.
+Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d'un **modèle**, dans **Liberty Next → Construire → Explorateur**. Les utilisateurs ouvrent ensuite l'explorateur depuis la **boussole** de l'en-tête, visible dès qu'au moins un modèle leur est accessible.
 
 ---
 
@@ -187,10 +187,10 @@ Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d
 
 ## Qui voit quoi \{#access\}
 
-- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Paramètres → Access → Roles**, bloc **Beyond the menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Liberty Next → Administrer → Accès → Roles**, bloc **Beyond the menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
 - Le **périmètre de données** du rôle s'applique à chaque requête de l'explorateur : un utilisateur limité aux lignes d'une société dans les écrans retrouve exactement ces lignes dans l'explorateur, totaux compris. Voir [Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
 - Une entrée de menu peut ouvrir l'explorateur sur un modèle précis (`/explorer/<app>/<model>`) : chaque dossier fonctionnel d'une application mène ainsi à ses propres données, et le sélecteur de modèle permet toujours d'en changer. Voir [Types d'entrées de menu](../build/menus/item-types.md#explorer).
-- Seul un superutilisateur modifie **Paramètres → Explorateur** ; lui seul voit aussi le SQL d'une analyse et les avertissements du modèle (colonne disparue, mesure non numérique).
+- Seul un superutilisateur modifie **Liberty Next → Construire → Explorateur** ; lui seul voit aussi le SQL d'une analyse et les avertissements du modèle (colonne disparue, mesure non numérique).
 
 ---
 
@@ -204,5 +204,5 @@ Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d
 
 ## Pour aller plus loin
 
-- [Construire un modèle](./model.md) — Paramètres → Explorateur, de zéro ou depuis un préréglage de l'assistant de création d'écran.
+- [Construire un modèle](./model.md) — Liberty Next → Construire → Explorateur, de zéro ou depuis un préréglage de l'assistant de création d'écran.
 - [Analyser les données](./analysis.md) — la page, étape par étape.

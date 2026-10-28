@@ -50,7 +50,7 @@ An upgrade is one command. It never starts without a fresh backup, keeps what is
   <text x="310" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">./liberty rollback: previous image + this backup</text>
   <line x1="300" y1="202.0" x2="480" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
   <rect x="790" y="185" width="330" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="800" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Settings → History → Upgrades</text>
+  <text x="800" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deploy → History → Upgrades</text>
   <text x="800" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">versions before / after, every step, migrations</text>
   <line x1="790" y1="202.0" x2="1080" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
 </svg>
@@ -107,7 +107,7 @@ Run it as the service user with its environment loaded, as for every `liberty-op
 
 Each `upgrade` and each `rollback` records a report: versions before and after, image tag, compose files, backup folder, `doctor` findings, the result of every step and the migrations applied. It is stored with the configuration (`.versions/upgrades/`), and on Docker a copy is also written in the backup folder.
 
-Open it in **Settings → History → Upgrades**. Each entry shows its component:
+Open it in **Liberty Next → Deploy → History → Upgrades**. Each entry shows its component:
 
 | Entry | Recorded by |
 |---|---|
@@ -127,7 +127,7 @@ The framework creates and completes its own tables when it starts. The licensed 
 - `./liberty migrate --dry-run` lists them, `./liberty migrate` applies them;
 - with `LIBERTY_AUTO_MIGRATE=1` in `.env`, the server applies them itself at start-up.
 
-Every run is recorded in **Settings → History → Upgrades**. For a database whose recorded version is ahead of its real tables, `liberty-admin migrate --app nomasx1 --stamp <revision>` sets the version without running anything, then applies what remains — see [CLI](../references/cli.md#migrate).
+Every run is recorded in **Liberty Next → Deploy → History → Upgrades**. For a database whose recorded version is ahead of its real tables, `liberty-admin migrate --app nomasx1 --stamp <revision>` sets the version without running anything, then applies what remains — see [CLI](../references/cli.md#migrate).
 
 ---
 
@@ -167,7 +167,7 @@ Or set `LIBERTY_IMAGE_TAG` in `.env` and run `./deploy-swarm.sh` again.
 | Patch (`7.0.57` → `7.0.58`) | Fixes and features; the configuration stays compatible; database changes only add tables or columns. |
 | A larger step | The release notes say what to check before and after. |
 
-Read the release notes before upgrading: **Settings → Release notes** shows those of the running version.
+Read the release notes before upgrading: **Liberty Next → Document → Release notes** shows those of the running version.
 
 ---
 

@@ -46,4 +46,4 @@ Nomasx-1 livre deux rôles, créés par une tâche que l'administrateur lance un
 | `nomasx1_auditor` | Consulter tous les écrans, tableaux de bord et modèles de l'explorateur, utiliser l'assistant IA et lancer les deux rapports ; il reçoit les rapports mensuels. |
 | `nomasx1_admin` | Tout, y compris les paramètres et toutes les tâches de Nomasx-1. |
 
-Les attribuer aux utilisateurs dans **Paramètres → Access**. Voir [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).
+Les attribuer aux utilisateurs dans **Liberty Next → Administrer → Accès**. Voir [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).

@@ -16,7 +16,7 @@ Three things are worth knowing up front:
 | Menus are stored as a **flat list of items** linked by `parent`. | The tree is assembled by the backend — easier to hand-edit, round-trips cleanly through TOML, drag operations only ever mutate one list. |
 | Every menu key is a connector name (`[menus.<connector>]`). | The connector named `crm` carries the menu under `[menus.crm]`; the screen `customers` on `crm` is reached from a leaf with `target = "customers_get"`. |
 
-The page that manages menus is **Settings → Menus**.
+The page that manages menus is **Liberty Next → Build → Menus**.
 
 ---
 
@@ -168,8 +168,8 @@ Cross-menu duplicates are fine — `[menus.crm.security]` and `[menus.nomasx1.se
 
 **A connector is listed in the application picker of the sidebar only when both conditions are true:**
 
-1. A menu exists — `[menus.<connector>]` is set up in *Settings → Menus*.
-2. **Show In Switcher** on the connector — set in *Settings → Connectors → \<connector> → Settings* (on by default).
+1. A menu exists — `[menus.<connector>]` is set up in *Liberty Next → Build → Menus*.
+2. **Show In Switcher** on the connector — set in *Liberty Next → Build → Connectors → \<connector> → Settings* (on by default).
 
 Miss either one and the connector exists but is not listed. The picker itself appears only when there is more than one application. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
 

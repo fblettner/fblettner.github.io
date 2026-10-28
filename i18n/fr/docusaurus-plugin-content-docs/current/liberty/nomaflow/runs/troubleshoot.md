@@ -16,7 +16,7 @@ Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec,
 |---|---|
 | *step timed out after N s* | L'étape a dépassé son `timeout_seconds` (3 600 par défaut). L'augmenter dans `jobs.toml`, ou découper le traitement. |
 | *→ 404*, *→ 500* (étape http) | L'URL appelée a répondu avec ce code. |
-| Une erreur de base de données | Identifiants faux, table absente, contrainte. Tester le pool dans **Paramètres → Pools** et la requête dans la page du connecteur. |
+| Une erreur de base de données | Identifiants faux, table absente, contrainte. Tester le pool dans **Liberty Next → Administrer → Pools** et la requête dans la page du connecteur. |
 | *cannot import module …* / *has no attribute …* (étape python) | Le plugin n'est pas là où l'indique `callable`, ou le serveur n'a pas été redémarré après une modification — voir [Déployer et déboguer](../../framework/build/plugins/deploy-and-debug.md). |
 | *period … is closed* (file_load) | La requête de refus de l'étape a volontairement rejeté le chargement. |
 | *control total mismatch …* (file_load) | Le total chargé diffère du total attendu ; rien n'a été écrit. |
@@ -56,7 +56,7 @@ Les étapes SQL, HTTP, de chargement de fichier et les fonctions Python `async` 
 
 ## La tâche n'apparaît pas dans la liste \{#missing\}
 
-`jobs.toml` a été modifié à la main et n'est plus valide : le journal du serveur indique l'erreur. Une clé absente du schéma est refusée — vérifier l'orthographe avec [Étapes](../steps.md) et [Créer une tâche](../jobs/create.md#toml-only). Après correction du fichier, **Paramètres → Recharger la config**.
+`jobs.toml` a été modifié à la main et n'est plus valide : le journal du serveur indique l'erreur. Une clé absente du schéma est refusée — vérifier l'orthographe avec [Étapes](../steps.md) et [Créer une tâche](../jobs/create.md#toml-only). Après correction du fichier, **Recharger la config (en haut de toute page d'édition de Liberty Next)**.
 
 ---
 

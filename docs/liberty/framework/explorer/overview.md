@@ -1,6 +1,6 @@
 ---
 title: Data Explorer
-description: "The Liberty Next Data Explorer: free analysis of an app's data without writing SQL — fields pane, rows, measures and filters, a period, table, pivot, charts and KPI views, detail rows and drill, calculated fields, saved analyses, dashboards and Excel / PDF export, over a model built in Settings → Explorer."
+description: "The Liberty Next Data Explorer: free analysis of an app's data without writing SQL — fields pane, rows, measures and filters, a period, table, pivot, charts and KPI views, detail rows and drill, calculated fields, saved analyses, dashboards and Excel / PDF export, over a model built in Liberty Next → Build → Explorer."
 keywords: [Liberty Next, Data Explorer, explorer, analysis, pivot, ad hoc reporting, self-service BI, measures, dimensions, drill, data mart]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, Data Explorer, explorer, analysis, pivot, ad hoc report
 
 The Data Explorer lets users analyse an app's data on their own: they pick fields, group, filter, choose a period, then read the result as a table, a pivot, a chart or KPI cards — without writing a query. It works on any connected application whose data is reached through a SQL connector.
 
-An operator first describes the data once, as a **model**, in **Settings → Explorer**. Users then open the explorer from the **compass** in the header, which appears when at least one model is available to them.
+An operator first describes the data once, as a **model**, in **Liberty Next → Build → Explorer**. Users then open the explorer from the **compass** in the header, which appears when at least one model is available to them.
 
 ---
 
@@ -187,10 +187,10 @@ An operator first describes the data once, as a **model**, in **Settings → Exp
 
 ## Who sees what \{#access\}
 
-- A model is offered to the holders of a role that grants it: in **Settings → Access → Roles**, **Beyond the menus**, type **Data Explorer**, then a model, or every model of an app. Superusers see every model. See [Roles & permissions](../build/secure/roles-and-permissions.md#access).
+- A model is offered to the holders of a role that grants it: in **Liberty Next → Administer → Access → Roles**, **Beyond the menus**, type **Data Explorer**, then a model, or every model of an app. Superusers see every model. See [Roles & permissions](../build/secure/roles-and-permissions.md#access).
 - The role's **data scope** applies inside every query the explorer runs: a user who sees one company's rows in the screens sees the same rows in the explorer, the totals included. See [Data scope](../build/secure/roles-and-permissions.md#data-scope).
 - A menu entry can open the explorer on one model (`/explorer/<app>/<model>`), so each functional folder of an app reaches its own data; the model picker still lets the user switch. See [Menu item types](../build/menus/item-types.md#explorer).
-- Only a superuser edits **Settings → Explorer**, and sees the SQL of an analysis and the model's warnings (a column that disappeared, a measure that is not numeric).
+- Only a superuser edits **Liberty Next → Build → Explorer**, and sees the SQL of an analysis and the model's warnings (a column that disappeared, a measure that is not numeric).
 
 ---
 
@@ -204,5 +204,5 @@ An operator first describes the data once, as a **model**, in **Settings → Exp
 
 ## What's next
 
-- [Build a model](./model.md) — Settings → Explorer, from scratch or from a Screen Assistant preset.
+- [Build a model](./model.md) — Liberty Next → Build → Explorer, from scratch or from a Screen Assistant preset.
 - [Analyse data](./analysis.md) — the page, step by step.

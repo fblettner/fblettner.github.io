@@ -52,7 +52,7 @@ Quand l'OIDC est configuré, un second bouton apparaît sous le formulaire local
 
 ## Étape 1 — Utilisateurs locaux
 
-Les utilisateurs locaux et les rôles se gèrent dans **Paramètres → Accès**. L'installation détermine leur lieu de stockage (le dossier de configuration du serveur, ou la base du framework quand plusieurs instances partagent les mêmes utilisateurs) ; les écrans sont identiques dans les deux cas.
+Les utilisateurs locaux et les rôles se gèrent dans **Liberty Next → Administrer → Accès**. L'installation détermine leur lieu de stockage (le dossier de configuration du serveur, ou la base du framework quand plusieurs instances partagent les mêmes utilisateurs) ; les écrans sont identiques dans les deux cas.
 
 ### Amorcer le premier utilisateur
 
@@ -62,7 +62,7 @@ Sur une installation neuve sans utilisateur, exécuter :
 liberty-admin init-db
 ```
 
-La commande crée le superutilisateur `admin` et affiche une seule fois un mot de passe aléatoire (`--admin-username`, `--password-env` pour les choisir). L'installation Docker la lance d'elle-même. Se connecter une fois, puis utiliser *Paramètres → Accès → Utilisateurs* pour en ajouter d'autres (voir [Utilisateurs](./users.md)).
+La commande crée le superutilisateur `admin` et affiche une seule fois un mot de passe aléatoire (`--admin-username`, `--password-env` pour les choisir). L'installation Docker la lance d'elle-même. Se connecter une fois, puis utiliser *Liberty Next → Administrer → Accès → Utilisateurs* pour en ajouter d'autres (voir [Utilisateurs](./users.md)).
 
 ---
 
@@ -80,7 +80,7 @@ L'OIDC se superpose aux utilisateurs locaux. N'importe quel fournisseur conforme
 
 ### Configuration
 
-L'OIDC se règle dans **Paramètres → App → OpenID Connect (SSO)**. Le secret client est chiffré à l'enregistrement, dans une saisie masquée avec un œil pour l'afficher. L'enregistrement s'applique aussitôt — **sans redémarrage** ; la connexion suivante en tient compte.
+L'OIDC se règle dans **Liberty Next → Administrer → App → OpenID Connect (SSO)**. Le secret client est chiffré à l'enregistrement, dans une saisie masquée avec un œil pour l'afficher. L'enregistrement s'applique aussitôt — **sans redémarrage** ; la connexion suivante en tient compte.
 
 | Champ | Requis | Remarques |
 |---|---|---|
@@ -126,10 +126,10 @@ Les jetons du fournisseur **ne sont pas propagés** — Liberty émet de nouveau
 
 ## Les utilisateurs OIDC dans la page Accès
 
-Les utilisateurs OIDC **apparaissent dans *Paramètres → Accès → Utilisateurs* uniquement après leur première connexion** — Liberty ne les pré-crée pas. Le motif d'onboarding habituel est donc :
+Les utilisateurs OIDC **apparaissent dans *Liberty Next → Administrer → Accès → Utilisateurs* uniquement après leur première connexion** — Liberty ne les pré-crée pas. Le motif d'onboarding habituel est donc :
 
 1. La nouvelle recrue se connecte via OIDC. Elle arrive sans rôle → elle voit une application vide.
-2. L'opérateur ouvre *Paramètres → Accès → Utilisateurs*, trouve le nouvel utilisateur et lui attribue les bons rôles.
+2. L'opérateur ouvre *Liberty Next → Administrer → Accès → Utilisateurs*, trouve le nouvel utilisateur et lui attribue les bons rôles.
 3. L'utilisateur rafraîchit (ou se reconnecte) et dispose alors de ses accès.
 
 Pour les installations comptant beaucoup d'utilisateurs OIDC, un script d'automatisation peut les pré-créer via `POST /admin/access/users` pour que les rôles soient prêts à la première connexion — mais le flux standard suppose une attribution manuelle des rôles.
@@ -186,7 +186,7 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 | L'URL de redirection déclarée chez le fournisseur diffère de celle de Liberty. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
 | La **Discovery URL** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
 | Le **Username claim** est absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
-| Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Paramètres → Accès → Utilisateurs*. |
+| Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Liberty Next → Administrer → Accès → Utilisateurs*. |
 | OIDC configuré mais non activé. | Le bouton OIDC n'apparaît pas. | Cocher **Enabled**. |
 
 ---

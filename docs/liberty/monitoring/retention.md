@@ -103,7 +103,7 @@ keywords: [Liberty Next, monitoring, retention, purge, job runs, job files, noti
 |---|---|---|
 | **Job runs** | Finished runs with their steps and logs, beyond the days kept or the cap per job. | Nomaflow — [Run history retention](../nomaflow/administration.md#retention). |
 | **Job files** | Uploaded files, rejects reports, reports, exports, watched-folder archives. | Nomaflow — **Files kept (days)** in the same panel. |
-| **Notifications** | Read notifications older than the days set. | Settings → App → Notifications — [Keep read notifications](../nomaflow/notifications.md#smtp). |
+| **Notifications** | Read notifications older than the days set. | Liberty Next → Administer → App → Notifications — [Keep read notifications](../nomaflow/notifications.md#smtp). |
 | **Config versions** | The configuration snapshots beyond the number kept per file, or too old; the newest of each file always stays. | The [`config-versions-purge` job](../nomaflow/bundled-jobs.md), else 20 per file and 90 days. |
 | **Change packages** | Exported or promoted packages and import logs older than the days set. Drafts are never touched. | Kept by default. |
 | **Saved views** | The users' own views and analyses. | Never purged — shown for their size. |

@@ -1,12 +1,12 @@
 ---
 title: Build a model
-description: "Settings → Explorer in Liberty Next: an explorer model per data mart — the hub, the entities (a query with its cardinality, key, measures, hidden columns and default date), the relations on column pairs, and a model filled from a Screen Assistant preset."
+description: "Liberty Next → Build → Explorer in Liberty Next: an explorer model per data mart — the hub, the entities (a query with its cardinality, key, measures, hidden columns and default date), the relations on column pairs, and a model filled from a Screen Assistant preset."
 keywords: [Liberty Next, Data Explorer, Settings Explorer, model, hub, entity, cardinality, measure, relation, join, preset, Screen Assistant, data mart]
 ---
 
 # Build a model
 
-A model tells the explorer what a user may analyse and how the tables relate. It is built in **Settings → Explorer** by a superuser, with no SQL: every entity reads an existing query of a connector, and the columns are discovered from that query's result.
+A model tells the explorer what a user may analyse and how the tables relate. It is built in **Liberty Next → Build → Explorer** by a superuser, with no SQL: every entity reads an existing query of a connector, and the columns are discovered from that query's result.
 
 ---
 
@@ -306,9 +306,9 @@ Applying the preset also creates the dictionary entries its tables lack — on a
 
 ### Models shipped by a preset \{#shipped\}
 
-A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Liberty Next → Build → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
 
-To change such a model, add a model in Settings → Explorer from the same preset: the declared model replaces the shipped one.
+To change such a model, add a model in Liberty Next → Build → Explorer from the same preset: the declared model replaces the shipped one.
 
 ---
 
@@ -318,7 +318,7 @@ To change such a model, add a model in Settings → Explorer from the same prese
 |---|---|---|
 | An entity is not linked to the hub. | **Save** is refused and names the entities left out. | Add the missing relation. |
 | The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
-| No column is discovered. | The query failed or returned nothing. | Check the query in Settings → Connectors. |
+| No column is discovered. | The query failed or returned nothing. | Check the query in Liberty Next → Build → Connectors. |
 | A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
 | Fields show their raw column name. | The columns have no dictionary entry. | On the explorer page, a superuser sees *N column(s) have no dictionary entry and show their column name* and **Create the entries from the data dictionary** creates them in one click. |
 

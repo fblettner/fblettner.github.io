@@ -14,7 +14,7 @@ C'est le chemin recommandé pour toute table déjà existante. À éviter unique
 
 ## Où le trouver
 
-L'assistant est accessible depuis **Paramètres → Connecteurs** :
+L'assistant est accessible depuis **Liberty Next → Construire → Connecteurs** :
 
 1. Choisir un connecteur dans la liste de gauche.
 2. Dans la barre de modes du volet droit, choisir **Tables**.

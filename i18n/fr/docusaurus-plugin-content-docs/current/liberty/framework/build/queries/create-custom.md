@@ -14,7 +14,7 @@ Cette page détaille le formulaire de l'éditeur, champ par champ.
 
 ## Accès
 
-**Paramètres → Connecteurs → choix du connecteur → barre de modes : Requêtes → ＋ Ajouter une requête**.
+**Liberty Next → Construire → Connecteurs → choix du connecteur → barre de modes : Requêtes → ＋ Ajouter une requête**.
 
 La page demande un nom, crée une requête vide et ouvre son éditeur.
 

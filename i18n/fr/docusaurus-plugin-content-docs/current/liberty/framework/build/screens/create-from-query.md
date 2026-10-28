@@ -14,7 +14,7 @@ Cette page parcourt les onglets **Général** et **Requêtes** du Concepteur d'�
 
 ## Étape 1 — Enregistrer l'application, si besoin
 
-Sur **Paramètres → Écrans**, la barre de portée liste chaque application (= connecteur) qui possède déjà au moins un écran. Si le connecteur qui doit recevoir l'écran n'y figure pas :
+Sur **Liberty Next → Construire → Écrans**, la barre de portée liste chaque application (= connecteur) qui possède déjà au moins un écran. Si le connecteur qui doit recevoir l'écran n'y figure pas :
 
 1. Cliquer sur **＋ Ajouter une portée**.
 2. Sélectionner le connecteur dans la liste déroulante (seuls les connecteurs **sans** espace de nommage Écrans apparaissent — une fois enregistré, le connecteur devient une puce d'application).

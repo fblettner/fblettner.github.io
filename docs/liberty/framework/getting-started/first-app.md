@@ -1,7 +1,7 @@
 ---
 title: First app walkthrough
 description: "Build a working Liberty Next app end to end: a pool, a SQL connector with its queries generated from a table, a screen with a grid and an edit dialog, and a menu entry — all from Settings, applied without a restart."
-keywords: [Liberty Framework, first app, walkthrough, pool, connector, screen, menu, hot-reload, Settings UI, dictionary, low-code]
+keywords: [Liberty Framework, first app, walkthrough, pool, connector, screen, menu, hot-reload, Liberty Next pages, dictionary, low-code]
 ---
 
 # First app walkthrough
@@ -50,7 +50,7 @@ The example uses the `default` pool and a small `tasks` table.
 
 ## Step 1 — The pool \{#pool\}
 
-Open **Settings → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#pools).
+Open **Liberty Next → Administer → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#pools).
 
 Create the example table with any SQL client connected to that database:
 
@@ -71,7 +71,7 @@ INSERT INTO tasks (id, title, status, due_date) VALUES
 
 ## Step 2 — The connector and its queries \{#connector\}
 
-1. **Settings → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
+1. **Liberty Next → Build → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
 2. With `tasks` selected, choose **Tables** in the mode bar, then **＋ Add queries → Generate from DB**.
 3. In the CRUD wizard, pick the `tasks` table, keep every column, tick **key** on `ID`, and keep the four statements (SELECT, UPDATE, INSERT, DELETE).
 4. Save. The connector now holds `tasks_get`, `tasks_put`, `tasks_post` and `tasks_delete`:
@@ -87,7 +87,7 @@ The columns are read from the database when the query runs; nothing else needs d
 
 ## Step 3 — The screen \{#screen\}
 
-1. **Settings → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
+1. **Liberty Next → Build → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
 2. **＋ Add screen**, id `tasks`. Click the new card to open the screen editor.
 3. **General** tab: label `Tasks`; check **Editable** for in-grid editing.
 4. **Queries** tab: read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
@@ -100,7 +100,7 @@ The grid columns come from the read query; their labels and formats from the [di
 
 ## Step 4 — The menu entry \{#menu\}
 
-1. **Settings → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
+1. **Liberty Next → Build → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
 2. **＋ Item**, then in the inspector: label `Tasks`, type `screen`, target `tasks_get` (the screen built on it), icon `table`.
 3. Save.
 

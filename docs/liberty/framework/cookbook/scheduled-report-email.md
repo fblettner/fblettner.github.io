@@ -22,7 +22,7 @@ Management wants yesterday's figures by e-mail at 08:00 on weekdays, without a s
 
 ### 1. The e-mail account
 
-**Settings → App → Notifications**: SMTP server, port, security, account and sender address. **Send a test** checks it. See [Notifications → The e-mail account](../../nomaflow/notifications.md#smtp).
+**Liberty Next → Administer → App → Notifications**: SMTP server, port, security, account and sender address. **Send a test** checks it. See [Notifications → The e-mail account](../../nomaflow/notifications.md#smtp).
 
 ### 2. The report table and its query
 
@@ -56,7 +56,7 @@ In Nomaflow, a job `crm-daily-pipeline` with:
 
 ### 4. The e-mail
 
-**Settings → Notifications**, a new rule:
+**Liberty Next → Build → Notifications**, a new rule:
 
 | Field | Value |
 |---|---|

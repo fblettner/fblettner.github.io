@@ -51,7 +51,7 @@ When OIDC is configured, a second button appears below the local form. When OIDC
 
 ## Step 1 — Local users
 
-Local users and roles are managed in **Settings → Access**. The installation chooses where they are stored (the server's configuration folder, or the framework's database for several instances sharing one user list); the screens are the same either way.
+Local users and roles are managed in **Liberty Next → Administer → Access**. The installation chooses where they are stored (the server's configuration folder, or the framework's database for several instances sharing one user list); the screens are the same either way.
 
 ### Bootstrap the first user
 
@@ -61,7 +61,7 @@ On a fresh install with no users, run:
 liberty-admin init-db
 ```
 
-The command creates the `admin` superuser and prints a random password once (`--admin-username`, `--password-env` to choose them). The Docker installation runs it for you. Sign in once, then use *Settings → Access → Users* to add others (see [Users](./users.md)).
+The command creates the `admin` superuser and prints a random password once (`--admin-username`, `--password-env` to choose them). The Docker installation runs it for you. Sign in once, then use *Liberty Next → Administer → Access → Users* to add others (see [Users](./users.md)).
 
 ---
 
@@ -79,7 +79,7 @@ OIDC is layered on top of the local users. Any OIDC-compliant provider works —
 
 ### Configuration
 
-OIDC is set in **Settings → App → OpenID Connect (SSO)**. The client secret is encrypted when saved, in a masked input with an eye to show it. Saving applies the change at once — **no restart**; the next sign-in uses it.
+OIDC is set in **Liberty Next → Administer → App → OpenID Connect (SSO)**. The client secret is encrypted when saved, in a masked input with an eye to show it. Saving applies the change at once — **no restart**; the next sign-in uses it.
 
 | Field | Required | Notes |
 |---|---|---|
@@ -125,10 +125,10 @@ The provider's tokens are **not propagated** — Liberty issues fresh tokens wit
 
 ## OIDC users in the Access page
 
-OIDC users **appear in *Settings → Access → Users* only after their first sign-in** — Liberty doesn't pre-create them. So the typical onboarding pattern is:
+OIDC users **appear in *Liberty Next → Administer → Access → Users* only after their first sign-in** — Liberty doesn't pre-create them. So the typical onboarding pattern is:
 
 1. The new hire signs in via OIDC. They land with no roles → they see an empty app.
-2. The operator opens *Settings → Access → Users*, finds the new user, assigns the right roles.
+2. The operator opens *Liberty Next → Administer → Access → Users*, finds the new user, assigns the right roles.
 3. The user refreshes (or signs back in) and now has access.
 
 For installs with many OIDC users, an automation script can pre-create them via `POST /admin/access/users` so roles are ready at first sign-in — but the standard flow assumes manual role assignment.
@@ -185,7 +185,7 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 | The redirect URL registered at the provider differs from Liberty's. | Sign-in returns `redirect_uri_mismatch`. | Register the exact URL Liberty sends — including the scheme and port. |
 | The **Discovery URL** returns 404 or HTML. | Sign-in fails at startup with a config error. | Verify the URL — most providers add `/.well-known/openid-configuration` to a base URL; Liberty needs the full path. |
 | The **Username claim** is not in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
-| OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Settings → Access → Users*. |
+| OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Liberty Next → Administer → Access → Users*. |
 | OIDC configured but not enabled. | The OIDC button doesn't show. | Tick **Enabled**. |
 
 ---

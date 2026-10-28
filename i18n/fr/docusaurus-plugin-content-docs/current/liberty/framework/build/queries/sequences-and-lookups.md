@@ -19,12 +19,12 @@ Les deux passent par l'**assistant de génération** : choix d'une table et de l
 
 ## Accès
 
-**Paramètres → Connecteurs → choix du connecteur → barre de modes : Séquences** (ou **Lookups**) **→ ＋ Ajouter une séquence** (ou **＋ Ajouter un lookup**).
+**Liberty Next → Construire → Connecteurs → choix du connecteur → barre de modes : Séquences** (ou **Lookups**) **→ ＋ Ajouter une séquence** (ou **＋ Ajouter un lookup**).
 
 La fenêtre s'ouvre, lit le pool et liste les schémas et les tables.
 
 :::note[Sans table]
-L'assistant part d'une table. Pour un lookup ou une séquence reposant sur une jointure ou sur un `SELECT` écrit à la main, créer l'élément dans **Paramètres → Dictionnaire** (onglet Lookups ou Séquences) et créer sa requête depuis cet élément — une requête vide, ou **Generate** à partir d'une table en associant ses colonnes aux champs de l'élément.
+L'assistant part d'une table. Pour un lookup ou une séquence reposant sur une jointure ou sur un `SELECT` écrit à la main, créer l'élément dans **Liberty Next → Construire → Dictionnaire** (onglet Lookups ou Séquences) et créer sa requête depuis cet élément — une requête vide, ou **Generate** à partir d'une table en associant ses colonnes aux champs de l'élément.
 :::
 
 ---

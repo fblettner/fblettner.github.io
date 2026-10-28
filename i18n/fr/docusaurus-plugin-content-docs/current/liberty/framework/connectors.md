@@ -1,6 +1,6 @@
 ---
 title: Connecteurs
-description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les endpoints nommés d'une API web. Modifiés dans Paramètres → Connecteurs ; un connecteur doté d'un menu est une application."
+description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les endpoints nommés d'une API web. Modifiés dans Liberty Next → Construire → Connecteurs ; un connecteur doté d'un menu est une application."
 keywords: [Liberty Next, connecteur, SQL, API, pool, requête nommée, endpoint, tables, requêtes, séquences, lookups, permissions, multi-pools, Oracle thick]
 ---
 
@@ -111,13 +111,13 @@ Un connecteur doté d'un menu est une **application** — voir [Applications](./
 
 ---
 
-## Paramètres → Connecteurs \{#page\}
+## Liberty Next → Construire → Connecteurs \{#page\}
 
 La liste de gauche a deux groupes : **Applications** (connecteurs dotés d'un menu) et **Sources de données** (les autres). **＋ Connecteur** en crée un (nom, type SQL ou API) ; le volet de droite modifie le connecteur sélectionné. **Enregistrer** écrit `connectors.toml` et applique la modification sans redémarrage ; **Abandonner** annule les modifications en attente. Les boutons propres au connecteur — **Cloner** (avec sa portée du dictionnaire, ses écrans, son menu, ses graphiques et tableaux de bord), **Renommer** (toutes les références réécrites), **Supprimer** (avec tout ce qui lui appartient) — se trouvent sur sa vue de réglages.
 
 ### Pools \{#pools\}
 
-Un pool est une connexion à une base de données, définie dans **Paramètres → Pools** et partagée par les connecteurs qui l'utilisent :
+Un pool est une connexion à une base de données, définie dans **Liberty Next → Administrer → Pools** et partagée par les connecteurs qui l'utilisent :
 
 | Champ | Effet |
 |---|---|
@@ -144,7 +144,7 @@ Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du con
 
 | Champ | Effet |
 |---|---|
-| **Pool** | Le pool sur lequel s'exécutent les requêtes — une liste des pools définis dans *Paramètres → Pools*. Le connecteur reprend l'adresse, les identifiants et le dialecte du pool. |
+| **Pool** | Le pool sur lequel s'exécutent les requêtes — une liste des pools définis dans *Liberty Next → Administrer → Pools*. Le connecteur reprend l'adresse, les identifiants et le dialecte du pool. |
 | **Pools** | Les pools supplémentaires sur lesquels les mêmes requêtes peuvent s'exécuter — voir [Connecteurs multi-pools](#multi-pool). |
 | **Show In Switcher** | Affiche le connecteur comme une application dans le sélecteur en haut du menu latéral — avec un menu, voir [Faire d'un connecteur une application](./build/menus/make-connector-an-app.md). |
 | **Home** | L'entrée de menu ouverte quand l'application est choisie. |
@@ -185,7 +185,7 @@ Le pilote Oracle fonctionne par défaut en mode *thin* : aucun client Oracle né
 - le **chiffrement réseau natif** (NNE) exigé par la base — le mode thin échoue avec `DPY-3001` ;
 - la lecture d'un **LOB au travers d'un DB link** — le mode thin échoue avec `ORA-22992` / `ORA-03149`.
 
-Cocher **Oracle thick mode** dans **Paramètres → App** (section *App*) et redémarrer le serveur : tous les pools Oracle passent alors en mode thick — le réglage vaut pour tout le serveur, pas pour un pool. Les pools PostgreSQL ne sont pas concernés. L'Instant Client est inclus dans l'image Docker (amd64 et arm64) ; une installation Python en a besoin sur l'hôte.
+Cocher **Oracle thick mode** dans **Liberty Next → Administrer → App** (section *App*) et redémarrer le serveur : tous les pools Oracle passent alors en mode thick — le réglage vaut pour tout le serveur, pas pour un pool. Les pools PostgreSQL ne sont pas concernés. L'Instant Client est inclus dans l'image Docker (amd64 et arm64) ; une installation Python en a besoin sur l'hôte.
 
 ---
 
@@ -266,7 +266,7 @@ Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'e
 
 ## Sous le capot
 
-Connecteurs et pools sont enregistrés dans `connectors.toml`, dans le dossier de configuration des applications. Les pages des Paramètres sont le moyen normal de les modifier ; la même configuration est accessible par l'API REST sous `/admin/config/connectors` — voir [API REST](../references/rest-api.md#admin-config).
+Connecteurs et pools sont enregistrés dans `connectors.toml`, dans le dossier de configuration des applications. Les pages de Liberty Next sont le moyen normal de les modifier ; la même configuration est accessible par l'API REST sous `/admin/config/connectors` — voir [API REST](../references/rest-api.md#admin-config).
 
 ---
 

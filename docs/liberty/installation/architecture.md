@@ -173,7 +173,7 @@ The Docker installation generates both into `release/.env` (mode `0600`); on a P
 1. The settings are read; `${VARIABLE}` references in the TOML files are replaced by the environment.
 2. *Docker only:* secrets given as files are read, the ownership of the configuration volume and of the apps folder is fixed, then the process drops root and runs as the `liberty` user (uid 1000). On a first start without licensed apps, the default configuration files are copied into `liberty-config` — an existing file is never overwritten.
 3. *Docker only:* `liberty-admin init-db` creates the framework tables that are missing and, on the very first start, the `admin` user. On a Python install you run it once yourself.
-4. The framework's own tables are compared with the version of the code: a missing column is added and recorded in **Settings → History → Upgrades**.
+4. The framework's own tables are compared with the version of the code: a missing column is added and recorded in **Liberty Next → Deploy → History → Upgrades**.
 5. Pending schema migrations of the licensed apps are reported in the log; they are applied by the upgrade or by `migrate` (Docker: also at start-up with `LIBERTY_AUTO_MIGRATE=1`).
 6. The server starts answering, even if the framework database is still unreachable — so that a pool can be fixed from **Settings**. `/ready` says when the database answers.
 

@@ -28,7 +28,7 @@ The Liberty Framework is split between **two repositories** that work together a
   <text x="258" y="110" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">frontend/</text>
   <text x="576" y="110" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">React</text>
   <text x="258" y="132" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/app.toml</text>
-  <text x="576" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Settings → App</text>
+  <text x="576" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Administer → App</text>
   <text x="258" y="154" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/auth.toml</text>
   <text x="576" y="154" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">users, roles</text>
   <text x="258" y="176" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">tests/</text>
@@ -97,7 +97,7 @@ liberty-next/
 │       └── api/              ← REST client
 │
 ├── config/                   ← bundled templates + per-installation files
-│   ├── app.toml              ← application settings — edited in Settings → App
+│   ├── app.toml              ← application settings — edited in Liberty Next → Administer → App
 │   ├── auth.toml             ← local users — created by init-db, gitignored
 │   ├── *.toml.example        ← templates for connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← real per-section files (only when LIBERTY_APPS_DIR is unset)
@@ -109,10 +109,10 @@ liberty-next/
 | File | Status | Edited by |
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Committed | Framework maintainers — *don't* edit per-installation. |
-| `config/app.toml` | Per-installation | Settings → App. |
-| `config/auth.toml` | Per-installation, gitignored | `liberty-admin` CLI / the Settings UI. |
+| `config/app.toml` | Per-installation | Liberty Next → Administer → App. |
+| `config/auth.toml` | Per-installation, gitignored | `liberty-admin` CLI / the Liberty Next pages. |
 | `config/*.toml.example` | Committed | Framework maintainers — bundled templates. |
-| `config/*.toml` (without `.example`) | Per-installation, gitignored | Editable from the Settings UI when `LIBERTY_APPS_DIR` is unset. |
+| `config/*.toml` (without `.example`) | Per-installation, gitignored | Editable from the Liberty Next pages when `LIBERTY_APPS_DIR` is unset. |
 
 ---
 
@@ -141,18 +141,18 @@ liberty-apps/
 
 | File | Edited by | Notes |
 |---|---|---|
-| `config/connectors.toml` | Settings UI → *Connectors* | Owns the pool registry plus every connector. |
-| `config/dictionary.toml` | Settings UI → *Dictionary* | Per-column metadata reused by screens and charts. |
-| `config/menus.toml` | Settings UI → *Menus* | One root per app, optional folder/leaf hierarchy. |
-| `config/screens.toml` | Settings UI → *Screens* | Grids + dialogs + per-field conditions. |
-| `config/dashboards.toml` | Settings UI → *Dashboards* | KPI, chart and table widgets. |
-| `config/charts.toml` | Settings UI → *Charts* | Chart definitions referenced by dashboards. |
-| `config/actions.toml` | Settings UI → *Actions* | Shared actions called by screens. |
-| `config/theme.toml` | Settings UI → *Theme* | Colours and branding. |
+| `config/connectors.toml` | *Build → Connectors* | Owns the pool registry plus every connector. |
+| `config/dictionary.toml` | *Build → Dictionary* | Per-column metadata reused by screens and charts. |
+| `config/menus.toml` | *Build → Menus* | One root per app, optional folder/leaf hierarchy. |
+| `config/screens.toml` | *Build → Screens* | Grids + dialogs + per-field conditions. |
+| `config/dashboards.toml` | *Build → Dashboards* | KPI, chart and table widgets. |
+| `config/charts.toml` | *Build → Charts* | Chart definitions referenced by dashboards. |
+| `config/actions.toml` | *Build → Actions* | Shared actions called by screens. |
+| `config/theme.toml` | *Administer → Theme* | Colours and branding. |
 | `plugins/nomaflow/jobs.toml` | Nomaflow → *Jobs* | The job catalogue. |
 | `plugins/*/*.py` | Developer | Custom step callables — exposed to the framework via `sys.path`. |
 
-Every file is plain TOML you can read with `cat`, diff with `git`, edit in `vim`. The Settings UI uses the same on-disk format — what you save in the browser is what `git status` reports.
+Every file is plain TOML you can read with `cat`, diff with `git`, edit in `vim`. The Liberty Next pages uses the same on-disk format — what you save in the browser is what `git status` reports.
 
 ---
 
@@ -184,19 +184,19 @@ The full env-var contract is documented under [Configuration → Environment var
 - **App identifier** — every screen, menu and job carries an `app` field (e.g. `nomajde`, `nomasx1`, `tutorial`). It's the namespace for screen ids and the prefix of the sidebar entry.
 - **Connector name** — short, kebab-case (`jdedwards`, `tasks`, `crm-sql`). The same name surfaces in the catalog page, the AI assistant tool list and the URL of a query.
 - **Pool name** — short, lowercase. `default` is reserved for the framework's own pool.
-- **Permission code** — `sql:<connector>:<query>` for SQL queries and `api:<connector>:<endpoint>` for HTTP/API endpoints. The Settings UI builds them automatically; no manual code is needed.
+- **Permission code** — `sql:<connector>:<query>` for SQL queries and `api:<connector>:<endpoint>` for HTTP/API endpoints. The Liberty Next pages builds them automatically; no manual code is needed.
 
 ---
 
 ## Version control conventions
 
 - `liberty-next` is upgraded by **switching git tags** — the framework binary is treated as an external dependency, not modified in place. The `liberty-apps` repo stays untouched across framework upgrades.
-- `liberty-apps` is committed normally — every TOML edit done in the Settings UI ends up as a diff in the repo. Commits made by the operator are reviewable like any other code change.
+- `liberty-apps` is committed normally — every TOML edit done in the Liberty Next pages ends up as a diff in the repo. Commits made by the operator are reviewable like any other code change.
 - Secrets — JWT signing key, master key, license key, AI key — live in the **environment**, not in either repo. See [Encryption & secrets](../configuration/encryption-secrets.md).
 
 ---
 
 ## What's next
 
-- [Configuration → Settings UI](../configuration/settings-ui.md) — the in-browser editor for everything under `liberty-apps/config/`.
+- [The Liberty Next workspace](../configuration/settings-ui.md) — the in-browser editor for everything under `liberty-apps/config/`.
 - [Apps & Plugins → Apps](../apps/overview.md) — how to organise multiple apps inside `liberty-apps`.

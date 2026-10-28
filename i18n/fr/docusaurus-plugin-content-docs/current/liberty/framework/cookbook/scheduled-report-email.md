@@ -22,7 +22,7 @@ La direction veut recevoir les chiffres de la veille par e-mail à 8 h les jours
 
 ### 1. Le compte e-mail
 
-**Paramètres → App → Notifications** : serveur SMTP, port, sécurité, compte et adresse d'expédition. **Send a test** le vérifie. Voir [Notifications → Le compte e-mail](../../nomaflow/notifications.md#smtp).
+**Liberty Next → Administrer → App → Notifications** : serveur SMTP, port, sécurité, compte et adresse d'expédition. **Send a test** le vérifie. Voir [Notifications → Le compte e-mail](../../nomaflow/notifications.md#smtp).
 
 ### 2. La table de rapport et sa requête
 
@@ -56,7 +56,7 @@ Dans Nomaflow, une tâche `crm-daily-pipeline` avec :
 
 ### 4. L'e-mail
 
-**Paramètres → Notifications**, une nouvelle règle :
+**Liberty Next → Construire → Notifications**, une nouvelle règle :
 
 | Champ | Valeur |
 |---|---|

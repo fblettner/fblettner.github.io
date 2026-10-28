@@ -112,7 +112,7 @@ The run is an ordinary Nomaflow run: the operators see it in the [run history](.
 
 ## Putting a job in a menu \{#menu\}
 
-In **Settings → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+In **Liberty Next → Build → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
 
 ---
 
@@ -124,7 +124,7 @@ An item can pin one of the job's [presets](./schedules.md#schedulable-presets) w
 
 ## Who may run it \{#access\}
 
-The item and its page need the permission `job:<id>` — in **Settings → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
+The item and its page need the permission `job:<id>` — in **Liberty Next → Administer → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
 
 Every holder of the permission sees **all** the runs of the job — the previous runs list, their logs and their files —, not only their own.
 

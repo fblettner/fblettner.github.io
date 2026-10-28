@@ -85,9 +85,9 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 - avec plusieurs actions, la poignée (**⋯**, *Actions de la ligne*) ouvre le même menu que le clic droit ;
 - avec une seule action `navigate`, la poignée (une flèche de retour) la déclenche aussitôt — son infobulle reprend le libellé de l'action.
 
-**Cellules en lien.** Le réglage **drill** d'une colonne (Paramètres → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
+**Cellules en lien.** Le réglage **drill** d'une colonne (Liberty Next → Construire → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
 
-**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Paramètres → App](../settings-app.md#app), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
+**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#app), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
 
 ### Types composites
 
@@ -122,7 +122,7 @@ Les valeurs saisies sont disponibles sous `INPUT.<nom>` pour l'action et pour to
 
 ## Actions partagées \{#shared\}
 
-Une action utilisée par plusieurs écrans se définit une seule fois dans **Paramètres → Actions** : un identifiant, un libellé, une description, des **params** déclarés, des **prompt_fields** facultatifs et ses **steps** (les mêmes types d'actions). La page liste les actions partagées avec **Find usages**, **Cloner** et **Supprimer** ; un clic sur une ligne ouvre le concepteur d'action.
+Une action utilisée par plusieurs écrans se définit une seule fois dans **Liberty Next → Construire → Actions** : un identifiant, un libellé, une description, des **params** déclarés, des **prompt_fields** facultatifs et ses **steps** (les mêmes types d'actions). La page liste les actions partagées avec **Find usages**, **Cloner** et **Supprimer** ; un clic sur une ligne ouvre le concepteur d'action.
 
 Un écran l'exécute avec `call_action` : `ref` désigne l'action partagée, et ses `param_binds` alimentent les valeurs `INPUT.<param>` de l'action.
 

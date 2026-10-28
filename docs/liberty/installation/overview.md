@@ -46,7 +46,7 @@ Liberty Next is one server — a web application, its API and its job scheduler 
   <text x="1086.0" y="114.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">./liberty upgrade</text>
   <text x="30" y="44" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">A Docker install from start to finish — every step is one command run from release/</text>
   <rect x="230" y="185" width="250" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="240" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Settings → App → License</text>
+  <text x="240" y="200" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Administer → App → License</text>
   <text x="240" y="213" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">paste the key once signed in</text>
   <line x1="230" y1="202.0" x2="450" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jrn-arrow)"/>
   <rect x="780" y="185" width="300" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -84,7 +84,7 @@ The command generates the secrets, starts the stack, waits until it answers and 
 
 Then, in this order and only if you need them:
 
-1. **Licence** — *Settings → App → License*: paste the key you were delivered.
+1. **Licence** — *Liberty Next → Administer → App → License*: paste the key you were delivered.
 2. **Licensed apps** — `./liberty apps liberty_apps-<version>-py3-none-any.whl` ([Licensed apps](./deploy-prebuilt-apps.md)).
 3. **HTTPS** — `./liberty ssl letsencrypt --domain liberty.example.com --email ops@example.com` ([HTTPS and Traefik](./traefik.md)).
 

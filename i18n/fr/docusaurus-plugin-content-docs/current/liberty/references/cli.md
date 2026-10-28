@@ -10,7 +10,7 @@ L'essentiel de l'administration se fait dans **Paramètres**. Les outils en lign
 
 | Outil | Rôle |
 |---|---|
-| `liberty-next` | Démarre le serveur. Adresse et port viennent de **Paramètres → App**. |
+| `liberty-next` | Démarre le serveur. Adresse et port viennent de **Liberty Next → Administrer → App**. |
 | [`liberty-admin`](#liberty-admin) | Initialisation de la base, utilisateurs, rôles et périmètre de données, tâches d'installation, migrations de schéma. |
 | `./liberty` et `liberty-ops` | Exploitation d'une installation Docker ou Python — voir [Exploitation](../installation/operations.md). |
 | [`liberty-connectors`](#liberty-connectors) | Liste les connecteurs et lance une requête ou un endpoint. |
@@ -72,7 +72,7 @@ liberty-admin migrate [--app X]… [--dry-run] [--target-connector C] [--revisio
                       [--plugins-dir D] [--stamp REV]
 ```
 
-Applique les migrations de schéma en attente de chaque application sous licence (les modules `plugins/<application>/db`) et enregistre chaque exécution dans **Paramètres → History → Upgrades**.
+Applique les migrations de schéma en attente de chaque application sous licence (les modules `plugins/<application>/db`) et enregistre chaque exécution dans **Liberty Next → Déployer → Historique → Upgrades**.
 
 | Option | Effet |
 |---|---|
@@ -123,7 +123,7 @@ La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplace
 
 | Commande | Effet |
 |---|---|
-| `liberty-license status` | Vérifie la clé configurée dans **Paramètres → App → License** : validité, produits couverts, expiration. |
+| `liberty-license status` | Vérifie la clé configurée dans **Liberty Next → Administrer → App → License** : validité, produits couverts, expiration. |
 | `liberty-license verify [CLÉ]` | Vérifie une clé passée en argument ou sur l'entrée standard, avant de la coller. |
 
 `--config` désigne un autre `app.toml`. Voir [Clé de licence](../framework/build/secure/license-key.md).

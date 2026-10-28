@@ -12,7 +12,7 @@ Nomasx-1, Nomajde and their Nomaflow jobs are delivered as one Python wheel, `li
 
 ## 1 — The licence key \{#set-the-license-key\}
 
-Sign in as a superuser and open **Settings → App → License**. Paste the key you were delivered and save: the key is encrypted with the install's master key and the licensed connectors appear at once, without a restart.
+Sign in as a superuser and open **Liberty Next → Administer → App → License**. Paste the key you were delivered and save: the key is encrypted with the install's master key and the licensed connectors appear at once, without a restart.
 
 Without a key, the apps install but their licensed connectors stay hidden. `liberty-license status` (in the container: `docker exec -u liberty liberty-next liberty-license status`) shows what the key covers and when it expires — see [Licence key](../framework/build/secure/license-key.md).
 
@@ -49,9 +49,9 @@ On a Python install, the same steps are three commands — see [Python server](.
 
 ## 3 — Connect the source system \{#source\}
 
-The apps read their data from your source system through a pool. Open **Settings → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run **`nomasx1-roles`** to create the auditor and administrator roles, and the collection — `nomasx1-collect-all` — from **Nomaflow** or from *Nomasx-1 → Jobs*. The jobs and their parameters are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
+The apps read their data from your source system through a pool. Open **Liberty Next → Administer → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run **`nomasx1-roles`** to create the auditor and administrator roles, and the collection — `nomasx1-collect-all` — from **Nomaflow** or from *Nomasx-1 → Jobs*. The jobs and their parameters are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
 
-Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Settings → Connectors**. A value set in Settings is kept on every upgrade.
+Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Liberty Next → Build → Connectors**. A value set in Settings is kept on every upgrade.
 
 ---
 
@@ -84,7 +84,7 @@ The apps upgrade together with the framework with `./liberty upgrade --apps <whe
 | Check | Where |
 |---|---|
 | Apps version | `./liberty status` → `apps bundle` |
-| Licence | **Settings → App → License** |
+| Licence | **Liberty Next → Administer → App → License** |
 | Apps in the switcher | Nomasx-1 and Nomajde appear at the top of the sidebar |
 | Installation jobs | The Nomaflow run history: `deploy-databases` and `nomasx1-import-reference` succeeded |
 | Schema up to date | `./liberty status` → `migrations: up to date` |
@@ -112,7 +112,7 @@ Both use the same per-entity merge, so a wheel upgrade and a package import neve
 
 | Symptom | Fix |
 |---|---|
-| The licensed apps are missing from the switcher | Check the licence in **Settings → App → License**; `./liberty doctor` checks that the apps folder is in the recorded compose files. |
+| The licensed apps are missing from the switcher | Check the licence in **Liberty Next → Administer → App → License**; `./liberty doctor` checks that the apps folder is in the recorded compose files. |
 | After a manual `docker compose -f … up -d` the install looks empty | The apps folder was left out. Run `./liberty apps <wheel>` again (it changes nothing else) — then keep to `./liberty` commands. |
 | `deploy-databases` fails with *permission denied* | The `default` pool needs a role allowed to create roles and databases. On the full layout it is the bundled `liberty` superuser. |
 | A new vendor screen did not appear | It was kept because you changed it locally: see the list printed at the end, or install again with `--force-config`. |

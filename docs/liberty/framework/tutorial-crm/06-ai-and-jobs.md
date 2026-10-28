@@ -63,7 +63,7 @@ Two additions: the **AI assistant**, so that users ask questions in plain langua
 
 ### Settings
 
-**Settings → App → AI Assistant**: **Enabled**, the **Anthropic API key**, the **Model**, and **Allowed connectors** `crm`. Save. See [AI assistant](../ai-assistant.md).
+**Liberty Next → Administer → App → AI Assistant**: **Enabled**, the **Anthropic API key**, the **Model**, and **Allowed connectors** `crm`. Save. See [AI assistant](../ai-assistant.md).
 
 ### Access
 
@@ -125,7 +125,7 @@ Save, then **Run with parameters** to run it once: the run detail shows the rows
 
 ### The notification
 
-**Settings → Notifications**, a rule:
+**Liberty Next → Build → Notifications**, a rule:
 
 | Field | Value |
 |---|---|

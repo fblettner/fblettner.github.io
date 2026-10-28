@@ -1,6 +1,6 @@
 ---
 title: Pourquoi Liberty Framework
-description: "Liberty Framework est une plateforme low-code pour construire des applications internes — outils d'administration, tableaux de bord BI, intégrations, portails clients — sans écrire de frontend. Définissez les sources de données et les écrans dans l'interface Paramètres ; le framework rend la grille, le dialogue d'édition, le tableau de bord, l'assistant."
+description: "Liberty Framework est une plateforme low-code pour construire des applications internes — outils d'administration, tableaux de bord BI, intégrations, portails clients — sans écrire de frontend. Définissez les sources de données et les écrans dans les pages de Liberty Next ; le framework rend la grille, le dialogue d'édition, le tableau de bord, l'assistant."
 keywords: [Liberty Framework, low-code, internal apps, applications internes, admin tools, outils d'administration, BI dashboards, tableaux de bord, why, getting started, overview, présentation]
 ---
 
@@ -28,7 +28,7 @@ La plupart des équipes finissent par écrire le même type d'application encore
 
 Écrire cela en React (ou Angular, ou Vue), c'est une semaine de travail par écran. Multipliez par 20 écrans par application et 5 applications par équipe : le calcul est implacable — l'essentiel des heures d'ingénierie part dans le câblage de formulaires vers des API et d'API vers des bases de données, et très peu finit en logique métier.
 
-Le framework prend l'approche inverse : le **schéma** de chaque requête est découvert à l'exécution depuis la base de données elle-même, la **mise en page** est décrite en quelques clics dans l'interface Paramètres, et le **rendu** — grille, dialogue, tableau de bord, outil IA, surface REST — revient au framework. Le SQL produit l'interface.
+Le framework prend l'approche inverse : le **schéma** de chaque requête est découvert à l'exécution depuis la base de données elle-même, la **mise en page** est décrite en quelques clics dans les pages de Liberty Next, et le **rendu** — grille, dialogue, tableau de bord, outil IA, surface REST — revient au framework. Le SQL produit l'interface.
 
 Quand un besoin que le framework ne couvre pas apparaît (un widget sur mesure, une page unique, une UX peaufinée à la main), la plateforme laisse la place à du code : une route React, une étape Python spécifique ou un appel HTTP.
 

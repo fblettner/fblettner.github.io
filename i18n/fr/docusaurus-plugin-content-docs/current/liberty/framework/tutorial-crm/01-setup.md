@@ -169,12 +169,12 @@ INSERT INTO deals (customer_id, name, stage, amount, close_date) VALUES
 
 Un **connecteur** regroupe sous un nom les requêtes d'une base de données. Dès qu'il aura un menu, il deviendra l'**application** `crm`.
 
-1. Ouvrir **Paramètres → Connecteurs**, cliquer sur **＋ Connecteur**.
+1. Ouvrir **Liberty Next → Construire → Connecteurs**, cliquer sur **＋ Connecteur**.
 2. Nom `crm`, type **SQL**, pool `default`. Enregistrer.
 
 Le connecteur apparaît sous *Sources de données* dans la liste de gauche : il n'a pas encore de menu. Il passera sous *Applications* à l'[étape 2](./02-customers.md).
 
-Pour travailler sur une autre base que celle du framework, ajouter d'abord un pool dans **Paramètres → Pools** avec son URL, puis le choisir ici — voir [Connecteurs](../connectors.md#pools).
+Pour travailler sur une autre base que celle du framework, ajouter d'abord un pool dans **Liberty Next → Administrer → Pools** avec son URL, puis le choisir ici — voir [Connecteurs](../connectors.md#pools).
 
 ---
 
@@ -183,6 +183,6 @@ Pour travailler sur une autre base que celle du framework, ajouter d'abord un po
 | Vérification | Moyen |
 |---|---|
 | Tables créées | `SELECT count(*) FROM customers;` renvoie 3. |
-| Connecteur créé | **Paramètres → Connecteurs** liste `crm` sous *Sources de données*. |
+| Connecteur créé | **Liberty Next → Construire → Connecteurs** liste `crm` sous *Sources de données*. |
 
 → **[Étape 2 — L'écran Clients](./02-customers.md)** : les requêtes, le premier écran et le menu.

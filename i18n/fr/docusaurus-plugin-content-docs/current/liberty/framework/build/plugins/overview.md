@@ -190,7 +190,7 @@ Signature de fonction, forme de retour, gestion des erreurs et auto-injections d
 | Il faut intégrer un service pour lequel Liberty n'a pas d'étape native. | L'intégration est HTTP ou LDAP — utiliser ces types d'étapes. |
 | On transforme des données autrement qu'en SQL (analyse XML, génération de PDF, traitement d'images). | La transformation est purement SQL. |
 | Il faut appeler une procédure stockée avec de la logique entre les appels. | Une seule étape `sql_query` suffit. |
-| On construit de l'outillage autour du framework (jobs batch CLI, scripts ad-hoc). | L'interface Paramètres offre déjà toutes les options nécessaires. |
+| On construit de l'outillage autour du framework (jobs batch CLI, scripts ad-hoc). | L'pages de Liberty Next offre déjà toutes les options nécessaires. |
 
 L'étape `python` est la **voie d'extension**, pas le défaut. La plupart des charges opérationnelles tiennent dans les étapes déclaratives ; recourir à Python quand ce n'est sincèrement pas le cas.
 
@@ -200,7 +200,7 @@ L'étape `python` est la **voie d'extension**, pas le défaut. La plupart des ch
 
 | Changement dans le plugin | Pris en compte par | Demande |
 |---|---|---|
-| Modifier `jobs.toml` (catalogue de jobs du plugin). | Le prochain *Save* dans l'interface Paramètres **ou** `POST /admin/reload`. | Rechargement à chaud (pas de redémarrage). |
+| Modifier `jobs.toml` (catalogue de jobs du plugin). | Le prochain *Save* dans les pages de Liberty Next **ou** `POST /admin/reload`. | Rechargement à chaud (pas de redémarrage). |
 | Modifier un fichier `.py` — changer le code d'une fonction. | Le cache d'imports Python contient encore l'**ancienne** version. | **Redémarrage** du processus du framework. |
 | Ajouter un nouveau fichier `.py`. | Sera importable au premier import après démarrage du framework. | **Redémarrage** du processus du framework. |
 | Changer `requirements.txt` / installer une nouvelle dépendance. | `pip install` n'aide pas — le processus en cours a déjà chargé son environnement. | **Redémarrage** du processus du framework (après `pip install`). |

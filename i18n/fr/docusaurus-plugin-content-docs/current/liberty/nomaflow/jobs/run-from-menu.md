@@ -112,7 +112,7 @@ L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouve
 
 ## Placer une tâche dans un menu \{#menu\}
 
-Dans **Paramètres → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+Dans **Liberty Next → Construire → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
 
 ---
 
@@ -124,7 +124,7 @@ Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-prese
 
 ## Qui peut la lancer \{#access\}
 
-L'entrée et sa page demandent la permission `job:<id>` — dans **Paramètres → Access → Roles**, bloc **Beyond the menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
+L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Beyond the menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
 
 Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
 

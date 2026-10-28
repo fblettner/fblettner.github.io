@@ -1,6 +1,6 @@
 ---
 title: Dictionnaire
-description: "Le dictionnaire définit une seule fois chaque donnée — libellé, format, règle, valeur par défaut, traductions — et chaque colonne de requête qui y renvoie hérite de cette définition. Entrées, énumérations, lookups, séquences et listes du framework, partagés ou par connecteur, dans Paramètres → Dictionnaire."
+description: "Le dictionnaire définit une seule fois chaque donnée — libellé, format, règle, valeur par défaut, traductions — et chaque colonne de requête qui y renvoie hérite de cette définition. Entrées, énumérations, lookups, séquences et listes du framework, partagés ou par connecteur, dans Liberty Next → Construire → Dictionnaire."
 keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séquences, libellés, formats, règles, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, traductions]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séque
 
 Le **dictionnaire** définit une seule fois chaque donnée : son libellé, son format, sa règle (booléen, liste de valeurs, lookup, séquence…), sa valeur par défaut et ses traductions. Une colonne de requête qui renvoie à une entrée hérite de cette définition : la même donnée se lit donc de la même façon sur tous les écrans, graphiques et tableaux de bord.
 
-Il se modifie dans **Paramètres → Dictionnaire**, qui regroupe cinq types d'éléments :
+Il se modifie dans **Liberty Next → Construire → Dictionnaire**, qui regroupe cinq types d'éléments :
 
 | Onglet | Contenu |
 |---|---|

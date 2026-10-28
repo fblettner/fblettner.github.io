@@ -149,7 +149,7 @@ Each user sees only their own notifications.
 
 ## The e-mail account \{#smtp\}
 
-E-mail goes through the SMTP server set in **Settings → App → Notifications (email)**:
+E-mail goes through the SMTP server set in **Liberty Next → Administer → App → Notifications (email)**:
 
 | Field | Default | Notes |
 |---|---|---|
@@ -168,7 +168,7 @@ E-mails are plain text: the subject, then the body, then the rule's link.
 
 ## Rules \{#rules\}
 
-Rules are edited in **Settings → Notifications** and saved in `notifications.toml` — a change applies without a restart. **Send a test** sends the rule being edited, even unsaved, with sample values to its recipients.
+Rules are edited in **Liberty Next → Build → Notifications** and saved in `notifications.toml` — a change applies without a restart. **Send a test** sends the rule being edited, even unsaved, with sample values to its recipients.
 
 ### Triggers
 

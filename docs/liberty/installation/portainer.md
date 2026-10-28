@@ -246,7 +246,7 @@ Don't try to scale Portainer beyond `replicas: 1` — it stores its admin DB on 
 
 | Pitfall | What actually happens | Avoid by |
 |---|---|---|
-| **Recreating `liberty-next` to reload a TOML edit.** | Portainer's *Recreate* kills and restarts the container — and TOML changes pushed via the Settings UI are already live. Useless restart, ~10 s of downtime. | TOMLs reload on save. The framework-wide button is `POST /admin/reload` (or *Settings → Reload*). Only recreate to apply a new image tag or a `.env` change. |
+| **Recreating `liberty-next` to reload a TOML edit.** | Portainer's *Recreate* kills and restarts the container — and TOML changes pushed via the Liberty Next pages are already live. Useless restart, ~10 s of downtime. | TOMLs reload on save. The framework-wide button is `POST /admin/reload` (or *Reload config (at the top of any Liberty Next editor page)*). Only recreate to apply a new image tag or a `.env` change. |
 | **Restarting `pg` without first stopping `liberty-next`.** | Liberty's pool sees half its connections drop mid-query; the next requests fail until the pool recovers. | Stop `liberty-next` first (Portainer → *Stop*), restart `pg`, start `liberty-next`. Or restart the whole stack in order. |
 | **Editing env vars in Portainer.** | Portainer's env tab is read-only — there's no *Save* button. Operators sometimes copy them out, edit, paste back, and nothing happens. | Edit `.env` on the host, then *Recreate* the container so the new values are read at startup. |
 | **Exposing `/portainer` to the public internet before completing the wizard.** | The first stranger to load the page claims the admin account. | Run the wizard immediately after `./liberty install full`. Or firewall the path until you have. |

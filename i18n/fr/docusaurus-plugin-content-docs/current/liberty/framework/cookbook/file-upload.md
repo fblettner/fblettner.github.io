@@ -30,7 +30,7 @@ ALTER TABLE contracts ADD document_url VARCHAR(500);
 
 ### 2. L'afficher
 
-Donner à l'entrée `DOCUMENT_URL` du dictionnaire un libellé et le format **url** (Paramètres → Dictionnaire → Entrées). La grille et le dialogue affichent l'adresse sous forme de texte, à copier dans le navigateur — elle n'est pas transformée en lien cliquable.
+Donner à l'entrée `DOCUMENT_URL` du dictionnaire un libellé et le format **url** (Liberty Next → Construire → Dictionnaire → Entrées). La grille et le dialogue affichent l'adresse sous forme de texte, à copier dans le navigateur — elle n'est pas transformée en lien cliquable.
 
 ### 3. La renseigner
 

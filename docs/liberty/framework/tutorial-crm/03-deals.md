@@ -80,7 +80,7 @@ Three things in this step:
 
 ### Entries from the tables
 
-**Settings → Dictionary**, pick the `crm` scope, then **Scan a table**:
+**Liberty Next → Build → Dictionary**, pick the `crm` scope, then **Scan a table**:
 
 1. Connector `crm`, table `customers`, **Scan**: one proposal per column, missing ones ticked.
 2. Fill the **Label** of each (`Name`, `Industry`, `Country`, `Status`, `E-mail`…), then **Add**.
@@ -98,7 +98,7 @@ The grid shows *Active* instead of `ACTIVE`, and the dialog offers the three val
 
 A lookup turns a code (the customer's id) into a label (its name), from a query.
 
-1. **Settings → Connectors → crm → Lookups → ＋ Add lookup**: table `customers`, value column `ID`, label column `NAME`. The assistant writes the query and the dictionary lookup `customers`.
+1. **Liberty Next → Build → Connectors → crm → Lookups → ＋ Add lookup**: table `customers`, value column `ID`, label column `NAME`. The assistant writes the query and the dictionary lookup `customers`.
 2. Same for the stages: table `deal_stages`, value `CODE`, label `LABEL`.
 3. In the dictionary, entry `CUSTOMER_ID`: **Rules** `LOOKUP`, **Rules values** `customers`; entry `STAGE`: **Rules** `LOOKUP`, **Rules values** `deal_stages`.
 

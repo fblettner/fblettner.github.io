@@ -30,7 +30,7 @@ ALTER TABLE contracts ADD document_url VARCHAR(500);
 
 ### 2. Show it
 
-Give the `DOCUMENT_URL` dictionary entry a label and the **url** format (Settings → Dictionary → Entries). The grid and the dialog show the address as text, to copy into the browser — they do not turn it into a clickable link.
+Give the `DOCUMENT_URL` dictionary entry a label and the **url** format (Liberty Next → Build → Dictionary → Entries). The grid and the dialog show the address as text, to copy into the browser — they do not turn it into a clickable link.
 
 ### 3. Fill it
 

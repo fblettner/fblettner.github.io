@@ -1,12 +1,12 @@
 ---
 title: Dashboards
-description: "Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Settings → Dashboards and opened from the menu."
+description: "Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Liberty Next → Build → Dashboards and opened from the menu."
 keywords: [Liberty Next, dashboard, KPI, figure, list, bars, synthesis, export, Excel, PDF, chart, table, widget, period, previous period, compare_previous, PERIOD_FROM, filters, dashboards.toml, cache]
 ---
 
 # Dashboards
 
-A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Settings → Dashboards**.
+A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Liberty Next → Build → Dashboards**.
 
 ---
 
@@ -116,7 +116,7 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Figure** | A figure card read from the query's **first row**, with a line of detail under it. | **Value column**, **Format**, **Unit**, **Sub line**. |
 | **List** | A decision or ranked list: one line per row, with a coloured dot, a title, a subtitle, a figure and a tag. | **Title column** (required), **Subtitle column**, **Value column**, format, unit, **Count column** and **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
 | **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
-| **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
+| **Chart** | A bar, line, area or pie chart. | A chart saved in **Liberty Next → Build → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 | **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
 | **Jobs** | The Nomaflow jobs with their next run, their schedule in words and their last state, and **Run now** / **Pause** / **Resume**. Superusers only. | **Jobs (ids, in order)** — empty = every scheduled job —, **Only these tags**, **Max rows** (12 when blank). |
@@ -262,7 +262,7 @@ A dashboard can carry a **period**: a date range control in its bar that applies
 - **A free range**: pick a start date, then an end date, in the two-month calendar, then **Apply**.
 - **Date basis**: when the dashboard offers several dates (*Document date*, *Paid on*), a **Date** choice at the bottom of the panel picks the one the range applies to.
 
-The dashboard opens on its own default preset, otherwise on the application's default (**Settings → App → Default period (dashboards)**, *This month* by default). A choice lasts as long as the dashboard tab stays open.
+The dashboard opens on its own default preset, otherwise on the application's default (**Liberty Next → Administer → App → Default period (dashboards)**, *This month* by default). A choice lasts as long as the dashboard tab stays open.
 
 ### What the queries receive
 
@@ -300,7 +300,7 @@ With **All**, nothing is filtered: a query that returns one total row first, the
 
 ## Refresh and cache \{#cache\}
 
-When a dashboard is opened again, each widget reuses its last result for **Settings → App → Dashboard cache (seconds, 0 = none)** — 60 seconds by default. The **↻** button in the bar reloads everything, and *Updated at 14:05* says when the data was fetched. The cache is kept in the browser, per user, until the page is reloaded.
+When a dashboard is opened again, each widget reuses its last result for **Liberty Next → Administer → App → Dashboard cache (seconds, 0 = none)** — 60 seconds by default. The **↻** button in the bar reloads everything, and *Updated at 14:05* says when the data was fetched. The cache is kept in the browser, per user, until the page is reloaded.
 
 ---
 
@@ -316,13 +316,13 @@ The **Excel** and **PDF** buttons, next to **↻**, export what the bar holds: t
 | Text, Links | The text; the links as rows. | The text; a table of the links. |
 | Chart | Its data table. | The chart drawn, with a legend and the values on the bars. |
 
-A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Settings → App](./build/settings-app.md#branding).
+A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Liberty Next → Administer → App](./build/settings-app.md#branding).
 
 ---
 
 ## Building a dashboard \{#builder\}
 
-In **Settings → Dashboards**, pick the application, then add or open a dashboard. The editor has:
+In **Liberty Next → Build → Dashboards**, pick the application, then add or open a dashboard. The editor has:
 
 | Part | Content |
 |---|---|

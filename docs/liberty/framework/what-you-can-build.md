@@ -91,7 +91,7 @@ An app opened to users outside the team, each seeing only their own rows.
 | Roles: which menus, screens and queries each user reaches | [Roles & permissions](./build/secure/roles-and-permissions.md) |
 | Data scope: rows filtered by user attributes, applied by the server | [Row-level access](./cookbook/row-level-access.md) |
 | Queries filtered on the signed-in user with `{{LOGIN}}` | [Parameter binding](./build/queries/parameter-binding.md#tokens) |
-| App name, colours and fonts | Settings → Theme |
+| App name, colours and fonts | Liberty Next → Administer → Theme |
 
 ---
 

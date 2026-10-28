@@ -205,7 +205,7 @@ liberty-ops status
 
 `liberty-ops` pilote l'unité nommée `liberty-next` ; définir `LIBERTY_SERVICE` si la vôtre porte un autre nom.
 
-Le serveur écoute sur `http://<hôte>:8000/` (le port de **Paramètres → App**). Se connecter en **`admin`**, puis coller la clé de licence dans **Paramètres → App → License**. Pour le HTTPS, placer devant un proxy inverse au choix, en relayant aussi le trafic WebSocket (`/socket.io`).
+Le serveur écoute sur `http://<hôte>:8000/` (le port de **Liberty Next → Administrer → App**). Se connecter en **`admin`**, puis coller la clé de licence dans **Liberty Next → Administrer → App → License**. Pour le HTTPS, placer devant un proxy inverse au choix, en relayant aussi le trafic WebSocket (`/socket.io`).
 
 ---
 

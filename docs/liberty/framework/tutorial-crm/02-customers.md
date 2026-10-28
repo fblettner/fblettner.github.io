@@ -89,7 +89,7 @@ The `customers` table becomes a screen: a grid with filters, an edit dialog, add
 
 ## The queries
 
-1. **Settings → Connectors**, select `crm`, choose **Tables** in the mode bar.
+1. **Liberty Next → Build → Connectors**, select `crm`, choose **Tables** in the mode bar.
 2. **＋ Add queries → Generate from DB**, pick the `customers` table.
 3. Keep every column, tick **key** on `ID`, keep the four statements. Save.
 
@@ -119,7 +119,7 @@ Each query has its own permission — `sql:crm:customers_get`, `sql:crm:customer
 
 ## The screen
 
-1. **Settings → Screens → ＋ Add scope**, pick `crm`: the `crm` chip appears.
+1. **Liberty Next → Build → Screens → ＋ Add scope**, pick `crm`: the `crm` chip appears.
 2. **＋ Add screen**, id `customers`, then click the card to open the screen editor.
 
 | Tab | Setting |
@@ -135,7 +135,7 @@ Save. The labels typed on the columns can later move to the dictionary, which se
 
 ## The menu
 
-1. **Settings → Menus → + Add scope**, pick `crm`: the app's empty tree appears.
+1. **Liberty Next → Build → Menus → + Add scope**, pick `crm`: the app's empty tree appears.
 2. **＋ Folder**: label `Sales`, icon `briefcase`.
 3. On the folder, **＋ Add child**: label `Customers`, type `screen`, target `customers_get`, icon `users`.
 4. Save.

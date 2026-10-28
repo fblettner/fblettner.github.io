@@ -1,12 +1,12 @@
 ---
 title: Historique & versionnage de la configuration
-description: "Chaque sauvegarde de configuration est capturée, chaque sauvegarde d'écran capture sa clôture de dépendances sous forme de bundle restaurable, les changements de version sont journalisés et les notes de version se lisent dans l'application — le tout sous Paramètres → Historique."
+description: "Chaque sauvegarde de configuration est capturée, chaque sauvegarde d'écran capture sa clôture de dépendances sous forme de bundle restaurable, les changements de version sont journalisés et les notes de version se lisent dans l'application — le tout sous Liberty Next → Déployer → Historique."
 keywords: [Liberty Framework, historique de configuration, versionnage, snapshot, restauration, purge de rétention, historique des mises à niveau, notes de version, bundle, clôture de dépendances]
 ---
 
 # Historique & versionnage de la configuration
 
-Liberty garde un historique de votre configuration. À chaque sauvegarde d'un fichier de configuration depuis l'interface Paramètres, l'état précédent est capturé ; à chaque sauvegarde d'un **écran**, le framework capture aussi cet écran *avec ses dépendances* sous forme de bundle restaurable. Vous pouvez comparer un snapshot à ce qui est actif, le restaurer, élaguer l'historique et voir précisément quand la version de l'application a changé — le tout depuis **Paramètres → Historique**.
+Liberty garde un historique de la configuration. À chaque enregistrement d'un fichier de configuration depuis les pages de Liberty Next, l'état précédent est conservé ; à chaque enregistrement d'un **écran**, le framework conserve aussi cet écran *avec ses dépendances*, sous une forme restaurable. Un instantané se compare à ce qui est actif, se restaure, l'historique s'élague, et la page indique précisément quand la version de l'application a changé — le tout depuis **Liberty Next → Déployer → Historique**.
 
 ---
 
@@ -91,7 +91,7 @@ Les snapshots sont adressés par leur contenu : sauvegarder un fichier inchangé
 
 ---
 
-## Paramètres → Historique
+## Liberty Next → Déployer → Historique
 
 L'onglet **Historique** a trois modes :
 
@@ -125,13 +125,13 @@ Les deux règles se combinent en OU, et la version la plus récente de chaque fi
 
 ## Historique des mises à niveau
 
-À chaque changement de version de l'application en cours d'exécution, le framework l'enregistre sous **Paramètres → Historique → Mises à niveau** : une ligne par composant — **Framework** (Liberty Next) et **Apps** (Liberty Apps) — avec la version de départ et d'arrivée. Le premier lancement d'un composant est journalisé comme une *installation* ; les changements de version ultérieurs comme une *mise à niveau*. La liste est enregistrée automatiquement au démarrage et reste idempotente : redémarrer sur la même version n'ajoute rien. Sélectionner une ligne affiche la section correspondante des notes de version.
+À chaque changement de version de l'application en cours d'exécution, le framework l'enregistre sous **Liberty Next → Déployer → Historique → Mises à niveau** : une ligne par composant — **Framework** (Liberty Next) et **Apps** (Liberty Apps) — avec la version de départ et d'arrivée. Le premier lancement d'un composant est journalisé comme une *installation* ; les changements de version ultérieurs comme une *mise à niveau*. La liste est enregistrée automatiquement au démarrage et ne crée pas de doublon : redémarrer sur la même version n'ajoute rien. Sélectionner une ligne affiche la section correspondante des notes de version.
 
 ---
 
 ## Les notes de version, dans l'application
 
-L'onglet **Paramètres → Notes de version** est le journal complet livré avec le build. Il lit les notes du framework (et celles des apps, quand Liberty Apps est installé), avec une table des matières par version et un sélecteur de composant quand il y en a plusieurs. Le texte du journal est **bilingue** — il affiche les notes françaises quand l'interface est en français, anglaises sinon.
+L'onglet **Liberty Next → Documenter → Notes de version** est le journal complet livré avec le build. Il lit les notes du framework (et celles des apps, quand Liberty Apps est installé), avec une table des matières par version et un sélecteur de composant quand il y en a plusieurs. Le texte du journal est **bilingue** — il affiche les notes françaises quand l'interface est en français, anglaises sinon.
 
 ---
 

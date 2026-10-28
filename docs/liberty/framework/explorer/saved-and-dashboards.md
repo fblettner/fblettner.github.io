@@ -141,7 +141,7 @@ In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, e
 | KPI | A row of totals. | Cards. |
 | Detail | Its rows. | A table. |
 
-Numbers in the PDF follow the reader's language (`1 234,5` / `1,234.5`). The same document is produced when a Nomaflow job renders the analysis on a schedule — see [Steps → Report](../../nomaflow/steps.md#report). Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
+Numbers in the PDF follow the reader's language (`1 234,5` / `1,234.5`). The same document is produced when a Nomaflow job renders the analysis on a schedule — see [Steps → Report](../../nomaflow/steps.md#report). Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Liberty Next → Administer → App](../build/settings-app.md).
 
 ---
 

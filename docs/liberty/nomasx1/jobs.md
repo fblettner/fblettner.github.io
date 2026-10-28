@@ -46,4 +46,4 @@ Nomasx-1 delivers two roles, created by a job the administrator runs once after 
 | `nomasx1_auditor` | Reading every screen, dashboard and Explorer model, the AI assistant, and running the two reports; it receives the monthly reports. |
 | `nomasx1_admin` | Everything, the settings and every Nomasx-1 job included. |
 
-Assign them to users under **Settings → Access**. See [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).
+Assign them to users under **Liberty Next → Administer → Access**. See [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).

@@ -1,12 +1,12 @@
 ---
 title: Tableaux de bord
-description: "Les tableaux de bord de Liberty Next : indicateurs, chiffres, listes de décisions, barres de proportion, graphiques et tableaux sur des requêtes de connecteurs, dans une grille de 12 colonnes, export Excel et PDF, une période avec préréglages et comparaison avec la période précédente, des filtres du dictionnaire, un cache avec Actualiser — construits dans Paramètres → Tableaux de bord et ouverts depuis le menu."
+description: "Les tableaux de bord de Liberty Next : indicateurs, chiffres, listes de décisions, barres de proportion, graphiques et tableaux sur des requêtes de connecteurs, dans une grille de 12 colonnes, export Excel et PDF, une période avec préréglages et comparaison avec la période précédente, des filtres du dictionnaire, un cache avec Actualiser — construits dans Liberty Next → Construire → Tableaux de bord et ouverts depuis le menu."
 keywords: [Liberty Next, tableau de bord, KPI, indicateur, synthèse, liste, barres, export, Excel, PDF, graphique, table, widget, période, période précédente, compare_previous, PERIOD_FROM, filtres, dashboards.toml, cache]
 ---
 
 # Tableaux de bord
 
-Un tableau de bord place côte à côte plusieurs **widgets** — chiffres clés, listes de décisions, barres de proportion, graphiques, tableaux — alimentés chacun par une requête d'un connecteur. Il s'ouvre depuis le menu comme un écran, et se construit dans **Paramètres → Tableaux de bord**.
+Un tableau de bord place côte à côte plusieurs **widgets** — chiffres clés, listes de décisions, barres de proportion, graphiques, tableaux — alimentés chacun par une requête d'un connecteur. Il s'ouvre depuis le menu comme un écran, et se construit dans **Liberty Next → Construire → Tableaux de bord**.
 
 ---
 
@@ -116,7 +116,7 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | **Chiffre** | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Colonne de valeur**, **Format**, **Unité**, **Ligne secondaire**. |
 | **Liste** | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Colonne de titre** (obligatoire), **Colonne de sous-titre**, **Colonne de valeur**, format, unité, **Colonne de compte** et **Libellé du compte**, **Colonne de tonalité**, **Colonne d'étiquette**, **Lignes affichées**. |
 | **Barres** | Un classement avec une barre de proportion sous chaque ligne. | **Colonne de libellé** et **Colonne de valeur** (obligatoires), **Colonne de sous-libellé**, format, unité, **Barre en part de**, **Note sous les barres**, **Lignes affichées**. |
-| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
+| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Liberty Next → Construire → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
 | **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
 | **Tâches** | Les tâches Nomaflow avec leur prochaine exécution, leur planification en clair et leur dernier état, et **Exécuter** / **Mettre en pause** / **Reprendre**. Réservé aux superutilisateurs. | **Tâches (ids, dans l'ordre)** — vide = toutes les tâches planifiées —, **Seulement ces étiquettes**, **Lignes maximum** (12 si vide). |
@@ -262,7 +262,7 @@ Un tableau de bord peut porter une **période** : un sélecteur de dates dans sa
 - **Une période libre** : choisir une date de début puis une date de fin dans le calendrier de deux mois, puis **Appliquer**.
 - **Base de dates** : quand le tableau de bord propose plusieurs dates (*Date du document*, *Payée le*), un choix **Date** en bas du panneau indique celle à laquelle s'applique la période.
 
-Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Paramètres → App → Période par défaut (tableaux de bord)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
+Le tableau de bord s'ouvre sur son propre préréglage, sinon sur celui de l'application (**Liberty Next → Administrer → App → Période par défaut (tableaux de bord)**, *Ce mois-ci* par défaut). Un choix dure tant que l'onglet du tableau de bord reste ouvert.
 
 ### Ce que reçoivent les requêtes
 
@@ -300,7 +300,7 @@ Avec **Tous**, rien n'est filtré : une requête qui renvoie d'abord une ligne d
 
 ## Actualisation et cache \{#cache\}
 
-Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Paramètres → App → Cache des tableaux de bord (secondes, 0 = aucun)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
+Quand un tableau de bord est rouvert, chaque widget réutilise son dernier résultat pendant **Liberty Next → Administrer → App → Cache des tableaux de bord (secondes, 0 = aucun)** — 60 secondes par défaut. Le bouton **↻** de la barre recharge tout, et *Mis à jour à 14:05* indique l'heure des données. Le cache est tenu par le navigateur, par utilisateur, jusqu'au rechargement de la page.
 
 ---
 
@@ -316,13 +316,13 @@ Les boutons **Excel** et **PDF**, à côté de **↻**, exportent ce que montre 
 | Texte, liens | Le texte ; les liens en lignes. | Le texte ; un tableau des liens. |
 | Graphique | Son tableau de données. | Le graphique dessiné, avec sa légende et les valeurs sur les barres. |
 
-Un widget dont la requête échoue devient une section d'erreur ; le reste de l'export est produit. Les nombres suivent la langue du lecteur (`1 234,5` / `1,234.5`). La charte PDF se règle dans [Paramètres → App](./build/settings-app.md#branding).
+Un widget dont la requête échoue devient une section d'erreur ; le reste de l'export est produit. Les nombres suivent la langue du lecteur (`1 234,5` / `1,234.5`). La charte PDF se règle dans [Liberty Next → Administrer → App](./build/settings-app.md#branding).
 
 ---
 
 ## Construire un tableau de bord \{#builder\}
 
-Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
+Dans **Liberty Next → Construire → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
 
 | Partie | Contenu |
 |---|---|

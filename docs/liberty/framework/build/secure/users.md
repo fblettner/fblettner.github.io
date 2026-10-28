@@ -1,12 +1,12 @@
 ---
 title: Users
-description: "The Settings → Access → Users tab — add local users, manage OIDC users that landed at first sign-in, assign roles, toggle is_active and is_superuser, reset passwords."
+description: "The Liberty Next → Administer → Access → Users tab — add local users, manage OIDC users that landed at first sign-in, assign roles, toggle is_active and is_superuser, reset passwords."
 keywords: [Liberty Framework, users, AccessBuilder, local user, OIDC user, password, is_active, is_superuser, roles assignment]
 ---
 
 # Users
 
-A **user** in Liberty is the identity that signs in and carries roles. The Settings → Access → Users tab is where you create local users, see OIDC users that have signed in at least once, assign roles, and toggle the active and superuser flags.
+A **user** in Liberty is the identity that signs in and carries roles. The Liberty Next → Administer → Access → Users tab is where you create local users, see OIDC users that have signed in at least once, assign roles, and toggle the active and superuser flags.
 
 The same UI manages both identity backends (TOML / DB) and both identity sources (local / OIDC). The differences land on **what fields are editable**: OIDC users have no password (it's at the IdP), and their `provider` field is read-only.
 
@@ -201,7 +201,7 @@ The standard onboarding sequence:
 1. The new hire signs in via OIDC for the first time.
 2. They land with **no roles** → they see an empty app.
 3. They tell their admin "I'm in but see nothing".
-4. The admin opens *Settings → Access → Users*, finds them, assigns the right roles, saves.
+4. The admin opens *Liberty Next → Administer → Access → Users*, finds them, assigns the right roles, saves.
 5. The user refreshes the page (or signs out + back in) and now has access.
 
 For installs that want to pre-create OIDC users with roles already attached, scripts can hit `POST /admin/access/users` with `provider = "oidc"` and the expected `provider_subject` (the `sub` claim). On first sign-in the framework finds the pre-created user and uses it. Standard installs skip this and assign roles after first sign-in.
@@ -218,7 +218,7 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 
 ### Onboard a local hire
 
-1. *Settings → Access → Users → ＋ Add user*.
+1. *Liberty Next → Administer → Access → Users → ＋ Add user*.
 2. Username = corporate handle, password = a one-time string they'll change, email = their address.
 3. Assign roles per their team (`analyst`, `reporter`, …).
 4. Save.
@@ -229,12 +229,12 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 
 1. They sign in via OIDC the first time — Liberty auto-creates the account.
 2. They report no access.
-3. *Settings → Access → Users*, find them, assign roles, save.
+3. *Liberty Next → Administer → Access → Users*, find them, assign roles, save.
 4. They refresh → they're in.
 
 ### Change a user's password (you're the admin)
 
-1. *Settings → Access → Users*, click the user.
+1. *Liberty Next → Administer → Access → Users*, click the user.
 2. Type the new password in the **Password** field (8+ chars).
 3. Save.
 4. Tell the user. They sign in with the new password; their existing session keeps working until the access token expires.
@@ -250,7 +250,7 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| OIDC user has no roles after sign-in. | Expected — the operator hasn't assigned any yet. | Open *Settings → Access → Users*, assign roles. |
+| OIDC user has no roles after sign-in. | Expected — the operator hasn't assigned any yet. | Open *Liberty Next → Administer → Access → Users*, assign roles. |
 | Editing an OIDC user's email reverts on next sign-in. | The IdP claim wins; the framework refreshes from the latest token. | Edit the email at the IdP. |
 | Trying to set a password for an OIDC user. | Backend rejects with 400. | OIDC users have no local password — they sign in through the provider. |
 | Changing a user's role doesn't take effect immediately. | The user's JWT still has the old roles. | They refresh (or sign-out + sign-in) — within the access token TTL the new roles apply. |

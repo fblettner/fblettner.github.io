@@ -173,7 +173,7 @@ L'installation Docker les génère tous deux dans `release/.env` (mode `0600`) ;
 1. Les paramètres sont lus ; les références `${VARIABLE}` des fichiers TOML sont remplacées par l'environnement.
 2. *Docker uniquement :* les secrets fournis sous forme de fichiers sont lus, le propriétaire du volume de configuration et du dossier des applications est corrigé, puis le processus abandonne les droits root et s'exécute sous l'utilisateur `liberty` (uid 1000). Au premier démarrage sans applications sous licence, les fichiers de configuration par défaut sont copiés dans `liberty-config` — un fichier existant n'est jamais écrasé.
 3. *Docker uniquement :* `liberty-admin init-db` crée les tables manquantes du framework et, au tout premier démarrage, l'utilisateur `admin`. Sur une installation Python, cette commande est lancée une fois à la main.
-4. Les tables du framework sont comparées à la version du code : une colonne manquante est ajoutée et enregistrée dans **Paramètres → History → Upgrades**.
+4. Les tables du framework sont comparées à la version du code : une colonne manquante est ajoutée et enregistrée dans **Liberty Next → Déployer → Historique → Upgrades**.
 5. Les migrations de schéma en attente des applications sous licence sont signalées dans le journal ; la mise à jour ou `migrate` les applique (avec Docker, aussi au démarrage si `LIBERTY_AUTO_MIGRATE=1`).
 6. Le serveur répond, même si la base du framework est encore injoignable — pour qu'un pool puisse être corrigé depuis **Paramètres**. `/ready` indique quand la base répond.
 

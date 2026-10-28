@@ -1,6 +1,6 @@
 ---
 title: Connexion OIDC
-description: "Recette — permettre aux utilisateurs de se connecter avec le fournisseur d'identité de l'entreprise (Microsoft Entra ID, Keycloak, Okta, Auth0…) : déclarer l'application chez le fournisseur, renseigner Paramètres → App → OpenID Connect (SSO), puis attribuer leurs rôles aux nouveaux utilisateurs."
+description: "Recette — permettre aux utilisateurs de se connecter avec le fournisseur d'identité de l'entreprise (Microsoft Entra ID, Keycloak, Okta, Auth0…) : déclarer l'application chez le fournisseur, renseigner Liberty Next → Administrer → App → OpenID Connect (SSO), puis attribuer leurs rôles aux nouveaux utilisateurs."
 keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, connexion]
 ---
 
@@ -28,7 +28,7 @@ Relever l'**identifiant client**, le **secret client** et l'**URL de découverte
 
 ### 2. Renseigner les paramètres
 
-**Paramètres → App → OpenID Connect (SSO)** :
+**Liberty Next → Administrer → App → OpenID Connect (SSO)** :
 
 | Champ | Valeur |
 |---|---|
@@ -42,7 +42,7 @@ Enregistrer : la modification s'applique sans redémarrage. Voir [Paramètres de
 
 ### 3. Première connexion et rôles
 
-Les utilisateurs apparaissent dans **Paramètres → Access → Users** à leur première connexion, actifs et **sans rôle** : l'application leur apparaît vide tant qu'aucun rôle ne leur est attribué. Usage courant : la personne se connecte une première fois, puis un administrateur lui attribue ses rôles. Voir [Utilisateurs](../build/secure/users.md).
+Les utilisateurs apparaissent dans **Liberty Next → Administrer → Accès → Users** à leur première connexion, actifs et **sans rôle** : l'application leur apparaît vide tant qu'aucun rôle ne leur est attribué. Usage courant : la personne se connecte une première fois, puis un administrateur lui attribue ses rôles. Voir [Utilisateurs](../build/secure/users.md).
 
 ## Vérifications
 

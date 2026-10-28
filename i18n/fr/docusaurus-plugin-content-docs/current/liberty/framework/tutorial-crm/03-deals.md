@@ -80,7 +80,7 @@ Trois volets dans cette étape :
 
 ### Les entrées tirées des tables
 
-**Paramètres → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** :
+**Liberty Next → Construire → Dictionnaire**, choisir la portée `crm`, puis **Scan a table** :
 
 1. Connecteur `crm`, table `customers`, **Scan** : une proposition par colonne, les manquantes cochées.
 2. Renseigner le **Label** de chacune (`Nom`, `Secteur`, `Pays`, `Statut`, `E-mail`…), puis **Add**.
@@ -98,7 +98,7 @@ La grille affiche *Actif* au lieu de `ACTIVE`, et le dialogue propose les trois 
 
 Un lookup remplace un code (l'identifiant du client) par un libellé (son nom), à partir d'une requête.
 
-1. **Paramètres → Connecteurs → crm → Lookups → ＋ Ajouter un lookup** : table `customers`, colonne valeur `ID`, colonne libellé `NAME`. L'assistant écrit la requête et le lookup `customers` du dictionnaire.
+1. **Liberty Next → Construire → Connecteurs → crm → Lookups → ＋ Ajouter un lookup** : table `customers`, colonne valeur `ID`, colonne libellé `NAME`. L'assistant écrit la requête et le lookup `customers` du dictionnaire.
 2. Même chose pour les étapes : table `deal_stages`, valeur `CODE`, libellé `LABEL`.
 3. Dans le dictionnaire, entrée `CUSTOMER_ID` : **Rules** `LOOKUP`, **Rules values** `customers` ; entrée `STAGE` : **Rules** `LOOKUP`, **Rules values** `deal_stages`.
 

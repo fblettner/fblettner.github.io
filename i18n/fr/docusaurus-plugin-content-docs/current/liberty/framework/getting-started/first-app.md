@@ -50,7 +50,7 @@ L'exemple utilise le pool `default` et une petite table `tasks`.
 
 ## Étape 1 — Le pool \{#pool\}
 
-Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#pools).
+Ouvrir **Liberty Next → Administrer → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#pools).
 
 Créer la table d'exemple avec n'importe quel client SQL connecté à cette base :
 
@@ -71,7 +71,7 @@ INSERT INTO tasks (id, title, status, due_date) VALUES
 
 ## Étape 2 — Le connecteur et ses requêtes \{#connector\}
 
-1. **Paramètres → Connecteurs → ＋ Connecteur** : nom `tasks`, type **SQL**, pool `default`. Enregistrer.
+1. **Liberty Next → Construire → Connecteurs → ＋ Connecteur** : nom `tasks`, type **SQL**, pool `default`. Enregistrer.
 2. Avec `tasks` sélectionné, choisir **Tables** dans la barre de modes, puis **＋ Ajouter des requêtes → Générer depuis la BDD**.
 3. Dans l'assistant CRUD, choisir la table `tasks`, garder toutes les colonnes, cocher **clé** sur `ID` et conserver les quatre instructions (SELECT, UPDATE, INSERT, DELETE).
 4. Enregistrer. Le connecteur contient désormais `tasks_get`, `tasks_put`, `tasks_post` et `tasks_delete` :
@@ -87,7 +87,7 @@ Les colonnes sont lues dans la base à l'exécution de la requête ; rien d'autr
 
 ## Étape 3 — L'écran \{#screen\}
 
-1. **Paramètres → Écrans → ＋ Ajouter une portée**, choisir `tasks` : la pastille `tasks` apparaît.
+1. **Liberty Next → Construire → Écrans → ＋ Ajouter une portée**, choisir `tasks` : la pastille `tasks` apparaît.
 2. **＋ Ajouter un écran**, identifiant `tasks`. Cliquer sur la nouvelle carte pour ouvrir l'éditeur d'écran.
 3. Onglet **Général** : libellé `Tâches` ; cocher **Editable** pour la saisie dans la grille.
 4. Onglet **Requêtes** : lecture `tasks_get`, mise à jour `tasks_put`, insertion `tasks_post`, suppression `tasks_delete`.
@@ -100,7 +100,7 @@ Les colonnes de la grille viennent de la requête de lecture ; leurs libellés e
 
 ## Étape 4 — L'entrée de menu \{#menu\}
 
-1. **Paramètres → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
+1. **Liberty Next → Construire → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
 2. **＋ Élément**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
 3. Enregistrer.
 

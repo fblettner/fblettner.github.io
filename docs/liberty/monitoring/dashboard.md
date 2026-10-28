@@ -6,7 +6,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 # The Monitoring page
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). Its three views are picked from a row of cards at the top — an icon, the name and one line on what the view is for. This page describes the first, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
+**Liberty Next → Operate → Monitoring** opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). Its three views are picked from a row of cards at the top — an icon, the name and one line on what the view is for. This page describes the first, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
 
 ---
 
@@ -150,7 +150,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 One row per pool: **Pool**, **Dialect**, **In use** (connections busy), **Idle** (open and free), **Overflow** (connections beyond the pool's size). *not opened* means no query has used the pool yet.
 
-All connections *In use* with *Overflow* above 0 means queries wait for a connection: look for slow queries in the log, or raise the pool's size in **Settings → Pools**.
+All connections *In use* with *Overflow* above 0 means queries wait for a connection: look for slow queries in the log, or raise the pool's size in **Liberty Next → Administer → Pools**.
 
 ---
 
