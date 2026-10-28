@@ -148,6 +148,7 @@ L'installation légère n'a pas de Traefik, donc pas de HTTPS propre : sur un r�
 | `--apps <wheel ou URL>` | Installer les applications sous licence dès que l'ensemble est démarré — voir [Applications sous licence](./deploy-prebuilt-apps.md). |
 | `--ssl letsencrypt --domain D --email E` | HTTPS avec un certificat Let's Encrypt (installation complète). |
 | `--ssl provided --domain D --cert-dir DIR --cert-file F --key-file K` | HTTPS avec un certificat fourni (installation complète). |
+| `--db external --db-host H [--db-port 5432] [--db-user liberty] [--db-name liberty] [--db-password-env VAR]` | La base sur un serveur PostgreSQL extérieur à l'ensemble : aucun Postgres intégré n'est démarré. Sans `--db-password-env`, le mot de passe est demandé ; il ne peut pas contenir `$`. Voir [Base externe](./operations.md#external-db). |
 | `--reset` | **Supprime** l'ensemble, ses volumes et `.env`, puis s'arrête. Relancer ensuite l'installation. |
 
 Une installation de production en une ligne :

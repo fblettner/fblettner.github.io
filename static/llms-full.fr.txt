@@ -2593,6 +2593,7 @@ L'installation légère n'a pas de Traefik, donc pas de HTTPS propre : sur un r�
 | `--apps <wheel ou URL>` | Installer les applications sous licence dès que l'ensemble est démarré — voir [Applications sous licence](./deploy-prebuilt-apps.md). |
 | `--ssl letsencrypt --domain D --email E` | HTTPS avec un certificat Let's Encrypt (installation complète). |
 | `--ssl provided --domain D --cert-dir DIR --cert-file F --key-file K` | HTTPS avec un certificat fourni (installation complète). |
+| `--db external --db-host H [--db-port 5432] [--db-user liberty] [--db-name liberty] [--db-password-env VAR]` | La base sur un serveur PostgreSQL extérieur à l'ensemble : aucun Postgres intégré n'est démarré. Sans `--db-password-env`, le mot de passe est demandé ; il ne peut pas contenir `$`. Voir [Base externe](./operations.md#external-db). |
 | `--reset` | **Supprime** l'ensemble, ses volumes et `.env`, puis s'arrête. Relancer ensuite l'installation. |
 
 Une installation de production en une ligne :
@@ -3302,6 +3303,7 @@ Liberty Next — /opt/liberty-next/release
   apps overlay  yes (/opt/liberty-next/release/apps)
   image tag     7.0.58
   chain         docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
+  database      embedded — the bundled Postgres (pg)
   container     running/healthy
   framework     7.0.58
   apps bundle   7.0.58
@@ -3314,6 +3316,7 @@ Liberty Next — /opt/liberty-next/release
 |---|---|
 | `layout`, `tls`, `apps overlay`, `chain` | Ce qui a été installé et les fichiers compose enregistrés dans `.env`. |
 | `image tag` | `latest` ou la version fixée. |
+| `database` | L'emplacement de la base : *embedded — the bundled Postgres* (le Postgres intégré), *embedded — SQLite* (déploiement léger), ou *external — utilisateur@hôte:port/nom*. |
 | `container` | État et santé Docker — `unhealthy` quand la base du framework ne répond pas. |
 | `framework`, `apps bundle` | Les versions réellement en service. |
 | `/ready` | Le contrôle de disponibilité du serveur. |
@@ -3372,6 +3375,29 @@ Une sauvegarde hebdomadaire conservée 60 jours, par cron :
 ```
 
 Copier les sauvegardes hors du serveur. `.env.snapshot` contient la clé maître : sans elle, la configuration restaurée ne peut pas déchiffrer ses mots de passe.
+
+Avec une [base externe](#external-db), la base n'est **pas** dans la sauvegarde — `./liberty backup` le signale : la sauvegarder sur son propre serveur (`pg_dump`, `pg_dumpall`).
+
+---
+
+## Base externe \{#external-db\}
+
+La base du framework — et celles des applications sous licence — peuvent résider sur un serveur PostgreSQL extérieur à l'ensemble : une base managée, le serveur de bases de l'entreprise.
+
+| Commande | Effet |
+|---|---|
+| `./liberty db` | L'emplacement actuel de la base. |
+| `./liberty db dump [fichier.sql.gz]` | Un `pg_dumpall` du Postgres intégré, pour transporter les données — par défaut sous `backups/`. Déploiement complet uniquement. |
+| `./liberty db external --host H [--port P] [--user U] [--name D] [--password-env VAR] [--yes]` | Bascule l'installation sur ce serveur : la connexion de l'application et les pools qui désignaient le serveur intégré — ceux des applications sous licence — y sont redirigés, l'ensemble redémarre, et le Postgres intégré est arrêté, son volume conservé. La commande présente le changement et demande confirmation (`--yes` l'évite). |
+| `./liberty db embedded [--yes]` | Revient au Postgres intégré (déploiement complet) ou à SQLite (déploiement léger). |
+
+**Les données ne sont pas copiées.** Pour déplacer une installation existante :
+
+1. `./liberty db dump` sur l'installation actuelle ;
+2. restaurer la sauvegarde sur le nouveau serveur — `gunzip -c backups/pg-dumpall-….sql.gz | psql -h <hôte> -U postgres -d postgres` ;
+3. `./liberty db external --host <hôte>`.
+
+Revenir avec `./liberty db embedded` ne recopie pas ce qui a été écrit entre-temps sur le serveur externe. Le choix est enregistré dans `.env` avec les fichiers compose : `start`, `upgrade` et `backup` le suivent. `./liberty doctor` avertit quand le Postgres intégré fonctionne encore alors que l'application utilise le serveur externe. Une nouvelle installation va directement sur un serveur externe avec `./liberty install full --db external --db-host …` — voir [Options d'installation](./docker.md#options).
 
 ---
 
@@ -9988,9 +10014,11 @@ L'onglet **Paramètres → Notes de version** est le journal complet livré avec
 ## Liberty Next — Packages
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/packages/
 
-Transporter la configuration d'une installation Liberty vers une autre. la page Package de Nomaflow : sélectionner quelques écrans / entrées de menu / tableaux de bord comme amorces, le résolveur de dépendances parcourt tout ce qu'ils atteignent (requêtes, dictionnaire, graphiques) et le package est exporté sous forme de ZIP. Sur l'installation cible, téléverser le ZIP et choisir une stratégie de fusion (merge / overwrite / replace all). La même interface gère les deux côtés.
+Transporter la configuration d'une installation Liberty vers une autre avec la page Paquet : choisir comme amorces des écrans, entrées de menu, tableaux de bord, modèles de l'explorateur, tâches, règles de notification, actions partagées ou contenus de l'assistant ; le résolveur de dépendances parcourt tout ce qu'ils atteignent et le paquet est exporté en ZIP — ou promu directement vers une autre instance. Sur la cible, l'import est d'abord présenté élément par élément, avec le détail des champs, avant d'être appliqué.
 
-La page **Package** (menu Nomaflow, adresse `/nomaflow/package`) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, permet de choisir une stratégie de fusion et l'applique à la configuration active — suivi d'un rechargement automatique.
+La page **Paquet** (*Nomaflow → Déploiement → Package*, ou *Paramètres → Paquet*) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, présente ce qu'il changerait, puis l'applique à la configuration active — suivi d'un rechargement automatique. Une fois une instance cible déclarée, le paquet peut aussi lui être **promu** directement, sans manipuler le ZIP.
+
+La page propose trois vues, choisies dans des cartes en haut de page : **Construire un paquet**, **Importer un paquet** et **Promotion**. Elle est réservée aux superutilisateurs.
 
 C'est le parcours standard *préproduction → production*. C'est aussi l'outil adapté à la réutilisation inter-clients : construire un package « starter » d'écrans sélectionnés, le remettre à une nouvelle installation, l'appliquer avec `replace_all`, et c'est terminé.
 
@@ -10004,14 +10032,15 @@ C'est le parcours standard *préproduction → production*. C'est aussi l'outil 
 | Livrer un ensemble d'écrans sélectionnés à une installation toute neuve. | Construire, appliquer avec `replace_all`. |
 | Ajouter quelques nouveaux écrans à une installation client existante sans toucher à ses modifications. | Construire, appliquer avec `merge`. |
 | Livrer une nouvelle version d'une application maintenue par l'éditeur quand le client a des modifications locales sur quelques écrans. | Construire, appliquer avec `overwrite` — les entités marquées `override = true` sur la cible sont préservées automatiquement. |
-| Promouvoir un job Nomaflow entre environnements. | Utiliser l'icône **Exporter** sur la ligne de la tâche, dans la page des Tâches (décrit dans [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)) ; l'écran Package ne regroupe pas les jobs. |
+| Promouvoir des écrans en production en une étape, sans ZIP. | **Promouvoir vers…** dans Construire — voir [Promotion](#promotion). |
+| Promouvoir une tâche Nomaflow entre environnements. | La choisir comme amorce sous *Tâches nomaflow*, ou utiliser l'icône **Exporter** sur la ligne de la tâche, dans la page des Tâches. |
 | Livrer un lot complet sous licence (Nomasx-1 + plugins Nomajde + configuration). | Pas par ce biais. Utiliser l'installeur wheel **`liberty-apps`** — voir [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 L'écran Package livre de la **configuration déclarative** — des fichiers TOML. Il ne livre ni code Python, ni JAR Java, ni packages de plugins, ni contenu de base de données. Pour cela, l'installeur wheel est le canal canonique.
 
 ---
 
-## L'onglet Build
+## La vue Construire
 
 Le panneau de gauche liste chaque **candidat amorce** de l'installation — écrans, entrées de menu, tableaux de bord. Le panneau de droite affiche la **clôture de dépendances** de tout ce qui est coché à gauche.
 
@@ -10021,9 +10050,14 @@ Trois sections dans le panneau de gauche :
 
 | Section | Source |
 |---|---|
-| **Screens** | Tous les écrans connus de l'installation — regroupés par application. |
-| **Menu items** | Toutes les entrées de menu, par application. |
-| **Dashboards** | Tous les tableaux de bord, par portée. |
+| **Écrans** | Tous les écrans connus de l'installation — regroupés par application. |
+| **Entrées de menu** | Toutes les entrées de menu, par application. |
+| **Tableaux de bord** | Tous les tableaux de bord, par portée. |
+| **Modèles de l'Explorateur** | Les modèles de l'explorateur de données, avec leurs analyses et tableaux de bord livrés. |
+| **Tâches nomaflow** | Les tâches de `jobs.toml`. |
+| **Règles de notification** | Les règles de Paramètres → Notifications. |
+| **Actions partagées** | Les actions réutilisées par plusieurs écrans. |
+| **Assistant (questions, procédures)** | Ce qu'une application livre pour l'assistant IA — une entrée par application. |
 
 Un champ de recherche en haut filtre la liste visible par nom / libellé / portée. La case *select all* par section respecte le filtre — réduire d'abord (par exemple en saisissant `audit`), puis cocher *select all* pour ne prendre que les écrans correspondants.
 
@@ -10085,14 +10119,13 @@ Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer �
 | Paramètres → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
 | `auth.toml` / utilisateurs stockés en base | Propre à chaque installation — porte les empreintes de mot de passe Argon2. Jamais regroupé. |
 | Plugins Python | Livrés avec le [wheel liberty-apps](../../installation/deploy-prebuilt-apps.md) ou le canal de release propre au plugin. |
-| Jobs Nomaflow | L'icône **Exporter** sur la ligne de chaque tâche produit un ZIP d'une seule tâche. L'export en masse de jobs n'est pas encore automatisé. Voir [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
 | Contenu de base de données | Utiliser un dump de base (ou un [job de préchargement intégré](../../nomaflow/bundled-jobs.md)). |
 
 ---
 
-## L'onglet Import
+## La vue Importer
 
-Basculer l'onglet du haut sur **Import package**. Le panneau propose trois stratégies, un sélecteur de fichier et un bouton *Apply package*.
+Choisir la carte **Importer un paquet**. La vue propose trois stratégies — **Fusionner**, **Écraser (recommandé pour les mises à niveau)**, **Tout remplacer** — et un sélecteur de fichier.
 
 ### Les trois stratégies
 
@@ -10123,17 +10156,42 @@ Deux limites à connaître :
 - `merge` ignore déjà les entités existantes — le drapeau y est redondant.
 - `replace_all` supprime le fichier entier — les overrides NE sont PAS préservés. À utiliser en connaissance de cause.
 
-### Application
+### Aperçu, puis application \{#preview\}
 
-| Étape | Action |
+Dès qu'un ZIP est choisi — et de nouveau quand la stratégie change —, la page présente l'import ; rien n'est écrit avant **Appliquer**.
+
+| Partie | Contenu |
 |---|---|
-| **Choisir le ZIP** | Cliquer dans la zone de dépôt (ou y glisser un `.zip`). Le nom de fichier et la taille s'affichent une fois la sélection faite. |
-| **Choisir une stratégie** | Par défaut `overwrite`. Ne basculer que si l'autre comportement est nécessaire en connaissance de cause. |
-| **Cliquer sur *Apply package*** | Le framework exécute `POST /admin/import-package?strategy=<value>`, applique le diff puis exécute `POST /admin/reload` automatiquement. |
-| **Lire le rapport** | Une ligne par fichier indiquant `+N added`, `~N replaced`, `⊘N skipped`, `✗N errors` ainsi qu'un échantillon des noms d'entités concernés. |
-| **Un badge vert *Applied + reloaded*** | Confirme la réussite du rechargement — la nouvelle configuration est active pour la prochaine requête. |
+| Pastilles d'état | Le nombre par état : **Nouveau**, **Modifié**, **Identique**, **Conservé (override)**, **Ignoré**, **Supprimé**, **Erreurs** — avec *De &lt;installation&gt; · &lt;version&gt;*, l'origine du paquet. |
+| Avertissements | Un paquet issu d'une version plus récente de Liberty Next — des réglages inconnus de cette instance peuvent être refusés : la mettre à jour d'abord ; des valeurs chiffrées que cette instance ne sait pas déchiffrer — une autre clé maître : les ressaisir après l'import. |
+| Éléments | Une carte par fichier. Ce qui change vient d'abord ; **Afficher les identiques** ajoute le reste. Un élément modifié s'ouvre sur ses champs : **Ici maintenant** et **Après l'import**. |
+| **Appliquer N changement(s)** | Écrit les changements, recharge, puis présente le même plan comme résultat, avec *Appliqué et rechargé*. Quand l'instance contient déjà chaque élément tel que dans le paquet, il n'y a rien à appliquer. |
 
-Si le rechargement échoue après une application réussie, le panneau d'avertissement d'import indique la raison mais les modifications de fichiers sont conservées sur le disque. Il convient alors de lancer manuellement *Paramètres → Recharger la config* après avoir corrigé la cause sous-jacente.
+Ce qui voyage est fusionné avec soin :
+
+- les requêtes, tables, séquences, lookups et points d'accès d'un **connecteur** sont importés un par un : l'import d'un paquet ne retire jamais les autres requêtes de la cible ;
+- une **tâche** qui existe déjà sur la cible garde sa planification, son activation, son fuseau horaire, ses préréglages, ses alertes, ses réessais, son niveau de journal et son délai ; une nouvelle tâche arrive désactivée ;
+- le paquet est construit à partir des fichiers tels qu'écrits : les valeurs non renseignées et les références `${VAR}` voyagent telles quelles.
+
+Si le rechargement échoue après une application réussie, les modifications de fichiers restent sur disque ; lancer *Paramètres → Recharger la config* une fois la cause corrigée.
+
+---
+
+## Promotion — directement vers une autre instance \{#promotion\}
+
+Une **instance cible** est une autre installation Liberty Next — la production, la préproduction d'un client — jointe par son API.
+
+**Paquet → Promotion** liste les cibles : **Nom**, **Libellé**, **URL** (l'adresse racine de la cible, avec son sous-chemin), **Compte** et **Mot de passe** d'un superutilisateur local de la cible — le mot de passe est enregistré chiffré —, **Vérifier le certificat TLS**, **Délai (s)**. **Tester** se connecte à la cible : *Connecté à prod · 7.0.64*. **Enregistrer les cibles** les conserve.
+
+**Promouvoir vers…**, à côté de **Télécharger le ZIP** dans Construire, envoie la sélection à une cible :
+
+1. choisir la **Cible**, la **Stratégie** et un **Commentaire** facultatif ;
+2. la cible présente aussitôt l'import — le même plan que ci-dessus, calculé sur la cible : *Aperçu sur prod — rien n'est écrit avant d'appliquer* ;
+3. **Appliquer sur prod** l'applique sur place.
+
+Les connecteurs, pools et points d'accès d'API restent ceux de la cible, sauf s'ils sont cochés : les requêtes d'un connecteur voyagent tout de même, fusionnées dans le connecteur de la cible. Le même **Promouvoir vers…** envoie un [paquet de changements](../../nomaflow/change-packages.md#promote) approuvé.
+
+L'**Historique** de la vue Promotion liste les promotions appliquées depuis cette instance — quand, par qui, vers quelle cible, quoi, et le résultat ; une ligne s'ouvre sur le compte rendu de la cible.
 
 ---
 
@@ -10175,7 +10233,8 @@ Liberty propose également une fenêtre modale dédiée **Find dependencies** de
 | Usage de `replace_all` pour appliquer une petite tranche — écrans spécifiques au client effacés. | Les écrans client manquent sur la cible après l'import. | Restaurer le TOML précédent depuis la sauvegarde. Appliquer la fois suivante avec `overwrite`. |
 | Inclusion de `connectors.toml` (exclu par défaut) sans vérifier que les noms de pool correspondent à la cible. | Les pools de la cible changent à l'improviste ; les requêtes préexistantes échouent au prochain rechargement. | Laisser les connecteurs / pools exclus par défaut tant que la cible n'est pas toute neuve. Ou renommer les pools sur la source avant le regroupement. |
 | Construction depuis une source aux références non résolues (renommage cassé / requête supprimée). | MANIFEST.md liste des éléments sous *Missing references*. | Corriger sur la source (renommer / supprimer / restaurer) et reconstruire. La cible ne recevra pas les références cassées — mais elle ne recevra pas non plus les écrans / requêtes qui les référençaient. |
-| L'import a réussi mais `Applied + reloaded` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Paramètres → Recharger la config* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
+| Un avertissement signale des valeurs que cette instance ne sait pas déchiffrer. | La source et la cible utilisent des clés maîtres différentes. | Ressaisir ces valeurs sur la cible après l'import, ou partager la clé maître. |
+| L'import a réussi mais `Appliqué et rechargé` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Paramètres → Recharger la config* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
 
 ---
 
@@ -10199,7 +10258,7 @@ curl -X POST \
   "https://<target>/admin/import-package?strategy=overwrite"
 ```
 
-`build-package` accepte un tableau optionnel `include` pour filtrer la clôture (même forme que l'état des cases à cocher par dépendance de l'interface). `import-package` accepte `strategy` en paramètre de requête (`merge` | `overwrite` | `replace_all`). Les deux endpoints exigent une authentification superuser.
+`build-package` accepte un tableau optionnel `include` pour filtrer la clôture (même forme que l'état des cases à cocher par dépendance de l'interface). `import-package` accepte `strategy` en paramètre de requête (`merge` | `overwrite` | `replace_all`) et `dry_run=true` pour l'aperçu. Les deux endpoints exigent une authentification superuser. `POST /admin/promotion/push` envoie un paquet ou un paquet de changements approuvé vers une cible déclarée.
 
 ---
 
@@ -12635,6 +12694,8 @@ Deux options valent pour toutes les commandes : `--config-app <app.toml>` et `--
 | Commande | Effet |
 |---|---|
 | `init-db [--admin-username admin] [--password P \| --password-env VAR]` | Crée le stockage des utilisateurs (le fichier `auth.toml` ou les tables en base) et les tables manquantes du framework, puis le premier superutilisateur. Sans mot de passe, un mot de passe aléatoire est généré et affiché. Relancée, la commande ne change rien. |
+| `set-default-pool` | Réécrit la connexion par défaut de l'application à partir de `POSTGRES_HOST`, `_PORT`, `_USER`, `_PASSWORD` et `_DB` — après un déplacement de la base. Le mot de passe est enregistré chiffré. `./liberty db external` le lance de lui-même. |
+| `retarget-pools --from hôte[:port] --to hôte[:port] [--dry-run]` | Redirige tous les pools d'un serveur de bases vers un autre (`--from pg:5432`) ; `--dry-run` les liste sans rien écrire. Un pool dont l'hôte est une variable `${VAR}` n'est pas touché. |
 | `run-install-jobs [--force]` | Lance dans l'ordre chaque tâche Nomaflow des applications sous licence marquée comme étape d'installation (`deploy-databases`, `nomasx1-import-reference`). Les tâches déjà terminées sont ignorées, sauf avec `--force`. |
 
 ### Utilisateurs
@@ -14693,9 +14754,13 @@ L'application se fait en deux temps : **d'abord un essai à blanc** pour voir le
 | 1. **Choisir le JSON** | Le paquet exporté. L'en-tête affiche son nom, son application et son nombre d'opérations une fois lu. |
 | 2. **Essai à blanc** | `POST /admin/changesets/apply { bundle, dry_run: true }`. Le serveur parcourt chaque opération, lit la ligne actuelle de la cible avec la `read_query` capturée, la compare aux `old_values` capturées et attribue un statut. **Aucune écriture.** |
 | 3. **Lire le rapport** | Chaque opération affiche son statut : `would_apply` (sans écart), `conflict` (la cible diffère de l'état capturé — voir plus bas), `would_force` (un conflit que l'opérateur a choisi d'appliquer), `unverified` (contrôle impossible), `skipped` (une action capturée pour relecture seulement), `error`. La ligne de synthèse totalise chaque statut. |
-| 4. **Cocher les conflits à appliquer quand même** | Chaque opération `conflict` a une case à cocher. La cocher **applique** l'opération malgré l'écart (elle devient `would_force`) ; un conflit non coché n'est pas appliqué. |
+| 4. **Cocher ce qui doit s'appliquer quand même** | Chaque opération `conflict` — et chaque opération `unverified`, dont l'écart ne peut être contrôlé faute de requête de lecture sur l'écran — a une case **forcer**. La cocher **applique** l'opération malgré tout (elle devient `would_force`) ; une opération non cochée n'est pas appliquée. |
 | 5. **Appliquer** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<index>] }`. Chaque opération s'exécute dans sa propre transaction ; le nombre de lignes et le statut de chacune reviennent dans le rapport. |
 | 6. **Confirmation** | Une ligne s'ajoute au journal d'import de la cible (en haut de l'onglet *Appliquer*), avec la somme de contrôle du paquet. Le paquet source reste `EXPORTED`. |
+
+### Promouvoir vers une autre instance \{#promote\}
+
+Un paquet approuvé — ou déjà exporté — peut partir directement vers une autre instance, sans manipuler le JSON : **Promouvoir vers…** dans l'en-tête du paquet ouvre la fenêtre de promotion. Choisir la **Cible** et un **Commentaire** facultatif : la cible effectue aussitôt l'essai à blanc et renvoie son rapport d'écarts, avec les mêmes cases **forcer** ; **Appliquer sur &lt;cible&gt;** l'applique sur place et marque le paquet comme exporté. Les cibles se déclarent dans *Paquet → Promotion* — voir [Paquets → Promotion](../framework/build/packages.md#promotion) ; les promotions appliquées figurent dans son historique.
 
 ### Détection des écarts — ce qui est comparé
 

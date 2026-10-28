@@ -229,9 +229,13 @@ The apply flow is two-pass: **dry-run first** to see the per-op drift report, th
 | 1. **Pick the JSON** | The exported bundle. The header shows its name, application and op count once parsed. |
 | 2. **Dry-run** | `POST /admin/changesets/apply { bundle, dry_run: true }`. The server walks every op, fetches the current target row via the captured `read_query`, compares to the captured `old_values`, and tags the op with a status. **No write happens.** |
 | 3. **Read the report** | Each op shows its status badge: `would_apply` (clean), `conflict` (the target differs from the captured state — see below), `would_force` (a conflict the operator chose to apply), `unverified` (no drift check possible), `skipped` (an action captured for review only), `error`. The summary line totals each status. |
-| 4. **Tick the conflicts to apply anyway** | Each `conflict` op has a checkbox. Ticking it **applies** the op despite the difference (it then reads `would_force`); an unticked conflict is not applied. |
+| 4. **Tick what to apply anyway** | Each `conflict` op — and each `unverified` op, whose drift cannot be checked because the screen has no read query — has a **force** checkbox. Ticking it **applies** the op anyway (it then reads `would_force`); an unticked one is not applied. |
 | 5. **Apply** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<indexes>] }`. Each op runs in its own transaction; per-op rowcounts + status come back in the report. |
 | 6. **Confirmation** | A row lands in the target's import log (top of the *Apply* tab), with the bundle's checksum. The source package stays `EXPORTED`. |
+
+### Promote to another instance \{#promote\}
+
+An approved — or already exported — package can go straight to another instance, without handling the JSON: **Promote to…** in the package's header opens the promotion window. Pick the **Target** and an optional **Comment**: the target runs the dry-run at once and returns its drift report, with the same **force** checkboxes; **Apply on &lt;target&gt;** applies it there and marks the package exported. The targets are declared under *Package → Promotion* — see [Packages → Promotion](../framework/build/packages.md#promotion); the promotions applied are listed in its history.
 
 ### Drift detection — what it compares
 

@@ -2622,6 +2622,7 @@ The light layout has no Traefik, so no HTTPS of its own: on a shared network, pu
 | `--apps <wheel or URL>` | Install the licensed apps right after the stack is up — see [Licensed apps](./deploy-prebuilt-apps.md). |
 | `--ssl letsencrypt --domain D --email E` | HTTPS with a Let's Encrypt certificate (full layout). |
 | `--ssl provided --domain D --cert-dir DIR --cert-file F --key-file K` | HTTPS with your own certificate (full layout). |
+| `--db external --db-host H [--db-port 5432] [--db-user liberty] [--db-name liberty] [--db-password-env VAR]` | The database on a PostgreSQL server outside the stack: no bundled Postgres is started. Without `--db-password-env`, the password is asked; it may not contain `$`. See [External database](./operations.md#external-db). |
 | `--reset` | **Deletes** the stack, its volumes and `.env`, then stops. Run the install again afterwards. |
 
 A production install in one line:
@@ -3331,6 +3332,7 @@ Liberty Next — /opt/liberty-next/release
   apps overlay  yes (/opt/liberty-next/release/apps)
   image tag     7.0.58
   chain         docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
+  database      embedded — the bundled Postgres (pg)
   container     running/healthy
   framework     7.0.58
   apps bundle   7.0.58
@@ -3343,6 +3345,7 @@ Liberty Next — /opt/liberty-next/release
 |---|---|
 | `layout`, `tls`, `apps overlay`, `chain` | What was installed and the compose files recorded in `.env`. |
 | `image tag` | `latest` or the pinned release. |
+| `database` | Where the database is: *embedded — the bundled Postgres*, *embedded — SQLite* (light layout), or *external — user@host:port/name*. |
 | `container` | Docker state and health — `unhealthy` when the framework database does not answer. |
 | `framework`, `apps bundle` | The versions actually running. |
 | `/ready` | The readiness check of the server. |
@@ -3401,6 +3404,29 @@ A weekly backup kept 60 days, from cron:
 ```
 
 Copy the backups off the server. `.env.snapshot` contains the master key: without it the restored configuration cannot decrypt its passwords.
+
+With an [external database](#external-db), the database is **not** in the backup — `./liberty backup` says so: back it up on its own server (`pg_dump`, `pg_dumpall`).
+
+---
+
+## External database \{#external-db\}
+
+The framework database — and the databases of the licensed apps — can live on a PostgreSQL server outside the stack: a managed database, the company's database server.
+
+| Command | Effect |
+|---|---|
+| `./liberty db` | Where the database is now. |
+| `./liberty db dump [file.sql.gz]` | A `pg_dumpall` of the bundled Postgres, to carry the data over — by default under `backups/`. Full layout only. |
+| `./liberty db external --host H [--port P] [--user U] [--name D] [--password-env VAR] [--yes]` | Moves the install to that server: the application's connection and the pools that named the bundled server — the licensed apps' — are pointed at it, the stack restarts, and the bundled Postgres is stopped, its volume kept. The command shows the change and asks for confirmation (`--yes` skips it). |
+| `./liberty db embedded [--yes]` | Comes back to the bundled Postgres (full layout) or SQLite (light layout). |
+
+**The data is not copied.** To move an existing install:
+
+1. `./liberty db dump` on the current install;
+2. restore the dump on the new server — `gunzip -c backups/pg-dumpall-….sql.gz | psql -h <host> -U postgres -d postgres`;
+3. `./liberty db external --host <host>`.
+
+Coming back with `./liberty db embedded` does not copy back what was written on the external server in the meantime. The choice is recorded in `.env` with the compose files, so `start`, `upgrade` and `backup` follow it. `./liberty doctor` warns when the bundled Postgres still runs while the application uses the external server. A new install goes straight to an external server with `./liberty install full --db external --db-host …` — see [Install options](./docker.md#options).
 
 ---
 
@@ -10008,9 +10034,11 @@ The **Settings → Release notes** tab is the full changelog bundled with the bu
 ## Liberty Next — Packages
 Source: https://docs.nomana-it.fr/liberty/framework/build/packages/
 
-Ship configuration from one Liberty install to another. the Nomaflow Package page: pick a few screens / menu items / dashboards as seeds, the dependency walker pulls in everything they reach (queries, dictionary, charts), and the package exports as a ZIP. On the target install, upload + pick a merge strategy (merge / overwrite / replace all). Same UI handles both sides.
+Ship configuration from one Liberty install to another with the Package page: pick screens, menu items, dashboards, Explorer models, jobs, notification rules, shared actions or assistant material as seeds, the dependency walker pulls in everything they reach, and the package exports as a ZIP — or is promoted straight to another instance. On the target, the import is previewed entity by entity, with a field diff, before it is applied.
 
-The **Package** page (Nomaflow menu, address `/nomaflow/package`) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, lets the operator pick a merge strategy and applies it to the live config — followed by an automatic reload.
+The **Package** page (*Nomaflow → Deployment → Package*, or *Settings → Package*) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, previews what it would change, and applies it to the live config — followed by an automatic reload. With a target instance declared, the package can also be **promoted** straight to it, without handling the ZIP.
+
+The page offers three views, picked from cards at the top: **Build package**, **Import package** and **Promotion**. It is reserved to superusers.
 
 This is the standard *staging → production* path. It's also the right tool for cross-customer reuse: build a "starter" package of curated screens, hand it to a fresh install, apply with `replace_all`, done.
 
@@ -10024,14 +10052,15 @@ This is the standard *staging → production* path. It's also the right tool for
 | Ship a curated set of screens to a brand-new install. | Build, apply with `replace_all`. |
 | Add a few new screens to an existing customer install without touching their edits. | Build, apply with `merge`. |
 | Ship a fresh release of a vendor-maintained app where the customer has local edits on a few screens. | Build, apply with `overwrite` — entities flagged `override = true` on the target are preserved automatically. |
-| Promote one Nomaflow job between environments. | Use the **Export** icon on the job's line of the Jobs page (covered in [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)); the Package screen does not bundle jobs. |
+| Promote screens to production in one step, without the ZIP. | **Promote to…** on Build — see [Promotion](#promotion). |
+| Promote one Nomaflow job between environments. | Pick it as a seed under *nomaflow jobs*, or use the **Export** icon on the job's line of the Jobs page. |
 | Deliver a full licensed bundle (Nomasx-1 + Nomajde plugins + config). | Not this. Use the **`liberty-apps`** wheel installer — see [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 The Package screen ships **declarative config** — TOML files. It does not ship Python code, Java JARs, plugin packages or database content. For those, the wheel installer is the canonical channel.
 
 ---
 
-## The Build tab
+## The Build view
 
 The left panel lists every **seed candidate** on the install — screens, menu items, dashboards. The right panel shows the **dependency closure** of whatever is ticked on the left.
 
@@ -10044,6 +10073,11 @@ Three sections in the left panel:
 | **Screens** | Every screen the install knows — grouped by app. |
 | **Menu items** | Every menu item, by app. |
 | **Dashboards** | Every dashboard, by scope. |
+| **Explorer models** | The Data Explorer models, with their shipped analyses and dashboards. |
+| **nomaflow jobs** | The jobs of `jobs.toml`. |
+| **Notification rules** | The rules of Settings → Notifications. |
+| **Shared actions** | The actions reused by several screens. |
+| **Assistant (starters, playbooks)** | What an application ships for the AI assistant — one entry per application. |
 
 A search box at the top filters the visible list by name / label / scope. The per-section *select all* tick respects the filter — narrow first (e.g. type `audit`), then tick *select all* to grab only the matching screens.
 
@@ -10105,14 +10139,13 @@ Worth knowing so you don't try to ship through this channel:
 | Settings → App | Per install — application settings, licence, sign-in. Never bundled. |
 | `auth.toml` / DB-stored users | Per-install — carries Argon2 password hashes. Never bundled. |
 | Python plugins | Shipped with the [liberty-apps wheel](../../installation/deploy-prebuilt-apps.md) or the plugin's own release channel. |
-| Nomaflow jobs | The **Export** icon on each job's line of the Jobs page produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
 | Database content | Use a DB dump (or a [bundled preload job](../../nomaflow/bundled-jobs.md)). |
 
 ---
 
-## The Import tab
+## The Import view
 
-Switch the top tab to **Import package**. The panel offers three strategies, a file picker and an *Apply package* button.
+Pick the **Import package** card. The view offers three strategies — **Merge**, **Overwrite (recommended for upgrades)**, **Replace all** — and a file picker.
 
 ### The three strategies
 
@@ -10143,17 +10176,42 @@ Two limits worth knowing:
 - `merge` already skips existing entities — the flag is redundant there.
 - `replace_all` drops the entire file — overrides are NOT preserved. Use it knowingly.
 
-### Applying
+### Preview, then apply \{#preview\}
 
-| Step | What |
+As soon as a ZIP is picked — and again when the strategy changes — the page previews the import; nothing is written until **Apply**.
+
+| Part | Content |
 |---|---|
-| **Pick the ZIP** | Click the drop zone (or drag a `.zip` onto it). The filename + size appears once selected. |
-| **Pick a strategy** | Default is `overwrite`. Switch only when you know you need the other behaviour. |
-| **Click *Apply package*** | The framework runs `POST /admin/import-package?strategy=<value>`, applies the diff and runs `POST /admin/reload` automatically. |
-| **Read the report** | Per-file row showing `+N added`, `~N replaced`, `⊘N skipped`, `✗N errors` plus a sample of the affected entity names. |
-| **A green *Applied + reloaded* badge** | Confirms the reload succeeded — new config is live for the next request. |
+| State chips | The count per state: **New**, **Changed**, **Identical**, **Kept (override)**, **Skipped**, **Removed**, **Errors** — with *From &lt;install&gt; · &lt;version&gt;*, the package's origin. |
+| Warnings | A package from a newer Liberty Next — settings this instance does not know may be rejected: upgrade it first; encrypted values this instance cannot decrypt — another master key: set them again after the import. |
+| Entities | One card per file. What changes comes first; **Show identical** adds the rest. A changed entity opens on its fields: **Here now** and **After the import**. |
+| **Apply N change(s)** | Writes the changes, reloads, then shows the same plan as the result with *Applied + reloaded*. When the instance already holds every entity as the package has it, there is nothing to apply. |
 
-If reload fails after a successful apply, the import warning panel shows the reason but the file changes are kept on disk. Run *Settings → Reload config* manually after fixing the underlying issue.
+What travels is merged with care:
+
+- a **connector**'s queries, tables, sequences, lookups and endpoints are imported one by one: importing a package never removes the target's other queries;
+- a **job** that already exists on the target keeps its schedule, enabled flag, timezone, presets, alerts, retry, log level and timeout; a new job arrives disabled;
+- the package is built from the files as written: unset values and `${VAR}` references travel as they are.
+
+If the reload fails after a successful apply, the file changes are kept on disk; run *Settings → Reload config* once the underlying issue is fixed.
+
+---
+
+## Promotion — straight to another instance \{#promotion\}
+
+A **target instance** is another Liberty Next install — production, a customer's staging — reached over its API.
+
+**Package → Promotion** lists the targets: **Name**, **Label**, **URL** (the target's root address, with its sub-path), **Account** and **Password** of a local superuser there — the password stored encrypted —, **Check the TLS certificate**, **Timeout (s)**. **Test** signs in on the target: *Signed in on prod · 7.0.64*. **Save targets** keeps them.
+
+**Promote to…**, beside **Download ZIP** on Build, sends the selection to a target:
+
+1. pick the **Target**, the **Strategy** and an optional **Comment**;
+2. the target previews the import at once — the same plan as above, computed on the target: *Preview on prod — nothing is written until you apply*;
+3. **Apply on prod** applies it there.
+
+Connectors, pools and API endpoints stay the target's unless ticked: a connector's queries still travel, merged into the target's connector. The same **Promote to…** sends an approved [change package](../../nomaflow/change-packages.md#promote).
+
+The **History** of the Promotion view lists the promotions applied from this instance — when, by whom, to which target, what, and the outcome; a row opens on the target's report.
 
 ---
 
@@ -10195,6 +10253,7 @@ Liberty also exposes a dedicated **Find dependencies** modal from any screen / m
 | Used `replace_all` to apply a small slice — wiped customer-specific screens. | Customer screens missing from the target after import. | Restore the previous TOML from your backup. Re-apply with `overwrite` next time. |
 | Bundled `connectors.toml` (default-excluded) without checking pool names match the target. | Target's pools change unexpectedly; pre-existing queries error at next reload. | Leave connectors / pools default-excluded unless the target is brand-new. Or rename pools on the source before bundling. |
 | Built from a source with unresolved references (broken rename / deleted query). | MANIFEST.md lists items under *Missing references*. | Fix on the source (rename / delete / restore) and rebuild. The target won't get the broken references — but it also won't get the screens / queries that referenced them. |
+| A warning says the package holds values this instance cannot decrypt. | The source and the target use different master keys. | Set those values again on the target after the import, or share the master key. |
 | Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload config* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
 
 ---
@@ -10219,7 +10278,7 @@ curl -X POST \
   "https://<target>/admin/import-package?strategy=overwrite"
 ```
 
-`build-package` accepts an optional `include` array to filter the closure (same shape as the UI's per-dep checkbox state). `import-package` accepts `strategy` as a query param (`merge` | `overwrite` | `replace_all`). Both endpoints require superuser auth.
+`build-package` accepts an optional `include` array to filter the closure (same shape as the UI's per-dep checkbox state). `import-package` accepts `strategy` as a query param (`merge` | `overwrite` | `replace_all`) and `dry_run=true` for the preview. Both endpoints require superuser auth. `POST /admin/promotion/push` sends a package or an approved change package to a declared target.
 
 ---
 
@@ -12655,6 +12714,8 @@ Two options apply to every command: `--config-app <app.toml>` and `--config-conn
 | Command | Effect |
 |---|---|
 | `init-db [--admin-username admin] [--password P \| --password-env VAR]` | Creates the user store (the `auth.toml` file or the database tables) and the missing framework tables, then the first superuser. Without a password, a random one is generated and printed. Running it again changes nothing. |
+| `set-default-pool` | Rewrites the application's default database connection from `POSTGRES_HOST`, `_PORT`, `_USER`, `_PASSWORD` and `_DB` — after the database moved. The password is stored encrypted. `./liberty db external` runs it for you. |
+| `retarget-pools --from host[:port] --to host[:port] [--dry-run]` | Points every pool on one database server at another (`--from pg:5432`); `--dry-run` lists them without writing. A pool whose host is a `${VAR}` is left alone. |
 | `run-install-jobs [--force]` | Runs, in order, every Nomaflow job of the licensed apps marked as an installation step (`deploy-databases`, `nomasx1-import-reference`). Jobs already completed are skipped unless `--force`. |
 
 ### Users
@@ -14711,9 +14772,13 @@ The apply flow is two-pass: **dry-run first** to see the per-op drift report, th
 | 1. **Pick the JSON** | The exported bundle. The header shows its name, application and op count once parsed. |
 | 2. **Dry-run** | `POST /admin/changesets/apply { bundle, dry_run: true }`. The server walks every op, fetches the current target row via the captured `read_query`, compares to the captured `old_values`, and tags the op with a status. **No write happens.** |
 | 3. **Read the report** | Each op shows its status badge: `would_apply` (clean), `conflict` (the target differs from the captured state — see below), `would_force` (a conflict the operator chose to apply), `unverified` (no drift check possible), `skipped` (an action captured for review only), `error`. The summary line totals each status. |
-| 4. **Tick the conflicts to apply anyway** | Each `conflict` op has a checkbox. Ticking it **applies** the op despite the difference (it then reads `would_force`); an unticked conflict is not applied. |
+| 4. **Tick what to apply anyway** | Each `conflict` op — and each `unverified` op, whose drift cannot be checked because the screen has no read query — has a **force** checkbox. Ticking it **applies** the op anyway (it then reads `would_force`); an unticked one is not applied. |
 | 5. **Apply** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<indexes>] }`. Each op runs in its own transaction; per-op rowcounts + status come back in the report. |
 | 6. **Confirmation** | A row lands in the target's import log (top of the *Apply* tab), with the bundle's checksum. The source package stays `EXPORTED`. |
+
+### Promote to another instance \{#promote\}
+
+An approved — or already exported — package can go straight to another instance, without handling the JSON: **Promote to…** in the package's header opens the promotion window. Pick the **Target** and an optional **Comment**: the target runs the dry-run at once and returns its drift report, with the same **force** checkboxes; **Apply on &lt;target&gt;** applies it there and marks the package exported. The targets are declared under *Package → Promotion* — see [Packages → Promotion](../framework/build/packages.md#promotion); the promotions applied are listed in its history.
 
 ### Drift detection — what it compares
 

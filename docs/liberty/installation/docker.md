@@ -148,6 +148,7 @@ The light layout has no Traefik, so no HTTPS of its own: on a shared network, pu
 | `--apps <wheel or URL>` | Install the licensed apps right after the stack is up — see [Licensed apps](./deploy-prebuilt-apps.md). |
 | `--ssl letsencrypt --domain D --email E` | HTTPS with a Let's Encrypt certificate (full layout). |
 | `--ssl provided --domain D --cert-dir DIR --cert-file F --key-file K` | HTTPS with your own certificate (full layout). |
+| `--db external --db-host H [--db-port 5432] [--db-user liberty] [--db-name liberty] [--db-password-env VAR]` | The database on a PostgreSQL server outside the stack: no bundled Postgres is started. Without `--db-password-env`, the password is asked; it may not contain `$`. See [External database](./operations.md#external-db). |
 | `--reset` | **Deletes** the stack, its volumes and `.env`, then stops. Run the install again afterwards. |
 
 A production install in one line:

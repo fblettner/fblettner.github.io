@@ -31,6 +31,8 @@ Deux options valent pour toutes les commandes : `--config-app <app.toml>` et `--
 | Commande | Effet |
 |---|---|
 | `init-db [--admin-username admin] [--password P \| --password-env VAR]` | Crée le stockage des utilisateurs (le fichier `auth.toml` ou les tables en base) et les tables manquantes du framework, puis le premier superutilisateur. Sans mot de passe, un mot de passe aléatoire est généré et affiché. Relancée, la commande ne change rien. |
+| `set-default-pool` | Réécrit la connexion par défaut de l'application à partir de `POSTGRES_HOST`, `_PORT`, `_USER`, `_PASSWORD` et `_DB` — après un déplacement de la base. Le mot de passe est enregistré chiffré. `./liberty db external` le lance de lui-même. |
+| `retarget-pools --from hôte[:port] --to hôte[:port] [--dry-run]` | Redirige tous les pools d'un serveur de bases vers un autre (`--from pg:5432`) ; `--dry-run` les liste sans rien écrire. Un pool dont l'hôte est une variable `${VAR}` n'est pas touché. |
 | `run-install-jobs [--force]` | Lance dans l'ordre chaque tâche Nomaflow des applications sous licence marquée comme étape d'installation (`deploy-databases`, `nomasx1-import-reference`). Les tâches déjà terminées sont ignorées, sauf avec `--force`. |
 
 ### Utilisateurs

@@ -229,9 +229,13 @@ L'application se fait en deux temps : **d'abord un essai à blanc** pour voir le
 | 1. **Choisir le JSON** | Le paquet exporté. L'en-tête affiche son nom, son application et son nombre d'opérations une fois lu. |
 | 2. **Essai à blanc** | `POST /admin/changesets/apply { bundle, dry_run: true }`. Le serveur parcourt chaque opération, lit la ligne actuelle de la cible avec la `read_query` capturée, la compare aux `old_values` capturées et attribue un statut. **Aucune écriture.** |
 | 3. **Lire le rapport** | Chaque opération affiche son statut : `would_apply` (sans écart), `conflict` (la cible diffère de l'état capturé — voir plus bas), `would_force` (un conflit que l'opérateur a choisi d'appliquer), `unverified` (contrôle impossible), `skipped` (une action capturée pour relecture seulement), `error`. La ligne de synthèse totalise chaque statut. |
-| 4. **Cocher les conflits à appliquer quand même** | Chaque opération `conflict` a une case à cocher. La cocher **applique** l'opération malgré l'écart (elle devient `would_force`) ; un conflit non coché n'est pas appliqué. |
+| 4. **Cocher ce qui doit s'appliquer quand même** | Chaque opération `conflict` — et chaque opération `unverified`, dont l'écart ne peut être contrôlé faute de requête de lecture sur l'écran — a une case **forcer**. La cocher **applique** l'opération malgré tout (elle devient `would_force`) ; une opération non cochée n'est pas appliquée. |
 | 5. **Appliquer** | `POST /admin/changesets/apply { bundle, dry_run: false, force: [<index>] }`. Chaque opération s'exécute dans sa propre transaction ; le nombre de lignes et le statut de chacune reviennent dans le rapport. |
 | 6. **Confirmation** | Une ligne s'ajoute au journal d'import de la cible (en haut de l'onglet *Appliquer*), avec la somme de contrôle du paquet. Le paquet source reste `EXPORTED`. |
+
+### Promouvoir vers une autre instance \{#promote\}
+
+Un paquet approuvé — ou déjà exporté — peut partir directement vers une autre instance, sans manipuler le JSON : **Promouvoir vers…** dans l'en-tête du paquet ouvre la fenêtre de promotion. Choisir la **Cible** et un **Commentaire** facultatif : la cible effectue aussitôt l'essai à blanc et renvoie son rapport d'écarts, avec les mêmes cases **forcer** ; **Appliquer sur &lt;cible&gt;** l'applique sur place et marque le paquet comme exporté. Les cibles se déclarent dans *Paquet → Promotion* — voir [Paquets → Promotion](../framework/build/packages.md#promotion) ; les promotions appliquées figurent dans son historique.
 
 ### Détection des écarts — ce qui est comparé
 

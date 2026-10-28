@@ -82,6 +82,7 @@ Liberty Next — /opt/liberty-next/release
   apps overlay  yes (/opt/liberty-next/release/apps)
   image tag     7.0.58
   chain         docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
+  database      embedded — the bundled Postgres (pg)
   container     running/healthy
   framework     7.0.58
   apps bundle   7.0.58
@@ -94,6 +95,7 @@ Liberty Next — /opt/liberty-next/release
 |---|---|
 | `layout`, `tls`, `apps overlay`, `chain` | Ce qui a été installé et les fichiers compose enregistrés dans `.env`. |
 | `image tag` | `latest` ou la version fixée. |
+| `database` | L'emplacement de la base : *embedded — the bundled Postgres* (le Postgres intégré), *embedded — SQLite* (déploiement léger), ou *external — utilisateur@hôte:port/nom*. |
 | `container` | État et santé Docker — `unhealthy` quand la base du framework ne répond pas. |
 | `framework`, `apps bundle` | Les versions réellement en service. |
 | `/ready` | Le contrôle de disponibilité du serveur. |
@@ -152,6 +154,29 @@ Une sauvegarde hebdomadaire conservée 60 jours, par cron :
 ```
 
 Copier les sauvegardes hors du serveur. `.env.snapshot` contient la clé maître : sans elle, la configuration restaurée ne peut pas déchiffrer ses mots de passe.
+
+Avec une [base externe](#external-db), la base n'est **pas** dans la sauvegarde — `./liberty backup` le signale : la sauvegarder sur son propre serveur (`pg_dump`, `pg_dumpall`).
+
+---
+
+## Base externe \{#external-db\}
+
+La base du framework — et celles des applications sous licence — peuvent résider sur un serveur PostgreSQL extérieur à l'ensemble : une base managée, le serveur de bases de l'entreprise.
+
+| Commande | Effet |
+|---|---|
+| `./liberty db` | L'emplacement actuel de la base. |
+| `./liberty db dump [fichier.sql.gz]` | Un `pg_dumpall` du Postgres intégré, pour transporter les données — par défaut sous `backups/`. Déploiement complet uniquement. |
+| `./liberty db external --host H [--port P] [--user U] [--name D] [--password-env VAR] [--yes]` | Bascule l'installation sur ce serveur : la connexion de l'application et les pools qui désignaient le serveur intégré — ceux des applications sous licence — y sont redirigés, l'ensemble redémarre, et le Postgres intégré est arrêté, son volume conservé. La commande présente le changement et demande confirmation (`--yes` l'évite). |
+| `./liberty db embedded [--yes]` | Revient au Postgres intégré (déploiement complet) ou à SQLite (déploiement léger). |
+
+**Les données ne sont pas copiées.** Pour déplacer une installation existante :
+
+1. `./liberty db dump` sur l'installation actuelle ;
+2. restaurer la sauvegarde sur le nouveau serveur — `gunzip -c backups/pg-dumpall-….sql.gz | psql -h <hôte> -U postgres -d postgres` ;
+3. `./liberty db external --host <hôte>`.
+
+Revenir avec `./liberty db embedded` ne recopie pas ce qui a été écrit entre-temps sur le serveur externe. Le choix est enregistré dans `.env` avec les fichiers compose : `start`, `upgrade` et `backup` le suivent. `./liberty doctor` avertit quand le Postgres intégré fonctionne encore alors que l'application utilise le serveur externe. Une nouvelle installation va directement sur un serveur externe avec `./liberty install full --db external --db-host …` — voir [Options d'installation](./docker.md#options).
 
 ---
 
