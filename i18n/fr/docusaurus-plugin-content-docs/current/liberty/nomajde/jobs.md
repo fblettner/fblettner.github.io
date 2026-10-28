@@ -32,4 +32,4 @@ Le journal liste, par modèle, les tables analysées et les entrées créées.
 
 ## Qui peut les lancer \{#access\}
 
-Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Au-delà des menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.

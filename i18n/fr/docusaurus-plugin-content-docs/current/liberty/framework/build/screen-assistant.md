@@ -123,6 +123,26 @@ Le catalogue **Address Book** (`config/presets/jdedwards/address_book.toml`) : l
 
 ---
 
+## Un module entier \{#module\}
+
+**Un module**, à côté de **Un écran** dans l'en-tête de l'assistant, construit d'un seul coup tout un module fonctionnel — plusieurs écrans reliés entre eux, leur dossier de menu et leurs entrées de dictionnaire — à partir d'un **catalogue de modules** livré avec les préréglages.
+
+1. Choisir un module dans la liste — avec recherche, groupée par domaine (*JDE · Address Book*) ; chacun indique son application, son connecteur et son nombre d'écrans.
+2. L'aperçu lit aussitôt les tables en service et présente l'arbre des écrans, les détails en retrait sous leur parent : **Écran**, **Table**, **Préfixe** (le préfixe de colonnes trouvé dans la base), **Colonnes**, **Absent de la table** (les éléments qui manquent à la table), et l'**État** de chacun — *nouveau*, *existe* ou *remplacé*. La ligne **Menu** présente de la même façon le dossier et ses entrées. Une table ou une clé introuvable bloque le module, avec la raison.
+3. **Appliquer le module** écrit tout d'un coup : *Appliqué : 7 requêtes, 7 écrans, 4 entrées de menu, 244 entrées de dictionnaire.* Le menu latéral affiche aussitôt le nouveau dossier, et **Ouvrir le nouvel écran** ouvre son premier écran.
+
+Ce que crée un module :
+
+- une **requête de lecture** par écran, triée sur la clé, avec les tables de référence jointes pour leurs libellés ;
+- des **écrans en consultation** dont le dialogue porte les onglets du module, et un onglet par table liée — une liste pour un lien un-à-plusieurs, un formulaire pour un lien un-à-un —, reliés à la clé du parent ;
+- les **filtres** que nomme le module, appliqués dans la base ;
+- le **dossier de menu** du module, avec une entrée par écran principal ;
+- les **entrées de dictionnaire** des colonnes, issues du dictionnaire de données de la source — libellés, formats, listes de valeurs.
+
+L'application est additive : ce qui existe déjà est conservé. **Remplacer les entrées existantes du module** réécrit les requêtes, écrans et entrées de menu propres au module — une modification faite depuis est perdue. Quand tout existe déjà, il n'y a rien à appliquer. Les trois fichiers sont validés avant toute écriture : tout est écrit, ou rien. Réservé aux superutilisateurs.
+
+Liberty Apps livre le module **Address Book** pour JD Edwards EnterpriseOne : le carnet d'adresses avec ses contacts, téléphones, e-mails et adresses datées, les fichiers clients et fournisseurs — voir [Nomajde → Carnet d'adresses](../../nomajde/master-data/address-book.md).
+
 ## Sélecteur de colonnes
 
 Les sélecteurs des étapes 2 et 3 sont pensés pour les sources larges — un scan complet d'un `F0101` JDE n'est pas amusant dans une liste plate. Ils partagent quelques conventions :

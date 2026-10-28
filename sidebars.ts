@@ -448,6 +448,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'liberty/nomajde/master-data/udc-types',
         'liberty/nomajde/master-data/udc-codes',
+        'liberty/nomajde/master-data/address-book',
       ],
     },
     {

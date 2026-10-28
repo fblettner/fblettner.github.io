@@ -6,7 +6,7 @@ keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, 
 
 # Paramètres de l'application
 
-**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Chaque section se replie — la première est ouverte — et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Les sections sont classées par ordre alphabétique, *Déploiement* en lecture seule en dernier ; chacune se replie et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client et secret de session OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -95,7 +95,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 
 ---
 
-## Application \{#app\}
+## Serveur \{#app\}
 
 | Champ | Remarques |
 |---|---|
@@ -103,6 +103,13 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
 | **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent. **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
+| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
+| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+
+## Affichage \{#display\}
+
+| Champ | Remarques |
+|---|---|
 | **Langue par défaut** | Langue des libellés quand une requête n'en indique pas. |
 | **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
 | **Taille de page des grilles** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
@@ -111,8 +118,10 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets Paramètres, Surveillance et d'exécution restent ouverts. |
 | **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme l'onglet le plus ancien. |
 | **Les navigations s'ouvrent dans l'onglet courant (…)** | Désactivé par défaut. Activé : la navigation depuis une ligne s'ouvre en panneau dans l'onglet courant, avec un fil d'Ariane et **Retour**, sauf si l'action en décide autrement — voir [Actions](./screens/actions-and-lifecycle.md#drill). |
-| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
-| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+
+## Adresses externes \{#external-urls\}
+
+Les systèmes vers lesquels l'installation renvoie — le client web de JD Edwards, un intranet. Une ligne par adresse : un **nom** en majuscules (`JDE_WEB`) et son **URL** (`https://jde.example.com:8080/jde`) ; **Ajouter une adresse** en ajoute une. Une action « Ouvrir dans » ou une entrée de menu lien écrit `#URL.JDE_WEB#` au début de son adresse au lieu de l'adresse elle-même : les écrans et menus livrés avec une application ne portent ainsi aucune adresse propre à un client, et chaque installation fixe la sienne. Un changement s'applique aussitôt. Une adresse que l'installation ne fixe pas ne donne aucun lien : l'action n'ouvre rien.
 
 Quand un changement enregistré demande un redémarrage, la page l'indique : *Enregistré. Redémarrez le serveur pour appliquer les nouveaux réglages.*
 

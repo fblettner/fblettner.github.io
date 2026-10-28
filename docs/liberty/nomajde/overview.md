@@ -325,7 +325,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 |---|---|
 | **Overview** | The [home page](./home.md): what Nomajde does, the live figures of the JD Edwards instance, the entry points of each domain. |
 | **Data Explorer** | [Free analysis](./data-explorer.md) of the security and development data, and of the models shipped by the JD Edwards presets. |
-| **Master Data** | UDC types and UDC codes. Every grid supports filter, sort, inline edit and Excel upload. |
+| **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |

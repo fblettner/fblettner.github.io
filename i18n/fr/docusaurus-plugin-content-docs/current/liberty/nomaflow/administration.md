@@ -114,7 +114,15 @@ Chaque exécution collecte ses lignes de journal en mémoire — loggers `libert
 
 ## Qui peut utiliser Nomaflow \{#permissions\}
 
-Les pages des Tâches et leur API (`/admin/jobs/…`) sont réservées aux **superutilisateurs**. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
+Les superutilisateurs voient et font tout. Les autres utilisateurs reçoivent ce que leurs rôles accordent, dans **Liberty Next → Administrer → Accès**, bloc *Au-delà des menus* :
+
+| Droit | Donne |
+|---|---|
+| **nomaflow → Suivre les tâches** (`nomaflow:view`) | Les pages Tâches, Planning et Exécutions : les tâches, leurs planifications, leurs exécutions avec journaux et fichiers. |
+| **Tâche → Toutes les tâches** (`job:*`), ou une tâche (`job:<id>`) | Lancer la tâche — avec ses fichiers et paramètres — et annuler ses exécutions. |
+| **nomaflow → Créer et modifier les tâches** (`nomaflow:edit`) | Comprend *Suivre les tâches* ; créer, modifier, cloner, supprimer, suspendre et reprendre des tâches, enregistrer des préréglages. Les étapes exécutent SQL et Python sans le périmètre de données de l'utilisateur : à accorder avec prudence. |
+
+Les règles de rétention et de planifications manquées, ainsi que l'export d'une tâche, restent réservés aux superutilisateurs. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
 
 ---
 

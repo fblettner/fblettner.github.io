@@ -212,7 +212,7 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 |---|---|
 | **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
-| **Données de base** | Types et codes UDC. Chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel. |
+| **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |

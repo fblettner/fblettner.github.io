@@ -196,7 +196,7 @@ Deux rôles types :
 
 ### Hors menus
 
-Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Allow** ou **Deny**, le type, l'élément, puis **Add**.
+Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà des menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Allow** ou **Deny**, le type, l'élément, puis **Add**.
 
 | Type | Accorde |
 |---|---|
@@ -205,7 +205,8 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the
 | API endpoint | Un endpoint d'un connecteur API. |
 | Dashboard | Un tableau de bord. |
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
-| Tâche | Une tâche Nomaflow : son entrée de menu et sa page — fichiers, paramètres, lancement, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
+| nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
+| Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | L'assistant. |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 

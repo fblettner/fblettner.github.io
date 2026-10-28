@@ -66,4 +66,4 @@ Sur la page de l'explorateur, l'assistant propose de créer ce que l'utilisateur
 
 ## Qui voit quoi \{#access\}
 
-Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Beyond the menus* du rôle). Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse.
+Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Au-delà des menus* du rôle). Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse.

@@ -143,7 +143,7 @@ Les analyses et tableaux de bord ci-dessus sont **partagés** : tout utilisateur
 
 ## Qui voit quoi \{#access\}
 
-- Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Beyond the menus* du rôle) — voir [Rôles et permissions](../framework/build/secure/roles-and-permissions.md#access).
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Au-delà des menus* du rôle) — voir [Rôles et permissions](../framework/build/secure/roles-and-permissions.md#access).
 - Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse : un utilisateur limité à une application ou à une société n'en voit que les lignes, totaux compris.
 
 ---

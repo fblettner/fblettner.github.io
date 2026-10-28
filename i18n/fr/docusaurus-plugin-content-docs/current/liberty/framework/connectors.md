@@ -251,7 +251,7 @@ Chaque requête et chaque endpoint a sa propre permission :
 | `sql:<connecteur>:<requête>` | L'exécution de la requête — en lecture comme en écriture. |
 | `api:<connecteur>:<endpoint>` | L'appel de l'endpoint. |
 
-Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'elle ouvre, et **Beyond the menus** accorde une requête, un endpoint ou un connecteur entier — des motifs comme `sql:billing:report_*` sont acceptés. Voir [Rôles et permissions](./build/secure/roles-and-permissions.md).
+Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'elle ouvre, et **Au-delà des menus** accorde une requête, un endpoint ou un connecteur entier — des motifs comme `sql:billing:report_*` sont acceptés. Voir [Rôles et permissions](./build/secure/roles-and-permissions.md).
 
 ---
 

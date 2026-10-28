@@ -6,7 +6,7 @@ keywords: [Liberty Next, Settings App, server log, sign-in, tokens, login thrott
 
 # App settings
 
-**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. Each section folds — the first one is open — and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
+**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. The sections are listed in alphabetical order, the read-only *Deployment* last; each folds and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret and session secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
@@ -95,7 +95,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 
 ---
 
-## App \{#app\}
+## Server \{#app\}
 
 | Field | Notes |
 |---|---|
@@ -103,6 +103,13 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
 | **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it. **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
+| **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
+| **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
+
+## Display \{#display\}
+
+| Field | Notes |
+|---|---|
 | **Default language** | Labels when a request names no language. |
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
@@ -111,8 +118,10 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the Settings, Monitoring and run tabs stay. |
 | **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
 | **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
-| **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
-| **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
+
+## External addresses \{#external-urls\}
+
+The systems this install links to — the JD Edwards web client, an intranet. One line per address: a **name** in capitals (`JDE_WEB`) and its **URL** (`https://jde.example.com:8080/jde`); **Add an address** adds one. An *Open in* action or a link menu item writes `#URL.JDE_WEB#` at the start of its address instead of the address itself: the screens and menus shipped with an application then carry no customer address, and each install sets its own. A change applies at once. An address the install does not set gives no link: the action opens nothing.
 
 When a saved change needs a restart, the page says *Saved. Restart the server to apply the new settings.*
 

@@ -959,7 +959,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 |---|---|
 | **Overview** | The [home page](./home.md): what Nomajde does, the live figures of the JD Edwards instance, the entry points of each domain. |
 | **Data Explorer** | [Free analysis](./data-explorer.md) of the security and development data, and of the models shipped by the JD Edwards presets. |
-| **Master Data** | UDC types and UDC codes. Every grid supports filter, sort, inline edit and Excel upload. |
+| **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |
@@ -3661,6 +3661,10 @@ The shipped layouts are already hardened; this page lists what they do for you a
 
 ---
 
+## Install it as an app \{#pwa\}
+
+Over HTTPS, users can install Liberty Next as an application on their computer: **Install** in Chrome or Edge, **Add to Dock** in Safari. It then opens in its own window, with its own icon, under the name given in the theme — and under the sub-path when the install has one. Nothing is kept on the device: each opening loads the running version.
+
 ## Keep one replica \{#replicas\}
 
 Live updates (the notification bell, record locks, the assistant's answers) are held in the server process, and the sign-in throttle counts per process. Run **one** `liberty-next` instance: several replicas would show users different states.
@@ -5936,6 +5940,26 @@ The **Address Book** catalog (`config/presets/jdedwards/address_book.toml`): the
 
 ---
 
+## A whole module \{#module\}
+
+**A module**, beside **A screen** in the assistant's header, builds an entire functional module in one go — several screens linked to each other, their menu folder and their dictionary entries — from a **module catalogue** shipped with the presets.
+
+1. Pick a module in the list — searchable, grouped by area (*JDE · Address Book*); each shows its application, its connector and its number of screens.
+2. The preview reads the live tables at once and shows the screen tree, the details indented under their parent: **Screen**, **Table**, **Prefix** (the column prefix found in the database), **Columns**, **Not in the table** (the items the table lacks), and the **State** of each — *new*, *exists* or *replace*. The **Menu** line shows the folder and its items the same way. A table or a key that cannot be found stops the module, with the reason.
+3. **Apply the module** writes everything at once: *Applied: 7 queries, 7 screens, 4 menu entries, 244 dictionary entries.* The sidebar shows the new folder at once, and **Open the new screen** opens its first screen.
+
+What a module creates:
+
+- one **read query** per screen, ordered by the key, with the lookup tables joined for their descriptions;
+- **read-only screens** whose dialog carries the module's tabs, and one tab per related table — a list for a one-to-many link, a form for a one-to-one link —, bound on the parent's key;
+- the **filters** the module names, applied in the database;
+- the **menu folder** of the module, with an item per main screen;
+- the **dictionary entries** of the columns, from the source's data dictionary — labels, formats, value lists.
+
+Applying is additive: what already exists is kept. **Replace the module's existing entries** rewrites the module's own queries, screens and menu items — a change made to them since is lost. When everything exists already, there is nothing to apply. The three files are validated before anything is written: everything is written, or nothing. Superusers only.
+
+Liberty Apps ships the **Address Book** module for JD Edwards EnterpriseOne: the address book with its contacts, phones, e-mails and dated addresses, the customer and supplier masters — see [Nomajde → Address Book](../../nomajde/master-data/address-book.md).
+
 ## Column picker
 
 The pickers on steps 2 and 3 are built for wide sources — a full JDE `F0101` scan is not fun in a flat list. They share a few conventions:
@@ -6013,7 +6037,7 @@ The schema's top-level fields, grouped by purpose:
 | **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
 | **Read query** | `read_query` (required), `auto_load`, `max_rows`, `page_size` (rows per page of the grid; blank = the app's default), `key_columns` |
 | **Write queries** | `update_query`, `insert_query`, `delete_query` |
-| **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only` (a click on a row opens the dialog view only — no save, no record lock —, its detail tabs loading from the row), `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Views & summary** | `views` (shared views), `summary`, `value_diff` |
 | **Change packages** | `change_tracked`, `change_entity`, `post_apply` — see [Change packages](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (e.g. `AUD_USERS` — mirrors writes with AUD_ACTION / AUD_USER / AUD_DATE) |
@@ -6738,6 +6762,7 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`call_plugin`** | Calls a server-side Python function (`module:function`), the same entry points Nomaflow runs as steps. | `callable`, `param_binds`, `bind_result` |
 | **`call_action`** | Runs a [shared action](#shared) by its id. | `ref`, `param_binds` |
 | **`navigate`** | Opens another view: a screen (`screen`) or a query (`to`), with `param_binds` passed as its parameters. | `connector`, `screen` or `to`, `param_binds` |
+| **`open_url`** | Opens an external address — another application on the row's record. | `url`, `new_tab` |
 | **`set_field`** | Writes a value into a form field. | `target`, `value` or `source` |
 | **`confirm`** | Asks for confirmation; **Cancel** stops the chain. | `message`, `confirm_label`, `cancel_label` |
 | **`notify`** | Shows a message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
@@ -6745,6 +6770,16 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`refresh`** | Reloads the grid. | — |
 
 `bind_result` keeps the rows (or the response) of the step in the chain's context, so that a later step reads them with `source = "<id>.first_row.<COLUMN>"`.
+
+### Open an external address \{#open-url\}
+
+An **`open_url`** action opens another application on the record at hand — the JD Edwards form of an address book entry, a ticket in a help desk. It can sit in a row menu, on the toolbar, in a dialog tab, behind a drill column or in a chain, and can ask for values first.
+
+- **`url`** is a template: `{COLUMN}` takes the value of a column of the row, a field of the form, a value asked for, or a step of the chain — `{step.first_row.X}` —, encoded for an address; `#LOGIN_USER#` and the other built-ins are filled too. `https://helpdesk.example.com/tickets?customer={CUSTOMER_ID}`.
+- An address that differs from one install to the next is written `#URL.NAME#` at the start: `#URL.JDE_WEB#/ShortcutLauncher?OID=P01012_W01012A&…`. Each install sets the address once, in [App → External addresses](../settings-app.md#external-urls); without it, the action opens nothing.
+- **`new_tab`**: on by default; off, the address replaces the page.
+
+Only `http://`, `https://` addresses and paths of this server are opened; anything else is refused when the configuration loads, and checked again on the filled address. A row menu whose only action is an `open_url` fires it from the row handle.
 
 ### The row handle and drill-downs \{#drill\}
 
@@ -6755,7 +6790,7 @@ A screen with row-menu actions shows a small handle at the start of every row, s
 
 **Link cells.** A column's **drill** setting (Liberty Next → Build → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
 
-**Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Liberty Next → Administer → App](../settings-app.md#app), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
+**Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Liberty Next → Administer → App](../settings-app.md#display), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
 
 ### Composite types
 
@@ -7689,11 +7724,11 @@ The filter is case-insensitive and matches anywhere in the id or label. Folders 
 ## Liberty Next — Item types
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/item-types/
 
-The six leaf kinds — screen / query / endpoint / dashboard / page / job — what each opens, the target field's shape, the connector rule, and when to reach for each.
+The seven leaf kinds — screen / query / endpoint / dashboard / page / job / url — what each opens, the target field's shape, the connector rule, and when to reach for each.
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Six leaf kinds:
+Seven leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
@@ -7702,6 +7737,7 @@ Six leaf kinds:
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | `<app>.<id>` of the dashboard. | Must NOT be set (the app is in the target). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
+| **`url`** | An external address, in a new browser tab. | The address: `https://…`, a path of this server, or `#URL.NAME#/…` — see [External addresses](../settings-app.md#external-urls). | Must NOT be set. |
 | **`job`** | The page of a Nomaflow job: its files and parameters, Run, the live log, the previous runs. | The job id. | Must NOT be set. |
 
 This page walks each in detail with concrete examples.
@@ -10436,7 +10472,7 @@ Source: https://docs.nomana-it.fr/liberty/framework/build/settings-app/
 
 Liberty Next → Administer → App: every setting of the install, section by section — App (name, address, sub-path, language, UI defaults, hot reload, Oracle thick mode), Server log, Sign-in, Nomaflow, Change packages, License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding, and the read-only Deployment values — what each field does, which secrets are encrypted, and what needs a restart.
 
-**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. Each section folds — the first one is open — and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
+**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. The sections are listed in alphabetical order, the read-only *Deployment* last; each folds and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret and session secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
@@ -10446,7 +10482,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 
 ---
 
-## App \{#app\}
+## Server \{#app\}
 
 | Field | Notes |
 |---|---|
@@ -10454,6 +10490,13 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
 | **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it. **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
+| **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
+| **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
+
+## Display \{#display\}
+
+| Field | Notes |
+|---|---|
 | **Default language** | Labels when a request names no language. |
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
@@ -10462,8 +10505,10 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the Settings, Monitoring and run tabs stay. |
 | **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
 | **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
-| **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
-| **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
+
+## External addresses \{#external-urls\}
+
+The systems this install links to — the JD Edwards web client, an intranet. One line per address: a **name** in capitals (`JDE_WEB`) and its **URL** (`https://jde.example.com:8080/jde`); **Add an address** adds one. An *Open in* action or a link menu item writes `#URL.JDE_WEB#` at the start of its address instead of the address itself: the screens and menus shipped with an application then carry no customer address, and each install sets its own. A change applies at once. An address the install does not set gives no link: the action opens nothing.
 
 When a saved change needs a restart, the page says *Saved. Restart the server to apply the new settings.*
 
@@ -10891,7 +10936,8 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | API endpoint | One endpoint of an API connector. |
 | Dashboard | One dashboard. |
 | Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
-| Job | One Nomaflow job: its menu item and its page — files, parameters, run, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
+| nomaflow | **Follow the jobs** (`nomaflow:view`) — the Jobs, Schedule and Job Runs pages, the runs and their logs; **Create and edit jobs** (`nomaflow:edit`) — create, change, pause and resume jobs; it runs SQL and Python without row scope. See [Nomaflow administration](../../../nomaflow/administration.md#permissions). |
+| Job | One Nomaflow job, or **Every job** (`job:*`): its menu item and its page — files, parameters, run, cancel, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | The assistant. |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 
@@ -15381,7 +15427,15 @@ Each run collects its log lines in memory — the `liberty.*` loggers, the `noma
 
 ## Who can use Nomaflow \{#permissions\}
 
-The Jobs pages and their API (`/admin/jobs/…`) are reserved to **superusers**. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
+Superusers see and do everything. Other users get what their roles grant, in **Liberty Next → Administer → Access**, *Beyond the menus*:
+
+| Grant | Gives |
+|---|---|
+| **nomaflow → Follow the jobs** (`nomaflow:view`) | The Jobs, Schedule and Job Runs pages: the jobs, their schedules, their runs with logs and files. |
+| **Job → Every job** (`job:*`), or one job (`job:<id>`) | Run the job — with its files and parameters — and cancel its runs. |
+| **nomaflow → Create and edit jobs** (`nomaflow:edit`) | Includes *Follow the jobs*; create, change, clone, delete, pause and resume jobs, save presets. The steps run SQL and Python without the row scope of the user: grant it with care. |
+
+The retention and missed-schedule policies and the export of a job stay with the superusers. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
 
 ---
 
@@ -19614,6 +19668,67 @@ Save writes back to JDE; the row appears in the grid immediately and is usable b
 - **Use *Description 1* as the short label, *Description 2* for the long form.** JDE programs read both; keeping them consistent avoids audit confusion.
 - **Never edit a hard-coded value.** `Y` in the *Hard-coded* column means a JDE program tests the value against a literal — renaming it changes behaviour silently.
 - **For mass loads**, use the Excel export, edit it offline, then re-import via the upload action — much faster than typing each row.
+
+---
+
+## Nomajde — Address Book
+Source: https://docs.nomana-it.fr/liberty/nomajde/master-data/address-book/
+
+The Nomajde Address Book folder: the JD Edwards EnterpriseOne Address Book (F0101) with its contacts, dated addresses, customer and supplier, the Customer Master (F03012) and the Supplier Master (F0401) — read-only grids with filters and detail tabs, and Open in JDE on a row.
+
+The **Address Book** folder, under **Master Data**, shows the JD Edwards EnterpriseOne Address Book in three read-only screens: the address book itself, the customers and the suppliers. The data is read live in JD Edwards; changes are made in JD Edwards, which **Open in JDE** opens on the right record.
+
+---
+
+## At a glance
+
+---
+
+## Address Book \{#address-book\}
+
+One line per address book entry (F0101).
+
+| Filter | Finds |
+|---|---|
+| **Address Number**, **Alpha Name**, **Long Address** | One entry, by number, name or long address. |
+| **Search Type** | The kind of entry — customer, supplier, employee… |
+| **Tax ID**, **Business Unit**, **Industry Classification** | The entries of a tax id, a business unit, an industry. |
+
+The grid opens on the main columns — number, name, search type, long address, tax id, business unit — and offers the rest of the record in its **Columns** menu: language, credit message, category codes 01 to 30, the related addresses.
+
+A click on a row opens the record, view only:
+
+| Tab | Content |
+|---|---|
+| **General**, **Flags**, **Category codes**, **Related addresses** | The fields of the address book record. |
+| **Who's Who** | The contacts of the entry, with their phones and e-mail addresses. |
+| **Addresses** | The dated postal addresses. |
+| **Customer** | The customer record of the entry, per company. |
+| **Supplier** | The supplier record of the entry. |
+
+The descriptions of the coded fields — currency, payment terms, business unit, UDC values — show next to the codes.
+
+---
+
+## Customer Master \{#customer-master\}
+
+One line per customer and company (F03012), with the customer's name and long address: credit limit, currency, payment terms, hold code, G/L offset, business unit, credit manager. Filters: **Address Number**, **Long Address**, **Alpha Name**, **Company**, **G/L Offset**.
+
+---
+
+## Supplier Master \{#supplier-master\}
+
+One line per supplier (F0401), with the supplier's name and long address: currency, payment terms, hold code, payment instrument. Filters: **Address Number**, **Long Address**, **Alpha Name**.
+
+---
+
+## Open in JDE \{#open-in-jde\}
+
+On an Address Book row, **Open in JDE** — in the row menu, or the arrow at the start of the row — opens the record in the JD Edwards web client, on the Address Book Revisions form (P01012), in a new browser tab. The JD Edwards web address is set once for the install, as the external address `JDE_WEB` — see [App settings → External addresses](../../framework/build/settings-app.md#external-urls). Without it, the action opens nothing.
+
+:::info[JDE-specific]
+The screens read the JD Edwards EnterpriseOne tables through the `jdedwards` connector, with the row-level scope of the user's roles.
+:::
 
 ---
 

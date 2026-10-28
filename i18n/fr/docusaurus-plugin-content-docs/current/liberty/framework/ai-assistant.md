@@ -191,7 +191,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
-- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Beyond the menus**).
+- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Au-delà des menus**).
 - **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.

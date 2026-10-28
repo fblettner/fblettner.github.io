@@ -114,7 +114,15 @@ Each run collects its log lines in memory — the `liberty.*` loggers, the `noma
 
 ## Who can use Nomaflow \{#permissions\}
 
-The Jobs pages and their API (`/admin/jobs/…`) are reserved to **superusers**. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
+Superusers see and do everything. Other users get what their roles grant, in **Liberty Next → Administer → Access**, *Beyond the menus*:
+
+| Grant | Gives |
+|---|---|
+| **nomaflow → Follow the jobs** (`nomaflow:view`) | The Jobs, Schedule and Job Runs pages: the jobs, their schedules, their runs with logs and files. |
+| **Job → Every job** (`job:*`), or one job (`job:<id>`) | Run the job — with its files and parameters — and cancel its runs. |
+| **nomaflow → Create and edit jobs** (`nomaflow:edit`) | Includes *Follow the jobs*; create, change, clone, delete, pause and resume jobs, save presets. The steps run SQL and Python without the row scope of the user: grant it with care. |
+
+The retention and missed-schedule policies and the export of a job stay with the superusers. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
 
 ---
 

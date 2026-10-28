@@ -94,7 +94,7 @@ Les titulaires voient les écrans et le tableau de bord, mais toute écriture es
 |---|---|
 | Base | **No access** |
 | Menus | **Allow** sur *Ventes* et *Pipeline*. |
-| Beyond the menus | **Allow** — Connector (all queries) — `crm`. |
+| Au-delà des menus | **Allow** — Connector (all queries) — `crm`. |
 
 La règle sur le connecteur accorde toutes les requêtes de `crm`, écritures comprises. **Save** pour chaque rôle.
 

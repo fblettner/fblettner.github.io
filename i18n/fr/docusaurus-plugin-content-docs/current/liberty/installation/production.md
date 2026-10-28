@@ -49,6 +49,10 @@ Les installations livrées sont déjà sécurisées ; cette page liste ce qu'ell
 
 ---
 
+## L'installer comme une application \{#pwa\}
+
+En HTTPS, les utilisateurs peuvent installer Liberty Next comme une application sur leur poste : **Installer** dans Chrome ou Edge, **Ajouter au Dock** dans Safari. Elle s'ouvre alors dans sa propre fenêtre, avec sa propre icône, sous le nom défini dans le thème — et sous le sous-chemin quand l'installation en a un. Rien n'est conservé sur le poste : chaque ouverture charge la version en service.
+
 ## Une seule instance \{#replicas\}
 
 Les mises à jour en temps réel (cloche des notifications, verrous d'enregistrement, réponses de l'assistant) sont tenues dans le processus du serveur, et la limitation des connexions compte par processus. Exécuter **une seule** instance de `liberty-next` : plusieurs répliques montreraient aux utilisateurs des états différents.

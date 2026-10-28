@@ -24,7 +24,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 
 ### 1. Ouvrir l'assistant
 
-Dans **Liberty Next → Administrer → Accès → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Beyond the menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
+Dans **Liberty Next → Administrer → Accès → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Au-delà des menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ### 2. Limiter les connecteurs
 

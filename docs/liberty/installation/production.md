@@ -49,6 +49,10 @@ The shipped layouts are already hardened; this page lists what they do for you a
 
 ---
 
+## Install it as an app \{#pwa\}
+
+Over HTTPS, users can install Liberty Next as an application on their computer: **Install** in Chrome or Edge, **Add to Dock** in Safari. It then opens in its own window, with its own icon, under the name given in the theme — and under the sub-path when the install has one. Nothing is kept on the device: each opening loads the running version.
+
 ## Keep one replica \{#replicas\}
 
 Live updates (the notification bell, record locks, the assistant's answers) are held in the server process, and the sign-in throttle counts per process. Run **one** `liberty-next` instance: several replicas would show users different states.

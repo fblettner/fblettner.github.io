@@ -67,7 +67,7 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
 
 ### Accès
 
-Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
+Dans le rôle `crm-sales`, **Au-delà des menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
 
 ### Descriptions
 

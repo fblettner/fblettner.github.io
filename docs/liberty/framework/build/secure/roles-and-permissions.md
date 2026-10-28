@@ -205,7 +205,8 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | API endpoint | One endpoint of an API connector. |
 | Dashboard | One dashboard. |
 | Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
-| Job | One Nomaflow job: its menu item and its page — files, parameters, run, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
+| nomaflow | **Follow the jobs** (`nomaflow:view`) — the Jobs, Schedule and Job Runs pages, the runs and their logs; **Create and edit jobs** (`nomaflow:edit`) — create, change, pause and resume jobs; it runs SQL and Python without row scope. See [Nomaflow administration](../../../nomaflow/administration.md#permissions). |
+| Job | One Nomaflow job, or **Every job** (`job:*`): its menu item and its page — files, parameters, run, cancel, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | The assistant. |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 

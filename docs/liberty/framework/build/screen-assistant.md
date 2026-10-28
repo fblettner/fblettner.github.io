@@ -123,6 +123,26 @@ The **Address Book** catalog (`config/presets/jdedwards/address_book.toml`): the
 
 ---
 
+## A whole module \{#module\}
+
+**A module**, beside **A screen** in the assistant's header, builds an entire functional module in one go — several screens linked to each other, their menu folder and their dictionary entries — from a **module catalogue** shipped with the presets.
+
+1. Pick a module in the list — searchable, grouped by area (*JDE · Address Book*); each shows its application, its connector and its number of screens.
+2. The preview reads the live tables at once and shows the screen tree, the details indented under their parent: **Screen**, **Table**, **Prefix** (the column prefix found in the database), **Columns**, **Not in the table** (the items the table lacks), and the **State** of each — *new*, *exists* or *replace*. The **Menu** line shows the folder and its items the same way. A table or a key that cannot be found stops the module, with the reason.
+3. **Apply the module** writes everything at once: *Applied: 7 queries, 7 screens, 4 menu entries, 244 dictionary entries.* The sidebar shows the new folder at once, and **Open the new screen** opens its first screen.
+
+What a module creates:
+
+- one **read query** per screen, ordered by the key, with the lookup tables joined for their descriptions;
+- **read-only screens** whose dialog carries the module's tabs, and one tab per related table — a list for a one-to-many link, a form for a one-to-one link —, bound on the parent's key;
+- the **filters** the module names, applied in the database;
+- the **menu folder** of the module, with an item per main screen;
+- the **dictionary entries** of the columns, from the source's data dictionary — labels, formats, value lists.
+
+Applying is additive: what already exists is kept. **Replace the module's existing entries** rewrites the module's own queries, screens and menu items — a change made to them since is lost. When everything exists already, there is nothing to apply. The three files are validated before anything is written: everything is written, or nothing. Superusers only.
+
+Liberty Apps ships the **Address Book** module for JD Edwards EnterpriseOne: the address book with its contacts, phones, e-mails and dated addresses, the customer and supplier masters — see [Nomajde → Address Book](../../nomajde/master-data/address-book.md).
+
 ## Column picker
 
 The pickers on steps 2 and 3 are built for wide sources — a full JDE `F0101` scan is not fun in a flat list. They share a few conventions:

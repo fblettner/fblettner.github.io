@@ -70,6 +70,7 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`call_plugin`** | Appelle une fonction Python côté serveur (`module:fonction`), les mêmes points d'entrée que les étapes Nomaflow. | `callable`, `param_binds`, `bind_result` |
 | **`call_action`** | Exécute une [action partagée](#shared) par son identifiant. | `ref`, `param_binds` |
 | **`navigate`** | Ouvre une autre vue : un écran (`screen`) ou une requête (`to`), les `param_binds` lui étant transmis comme paramètres. | `connector`, `screen` ou `to`, `param_binds` |
+| **`open_url`** | Ouvre une adresse externe — une autre application sur la fiche de la ligne. | `url`, `new_tab` |
 | **`set_field`** | Écrit une valeur dans un champ du formulaire. | `target`, `value` ou `source` |
 | **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. | `message`, `confirm_label`, `cancel_label` |
 | **`notify`** | Affiche un message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
@@ -77,6 +78,16 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`refresh`** | Recharge la grille. | — |
 
 `bind_result` conserve les lignes (ou la réponse) de l'étape dans le contexte de la chaîne : une étape suivante les lit avec `source = "<id>.first_row.<COLONNE>"`.
+
+### Ouvrir une adresse externe \{#open-url\}
+
+Une action **`open_url`** ouvre une autre application sur la fiche en cours — le formulaire JD Edwards d'une fiche du carnet d'adresses, un ticket du support. Elle peut figurer dans un menu de ligne, dans la barre d'outils, dans un onglet de dialogue, derrière une colonne de navigation ou dans une chaîne, et demander d'abord des valeurs.
+
+- **`url`** est un modèle : `{COLONNE}` reprend la valeur d'une colonne de la ligne, d'un champ du formulaire, d'une valeur demandée ou d'une étape de la chaîne — `{step.first_row.X}` —, encodée pour une adresse ; `#LOGIN_USER#` et les autres variables intégrées sont remplies aussi. `https://helpdesk.example.com/tickets?customer={CUSTOMER_ID}`.
+- Une adresse qui change d'une installation à l'autre s'écrit `#URL.NOM#` en tête : `#URL.JDE_WEB#/ShortcutLauncher?OID=P01012_W01012A&…`. Chaque installation fixe l'adresse une fois, dans [App → Adresses externes](../settings-app.md#external-urls) ; sans elle, l'action n'ouvre rien.
+- **`new_tab`** : activé par défaut ; désactivé, l'adresse remplace la page.
+
+Seules les adresses `http://`, `https://` et les chemins de ce serveur s'ouvrent ; tout le reste est refusé au chargement de la configuration, puis contrôlé de nouveau sur l'adresse remplie. Un menu de ligne dont la seule action est un `open_url` la déclenche depuis la poignée de ligne.
 
 ### La poignée de ligne et la navigation \{#drill\}
 
@@ -87,7 +98,7 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 
 **Cellules en lien.** Le réglage **drill** d'une colonne (Liberty Next → Construire → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
 
-**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#app), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
+**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#display), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
 
 ### Types composites
 

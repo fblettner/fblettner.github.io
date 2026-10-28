@@ -1,6 +1,6 @@
 ---
 title: Item types
-description: "The six leaf kinds — screen / query / endpoint / dashboard / page / job — what each opens, the target field's shape, the connector rule, and when to reach for each."
+description: "The seven leaf kinds — screen / query / endpoint / dashboard / page / job / url — what each opens, the target field's shape, the connector rule, and when to reach for each."
 keywords: [Liberty Framework, menu item, screen, query, endpoint, dashboard, page, target, connector, leaf, folder]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Framework, menu item, screen, query, endpoint, dashboard, pag
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Six leaf kinds:
+Seven leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
@@ -17,6 +17,7 @@ Six leaf kinds:
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | `<app>.<id>` of the dashboard. | Must NOT be set (the app is in the target). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
+| **`url`** | An external address, in a new browser tab. | The address: `https://…`, a path of this server, or `#URL.NAME#/…` — see [External addresses](../settings-app.md#external-urls). | Must NOT be set. |
 | **`job`** | The page of a Nomaflow job: its files and parameters, Run, the live log, the previous runs. | The job id. | Must NOT be set. |
 
 This page walks each in detail with concrete examples.

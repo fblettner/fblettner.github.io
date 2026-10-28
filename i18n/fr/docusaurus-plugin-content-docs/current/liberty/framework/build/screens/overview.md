@@ -136,7 +136,7 @@ Les champs de premier niveau du schéma, regroupés par finalité :
 | **Identité** | `id`, `label`, `description`, `connector` *(vide = le connecteur de l'application)* |
 | **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `page_size` (lignes par page de la grille ; vide = la valeur de l'application), `key_columns` |
 | **Requêtes d'écriture** | `update_query`, `insert_query`, `delete_query` |
-| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only` (un clic sur une ligne ouvre le dialogue en consultation — ni enregistrement, ni verrou —, ses onglets de détail se chargeant à partir de la ligne), `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Vues et résumé** | `views` (vues partagées), `summary`, `value_diff` |
 | **Paquets de modifications** | `change_tracked`, `change_entity`, `post_apply` — voir [Paquets de modifications](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (ex. `AUD_USERS` — duplique les écritures avec AUD_ACTION / AUD_USER / AUD_DATE) |

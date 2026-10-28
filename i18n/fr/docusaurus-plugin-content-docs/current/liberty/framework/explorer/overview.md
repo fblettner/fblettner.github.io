@@ -187,7 +187,7 @@ Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d
 
 ## Qui voit quoi \{#access\}
 
-- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Liberty Next → Administrer → Accès → Roles**, bloc **Beyond the menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
 - Le **périmètre de données** du rôle s'applique à chaque requête de l'explorateur : un utilisateur limité aux lignes d'une société dans les écrans retrouve exactement ces lignes dans l'explorateur, totaux compris. Voir [Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
 - Une entrée de menu peut ouvrir l'explorateur sur un modèle précis (`/explorer/<app>/<model>`) : chaque dossier fonctionnel d'une application mène ainsi à ses propres données, et le sélecteur de modèle permet toujours d'en changer. Voir [Types d'entrées de menu](../build/menus/item-types.md#explorer).
 - Seul un superutilisateur modifie **Liberty Next → Construire → Explorateur** ; lui seul voit aussi le SQL d'une analyse et les avertissements du modèle (colonne disparue, mesure non numérique).

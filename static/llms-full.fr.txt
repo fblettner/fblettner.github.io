@@ -951,7 +951,7 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 |---|---|
 | **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
-| **Données de base** | Types et codes UDC. Chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel. |
+| **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |
@@ -1640,7 +1640,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
-- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Beyond the menus**).
+- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Au-delà des menus**).
 - **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
@@ -1685,7 +1685,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 
 ### 1. Ouvrir l'assistant
 
-Dans **Liberty Next → Administrer → Accès → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Beyond the menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
+Dans **Liberty Next → Administrer → Accès → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Au-delà des menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ### 2. Limiter les connecteurs
 
@@ -3632,6 +3632,10 @@ Les installations livrées sont déjà sécurisées ; cette page liste ce qu'ell
 
 ---
 
+## L'installer comme une application \{#pwa\}
+
+En HTTPS, les utilisateurs peuvent installer Liberty Next comme une application sur leur poste : **Installer** dans Chrome ou Edge, **Ajouter au Dock** dans Safari. Elle s'ouvre alors dans sa propre fenêtre, avec sa propre icône, sous le nom défini dans le thème — et sous le sous-chemin quand l'installation en a un. Rien n'est conservé sur le poste : chaque ouverture charge la version en service.
+
 ## Une seule instance \{#replicas\}
 
 Les mises à jour en temps réel (cloche des notifications, verrous d'enregistrement, réponses de l'assistant) sont tenues dans le processus du serveur, et la limitation des connexions compte par processus. Exécuter **une seule** instance de `liberty-next` : plusieurs répliques montreraient aux utilisateurs des états différents.
@@ -4084,7 +4088,7 @@ Les titulaires voient les écrans et le tableau de bord, mais toute écriture es
 |---|---|
 | Base | **No access** |
 | Menus | **Allow** sur *Ventes* et *Pipeline*. |
-| Beyond the menus | **Allow** — Connector (all queries) — `crm`. |
+| Au-delà des menus | **Allow** — Connector (all queries) — `crm`. |
 
 La règle sur le connecteur accorde toutes les requêtes de `crm`, écritures comprises. **Save** pour chaque rôle.
 
@@ -4157,7 +4161,7 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
 
 ### Accès
 
-Dans le rôle `crm-sales`, **Beyond the menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
+Dans le rôle `crm-sales`, **Au-delà des menus** : **Allow** — *AI assistant*. Enregistrer. Bob dispose désormais d'un bouton **Assistant** en haut à droite.
 
 ### Descriptions
 
@@ -4494,7 +4498,7 @@ Chaque requête et chaque endpoint a sa propre permission :
 | `sql:<connecteur>:<requête>` | L'exécution de la requête — en lecture comme en écriture. |
 | `api:<connecteur>:<endpoint>` | L'appel de l'endpoint. |
 
-Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'elle ouvre, et **Beyond the menus** accorde une requête, un endpoint ou un connecteur entier — des motifs comme `sql:billing:report_*` sont acceptés. Voir [Rôles et permissions](./build/secure/roles-and-permissions.md).
+Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'elle ouvre, et **Au-delà des menus** accorde une requête, un endpoint ou un connecteur entier — des motifs comme `sql:billing:report_*` sont acceptés. Voir [Rôles et permissions](./build/secure/roles-and-permissions.md).
 
 ---
 
@@ -5905,6 +5909,26 @@ Le catalogue **Address Book** (`config/presets/jdedwards/address_book.toml`) : l
 
 ---
 
+## Un module entier \{#module\}
+
+**Un module**, à côté de **Un écran** dans l'en-tête de l'assistant, construit d'un seul coup tout un module fonctionnel — plusieurs écrans reliés entre eux, leur dossier de menu et leurs entrées de dictionnaire — à partir d'un **catalogue de modules** livré avec les préréglages.
+
+1. Choisir un module dans la liste — avec recherche, groupée par domaine (*JDE · Address Book*) ; chacun indique son application, son connecteur et son nombre d'écrans.
+2. L'aperçu lit aussitôt les tables en service et présente l'arbre des écrans, les détails en retrait sous leur parent : **Écran**, **Table**, **Préfixe** (le préfixe de colonnes trouvé dans la base), **Colonnes**, **Absent de la table** (les éléments qui manquent à la table), et l'**État** de chacun — *nouveau*, *existe* ou *remplacé*. La ligne **Menu** présente de la même façon le dossier et ses entrées. Une table ou une clé introuvable bloque le module, avec la raison.
+3. **Appliquer le module** écrit tout d'un coup : *Appliqué : 7 requêtes, 7 écrans, 4 entrées de menu, 244 entrées de dictionnaire.* Le menu latéral affiche aussitôt le nouveau dossier, et **Ouvrir le nouvel écran** ouvre son premier écran.
+
+Ce que crée un module :
+
+- une **requête de lecture** par écran, triée sur la clé, avec les tables de référence jointes pour leurs libellés ;
+- des **écrans en consultation** dont le dialogue porte les onglets du module, et un onglet par table liée — une liste pour un lien un-à-plusieurs, un formulaire pour un lien un-à-un —, reliés à la clé du parent ;
+- les **filtres** que nomme le module, appliqués dans la base ;
+- le **dossier de menu** du module, avec une entrée par écran principal ;
+- les **entrées de dictionnaire** des colonnes, issues du dictionnaire de données de la source — libellés, formats, listes de valeurs.
+
+L'application est additive : ce qui existe déjà est conservé. **Remplacer les entrées existantes du module** réécrit les requêtes, écrans et entrées de menu propres au module — une modification faite depuis est perdue. Quand tout existe déjà, il n'y a rien à appliquer. Les trois fichiers sont validés avant toute écriture : tout est écrit, ou rien. Réservé aux superutilisateurs.
+
+Liberty Apps livre le module **Address Book** pour JD Edwards EnterpriseOne : le carnet d'adresses avec ses contacts, téléphones, e-mails et adresses datées, les fichiers clients et fournisseurs — voir [Nomajde → Carnet d'adresses](../../nomajde/master-data/address-book.md).
+
 ## Sélecteur de colonnes
 
 Les sélecteurs des étapes 2 et 3 sont pensés pour les sources larges — un scan complet d'un `F0101` JDE n'est pas amusant dans une liste plate. Ils partagent quelques conventions :
@@ -5982,7 +6006,7 @@ Les champs de premier niveau du schéma, regroupés par finalité :
 | **Identité** | `id`, `label`, `description`, `connector` *(vide = le connecteur de l'application)* |
 | **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `page_size` (lignes par page de la grille ; vide = la valeur de l'application), `key_columns` |
 | **Requêtes d'écriture** | `update_query`, `insert_query`, `delete_query` |
-| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
+| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only` (un clic sur une ligne ouvre le dialogue en consultation — ni enregistrement, ni verrou —, ses onglets de détail se chargeant à partir de la ligne), `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Vues et résumé** | `views` (vues partagées), `summary`, `value_diff` |
 | **Paquets de modifications** | `change_tracked`, `change_entity`, `post_apply` — voir [Paquets de modifications](../../../nomaflow/change-packages.md) |
 | **Audit** | `audit_table` (ex. `AUD_USERS` — duplique les écritures avec AUD_ACTION / AUD_USER / AUD_DATE) |
@@ -6707,6 +6731,7 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`call_plugin`** | Appelle une fonction Python côté serveur (`module:fonction`), les mêmes points d'entrée que les étapes Nomaflow. | `callable`, `param_binds`, `bind_result` |
 | **`call_action`** | Exécute une [action partagée](#shared) par son identifiant. | `ref`, `param_binds` |
 | **`navigate`** | Ouvre une autre vue : un écran (`screen`) ou une requête (`to`), les `param_binds` lui étant transmis comme paramètres. | `connector`, `screen` ou `to`, `param_binds` |
+| **`open_url`** | Ouvre une adresse externe — une autre application sur la fiche de la ligne. | `url`, `new_tab` |
 | **`set_field`** | Écrit une valeur dans un champ du formulaire. | `target`, `value` ou `source` |
 | **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. | `message`, `confirm_label`, `cancel_label` |
 | **`notify`** | Affiche un message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
@@ -6714,6 +6739,16 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`refresh`** | Recharge la grille. | — |
 
 `bind_result` conserve les lignes (ou la réponse) de l'étape dans le contexte de la chaîne : une étape suivante les lit avec `source = "<id>.first_row.<COLONNE>"`.
+
+### Ouvrir une adresse externe \{#open-url\}
+
+Une action **`open_url`** ouvre une autre application sur la fiche en cours — le formulaire JD Edwards d'une fiche du carnet d'adresses, un ticket du support. Elle peut figurer dans un menu de ligne, dans la barre d'outils, dans un onglet de dialogue, derrière une colonne de navigation ou dans une chaîne, et demander d'abord des valeurs.
+
+- **`url`** est un modèle : `{COLONNE}` reprend la valeur d'une colonne de la ligne, d'un champ du formulaire, d'une valeur demandée ou d'une étape de la chaîne — `{step.first_row.X}` —, encodée pour une adresse ; `#LOGIN_USER#` et les autres variables intégrées sont remplies aussi. `https://helpdesk.example.com/tickets?customer={CUSTOMER_ID}`.
+- Une adresse qui change d'une installation à l'autre s'écrit `#URL.NOM#` en tête : `#URL.JDE_WEB#/ShortcutLauncher?OID=P01012_W01012A&…`. Chaque installation fixe l'adresse une fois, dans [App → Adresses externes](../settings-app.md#external-urls) ; sans elle, l'action n'ouvre rien.
+- **`new_tab`** : activé par défaut ; désactivé, l'adresse remplace la page.
+
+Seules les adresses `http://`, `https://` et les chemins de ce serveur s'ouvrent ; tout le reste est refusé au chargement de la configuration, puis contrôlé de nouveau sur l'adresse remplie. Un menu de ligne dont la seule action est un `open_url` la déclenche depuis la poignée de ligne.
 
 ### La poignée de ligne et la navigation \{#drill\}
 
@@ -6724,7 +6759,7 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 
 **Cellules en lien.** Le réglage **drill** d'une colonne (Liberty Next → Construire → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
 
-**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#app), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
+**Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#display), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
 
 ### Types composites
 
@@ -7658,11 +7693,11 @@ Le filtre est insensible à la casse et trouve la sous-chaîne n'importe où dan
 ## Liberty Next — Types d'éléments
 Source: https://docs.nomana-it.fr/fr/liberty/framework/build/menus/item-types/
 
-Les six types de feuilles — screen / query / endpoint / dashboard / page / job — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun.
+Les sept types de feuilles — screen / query / endpoint / dashboard / page / job / url — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun.
 
 Un élément de menu est soit un **dossier** (sans `type`), soit une **feuille** qui ouvre quelque chose. Le `type` de la feuille décide ce qu'est ce quelque chose et ce que signifient les champs `target` / `connector`.
 
-Six types de feuilles :
+Sept types de feuilles :
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
@@ -7671,6 +7706,7 @@ Six types de feuilles :
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
+| **`url`** | Une adresse externe, dans un nouvel onglet du navigateur. | L'adresse : `https://…`, un chemin de ce serveur, ou `#URL.NOM#/…` — voir [Adresses externes](../settings-app.md#external-urls). | NE doit PAS être renseigné. |
 | **`job`** | La page d'une tâche Nomaflow : ses fichiers et paramètres, Lancer, le journal en direct, les exécutions précédentes. | L'identifiant de la tâche. | NE doit PAS être renseigné. |
 
 Cette page détaille chacun avec des exemples concrets.
@@ -7872,7 +7908,7 @@ Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui 
 | **`connector`** | NE doit PAS être renseigné. |
 | **`params`** | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
 
-L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Beyond the menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
+L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Au-delà des menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
 
 ### Exemple
 
@@ -8658,7 +8694,7 @@ Un opérateur décrit d'abord les données une fois pour toutes, sous la forme d
 
 ## Qui voit quoi \{#access\}
 
-- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Liberty Next → Administrer → Accès → Roles**, bloc **Beyond the menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde : dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type **Data Explorer**, puis un modèle ou tous les modèles d'une application. Les superutilisateurs voient tous les modèles. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md#access).
 - Le **périmètre de données** du rôle s'applique à chaque requête de l'explorateur : un utilisateur limité aux lignes d'une société dans les écrans retrouve exactement ces lignes dans l'explorateur, totaux compris. Voir [Périmètre de données](../build/secure/roles-and-permissions.md#data-scope).
 - Une entrée de menu peut ouvrir l'explorateur sur un modèle précis (`/explorer/<app>/<model>`) : chaque dossier fonctionnel d'une application mène ainsi à ses propres données, et le sélecteur de modèle permet toujours d'en changer. Voir [Types d'entrées de menu](../build/menus/item-types.md#explorer).
 - Seul un superutilisateur modifie **Liberty Next → Construire → Explorateur** ; lui seul voit aussi le SQL d'une analyse et les avertissements du modèle (colonne disparue, mesure non numérique).
@@ -10416,7 +10452,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/build/settings-app/
 
 Liberty Next → Administrer → App : tous les réglages de l'installation, section par section — Application (nom, adresse, sous-chemin, langue, valeurs par défaut de l'interface, onglets, navigation, rechargement à chaud, mode épais d'Oracle), Journal du serveur, Connexion, Nomaflow, Paquets de changements, Licence, Assistant IA, Notifications (e-mail), OpenID Connect (SSO), Charte des PDF, et les valeurs de Déploiement en lecture seule — le rôle de chaque champ, les secrets chiffrés, et ce qui demande un redémarrage.
 
-**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Chaque section se replie — la première est ouverte — et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Les sections sont classées par ordre alphabétique, *Déploiement* en lecture seule en dernier ; chacune se replie et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client et secret de session OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -10426,7 +10462,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 
 ---
 
-## Application \{#app\}
+## Serveur \{#app\}
 
 | Champ | Remarques |
 |---|---|
@@ -10434,6 +10470,13 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
 | **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent. **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
+| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
+| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+
+## Affichage \{#display\}
+
+| Champ | Remarques |
+|---|---|
 | **Langue par défaut** | Langue des libellés quand une requête n'en indique pas. |
 | **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
 | **Taille de page des grilles** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
@@ -10442,8 +10485,10 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets Paramètres, Surveillance et d'exécution restent ouverts. |
 | **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme l'onglet le plus ancien. |
 | **Les navigations s'ouvrent dans l'onglet courant (…)** | Désactivé par défaut. Activé : la navigation depuis une ligne s'ouvre en panneau dans l'onglet courant, avec un fil d'Ariane et **Retour**, sauf si l'action en décide autrement — voir [Actions](./screens/actions-and-lifecycle.md#drill). |
-| **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
-| **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
+
+## Adresses externes \{#external-urls\}
+
+Les systèmes vers lesquels l'installation renvoie — le client web de JD Edwards, un intranet. Une ligne par adresse : un **nom** en majuscules (`JDE_WEB`) et son **URL** (`https://jde.example.com:8080/jde`) ; **Ajouter une adresse** en ajoute une. Une action « Ouvrir dans » ou une entrée de menu lien écrit `#URL.JDE_WEB#` au début de son adresse au lieu de l'adresse elle-même : les écrans et menus livrés avec une application ne portent ainsi aucune adresse propre à un client, et chaque installation fixe la sienne. Un changement s'applique aussitôt. Une adresse que l'installation ne fixe pas ne donne aucun lien : l'action n'ouvre rien.
 
 Quand un changement enregistré demande un redémarrage, la page l'indique : *Enregistré. Redémarrez le serveur pour appliquer les nouveaux réglages.*
 
@@ -10862,7 +10907,7 @@ Deux rôles types :
 
 ### Hors menus
 
-Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Allow** ou **Deny**, le type, l'élément, puis **Add**.
+Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà des menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Allow** ou **Deny**, le type, l'élément, puis **Add**.
 
 | Type | Accorde |
 |---|---|
@@ -10871,7 +10916,8 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Beyond the
 | API endpoint | Un endpoint d'un connecteur API. |
 | Dashboard | Un tableau de bord. |
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
-| Tâche | Une tâche Nomaflow : son entrée de menu et sa page — fichiers, paramètres, lancement, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
+| nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
+| Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
 | AI assistant | L'assistant. |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
@@ -13537,7 +13583,7 @@ Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-prese
 
 ## Qui peut la lancer \{#access\}
 
-L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Beyond the menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
+L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
 
 Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
 
@@ -15361,7 +15407,15 @@ Chaque exécution collecte ses lignes de journal en mémoire — loggers `libert
 
 ## Qui peut utiliser Nomaflow \{#permissions\}
 
-Les pages des Tâches et leur API (`/admin/jobs/…`) sont réservées aux **superutilisateurs**. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
+Les superutilisateurs voient et font tout. Les autres utilisateurs reçoivent ce que leurs rôles accordent, dans **Liberty Next → Administrer → Accès**, bloc *Au-delà des menus* :
+
+| Droit | Donne |
+|---|---|
+| **nomaflow → Suivre les tâches** (`nomaflow:view`) | Les pages Tâches, Planning et Exécutions : les tâches, leurs planifications, leurs exécutions avec journaux et fichiers. |
+| **Tâche → Toutes les tâches** (`job:*`), ou une tâche (`job:<id>`) | Lancer la tâche — avec ses fichiers et paramètres — et annuler ses exécutions. |
+| **nomaflow → Créer et modifier les tâches** (`nomaflow:edit`) | Comprend *Suivre les tâches* ; créer, modifier, cloner, supprimer, suspendre et reprendre des tâches, enregistrer des préréglages. Les étapes exécutent SQL et Python sans le périmètre de données de l'utilisateur : à accorder avec prudence. |
+
+Les règles de rétention et de planifications manquées, ainsi que l'export d'une tâche, restent réservés aux superutilisateurs. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
 
 ---
 
@@ -15667,7 +15721,7 @@ Les analyses et tableaux de bord ci-dessus sont **partagés** : tout utilisateur
 
 ## Qui voit quoi \{#access\}
 
-- Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Beyond the menus* du rôle) — voir [Rôles et permissions](../framework/build/secure/roles-and-permissions.md#access).
+- Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Au-delà des menus* du rôle) — voir [Rôles et permissions](../framework/build/secure/roles-and-permissions.md#access).
 - Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse : un utilisateur limité à une application ou à une société n'en voit que les lignes, totaux compris.
 
 ---
@@ -15715,7 +15769,7 @@ Les exploitants planifient les mêmes tâches dans Nomaflow : la collecte chaque
 
 ## Qui peut les lancer \{#access\}
 
-Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Au-delà des menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
 
 Nomasx-1 livre deux rôles, créés par une tâche que l'administrateur lance une fois après l'installation et après chaque mise à jour :
 
@@ -19378,7 +19432,7 @@ Sur la page de l'explorateur, l'assistant propose de créer ce que l'utilisateur
 
 ## Qui voit quoi \{#access\}
 
-Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Beyond the menus* du rôle). Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse.
+Un modèle est proposé aux titulaires d'un rôle qui l'accorde (**Data Explorer** dans les règles *Au-delà des menus* du rôle). Le périmètre de données des rôles de l'utilisateur s'applique à chaque analyse.
 
 ---
 
@@ -19510,6 +19564,67 @@ L'enregistrement écrit dans JDE ; la ligne apparaît immédiatement dans la gri
 - **Utiliser *Description 1* comme libellé court, *Description 2* pour la forme longue.** Les programmes JDE lisent les deux ; les garder cohérents évite la confusion en audit.
 - **Ne jamais éditer une valeur verrouillée.** `Y` dans la colonne *Verrouillé* signifie qu'un programme JDE teste la valeur contre un littéral — la renommer change silencieusement le comportement.
 - **Pour les chargements en masse**, exporter vers Excel, éditer hors ligne, puis ré-importer via l'action d'upload — bien plus rapide que la saisie ligne à ligne.
+
+---
+
+## Nomajde — Carnet d'adresses
+Source: https://docs.nomana-it.fr/fr/liberty/nomajde/master-data/address-book/
+
+Le dossier Carnet d'adresses de Nomajde : le carnet d'adresses de JD Edwards EnterpriseOne (F0101) avec ses contacts, ses adresses datées, son client et son fournisseur, le fichier clients (F03012) et le fichier fournisseurs (F0401) — des grilles en consultation avec filtres et onglets de détail, et Open in JDE sur une ligne.
+
+Le dossier **Carnet d'adresses**, sous **Données de base**, présente le carnet d'adresses de JD Edwards EnterpriseOne dans trois écrans en consultation : le carnet d'adresses lui-même, les clients et les fournisseurs. Les données sont lues en direct dans JD Edwards ; les modifications se font dans JD Edwards, que **Open in JDE** ouvre sur la bonne fiche.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Carnet d'adresses \{#address-book\}
+
+Une ligne par fiche du carnet d'adresses (F0101).
+
+| Filtre | Trouve |
+|---|---|
+| **N° d'adresse**, **Nom alpha**, **Adresse longue** | Une fiche, par numéro, nom ou adresse longue. |
+| **Type de recherche** | La nature de la fiche — client, fournisseur, salarié… |
+| **N° fiscal**, **Unité d'activité**, **Classification sectorielle** | Les fiches d'un numéro fiscal, d'une unité d'activité, d'un secteur. |
+
+La grille s'ouvre sur les colonnes principales — numéro, nom, type de recherche, adresse longue, numéro fiscal, unité d'activité — et propose le reste de la fiche dans son menu **Colonnes** : langue, message de crédit, codes catégorie 01 à 30, adresses liées.
+
+Un clic sur une ligne ouvre la fiche, en consultation :
+
+| Onglet | Contenu |
+|---|---|
+| **Général**, **Indicateurs**, **Codes catégorie**, **Adresses liées** | Les champs de la fiche du carnet d'adresses. |
+| **Contacts** | Les contacts de la fiche, avec leurs téléphones et adresses e-mail. |
+| **Adresses** | Les adresses postales datées. |
+| **Client** | La fiche client correspondante, par société. |
+| **Fournisseur** | La fiche fournisseur correspondante. |
+
+Les libellés des champs codés — devise, conditions de paiement, unité d'activité, valeurs UDC — s'affichent à côté des codes.
+
+---
+
+## Fichier clients \{#customer-master\}
+
+Une ligne par client et par société (F03012), avec le nom et l'adresse longue du client : limite de crédit, devise, conditions de paiement, code de blocage, compte de contrepartie, unité d'activité, responsable crédit. Filtres : **N° d'adresse**, **Adresse longue**, **Nom alpha**, **Société**, **Compte de contrepartie**.
+
+---
+
+## Fichier fournisseurs \{#supplier-master\}
+
+Une ligne par fournisseur (F0401), avec le nom et l'adresse longue du fournisseur : devise, conditions de paiement, code de blocage, instrument de paiement. Filtres : **N° d'adresse**, **Adresse longue**, **Nom alpha**.
+
+---
+
+## Open in JDE \{#open-in-jde\}
+
+Sur une ligne du carnet d'adresses, **Open in JDE** — dans le menu de ligne, ou la flèche en début de ligne — ouvre la fiche dans le client web de JD Edwards, sur le formulaire de mise à jour du carnet d'adresses (P01012), dans un nouvel onglet du navigateur. L'adresse web de JD Edwards se règle une fois pour l'installation, comme adresse externe `JDE_WEB` — voir [Paramètres de l'application → Adresses externes](../../framework/build/settings-app.md#external-urls). Sans elle, l'action n'ouvre rien.
+
+:::info[Spécifique à JDE]
+Les écrans lisent les tables de JD Edwards EnterpriseOne par le connecteur `jdedwards`, dans le périmètre de données des rôles de l'utilisateur.
+:::
 
 ---
 
@@ -20049,7 +20164,7 @@ Le journal liste, par modèle, les tables analysées et les entrées créées.
 
 ## Qui peut les lancer \{#access\}
 
-Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Au-delà des menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
 
 ---
 
