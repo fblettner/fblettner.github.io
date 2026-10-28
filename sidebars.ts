@@ -210,30 +210,32 @@ const sidebars: SidebarsConfig = {
 
   nomaflowSidebar: [
     'liberty/nomaflow/overview',
-    'liberty/nomaflow/dashboard',
     'liberty/nomaflow/getting-started',
     'liberty/nomaflow/concepts',
+    'liberty/nomaflow/dashboard',
     {
       type: 'category',
       label: 'Jobs',
-      link: {type: 'generated-index', slug: '/liberty/nomaflow/jobs', description: 'The Jobs page — browse the catalogue, create or edit a workflow, schedule it.'},
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/jobs', description: 'The Jobs page, creating a job, its steps and its schedules, and running a job from an application\'s menu.'},
       items: [
         'liberty/nomaflow/jobs/catalog',
         'liberty/nomaflow/jobs/create',
+        'liberty/nomaflow/steps',
         'liberty/nomaflow/jobs/schedules',
         'liberty/nomaflow/jobs/run-from-menu',
       ],
     },
-    'liberty/nomaflow/steps',
     {
       type: 'category',
       label: 'Runs',
-      link: {type: 'generated-index', slug: '/liberty/nomaflow/runs', description: 'Run history, live monitoring, troubleshooting.'},
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/runs', description: 'The Job Runs page, the detail of a run, and what to do when a run goes wrong.'},
       items: [
         'liberty/nomaflow/runs/history',
         'liberty/nomaflow/runs/troubleshoot',
       ],
     },
+    'liberty/nomaflow/notifications',
+    'liberty/nomaflow/bundled-jobs',
     {
       type: 'category',
       label: 'Workflow recipes',
@@ -244,17 +246,7 @@ const sidebars: SidebarsConfig = {
         'liberty/nomaflow/workflows/conditional-cleanup',
       ],
     },
-    'liberty/nomaflow/bundled-jobs',
-    'liberty/nomaflow/change-packages',
-    {
-      type: 'category',
-      label: 'Customisation',
-      link: {type: 'generated-index', slug: '/liberty/nomaflow/customisation', description: 'Extension points — custom Python steps and outbound notifications.'},
-      items: [
-        'liberty/nomaflow/custom-python',
-        'liberty/nomaflow/notifications',
-      ],
-    },
+    'liberty/nomaflow/custom-python',
     'liberty/nomaflow/administration',
   ],
 

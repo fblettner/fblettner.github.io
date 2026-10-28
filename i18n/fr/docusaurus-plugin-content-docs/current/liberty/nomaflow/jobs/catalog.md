@@ -1,10 +1,10 @@
 ---
-title: Catalogue — la page des Tâches
+title: La page des Tâches
 description: "La page des Tâches de Nomaflow : recherche et filtres, les tâches groupées par application avec les tâches principales en tête, le contenu d'une ligne de tâche, l'activation d'une tâche, Exécuter et Exécuter avec des paramètres (préréglages, paramètres, plusieurs valeurs, étapes, envoi de fichiers, niveau de journal), Annuler, Cloner, Supprimer et Exporter."
 keywords: [Nomaflow, tâches, catalogue, exécuter, run with parameters, préréglages, annuler, cloner, supprimer, export, rétention, planifications manquées, Liberty Next]
 ---
 
-# Catalogue — la page des Tâches
+# La page des Tâches
 
 La page **Tâches** présente chaque tâche de `jobs.toml`, une ligne par tâche, groupées par application, avec sa dernière exécution, sa planification et ses actions. Elle est réservée aux superutilisateurs.
 

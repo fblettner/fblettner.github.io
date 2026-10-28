@@ -13142,45 +13142,6 @@ Les deux se combinent : les commerciaux d'une filiale voient leurs propres clien
 
 # === Nomaflow — planification et orchestration ===
 
-## Nomaflow — Tableau de bord Vue d'ensemble
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/dashboard/
-
-Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche, les dernières exécutions et la dernière réussite par tâche, avec la carte des tâches planifiées — sur les 7 derniers jours par défaut.
-
-**Vue d'ensemble**, première entrée du menu de Nomaflow, donne aux exploitants l'état de l'ordonnanceur en un coup d'œil : l'issue des exécutions, ce qui a échoué ou a été manqué, ce qui est en cours d'exécution, les tâches les plus actives et les plus lentes, et les dernières exécutions.
-
----
-
-## Vue d'ensemble
-
----
-
-## La période \{#period\}
-
-La page s'ouvre sur **7 derniers jours** ; le sélecteur de période de la barre propose les autres préréglages et une période libre. Chaque widget la suit, sauf **En cours**, qui montre toujours l'instant présent. **Excel** et **PDF** exportent la page avec sa période — voir [Tableaux de bord → Export](../framework/dashboards.md#export).
-
----
-
-## Les widgets \{#widgets\}
-
-| Widget | Contenu |
-|---|---|
-| **Exécutions** — par issue | Les exécutions démarrées sur la période : réussies · en échec · annulées. |
-| **Échecs** — exécutions terminées en erreur | Les exécutions en échec, le nombre de tâches concernées et les planifications manquées. |
-| **En cours** — en ce moment | En exécution · en attente. |
-| **Durée moyenne** — exécutions terminées | La durée moyenne, et la plus longue. |
-| **Tâches planifiées** | Ce qui s'exécute ensuite : chaque tâche planifiée avec sa prochaine exécution ou *En pause*, sa planification en clair et son dernier état, et les boutons **Exécuter**, **Mettre la planification en pause** et **Reprendre la planification**. Réservé aux superutilisateurs. |
-| **Exécutions par jour** | Une barre par jour, par issue. |
-| **Ce qui demande attention** | Par tâche : les échecs avec leur dernière erreur, les planifications manquées, les exécutions en cours depuis plus d'une heure — en rouge pour un échec, en orange pour le reste, avec la date de la dernière occurrence. |
-| **Exécutions par tâche** | La part des exécutions de chaque tâche sur la période. |
-| **Durée moyenne par tâche** | En secondes, les plus lentes d'abord. |
-| **Dernières exécutions** | Les dernières exécutions, avec leur état ; l'erreur, ou le déclencheur, sous chacune. |
-| **Dernière réussite par tâche** | Chaque tâche avec sa dernière exécution réussie, les échecs depuis et son dernier état : les tâches en échec d'abord, une tâche sans réussite depuis une semaine en orange ; le chiffre donne les jours depuis la dernière réussite. |
-
-Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md). La même carte des tâches peut être ajoutée à n'importe quel tableau de bord — voir [Tableaux de bord → Tâches](../framework/dashboards.md#jobs).
-
----
-
 ## Nomaflow — Concepts
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/concepts/
 
@@ -13246,7 +13207,46 @@ La tâche `sales-load` a trois étapes : `file_load` (charger le fichier du mois
 
 ---
 
-## Nomaflow — Catalogue — la page des Tâches
+## Nomaflow — Tableau de bord Vue d'ensemble
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/dashboard/
+
+Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche, les dernières exécutions et la dernière réussite par tâche, avec la carte des tâches planifiées — sur les 7 derniers jours par défaut.
+
+**Vue d'ensemble**, première entrée du menu de Nomaflow, donne aux exploitants l'état de l'ordonnanceur en un coup d'œil : l'issue des exécutions, ce qui a échoué ou a été manqué, ce qui est en cours d'exécution, les tâches les plus actives et les plus lentes, et les dernières exécutions.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La période \{#period\}
+
+La page s'ouvre sur **7 derniers jours** ; le sélecteur de période de la barre propose les autres préréglages et une période libre. Chaque widget la suit, sauf **En cours**, qui montre toujours l'instant présent. **Excel** et **PDF** exportent la page avec sa période — voir [Tableaux de bord → Export](../framework/dashboards.md#export).
+
+---
+
+## Les widgets \{#widgets\}
+
+| Widget | Contenu |
+|---|---|
+| **Exécutions** — par issue | Les exécutions démarrées sur la période : réussies · en échec · annulées. |
+| **Échecs** — exécutions terminées en erreur | Les exécutions en échec, le nombre de tâches concernées et les planifications manquées. |
+| **En cours** — en ce moment | En exécution · en attente. |
+| **Durée moyenne** — exécutions terminées | La durée moyenne, et la plus longue. |
+| **Tâches planifiées** | Ce qui s'exécute ensuite : chaque tâche planifiée avec sa prochaine exécution ou *En pause*, sa planification en clair et son dernier état, et les boutons **Exécuter**, **Mettre la planification en pause** et **Reprendre la planification**. Réservé aux superutilisateurs. |
+| **Exécutions par jour** | Une barre par jour, par issue. |
+| **Ce qui demande attention** | Par tâche : les échecs avec leur dernière erreur, les planifications manquées, les exécutions en cours depuis plus d'une heure — en rouge pour un échec, en orange pour le reste, avec la date de la dernière occurrence. |
+| **Exécutions par tâche** | La part des exécutions de chaque tâche sur la période. |
+| **Durée moyenne par tâche** | En secondes, les plus lentes d'abord. |
+| **Dernières exécutions** | Les dernières exécutions, avec leur état ; l'erreur, ou le déclencheur, sous chacune. |
+| **Dernière réussite par tâche** | Chaque tâche avec sa dernière exécution réussie, les échecs depuis et son dernier état : les tâches en échec d'abord, une tâche sans réussite depuis une semaine en orange ; le chiffre donne les jours depuis la dernière réussite. |
+
+Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md). La même carte des tâches peut être ajoutée à n'importe quel tableau de bord — voir [Tableaux de bord → Tâches](../framework/dashboards.md#jobs).
+
+---
+
+## Nomaflow — La page des Tâches
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/catalog/
 
 La page des Tâches de Nomaflow : recherche et filtres, les tâches groupées par application avec les tâches principales en tête, le contenu d'une ligne de tâche, l'activation d'une tâche, Exécuter et Exécuter avec des paramètres (préréglages, paramètres, plusieurs valeurs, étapes, envoi de fichiers, niveau de journal), Annuler, Cloner, Supprimer et Exporter.
@@ -13417,215 +13417,6 @@ name = "load-sales"
 - Donner à chaque étape un nom court verbe-objet (`load-sales`, `refresh-totals`) : c'est ce qu'affiche le détail de l'exécution.
 - Garder une tâche par flux métier ; enchaîner les tâches par une étape `call_job` plutôt que de copier des étapes.
 - Enregistrer, puis lancer une fois à la main avec **Exécuter avec des paramètres** en `DEBUG` avant d'activer la planification.
-
----
-
-## Nomaflow — Planifications
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/schedules/
-
-Quand s'exécutent les tâches Nomaflow : la syntaxe cron à cinq zones et la numérotation des jours de la semaine, les fuseaux horaires, l'aperçu des prochaines exécutions, la vue Planning, les préréglages planifiables, et les planifications manquées enregistrées comme exécutions MISSED.
-
-Une tâche s'exécute selon sa propre **planification** — une expression cron et un fuseau horaire — et selon celles de ses **préréglages**. Une tâche sans planification ne s'exécute que par un clic sur **Exécuter**.
-
----
-
-## Le cron dans Nomaflow \{#cron\}
-
-Une planification comporte **cinq zones** :
-
-```
-┌──── minute (0-59)
-│ ┌── heure (0-23)
-│ │ ┌── jour du mois (1-31)
-│ │ │ ┌── mois (1-12)
-│ │ │ │ ┌── jour de la semaine (mon-sun)
-0 2 * * *
-```
-
-| Opérateur | Signification | Exemple |
-|---|---|---|
-| `*` | toutes les valeurs | `* * * * *` — chaque minute |
-| `,` | une liste | `0 6,12,18 * * *` — à 06:00, 12:00 et 18:00 |
-| `-` | un intervalle | `0 9 * * mon-fri` — en semaine à 09:00 |
-| `/` | un pas | `*/10 * * * *` — toutes les 10 minutes |
-
-:::warning[Écrire les jours de la semaine en toutes lettres]
-Le planificateur numérote les jours de **0 = lundi** à **6 = dimanche** — contrairement au cron Unix, où 0 désigne le dimanche. `0 9 * * 1` s'exécute donc le **mardi**. Écrire `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`) : les noms ne laissent aucun doute, et l'aperçu sous le champ confirme les jours.
-:::
-
-Quand le jour du mois et le jour de la semaine sont tous deux renseignés, **les deux** doivent correspondre : `0 9 15 * mon` s'exécute un 15 qui tombe un lundi.
-
-| Besoin | Cron |
-|---|---|
-| Toutes les 5 minutes | `*/5 * * * *` |
-| Chaque heure à :15 | `15 * * * *` |
-| Chaque jour à 02:00 | `0 2 * * *` |
-| En semaine à 09:00 | `0 9 * * mon-fri` |
-| Chaque lundi à 06:00 | `0 6 * * mon` |
-| Le 1er de chaque mois à 07:00 | `0 7 1 * *` |
-| Chaque trimestre (1er janvier, avril, juillet, octobre) à 03:00 | `0 3 1 1,4,7,10 *` |
-
----
-
-## Dans l'éditeur de tâche \{#editor\}
-
-Le champ **Planification (cron)** de l'éditeur propose des choix tout faits — **Manuelle**, **Horaire**, **Quotidienne**, **Hebdomadaire**, **Mensuelle** — et un cron libre. Sous le champ, **Prochaines exécutions** liste les cinq prochaines exécutions dans le fuseau de la tâche ; la liste est recalculée peu après chaque modification, et une expression invalide y est signalée.
-
-**Fuseau horaire** est un nom IANA (`Europe/Paris`, `America/New_York`). La planification est évaluée dans ce fuseau, heure d'été comprise : `0 2 * * *` en `Europe/Paris` s'exécute à 02:00 heure de Paris toute l'année.
-
----
-
-## La vue Planning \{#schedule-view\}
-
-**Exploitation → Planning**, dans le menu de Nomaflow, montre ce qui s'exécute et quand, jour par jour.
-
-| Partie | Contenu |
-|---|---|
-| Compteurs | Les exécutions prévues dans les 24 h, les planifications actives, les planifications désactivées, les tâches lancées à la main uniquement. |
-| **À venir** | Chaque planification active à sa prochaine exécution — celle de la tâche, et une par préréglage planifié (le nom du préréglage à côté de la tâche) —, groupées par jour : *Aujourd'hui*, *Demain*, puis la date. Chaque ligne présente l'heure, la tâche, la planification en clair (*chaque jour à 03:00*, *chaque lundi à 07:00*) avec le cron en dessous, l'échéance et l'état de la dernière exécution. |
-| **Planifiées mais désactivées** | Les planifications définies mais désactivées. |
-| **Lancées à la main uniquement** | Les tâches sans aucune planification, repliées ; un clic sur l'une ouvre son éditeur. |
-
-Les planifications que la page ne sait pas exprimer en clair — listes d'heures, plusieurs mois — n'affichent que leur cron.
-
----
-
-## Préréglages planifiables \{#schedulable-presets\}
-
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
-
-Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
-
-La planification d'un préréglage ne dépend pas du switch **Activée** de la tâche : un préréglage activé s'exécute même quand la planification propre de la tâche est arrêtée.
-
-:::info[Cloner une tâche]
-**Cloner** crée une copie désactivée et sans aucune planification : le cron de la tâche et ceux des préréglages sont retirés, si bien que la copie ne se déclenche jamais en même temps que l'original. Ses planifications se définissent une fois la copie prête.
-:::
-
----
-
-## Planifications manquées \{#missed\}
-
-Une exécution peut ne pas avoir lieu : le serveur était arrêté à ce moment-là, ou l'exécution précédente de la même tâche était encore en cours. Nomaflow recherche ces manques et enregistre chacun comme une exécution à l'état **MISSED**, avec l'heure attendue, dans l'historique des exécutions et comme dernière exécution de la tâche. Une règle sur l'événement `missed` peut prévenir quelqu'un — voir [Notifications](../notifications.md).
-
-Le panneau **Planifications manquées** de la page des Tâches (à côté du panneau de rétention) affiche la politique et le dernier contrôle, et **Contrôler maintenant** lance aussitôt un contrôle.
-
-| Réglage | Défaut | Signification |
-|---|---|---|
-| **Contrôle** | activé | Active ou désactive le contrôle. |
-| **Tolérance (min)** | 10 | Une exécution lancée dans ce délai après l'heure attendue — planifiée ou manuelle — compte pour elle. |
-| **Intervalle de contrôle (min)** | 5 | La fréquence du contrôle. |
-| **Fenêtre arrière (heures)** | 24 | La profondeur maximale d'un contrôle. Une tâche qui ne s'est jamais exécutée n'est contrôlée qu'à partir du démarrage du planificateur. |
-
-La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manquée n'est enregistrée qu'une fois : un redémarrage ne la signale pas de nouveau.
-
----
-
-## Suspendre une planification \{#pause\}
-
-| Option | Effet |
-|---|---|
-| La pastille **activée** / **désactivée** de la tâche dans la page des Tâches, ou **Mettre la planification en pause** sur la carte des tâches d'un tableau de bord | La planification propre de la tâche s'arrête aussitôt, sans rechargement. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
-| **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
-| **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
-
----
-
-## Conseils \{#tips\}
-
-- Étaler les tâches lourdes sur la nuit (02:00, 02:30, 03:00) plutôt que de toutes les lancer à minuit.
-- Préférer `15 * * * *` à `0 * * * *` pour les tâches horaires : beaucoup d'autres systèmes s'exécutent à l'heure pile.
-- Utiliser un nom de fuseau horaire, jamais un décalage fixe, pour suivre l'heure d'été.
-- Vérifier l'aperçu **Prochaines exécutions** après chaque modification : c'est le moyen le plus rapide de repérer un mauvais jour.
-
----
-
-## Nomaflow — Lancer une tâche depuis le menu d'une application
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/run-from-menu/
-
-Une entrée de menu de type job place une tâche Nomaflow dans le menu d'une application : l'utilisateur choisit les fichiers et les paramètres demandés, lance la tâche, suit son journal en direct et retrouve les exécutions précédentes — sans accès à Nomaflow lui-même. La permission de la tâche, les paramètres utilisateur, les fichiers et l'historique.
-
-Une entrée de menu de type **job** place une tâche Nomaflow dans le menu d'une application, à l'intention des utilisateurs qui n'administrent pas Nomaflow : la personne qui charge le fichier des ventes du mois, le responsable sécurité qui collecte les données de sécurité avant une revue. L'entrée ouvre la page propre à la tâche — les fichiers attendus, ses paramètres, **Lancer**, le journal suivi en direct et les exécutions précédentes. Rien d'autre de Nomaflow n'apparaît.
-
----
-
-## Vue d'ensemble
-
----
-
-## La page de la tâche \{#page\}
-
-| Partie | Contenu |
-|---|---|
-| Titre et description | Le libellé de l'entrée de menu, puis la description de la tâche. |
-| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. Un paramètre qui accepte plusieurs valeurs s'affiche en cases à cocher précédées de **Tout**. |
-| Fichiers | Un sélecteur par étape `file_load` qui attend un fichier — **Fichier pour l'étape « load »**, avec la feuille quand l'étape en nomme une. Formats acceptés : `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. Une étape dotée de son propre chemin ou d'un dossier surveillé ne demande rien : elle lit son fichier. |
-| **Lancer** | Envoie les fichiers et démarre l'exécution. *Choisissez d'abord le ou les fichiers.* ou *« Société » est obligatoire.* quand un élément manque. Une seule exécution à la fois : tant qu'une exécution est en cours, le bouton reste en attente. |
-| **Journal** | L'état de l'exécution et son journal, rafraîchi toutes les 2 secondes tant que l'exécution est en attente ou en cours, l'erreur en rouge. **Fichiers de l'exécution** propose les fichiers produits — les lignes rejetées d'un chargement. |
-| **Fichier chargé** | Sous le journal, le fichier envoyé pour l'exécution sélectionnée, à télécharger à nouveau. |
-| **Exécutions précédentes** | Les 20 dernières exécutions : début, état, durée, auteur (ou déclencheur, pour une exécution planifiée), lignes traitées et début de l'erreur. Un clic sur une exécution affiche son journal. |
-
-L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouvent dans l'[historique des exécutions](../runs/history.md), et ses notifications et alertes s'appliquent.
-
----
-
-## Placer une tâche dans un menu \{#menu\}
-
-Dans **Liberty Next → Construire → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
-
----
-
-### Un préréglage dans le menu \{#preset\}
-
-Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-presets) de la tâche avec `params = { preset = "Licences" }` : la page lance alors la tâche avec les paramètres et les étapes actives de ce préréglage. Une même tâche donne ainsi plusieurs entrées de menu — *Collecter la sécurité et la SoD*, *Collecter les licences* —, chacune sur un préréglage. Le libellé de l'entrée de menu donne son titre à la page.
-
----
-
-## Qui peut la lancer \{#access\}
-
-L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
-
-Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
-
----
-
-## Paramètres utilisateur \{#user-params\}
-
-Une tâche déclare dans `jobs.toml` ce qu'un utilisateur peut régler en la lançant depuis sa page. Toute autre valeur est refusée ; les autres réglages de l'exploitant restent hors de portée.
-
-```toml title="jobs.toml"
-[[jobs.user_params]]
-name = "models"
-label = "Explorer model (blank = every model)"
-l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
-step = "refresh"
-choices_from = "explorer_models:nomajde"
-```
-
-| Clé | Rôle |
-|---|---|
-| `name` | L'argument de l'étape qui reçoit la valeur. |
-| `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
-| `step` | L'étape qui reçoit la valeur. Sans elle, la valeur va à toutes les étapes de la tâche. |
-| `default` | La valeur préremplie. |
-| `required` | `true` : la tâche ne démarre pas sans valeur. |
-| `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
-| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application ; ou `query:<connecteur>/<requête>:<colonne valeur>:<colonne libellé>` — les lignes d'une requête de lecture, comme les applications de Nomasx-1. |
-| `multiple` | `true` : plusieurs valeurs peuvent être cochées, avec **Tout**. |
-
-Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique. Les mêmes paramètres apparaissent dans la fenêtre **Exécuter avec des paramètres** des exploitants.
-
-**Une exécution par valeur.** Une tâche qui déclare `for_each = "<paramètre>"` s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
-
----
-
-## Ce que livrent les applications \{#shipped\}
-
-| Application | Dossier | Tâches |
-|---|---|---|
-| Nomasx-1 | **Tâches** | Collecter la sécurité et la SoD, Collecter les licences, Rapport d'audit des licences, Rapport sécurité et SoD — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
-| Nomajde | **Tâches** | Refusionner la sécurité (paquet de changements), Refusionner la sécurité (tous les rôles), Rafraîchir le dictionnaire (modèles Explorateur) — voir [Tâches de Nomajde](../../nomajde/jobs.md). |
-| Démo des ventes | **Import** | Fichier articles, Fichier sociétés, Fichier ventes (un mois), Recalculer les périodes, Charger les fichiers d'exemple — voir [La démo des ventes](../../framework/demo-app.md#loads). |
 
 ---
 
@@ -13903,6 +13694,215 @@ Le bloc **Politique de réessai** de la tâche (`attempts`, `backoff` fixe ou ex
 
 ---
 
+## Nomaflow — Planifications
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/schedules/
+
+Quand s'exécutent les tâches Nomaflow : la syntaxe cron à cinq zones et la numérotation des jours de la semaine, les fuseaux horaires, l'aperçu des prochaines exécutions, la vue Planning, les préréglages planifiables, et les planifications manquées enregistrées comme exécutions MISSED.
+
+Une tâche s'exécute selon sa propre **planification** — une expression cron et un fuseau horaire — et selon celles de ses **préréglages**. Une tâche sans planification ne s'exécute que par un clic sur **Exécuter**.
+
+---
+
+## Le cron dans Nomaflow \{#cron\}
+
+Une planification comporte **cinq zones** :
+
+```
+┌──── minute (0-59)
+│ ┌── heure (0-23)
+│ │ ┌── jour du mois (1-31)
+│ │ │ ┌── mois (1-12)
+│ │ │ │ ┌── jour de la semaine (mon-sun)
+0 2 * * *
+```
+
+| Opérateur | Signification | Exemple |
+|---|---|---|
+| `*` | toutes les valeurs | `* * * * *` — chaque minute |
+| `,` | une liste | `0 6,12,18 * * *` — à 06:00, 12:00 et 18:00 |
+| `-` | un intervalle | `0 9 * * mon-fri` — en semaine à 09:00 |
+| `/` | un pas | `*/10 * * * *` — toutes les 10 minutes |
+
+:::warning[Écrire les jours de la semaine en toutes lettres]
+Le planificateur numérote les jours de **0 = lundi** à **6 = dimanche** — contrairement au cron Unix, où 0 désigne le dimanche. `0 9 * * 1` s'exécute donc le **mardi**. Écrire `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`) : les noms ne laissent aucun doute, et l'aperçu sous le champ confirme les jours.
+:::
+
+Quand le jour du mois et le jour de la semaine sont tous deux renseignés, **les deux** doivent correspondre : `0 9 15 * mon` s'exécute un 15 qui tombe un lundi.
+
+| Besoin | Cron |
+|---|---|
+| Toutes les 5 minutes | `*/5 * * * *` |
+| Chaque heure à :15 | `15 * * * *` |
+| Chaque jour à 02:00 | `0 2 * * *` |
+| En semaine à 09:00 | `0 9 * * mon-fri` |
+| Chaque lundi à 06:00 | `0 6 * * mon` |
+| Le 1er de chaque mois à 07:00 | `0 7 1 * *` |
+| Chaque trimestre (1er janvier, avril, juillet, octobre) à 03:00 | `0 3 1 1,4,7,10 *` |
+
+---
+
+## Dans l'éditeur de tâche \{#editor\}
+
+Le champ **Planification (cron)** de l'éditeur propose des choix tout faits — **Manuelle**, **Horaire**, **Quotidienne**, **Hebdomadaire**, **Mensuelle** — et un cron libre. Sous le champ, **Prochaines exécutions** liste les cinq prochaines exécutions dans le fuseau de la tâche ; la liste est recalculée peu après chaque modification, et une expression invalide y est signalée.
+
+**Fuseau horaire** est un nom IANA (`Europe/Paris`, `America/New_York`). La planification est évaluée dans ce fuseau, heure d'été comprise : `0 2 * * *` en `Europe/Paris` s'exécute à 02:00 heure de Paris toute l'année.
+
+---
+
+## La vue Planning \{#schedule-view\}
+
+**Exploitation → Planning**, dans le menu de Nomaflow, montre ce qui s'exécute et quand, jour par jour.
+
+| Partie | Contenu |
+|---|---|
+| Compteurs | Les exécutions prévues dans les 24 h, les planifications actives, les planifications désactivées, les tâches lancées à la main uniquement. |
+| **À venir** | Chaque planification active à sa prochaine exécution — celle de la tâche, et une par préréglage planifié (le nom du préréglage à côté de la tâche) —, groupées par jour : *Aujourd'hui*, *Demain*, puis la date. Chaque ligne présente l'heure, la tâche, la planification en clair (*chaque jour à 03:00*, *chaque lundi à 07:00*) avec le cron en dessous, l'échéance et l'état de la dernière exécution. |
+| **Planifiées mais désactivées** | Les planifications définies mais désactivées. |
+| **Lancées à la main uniquement** | Les tâches sans aucune planification, repliées ; un clic sur l'une ouvre son éditeur. |
+
+Les planifications que la page ne sait pas exprimer en clair — listes d'heures, plusieurs mois — n'affichent que leur cron.
+
+---
+
+## Préréglages planifiables \{#schedulable-presets\}
+
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+
+Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
+
+La planification d'un préréglage ne dépend pas du switch **Activée** de la tâche : un préréglage activé s'exécute même quand la planification propre de la tâche est arrêtée.
+
+:::info[Cloner une tâche]
+**Cloner** crée une copie désactivée et sans aucune planification : le cron de la tâche et ceux des préréglages sont retirés, si bien que la copie ne se déclenche jamais en même temps que l'original. Ses planifications se définissent une fois la copie prête.
+:::
+
+---
+
+## Planifications manquées \{#missed\}
+
+Une exécution peut ne pas avoir lieu : le serveur était arrêté à ce moment-là, ou l'exécution précédente de la même tâche était encore en cours. Nomaflow recherche ces manques et enregistre chacun comme une exécution à l'état **MISSED**, avec l'heure attendue, dans l'historique des exécutions et comme dernière exécution de la tâche. Une règle sur l'événement `missed` peut prévenir quelqu'un — voir [Notifications](../notifications.md).
+
+Le panneau **Planifications manquées** de la page des Tâches (à côté du panneau de rétention) affiche la politique et le dernier contrôle, et **Contrôler maintenant** lance aussitôt un contrôle.
+
+| Réglage | Défaut | Signification |
+|---|---|---|
+| **Contrôle** | activé | Active ou désactive le contrôle. |
+| **Tolérance (min)** | 10 | Une exécution lancée dans ce délai après l'heure attendue — planifiée ou manuelle — compte pour elle. |
+| **Intervalle de contrôle (min)** | 5 | La fréquence du contrôle. |
+| **Fenêtre arrière (heures)** | 24 | La profondeur maximale d'un contrôle. Une tâche qui ne s'est jamais exécutée n'est contrôlée qu'à partir du démarrage du planificateur. |
+
+La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manquée n'est enregistrée qu'une fois : un redémarrage ne la signale pas de nouveau.
+
+---
+
+## Suspendre une planification \{#pause\}
+
+| Option | Effet |
+|---|---|
+| La pastille **activée** / **désactivée** de la tâche dans la page des Tâches, ou **Mettre la planification en pause** sur la carte des tâches d'un tableau de bord | La planification propre de la tâche s'arrête aussitôt, sans rechargement. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
+| **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
+| **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
+
+---
+
+## Conseils \{#tips\}
+
+- Étaler les tâches lourdes sur la nuit (02:00, 02:30, 03:00) plutôt que de toutes les lancer à minuit.
+- Préférer `15 * * * *` à `0 * * * *` pour les tâches horaires : beaucoup d'autres systèmes s'exécutent à l'heure pile.
+- Utiliser un nom de fuseau horaire, jamais un décalage fixe, pour suivre l'heure d'été.
+- Vérifier l'aperçu **Prochaines exécutions** après chaque modification : c'est le moyen le plus rapide de repérer un mauvais jour.
+
+---
+
+## Nomaflow — Lancer une tâche depuis le menu d'une application
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/run-from-menu/
+
+Une entrée de menu de type job place une tâche Nomaflow dans le menu d'une application : l'utilisateur choisit les fichiers et les paramètres demandés, lance la tâche, suit son journal en direct et retrouve les exécutions précédentes — sans accès à Nomaflow lui-même. La permission de la tâche, les paramètres utilisateur, les fichiers et l'historique.
+
+Une entrée de menu de type **job** place une tâche Nomaflow dans le menu d'une application, à l'intention des utilisateurs qui n'administrent pas Nomaflow : la personne qui charge le fichier des ventes du mois, le responsable sécurité qui collecte les données de sécurité avant une revue. L'entrée ouvre la page propre à la tâche — les fichiers attendus, ses paramètres, **Lancer**, le journal suivi en direct et les exécutions précédentes. Rien d'autre de Nomaflow n'apparaît.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La page de la tâche \{#page\}
+
+| Partie | Contenu |
+|---|---|
+| Titre et description | Le libellé de l'entrée de menu, puis la description de la tâche. |
+| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. Un paramètre qui accepte plusieurs valeurs s'affiche en cases à cocher précédées de **Tout**. |
+| Fichiers | Un sélecteur par étape `file_load` qui attend un fichier — **Fichier pour l'étape « load »**, avec la feuille quand l'étape en nomme une. Formats acceptés : `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. Une étape dotée de son propre chemin ou d'un dossier surveillé ne demande rien : elle lit son fichier. |
+| **Lancer** | Envoie les fichiers et démarre l'exécution. *Choisissez d'abord le ou les fichiers.* ou *« Société » est obligatoire.* quand un élément manque. Une seule exécution à la fois : tant qu'une exécution est en cours, le bouton reste en attente. |
+| **Journal** | L'état de l'exécution et son journal, rafraîchi toutes les 2 secondes tant que l'exécution est en attente ou en cours, l'erreur en rouge. **Fichiers de l'exécution** propose les fichiers produits — les lignes rejetées d'un chargement. |
+| **Fichier chargé** | Sous le journal, le fichier envoyé pour l'exécution sélectionnée, à télécharger à nouveau. |
+| **Exécutions précédentes** | Les 20 dernières exécutions : début, état, durée, auteur (ou déclencheur, pour une exécution planifiée), lignes traitées et début de l'erreur. Un clic sur une exécution affiche son journal. |
+
+L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouvent dans l'[historique des exécutions](../runs/history.md), et ses notifications et alertes s'appliquent.
+
+---
+
+## Placer une tâche dans un menu \{#menu\}
+
+Dans **Liberty Next → Construire → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+
+---
+
+### Un préréglage dans le menu \{#preset\}
+
+Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-presets) de la tâche avec `params = { preset = "Licences" }` : la page lance alors la tâche avec les paramètres et les étapes actives de ce préréglage. Une même tâche donne ainsi plusieurs entrées de menu — *Collecter la sécurité et la SoD*, *Collecter les licences* —, chacune sur un préréglage. Le libellé de l'entrée de menu donne son titre à la page.
+
+---
+
+## Qui peut la lancer \{#access\}
+
+L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
+
+Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
+
+---
+
+## Paramètres utilisateur \{#user-params\}
+
+Une tâche déclare dans `jobs.toml` ce qu'un utilisateur peut régler en la lançant depuis sa page. Toute autre valeur est refusée ; les autres réglages de l'exploitant restent hors de portée.
+
+```toml title="jobs.toml"
+[[jobs.user_params]]
+name = "models"
+label = "Explorer model (blank = every model)"
+l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
+step = "refresh"
+choices_from = "explorer_models:nomajde"
+```
+
+| Clé | Rôle |
+|---|---|
+| `name` | L'argument de l'étape qui reçoit la valeur. |
+| `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
+| `step` | L'étape qui reçoit la valeur. Sans elle, la valeur va à toutes les étapes de la tâche. |
+| `default` | La valeur préremplie. |
+| `required` | `true` : la tâche ne démarre pas sans valeur. |
+| `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
+| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application ; ou `query:<connecteur>/<requête>:<colonne valeur>:<colonne libellé>` — les lignes d'une requête de lecture, comme les applications de Nomasx-1. |
+| `multiple` | `true` : plusieurs valeurs peuvent être cochées, avec **Tout**. |
+
+Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique. Les mêmes paramètres apparaissent dans la fenêtre **Exécuter avec des paramètres** des exploitants.
+
+**Une exécution par valeur.** Une tâche qui déclare `for_each = "<paramètre>"` s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
+
+---
+
+## Ce que livrent les applications \{#shipped\}
+
+| Application | Dossier | Tâches |
+|---|---|---|
+| Nomasx-1 | **Tâches** | Collecter la sécurité et la SoD, Collecter les licences, Rapport d'audit des licences, Rapport sécurité et SoD — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
+| Nomajde | **Tâches** | Refusionner la sécurité (paquet de changements), Refusionner la sécurité (tous les rôles), Rafraîchir le dictionnaire (modèles Explorateur) — voir [Tâches de Nomajde](../../nomajde/jobs.md). |
+| Démo des ventes | **Import** | Fichier articles, Fichier sociétés, Fichier ventes (un mois), Recalculer les périodes, Charger les fichiers d'exemple — voir [La démo des ventes](../../framework/demo-app.md#loads). |
+
+---
+
 ## Nomaflow — Historique des exécutions
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/runs/history/
 
@@ -14045,263 +14045,141 @@ Les pages Nomaflow et leur API sont réservées aux superutilisateurs.
 
 ---
 
-## Nomaflow — Synchronisation planifiée
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/scheduled-sync/
+## Nomaflow — Notifications
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/notifications/
 
-Recette — copier chaque nuit des tables d'une base opérationnelle vers une base de reporting avec sql_copy, rafraîchir les agrégats avec sql_query, et être prévenu en cas d'échec ou d'exécution manquée.
+Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue, retard) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche.
 
-Chaque nuit, copier les tables `orders` et `customers` de la base opérationnelle vers la base de reporting, puis rafraîchir les agrégats lus par les tableaux de bord.
-
----
-
-## Prérequis \{#needs\}
-
-- Deux connecteurs SQL : `ops-db` (source, compte en lecture seule) et `reporting` (cible).
-- Sur `reporting`, une requête d'écriture `daily_totals_refresh` qui reconstruit les agrégats (`REFRESH MATERIALIZED VIEW …`, ou `DELETE` + `INSERT … SELECT …`).
+Une notification prévient quelqu'un qu'un événement s'est produit : une période clôturée, une tâche de nuit en échec, une planification manquée. Les **règles** décident quand ; les **canaux** décident comment — la cloche de l'application, un e-mail, ou un appel à un connecteur.
 
 ---
 
-## La tâche \{#job\}
+## Vue d'ensemble
 
-**+ Nouvelle tâche** : identifiant `nightly-reporting-sync`, étiquette `etl`, **Planification (cron)** `0 2 * * *`, **Fuseau horaire** `Europe/Paris`. Puis trois étapes :
+---
 
-| N° | Type | Réglages |
+## Ce que voient les utilisateurs \{#inbox\}
+
+- **La cloche** de l'en-tête affiche le nombre de notifications non lues, mis à jour en temps réel. Son menu liste les six dernières ; **Tout marquer comme lu** et **Tout voir** sont en bas. Un clic sur une notification la marque comme lue et ouvre son lien.
+- **La page Notifications** (depuis **Tout voir**) les liste avec les onglets **Toutes** / **Non lues** et **Tout marquer comme lu**.
+
+Chaque utilisateur ne voit que ses propres notifications.
+
+---
+
+## Le compte e-mail \{#smtp\}
+
+Les e-mails passent par le serveur SMTP défini dans **Liberty Next → Administrer → App → Notifications (email)** :
+
+| Champ | Défaut | Remarques |
 |---|---|---|
-| 1 | `sql_copy` | Source `ops-db` · `public` · `orders` ; cible `reporting` · `staging` · `orders` ; mode `overwrite`. |
-| 2 | `sql_copy` | Idem pour `customers`. |
-| 3 | `sql_query` | Connecteur `reporting`, requête `daily_totals_refresh`. |
+| Notifications enabled | activé | Désactivé : aucune règle ne se déclenche. |
+| SMTP host, Port | —, `587` | Sans hôte, seule la cloche fonctionne. |
+| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* ou *None*. Changer d'option règle le port habituel. |
+| Timeout (s) | `20` | |
+| User, Password | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
+| From address | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
 
-`overwrite` écrit dans `<table>__new` puis l'échange avec la cible en une transaction : les tableaux de bord ne voient jamais une table à moitié remplie, et une copie en échec laisse en place les données de la veille.
+| Keep read notifications (days, 0 = forever) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
 
-:::warning[Conversion des types]
-`sql_copy` applique par défaut les règles de conversion JD Edwards (`type_coercion = "jde"`, `decimal_mode = "truncate"`). Entre deux bases ordinaires, définir `type_coercion = "none"` dans `jobs.toml` pour copier les valeurs telles quelles.
-:::
-
-```toml title="jobs.toml"
-[[jobs]]
-id = "nightly-reporting-sync"
-schedule = "0 2 * * *"
-timezone = "Europe/Paris"
-tags = ["etl"]
-
-[jobs.retry]
-attempts = 3
-backoff = "exponential"
-base_seconds = 60
-
-[[jobs.steps]]
-type = "sql_copy"
-name = "copy-orders"
-source = { connector = "ops-db", schema = "public", table = "orders" }
-target = { connector = "reporting", schema = "staging", table = "orders" }
-mode = "overwrite"
-type_coercion = "none"
-
-[[jobs.steps]]
-type = "sql_copy"
-name = "copy-customers"
-source = { connector = "ops-db", schema = "public", table = "customers" }
-target = { connector = "reporting", schema = "staging", table = "customers" }
-mode = "overwrite"
-type_coercion = "none"
-
-[[jobs.steps]]
-type = "sql_query"
-name = "refresh-totals"
-connector = "reporting"
-query = "daily_totals_refresh"
-```
+Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ---
 
-## Être prévenu \{#notify\}
+## Règles \{#rules\}
 
-Dans **Liberty Next → Construire → Notifications**, une règle sur *A job event* : tâche `nightly-reporting-sync`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`, objet `{JOB} : {STATE}`, corps `{ERROR}`. Voir [Notifications](../notifications.md).
+Les règles se modifient dans **Liberty Next → Construire → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
 
----
+### Déclencheurs
 
-## Vérifier \{#check\}
+| Déclencheur | Se déclenche quand | Réglages |
+|---|---|---|
+| **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
+| **A job event** | Une exécution Nomaflow se termine. | Jobs — plusieurs choisies dans une même liste, vide = toutes les tâches — et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
+| **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
 
-**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Exécuter avec des paramètres** affiche les requêtes. Une fois le résultat juste, laisser la planification active.
+`long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
 
----
+### Canaux
 
-## Nomaflow — Récupération d'API
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/api-pull/
-
-Recette — récupérer chaque heure des enregistrements d'une API REST avec une étape Python et les écrire par une requête d'un connecteur, le jeton restant hors de la tâche.
-
-Chaque heure, récupérer les dernières versions publiées d'un projet depuis une API REST et les enregistrer (ajout ou mise à jour) dans une table.
-
-L'étape `http` appelle une URL et contrôle la réponse, mais ne transmet pas le corps à l'étape suivante : pour lire les données d'une API et les stocker, utiliser une étape `python` qui appelle l'API et écrit par une requête nommée d'un connecteur.
-
----
-
-## Prérequis \{#needs\}
-
-- Un connecteur SQL `reporting` avec une requête d'écriture `release_upsert` — pour PostgreSQL :
-
-```sql title="release_upsert"
-INSERT INTO releases (tag, name, published_at)
-VALUES (:TAG, :NAME, :PUBLISHED_AT)
-ON CONFLICT (tag) DO UPDATE SET name = EXCLUDED.name, published_at = EXCLUDED.published_at
-```
-
-- Le jeton d'API dans l'environnement du serveur : `GITHUB_TOKEN` (dans `release/.env` avec Docker, dans le fichier d'environnement du service pour une installation Python).
-
----
-
-## La fonction \{#function\}
-
-```python title="plugins/integrations/releases.py"
-import logging
-import os
-
-import httpx
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import StepResult
-
-_log = logging.getLogger(__name__)
-
-async def pull_releases(*, repo: str, target_connector: str, connectors: ConnectorRegistry) -> StepResult:
-    headers = {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"}
-    async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.get(f"https://api.github.com/repos/{repo}/releases", headers=headers)
-        resp.raise_for_status()
-        releases = resp.json()
-
-    target = connectors.sql(target_connector)
-    for r in releases:
-        await target.execute("release_upsert", {
-            "TAG": r["tag_name"], "NAME": r["name"], "PUBLISHED_AT": r["published_at"],
-        })
-    _log.info("%d release(s) upserted", len(releases))
-    return StepResult(rows_affected=len(releases))
-```
-
-Enregistrer une fois le paquet pour que ses lignes arrivent dans le journal de l'exécution : `register_namespace("integrations")` dans `plugins/integrations/__init__.py` — voir [Étapes Python personnalisées](../custom-python.md#logging).
-
----
-
-## La tâche \{#job\}
-
-```toml title="jobs.toml"
-[[jobs]]
-id = "pull-releases"
-schedule = "15 * * * *"
-timezone = "Europe/Paris"
-tags = ["integration"]
-
-[jobs.retry]
-attempts = 3
-backoff = "exponential"
-base_seconds = 30
-
-[[jobs.steps]]
-type = "python"
-name = "pull-releases"
-callable = "integrations.releases:pull_releases"
-op_kwargs = { repo = "acme/platform", target_connector = "reporting" }
-```
-
-Une erreur levée par `raise_for_status()` fait échouer l'étape ; la politique de réessai retente après 30 s, puis 60 s.
-
----
-
-## Variantes \{#variants\}
-
-| Besoin | Modification |
+| Canal | Délivre |
 |---|---|
-| Résultats paginés | Boucler sur le lien de page suivante de l'API dans la fonction. |
-| Un autre dépôt selon une autre planification | Un préréglage avec son propre `repo` et sa planification — voir [Préréglages planifiables](../jobs/schedules.md#schedulable-presets). |
-| Seulement vérifier qu'un service répond | Une étape `http` sur son URL de santé suffit. |
+| `portal` | Une notification dans la cloche de chaque utilisateur destinataire. |
+| `email` | Un e-mail à chaque destinataire qui a une adresse. |
+| `action` | Lance une requête (connecteur SQL) ou appelle un endpoint (connecteur API) avec les valeurs du message — pour publier dans Teams ou sur un webhook, ou écrire dans une table de journal. Ses paramètres sont les valeurs de l'événement, plus `SUBJECT`, `BODY` et `RULE`. |
 
----
+Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait en arrière-plan : un enregistrement ou une tâche n'attend jamais le serveur de messagerie.
 
-## Nomaflow — Nettoyage conditionnel
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/conditional-cleanup/
+### Destinataires
 
-Recette — purger chaque nuit les anciennes lignes, mais seulement quand il y en a assez, par lots, avec la décision et les comptages dans le journal de l'exécution.
+| Forme | Signifie |
+|---|---|
+| `user:alice` | Cet utilisateur. |
+| `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
+| `email:finance@example.com` | Une adresse — e-mail uniquement. |
 
-Chaque nuit, supprimer les lignes d'audit de plus de 90 jours — mais seulement quand plus de 10 000 se sont accumulées, et par lots pour ne pas verrouiller la table longtemps.
+Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
 
----
+### Variables
 
-## Prérequis \{#needs\}
+L'objet, le corps et le lien acceptent des variables `{NOM}`, en majuscules ou en minuscules :
 
-Deux requêtes nommées sur le connecteur `ops-db` — pour PostgreSQL :
+| Déclencheur | Variables |
+|---|---|
+| Événement d'écran | Chaque colonne de la ligne écrite, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
+| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée ou une échéance. |
+| Action d'écran | Les valeurs transmises par l'action, plus `USER`. |
 
-```sql title="audit_old_count_get"
-SELECT COUNT(*) AS N FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER)
+Une variable inconnue est laissée telle quelle. Dans l'éditeur, le bouton **{ }** à côté de l'objet, du corps et du lien liste les variables du déclencheur et insère celle choisie à l'emplacement du curseur ; le même bouton figure à côté de l'objet et du corps d'une [étape `notify`](./steps.md#notify).
+
+### En TOML
+
+```toml title="notifications.toml"
+[notifications.period_closed]
+label = "Période clôturée"
+trigger = { kind = "screen", app = "sales", screen = "period_status", events = ["update"], when = [{ field = "STATUS", value = "closed" }] }
+channels = ["portal", "email"]
+recipients = ["role:controllers", "email:finance@example.com"]
+subject = "Période {PERIOD} clôturée par {USER}"
+body = "Société {COMPANY} : la période passe en lecture seule."
+link = "/screen/sales/period_status"
+
+[notifications.job_failed]
+trigger = { kind = "job", events = ["failure", "missed"] }
+channels = ["email"]
+recipients = ["role:ops"]
+subject = "{JOB} : {STATE}"
+body = "{ERROR}"
 ```
 
-```sql title="audit_old_batch_delete"
-DELETE FROM audit_log
-WHERE id IN (SELECT id FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER) LIMIT 5000)
-```
+---
+
+## Depuis une étape de tâche \{#notify-step\}
+
+Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Voir [Étapes → Notification](./steps.md#notify).
 
 ---
 
-## La version simple \{#simple\}
+## Les alertes propres à une tâche \{#job-alerts\}
 
-Sans seuil, une étape `sql_query` qui appelle `audit_old_batch_delete` suffit — la planifier assez souvent pour que chaque exécution supprime un lot.
-
----
-
-## Avec un seuil \{#threshold\}
-
-```python title="plugins/housekeeping/audit.py"
-import asyncio
-import logging
-
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import StepResult
-
-_log = logging.getLogger(__name__)
-
-async def purge_audit(*, connector: str, days: int, threshold: int, connectors: ConnectorRegistry) -> StepResult:
-    db = connectors.sql(connector)
-    count = (await db.execute("audit_old_count_get", {"DAYS": days})).rows[0]["N"]
-    if count < threshold:
-        _log.info("%d old row(s), below %d — nothing to do", count, threshold)
-        return StepResult(rows_affected=0, extras={"old_rows": count, "purged": False})
-
-    deleted = 0
-    while True:
-        n = (await db.execute("audit_old_batch_delete", {"DAYS": days})).rowcount
-        deleted += max(n, 0)
-        if n <= 0:
-            break
-        await asyncio.sleep(0)          # permet à Annuler d'arrêter la boucle entre deux lots
-    _log.info("%d row(s) deleted", deleted)
-    return StepResult(rows_affected=deleted, extras={"old_rows": count, "purged": True})
-```
+Une tâche peut aussi prévenir en cas d'échec sans règle, depuis le bloc **Alertes** de l'éditeur de tâche :
 
 ```toml title="jobs.toml"
-[[jobs]]
-id = "purge-audit"
-schedule = "30 3 * * *"
-timezone = "Europe/Paris"
-tags = ["housekeeping"]
-
-[[jobs.steps]]
-type = "python"
-name = "purge-audit"
-callable = "housekeeping.audit:purge_audit"
-op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
+[jobs.alerts]
+on_failure = true
+recipients = ["role:ops", "user:alice"]
 ```
 
-Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Exécuter avec des paramètres**.
+En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail.
 
 ---
 
-## Variantes \{#variants\}
+## Conseils \{#tips\}
 
-| Besoin | Modification |
-|---|---|
-| Un essai à blanc d'abord | Ajouter un argument `dry_run: bool = False` qui se contente de compter, et lancer une fois avec `dry_run = true`. |
-| Plusieurs tables | Une tâche par table, ou une fonction qui reçoit en arguments les requêtes de la table. |
-| Être prévenu que la purge a eu lieu | Une règle de notification sur `succeeded` pour cette tâche. |
+- Commencer par une règle : `failure` et `missed` sur toutes les tâches, vers le rôle d'exploitation.
+- Préférer les rôles aux utilisateurs nommés : la règle suit les changements d'équipe.
+- Utiliser **Send a test** après avoir modifié le compte SMTP.
+- Réserver la cloche à ce qui demande une action ; envoyer le reste par e-mail à une boîte partagée.
 
 ---
 
@@ -14823,6 +14701,461 @@ Les tâches livrées sont **enabled = false** par défaut. Définir une planific
 
 ---
 
+## Nomaflow — Synchronisation planifiée
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/scheduled-sync/
+
+Recette — copier chaque nuit des tables d'une base opérationnelle vers une base de reporting avec sql_copy, rafraîchir les agrégats avec sql_query, et être prévenu en cas d'échec ou d'exécution manquée.
+
+Chaque nuit, copier les tables `orders` et `customers` de la base opérationnelle vers la base de reporting, puis rafraîchir les agrégats lus par les tableaux de bord.
+
+---
+
+## Prérequis \{#needs\}
+
+- Deux connecteurs SQL : `ops-db` (source, compte en lecture seule) et `reporting` (cible).
+- Sur `reporting`, une requête d'écriture `daily_totals_refresh` qui reconstruit les agrégats (`REFRESH MATERIALIZED VIEW …`, ou `DELETE` + `INSERT … SELECT …`).
+
+---
+
+## La tâche \{#job\}
+
+**+ Nouvelle tâche** : identifiant `nightly-reporting-sync`, étiquette `etl`, **Planification (cron)** `0 2 * * *`, **Fuseau horaire** `Europe/Paris`. Puis trois étapes :
+
+| N° | Type | Réglages |
+|---|---|---|
+| 1 | `sql_copy` | Source `ops-db` · `public` · `orders` ; cible `reporting` · `staging` · `orders` ; mode `overwrite`. |
+| 2 | `sql_copy` | Idem pour `customers`. |
+| 3 | `sql_query` | Connecteur `reporting`, requête `daily_totals_refresh`. |
+
+`overwrite` écrit dans `<table>__new` puis l'échange avec la cible en une transaction : les tableaux de bord ne voient jamais une table à moitié remplie, et une copie en échec laisse en place les données de la veille.
+
+:::warning[Conversion des types]
+`sql_copy` applique par défaut les règles de conversion JD Edwards (`type_coercion = "jde"`, `decimal_mode = "truncate"`). Entre deux bases ordinaires, définir `type_coercion = "none"` dans `jobs.toml` pour copier les valeurs telles quelles.
+:::
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "nightly-reporting-sync"
+schedule = "0 2 * * *"
+timezone = "Europe/Paris"
+tags = ["etl"]
+
+[jobs.retry]
+attempts = 3
+backoff = "exponential"
+base_seconds = 60
+
+[[jobs.steps]]
+type = "sql_copy"
+name = "copy-orders"
+source = { connector = "ops-db", schema = "public", table = "orders" }
+target = { connector = "reporting", schema = "staging", table = "orders" }
+mode = "overwrite"
+type_coercion = "none"
+
+[[jobs.steps]]
+type = "sql_copy"
+name = "copy-customers"
+source = { connector = "ops-db", schema = "public", table = "customers" }
+target = { connector = "reporting", schema = "staging", table = "customers" }
+mode = "overwrite"
+type_coercion = "none"
+
+[[jobs.steps]]
+type = "sql_query"
+name = "refresh-totals"
+connector = "reporting"
+query = "daily_totals_refresh"
+```
+
+---
+
+## Être prévenu \{#notify\}
+
+Dans **Liberty Next → Construire → Notifications**, une règle sur *A job event* : tâche `nightly-reporting-sync`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`, objet `{JOB} : {STATE}`, corps `{ERROR}`. Voir [Notifications](../notifications.md).
+
+---
+
+## Vérifier \{#check\}
+
+**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Exécuter avec des paramètres** affiche les requêtes. Une fois le résultat juste, laisser la planification active.
+
+---
+
+## Nomaflow — Récupération d'API
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/api-pull/
+
+Recette — récupérer chaque heure des enregistrements d'une API REST avec une étape Python et les écrire par une requête d'un connecteur, le jeton restant hors de la tâche.
+
+Chaque heure, récupérer les dernières versions publiées d'un projet depuis une API REST et les enregistrer (ajout ou mise à jour) dans une table.
+
+L'étape `http` appelle une URL et contrôle la réponse, mais ne transmet pas le corps à l'étape suivante : pour lire les données d'une API et les stocker, utiliser une étape `python` qui appelle l'API et écrit par une requête nommée d'un connecteur.
+
+---
+
+## Prérequis \{#needs\}
+
+- Un connecteur SQL `reporting` avec une requête d'écriture `release_upsert` — pour PostgreSQL :
+
+```sql title="release_upsert"
+INSERT INTO releases (tag, name, published_at)
+VALUES (:TAG, :NAME, :PUBLISHED_AT)
+ON CONFLICT (tag) DO UPDATE SET name = EXCLUDED.name, published_at = EXCLUDED.published_at
+```
+
+- Le jeton d'API dans l'environnement du serveur : `GITHUB_TOKEN` (dans `release/.env` avec Docker, dans le fichier d'environnement du service pour une installation Python).
+
+---
+
+## La fonction \{#function\}
+
+```python title="plugins/integrations/releases.py"
+import logging
+import os
+
+import httpx
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import StepResult
+
+_log = logging.getLogger(__name__)
+
+async def pull_releases(*, repo: str, target_connector: str, connectors: ConnectorRegistry) -> StepResult:
+    headers = {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"}
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.get(f"https://api.github.com/repos/{repo}/releases", headers=headers)
+        resp.raise_for_status()
+        releases = resp.json()
+
+    target = connectors.sql(target_connector)
+    for r in releases:
+        await target.execute("release_upsert", {
+            "TAG": r["tag_name"], "NAME": r["name"], "PUBLISHED_AT": r["published_at"],
+        })
+    _log.info("%d release(s) upserted", len(releases))
+    return StepResult(rows_affected=len(releases))
+```
+
+Enregistrer une fois le paquet pour que ses lignes arrivent dans le journal de l'exécution : `register_namespace("integrations")` dans `plugins/integrations/__init__.py` — voir [Étapes Python personnalisées](../custom-python.md#logging).
+
+---
+
+## La tâche \{#job\}
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "pull-releases"
+schedule = "15 * * * *"
+timezone = "Europe/Paris"
+tags = ["integration"]
+
+[jobs.retry]
+attempts = 3
+backoff = "exponential"
+base_seconds = 30
+
+[[jobs.steps]]
+type = "python"
+name = "pull-releases"
+callable = "integrations.releases:pull_releases"
+op_kwargs = { repo = "acme/platform", target_connector = "reporting" }
+```
+
+Une erreur levée par `raise_for_status()` fait échouer l'étape ; la politique de réessai retente après 30 s, puis 60 s.
+
+---
+
+## Variantes \{#variants\}
+
+| Besoin | Modification |
+|---|---|
+| Résultats paginés | Boucler sur le lien de page suivante de l'API dans la fonction. |
+| Un autre dépôt selon une autre planification | Un préréglage avec son propre `repo` et sa planification — voir [Préréglages planifiables](../jobs/schedules.md#schedulable-presets). |
+| Seulement vérifier qu'un service répond | Une étape `http` sur son URL de santé suffit. |
+
+---
+
+## Nomaflow — Nettoyage conditionnel
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/workflows/conditional-cleanup/
+
+Recette — purger chaque nuit les anciennes lignes, mais seulement quand il y en a assez, par lots, avec la décision et les comptages dans le journal de l'exécution.
+
+Chaque nuit, supprimer les lignes d'audit de plus de 90 jours — mais seulement quand plus de 10 000 se sont accumulées, et par lots pour ne pas verrouiller la table longtemps.
+
+---
+
+## Prérequis \{#needs\}
+
+Deux requêtes nommées sur le connecteur `ops-db` — pour PostgreSQL :
+
+```sql title="audit_old_count_get"
+SELECT COUNT(*) AS N FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER)
+```
+
+```sql title="audit_old_batch_delete"
+DELETE FROM audit_log
+WHERE id IN (SELECT id FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER) LIMIT 5000)
+```
+
+---
+
+## La version simple \{#simple\}
+
+Sans seuil, une étape `sql_query` qui appelle `audit_old_batch_delete` suffit — la planifier assez souvent pour que chaque exécution supprime un lot.
+
+---
+
+## Avec un seuil \{#threshold\}
+
+```python title="plugins/housekeeping/audit.py"
+import asyncio
+import logging
+
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import StepResult
+
+_log = logging.getLogger(__name__)
+
+async def purge_audit(*, connector: str, days: int, threshold: int, connectors: ConnectorRegistry) -> StepResult:
+    db = connectors.sql(connector)
+    count = (await db.execute("audit_old_count_get", {"DAYS": days})).rows[0]["N"]
+    if count < threshold:
+        _log.info("%d old row(s), below %d — nothing to do", count, threshold)
+        return StepResult(rows_affected=0, extras={"old_rows": count, "purged": False})
+
+    deleted = 0
+    while True:
+        n = (await db.execute("audit_old_batch_delete", {"DAYS": days})).rowcount
+        deleted += max(n, 0)
+        if n <= 0:
+            break
+        await asyncio.sleep(0)          # permet à Annuler d'arrêter la boucle entre deux lots
+    _log.info("%d row(s) deleted", deleted)
+    return StepResult(rows_affected=deleted, extras={"old_rows": count, "purged": True})
+```
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "purge-audit"
+schedule = "30 3 * * *"
+timezone = "Europe/Paris"
+tags = ["housekeeping"]
+
+[[jobs.steps]]
+type = "python"
+name = "purge-audit"
+callable = "housekeeping.audit:purge_audit"
+op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
+```
+
+Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Exécuter avec des paramètres**.
+
+---
+
+## Variantes \{#variants\}
+
+| Besoin | Modification |
+|---|---|
+| Un essai à blanc d'abord | Ajouter un argument `dry_run: bool = False` qui se contente de compter, et lancer une fois avec `dry_run = true`. |
+| Plusieurs tables | Une tâche par table, ou une fonction qui reçoit en arguments les requêtes de la table. |
+| Être prévenu que la purge a eu lieu | Une règle de notification sur `succeeded` pour cette tâche. |
+
+---
+
+## Nomaflow — Étapes Python personnalisées
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/custom-python/
+
+Écrire une fonction Python pour une étape python de Nomaflow : son emplacement, ce qu'elle reçoit (ses arguments, les connecteurs, le contexte de l'exécution), ce qu'elle renvoie, comment elle écrit dans le journal de l'exécution, comment elle échoue et comment elle est annulée.
+
+Quand aucun autre type d'étape ne convient, une étape `python` appelle une fonction écrite pour l'occasion. La fonction se trouve dans un plugin du dossier des applications, reçoit ses arguments de la tâche, et son résultat s'inscrit dans l'exécution comme celui de toute autre étape.
+
+Cette page est la version courte, pour les auteurs de tâches. La référence complète — arguments injectés, valeurs de retour, annulation, exemple détaillé — se trouve dans [Écrire un callable](../framework/build/plugins/write-a-callable.md), et le déploiement dans [Déployer et déboguer](../framework/build/plugins/deploy-and-debug.md).
+
+---
+
+## Emplacement de la fonction \{#where\}
+
+Un plugin est un paquet Python du dossier `plugins/`, à côté du dossier de configuration (`LIBERTY_APPS_DIR/../plugins`). L'étape désigne la fonction sous la forme `paquet.module:fonction` :
+
+```toml title="jobs.toml"
+[[jobs.steps]]
+type = "python"
+name = "refresh-summary"
+callable = "reports.summary:refresh"
+op_kwargs = { period = "2026-10", target_connector = "reporting" }
+```
+
+Les modules ne sont importés qu'une fois : après une modification du code, redémarrer le serveur (`./liberty restart` ou `liberty-ops restart`).
+
+---
+
+## Ce que reçoit la fonction \{#arguments\}
+
+```python title="plugins/reports/summary.py"
+import logging
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import RunContext, StepResult
+
+_log = logging.getLogger(__name__)
+
+async def refresh(*, period: str, target_connector: str,
+                  connectors: ConnectorRegistry, ctx: RunContext) -> StepResult:
+    _log.info("refresh %s · run %s", period, ctx.run_id)
+    conn = connectors.sql(target_connector)          # connectors.api(...) pour un connecteur API
+    await conn.execute("summary_refresh_put", {"PERIOD": period})   # une requête nommée du connecteur
+    ...
+    return StepResult(rows_affected=count, extras={"period": period})
+```
+
+| Argument | Provenance |
+|---|---|
+| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Exécuter avec des paramètres**. Les valeurs sont converties au type annoté (`apps_id: int`). |
+| `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
+| `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
+| `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
+| `app_state` | L'état vivant du serveur en cours d'exécution (applications, modèles de l'explorateur de données, dictionnaire…), pour une fonction qui agit sur la configuration elle-même — comme la tâche de rafraîchissement du dictionnaire. Fourni seulement s'il est déclaré. |
+
+La fonction peut être `async` (recommandé) ou un simple `def`, exécuté dans un thread de travail.
+
+---
+
+## Ce qu'elle renvoie \{#return\}
+
+| Retour | Dans l'exécution |
+|---|---|
+| `None` | Rien de plus. |
+| un `int` | Le nombre de lignes modifiées. |
+| un `dict` | Conservé comme détail de l'étape (non compté comme lignes). |
+| un `StepResult(rows_affected=…, extras={…})` | Les deux. |
+
+Tout autre type — un `bool` par exemple — fait échouer l'étape, pour qu'une erreur ne passe pas pour un succès.
+
+---
+
+## Écrire dans le journal de l'exécution \{#logging\}
+
+Le journal de l'exécution conserve les lignes des loggers `liberty.*` et des espaces de noms enregistrés par un plugin. Enregistrer le paquet une fois, dans `plugins/reports/__init__.py` :
+
+```python
+from liberty.jobs.runlog import register_namespace
+register_namespace("reports")
+```
+
+Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Exécuter avec des paramètres** → niveau de journal) s'applique.
+
+---
+
+## Échec et annulation \{#errors\}
+
+- Laisser passer les exceptions : l'étape échoue avec le message, la **Politique de réessai** de la tâche s'applique, les étapes suivantes sont sautées. Lever `StepFailed("…")` (de `liberty.jobs.steps.base`) donne un message plus clair.
+- **Annuler** sur la carte de la tâche annule une fonction `async` à son prochain `await`. Un simple `def` ne peut pas être interrompu : l'exécution est marquée annulée, la fonction se termine d'elle-même.
+
+---
+
+## Conseils \{#tips\}
+
+- Placer le SQL dans les requêtes nommées du connecteur et les appeler depuis la fonction : la requête reste visible et testable dans la page du connecteur.
+- Garder les fonctions courtes ; découper un long traitement en plusieurs étapes pour que le détail de l'exécution montre où il s'est arrêté.
+- Tester la fonction comme tout code Python, avec un registre branché sur une base de test.
+
+---
+
+## Nomaflow — Administration
+Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/administration/
+
+Faire fonctionner Nomaflow sur un serveur : le stockage des exécutions et des fichiers, une seule instance, le comportement au redémarrage, la rétention de l'historique, le tampon du journal, l'accès aux pages des Tâches, la sauvegarde et l'état de santé.
+
+Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur d'exécution et son historique ne demandent aucun service séparé.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Stockage et limites \{#settings\}
+
+| Élément | Valeur |
+|---|---|
+| Historique des exécutions | Dans la base de données du framework, cinq tables : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage. |
+| Tâches | Le fichier des tâches `plugins/nomaflow/jobs.toml`, à côté du dossier de configuration — modifié depuis les pages des Tâches. |
+| Journal d'exécution | Les 5 000 dernières lignes de chaque exécution sont conservées. |
+| Fichiers | Les fichiers envoyés par **Exécuter avec des paramètres** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
+| Taille d'envoi | 200 Mo au plus par fichier. |
+
+---
+
+## Une seule instance \{#one-instance\}
+
+Exécuter **une seule** instance de Liberty Next : le planificateur se déclenche depuis le processus du serveur, sans verrou partagé entre instances ; deux instances lanceraient chaque tâche deux fois. Voir [Liste de contrôle de production](../installation/production.md#replicas).
+
+---
+
+## Redémarrage \{#restart\}
+
+- Les exécutions en cours à l'arrêt du serveur sont clôturées **FAILED** avec *abandoned: process restart during run* au démarrage suivant.
+- Les heures planifiées tombées pendant l'arrêt sont enregistrées **MISSED** — voir [Planifications manquées](./jobs/schedules.md#missed). Elles ne sont pas relancées d'elles-mêmes : les lancer à la main si besoin.
+- Tâches, préréglages et politiques sont dans `jobs.toml` ; l'historique est en base — les deux survivent au redémarrage.
+
+---
+
+## Rétention de l'historique \{#retention\}
+
+Le panneau **Rétention de l'historique des exécutions** de la page des Tâches :
+
+| Réglage | Défaut | Signification |
+|---|---|---|
+| **Nettoyage automatique** | activé | Le nettoyage récurrent. |
+| **Jours conservés** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
+| **Plafond par tâche** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
+| **Intervalle de nettoyage (min)** | 60 | La fréquence du nettoyage. |
+| **Fichiers conservés (jours)** | vide | Les fichiers plus anciens de la zone de travail sont supprimés : fichiers envoyés, rapports de rejets, rapports, exports, et archives `done/` / `failed/` des dossiers surveillés. Vide = **Jours conservés** ; `0` = garder les fichiers. Une copie écrite dans un dossier d'export n'est jamais touchée. |
+
+**Nettoyer maintenant** le lance aussitôt et indique les exécutions et les fichiers supprimés. Les mêmes stockages figurent, avec leur taille, dans [Surveillance → Rétention](../monitoring/retention.md). La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
+
+---
+
+## Journal d'exécution \{#run-log\}
+
+Chaque exécution collecte ses lignes de journal en mémoire — loggers `liberty.*`, lignes `nomaflow` et espaces de noms enregistrés par les plugins — et les écrit en base à sa fin. Le niveau est celui de l'exécution : `WARNING`, `INFO` ou `DEBUG` (`DEBUG` ajoute le SQL de chaque requête). Le journal du serveur reçoit les mêmes lignes.
+
+---
+
+## Qui peut utiliser Nomaflow \{#permissions\}
+
+Les superutilisateurs voient et font tout. Les autres utilisateurs reçoivent ce que leurs rôles accordent, dans **Liberty Next → Administrer → Accès**, bloc *Au-delà des menus* :
+
+| Droit | Donne |
+|---|---|
+| **nomaflow → Suivre les tâches** (`nomaflow:view`) | Les pages Tâches, Planning et Exécutions : les tâches, leurs planifications, leurs exécutions avec journaux et fichiers. |
+| **Tâche → Toutes les tâches** (`job:*`), ou une tâche (`job:<id>`) | Lancer la tâche — avec ses fichiers et paramètres — et annuler ses exécutions. |
+| **nomaflow → Créer et modifier les tâches** (`nomaflow:edit`) | Comprend *Suivre les tâches* ; créer, modifier, cloner, supprimer, suspendre et reprendre des tâches, enregistrer des préréglages. Les étapes exécutent SQL et Python sans le périmètre de données de l'utilisateur : à accorder avec prudence. |
+
+Les règles de rétention et de planifications manquées, ainsi que l'export d'une tâche, restent réservés aux superutilisateurs. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
+
+---
+
+## Sauvegarde \{#backup\}
+
+`./liberty backup` (Docker) ou `liberty-ops backup` (Python) sauvegarde la configuration — `jobs.toml` compris — et la base qui contient l'historique. Voir [Exploitation](../installation/operations.md#backup).
+
+---
+
+## État de santé \{#health\}
+
+Le `/ready` du serveur répond quand la base du framework — qui contient l'historique — est joignable. La page des Tâches montre le dernier état de chaque tâche ; une règle de notification sur `failure` et `missed` est la supervision la plus simple.
+
+---
+
+## Tâches courantes \{#tasks\}
+
+| Tâche | Comment |
+|---|---|
+| Suspendre une tâche | Son switch **activée** dans la page des Tâches. |
+| Déplacer une tâche vers un autre serveur | La transporter dans un package — voir [Packages](../framework/build/packages.md). Les connecteurs et requêtes utilisés doivent y exister. |
+| Analyser une tâche sans arrêter les autres | La désactiver, la lancer à la main en `DEBUG`. |
+
+---
+
 ## Nomaflow — Paquets de modifications
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/change-packages/
 
@@ -15105,339 +15438,6 @@ Le framework livre le moteur pour ce qui suit, mais l'interface aujourd'hui est 
 - [Nomaflow → Jobs intégrés → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all) — le plugin de re-fusion de sécurité le plus souvent câblé comme étape de post-application sur les promotions JDE.
 - [Nomaflow → Concepts](./concepts.md) — le modèle mental Nomaflow plus large dans lequel s'inscrivent les Paquets de modifications.
 - [Liberty Next → Déployer → Paquet](../framework/build/packages.md) — l'équivalent configuration : expédier écrans / éléments de menu / tableaux de bord entre installations. Les deux canaux coexistent.
-
----
-
-## Nomaflow — Étapes Python personnalisées
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/custom-python/
-
-Écrire une fonction Python pour une étape python de Nomaflow : son emplacement, ce qu'elle reçoit (ses arguments, les connecteurs, le contexte de l'exécution), ce qu'elle renvoie, comment elle écrit dans le journal de l'exécution, comment elle échoue et comment elle est annulée.
-
-Quand aucun autre type d'étape ne convient, une étape `python` appelle une fonction écrite pour l'occasion. La fonction se trouve dans un plugin du dossier des applications, reçoit ses arguments de la tâche, et son résultat s'inscrit dans l'exécution comme celui de toute autre étape.
-
-Cette page est la version courte, pour les auteurs de tâches. La référence complète — arguments injectés, valeurs de retour, annulation, exemple détaillé — se trouve dans [Écrire un callable](../framework/build/plugins/write-a-callable.md), et le déploiement dans [Déployer et déboguer](../framework/build/plugins/deploy-and-debug.md).
-
----
-
-## Emplacement de la fonction \{#where\}
-
-Un plugin est un paquet Python du dossier `plugins/`, à côté du dossier de configuration (`LIBERTY_APPS_DIR/../plugins`). L'étape désigne la fonction sous la forme `paquet.module:fonction` :
-
-```toml title="jobs.toml"
-[[jobs.steps]]
-type = "python"
-name = "refresh-summary"
-callable = "reports.summary:refresh"
-op_kwargs = { period = "2026-10", target_connector = "reporting" }
-```
-
-Les modules ne sont importés qu'une fois : après une modification du code, redémarrer le serveur (`./liberty restart` ou `liberty-ops restart`).
-
----
-
-## Ce que reçoit la fonction \{#arguments\}
-
-```python title="plugins/reports/summary.py"
-import logging
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import RunContext, StepResult
-
-_log = logging.getLogger(__name__)
-
-async def refresh(*, period: str, target_connector: str,
-                  connectors: ConnectorRegistry, ctx: RunContext) -> StepResult:
-    _log.info("refresh %s · run %s", period, ctx.run_id)
-    conn = connectors.sql(target_connector)          # connectors.api(...) pour un connecteur API
-    await conn.execute("summary_refresh_put", {"PERIOD": period})   # une requête nommée du connecteur
-    ...
-    return StepResult(rows_affected=count, extras={"period": period})
-```
-
-| Argument | Provenance |
-|---|---|
-| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Exécuter avec des paramètres**. Les valeurs sont converties au type annoté (`apps_id: int`). |
-| `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
-| `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
-| `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
-| `app_state` | L'état vivant du serveur en cours d'exécution (applications, modèles de l'explorateur de données, dictionnaire…), pour une fonction qui agit sur la configuration elle-même — comme la tâche de rafraîchissement du dictionnaire. Fourni seulement s'il est déclaré. |
-
-La fonction peut être `async` (recommandé) ou un simple `def`, exécuté dans un thread de travail.
-
----
-
-## Ce qu'elle renvoie \{#return\}
-
-| Retour | Dans l'exécution |
-|---|---|
-| `None` | Rien de plus. |
-| un `int` | Le nombre de lignes modifiées. |
-| un `dict` | Conservé comme détail de l'étape (non compté comme lignes). |
-| un `StepResult(rows_affected=…, extras={…})` | Les deux. |
-
-Tout autre type — un `bool` par exemple — fait échouer l'étape, pour qu'une erreur ne passe pas pour un succès.
-
----
-
-## Écrire dans le journal de l'exécution \{#logging\}
-
-Le journal de l'exécution conserve les lignes des loggers `liberty.*` et des espaces de noms enregistrés par un plugin. Enregistrer le paquet une fois, dans `plugins/reports/__init__.py` :
-
-```python
-from liberty.jobs.runlog import register_namespace
-register_namespace("reports")
-```
-
-Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Exécuter avec des paramètres** → niveau de journal) s'applique.
-
----
-
-## Échec et annulation \{#errors\}
-
-- Laisser passer les exceptions : l'étape échoue avec le message, la **Politique de réessai** de la tâche s'applique, les étapes suivantes sont sautées. Lever `StepFailed("…")` (de `liberty.jobs.steps.base`) donne un message plus clair.
-- **Annuler** sur la carte de la tâche annule une fonction `async` à son prochain `await`. Un simple `def` ne peut pas être interrompu : l'exécution est marquée annulée, la fonction se termine d'elle-même.
-
----
-
-## Conseils \{#tips\}
-
-- Placer le SQL dans les requêtes nommées du connecteur et les appeler depuis la fonction : la requête reste visible et testable dans la page du connecteur.
-- Garder les fonctions courtes ; découper un long traitement en plusieurs étapes pour que le détail de l'exécution montre où il s'est arrêté.
-- Tester la fonction comme tout code Python, avec un registre branché sur une base de test.
-
----
-
-## Nomaflow — Notifications
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/notifications/
-
-Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue, retard) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche.
-
-Une notification prévient quelqu'un qu'un événement s'est produit : une période clôturée, une tâche de nuit en échec, une planification manquée. Les **règles** décident quand ; les **canaux** décident comment — la cloche de l'application, un e-mail, ou un appel à un connecteur.
-
----
-
-## Vue d'ensemble
-
----
-
-## Ce que voient les utilisateurs \{#inbox\}
-
-- **La cloche** de l'en-tête affiche le nombre de notifications non lues, mis à jour en temps réel. Son menu liste les six dernières ; **Tout marquer comme lu** et **Tout voir** sont en bas. Un clic sur une notification la marque comme lue et ouvre son lien.
-- **La page Notifications** (depuis **Tout voir**) les liste avec les onglets **Toutes** / **Non lues** et **Tout marquer comme lu**.
-
-Chaque utilisateur ne voit que ses propres notifications.
-
----
-
-## Le compte e-mail \{#smtp\}
-
-Les e-mails passent par le serveur SMTP défini dans **Liberty Next → Administrer → App → Notifications (email)** :
-
-| Champ | Défaut | Remarques |
-|---|---|---|
-| Notifications enabled | activé | Désactivé : aucune règle ne se déclenche. |
-| SMTP host, Port | —, `587` | Sans hôte, seule la cloche fonctionne. |
-| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* ou *None*. Changer d'option règle le port habituel. |
-| Timeout (s) | `20` | |
-| User, Password | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
-| From address | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
-
-| Keep read notifications (days, 0 = forever) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
-
-Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
-
----
-
-## Règles \{#rules\}
-
-Les règles se modifient dans **Liberty Next → Construire → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
-
-### Déclencheurs
-
-| Déclencheur | Se déclenche quand | Réglages |
-|---|---|---|
-| **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **A job event** | Une exécution Nomaflow se termine. | Jobs — plusieurs choisies dans une même liste, vide = toutes les tâches — et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
-| **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
-
-`long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
-
-### Canaux
-
-| Canal | Délivre |
-|---|---|
-| `portal` | Une notification dans la cloche de chaque utilisateur destinataire. |
-| `email` | Un e-mail à chaque destinataire qui a une adresse. |
-| `action` | Lance une requête (connecteur SQL) ou appelle un endpoint (connecteur API) avec les valeurs du message — pour publier dans Teams ou sur un webhook, ou écrire dans une table de journal. Ses paramètres sont les valeurs de l'événement, plus `SUBJECT`, `BODY` et `RULE`. |
-
-Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait en arrière-plan : un enregistrement ou une tâche n'attend jamais le serveur de messagerie.
-
-### Destinataires
-
-| Forme | Signifie |
-|---|---|
-| `user:alice` | Cet utilisateur. |
-| `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
-| `email:finance@example.com` | Une adresse — e-mail uniquement. |
-
-Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
-
-### Variables
-
-L'objet, le corps et le lien acceptent des variables `{NOM}`, en majuscules ou en minuscules :
-
-| Déclencheur | Variables |
-|---|---|
-| Événement d'écran | Chaque colonne de la ligne écrite, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
-| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée ou une échéance. |
-| Action d'écran | Les valeurs transmises par l'action, plus `USER`. |
-
-Une variable inconnue est laissée telle quelle. Dans l'éditeur, le bouton **{ }** à côté de l'objet, du corps et du lien liste les variables du déclencheur et insère celle choisie à l'emplacement du curseur ; le même bouton figure à côté de l'objet et du corps d'une [étape `notify`](./steps.md#notify).
-
-### En TOML
-
-```toml title="notifications.toml"
-[notifications.period_closed]
-label = "Période clôturée"
-trigger = { kind = "screen", app = "sales", screen = "period_status", events = ["update"], when = [{ field = "STATUS", value = "closed" }] }
-channels = ["portal", "email"]
-recipients = ["role:controllers", "email:finance@example.com"]
-subject = "Période {PERIOD} clôturée par {USER}"
-body = "Société {COMPANY} : la période passe en lecture seule."
-link = "/screen/sales/period_status"
-
-[notifications.job_failed]
-trigger = { kind = "job", events = ["failure", "missed"] }
-channels = ["email"]
-recipients = ["role:ops"]
-subject = "{JOB} : {STATE}"
-body = "{ERROR}"
-```
-
----
-
-## Depuis une étape de tâche \{#notify-step\}
-
-Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Voir [Étapes → Notification](./steps.md#notify).
-
----
-
-## Les alertes propres à une tâche \{#job-alerts\}
-
-Une tâche peut aussi prévenir en cas d'échec sans règle, depuis le bloc **Alertes** de l'éditeur de tâche :
-
-```toml title="jobs.toml"
-[jobs.alerts]
-on_failure = true
-recipients = ["role:ops", "user:alice"]
-```
-
-En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail.
-
----
-
-## Conseils \{#tips\}
-
-- Commencer par une règle : `failure` et `missed` sur toutes les tâches, vers le rôle d'exploitation.
-- Préférer les rôles aux utilisateurs nommés : la règle suit les changements d'équipe.
-- Utiliser **Send a test** après avoir modifié le compte SMTP.
-- Réserver la cloche à ce qui demande une action ; envoyer le reste par e-mail à une boîte partagée.
-
----
-
-## Nomaflow — Administration
-Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/administration/
-
-Faire fonctionner Nomaflow sur un serveur : le stockage des exécutions et des fichiers, une seule instance, le comportement au redémarrage, la rétention de l'historique, le tampon du journal, l'accès aux pages des Tâches, la sauvegarde et l'état de santé.
-
-Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur d'exécution et son historique ne demandent aucun service séparé.
-
----
-
-## Vue d'ensemble
-
----
-
-## Stockage et limites \{#settings\}
-
-| Élément | Valeur |
-|---|---|
-| Historique des exécutions | Dans la base de données du framework, cinq tables : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage. |
-| Tâches | Le fichier des tâches `plugins/nomaflow/jobs.toml`, à côté du dossier de configuration — modifié depuis les pages des Tâches. |
-| Journal d'exécution | Les 5 000 dernières lignes de chaque exécution sont conservées. |
-| Fichiers | Les fichiers envoyés par **Exécuter avec des paramètres** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
-| Taille d'envoi | 200 Mo au plus par fichier. |
-
----
-
-## Une seule instance \{#one-instance\}
-
-Exécuter **une seule** instance de Liberty Next : le planificateur se déclenche depuis le processus du serveur, sans verrou partagé entre instances ; deux instances lanceraient chaque tâche deux fois. Voir [Liste de contrôle de production](../installation/production.md#replicas).
-
----
-
-## Redémarrage \{#restart\}
-
-- Les exécutions en cours à l'arrêt du serveur sont clôturées **FAILED** avec *abandoned: process restart during run* au démarrage suivant.
-- Les heures planifiées tombées pendant l'arrêt sont enregistrées **MISSED** — voir [Planifications manquées](./jobs/schedules.md#missed). Elles ne sont pas relancées d'elles-mêmes : les lancer à la main si besoin.
-- Tâches, préréglages et politiques sont dans `jobs.toml` ; l'historique est en base — les deux survivent au redémarrage.
-
----
-
-## Rétention de l'historique \{#retention\}
-
-Le panneau **Rétention de l'historique des exécutions** de la page des Tâches :
-
-| Réglage | Défaut | Signification |
-|---|---|---|
-| **Nettoyage automatique** | activé | Le nettoyage récurrent. |
-| **Jours conservés** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
-| **Plafond par tâche** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
-| **Intervalle de nettoyage (min)** | 60 | La fréquence du nettoyage. |
-| **Fichiers conservés (jours)** | vide | Les fichiers plus anciens de la zone de travail sont supprimés : fichiers envoyés, rapports de rejets, rapports, exports, et archives `done/` / `failed/` des dossiers surveillés. Vide = **Jours conservés** ; `0` = garder les fichiers. Une copie écrite dans un dossier d'export n'est jamais touchée. |
-
-**Nettoyer maintenant** le lance aussitôt et indique les exécutions et les fichiers supprimés. Les mêmes stockages figurent, avec leur taille, dans [Surveillance → Rétention](../monitoring/retention.md). La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
-
----
-
-## Journal d'exécution \{#run-log\}
-
-Chaque exécution collecte ses lignes de journal en mémoire — loggers `liberty.*`, lignes `nomaflow` et espaces de noms enregistrés par les plugins — et les écrit en base à sa fin. Le niveau est celui de l'exécution : `WARNING`, `INFO` ou `DEBUG` (`DEBUG` ajoute le SQL de chaque requête). Le journal du serveur reçoit les mêmes lignes.
-
----
-
-## Qui peut utiliser Nomaflow \{#permissions\}
-
-Les superutilisateurs voient et font tout. Les autres utilisateurs reçoivent ce que leurs rôles accordent, dans **Liberty Next → Administrer → Accès**, bloc *Au-delà des menus* :
-
-| Droit | Donne |
-|---|---|
-| **nomaflow → Suivre les tâches** (`nomaflow:view`) | Les pages Tâches, Planning et Exécutions : les tâches, leurs planifications, leurs exécutions avec journaux et fichiers. |
-| **Tâche → Toutes les tâches** (`job:*`), ou une tâche (`job:<id>`) | Lancer la tâche — avec ses fichiers et paramètres — et annuler ses exécutions. |
-| **nomaflow → Créer et modifier les tâches** (`nomaflow:edit`) | Comprend *Suivre les tâches* ; créer, modifier, cloner, supprimer, suspendre et reprendre des tâches, enregistrer des préréglages. Les étapes exécutent SQL et Python sans le périmètre de données de l'utilisateur : à accorder avec prudence. |
-
-Les règles de rétention et de planifications manquées, ainsi que l'export d'une tâche, restent réservés aux superutilisateurs. Les autres utilisateurs sont informés des tâches par les règles de notification — voir [Notifications](./notifications.md).
-
----
-
-## Sauvegarde \{#backup\}
-
-`./liberty backup` (Docker) ou `liberty-ops backup` (Python) sauvegarde la configuration — `jobs.toml` compris — et la base qui contient l'historique. Voir [Exploitation](../installation/operations.md#backup).
-
----
-
-## État de santé \{#health\}
-
-Le `/ready` du serveur répond quand la base du framework — qui contient l'historique — est joignable. La page des Tâches montre le dernier état de chaque tâche ; une règle de notification sur `failure` et `missed` est la supervision la plus simple.
-
----
-
-## Tâches courantes \{#tasks\}
-
-| Tâche | Comment |
-|---|---|
-| Suspendre une tâche | Son switch **activée** dans la page des Tâches. |
-| Déplacer une tâche vers un autre serveur | La transporter dans un package — voir [Packages](../framework/build/packages.md). Les connecteurs et requêtes utilisés doivent y exister. |
-| Analyser une tâche sans arrêter les autres | La désactiver, la lancer à la main en `DEBUG`. |
 
 ---
 

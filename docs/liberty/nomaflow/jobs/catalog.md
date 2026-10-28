@@ -1,10 +1,10 @@
 ---
-title: Catalogue — the Jobs page
+title: The Jobs page
 description: "The Nomaflow Jobs page: search and filters, the jobs grouped by application with the main jobs first, what a job line shows, switching a job on or off, Run now and Run with parameters (presets, parameters, several values, steps, file uploads, log level), Cancel, Clone, Delete and Export."
 keywords: [Nomaflow, jobs, catalogue, run now, run with parameters, presets, cancel, clone, delete, export, retention, missed schedules, Liberty Next]
 ---
 
-# Catalogue — the Jobs page
+# The Jobs page
 
 The **Jobs** page lists every job of `jobs.toml`, one line per job, grouped by application, with its last run, its schedule and its actions. It is reserved to superusers.
 

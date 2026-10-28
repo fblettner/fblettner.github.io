@@ -13162,45 +13162,6 @@ Both can be combined: a subsidiary's salespeople see their own customers, within
 
 # === Nomaflow — scheduling and orchestration ===
 
-## Nomaflow — Overview dashboard
-Source: https://docs.nomana-it.fr/liberty/nomaflow/dashboard/
-
-The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the scheduled jobs with Run now / Pause / Resume, the runs per day, what needs attention, the runs and durations per job, the latest runs and the last success per job — last 7 days by default.
-
-**Overview**, the first entry of the Nomaflow menu, gives the operators the state of the scheduler at a glance: how the runs ended, what failed or was missed, what is running now, which jobs are the busiest or the slowest, and the latest runs.
-
----
-
-## At a glance
-
----
-
-## The period \{#period\}
-
-The page opens on **Last 7 days**; the period control in the bar offers the other presets and a free range. Every widget follows it, except **In flight**, which always shows the present. **Excel** and **PDF** export the page with its period — see [Dashboards → Export](../framework/dashboards.md#export).
-
----
-
-## The widgets \{#widgets\}
-
-| Widget | Shows |
-|---|---|
-| **Runs** — by outcome | The runs started over the period: succeeded · failed · canceled. |
-| **Failures** — runs that ended in error | The failed runs, the number of jobs concerned and the missed schedules. |
-| **In flight** — right now | Running · queued. |
-| **Average duration** — completed runs | The average duration, and the longest. |
-| **Scheduled jobs** | What runs next: each scheduled job with its next run or *Paused*, its schedule in words and its last state, and the buttons **Run now**, **Pause the schedule** and **Resume the schedule**. Superusers only. |
-| **Runs per day** | One bar per day, by outcome. |
-| **What needs attention** | Per job: the failures with their last error, the missed schedules, the runs going for more than an hour — red for a failure, orange for the rest, with the date of the last occurrence. |
-| **Runs per job** | The share of the runs of each job over the period. |
-| **Average duration per job** | In seconds, the slowest first. |
-| **Recent runs** | The latest runs, with their state; the error, or the trigger, under each. |
-| **Last success per job** | Every job with its last successful run, the failures since and its last state: the failing jobs first, a job without a success for a week in orange; the figure is the days since the last success. |
-
-The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md). The same jobs card can be added to any dashboard — see [Dashboards → Jobs](../framework/dashboards.md#jobs).
-
----
-
 ## Nomaflow — Concepts
 Source: https://docs.nomana-it.fr/liberty/nomaflow/concepts/
 
@@ -13266,7 +13227,46 @@ The job `sales-load` has three steps: `file_load` (load the month's file), `sql_
 
 ---
 
-## Nomaflow — Catalogue — the Jobs page
+## Nomaflow — Overview dashboard
+Source: https://docs.nomana-it.fr/liberty/nomaflow/dashboard/
+
+The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the scheduled jobs with Run now / Pause / Resume, the runs per day, what needs attention, the runs and durations per job, the latest runs and the last success per job — last 7 days by default.
+
+**Overview**, the first entry of the Nomaflow menu, gives the operators the state of the scheduler at a glance: how the runs ended, what failed or was missed, what is running now, which jobs are the busiest or the slowest, and the latest runs.
+
+---
+
+## At a glance
+
+---
+
+## The period \{#period\}
+
+The page opens on **Last 7 days**; the period control in the bar offers the other presets and a free range. Every widget follows it, except **In flight**, which always shows the present. **Excel** and **PDF** export the page with its period — see [Dashboards → Export](../framework/dashboards.md#export).
+
+---
+
+## The widgets \{#widgets\}
+
+| Widget | Shows |
+|---|---|
+| **Runs** — by outcome | The runs started over the period: succeeded · failed · canceled. |
+| **Failures** — runs that ended in error | The failed runs, the number of jobs concerned and the missed schedules. |
+| **In flight** — right now | Running · queued. |
+| **Average duration** — completed runs | The average duration, and the longest. |
+| **Scheduled jobs** | What runs next: each scheduled job with its next run or *Paused*, its schedule in words and its last state, and the buttons **Run now**, **Pause the schedule** and **Resume the schedule**. Superusers only. |
+| **Runs per day** | One bar per day, by outcome. |
+| **What needs attention** | Per job: the failures with their last error, the missed schedules, the runs going for more than an hour — red for a failure, orange for the rest, with the date of the last occurrence. |
+| **Runs per job** | The share of the runs of each job over the period. |
+| **Average duration per job** | In seconds, the slowest first. |
+| **Recent runs** | The latest runs, with their state; the error, or the trigger, under each. |
+| **Last success per job** | Every job with its last successful run, the failures since and its last state: the failing jobs first, a job without a success for a week in orange; the figure is the days since the last success. |
+
+The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md). The same jobs card can be added to any dashboard — see [Dashboards → Jobs](../framework/dashboards.md#jobs).
+
+---
+
+## Nomaflow — The Jobs page
 Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/catalog/
 
 The Nomaflow Jobs page: search and filters, the jobs grouped by application with the main jobs first, what a job line shows, switching a job on or off, Run now and Run with parameters (presets, parameters, several values, steps, file uploads, log level), Cancel, Clone, Delete and Export.
@@ -13437,215 +13437,6 @@ name = "load-sales"
 - Give each step a short verb-noun name (`load-sales`, `refresh-totals`): it is what the run detail shows.
 - Keep one job per business flow; chain jobs with a `call_job` step rather than copying steps.
 - Save, then run once by hand with **Run with parameters** in `DEBUG` before enabling the schedule.
-
----
-
-## Nomaflow — Schedules
-Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/schedules/
-
-When Nomaflow jobs run: the five-field cron syntax and its day-of-week numbering, timezones, the preview of the next runs, the Schedule view, schedulable presets, and missed schedules recorded as MISSED runs.
-
-A job runs on its own **schedule** — a cron expression and a timezone — and on the schedules of its **presets**. A job without any schedule runs only when someone clicks **Run**.
-
----
-
-## Cron in Nomaflow \{#cron\}
-
-A schedule has **five fields**:
-
-```
-┌──── minute (0-59)
-│ ┌── hour (0-23)
-│ │ ┌── day of month (1-31)
-│ │ │ ┌── month (1-12)
-│ │ │ │ ┌── day of week (mon-sun)
-0 2 * * *
-```
-
-| Operator | Meaning | Example |
-|---|---|---|
-| `*` | every value | `* * * * *` — every minute |
-| `,` | a list | `0 6,12,18 * * *` — at 06:00, 12:00 and 18:00 |
-| `-` | a range | `0 9 * * mon-fri` — weekdays at 09:00 |
-| `/` | a step | `*/10 * * * *` — every 10 minutes |
-
-:::warning[Write the days of the week as names]
-The scheduler numbers the days of the week from **0 = Monday** to **6 = Sunday** — not like Unix cron, where 0 is Sunday. `0 9 * * 1` runs on **Tuesday**. Write `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`): the names leave no doubt, and the preview under the field confirms the days.
-:::
-
-When both the day of the month and the day of the week are set, **both** must match: `0 9 15 * mon` runs on a 15th that falls on a Monday.
-
-| Need | Cron |
-|---|---|
-| Every 5 minutes | `*/5 * * * *` |
-| Every hour at :15 | `15 * * * *` |
-| Every day at 02:00 | `0 2 * * *` |
-| Weekdays at 09:00 | `0 9 * * mon-fri` |
-| Every Monday at 06:00 | `0 6 * * mon` |
-| The 1st of every month at 07:00 | `0 7 1 * *` |
-| Every quarter (1st of Jan, Apr, Jul, Oct) at 03:00 | `0 3 1 1,4,7,10 *` |
-
----
-
-## In the job editor \{#editor\}
-
-The **Schedule (cron)** field of the job editor offers ready-made choices — **Manual**, **Hourly**, **Daily**, **Weekly**, **Monthly** — and a free cron. Under the field, **Next runs** lists the next five runs in the job's timezone; it is recomputed shortly after each change, and an invalid expression is reported there.
-
-**Timezone** is an IANA name (`Europe/Paris`, `America/New_York`). The schedule is evaluated in that timezone, daylight saving time included: `0 2 * * *` in `Europe/Paris` runs at 02:00 Paris time all year round.
-
----
-
-## The Schedule view \{#schedule-view\}
-
-**Operations → Schedule**, in the Nomaflow menu, shows what runs when, day by day.
-
-| Part | Content |
-|---|---|
-| Counters | The runs due in the next 24 hours, the active schedules, the schedules switched off, the jobs run by hand only. |
-| **Upcoming** | Each active schedule at its next run — the job's own, and one per preset with a schedule (the preset's name next to the job) —, grouped by day: *Today*, *Tomorrow*, then the date. Each line shows the time, the job, the schedule in words (*every day at 03:00*, *every Monday at 07:00*) with the cron under it, when it comes, and the state of the last run. |
-| **Scheduled but switched off** | Schedules that are set but disabled. |
-| **Run by hand only** | The jobs without any schedule, folded; a click on one opens its editor. |
-
-Schedules the page cannot put into words — lists of hours, several months — show their cron only.
-
----
-
-## Schedulable presets \{#schedulable-presets\}
-
-A **preset** is a saved set of run parameters (parameters, step arguments, steps switched on or off, log level), created from the **Run with parameters** window with **Save as preset**. In the job editor, the **Presets & schedules** section gives each preset its own **Schedule (cron)** and **Timezone**, and a **Schedule enabled** checkbox.
-
-The scheduler then runs the job on that schedule with the preset's parameters: one job, several schedules, different inputs — a nightly full load and an hourly incremental of the same ETL, for instance.
-
-A preset's schedule is independent of the job's **Enabled** switch: an enabled preset runs even when the job's own schedule is off.
-
-:::info[Cloning a job]
-**Clone** creates a disabled copy without any schedule: the job's own cron and the presets' schedules are dropped, so the copy never fires alongside the original. Give it its schedules once it is ready.
-:::
-
----
-
-## Missed schedules \{#missed\}
-
-A run can fail to happen: the server was stopped at that time, or the previous run of the same job was still in progress. Nomaflow checks for such gaps and records each one as a run in state **MISSED**, with the expected time, in the run history and as the job's last run. A rule on the `missed` event can warn someone — see [Notifications](../notifications.md).
-
-The **Missed schedules** panel of the Jobs page (next to the retention panel) shows the policy and the last check, and **Check now** runs a check at once.
-
-| Setting | Default | Meaning |
-|---|---|---|
-| **Check** | on | Switches the check on or off. |
-| **Grace (min)** | 10 | A run started within this delay after the expected time — a scheduled one, or a manual one — counts for it. |
-| **Check interval (min)** | 5 | How often the check runs. |
-| **Look back (hours)** | 24 | How far back a check looks, at most. A job that never ran is checked from the scheduler's start only. |
-
-The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recorded once: a restart does not report it again.
-
----
-
-## Pausing a schedule \{#pause\}
-
-| Option | Effect |
-|---|---|
-| The job's **enabled** / **disabled** pill on the Jobs page, or **Pause** on a dashboard's jobs card | The job's own schedule stops at once, without a reload. **Run** still works; preset schedules keep running unless switched off. |
-| **Manual** in the Schedule field | The job's own schedule is removed. |
-| **Schedule enabled** off on a preset | That preset's schedule stops. |
-
----
-
-## Tips \{#tips\}
-
-- Spread heavy jobs over the night (02:00, 02:30, 03:00) rather than starting them all at midnight.
-- Prefer `15 * * * *` to `0 * * * *` for hourly jobs: many other systems run on the hour.
-- Use a timezone name, never a fixed offset, so that daylight saving time is followed.
-- Check the **Next runs** preview after every change: it is the quickest way to catch a wrong day.
-
----
-
-## Nomaflow — Run a job from an application's menu
-Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/run-from-menu/
-
-A job menu item puts a Nomaflow job in an application's menu: the user picks the files and parameters the job asks for, runs it, follows its log live and finds the previous runs — without access to Nomaflow itself. The job permission, user parameters, files and history.
-
-A **job** menu item puts a Nomaflow job in an application's menu, for users who do not administer Nomaflow: the person who loads the month's sales file, the security officer who collects the security data before a review. The item opens the job's own page — the files it needs, its parameters, **Run**, the log followed live and the previous runs. Nothing else of Nomaflow is shown.
-
----
-
-## At a glance
-
----
-
-## The job's page \{#page\}
-
-| Part | Content |
-|---|---|
-| Title and description | The menu item's label, then the job's description. |
-| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. A parameter that accepts several values shows as checkboxes headed by **All**. |
-| Files | One picker per `file_load` step that needs a file — **File for the step “load”**, with the sheet when the step names one. Accepted: `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. A step with its own path or a watched folder asks for nothing: it reads its file. |
-| **Run** | Uploads the files and starts the run. *Pick the file(s) first.* or *“Company” is required.* when something is missing. One run at a time: while one is going, the button waits. |
-| **Log** | The run's state and its log, refreshed every 2 seconds while the run is queued or running, the error in red. **Files of the run** offers the files it produced — the rejected rows of a load. |
-| **File loaded** | Under the log, the file uploaded for the selected run, to download again. |
-| **Previous runs** | The last 20 runs: start, state, duration, who ran it (or the trigger, for a scheduled run), rows and the start of the error. A click on a run shows its log. |
-
-The run is an ordinary Nomaflow run: the operators see it in the [run history](../runs/history.md), its notifications and alerts apply.
-
----
-
-## Putting a job in a menu \{#menu\}
-
-In **Liberty Next → Build → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
-
----
-
-### A preset in the menu \{#preset\}
-
-An item can pin one of the job's [presets](./schedules.md#schedulable-presets) with `params = { preset = "Licences" }`: the page then runs the job with that preset's parameters and step switches. One job thus gives several menu entries — *Collect security and SoD*, *Collect licences* —, each a preset. The menu item's label names the page.
-
----
-
-## Who may run it \{#access\}
-
-The item and its page need the permission `job:<id>` — in **Liberty Next → Administer → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
-
-Every holder of the permission sees **all** the runs of the job — the previous runs list, their logs and their files —, not only their own.
-
----
-
-## User parameters \{#user-params\}
-
-A job declares in `jobs.toml` what a user may set when running it from its page. Anything else is refused; the operator's other settings stay out of reach.
-
-```toml title="jobs.toml"
-[[jobs.user_params]]
-name = "models"
-label = "Explorer model (blank = every model)"
-l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
-step = "refresh"
-choices_from = "explorer_models:nomajde"
-```
-
-| Key | Meaning |
-|---|---|
-| `name` | The step argument the value is given to. |
-| `label`, `l` | The label shown, per language. Default: the name. |
-| `step` | The step that receives the value. Without it, the value goes to every step of the job. |
-| `default` | The pre-filled value. |
-| `required` | `true`: the job does not start without a value. |
-| `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
-| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application; or `query:<connector>/<query>:<value column>:<label column>` — the rows of a read query, such as the applications of Nomasx-1. |
-| `multiple` | `true`: several values may be ticked, with **All**. |
-
-A blank value means *not set*: the step's own default applies. The same parameters show in the operators' **Run with parameters** window.
-
-**One run per value.** A job that declares `for_each = "<parameter>"` runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
-
----
-
-## What the applications ship \{#shipped\}
-
-| Application | Folder | Jobs |
-|---|---|---|
-| Nomasx-1 | **Jobs** | Collect security and SoD, Collect licences, Licence audit report, Security & SoD report — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
-| Nomajde | **Jobs** | Re-merge security (change package), Re-merge security (all roles), Refresh data dictionary (Explorer models) — see [Nomajde jobs](../../nomajde/jobs.md). |
-| Sales demo | **Import** | Items file, Companies file, Sales file (one month), Refresh periods, Load the sample files — see [The sales demo](../../framework/demo-app.md#loads). |
 
 ---
 
@@ -13923,6 +13714,215 @@ The job's **Retry policy** block (`attempts`, `backoff` fixed or exponential, `b
 
 ---
 
+## Nomaflow — Schedules
+Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/schedules/
+
+When Nomaflow jobs run: the five-field cron syntax and its day-of-week numbering, timezones, the preview of the next runs, the Schedule view, schedulable presets, and missed schedules recorded as MISSED runs.
+
+A job runs on its own **schedule** — a cron expression and a timezone — and on the schedules of its **presets**. A job without any schedule runs only when someone clicks **Run**.
+
+---
+
+## Cron in Nomaflow \{#cron\}
+
+A schedule has **five fields**:
+
+```
+┌──── minute (0-59)
+│ ┌── hour (0-23)
+│ │ ┌── day of month (1-31)
+│ │ │ ┌── month (1-12)
+│ │ │ │ ┌── day of week (mon-sun)
+0 2 * * *
+```
+
+| Operator | Meaning | Example |
+|---|---|---|
+| `*` | every value | `* * * * *` — every minute |
+| `,` | a list | `0 6,12,18 * * *` — at 06:00, 12:00 and 18:00 |
+| `-` | a range | `0 9 * * mon-fri` — weekdays at 09:00 |
+| `/` | a step | `*/10 * * * *` — every 10 minutes |
+
+:::warning[Write the days of the week as names]
+The scheduler numbers the days of the week from **0 = Monday** to **6 = Sunday** — not like Unix cron, where 0 is Sunday. `0 9 * * 1` runs on **Tuesday**. Write `mon`, `tue`… `sun` (`mon-fri`, `sat,sun`): the names leave no doubt, and the preview under the field confirms the days.
+:::
+
+When both the day of the month and the day of the week are set, **both** must match: `0 9 15 * mon` runs on a 15th that falls on a Monday.
+
+| Need | Cron |
+|---|---|
+| Every 5 minutes | `*/5 * * * *` |
+| Every hour at :15 | `15 * * * *` |
+| Every day at 02:00 | `0 2 * * *` |
+| Weekdays at 09:00 | `0 9 * * mon-fri` |
+| Every Monday at 06:00 | `0 6 * * mon` |
+| The 1st of every month at 07:00 | `0 7 1 * *` |
+| Every quarter (1st of Jan, Apr, Jul, Oct) at 03:00 | `0 3 1 1,4,7,10 *` |
+
+---
+
+## In the job editor \{#editor\}
+
+The **Schedule (cron)** field of the job editor offers ready-made choices — **Manual**, **Hourly**, **Daily**, **Weekly**, **Monthly** — and a free cron. Under the field, **Next runs** lists the next five runs in the job's timezone; it is recomputed shortly after each change, and an invalid expression is reported there.
+
+**Timezone** is an IANA name (`Europe/Paris`, `America/New_York`). The schedule is evaluated in that timezone, daylight saving time included: `0 2 * * *` in `Europe/Paris` runs at 02:00 Paris time all year round.
+
+---
+
+## The Schedule view \{#schedule-view\}
+
+**Operations → Schedule**, in the Nomaflow menu, shows what runs when, day by day.
+
+| Part | Content |
+|---|---|
+| Counters | The runs due in the next 24 hours, the active schedules, the schedules switched off, the jobs run by hand only. |
+| **Upcoming** | Each active schedule at its next run — the job's own, and one per preset with a schedule (the preset's name next to the job) —, grouped by day: *Today*, *Tomorrow*, then the date. Each line shows the time, the job, the schedule in words (*every day at 03:00*, *every Monday at 07:00*) with the cron under it, when it comes, and the state of the last run. |
+| **Scheduled but switched off** | Schedules that are set but disabled. |
+| **Run by hand only** | The jobs without any schedule, folded; a click on one opens its editor. |
+
+Schedules the page cannot put into words — lists of hours, several months — show their cron only.
+
+---
+
+## Schedulable presets \{#schedulable-presets\}
+
+A **preset** is a saved set of run parameters (parameters, step arguments, steps switched on or off, log level), created from the **Run with parameters** window with **Save as preset**. In the job editor, the **Presets & schedules** section gives each preset its own **Schedule (cron)** and **Timezone**, and a **Schedule enabled** checkbox.
+
+The scheduler then runs the job on that schedule with the preset's parameters: one job, several schedules, different inputs — a nightly full load and an hourly incremental of the same ETL, for instance.
+
+A preset's schedule is independent of the job's **Enabled** switch: an enabled preset runs even when the job's own schedule is off.
+
+:::info[Cloning a job]
+**Clone** creates a disabled copy without any schedule: the job's own cron and the presets' schedules are dropped, so the copy never fires alongside the original. Give it its schedules once it is ready.
+:::
+
+---
+
+## Missed schedules \{#missed\}
+
+A run can fail to happen: the server was stopped at that time, or the previous run of the same job was still in progress. Nomaflow checks for such gaps and records each one as a run in state **MISSED**, with the expected time, in the run history and as the job's last run. A rule on the `missed` event can warn someone — see [Notifications](../notifications.md).
+
+The **Missed schedules** panel of the Jobs page (next to the retention panel) shows the policy and the last check, and **Check now** runs a check at once.
+
+| Setting | Default | Meaning |
+|---|---|---|
+| **Check** | on | Switches the check on or off. |
+| **Grace (min)** | 10 | A run started within this delay after the expected time — a scheduled one, or a manual one — counts for it. |
+| **Check interval (min)** | 5 | How often the check runs. |
+| **Look back (hours)** | 24 | How far back a check looks, at most. A job that never ran is checked from the scheduler's start only. |
+
+The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recorded once: a restart does not report it again.
+
+---
+
+## Pausing a schedule \{#pause\}
+
+| Option | Effect |
+|---|---|
+| The job's **enabled** / **disabled** pill on the Jobs page, or **Pause** on a dashboard's jobs card | The job's own schedule stops at once, without a reload. **Run** still works; preset schedules keep running unless switched off. |
+| **Manual** in the Schedule field | The job's own schedule is removed. |
+| **Schedule enabled** off on a preset | That preset's schedule stops. |
+
+---
+
+## Tips \{#tips\}
+
+- Spread heavy jobs over the night (02:00, 02:30, 03:00) rather than starting them all at midnight.
+- Prefer `15 * * * *` to `0 * * * *` for hourly jobs: many other systems run on the hour.
+- Use a timezone name, never a fixed offset, so that daylight saving time is followed.
+- Check the **Next runs** preview after every change: it is the quickest way to catch a wrong day.
+
+---
+
+## Nomaflow — Run a job from an application's menu
+Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/run-from-menu/
+
+A job menu item puts a Nomaflow job in an application's menu: the user picks the files and parameters the job asks for, runs it, follows its log live and finds the previous runs — without access to Nomaflow itself. The job permission, user parameters, files and history.
+
+A **job** menu item puts a Nomaflow job in an application's menu, for users who do not administer Nomaflow: the person who loads the month's sales file, the security officer who collects the security data before a review. The item opens the job's own page — the files it needs, its parameters, **Run**, the log followed live and the previous runs. Nothing else of Nomaflow is shown.
+
+---
+
+## At a glance
+
+---
+
+## The job's page \{#page\}
+
+| Part | Content |
+|---|---|
+| Title and description | The menu item's label, then the job's description. |
+| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. A parameter that accepts several values shows as checkboxes headed by **All**. |
+| Files | One picker per `file_load` step that needs a file — **File for the step “load”**, with the sheet when the step names one. Accepted: `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. A step with its own path or a watched folder asks for nothing: it reads its file. |
+| **Run** | Uploads the files and starts the run. *Pick the file(s) first.* or *“Company” is required.* when something is missing. One run at a time: while one is going, the button waits. |
+| **Log** | The run's state and its log, refreshed every 2 seconds while the run is queued or running, the error in red. **Files of the run** offers the files it produced — the rejected rows of a load. |
+| **File loaded** | Under the log, the file uploaded for the selected run, to download again. |
+| **Previous runs** | The last 20 runs: start, state, duration, who ran it (or the trigger, for a scheduled run), rows and the start of the error. A click on a run shows its log. |
+
+The run is an ordinary Nomaflow run: the operators see it in the [run history](../runs/history.md), its notifications and alerts apply.
+
+---
+
+## Putting a job in a menu \{#menu\}
+
+In **Liberty Next → Build → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+
+---
+
+### A preset in the menu \{#preset\}
+
+An item can pin one of the job's [presets](./schedules.md#schedulable-presets) with `params = { preset = "Licences" }`: the page then runs the job with that preset's parameters and step switches. One job thus gives several menu entries — *Collect security and SoD*, *Collect licences* —, each a preset. The menu item's label names the page.
+
+---
+
+## Who may run it \{#access\}
+
+The item and its page need the permission `job:<id>` — in **Liberty Next → Administer → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
+
+Every holder of the permission sees **all** the runs of the job — the previous runs list, their logs and their files —, not only their own.
+
+---
+
+## User parameters \{#user-params\}
+
+A job declares in `jobs.toml` what a user may set when running it from its page. Anything else is refused; the operator's other settings stay out of reach.
+
+```toml title="jobs.toml"
+[[jobs.user_params]]
+name = "models"
+label = "Explorer model (blank = every model)"
+l = { fr = "Modèle Explorateur (vide = tous les modèles)" }
+step = "refresh"
+choices_from = "explorer_models:nomajde"
+```
+
+| Key | Meaning |
+|---|---|
+| `name` | The step argument the value is given to. |
+| `label`, `l` | The label shown, per language. Default: the name. |
+| `step` | The step that receives the value. Without it, the value goes to every step of the job. |
+| `default` | The pre-filled value. |
+| `required` | `true`: the job does not start without a value. |
+| `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
+| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application; or `query:<connector>/<query>:<value column>:<label column>` — the rows of a read query, such as the applications of Nomasx-1. |
+| `multiple` | `true`: several values may be ticked, with **All**. |
+
+A blank value means *not set*: the step's own default applies. The same parameters show in the operators' **Run with parameters** window.
+
+**One run per value.** A job that declares `for_each = "<parameter>"` runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
+
+---
+
+## What the applications ship \{#shipped\}
+
+| Application | Folder | Jobs |
+|---|---|---|
+| Nomasx-1 | **Jobs** | Collect security and SoD, Collect licences, Licence audit report, Security & SoD report — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
+| Nomajde | **Jobs** | Re-merge security (change package), Re-merge security (all roles), Refresh data dictionary (Explorer models) — see [Nomajde jobs](../../nomajde/jobs.md). |
+| Sales demo | **Import** | Items file, Companies file, Sales file (one month), Refresh periods, Load the sample files — see [The sales demo](../../framework/demo-app.md#loads). |
+
+---
+
 ## Nomaflow — Run history
 Source: https://docs.nomana-it.fr/liberty/nomaflow/runs/history/
 
@@ -14065,263 +14065,141 @@ The Nomaflow pages and their API are reserved to superusers.
 
 ---
 
-## Nomaflow — Scheduled sync
-Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/scheduled-sync/
+## Nomaflow — Notifications
+Source: https://docs.nomana-it.fr/liberty/nomaflow/notifications/
 
-Recipe — copy tables every night from an operational database to a reporting database with sql_copy, refresh the aggregates with sql_query, and be warned when it fails or does not run.
+Liberty Next notifications: rules that react to a screen write, a Nomaflow job event (failure, success, cancel, missed schedule, long run, late) or a screen action, and deliver to the in-app bell, by e-mail or through a connector query or endpoint. SMTP account, recipients, placeholders, job alerts.
 
-Every night, copy the `orders` and `customers` tables of the operational database into the reporting database, then refresh the aggregates the dashboards read.
-
----
-
-## What you need \{#needs\}
-
-- Two SQL connectors: `ops-db` (source, read-only account) and `reporting` (target).
-- On `reporting`, a write query `daily_totals_refresh` that rebuilds the aggregates (`REFRESH MATERIALIZED VIEW …`, or `DELETE` + `INSERT … SELECT …`).
+A notification tells someone that something happened: a period was closed, a nightly job failed, a schedule was missed. **Rules** decide when; **channels** decide how — the bell in the application, an e-mail, or a call to a connector.
 
 ---
 
-## The job \{#job\}
+## At a glance
 
-**+ New job**: id `nightly-reporting-sync`, tag `etl`, **Schedule (cron)** `0 2 * * *`, **Timezone** `Europe/Paris`. Then three steps:
+---
 
-| # | Type | Settings |
+## What users see \{#inbox\}
+
+- **The bell** in the header shows the number of unread notifications, updated live. Its menu lists the latest six; **Mark all read** and **View all** are at the bottom. Clicking a notification marks it read and opens its link.
+- **The Notifications page** (from **View all**) lists them with **All** / **Unread** tabs and **Mark all read**.
+
+Each user sees only their own notifications.
+
+---
+
+## The e-mail account \{#smtp\}
+
+E-mail goes through the SMTP server set in **Liberty Next → Administer → App → Notifications (email)**:
+
+| Field | Default | Notes |
 |---|---|---|
-| 1 | `sql_copy` | Source `ops-db` · `public` · `orders`; target `reporting` · `staging` · `orders`; mode `overwrite`. |
-| 2 | `sql_copy` | Same for `customers`. |
-| 3 | `sql_query` | Connector `reporting`, query `daily_totals_refresh`. |
+| Notifications enabled | on | Off: no rule fires. |
+| SMTP host, Port | —, `587` | Without a host, only the bell works. |
+| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* or *None*. Changing it sets the usual port. |
+| Timeout (s) | `20` | |
+| User, Password | — | The password is encrypted with the install's master key. |
+| From address | the user | Falls back to the user name when empty. |
 
-`overwrite` writes into `<table>__new` and swaps it with the target in one transaction: the dashboards never see a half-filled table, and a failed copy leaves yesterday's data in place.
+| Keep read notifications (days, 0 = forever) | `90` | Read notifications older than that are purged, at startup and every six hours. Unread ones are kept. |
 
-:::warning[Type coercion]
-`sql_copy` applies the JD Edwards conversion rules by default (`type_coercion = "jde"`, `decimal_mode = "truncate"`). Between two ordinary databases, set `type_coercion = "none"` in `jobs.toml` so that values are copied as they are.
-:::
-
-```toml title="jobs.toml"
-[[jobs]]
-id = "nightly-reporting-sync"
-schedule = "0 2 * * *"
-timezone = "Europe/Paris"
-tags = ["etl"]
-
-[jobs.retry]
-attempts = 3
-backoff = "exponential"
-base_seconds = 60
-
-[[jobs.steps]]
-type = "sql_copy"
-name = "copy-orders"
-source = { connector = "ops-db", schema = "public", table = "orders" }
-target = { connector = "reporting", schema = "staging", table = "orders" }
-mode = "overwrite"
-type_coercion = "none"
-
-[[jobs.steps]]
-type = "sql_copy"
-name = "copy-customers"
-source = { connector = "ops-db", schema = "public", table = "customers" }
-target = { connector = "reporting", schema = "staging", table = "customers" }
-mode = "overwrite"
-type_coercion = "none"
-
-[[jobs.steps]]
-type = "sql_query"
-name = "refresh-totals"
-connector = "reporting"
-query = "daily_totals_refresh"
-```
+E-mails are plain text: the subject, then the body, then the rule's link.
 
 ---
 
-## Be warned \{#notify\}
+## Rules \{#rules\}
 
-In **Liberty Next → Build → Notifications**, a rule on *A job event*: job `nightly-reporting-sync`, events `failure` and `missed`, channel `email`, recipient `role:ops`, subject `{JOB}: {STATE}`, body `{ERROR}`. See [Notifications](../notifications.md).
+Rules are edited in **Liberty Next → Build → Notifications** and saved in `notifications.toml` — a change applies without a restart. **Send a test** sends the rule being edited, even unsaved, with sample values to its recipients.
 
----
+### Triggers
 
-## Check it \{#check\}
+| Trigger | Fires when | Settings |
+|---|---|---|
+| **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
+| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
+| **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
 
-**▶ Run now**, then open the run: each step shows its rows; `DEBUG` in **Run with parameters** shows the queries. Once it is right, leave the schedule on.
+`long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
 
----
+### Channels
 
-## Nomaflow — API pull
-Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/api-pull/
-
-Recipe — fetch records from a REST API every hour with a Python step and write them through a connector's query, with the token kept out of the job.
-
-Every hour, fetch the latest releases of a project from a REST API and upsert them into a table.
-
-The `http` step calls a URL and checks the answer, but does not hand the body to the next step: to read an API's data and store it, use a `python` step that calls the API and writes through a named query of a connector.
-
----
-
-## What you need \{#needs\}
-
-- A SQL connector `reporting` with a write query `release_upsert` — for PostgreSQL:
-
-```sql title="release_upsert"
-INSERT INTO releases (tag, name, published_at)
-VALUES (:TAG, :NAME, :PUBLISHED_AT)
-ON CONFLICT (tag) DO UPDATE SET name = EXCLUDED.name, published_at = EXCLUDED.published_at
-```
-
-- The API token in the server's environment: `GITHUB_TOKEN` (in `release/.env` on Docker, in the service's environment file on a Python install).
-
----
-
-## The function \{#function\}
-
-```python title="plugins/integrations/releases.py"
-import logging
-import os
-
-import httpx
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import StepResult
-
-_log = logging.getLogger(__name__)
-
-async def pull_releases(*, repo: str, target_connector: str, connectors: ConnectorRegistry) -> StepResult:
-    headers = {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"}
-    async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.get(f"https://api.github.com/repos/{repo}/releases", headers=headers)
-        resp.raise_for_status()
-        releases = resp.json()
-
-    target = connectors.sql(target_connector)
-    for r in releases:
-        await target.execute("release_upsert", {
-            "TAG": r["tag_name"], "NAME": r["name"], "PUBLISHED_AT": r["published_at"],
-        })
-    _log.info("%d release(s) upserted", len(releases))
-    return StepResult(rows_affected=len(releases))
-```
-
-Register the package once so that its lines reach the run log: `register_namespace("integrations")` in `plugins/integrations/__init__.py` — see [Custom Python steps](../custom-python.md#logging).
-
----
-
-## The job \{#job\}
-
-```toml title="jobs.toml"
-[[jobs]]
-id = "pull-releases"
-schedule = "15 * * * *"
-timezone = "Europe/Paris"
-tags = ["integration"]
-
-[jobs.retry]
-attempts = 3
-backoff = "exponential"
-base_seconds = 30
-
-[[jobs.steps]]
-type = "python"
-name = "pull-releases"
-callable = "integrations.releases:pull_releases"
-op_kwargs = { repo = "acme/platform", target_connector = "reporting" }
-```
-
-An error raised by `raise_for_status()` fails the step; the retry policy tries again after 30 s, then 60 s.
-
----
-
-## Variants \{#variants\}
-
-| Need | Change |
+| Channel | Delivers |
 |---|---|
-| Pages of results | Loop on the API's next-page link inside the function. |
-| Another repository on another schedule | A preset with its own `repo` and schedule — see [Schedulable presets](../jobs/schedules.md#schedulable-presets). |
-| Just check that a service answers | An `http` step on its health URL is enough. |
+| `portal` | A notification in the bell of each recipient user. |
+| `email` | An e-mail to each recipient that has an address. |
+| `action` | Runs a query (SQL connector) or calls an endpoint (API connector) with the message's values — to post to Teams or a webhook, or to write a log table. Its parameters are the event's values plus `SUBJECT`, `BODY` and `RULE`. |
 
----
+A channel that fails is logged and does not stop the others. Sending runs in the background: a save or a job never waits for the mail server.
 
-## Nomaflow — Conditional cleanup
-Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/conditional-cleanup/
+### Recipients
 
-Recipe — purge old rows every night, but only when there are enough of them, in batches, with the decision and the counts in the run log.
+| Form | Means |
+|---|---|
+| `user:alice` | That user. |
+| `role:controllers` | Every active user holding the role. |
+| `email:finance@example.com` | An address — e-mail only. |
 
-Every night, delete the audit rows older than 90 days — but only when more than 10 000 have piled up, in batches so the table is not locked for long.
+In the editor, pick users and roles from the list or type an address. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
 
----
+### Placeholders
 
-## What you need \{#needs\}
+Subject, body and link take `{NAME}` placeholders, written in any case:
 
-Two named queries on the connector `ops-db` — for PostgreSQL:
+| Trigger | Placeholders |
+|---|---|
+| Screen event | Every column of the written row, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
+| Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule or a deadline. |
+| Screen action | The values passed by the action, plus `USER`. |
 
-```sql title="audit_old_count_get"
-SELECT COUNT(*) AS N FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER)
+An unknown placeholder is left as written. In the editor, the **{ }** button beside the subject, the body and the link lists the placeholders of the trigger and inserts the one picked where the cursor is; the same button sits beside the subject and the body of a [`notify` step](./steps.md#notify).
+
+### In TOML
+
+```toml title="notifications.toml"
+[notifications.period_closed]
+label = "Period closed"
+trigger = { kind = "screen", app = "sales", screen = "period_status", events = ["update"], when = [{ field = "STATUS", value = "closed" }] }
+channels = ["portal", "email"]
+recipients = ["role:controllers", "email:finance@example.com"]
+subject = "Period {PERIOD} closed by {USER}"
+body = "Company {COMPANY}: the period is now read-only."
+link = "/screen/sales/period_status"
+
+[notifications.job_failed]
+trigger = { kind = "job", events = ["failure", "missed"] }
+channels = ["email"]
+recipients = ["role:ops"]
+subject = "{JOB}: {STATE}"
+body = "{ERROR}"
 ```
 
-```sql title="audit_old_batch_delete"
-DELETE FROM audit_log
-WHERE id IN (SELECT id FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER) LIMIT 5000)
-```
+---
+
+## From a job step \{#notify-step\}
+
+A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. See [Steps → Notify](./steps.md#notify).
 
 ---
 
-## The simple way \{#simple\}
+## A job's own alerts \{#job-alerts\}
 
-When no threshold is needed, a `sql_query` step calling `audit_old_batch_delete` is enough — schedule it often enough that each run deletes one batch.
-
----
-
-## With a threshold \{#threshold\}
-
-```python title="plugins/housekeeping/audit.py"
-import asyncio
-import logging
-
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import StepResult
-
-_log = logging.getLogger(__name__)
-
-async def purge_audit(*, connector: str, days: int, threshold: int, connectors: ConnectorRegistry) -> StepResult:
-    db = connectors.sql(connector)
-    count = (await db.execute("audit_old_count_get", {"DAYS": days})).rows[0]["N"]
-    if count < threshold:
-        _log.info("%d old row(s), below %d — nothing to do", count, threshold)
-        return StepResult(rows_affected=0, extras={"old_rows": count, "purged": False})
-
-    deleted = 0
-    while True:
-        n = (await db.execute("audit_old_batch_delete", {"DAYS": days})).rowcount
-        deleted += max(n, 0)
-        if n <= 0:
-            break
-        await asyncio.sleep(0)          # lets Cancel stop the loop between batches
-    _log.info("%d row(s) deleted", deleted)
-    return StepResult(rows_affected=deleted, extras={"old_rows": count, "purged": True})
-```
+A job can also warn on failure without a rule, from the **Alerts** block of the job editor:
 
 ```toml title="jobs.toml"
-[[jobs]]
-id = "purge-audit"
-schedule = "30 3 * * *"
-timezone = "Europe/Paris"
-tags = ["housekeeping"]
-
-[[jobs.steps]]
-type = "python"
-name = "purge-audit"
-callable = "housekeeping.audit:purge_audit"
-op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
+[jobs.alerts]
+on_failure = true
+recipients = ["role:ops", "user:alice"]
 ```
 
-The run detail shows the rows deleted; the log tells whether the threshold was reached. `days` and `threshold` can be changed for one run in **Run with parameters**.
+On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address.
 
 ---
 
-## Variants \{#variants\}
+## Tips \{#tips\}
 
-| Need | Change |
-|---|---|
-| A dry run first | Add a `dry_run: bool = False` argument that only counts, and run once with `dry_run = true`. |
-| Several tables | One job per table, or one function that takes the table's queries as arguments. |
-| Be told when the purge ran | A notification rule on `succeeded` for this job. |
+- Start with one rule: `failure` and `missed` on every job, to the operations role.
+- Prefer roles to named users: the rule follows team changes.
+- Use **Send a test** after changing the SMTP account.
+- Keep the bell for what needs action; send the rest by e-mail to a shared box.
 
 ---
 
@@ -14841,6 +14719,461 @@ The bundled jobs are **enabled = false** out of the box. Set a schedule in the j
 
 ---
 
+## Nomaflow — Scheduled sync
+Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/scheduled-sync/
+
+Recipe — copy tables every night from an operational database to a reporting database with sql_copy, refresh the aggregates with sql_query, and be warned when it fails or does not run.
+
+Every night, copy the `orders` and `customers` tables of the operational database into the reporting database, then refresh the aggregates the dashboards read.
+
+---
+
+## What you need \{#needs\}
+
+- Two SQL connectors: `ops-db` (source, read-only account) and `reporting` (target).
+- On `reporting`, a write query `daily_totals_refresh` that rebuilds the aggregates (`REFRESH MATERIALIZED VIEW …`, or `DELETE` + `INSERT … SELECT …`).
+
+---
+
+## The job \{#job\}
+
+**+ New job**: id `nightly-reporting-sync`, tag `etl`, **Schedule (cron)** `0 2 * * *`, **Timezone** `Europe/Paris`. Then three steps:
+
+| # | Type | Settings |
+|---|---|---|
+| 1 | `sql_copy` | Source `ops-db` · `public` · `orders`; target `reporting` · `staging` · `orders`; mode `overwrite`. |
+| 2 | `sql_copy` | Same for `customers`. |
+| 3 | `sql_query` | Connector `reporting`, query `daily_totals_refresh`. |
+
+`overwrite` writes into `<table>__new` and swaps it with the target in one transaction: the dashboards never see a half-filled table, and a failed copy leaves yesterday's data in place.
+
+:::warning[Type coercion]
+`sql_copy` applies the JD Edwards conversion rules by default (`type_coercion = "jde"`, `decimal_mode = "truncate"`). Between two ordinary databases, set `type_coercion = "none"` in `jobs.toml` so that values are copied as they are.
+:::
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "nightly-reporting-sync"
+schedule = "0 2 * * *"
+timezone = "Europe/Paris"
+tags = ["etl"]
+
+[jobs.retry]
+attempts = 3
+backoff = "exponential"
+base_seconds = 60
+
+[[jobs.steps]]
+type = "sql_copy"
+name = "copy-orders"
+source = { connector = "ops-db", schema = "public", table = "orders" }
+target = { connector = "reporting", schema = "staging", table = "orders" }
+mode = "overwrite"
+type_coercion = "none"
+
+[[jobs.steps]]
+type = "sql_copy"
+name = "copy-customers"
+source = { connector = "ops-db", schema = "public", table = "customers" }
+target = { connector = "reporting", schema = "staging", table = "customers" }
+mode = "overwrite"
+type_coercion = "none"
+
+[[jobs.steps]]
+type = "sql_query"
+name = "refresh-totals"
+connector = "reporting"
+query = "daily_totals_refresh"
+```
+
+---
+
+## Be warned \{#notify\}
+
+In **Liberty Next → Build → Notifications**, a rule on *A job event*: job `nightly-reporting-sync`, events `failure` and `missed`, channel `email`, recipient `role:ops`, subject `{JOB}: {STATE}`, body `{ERROR}`. See [Notifications](../notifications.md).
+
+---
+
+## Check it \{#check\}
+
+**▶ Run now**, then open the run: each step shows its rows; `DEBUG` in **Run with parameters** shows the queries. Once it is right, leave the schedule on.
+
+---
+
+## Nomaflow — API pull
+Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/api-pull/
+
+Recipe — fetch records from a REST API every hour with a Python step and write them through a connector's query, with the token kept out of the job.
+
+Every hour, fetch the latest releases of a project from a REST API and upsert them into a table.
+
+The `http` step calls a URL and checks the answer, but does not hand the body to the next step: to read an API's data and store it, use a `python` step that calls the API and writes through a named query of a connector.
+
+---
+
+## What you need \{#needs\}
+
+- A SQL connector `reporting` with a write query `release_upsert` — for PostgreSQL:
+
+```sql title="release_upsert"
+INSERT INTO releases (tag, name, published_at)
+VALUES (:TAG, :NAME, :PUBLISHED_AT)
+ON CONFLICT (tag) DO UPDATE SET name = EXCLUDED.name, published_at = EXCLUDED.published_at
+```
+
+- The API token in the server's environment: `GITHUB_TOKEN` (in `release/.env` on Docker, in the service's environment file on a Python install).
+
+---
+
+## The function \{#function\}
+
+```python title="plugins/integrations/releases.py"
+import logging
+import os
+
+import httpx
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import StepResult
+
+_log = logging.getLogger(__name__)
+
+async def pull_releases(*, repo: str, target_connector: str, connectors: ConnectorRegistry) -> StepResult:
+    headers = {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"}
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.get(f"https://api.github.com/repos/{repo}/releases", headers=headers)
+        resp.raise_for_status()
+        releases = resp.json()
+
+    target = connectors.sql(target_connector)
+    for r in releases:
+        await target.execute("release_upsert", {
+            "TAG": r["tag_name"], "NAME": r["name"], "PUBLISHED_AT": r["published_at"],
+        })
+    _log.info("%d release(s) upserted", len(releases))
+    return StepResult(rows_affected=len(releases))
+```
+
+Register the package once so that its lines reach the run log: `register_namespace("integrations")` in `plugins/integrations/__init__.py` — see [Custom Python steps](../custom-python.md#logging).
+
+---
+
+## The job \{#job\}
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "pull-releases"
+schedule = "15 * * * *"
+timezone = "Europe/Paris"
+tags = ["integration"]
+
+[jobs.retry]
+attempts = 3
+backoff = "exponential"
+base_seconds = 30
+
+[[jobs.steps]]
+type = "python"
+name = "pull-releases"
+callable = "integrations.releases:pull_releases"
+op_kwargs = { repo = "acme/platform", target_connector = "reporting" }
+```
+
+An error raised by `raise_for_status()` fails the step; the retry policy tries again after 30 s, then 60 s.
+
+---
+
+## Variants \{#variants\}
+
+| Need | Change |
+|---|---|
+| Pages of results | Loop on the API's next-page link inside the function. |
+| Another repository on another schedule | A preset with its own `repo` and schedule — see [Schedulable presets](../jobs/schedules.md#schedulable-presets). |
+| Just check that a service answers | An `http` step on its health URL is enough. |
+
+---
+
+## Nomaflow — Conditional cleanup
+Source: https://docs.nomana-it.fr/liberty/nomaflow/workflows/conditional-cleanup/
+
+Recipe — purge old rows every night, but only when there are enough of them, in batches, with the decision and the counts in the run log.
+
+Every night, delete the audit rows older than 90 days — but only when more than 10 000 have piled up, in batches so the table is not locked for long.
+
+---
+
+## What you need \{#needs\}
+
+Two named queries on the connector `ops-db` — for PostgreSQL:
+
+```sql title="audit_old_count_get"
+SELECT COUNT(*) AS N FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER)
+```
+
+```sql title="audit_old_batch_delete"
+DELETE FROM audit_log
+WHERE id IN (SELECT id FROM audit_log WHERE created_at < CURRENT_DATE - CAST(:DAYS AS INTEGER) LIMIT 5000)
+```
+
+---
+
+## The simple way \{#simple\}
+
+When no threshold is needed, a `sql_query` step calling `audit_old_batch_delete` is enough — schedule it often enough that each run deletes one batch.
+
+---
+
+## With a threshold \{#threshold\}
+
+```python title="plugins/housekeeping/audit.py"
+import asyncio
+import logging
+
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import StepResult
+
+_log = logging.getLogger(__name__)
+
+async def purge_audit(*, connector: str, days: int, threshold: int, connectors: ConnectorRegistry) -> StepResult:
+    db = connectors.sql(connector)
+    count = (await db.execute("audit_old_count_get", {"DAYS": days})).rows[0]["N"]
+    if count < threshold:
+        _log.info("%d old row(s), below %d — nothing to do", count, threshold)
+        return StepResult(rows_affected=0, extras={"old_rows": count, "purged": False})
+
+    deleted = 0
+    while True:
+        n = (await db.execute("audit_old_batch_delete", {"DAYS": days})).rowcount
+        deleted += max(n, 0)
+        if n <= 0:
+            break
+        await asyncio.sleep(0)          # lets Cancel stop the loop between batches
+    _log.info("%d row(s) deleted", deleted)
+    return StepResult(rows_affected=deleted, extras={"old_rows": count, "purged": True})
+```
+
+```toml title="jobs.toml"
+[[jobs]]
+id = "purge-audit"
+schedule = "30 3 * * *"
+timezone = "Europe/Paris"
+tags = ["housekeeping"]
+
+[[jobs.steps]]
+type = "python"
+name = "purge-audit"
+callable = "housekeeping.audit:purge_audit"
+op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
+```
+
+The run detail shows the rows deleted; the log tells whether the threshold was reached. `days` and `threshold` can be changed for one run in **Run with parameters**.
+
+---
+
+## Variants \{#variants\}
+
+| Need | Change |
+|---|---|
+| A dry run first | Add a `dry_run: bool = False` argument that only counts, and run once with `dry_run = true`. |
+| Several tables | One job per table, or one function that takes the table's queries as arguments. |
+| Be told when the purge ran | A notification rule on `succeeded` for this job. |
+
+---
+
+## Nomaflow — Custom Python steps
+Source: https://docs.nomana-it.fr/liberty/nomaflow/custom-python/
+
+Write a Python function for a Nomaflow python step: where it lives, what it receives (its arguments, connectors, the run context), what it returns, how it logs to the run, how it fails and how it is cancelled.
+
+When no other step type fits, a `python` step calls a function you write. The function lives in a plugin of the apps folder, receives its arguments from the job, and its result lands in the run like any other step.
+
+This page is the short version for job authors. The full reference — injected arguments, return values, cancellation, worked example — is in [Write a callable](../framework/build/plugins/write-a-callable.md), and deployment in [Deploy and debug](../framework/build/plugins/deploy-and-debug.md).
+
+---
+
+## Where the function lives \{#where\}
+
+A plugin is a Python package in the `plugins/` folder next to the configuration folder (`LIBERTY_APPS_DIR/../plugins`). The step names the function as `package.module:function`:
+
+```toml title="jobs.toml"
+[[jobs.steps]]
+type = "python"
+name = "refresh-summary"
+callable = "reports.summary:refresh"
+op_kwargs = { period = "2026-10", target_connector = "reporting" }
+```
+
+Modules are imported once: after changing the code, restart the server (`./liberty restart` or `liberty-ops restart`).
+
+---
+
+## What the function receives \{#arguments\}
+
+```python title="plugins/reports/summary.py"
+import logging
+from liberty.connectors import ConnectorRegistry
+from liberty.jobs.steps.base import RunContext, StepResult
+
+_log = logging.getLogger(__name__)
+
+async def refresh(*, period: str, target_connector: str,
+                  connectors: ConnectorRegistry, ctx: RunContext) -> StepResult:
+    _log.info("refresh %s · run %s", period, ctx.run_id)
+    conn = connectors.sql(target_connector)          # connectors.api(...) for an API connector
+    await conn.execute("summary_refresh_put", {"PERIOD": period})   # a named query of the connector
+    ...
+    return StepResult(rows_affected=count, extras={"period": period})
+```
+
+| Argument | Comes from |
+|---|---|
+| Its own arguments (`period`, `target_connector`) | The job's shared parameters, then the step's `op_kwargs` (the step wins), then the values typed in **Run with parameters**. Values are converted to the annotated type (`apps_id: int`). |
+| `connectors` | The connector registry — run a connector's named queries or endpoints. Given only if the function declares it. |
+| `ctx` | The run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (rows of the previous step). Given only if declared. |
+| `settings` | The server settings. Given only if declared. |
+| `app_state` | The running server's live state (applications, Data Explorer models, dictionary…), for a function that acts on the configuration itself — the dictionary refresh job does. Given only if declared. |
+
+The function may be `async` (recommended) or a plain `def`, which runs in a worker thread.
+
+---
+
+## What it returns \{#return\}
+
+| Return | In the run |
+|---|---|
+| `None` | Nothing more. |
+| an `int` | The number of rows affected. |
+| a `dict` | Kept as the step's details (not counted as rows). |
+| a `StepResult(rows_affected=…, extras={…})` | Both. |
+
+Any other type — a `bool` for instance — fails the step, so that a mistake does not pass for a success.
+
+---
+
+## Logging to the run \{#logging\}
+
+The run log keeps the lines of the `liberty.*` loggers and of the namespaces a plugin registers. Register the package once, in `plugins/reports/__init__.py`:
+
+```python
+from liberty.jobs.runlog import register_namespace
+register_namespace("reports")
+```
+
+Then `logging.getLogger(__name__)` in any module of the package writes to the run log, and `print()` does not. The run's log level (**Run with parameters** → log level) applies.
+
+---
+
+## Failing and cancelling \{#errors\}
+
+- Let exceptions out: the step fails with the message, the job's **Retry policy** applies, the following steps are skipped. Raise `StepFailed("…")` (from `liberty.jobs.steps.base`) for a clearer message.
+- **Cancel** on the job's card cancels an `async` function at its next `await`. A plain `def` cannot be interrupted: the run is marked cancelled, the function finishes on its own.
+
+---
+
+## Tips \{#tips\}
+
+- Put SQL in the connector's named queries and call them from the function: the query stays visible and testable in the connector page.
+- Keep functions short; split long work into several steps so the run detail shows where it stopped.
+- Test the function like any Python code, passing a registry pointed at a test database.
+
+---
+
+## Nomaflow — Administration
+Source: https://docs.nomana-it.fr/liberty/nomaflow/administration/
+
+Running Nomaflow on a server: where runs and files are kept, one instance, what happens on restart, run history retention, the run log buffer, who can use the Jobs pages, backup and health.
+
+Nomaflow runs inside the Liberty Next server: its scheduler, its runner and its run history need no separate service.
+
+---
+
+## At a glance
+
+---
+
+## Storage and limits \{#settings\}
+
+| Item | Value |
+|---|---|
+| Run history | In the framework's database, five tables: `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. The server creates and completes them at start-up. |
+| Jobs | The jobs file `plugins/nomaflow/jobs.toml`, next to the configuration folder — edited from the Jobs pages. |
+| Run log | The last 5,000 lines of each run are kept. |
+| Files | Files uploaded with **Run with parameters** and the reject files of `file_load` steps go to `.nomaflow/files`, next to the configuration. |
+| Upload size | 200 MB at most per file. |
+
+---
+
+## One instance \{#one-instance\}
+
+Run **one** Liberty Next instance: the scheduler fires from the server process, with no lock shared between instances, so two instances would run every job twice. See [Production checklist](../installation/production.md#replicas).
+
+---
+
+## Restart \{#restart\}
+
+- Runs in progress when the server stops are closed as **FAILED** with *abandoned: process restart during run* at the next start.
+- Scheduled times that fell while the server was down are recorded as **MISSED** — see [Missed schedules](./jobs/schedules.md#missed). They are not run again on their own: run them by hand if needed.
+- Jobs, presets and policies are in `jobs.toml`; the history is in the database — both survive the restart.
+
+---
+
+## Run history retention \{#retention\}
+
+The **Run history retention** panel of the Jobs page:
+
+| Setting | Default | Meaning |
+|---|---|---|
+| **Auto-sweep** | on | The recurring clean-up. |
+| **Days kept** | 30 | Finished runs older than this are deleted, with their steps and logs. |
+| **Cap per job** | 100 | Each job keeps at most this many recent runs. |
+| **Sweep interval (min)** | 60 | How often the clean-up runs. |
+| **Files kept (days)** | blank | The work area's files older than this are deleted: uploads, rejects reports, reports, exports, and the `done/` / `failed/` archives of watched folders. Blank = **Days kept**; `0` = keep the files. A copy written to an export folder is never touched. |
+
+**Clean now** runs it at once and reports the runs and the files deleted. The same stores show, with their size, in [Monitoring → Retention](../monitoring/retention.md). The policy is saved in `jobs.toml` under `[meta.retention]`.
+
+---
+
+## Run log \{#run-log\}
+
+Each run collects its log lines in memory — the `liberty.*` loggers, the `nomaflow` lines and the namespaces registered by plugins — and writes them to the database when it ends. The level is the run's: `WARNING`, `INFO` or `DEBUG` (`DEBUG` adds the SQL of every query). The server log receives the same lines.
+
+---
+
+## Who can use Nomaflow \{#permissions\}
+
+Superusers see and do everything. Other users get what their roles grant, in **Liberty Next → Administer → Access**, *Beyond the menus*:
+
+| Grant | Gives |
+|---|---|
+| **nomaflow → Follow the jobs** (`nomaflow:view`) | The Jobs, Schedule and Job Runs pages: the jobs, their schedules, their runs with logs and files. |
+| **Job → Every job** (`job:*`), or one job (`job:<id>`) | Run the job — with its files and parameters — and cancel its runs. |
+| **nomaflow → Create and edit jobs** (`nomaflow:edit`) | Includes *Follow the jobs*; create, change, clone, delete, pause and resume jobs, save presets. The steps run SQL and Python without the row scope of the user: grant it with care. |
+
+The retention and missed-schedule policies and the export of a job stay with the superusers. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
+
+---
+
+## Backup \{#backup\}
+
+`./liberty backup` (Docker) or `liberty-ops backup` (Python) saves the configuration — `jobs.toml` included — and the database that holds the history. See [Operations](../installation/operations.md#backup).
+
+---
+
+## Health \{#health\}
+
+The server's `/ready` answers when the framework database — which holds the history — is reachable. The Jobs page shows the last state of each job; a notification rule on `failure` and `missed` is the simplest monitoring.
+
+---
+
+## Common tasks \{#tasks\}
+
+| Task | How |
+|---|---|
+| Pause one job | Its **enabled** switch on the Jobs page. |
+| Move a job to another server | Carry it in a package — see [Packages](../framework/build/packages.md). The connectors and queries it uses must exist there. |
+| Investigate a job without stopping the others | Switch it off, run it by hand at `DEBUG`. |
+
+---
+
 ## Nomaflow — Change packages
 Source: https://docs.nomana-it.fr/liberty/nomaflow/change-packages/
 
@@ -15125,339 +15458,6 @@ The framework does ship the engine for these but the UI today is intentionally b
 - [Nomaflow → Bundled jobs → nomajde-remerge-security](./bundled-jobs.md#nomajde-remerge-security-all) — the security re-merge plugin most often wired as a post-apply step on JDE promotions.
 - [Nomaflow → Concepts](./concepts.md) — the broader Nomaflow mental model that Change packages sits inside.
 - [Liberty Next → Deploy → Package](../framework/build/packages.md) — the config equivalent: ship screens / menu items / dashboards between installs. The two channels coexist.
-
----
-
-## Nomaflow — Custom Python steps
-Source: https://docs.nomana-it.fr/liberty/nomaflow/custom-python/
-
-Write a Python function for a Nomaflow python step: where it lives, what it receives (its arguments, connectors, the run context), what it returns, how it logs to the run, how it fails and how it is cancelled.
-
-When no other step type fits, a `python` step calls a function you write. The function lives in a plugin of the apps folder, receives its arguments from the job, and its result lands in the run like any other step.
-
-This page is the short version for job authors. The full reference — injected arguments, return values, cancellation, worked example — is in [Write a callable](../framework/build/plugins/write-a-callable.md), and deployment in [Deploy and debug](../framework/build/plugins/deploy-and-debug.md).
-
----
-
-## Where the function lives \{#where\}
-
-A plugin is a Python package in the `plugins/` folder next to the configuration folder (`LIBERTY_APPS_DIR/../plugins`). The step names the function as `package.module:function`:
-
-```toml title="jobs.toml"
-[[jobs.steps]]
-type = "python"
-name = "refresh-summary"
-callable = "reports.summary:refresh"
-op_kwargs = { period = "2026-10", target_connector = "reporting" }
-```
-
-Modules are imported once: after changing the code, restart the server (`./liberty restart` or `liberty-ops restart`).
-
----
-
-## What the function receives \{#arguments\}
-
-```python title="plugins/reports/summary.py"
-import logging
-from liberty.connectors import ConnectorRegistry
-from liberty.jobs.steps.base import RunContext, StepResult
-
-_log = logging.getLogger(__name__)
-
-async def refresh(*, period: str, target_connector: str,
-                  connectors: ConnectorRegistry, ctx: RunContext) -> StepResult:
-    _log.info("refresh %s · run %s", period, ctx.run_id)
-    conn = connectors.sql(target_connector)          # connectors.api(...) for an API connector
-    await conn.execute("summary_refresh_put", {"PERIOD": period})   # a named query of the connector
-    ...
-    return StepResult(rows_affected=count, extras={"period": period})
-```
-
-| Argument | Comes from |
-|---|---|
-| Its own arguments (`period`, `target_connector`) | The job's shared parameters, then the step's `op_kwargs` (the step wins), then the values typed in **Run with parameters**. Values are converted to the annotated type (`apps_id: int`). |
-| `connectors` | The connector registry — run a connector's named queries or endpoints. Given only if the function declares it. |
-| `ctx` | The run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (rows of the previous step). Given only if declared. |
-| `settings` | The server settings. Given only if declared. |
-| `app_state` | The running server's live state (applications, Data Explorer models, dictionary…), for a function that acts on the configuration itself — the dictionary refresh job does. Given only if declared. |
-
-The function may be `async` (recommended) or a plain `def`, which runs in a worker thread.
-
----
-
-## What it returns \{#return\}
-
-| Return | In the run |
-|---|---|
-| `None` | Nothing more. |
-| an `int` | The number of rows affected. |
-| a `dict` | Kept as the step's details (not counted as rows). |
-| a `StepResult(rows_affected=…, extras={…})` | Both. |
-
-Any other type — a `bool` for instance — fails the step, so that a mistake does not pass for a success.
-
----
-
-## Logging to the run \{#logging\}
-
-The run log keeps the lines of the `liberty.*` loggers and of the namespaces a plugin registers. Register the package once, in `plugins/reports/__init__.py`:
-
-```python
-from liberty.jobs.runlog import register_namespace
-register_namespace("reports")
-```
-
-Then `logging.getLogger(__name__)` in any module of the package writes to the run log, and `print()` does not. The run's log level (**Run with parameters** → log level) applies.
-
----
-
-## Failing and cancelling \{#errors\}
-
-- Let exceptions out: the step fails with the message, the job's **Retry policy** applies, the following steps are skipped. Raise `StepFailed("…")` (from `liberty.jobs.steps.base`) for a clearer message.
-- **Cancel** on the job's card cancels an `async` function at its next `await`. A plain `def` cannot be interrupted: the run is marked cancelled, the function finishes on its own.
-
----
-
-## Tips \{#tips\}
-
-- Put SQL in the connector's named queries and call them from the function: the query stays visible and testable in the connector page.
-- Keep functions short; split long work into several steps so the run detail shows where it stopped.
-- Test the function like any Python code, passing a registry pointed at a test database.
-
----
-
-## Nomaflow — Notifications
-Source: https://docs.nomana-it.fr/liberty/nomaflow/notifications/
-
-Liberty Next notifications: rules that react to a screen write, a Nomaflow job event (failure, success, cancel, missed schedule, long run, late) or a screen action, and deliver to the in-app bell, by e-mail or through a connector query or endpoint. SMTP account, recipients, placeholders, job alerts.
-
-A notification tells someone that something happened: a period was closed, a nightly job failed, a schedule was missed. **Rules** decide when; **channels** decide how — the bell in the application, an e-mail, or a call to a connector.
-
----
-
-## At a glance
-
----
-
-## What users see \{#inbox\}
-
-- **The bell** in the header shows the number of unread notifications, updated live. Its menu lists the latest six; **Mark all read** and **View all** are at the bottom. Clicking a notification marks it read and opens its link.
-- **The Notifications page** (from **View all**) lists them with **All** / **Unread** tabs and **Mark all read**.
-
-Each user sees only their own notifications.
-
----
-
-## The e-mail account \{#smtp\}
-
-E-mail goes through the SMTP server set in **Liberty Next → Administer → App → Notifications (email)**:
-
-| Field | Default | Notes |
-|---|---|---|
-| Notifications enabled | on | Off: no rule fires. |
-| SMTP host, Port | —, `587` | Without a host, only the bell works. |
-| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* or *None*. Changing it sets the usual port. |
-| Timeout (s) | `20` | |
-| User, Password | — | The password is encrypted with the install's master key. |
-| From address | the user | Falls back to the user name when empty. |
-
-| Keep read notifications (days, 0 = forever) | `90` | Read notifications older than that are purged, at startup and every six hours. Unread ones are kept. |
-
-E-mails are plain text: the subject, then the body, then the rule's link.
-
----
-
-## Rules \{#rules\}
-
-Rules are edited in **Liberty Next → Build → Notifications** and saved in `notifications.toml` — a change applies without a restart. **Send a test** sends the rule being edited, even unsaved, with sample values to its recipients.
-
-### Triggers
-
-| Trigger | Fires when | Settings |
-|---|---|---|
-| **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
-| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
-| **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
-
-`long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
-
-### Channels
-
-| Channel | Delivers |
-|---|---|
-| `portal` | A notification in the bell of each recipient user. |
-| `email` | An e-mail to each recipient that has an address. |
-| `action` | Runs a query (SQL connector) or calls an endpoint (API connector) with the message's values — to post to Teams or a webhook, or to write a log table. Its parameters are the event's values plus `SUBJECT`, `BODY` and `RULE`. |
-
-A channel that fails is logged and does not stop the others. Sending runs in the background: a save or a job never waits for the mail server.
-
-### Recipients
-
-| Form | Means |
-|---|---|
-| `user:alice` | That user. |
-| `role:controllers` | Every active user holding the role. |
-| `email:finance@example.com` | An address — e-mail only. |
-
-In the editor, pick users and roles from the list or type an address. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
-
-### Placeholders
-
-Subject, body and link take `{NAME}` placeholders, written in any case:
-
-| Trigger | Placeholders |
-|---|---|
-| Screen event | Every column of the written row, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
-| Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule or a deadline. |
-| Screen action | The values passed by the action, plus `USER`. |
-
-An unknown placeholder is left as written. In the editor, the **{ }** button beside the subject, the body and the link lists the placeholders of the trigger and inserts the one picked where the cursor is; the same button sits beside the subject and the body of a [`notify` step](./steps.md#notify).
-
-### In TOML
-
-```toml title="notifications.toml"
-[notifications.period_closed]
-label = "Period closed"
-trigger = { kind = "screen", app = "sales", screen = "period_status", events = ["update"], when = [{ field = "STATUS", value = "closed" }] }
-channels = ["portal", "email"]
-recipients = ["role:controllers", "email:finance@example.com"]
-subject = "Period {PERIOD} closed by {USER}"
-body = "Company {COMPANY}: the period is now read-only."
-link = "/screen/sales/period_status"
-
-[notifications.job_failed]
-trigger = { kind = "job", events = ["failure", "missed"] }
-channels = ["email"]
-recipients = ["role:ops"]
-subject = "{JOB}: {STATE}"
-body = "{ERROR}"
-```
-
----
-
-## From a job step \{#notify-step\}
-
-A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. See [Steps → Notify](./steps.md#notify).
-
----
-
-## A job's own alerts \{#job-alerts\}
-
-A job can also warn on failure without a rule, from the **Alerts** block of the job editor:
-
-```toml title="jobs.toml"
-[jobs.alerts]
-on_failure = true
-recipients = ["role:ops", "user:alice"]
-```
-
-On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address.
-
----
-
-## Tips \{#tips\}
-
-- Start with one rule: `failure` and `missed` on every job, to the operations role.
-- Prefer roles to named users: the rule follows team changes.
-- Use **Send a test** after changing the SMTP account.
-- Keep the bell for what needs action; send the rest by e-mail to a shared box.
-
----
-
-## Nomaflow — Administration
-Source: https://docs.nomana-it.fr/liberty/nomaflow/administration/
-
-Running Nomaflow on a server: where runs and files are kept, one instance, what happens on restart, run history retention, the run log buffer, who can use the Jobs pages, backup and health.
-
-Nomaflow runs inside the Liberty Next server: its scheduler, its runner and its run history need no separate service.
-
----
-
-## At a glance
-
----
-
-## Storage and limits \{#settings\}
-
-| Item | Value |
-|---|---|
-| Run history | In the framework's database, five tables: `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. The server creates and completes them at start-up. |
-| Jobs | The jobs file `plugins/nomaflow/jobs.toml`, next to the configuration folder — edited from the Jobs pages. |
-| Run log | The last 5,000 lines of each run are kept. |
-| Files | Files uploaded with **Run with parameters** and the reject files of `file_load` steps go to `.nomaflow/files`, next to the configuration. |
-| Upload size | 200 MB at most per file. |
-
----
-
-## One instance \{#one-instance\}
-
-Run **one** Liberty Next instance: the scheduler fires from the server process, with no lock shared between instances, so two instances would run every job twice. See [Production checklist](../installation/production.md#replicas).
-
----
-
-## Restart \{#restart\}
-
-- Runs in progress when the server stops are closed as **FAILED** with *abandoned: process restart during run* at the next start.
-- Scheduled times that fell while the server was down are recorded as **MISSED** — see [Missed schedules](./jobs/schedules.md#missed). They are not run again on their own: run them by hand if needed.
-- Jobs, presets and policies are in `jobs.toml`; the history is in the database — both survive the restart.
-
----
-
-## Run history retention \{#retention\}
-
-The **Run history retention** panel of the Jobs page:
-
-| Setting | Default | Meaning |
-|---|---|---|
-| **Auto-sweep** | on | The recurring clean-up. |
-| **Days kept** | 30 | Finished runs older than this are deleted, with their steps and logs. |
-| **Cap per job** | 100 | Each job keeps at most this many recent runs. |
-| **Sweep interval (min)** | 60 | How often the clean-up runs. |
-| **Files kept (days)** | blank | The work area's files older than this are deleted: uploads, rejects reports, reports, exports, and the `done/` / `failed/` archives of watched folders. Blank = **Days kept**; `0` = keep the files. A copy written to an export folder is never touched. |
-
-**Clean now** runs it at once and reports the runs and the files deleted. The same stores show, with their size, in [Monitoring → Retention](../monitoring/retention.md). The policy is saved in `jobs.toml` under `[meta.retention]`.
-
----
-
-## Run log \{#run-log\}
-
-Each run collects its log lines in memory — the `liberty.*` loggers, the `nomaflow` lines and the namespaces registered by plugins — and writes them to the database when it ends. The level is the run's: `WARNING`, `INFO` or `DEBUG` (`DEBUG` adds the SQL of every query). The server log receives the same lines.
-
----
-
-## Who can use Nomaflow \{#permissions\}
-
-Superusers see and do everything. Other users get what their roles grant, in **Liberty Next → Administer → Access**, *Beyond the menus*:
-
-| Grant | Gives |
-|---|---|
-| **nomaflow → Follow the jobs** (`nomaflow:view`) | The Jobs, Schedule and Job Runs pages: the jobs, their schedules, their runs with logs and files. |
-| **Job → Every job** (`job:*`), or one job (`job:<id>`) | Run the job — with its files and parameters — and cancel its runs. |
-| **nomaflow → Create and edit jobs** (`nomaflow:edit`) | Includes *Follow the jobs*; create, change, clone, delete, pause and resume jobs, save presets. The steps run SQL and Python without the row scope of the user: grant it with care. |
-
-The retention and missed-schedule policies and the export of a job stay with the superusers. Notifications about jobs reach other users through notification rules — see [Notifications](./notifications.md).
-
----
-
-## Backup \{#backup\}
-
-`./liberty backup` (Docker) or `liberty-ops backup` (Python) saves the configuration — `jobs.toml` included — and the database that holds the history. See [Operations](../installation/operations.md#backup).
-
----
-
-## Health \{#health\}
-
-The server's `/ready` answers when the framework database — which holds the history — is reachable. The Jobs page shows the last state of each job; a notification rule on `failure` and `missed` is the simplest monitoring.
-
----
-
-## Common tasks \{#tasks\}
-
-| Task | How |
-|---|---|
-| Pause one job | Its **enabled** switch on the Jobs page. |
-| Move a job to another server | Carry it in a package — see [Packages](../framework/build/packages.md). The connectors and queries it uses must exist there. |
-| Investigate a job without stopping the others | Switch it off, run it by hand at `DEBUG`. |
 
 ---
 

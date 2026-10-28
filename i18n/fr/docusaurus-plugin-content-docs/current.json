@@ -360,16 +360,16 @@
     "description": "The label for category 'Jobs' in sidebar 'nomaflowSidebar'"
   },
   "sidebar.nomaflowSidebar.category.Jobs.link.generated-index.description": {
-    "message": "La page Jobs — parcourir le catalogue, créer ou modifier un flux, le planifier.",
-    "description": "The generated-index page description for category 'Jobs' in sidebar 'nomaflowSidebar'"
+    "message": "La page des Tâches, la création d'une tâche, ses étapes et ses planifications, et le lancement d'une tâche depuis le menu d'une application.",
+    "description": "The generated-index page description for category Jobs in sidebar nomaflowSidebar"
   },
   "sidebar.nomaflowSidebar.category.Runs": {
     "message": "Exécutions",
     "description": "The label for category 'Runs' in sidebar 'nomaflowSidebar'"
   },
   "sidebar.nomaflowSidebar.category.Runs.link.generated-index.description": {
-    "message": "Historique des exécutions, suivi en direct, dépannage.",
-    "description": "The generated-index page description for category 'Runs' in sidebar 'nomaflowSidebar'"
+    "message": "La page Exécutions, le détail d'une exécution, et que faire quand une exécution se passe mal.",
+    "description": "The generated-index page description for category Runs in sidebar nomaflowSidebar"
   },
   "sidebar.nomaflowSidebar.category.Workflow recipes": {
     "message": "Recettes de flux",
