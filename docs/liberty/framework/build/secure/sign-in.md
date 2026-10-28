@@ -135,6 +135,8 @@ For installs with many OIDC users, an automation script can pre-create them via 
 
 See [Users](./users.md) for the assignment UI.
 
+A user signed in through OIDC has no local password: their **Profile** window has no Security tab.
+
 ---
 
 ## Tokens — the JWT pair

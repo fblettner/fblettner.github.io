@@ -119,6 +119,7 @@ Un utilisateur lit les vues partagées et gère les siennes ; publier une vue po
 | **Enregistrer** | Écrase sur place la vue personnelle active (visible seulement quand la vue active est l'une des vôtres). |
 | Sélectionner une vue | Applique une vue partagée ou personnelle. |
 | **Supprimer la vue** | Retire l'une de ses vues (l'icône corbeille). |
+| **Rétablir la version livrée** | Dans le menu des vues : revient à la mise en page livrée avec l'écran — sa vue partagée par défaut, sinon sa mise en page de base. |
 | **Réinit.** | Revient à la vue partagée par défaut de l'écran, ou à sa disposition de colonnes de base s'il n'y en a pas. Pratique quand un état enregistré plus ancien entre en conflit avec une colonne désormais masquée sous condition. *Réinit.* se trouve dans le menu Colonnes. |
 
 La grille mémorise aussi, **par appareil**, la dernière vue ouverte sur chaque table — l'utilisateur retrouve donc la grille dans l'état où il l'avait laissée — tandis que les vues elles-mêmes restent sur le serveur.

@@ -175,7 +175,7 @@ Rules are edited in **Settings → Notifications** and saved in `notifications.t
 | Trigger | Fires when | Settings |
 |---|---|---|
 | **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
-| **A job event** | A Nomaflow run ends. | Jobs (empty = every job) and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
+| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
 | **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
 
 `long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
@@ -210,7 +210,7 @@ Subject, body and link take `{NAME}` placeholders, written in any case:
 | Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule or a deadline. |
 | Screen action | The values passed by the action, plus `USER`. |
 
-An unknown placeholder is left as written.
+An unknown placeholder is left as written. In the editor, the **{ }** button beside the subject, the body and the link lists the placeholders of the trigger and inserts the one picked where the cursor is; the same button sits beside the subject and the body of a [`notify` step](./steps.md#notify).
 
 ### In TOML
 

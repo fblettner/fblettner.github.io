@@ -134,7 +134,7 @@ Les champs de premier niveau du schéma, regroupés par finalité :
 | Groupe | Champs |
 |---|---|
 | **Identité** | `id`, `label`, `description`, `connector` *(vide = le connecteur de l'application)* |
-| **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `key_columns` |
+| **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `page_size` (lignes par page de la grille ; vide = la valeur de l'application), `key_columns` |
 | **Requêtes d'écriture** | `update_query`, `insert_query`, `delete_query` |
 | **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Vues et résumé** | `views` (vues partagées), `summary`, `value_diff` |

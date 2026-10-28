@@ -90,6 +90,7 @@ Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé d
 |---|---|
 | **`label`** | Titre d'affichage dans l'en-tête de la grille et libellé du champ dans le dialogue. Retombe sur le `label` du dictionnaire, puis sur le `name` de la colonne. |
 | **`hidden`** | Quand activé, la colonne est masquée par défaut. L'opérateur peut la rendre visible via le menu *Colonnes* de la grille. |
+| **`wrap`** | Quand activé, un texte long passe à la ligne dans la grille au lieu d'être tronqué. |
 | **`width`** | Largeur de colonne fixe en pixels. Vide = ajustement automatique. |
 | **`align`** | Alignement du texte — `left`, `right`, `center`. Vide choisit automatiquement selon le type (nombres à droite, texte à gauche). |
 | **`format`** | Comment afficher la valeur — `date`, `number`, `boolean`, `currency`, etc. Surcharge le format du dictionnaire. Pilote à la fois la cellule de grille et le champ de dialogue. |
@@ -122,7 +123,7 @@ Une clé n'est pas verrouillée d'office à la modification d'une ligne : cocher
 
 | Champ | Notes |
 |---|---|
-| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille. |
+| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. |
 | **`filter_from`** | Filtre en cascade — restreint les options de cette colonne en fonction de la valeur d'un autre filtre. Sélectionne une colonne `source` (déjà filtrée) et une `column` sur le résultat de la requête de recherche que la source met en correspondance. |
 | **`visible_when`** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans le dialogue, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
 

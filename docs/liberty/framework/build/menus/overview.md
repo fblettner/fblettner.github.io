@@ -20,6 +20,10 @@ The page that manages menus is **Settings → Menus**.
 
 ---
 
+## In the application \{#sidebar\}
+
+At the bottom of the sidebar, **Open on hover** folds the menu to its icons: it opens over the page while the mouse is on it and folds back once a page is picked, leaving the whole width to the screens. **Keep open** brings back the fixed menu. The choice is kept in the browser.
+
 ## The Menus page at a glance
 
 <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>

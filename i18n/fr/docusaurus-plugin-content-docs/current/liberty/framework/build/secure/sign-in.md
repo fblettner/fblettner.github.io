@@ -136,6 +136,8 @@ Pour les installations comptant beaucoup d'utilisateurs OIDC, un script d'automa
 
 Voir [Utilisateurs](./users.md) pour l'interface d'attribution.
 
+Un utilisateur connecté par OIDC n'a pas de mot de passe local : sa fenêtre **Profil** n'a pas d'onglet Sécurité.
+
 ---
 
 ## Jetons — la paire JWT

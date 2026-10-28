@@ -20,7 +20,7 @@ This is the standard *staging → production* path. It's also the right tool for
 | Ship a curated set of screens to a brand-new install. | Build, apply with `replace_all`. |
 | Add a few new screens to an existing customer install without touching their edits. | Build, apply with `merge`. |
 | Ship a fresh release of a vendor-maintained app where the customer has local edits on a few screens. | Build, apply with `overwrite` — entities flagged `override = true` on the target are preserved automatically. |
-| Promote one Nomaflow job between environments. | Use the dedicated *Export job* button on the job's card (covered in [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)); the Package screen does not bundle jobs. |
+| Promote one Nomaflow job between environments. | Use the **Export** icon on the job's line of the Jobs page (covered in [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)); the Package screen does not bundle jobs. |
 | Deliver a full licensed bundle (Nomasx-1 + Nomajde plugins + config). | Not this. Use the **`liberty-apps`** wheel installer — see [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 The Package screen ships **declarative config** — TOML files. It does not ship Python code, Java JARs, plugin packages or database content. For those, the wheel installer is the canonical channel.
@@ -101,7 +101,7 @@ Worth knowing so you don't try to ship through this channel:
 | Settings → App | Per install — application settings, licence, sign-in. Never bundled. |
 | `auth.toml` / DB-stored users | Per-install — carries Argon2 password hashes. Never bundled. |
 | Python plugins | Shipped with the [liberty-apps wheel](../../installation/deploy-prebuilt-apps.md) or the plugin's own release channel. |
-| Nomaflow jobs | The *Export job* button on each job's card produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
+| Nomaflow jobs | The **Export** icon on each job's line of the Jobs page produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
 | Database content | Use a DB dump (or a [bundled preload job](../../nomaflow/bundled-jobs.md)). |
 
 ---

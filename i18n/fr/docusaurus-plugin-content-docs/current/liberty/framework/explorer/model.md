@@ -306,7 +306,7 @@ L'application du préréglage crée aussi les entrées de dictionnaire qui manqu
 
 ### Modèles fournis par un préréglage \{#shipped\}
 
-Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Paramètres → Explorateur. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
+Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Paramètres → Explorateur. Dans le sélecteur de modèle, les modèles sont groupés par domaine — *JDE · Accounts Payable*, *JDE · Sales* —, les autres par application. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
 
 Pour modifier un tel modèle, ajouter un modèle dans Paramètres → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
 

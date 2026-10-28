@@ -175,7 +175,7 @@ Les règles se modifient dans **Paramètres → Notifications** et s'enregistren
 | Déclencheur | Se déclenche quand | Réglages |
 |---|---|---|
 | **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **A job event** | Une exécution Nomaflow se termine. | Jobs (vide = toutes les tâches) et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
+| **A job event** | Une exécution Nomaflow se termine. | Jobs — plusieurs choisies dans une même liste, vide = toutes les tâches — et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
 | **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
 
 `long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
@@ -210,7 +210,7 @@ L'objet, le corps et le lien acceptent des variables `{NOM}`, en majuscules ou e
 | Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée ou une échéance. |
 | Action d'écran | Les valeurs transmises par l'action, plus `USER`. |
 
-Une variable inconnue est laissée telle quelle.
+Une variable inconnue est laissée telle quelle. Dans l'éditeur, le bouton **{ }** à côté de l'objet, du corps et du lien liste les variables du déclencheur et insère celle choisie à l'emplacement du curseur ; le même bouton figure à côté de l'objet et du corps d'une [étape `notify`](./steps.md#notify).
 
 ### En TOML
 

@@ -20,7 +20,7 @@ C'est le parcours standard *préproduction → production*. C'est aussi l'outil 
 | Livrer un ensemble d'écrans sélectionnés à une installation toute neuve. | Construire, appliquer avec `replace_all`. |
 | Ajouter quelques nouveaux écrans à une installation client existante sans toucher à ses modifications. | Construire, appliquer avec `merge`. |
 | Livrer une nouvelle version d'une application maintenue par l'éditeur quand le client a des modifications locales sur quelques écrans. | Construire, appliquer avec `overwrite` — les entités marquées `override = true` sur la cible sont préservées automatiquement. |
-| Promouvoir un job Nomaflow entre environnements. | Utiliser le bouton dédié *Export job* sur la fiche du job (décrit dans [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)) ; l'écran Package ne regroupe pas les jobs. |
+| Promouvoir un job Nomaflow entre environnements. | Utiliser l'icône **Exporter** sur la ligne de la tâche, dans la page des Tâches (décrit dans [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)) ; l'écran Package ne regroupe pas les jobs. |
 | Livrer un lot complet sous licence (Nomasx-1 + plugins Nomajde + configuration). | Pas par ce biais. Utiliser l'installeur wheel **`liberty-apps`** — voir [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 L'écran Package livre de la **configuration déclarative** — des fichiers TOML. Il ne livre ni code Python, ni JAR Java, ni packages de plugins, ni contenu de base de données. Pour cela, l'installeur wheel est le canal canonique.
@@ -101,7 +101,7 @@ Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer �
 | Paramètres → App | Propres à chaque installation — réglages de l'application, licence, connexion. Jamais regroupés. |
 | `auth.toml` / utilisateurs stockés en base | Propre à chaque installation — porte les empreintes de mot de passe Argon2. Jamais regroupé. |
 | Plugins Python | Livrés avec le [wheel liberty-apps](../../installation/deploy-prebuilt-apps.md) ou le canal de release propre au plugin. |
-| Jobs Nomaflow | Le bouton *Export job* sur la fiche de chaque job produit un ZIP mono-job. L'export en masse de jobs n'est pas encore automatisé. Voir [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
+| Jobs Nomaflow | L'icône **Exporter** sur la ligne de chaque tâche produit un ZIP d'une seule tâche. L'export en masse de jobs n'est pas encore automatisé. Voir [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
 | Contenu de base de données | Utiliser un dump de base (ou un [job de préchargement intégré](../../nomaflow/bundled-jobs.md)). |
 
 ---

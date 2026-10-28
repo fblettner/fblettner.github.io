@@ -6,7 +6,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
 
 # La page Surveillance
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Cette page décrit son premier onglet, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
+**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Ses trois vues se choisissent dans une rangée de cartes en haut de page — une icône, le nom et une ligne sur l'usage de la vue. Cette page décrit la première, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
 
 ---
 

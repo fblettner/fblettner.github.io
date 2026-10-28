@@ -82,6 +82,7 @@ Ouvrir **Paramètres → Connecteurs**, choisir le connecteur, basculer sur l'on
 |---|---|
 | **`show_in_switcher`** | Par défaut `true`. Activé, le connecteur apparaît dans le sélecteur d'applications du menu latéral (à condition d'avoir un menu). Désactivé, le connecteur n'est accessible que par URL — utile pour les connecteurs cachés ou d'administration. |
 | **`home`** | Liste déroulante alimentée par les éléments de menu de ce connecteur. Choisit l'élément d'accueil quand l'utilisateur clique sur l'application dans le sélecteur. Vide → le premier élément visible de premier niveau. |
+| **`home_by_role`** | Une page d'accueil par rôle : une ligne par rôle, chacune avec un élément de menu choisi dans les listes. Un utilisateur arrive sur l'élément de son premier rôle listé ici, sinon sur `home` — les auditeurs sur la synthèse d'audit, les administrateurs sur les écrans de paramétrage. |
 
 Enregistrer la page du connecteur — la modification s'applique immédiatement (rechargement à chaud).
 

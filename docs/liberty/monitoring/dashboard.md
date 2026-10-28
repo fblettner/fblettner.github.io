@@ -6,7 +6,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 # The Monitoring page
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). This page describes its first tab, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). Its three views are picked from a row of cards at the top — an icon, the name and one line on what the view is for. This page describes the first, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
 
 ---
 

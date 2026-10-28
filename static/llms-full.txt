@@ -5904,7 +5904,7 @@ The schema's top-level fields, grouped by purpose:
 | Group | Fields |
 |---|---|
 | **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
-| **Read query** | `read_query` (required), `auto_load`, `max_rows`, `key_columns` |
+| **Read query** | `read_query` (required), `auto_load`, `max_rows`, `page_size` (rows per page of the grid; blank = the app's default), `key_columns` |
 | **Write queries** | `update_query`, `insert_query`, `delete_query` |
 | **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Views & summary** | `views` (shared views), `summary`, `value_diff` |
@@ -6142,6 +6142,7 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 |---|---|
 | **`label`** | Display title in the grid header and the dialog field label. Falls back to the dictionary's `label`, then to the column `name`. |
 | **`hidden`** | When on, the column is hidden by default. The operator can un-hide it via the grid's *Columns* menu. |
+| **`wrap`** | When on, long text wraps over several lines in the grid instead of being cut. |
 | **`width`** | Fixed column width in pixels. Blank = auto-size. |
 | **`align`** | Text alignment — `left`, `right`, `center`. Blank auto-picks based on type (numbers right, text left). |
 | **`format`** | How to render the value — `date`, `number`, `boolean`, `currency`, etc. Overrides the dictionary format. Drives both the grid cell and the dialog field. |
@@ -6174,7 +6175,7 @@ A key is not locked automatically when a row is edited: tick **disable_on_edit**
 
 | Field | Notes |
 |---|---|
-| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid. |
+| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
 | **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
 
@@ -6982,6 +6983,7 @@ A regular user reads shared views and manages their own; publishing a view for e
 | **Save** | Overwrites the active personal view in place (shown only when the active view is one of yours). |
 | Select a view | Applies a shared or personal view. |
 | **Delete view** | Removes one of your own views (the trash icon). |
+| **Reset to shipped** | In the Views menu: back to the layout the screen ships with — its default shared view, else its base layout. |
 | **Reset** | Reverts to the screen's default shared view, or to its base column layout if there is none. Handy when an older saved state conflicts with a column that is now conditionally hidden. *Reset* lives in the Columns menu. |
 
 The grid also remembers, **per device**, the last view you opened on each table — so you land back where you left off — while the views themselves live on the server.
@@ -7114,6 +7116,10 @@ Three things are worth knowing up front:
 The page that manages menus is **Settings → Menus**.
 
 ---
+
+## In the application \{#sidebar\}
+
+At the bottom of the sidebar, **Open on hover** folds the menu to its icons: it opens over the page while the mouse is on it and folds back once a page is picked, leaving the whole width to the screens. **Keep open** brings back the fixed menu. The choice is kept in the browser.
 
 ## The Menus page at a glance
 
@@ -7289,6 +7295,7 @@ Open **Settings → Connectors**, pick the connector, switch to the **Settings**
 |---|---|
 | **`show_in_switcher`** | Default `true`. When on, the connector shows in the application picker (provided it has a menu). When off, the connector is reachable only by URL — useful for hidden / admin connectors. |
 | **`home`** | Dropdown sourced from this connector's menu items. Picks the landing menu item when the user picks the app in the picker. Blank → the first visible top-level item. |
+| **`home_by_role`** | A start page per role: one line per role, each with a menu item picked from the lists. A user lands on the item of their first role listed here, else on `home` — the auditors on the audit synthesis, the administrators on the settings screens. |
 
 Save the connector page — the change applies immediately (hot reload).
 
@@ -8665,7 +8672,7 @@ Applying the preset also creates the dictionary entries its tables lack — on a
 
 ### Models shipped by a preset \{#shipped\}
 
-A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
 
 To change such a model, add a model in Settings → Explorer from the same preset: the declared model replaces the shipped one.
 
@@ -9105,6 +9112,8 @@ OIDC users **appear in *Settings → Access → Users* only after their first si
 For installs with many OIDC users, an automation script can pre-create them via `POST /admin/access/users` so roles are ready at first sign-in — but the standard flow assumes manual role assignment.
 
 See [Users](./users.md) for the assignment UI.
+
+A user signed in through OIDC has no local password: their **Profile** window has no Security tab.
 
 ---
 
@@ -10015,7 +10024,7 @@ This is the standard *staging → production* path. It's also the right tool for
 | Ship a curated set of screens to a brand-new install. | Build, apply with `replace_all`. |
 | Add a few new screens to an existing customer install without touching their edits. | Build, apply with `merge`. |
 | Ship a fresh release of a vendor-maintained app where the customer has local edits on a few screens. | Build, apply with `overwrite` — entities flagged `override = true` on the target are preserved automatically. |
-| Promote one Nomaflow job between environments. | Use the dedicated *Export job* button on the job's card (covered in [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)); the Package screen does not bundle jobs. |
+| Promote one Nomaflow job between environments. | Use the **Export** icon on the job's line of the Jobs page (covered in [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md)); the Package screen does not bundle jobs. |
 | Deliver a full licensed bundle (Nomasx-1 + Nomajde plugins + config). | Not this. Use the **`liberty-apps`** wheel installer — see [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 The Package screen ships **declarative config** — TOML files. It does not ship Python code, Java JARs, plugin packages or database content. For those, the wheel installer is the canonical channel.
@@ -10096,7 +10105,7 @@ Worth knowing so you don't try to ship through this channel:
 | Settings → App | Per install — application settings, licence, sign-in. Never bundled. |
 | `auth.toml` / DB-stored users | Per-install — carries Argon2 password hashes. Never bundled. |
 | Python plugins | Shipped with the [liberty-apps wheel](../../installation/deploy-prebuilt-apps.md) or the plugin's own release channel. |
-| Nomaflow jobs | The *Export job* button on each job's card produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
+| Nomaflow jobs | The **Export** icon on each job's line of the Jobs page produces a single-job ZIP. Bulk job export is not yet automated. See [Nomaflow → Bundled jobs](../../nomaflow/bundled-jobs.md). |
 | Database content | Use a DB dump (or a [bundled preload job](../../nomaflow/bundled-jobs.md)). |
 
 ---
@@ -12397,7 +12406,7 @@ Source: https://docs.nomana-it.fr/liberty/monitoring/dashboard/
 
 Block by block, the Liberty Next Monitoring page: the four KPIs, database pools, runtime, connected users, record locks and the live log tail — what each value means and when to act.
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). This page describes its first tab, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). Its three views are picked from a row of cards at the top — an icon, the name and one line on what the view is for. This page describes the first, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
 
 ---
 
@@ -14997,7 +15006,7 @@ Rules are edited in **Settings → Notifications** and saved in `notifications.t
 | Trigger | Fires when | Settings |
 |---|---|---|
 | **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
-| **A job event** | A Nomaflow run ends. | Jobs (empty = every job) and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
+| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
 | **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
 
 `long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
@@ -15032,7 +15041,7 @@ Subject, body and link take `{NAME}` placeholders, written in any case:
 | Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule or a deadline. |
 | Screen action | The values passed by the action, plus `USER`. |
 
-An unknown placeholder is left as written.
+An unknown placeholder is left as written. In the editor, the **{ }** button beside the subject, the body and the link lists the placeholders of the trigger and inserts the one picked where the cursor is; the same button sits beside the subject and the body of a [`notify` step](./steps.md#notify).
 
 ### In TOML
 

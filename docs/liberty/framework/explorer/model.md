@@ -306,7 +306,7 @@ Applying the preset also creates the dictionary entries its tables lack — on a
 
 ### Models shipped by a preset \{#shipped\}
 
-A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Settings → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
 
 To change such a model, add a model in Settings → Explorer from the same preset: the declared model replaces the shipped one.
 

@@ -134,7 +134,7 @@ The schema's top-level fields, grouped by purpose:
 | Group | Fields |
 |---|---|
 | **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
-| **Read query** | `read_query` (required), `auto_load`, `max_rows`, `key_columns` |
+| **Read query** | `read_query` (required), `auto_load`, `max_rows`, `page_size` (rows per page of the grid; blank = the app's default), `key_columns` |
 | **Write queries** | `update_query`, `insert_query`, `delete_query` |
 | **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only`, `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
 | **Views & summary** | `views` (shared views), `summary`, `value_diff` |

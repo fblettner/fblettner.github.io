@@ -20,6 +20,10 @@ La page qui gère les menus est **Paramètres → Menus**.
 
 ---
 
+## Dans l'application \{#sidebar\}
+
+En bas du menu latéral, **Ouvrir au survol** replie le menu sur ses icônes : il s'ouvre par-dessus la page quand la souris le survole et se referme une fois la page choisie, laissant toute la largeur aux écrans. **Garder ouvert** rétablit le menu fixe. Le choix est conservé par le navigateur.
+
 ## La page Menus en un coup d'œil
 
 <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>

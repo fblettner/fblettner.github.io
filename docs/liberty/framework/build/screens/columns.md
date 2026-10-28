@@ -90,6 +90,7 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 |---|---|
 | **`label`** | Display title in the grid header and the dialog field label. Falls back to the dictionary's `label`, then to the column `name`. |
 | **`hidden`** | When on, the column is hidden by default. The operator can un-hide it via the grid's *Columns* menu. |
+| **`wrap`** | When on, long text wraps over several lines in the grid instead of being cut. |
 | **`width`** | Fixed column width in pixels. Blank = auto-size. |
 | **`align`** | Text alignment — `left`, `right`, `center`. Blank auto-picks based on type (numbers right, text left). |
 | **`format`** | How to render the value — `date`, `number`, `boolean`, `currency`, etc. Overrides the dictionary format. Drives both the grid cell and the dialog field. |
@@ -122,7 +123,7 @@ A key is not locked automatically when a row is edited: tick **disable_on_edit**
 
 | Field | Notes |
 |---|---|
-| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid. |
+| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
 | **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
 

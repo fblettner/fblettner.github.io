@@ -119,6 +119,7 @@ A regular user reads shared views and manages their own; publishing a view for e
 | **Save** | Overwrites the active personal view in place (shown only when the active view is one of yours). |
 | Select a view | Applies a shared or personal view. |
 | **Delete view** | Removes one of your own views (the trash icon). |
+| **Reset to shipped** | In the Views menu: back to the layout the screen ships with — its default shared view, else its base layout. |
 | **Reset** | Reverts to the screen's default shared view, or to its base column layout if there is none. Handy when an older saved state conflicts with a column that is now conditionally hidden. *Reset* lives in the Columns menu. |
 
 The grid also remembers, **per device**, the last view you opened on each table — so you land back where you left off — while the views themselves live on the server.

@@ -82,6 +82,7 @@ Open **Settings → Connectors**, pick the connector, switch to the **Settings**
 |---|---|
 | **`show_in_switcher`** | Default `true`. When on, the connector shows in the application picker (provided it has a menu). When off, the connector is reachable only by URL — useful for hidden / admin connectors. |
 | **`home`** | Dropdown sourced from this connector's menu items. Picks the landing menu item when the user picks the app in the picker. Blank → the first visible top-level item. |
+| **`home_by_role`** | A start page per role: one line per role, each with a menu item picked from the lists. A user lands on the item of their first role listed here, else on `home` — the auditors on the audit synthesis, the administrators on the settings screens. |
 
 Save the connector page — the change applies immediately (hot reload).
 
