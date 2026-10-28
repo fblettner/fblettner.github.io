@@ -11,7 +11,7 @@ The **Security & Segregation of Duties Assessment** is a generated report, not a
 It draws on the data Nomasx-1 already collects — the user registry, roles and assignments, the object-security grants (Security Workbench) and the segregation-of-duties matrix — and turns it into a single narrative document, driven by **Sarbanes-Oxley (SOX)** IT general-control expectations. It is framed as a general security-posture review, not a formal control attestation.
 
 :::info[JDE-specific]
-The **segregation-of-duties** sections build on the SoD conflict refresh (`nomasx1-sod-1`), which today evaluates **JD Edwards EnterpriseOne** `SECURITY_RIGHTS` rows. The user, role and object-security hygiene sections read the `security_*` tables directly and apply to any connected application; the SoD matrix and `*PUBLIC` / Security Workbench language is JDE-flavoured.
+The **segregation-of-duties** sections build on the SoD conflict refresh (the *Security and SoD* collection, `nomasx1-collect-all`), which today evaluates **JD Edwards EnterpriseOne** `SECURITY_RIGHTS` rows. The user, role and object-security hygiene sections read the `security_*` tables directly and apply to any connected application; the SoD matrix and `*PUBLIC` / Security Workbench language is JDE-flavoured.
 :::
 
 ---
@@ -106,7 +106,7 @@ A **conflict** is a single enabled user who can perform **both** sides of an inc
 
 Severity comes from the operator's own levels on the matrix — the **Risk Level** (the primary sort) and, as a fallback, the **Critical Level** on the risk dimension. The headline *total violations* is a count of **user × matrix-entry pairings** (how many users trip each rule), not a raw count of rules.
 
-The matrix itself — processes, activities, objects, risks and the incompatible pairs — is maintained under **Settings → Segregation of duties**, and refreshed into the conflict tables by the `nomasx1-sod-1` job. Run that job before the report so the figures are current.
+The matrix itself — processes, activities, objects, risks and the incompatible pairs — is maintained under **Settings → Segregation of duties**, and refreshed into the conflict tables by the collection job, `nomasx1-collect-all` (*Jobs → Collect security and SoD*). Run it before the report so the figures are current.
 
 ---
 
@@ -128,6 +128,8 @@ Every dropdown resolves server-side against live catalogs — *Application* agai
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 
+**Every month, by e-mail** — *Jobs → Security & SoD report* renders the same PDF for one or several applications and mails it to the auditors' role; scheduled on the 1st of the month once enabled. See [Nomasx-1 jobs](../jobs.md#reports).
+
 ---
 
 ## Before you run
@@ -137,7 +139,7 @@ The audit reads the data Nomasx-1 has already collected for the application — 
 - **The user registry** — declared accounts, status and last sign-in, plus the curated flags (privileged / technical / generic / linked) maintained on each user.
 - **Roles and assignments** — the role catalog and the user-role assignments.
 - **Object security** — the Security Workbench grants (run / add / change / delete, direct or via `*ROLE`, and `*PUBLIC` grants).
-- **The SoD conflict tables** — refreshed by `nomasx1-sod-1`, decorated by the matrix and its process / activity / object / risk dimensions.
+- **The SoD conflict tables** — refreshed by `nomasx1-collect-all`, decorated by the matrix and its process / activity / object / risk dimensions.
 - **The applications registry** — for the cover and scope.
 
 A run against an application with no collected data still produces the document, but the affected sections read as empty rather than wrong.
@@ -146,7 +148,7 @@ A run against an application with no collected data still produces the document,
 
 ## Tips & best practices
 
-- **Refresh SoD first.** Run `nomasx1-sod-1` right before the report so the conflict counts and the trend match reality.
+- **Refresh SoD first.** Run *Jobs → Collect security and SoD* right before the report so the conflict counts and the trend match reality.
 - **Start with the role-level findings.** Self-conflicting roles and the most-conflicted roles are the fastest wins — one fix clears conflicts for every user who holds the role.
 - **Set the *Report date label* and *Client name*** for an external-ready cover page; leave them empty for an internal draft.
 - **Use *markdown* to iterate, *PDF* to deliver.** The Markdown output is the same content without the cover styling, handy for review before the final export.

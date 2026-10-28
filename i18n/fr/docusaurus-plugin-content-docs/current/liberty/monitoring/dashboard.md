@@ -6,7 +6,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
 
 # La page Surveillance
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO).
+**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Cette page décrit son premier onglet, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
 
 ---
 
@@ -182,4 +182,4 @@ Les dernières lignes du journal du serveur, les plus récentes en bas.
 | **Filter…** | Un texte dans le nom du logger ou le message — un `error_id`, un identifiant de requête, un connecteur. **Clear filter** le vide. |
 | **Pause** / **Resume** | Fige le défilement pour lire ; les nouvelles lignes continuent d'arriver. |
 
-Les erreurs sont en rouge, les avertissements en orange, les lignes de débogage atténuées ; une ligne avec une pile d'appels se déplie (**traceback**). Pour les lignes plus anciennes, utiliser `./liberty logs` ou `liberty-ops logs`.
+Les erreurs sont en rouge, les avertissements en orange, les lignes de débogage atténuées ; une ligne avec une pile d'appels se déplie (**traceback**). Pour les lignes plus anciennes, chercher dans l'onglet [Journal du serveur](./server-log.md).

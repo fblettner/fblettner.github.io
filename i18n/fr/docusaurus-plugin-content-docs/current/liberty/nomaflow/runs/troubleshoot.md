@@ -6,7 +6,7 @@ keywords: [Nomaflow, dépannage, exécution en échec, délai, annulation, plani
 
 # Dépannage
 
-Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec, puis le **Journal**. Relancer avec **Run with parameters** en `DEBUG` pour voir le SQL de chaque requête.
+Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec, puis le **Journal**. Relancer avec **Exécuter avec des paramètres** en `DEBUG` pour voir le SQL de chaque requête.
 
 ---
 
@@ -21,7 +21,7 @@ Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec,
 | *period … is closed* (file_load) | La requête de refus de l'étape a volontairement rejeté le chargement. |
 | *control total mismatch …* (file_load) | Le total chargé diffère du total attendu ; rien n'a été écrit. |
 
-Après correction, ne relancer que l'étape en échec : **Run with parameters**, décocher les étapes déjà réussies, **Run**.
+Après correction, ne relancer que l'étape en échec : **Exécuter avec des paramètres**, décocher les étapes déjà réussies, **Run**.
 
 ---
 

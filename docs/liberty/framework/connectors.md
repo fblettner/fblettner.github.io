@@ -208,7 +208,7 @@ An API connector calls a web API. Its editor has five tabs:
 
 | Tab | Content |
 |---|---|
-| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify** (*true*, *false*, or a variable such as `${JDE_AIS_VERIFY_SSL:-true}`, kept as written), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type**: *None*, *Basic* (user and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint, request body and headers, token field, token lifetime). Secrets are encrypted when saved. |
 | **Endpoints** | The named endpoints — see below. |
 | **Webhooks** | Not available yet: external systems cannot push events into Liberty Next. |

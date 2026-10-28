@@ -332,12 +332,13 @@ La barre latérale découpe le travail quotidien en sept sections plus la zone d
 | Section | Ce qu'elle couvre |
 |---|---|
 | **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
+| **Séparation des tâches**, **Revue de sécurité** | Deux tableaux de bord sous la Vue d'ensemble : les [conflits](./sod-dashboard.md) — tendance, risques, paires de rôles, conflits avérés — et la [revue des accès](./security-review.md) — douze contrôles et les comptes à revoir d'abord. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
 | **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |
 | **Licences** | Contrats CSI, photographie JD Edwards, licences Oracle requises, licences acquises, rapport d'utilisation, rapport financier. |
-| **Tâches** | [Collecter les données de sécurité ou les transactions de licences](./jobs.md) à la demande, avec un journal en direct. |
+| **Tâches** | [Collecter la sécurité et la SoD ou les licences, produire les deux rapports d'audit](./jobs.md), pour une ou plusieurs applications, avec un journal en direct. |
 | **Paramètres** | Définitions des sources (applications, schémas JDE, catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
 
 ---

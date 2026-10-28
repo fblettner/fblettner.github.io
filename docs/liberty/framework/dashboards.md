@@ -119,9 +119,10 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 | **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
+| **Jobs** | The Nomaflow jobs with their next run, their schedule in words and their last state, and **Run now** / **Pause** / **Resume**. Superusers only. | **Jobs (ids, in order)** — empty = every scheduled job —, **Only these tags**, **Max rows** (12 when blank). |
 | **Links** | A card of entry points: menu items of the dashboard's application, or web addresses. | **Links per row** (1 to 4); per link a **Menu item** or a **URL**, an **Icon**, a **Label** (blank: the menu item's) and a **Description**. |
 
-A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
+A widget whose query the user may not run is hidden; the rest of the dashboard still shows. Every card carries its title and subtitle inside it, and the page grows with its widgets: it scrolls to the last one.
 
 <svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -237,11 +238,17 @@ These three widgets turn a dashboard into a **synthesis page**: the figures that
 
 The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
 
+### Jobs \{#jobs\}
+
+A **Jobs** card puts the scheduler on a dashboard. Each line shows the job — a click opens it in Nomaflow —, its next run or *Paused*, its schedule in words (*every day at 03:00*), the state of its last run, and three buttons: **Run now** with the job's saved values, **Pause the schedule**, **Resume the schedule** — applied at once. Without ids, the card lists the scheduled jobs, the next to run first, optionally narrowed to some tags (`main`, `nomasx1`). The card refreshes itself while a run is going.
+
+The card is for superusers only: for anyone else, it does not show on the dashboard.
+
 ### Text and Links \{#text-links\}
 
 These two widgets turn a dashboard into the **home page of an application**: a few lines on what it does, the figures, then where to go.
 
-- A **Text** widget the full width of the grid (12 columns) takes the height of its text, with no scroll bar; a narrower one scrolls within its tile.
+- A **Text** or **Links** widget the full width of the grid (12 columns) takes the height of its content, with no scroll bar; a narrower one scrolls within its tile.
 - A **Links** widget only shows the menu items the user may open: an entry their roles do not grant disappears from the card. A URL opens in a new browser tab. A URL link needs a label.
 - In an export, a text keeps its Markdown and a links card becomes a table (*Link*, *Description*).
 
@@ -322,7 +329,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text** or **Links**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
 A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
 

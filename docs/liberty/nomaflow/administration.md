@@ -100,8 +100,9 @@ The **Run history retention** panel of the Jobs page:
 | **Days kept** | 30 | Finished runs older than this are deleted, with their steps and logs. |
 | **Cap per job** | 100 | Each job keeps at most this many recent runs. |
 | **Sweep interval (min)** | 60 | How often the clean-up runs. |
+| **Files kept (days)** | blank | The work area's files older than this are deleted: uploads, rejects reports, reports, exports, and the `done/` / `failed/` archives of watched folders. Blank = **Days kept**; `0` = keep the files. A copy written to an export folder is never touched. |
 
-**Clean now** runs it at once. The policy is saved in `jobs.toml` under `[meta.retention]`.
+**Clean now** runs it at once and reports the runs and the files deleted. The same stores show, with their size, in [Monitoring → Retention](../monitoring/retention.md). The policy is saved in `jobs.toml` under `[meta.retention]`.
 
 ---
 

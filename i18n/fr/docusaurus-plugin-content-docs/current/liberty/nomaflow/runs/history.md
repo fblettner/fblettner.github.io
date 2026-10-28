@@ -1,6 +1,6 @@
 ---
 title: Historique des exécutions
-description: "Où sont enregistrées les exécutions Nomaflow et comment en lire une : les états d'exécution, la page Détail de l'exécution (résumé, paramètres de l'exécution, étapes, journal avec Suivre et Télécharger), la liste des exécutions, et la durée de conservation de l'historique."
+description: "Où sont enregistrées les exécutions Nomaflow et comment les lire : la page Exécutions (recherche, filtres, effectifs par état, exécutions par jour, avancement en direct), les états d'exécution, la page Détail de l'exécution (résumé, paramètres de l'exécution, étapes, fichier envoyé, journal avec Suivre et Télécharger), et la durée de conservation de l'historique."
 keywords: [Nomaflow, historique des exécutions, détail de l'exécution, états, journal, MISSED, CANCELED, rétention, Liberty Next]
 ---
 
@@ -12,86 +12,122 @@ Chaque exécution d'une tâche — planifiée, manuelle, lancée par une autre t
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 370" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 390" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="rhi-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="rhi-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="rhi-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="rhi-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfr-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfr-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfr-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="340" rx="14" fill="url(#rhi-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Détail d'exécution · crm-stalled-deals</text>
-  <rect x="870" y="32" width="63" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="901.5" y="44.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="84" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Trigger</text>
-  <text x="240" y="102" fill="#e2e8f0" fontSize="10.5" fontFamily="system-ui, sans-serif">scheduled</text>
-  <text x="425" y="84" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Started</text>
-  <text x="425" y="102" fill="#e2e8f0" fontSize="10.5" fontFamily="system-ui, sans-serif">27/10 08:00:02</text>
-  <text x="610" y="84" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Finished</text>
-  <text x="610" y="102" fill="#e2e8f0" fontSize="10.5" fontFamily="system-ui, sans-serif">27/10 08:00:05</text>
-  <text x="795" y="84" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Rows affected</text>
-  <text x="795" y="102" fill="#e2e8f0" fontSize="10.5" fontFamily="system-ui, sans-serif">2</text>
-  <rect x="240" y="120" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">#</text>
-  <text x="290" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STEP</text>
-  <text x="490" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TYPE</text>
-  <text x="610" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ATTEMPT</text>
-  <text x="700" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATE</text>
-  <text x="830" y="137.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ERROR</text>
-  <rect x="240" y="152" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="168.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1</text>
-  <text x="290" y="168.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">flag-stalled</text>
-  <text x="490" y="168.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">sql_query</text>
-  <text x="610" y="168.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1</text>
-  <rect x="700" y="157.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="730.0" y="168.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="830" y="168.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <rect x="240" y="182" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="198.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
-  <text x="290" y="198.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">notify</text>
-  <text x="490" y="198.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">python</text>
-  <text x="610" y="198.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1</text>
-  <rect x="700" y="187.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="730.0" y="198.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="830" y="198.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="240" y="222" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Log</text>
-  <rect x="810" y="210" width="70" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="845.0" y="224.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Follow</text>
-  <rect x="888" y="210" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="928.0" y="224.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Download</text>
-  <rect x="240" y="238" width="720" height="100" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="260" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">08:00:02 INFO  nomaflow  run started (scheduled)</text>
-  <text x="252" y="282" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">08:00:03 INFO  sql_query flag_stalled_deals → 2 row(s)</text>
-  <text x="252" y="304" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">08:00:05 INFO  nomaflow  run SUCCEEDED in 3 s</text>
-  <rect x="10" y="84" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résumé</text>
-  <text x="20" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">déclencheur, horaires, lignes</text>
-  <line x1="210" y1="101.0" x2="240" y2="95" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rhi-arrow)"/>
-  <rect x="10" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Étapes</text>
-  <text x="20" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">état et erreur par étape</text>
-  <line x1="210" y1="177.0" x2="240" y2="165" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rhi-arrow)"/>
-  <rect x="10" y="270" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Log</text>
-  <text x="20" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">suivi en direct, téléchargement</text>
-  <line x1="210" y1="287.0" x2="240" y2="280" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rhi-arrow)"/>
-  <rect x="1000" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">État</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">QUEUED · RUNNING · SUCCEEDED…</text>
-  <line x1="1000" y1="47.0" x2="960" y2="41" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rhi-arrow)"/>
+  <rect x="220" y="14" width="760" height="362" rx="14" fill="url(#nfr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Exécutions</text>
+  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Toutes les exécutions, les plus récentes en premier</text>
+  <rect x="240" y="72" width="250" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="86.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Chercher une tâche, un utilisateur, une erreur…</text>
+  <rect x="500" y="72" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="510" y="86.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Toutes les tâches ▾</text>
+  <rect x="638" y="72" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="648" y="86.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">7 derniers jours ▾</text>
+  <rect x="910" y="75" width="58" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="939.0" y="86.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">en direct</text>
+  <rect x="240" y="104" width="53" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.5" y="116.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tout 214</text>
+  <rect x="299" y="104" width="58" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="328.0" y="116.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">RUNNING 1</text>
+  <rect x="363" y="104" width="53" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="389.5" y="116.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">FAILED 6</text>
+  <rect x="422" y="104" width="76" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="460.0" y="116.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED 205</text>
+  <rect x="504" y="104" width="53" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="530.5" y="116.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">MISSED 2</text>
+  <text x="240" y="146" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Aujourd'hui · 3 exécutions</text>
+  <rect x="240" y="156" width="720" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="163" width="47" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="273.5" y="174.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">RUNNING</text>
+  <text x="340" y="175" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">10:42</text>
+  <text x="385" y="175" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <rect x="550" y="163" width="55" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="577.5" y="174.2" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">apps_id 2</text>
+  <text x="650" y="175" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">👤 j.martin</text>
+  <text x="780" y="175" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">1 min 12 s</text>
+  <rect x="780" y="179" width="70" height="3" rx="1.5" fill="#1e293b"/><rect x="780" y="179" width="42" height="3" rx="1.5" fill="#4a9eff"/>
+  <text x="940" y="175" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif"></text>
+  <rect x="240" y="190" width="720" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="197" width="55" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="277.5" y="208.2" fill="#4ade80" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="340" y="209" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">10:15</text>
+  <text x="385" y="209" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <rect x="550" y="197" width="55" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="577.5" y="208.2" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">apps_id 1</text>
+  <text x="650" y="209" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">👤 j.martin</text>
+  <text x="780" y="209" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">4 min 2 s</text>
+  <text x="940" y="209" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">48 210</text>
+  <rect x="240" y="224" width="720" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="231" width="43" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="271.5" y="242.2" fill="#f87171" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">FAILED</text>
+  <text x="340" y="243" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">02:00</text>
+  <text x="385" y="243" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
+  <text x="650" y="243" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">⏱ Planification</text>
+  <text x="780" y="243" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">18 s</text>
+  <text x="940" y="243" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif"></text>
+  <text x="385" y="256" fill="#f87171" fontSize="8" fontFamily="system-ui, sans-serif">ORA-12170: TNS connect timeout</text>
+  <text x="240" y="286" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Hier · 1 exécution</text>
+  <rect x="240" y="296" width="720" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="303" width="55" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="277.5" y="314.2" fill="#4ade80" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="340" y="315" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">08:00</text>
+  <text x="385" y="315" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">crm-daily-pipeline</text>
+  <text x="650" y="315" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">⏱ Planification</text>
+  <text x="780" y="315" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">6 s</text>
+  <text x="940" y="315" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recherche et filtres</text>
+  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tâche, période — gardés</text>
+  <line x1="210" y1="67.0" x2="240" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
+  <rect x="10" y="108" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="123" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pastilles d'état</text>
+  <text x="20" y="136" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avec leurs effectifs</text>
+  <line x1="210" y1="125.0" x2="240" y2="113" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
+  <rect x="10" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécutions par jour</text>
+  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic ouvre l'exécution</text>
+  <line x1="210" y1="217.0" x2="250" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En direct</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rafraîchi pendant une exécution</text>
+  <line x1="1000" y1="77.0" x2="950" y2="83" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
+  <rect x="1000" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'application de l'exécution</text>
+  <line x1="1000" y1="167.0" x2="600" y2="165" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
+  <rect x="1000" y="230" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Avancement</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">étapes faites / total</text>
+  <line x1="1000" y1="247.0" x2="850" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfr-arrow)"/>
 </svg>
 
 ---
 
-## Où trouver les exécutions \{#where\}
+## La page Exécutions \{#where\}
 
-| Depuis | Ouvre |
+**Exploitation → Exécutions**, dans le menu de Nomaflow, liste toutes les exécutions, les plus récentes en premier.
+
+| Élément | Usage |
 |---|---|
-| *dernière* sur une carte de tâche | Le détail de la dernière exécution de la tâche. |
-| La liste **Exécutions** (menu Nomaflow ; lien **Exécutions** en haut d'un détail) | Les dernières exécutions de toutes les tâches. |
-| Une notification sur une exécution | Son détail, par le lien de la notification. |
+| **Chercher** | Une tâche, un utilisateur, un message d'erreur. |
+| **Toutes les tâches** | Une seule tâche. |
+| Période | *Dernières 24 heures*, *7 derniers jours* (par défaut), *30 derniers jours*, *Tout*. |
+| Pastilles d'état | **Tout**, puis chaque état présent avec son effectif — `RUNNING`, `QUEUED`, `FAILED`, `SUCCEEDED`, `CANCELED`, `MISSED`. Un clic ne garde que cet état ; un second clic l'efface. |
+
+Les filtres sont conservés par le navigateur. Les exécutions sont groupées par jour — *Aujourd'hui*, *Hier*, puis la date — et chaque ligne présente :
+
+- l'état et l'heure de début ;
+- la tâche et les paramètres de l'exécution : pour une tâche exécutée par application, l'application traitée ;
+- son origine : la planification, un utilisateur, ou la tâche appelante ;
+- la durée — qui s'incrémente pendant l'exécution, avec une barre des étapes terminées —, les lignes traitées, et sous une exécution en échec son erreur.
+
+Tant qu'une exécution est en cours, la page se rafraîchit d'elle-même (*en direct*). Un clic sur une ligne ouvre le détail de l'exécution ; **Afficher plus** charge les plus anciennes. Le détail d'une exécution s'ouvre aussi depuis l'état de la dernière exécution sur la [page des Tâches](../jobs/catalog.md#card) et depuis le lien d'une notification.
 
 ---
 
@@ -117,8 +153,8 @@ La page se rafraîchit toutes les deux secondes tant que l'exécution est en cou
 | Partie | Contenu |
 |---|---|
 | **Résumé** | Tâche, Déclencheur (`scheduled` ou `manual`, et qui l'a lancée — un nom d'utilisateur, ou `call_job:<tâche>@<exécution>` pour une tâche lancée par une autre), Démarrée, Terminée, Lignes affectées. |
-| **Run with parameters** | Affiché quand l'exécution a été lancée avec des valeurs particulières : celles choisies pour cette exécution (paramètres partagés, arguments des étapes, étapes sautées, niveau de journal). |
-| **Étapes** | Une ligne par étape : n°, nom, Type, Tentative, État, Erreur. Une étape `file_load` affiche aussi *N read · N inserted · N rejected* et, si besoin, **Rejected rows (csv)**. |
+| **Exécuter avec des paramètres** | Affiché quand l'exécution a été lancée avec des valeurs particulières : celles choisies pour cette exécution (paramètres partagés, arguments des étapes, étapes sautées, niveau de journal). |
+| **Étapes** | Une ligne par étape : n°, nom, Type, Tentative, État, Erreur. Une étape `file_load` affiche aussi *N read · N inserted · N rejected*, le fichier envoyé pour cette exécution — un clic le télécharge à nouveau — et, si besoin, **Rejected rows (csv)**. |
 | **Journal** | Les lignes écrites pendant l'exécution, au niveau de journal de l'exécution. **Suivre** garde les dernières lignes visibles (**Pause** l'arrête) ; **Télécharger** enregistre le journal complet. |
 
 Le journal conserve les 5 000 dernières lignes d'une exécution.
@@ -127,4 +163,4 @@ Le journal conserve les 5 000 dernières lignes d'une exécution.
 
 ## Durée de conservation \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches supprime les anciennes exécutions avec leurs étapes et leurs journaux : par défaut, celles de plus de 30 jours, en gardant au plus 100 exécutions par tâche, avec un contrôle toutes les 60 minutes. Voir [Administration](../administration.md#retention).
+Le panneau **Rétention de l'historique des exécutions** de la page des Tâches supprime les anciennes exécutions avec leurs étapes et leurs journaux : par défaut, celles de plus de 30 jours, en gardant au plus 100 exécutions par tâche, avec un contrôle toutes les 60 minutes. Voir [Administration](../administration.md#retention).

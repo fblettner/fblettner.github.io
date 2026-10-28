@@ -110,7 +110,7 @@ keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fusea
 | Champ | Remarques |
 |---|---|
 | **Identifiant** | Lettres, chiffres, `-` et `_`. Figé une fois la tâche créée — il indexe l'historique des exécutions. Pour renommer : **Cloner** sous le nouvel identifiant, puis supprimer l'ancienne tâche. |
-| **Description** | Affichée sur la carte. |
+| **Description** | Affichée sur la ligne de la tâche et sur sa page. |
 | **Planification (cron)** | Des choix tout faits (Manuelle, Horaire, Quotidienne, Hebdomadaire, Mensuelle) ou un cron à cinq zones ; **Prochaines exécutions** en affiche les cinq suivantes. Vide : tâche manuelle. Voir [Planifications](./schedules.md). |
 | **Fuseau horaire** | Le nom IANA dans lequel la planification est évaluée. |
 | **Étiquettes** | Libellés libres, utilisés par le filtre de la page des Tâches. |
@@ -118,7 +118,7 @@ keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fusea
 
 ### Préréglages & plannings
 
-Les préréglages s'enregistrent depuis **Run with parameters → Save as preset…**. Ici, chacun peut recevoir sa propre **Planification (cron)**, son **Fuseau horaire** et une case **Planning activé** — voir [Préréglages planifiables](./schedules.md#schedulable-presets).
+Les préréglages s'enregistrent depuis **Exécuter avec des paramètres → Enregistrer comme préréglage…**. Ici, chacun peut recevoir sa propre **Planification (cron)**, son **Fuseau horaire** et une case **Planning activé** — voir [Préréglages planifiables](./schedules.md#schedulable-presets).
 
 ### Politique de réessai
 
@@ -126,11 +126,11 @@ Les préréglages s'enregistrent depuis **Run with parameters → Save as preset
 
 ### Alertes
 
-**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
+**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. **Doit avoir réussi avant** fixe une échéance (`07:00`, dans le fuseau horaire de la tâche) : un jour où la tâche est planifiée, si aucune exécution n'a réussi à cette heure, les destinataires reçoivent *Job &lt;id&gt; is late* — encore en cours, en échec ou jamais démarrée. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
 
 ### Paramètres partagés
 
-Des paires nom / valeur fusionnées dans les arguments de chaque étape `python` (la valeur propre d'une étape l'emporte). Elles apparaissent aussi, modifiables, dans **Run with parameters**. La section s'intitule *Shared params* dans l'éditeur.
+Des paires nom / valeur fusionnées dans les arguments de chaque étape `python` (la valeur propre d'une étape l'emporte). Elles apparaissent aussi, modifiables, dans **Exécuter avec des paramètres**. La section s'intitule *Shared params* dans l'éditeur.
 
 ### Étapes
 
@@ -144,7 +144,7 @@ Quelques réglages n'ont pas de champ dans l'éditeur ; ils se définissent dans
 
 | Clé | Défaut | Signification |
 |---|---|---|
-| `log_level` (tâche) | `INFO` | Le niveau des exécutions planifiées : `WARNING`, `INFO` ou `DEBUG`. Une exécution manuelle choisit le sien dans **Run with parameters**. |
+| `log_level` (tâche) | `INFO` | Le niveau des exécutions planifiées : `WARNING`, `INFO` ou `DEBUG`. Une exécution manuelle choisit le sien dans **Exécuter avec des paramètres**. |
 | `timeout_seconds` (tâche) | `14400` | L'exécution entière s'arrête après ce délai. |
 | `enabled` (étape) | `true` | `false` saute toujours l'étape. |
 | `timeout_seconds` (étape) | `3600` | L'étape s'arrête après ce délai. |
@@ -179,4 +179,4 @@ name = "load-sales"
 
 - Donner à chaque étape un nom court verbe-objet (`load-sales`, `refresh-totals`) : c'est ce qu'affiche le détail de l'exécution.
 - Garder une tâche par flux métier ; enchaîner les tâches par une étape `call_job` plutôt que de copier des étapes.
-- Enregistrer, puis lancer une fois à la main avec **Run with parameters** en `DEBUG` avant d'activer la planification.
+- Enregistrer, puis lancer une fois à la main avec **Exécuter avec des paramètres** en `DEBUG` avant d'activer la planification.

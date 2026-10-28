@@ -119,9 +119,10 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
 | **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
+| **Tâches** | Les tâches Nomaflow avec leur prochaine exécution, leur planification en clair et leur dernier état, et **Exécuter** / **Mettre en pause** / **Reprendre**. Réservé aux superutilisateurs. | **Tâches (ids, dans l'ordre)** — vide = toutes les tâches planifiées —, **Seulement ces étiquettes**, **Lignes maximum** (12 si vide). |
 | **Liens** | Une carte de points d'entrée : des éléments du menu de l'application du tableau de bord, ou des adresses web. | **Liens par ligne** (1 à 4) ; pour chaque lien, un **Élément de menu** ou une **URL**, une **Icône**, un **Libellé** (vide : celui de l'élément de menu) et une **Description**. |
 
-Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche.
+Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche. Chaque carte porte son titre et son sous-titre à l'intérieur, et la page s'agrandit avec ses widgets : elle défile jusqu'au dernier.
 
 <svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -237,11 +238,17 @@ Ces trois widgets font d'un tableau de bord une **page de synthèse** : les chif
 
 L'éditeur affiche un aperçu du widget dès que le connecteur, la requête et les colonnes obligatoires sont choisis.
 
+### Tâches \{#jobs\}
+
+Une carte **Tâches** place l'ordonnanceur sur un tableau de bord. Chaque ligne présente la tâche — un clic l'ouvre dans Nomaflow —, sa prochaine exécution ou *En pause*, sa planification en clair (*chaque jour à 03:00*), l'état de sa dernière exécution, et trois boutons : **Exécuter** avec les valeurs enregistrées de la tâche, **Mettre la planification en pause**, **Reprendre la planification** — appliqués aussitôt. Sans identifiants, la carte liste les tâches planifiées, la plus proche d'abord, éventuellement limitées à certaines étiquettes (`main`, `nomasx1`). La carte se rafraîchit d'elle-même pendant une exécution.
+
+La carte est réservée aux superutilisateurs : pour les autres, elle n'apparaît pas sur le tableau de bord.
+
 ### Texte et liens \{#text-links\}
 
 Ces deux widgets font d'un tableau de bord la **page d'accueil d'une application** : quelques lignes sur ce qu'elle fait, les chiffres, puis par où commencer.
 
-- Un widget **Texte** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son texte, sans barre de défilement ; plus étroit, il défile dans sa tuile.
+- Un widget **Texte** ou **Liens** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son contenu, sans barre de défilement ; plus étroit, il défile dans sa tuile.
 - Un widget **Liens** n'affiche que les éléments de menu que l'utilisateur peut ouvrir : une entrée que ses rôles n'accordent pas disparaît de la carte. Une URL s'ouvre dans un nouvel onglet du navigateur. Un lien vers une URL exige un libellé.
 - À l'export, un texte garde son Markdown et une carte de liens devient un tableau (*Lien*, *Description*).
 
@@ -322,7 +329,7 @@ Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter o
 | Général | Titre, description. |
 | Période | **Ajouter une période** : *S'ouvre sur* (un préréglage, ou la valeur de l'application), *Colonne de date* ou *élément du dictionnaire*, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
 | Filtres | **Ajouter un filtre** : les listes déroulantes de la barre. |
-| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte** ou **Liens**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
+| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
 
 Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
 

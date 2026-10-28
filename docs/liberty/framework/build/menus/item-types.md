@@ -261,6 +261,7 @@ A `job` leaf opens the page of a Nomaflow job for users who do not administer No
 | **`type`** | `job` — *Job (run it, follow its log)* in the type list. |
 | **`target`** | The job id. The dropdown lists every job with the first line of its description. |
 | **`connector`** | Must NOT be set. |
+| **`params`** | Optional: `{ preset = "Licences" }` runs the job with one of its presets — one job, several menu entries. |
 
 The item needs the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
 

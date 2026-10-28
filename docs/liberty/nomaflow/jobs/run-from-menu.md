@@ -99,10 +99,11 @@ A **job** menu item puts a Nomaflow job in an application's menu, for users who 
 | Part | Content |
 |---|---|
 | Title and description | The menu item's label, then the job's description. |
-| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. |
+| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. A parameter that accepts several values shows as checkboxes headed by **All**. |
 | Files | One picker per `file_load` step that needs a file — **File for the step “load”**, with the sheet when the step names one. Accepted: `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. A step with its own path or a watched folder asks for nothing: it reads its file. |
 | **Run** | Uploads the files and starts the run. *Pick the file(s) first.* or *“Company” is required.* when something is missing. One run at a time: while one is going, the button waits. |
 | **Log** | The run's state and its log, refreshed every 2 seconds while the run is queued or running, the error in red. **Files of the run** offers the files it produced — the rejected rows of a load. |
+| **File loaded** | Under the log, the file uploaded for the selected run, to download again. |
 | **Previous runs** | The last 20 runs: start, state, duration, who ran it (or the trigger, for a scheduled run), rows and the start of the error. A click on a run shows its log. |
 
 The run is an ordinary Nomaflow run: the operators see it in the [run history](../runs/history.md), its notifications and alerts apply.
@@ -112,6 +113,12 @@ The run is an ordinary Nomaflow run: the operators see it in the [run history](.
 ## Putting a job in a menu \{#menu\}
 
 In **Settings → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+
+---
+
+### A preset in the menu \{#preset\}
+
+An item can pin one of the job's [presets](./schedules.md#schedulable-presets) with `params = { preset = "Licences" }`: the page then runs the job with that preset's parameters and step switches. One job thus gives several menu entries — *Collect security and SoD*, *Collect licences* —, each a preset. The menu item's label names the page.
 
 ---
 
@@ -140,13 +147,16 @@ choices_from = "explorer_models:nomajde"
 |---|---|
 | `name` | The step argument the value is given to. |
 | `label`, `l` | The label shown, per language. Default: the name. |
-| `step` | The step that receives the value. |
+| `step` | The step that receives the value. Without it, the value goes to every step of the job. |
 | `default` | The pre-filled value. |
 | `required` | `true`: the job does not start without a value. |
 | `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
-| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application. |
+| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application; or `query:<connector>/<query>:<value column>:<label column>` — the rows of a read query, such as the applications of Nomasx-1. |
+| `multiple` | `true`: several values may be ticked, with **All**. |
 
-A blank value means *not set*: the step's own default applies.
+A blank value means *not set*: the step's own default applies. The same parameters show in the operators' **Run with parameters** window.
+
+**One run per value.** A job that declares `for_each = "<parameter>"` runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
 
 ---
 
@@ -154,6 +164,6 @@ A blank value means *not set*: the step's own default applies.
 
 | Application | Folder | Jobs |
 |---|---|---|
-| Nomasx-1 | **Jobs** | Collect security, Collect licences — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
+| Nomasx-1 | **Jobs** | Collect security and SoD, Collect licences, Licence audit report, Security & SoD report — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
 | Nomajde | **Jobs** | Re-merge security (change package), Re-merge security (all roles), Refresh data dictionary (Explorer models) — see [Nomajde jobs](../../nomajde/jobs.md). |
 | Sales demo | **Import** | Items file, Companies file, Sales file (one month), Refresh periods, Load the sample files — see [The sales demo](../../framework/demo-app.md#loads). |

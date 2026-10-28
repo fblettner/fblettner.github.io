@@ -130,6 +130,8 @@ Every dropdown resolves server-side against live catalogs — *Application* agai
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 
+**Every month, by e-mail** — *Jobs → Licence audit report* renders the same PDF for one or several applications and mails it to the auditors' role; scheduled on the 1st of the month once enabled. See [Nomasx-1 jobs](../jobs.md#reports).
+
 ---
 
 ## Before you run

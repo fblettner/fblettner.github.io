@@ -130,6 +130,8 @@ Chaque liste déroulante se résout côté serveur sur des catalogues vivants �
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` quand on veut éditer ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
+**Chaque mois, par e-mail** — *Tâches → Rapport d'audit des licences* produit le même PDF pour une ou plusieurs applications et l'envoie au rôle des auditeurs ; planifié le 1er du mois une fois activé. Voir [Tâches de Nomasx-1](../jobs.md#reports).
+
 ---
 
 ## Avant d'exécuter

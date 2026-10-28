@@ -49,7 +49,9 @@ Sur une installation Python, les mêmes étapes tiennent en trois commandes — 
 
 ## 3 — Connecter le système source \{#source\}
 
-Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Paramètres → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer les tâches de collecte depuis **Nomaflow**. L'ordre et les paramètres de ces tâches sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
+Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Paramètres → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer **`nomasx1-roles`** pour créer les rôles d'auditeur et d'administrateur, et la collecte — `nomasx1-collect-all` — depuis **Nomaflow** ou depuis *Nomasx-1 → Tâches*. Les tâches et leurs paramètres sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
+
+Nomajde écrit aussi dans JD Edwards par son serveur AIS : l'adresse, l'utilisateur et la vérification du certificat viennent des variables d'environnement `JDE_AIS_URL`, `JDE_AIS_USER` et `JDE_AIS_VERIFY_SSL` (dans `.env` ou `secrets.env`), ou se règlent directement dans **Paramètres → Connecteurs**. Une valeur réglée dans les Paramètres est conservée à chaque mise à jour.
 
 ---
 
@@ -66,7 +68,10 @@ Un nouveau wheel apporte de nouveaux écrans, entrées de menu, éléments du di
 | Créée sur le serveur | Toujours conservée. |
 | Retirée par l'éditeur | Supprimée seulement si elle n'a jamais été modifiée. |
 | Pools et chaque secret `ENC:` | Toujours repris de la configuration en place. |
+| Une valeur fixée sur le serveur là où le wheel livre une variable (`${JDE_AIS_USER:-JDE}`) | Toujours la vôtre — une vérification TLS désactivée dans les Paramètres le reste. |
 | `theme.toml` | Toujours le vôtre. |
+
+**Les tâches Nomaflow** sont fusionnées tâche par tâche. La partie produit d'une tâche livrée — ses étapes, sa description, ses étiquettes, les paramètres qu'elle propose — est mise à jour ; ce qui a été réglé dessus est conservé : activation, planification, fuseau horaire, préréglages, alertes, réessais, niveau de journal, délai et valeurs de ses paramètres. Les tâches créées sur le serveur restent. Une tâche livrée dont les étapes ont été modifiées est conservée telle quelle et listée à la fin ; une tâche marquée `override = true` dans `jobs.toml` est toujours conservée telle qu'enregistrée.
 
 Ce qui a été livré est enregistré sous `config/.bundled/` : la mise à jour suivante distingue ainsi « jamais modifié » de « modifié ». Les entités conservées parce qu'elles ont été modifiées localement sont listées en fin d'exécution : les marquer `override = true` pour les garder définitivement, ou relancer avec `--force-config` pour prendre la version de l'éditeur.
 

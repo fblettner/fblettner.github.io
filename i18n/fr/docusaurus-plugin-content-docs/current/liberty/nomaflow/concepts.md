@@ -64,7 +64,7 @@ Une **tâche** est une entrée de `jobs.toml` : un **identifiant** (lettres, chi
 
 ## Étape \{#step\}
 
-Une **étape** est une unité de travail, de l'un des neuf types : `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
+Une **étape** est une unité de travail, de l'un des dix types : `sql_query`, `sql_copy`, `file_load`, `file_export`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
 
 ## Planification \{#schedule\}
 
@@ -72,7 +72,7 @@ Un **cron** à cinq zones évalué dans le **fuseau horaire** de la tâche. Les 
 
 ## Préréglage \{#preset\}
 
-Un jeu de valeurs d'exécution enregistré — paramètres partagés, arguments d'étapes, étapes désactivées, niveau de journal — créé depuis **Run with parameters**. Un préréglage peut avoir sa propre planification : une tâche, plusieurs planifications avec des entrées différentes.
+Un jeu de valeurs d'exécution enregistré — paramètres partagés, arguments d'étapes, étapes désactivées, niveau de journal — créé depuis **Exécuter avec des paramètres**. Un préréglage peut avoir sa propre planification : une tâche, plusieurs planifications avec des entrées différentes.
 
 ## Déclencheur \{#trigger\}
 
@@ -88,7 +88,7 @@ Un passage d'une tâche, avec un identifiant, son déclencheur, son début et sa
 |---|---|---|
 | Paramètres partagés | La tâche | Les arguments de chaque étape `python`. |
 | Arguments d'étape (`op_kwargs`) | L'étape | Cette étape — ils l'emportent sur les paramètres partagés. |
-| Run with parameters | Une exécution | Cette exécution seulement ; `jobs.toml` n'est pas modifié. |
+| Exécuter avec des paramètres | Une exécution | Cette exécution seulement ; `jobs.toml` n'est pas modifié. |
 
 `file_load` lit les paramètres d'exécution sous la forme `${params.x}` dans son chemin et ses constantes ; `sql_query` prend ses propres `params`.
 

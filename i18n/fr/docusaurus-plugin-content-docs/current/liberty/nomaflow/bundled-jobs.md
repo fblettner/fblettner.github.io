@@ -1,6 +1,6 @@
 ---
 title: Tâches livrées
-description: "Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de rafraîchissement, de synchronisation, de SoD et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Catalogue → ▶ Exécuter, planification via le planificateur standard ou déclenchement depuis la CI."
+description: "Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de synchronisation, de collecte, de rapport et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Catalogue → ▶ Exécuter, planification via le planificateur standard ou déclenchement depuis la CI."
 keywords: [Nomaflow, tâches livrées, jobs.toml, Nomasx-1, Nomajde, liberty-apps, préchargement, installation, rafraîchissement, synchronisation, SoD, audit trail, LDAP, deploy-databases, init-schema, security, license]
 ---
 
@@ -15,12 +15,10 @@ Chaque tâche est une fine enveloppe autour d'un appelable Python livré dans le
 | **Installation** | Provisionnement unique des bases de données et du schéma. | [Tâches d'installation](#install) |
 | **Préchargement** | Export/import de données de référence curatées — pour les nouvelles installations client ou la promotion entre environnements. | [Tâches de préchargement](#preload) |
 | **Synchronisation** | Copie des tables de contrôle et de dictionnaire en amont vers le miroir Nomajde local. | [Tâches de synchronisation](#sync) |
-| **Collecte sécurité** | Lecture de la sécurité JD Edwards et du LDAP dans le schéma Nomasx-1. | [Tâches de collecte sécurité](#security) |
-| **Collecte licences** | Lecture des données de licence, employés et OUT depuis JDE vers le schéma Nomasx-1. | [Tâches de collecte licences](#license) |
-| **Détection SoD** | Application de la matrice de séparation des tâches sur les données de sécurité collectées. | [Tâches SoD](#sod) |
-| **Propriétés base de données** | Lecture des métadonnées Oracle (options, fonctionnalités, partitionnement, licences). | [Tâches base de données](#database) |
+| **Collecte** | Une seule tâche collecte tout ce dont Nomasx-1 a besoin pour une ou plusieurs applications : sécurité JD Edwards, séparation des tâches, licences, Object Usage Tracking, et au besoin l'annuaire, le journal d'activité, les propriétés de la base Oracle et les références croisées. | [Tâche de collecte](#collect) |
+| **Rapports** | Les deux rapports d'audit, produits chaque mois et envoyés aux auditeurs. | [Tâches de rapport](#reports) |
 | **Audit trail** | Capture des modifications via LogMiner depuis la base source d'audit. | [Tâches d'audit trail](#audit-trail) |
-| **Maintenance** | Rafraîchissement des vues matérialisées, reconstruction des références croisées, remise à zéro de SCN, mise à niveau du schéma. | [Tâches de maintenance](#maintenance) |
+| **Maintenance** | Rafraîchissement des vues matérialisées, extraction des références croisées, purge des versions de configuration. | [Tâches de maintenance](#maintenance) |
 
 Toutes les tâches livrées arrivent avec **`enabled = false`** — elles apparaissent dans le catalogue mais ne se déclenchent pas automatiquement. L'opérateur active une planification (ou les exécute à la demande) une fois l'installation câblée.
 
@@ -54,8 +52,8 @@ Toutes les tâches livrées arrivent avec **`enabled = false`** — elles appara
   <rect x="315" y="146" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="373.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
   <rect x="605" y="74" width="355" height="102" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="617" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-security-1</text>
-  <text x="617" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">JDE security → nomasx1</text>
+  <text x="617" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <text x="617" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">toutes les collectes → nomasx1</text>
   <rect x="617" y="122" width="48" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
   <text x="641.0" y="134.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">manual</text>
   <text x="945" y="94" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">○ off</text>
@@ -136,7 +134,7 @@ La plupart des tâches du bundle partagent la même forme de paramètres sous `[
 | `target_connector` | `nomasx1` | Connecteur d'**écriture**. À surcharger pour une installation parallèle (`nomasx1b`). |
 | `target_schema` | `nomasx1` | Nom du schéma à l'intérieur du connecteur cible. |
 
-Surcharges à l'exécution : ouvrir *Exécuter avec paramètres* sur la fiche de la tâche avant ▶ Exécuter. Surcharges par planification : les définir sur le bloc `[[jobs.schedules]]` dans votre `jobs.toml` de surcharge.
+Surcharges à l'exécution : **Exécuter**, sur la ligne de la tâche, ouvre *Exécuter avec des paramètres*. Surcharges par planification : les définir sur le bloc `[[jobs.schedules]]` dans le `jobs.toml` de surcharge.
 
 ---
 
@@ -244,13 +242,26 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 
 ---
 
+### `nomasx1-roles` \{#nomasx1-roles\}
+
+**Crée ou met à jour les rôles de Nomasx-1.**
+
+| Rôle | Accorde |
+|---|---|
+| `nomasx1_auditor` | Toutes les lectures des données de Nomasx-1, l'explorateur de données, l'assistant IA et les deux tâches de rapport ; les rapports mensuels lui sont envoyés. |
+| `nomasx1_admin` | Tout : l'application entière, ses paramètres et toutes les tâches `nomasx1-*`. |
+
+À lancer une fois après l'installation et après chaque mise à jour, pour que les nouvelles requêtes de lecture soient accordées ; attribuer ensuite les rôles aux utilisateurs dans **Paramètres → Access**. Peut être relancée sans risque ; livrée désactivée.
+
+---
+
 ## Tâches de préchargement \{#preload\}
 
 Le **bundle de référence** curaté est livré dans `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz`. La tâche d'export construit le bundle depuis une installation source ; la tâche d'import le charge dans une installation cible.
 
 ### `nomasx1-export-reference` \{#nomasx1-export-reference\}
 
-**Extraction des tables de référence Nomasx-1 curatées vers un bundle `.tar.gz`.** Le bundle contient les lignes de référence `settings_*` et `sod_*` (~2 000 lignes, ~35 Ko) — les données de référence curatées livrées avec Nomasx-1, adaptées à l'amorçage des nouvelles installations client. Surcharger `output_path` ou `source_connector` via *Exécuter avec paramètres*.
+**Extraction des tables de référence Nomasx-1 curatées vers un bundle `.tar.gz`.** Le bundle contient les lignes de référence `settings_*` et `sod_*` (~2 000 lignes, ~35 Ko) — les données de référence curatées livrées avec Nomasx-1, adaptées à l'amorçage des nouvelles installations client. Surcharger `output_path` ou `source_connector` via *Exécuter avec des paramètres*.
 
 | Étape | Appelable |
 |---|---|
@@ -314,7 +325,7 @@ Réplication des tables de contrôle et de dictionnaire en amont depuis JD Edwar
 
 Chaque étape utilise `type_coercion = "jde"` et `decimal_mode = "truncate"` — les types de colonne JDE sont mis en correspondance avec du SQL standard à l'entrée (par exemple `JULIANDATE` → `DATE`, `STRING(N)` tronqué en `VARCHAR`), avec troncature plutôt qu'arrondi sur les décimales.
 
-**Planification** — `30 2 * * *` (02h30 chaque jour, fuseau Europe/Paris dans le bundle). `enabled = false` par défaut — à activer depuis la fiche du catalogue une fois `jdedwards` câblé et après une première exécution manuelle ▶ Exécuter réussie.
+**Planification** — `30 2 * * *` (02h30 chaque jour, fuseau Europe/Paris dans le bundle). `enabled = false` par défaut — à activer depuis la ligne de la tâche une fois `jdedwards` câblé et après une première exécution manuelle ▶ Exécuter réussie.
 
 **Reprise et alertes** — 2 tentatives de reprise, alerte quand l'exécution dépasse 120 minutes.
 
@@ -363,137 +374,54 @@ Pour une re-fusion partielle — uniquement les parents affectés par *cette* mo
 
 ---
 
-## Tâches de collecte sécurité \{#security\}
+## Tâche de collecte \{#collect\}
 
-Lecture des données de sécurité JD Edwards vers le schéma Nomasx-1. La structure prend la forme d'une longue chaîne d'étapes mono-appelable — une fonction Python par entité JDE ou par table dérivée Nomasx-1.
+### `nomasx1-collect-all` \{#nomasx1-collect-all\}
 
-### `nomasx1-security-1` \{#nomasx1-security-1\}
+**Collecte, dans l'ordre, tout ce dont Nomasx-1 a besoin pour une application**, puis rafraîchit une seule fois les vues matérialisées à la fin.
 
-**Collecte de toutes les données de sécurité pour une application** — Utilisateurs / Rôles / Affectations / Menus / Accès. Chaque étape extrait une entité JDE (objets, sec objects, sec menus, etc.) ou construit une table dérivée Nomasx-1 (security_users, security_rights_actions, etc.).
-
-| Famille | Étapes | Description |
+| Famille | Étapes | Active par défaut |
 |---|---|---|
-| Entités JDE | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `JDE_TASKS`, `JDE_MENUS` | Extraction brute depuis F00950, F0094, F0092, F9012, F9001, F9000. |
-| Catalogues Nomasx-1 | `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `SECURITY_MENUS` | Utilisateurs, rôles, affectations de rôles et arbres de menus par application. |
-| Droits dérivés | `SECURITY_RIGHTS_MENUS`, `SECURITY_RIGHTS_APPS`, `SECURITY_RIGHTS_ACTIONS`, `SECURITY_RIGHTS_APPS_USERS`, `SECURITY_RIGHTS_ACTIONS_USERS` | Droits effectifs — par rôle, par utilisateur, sur les menus, applications et actions. |
-| Audit | `SECURITY_RIGHTS_AUDIT` | Piste d'audit des octrois et révocations de droits. |
-| Rafraîchissement | `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées en fin de chaîne. |
+| Sécurité JD Edwards | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `JDE_TASKS`, `JDE_MENUS`, `SECURITY_MENUS`, `SECURITY_RIGHTS_*` (menus, applications, actions, par utilisateur, audit) | Oui |
+| Séparation des tâches | `SOD_CONFLICT_DETAILS`, `SOD_CONFLICT_SUMMARY` — la matrice de *Paramètres → Séparation des tâches* appliquée à la sécurité tout juste collectée | Oui |
+| Licences | `LICENSE_JDE_EMPLOYEES`, `LICENSE_JDE_USERS` | Oui |
+| Object Usage Tracking | `LICENSE_JDE_OUT`, `LICENSE_JDE_OUT_OBJECTS`, `LICENSE_JDE_OUT_USERS`, `LICENSE_JDE_OUT_PURGE` | Oui |
+| Annuaire | `SECURITY_LDAP` — le LDAP / Active Directory défini dans *Paramètres → LDAP* | Non |
+| Journal d'activité | `SECURITY_ACTIVITY_LOG` | Non |
+| Base Oracle | `DB_ORA_PROPERTIES`, `DB_ORA_OPTIONS`, `DB_ORA_FEATURES`, `DB_ORA_PARTITIONS`, `DB_ORA_LICENSES` | Non |
+| Références croisées | `JDE_XREF_APPS` | Non |
+| Vues | `REFRESH_VIEWS` | Oui |
 
-Toutes les étapes s'exécutent séquentiellement (aucun parallélisme — l'ordre est important pour les tables dérivées).
+**Préréglages**
 
-**Paramètres standards** (`apps_id`, `source_connector = jdedwards`, `target_connector = nomasx1`, `target_schema = nomasx1`).
+| Préréglage | Exécute |
+|---|---|
+| **Security and SoD** | La sécurité et la séparation des tâches — les étapes de licences et d'OUT désactivées. |
+| **Licences** | Les licences et l'OUT — les étapes de sécurité et de SoD désactivées. |
+| **Everything** | Toutes les étapes, y compris l'annuaire, le journal d'activité, la base et les références croisées. |
 
-**Reprise et alertes** — 2 tentatives, alerte d'exécution longue à 30 minutes.
+**Applications** — la tâche propose les applications de *Paramètres → Applications* en cases à cocher, avec **Tout**. Elle s'exécute une fois par application cochée, l'une après l'autre. Dans une planification ou un préréglage, `apps_id = "all"` collecte toutes les applications à chaque déclenchement.
 
-**Quand l'exécuter** — quotidiennement pour les installations actives (lecture seule sur JDE). La première exécution après un nouveau rôle, utilisateur ou octroi de droit dans JDE rafraîchit le catalogue Nomasx-1 ; jusque-là, l'interface affiche l'instantané précédent.
+**Paramètres** — `source_connector = jdedwards`, `target_connector = nomasx1`. Deux tentatives en cas d'échec ; une alerte au-delà de 90 minutes.
+
+**Menu** — *Nomasx-1 → Tâches → Collecter la sécurité et la SoD* et *Collecter les licences* lancent les deux préréglages. Voir [Tâches de Nomasx-1](../nomasx1/jobs.md).
+
+**Quand l'exécuter** — chaque jour sur une installation active, avec une planification sur un préréglage : *Security and SoD* chaque nuit, *Licences* chaque semaine.
 
 ---
 
-### `nomasx1-ldap-1` \{#nomasx1-ldap-1\}
+## Tâches de rapport \{#reports\}
 
-**Collecte des utilisateurs Active Directory** via la connexion LDAP/AD configurée dans *Paramètres → LDAP*. Peuple la table Nomasx-1 `security_ldap` qui alimente les pages de réconciliation LDAP.
+### `nomasx1-report-licences` et `nomasx1-report-security-sox` \{#nomasx1-reports\}
 
-| Étape | Appelable |
+**Produisent un rapport d'audit et l'envoient.** Une [étape `report`](./steps.md#report) produit le PDF — l'[audit des licences](../nomasx1/reports/audit-licences.md) ou l'[évaluation Sécurité & SoD](../nomasx1/reports/security-sox.md) — pour une application ; une [étape `notify`](./steps.md#notify) l'envoie au rôle `nomasx1_auditor`, fichier joint.
+
+| Paramètre | Rôle |
 |---|---|
-| `SECURITY_LDAP` | `nomasx1.ldap:j_security_ldap` |
+| **Applications** | Une ou plusieurs applications, ou **Tout** — un rapport par application. |
+| **Language** | `fr` ou `en`. |
 
-**Paramètres** — forme standard (`source_connector = unused` — le serveur LDAP est configuré séparément).
-
-**Quand l'exécuter** — quotidiennement, après le rafraîchissement de la source LDAP ; ou à la demande avant une revue d'accès trimestrielle.
-
----
-
-## Tâches de collecte licences \{#license\}
-
-Lecture des données JDE pertinentes pour les licences — employés, utilisateurs transactionnels, Object Usage Tracking — vers le schéma Nomasx-1. Alimentent les tableaux de bord *Licences → JD Edwards*.
-
-### `nomasx1-employees-1` \{#nomasx1-employees-1\}
-
-**Collecte des employés depuis les modules RH de JD Edwards** — internes et externes. Peuple la table `license_jde_employees` ; rafraîchit les vues matérialisées en fin de chaîne.
-
-| Étape | Appelable |
-|---|---|
-| `LICENSE_JDE_EMPLOYEES` | `nomasx1.license:j_license_jde_employees` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Alerte d'exécution longue** — 5 minutes.
-
-**Quand l'exécuter** — hebdomadairement. Les données RH ne changent pas quotidiennement.
-
----
-
-### `nomasx1-license-1` \{#nomasx1-license-1\}
-
-**Collecte des utilisateurs depuis les tables JD Edwards — transactions uniquement.** Lit qui a effectivement réalisé des transactions dans JDE sur la fenêtre récente (sert d'entrée au comptage des utilisateurs licenciables). Peuple `license_jde_users`.
-
-| Étape | Appelable |
-|---|---|
-| `LICENSE_JDE_USERS` | `nomasx1.license:j_license_jde_users` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Alerte d'exécution longue** — 30 minutes.
-
-**Quand l'exécuter** — quotidiennement (installations actives) ou hebdomadairement (installations moins sollicitées). À associer avec `nomasx1-employees-1` pour que les utilisateurs transactionnels soient rapprochés des fiches employés.
-
----
-
-### `nomasx1-out-1` \{#nomasx1-out-1\}
-
-**Collecte de l'Object Usage Tracking depuis JD Edwards.** Agrège les données OUT et purge les lignes conservées selon la rétention définie dans *Nomasx-1 → Paramètres → JDE → Rétention OUT*. Alimente les tableaux de bord OUT (composants, utilisateurs, objets).
-
-| Étape | Description |
-|---|---|
-| `LICENSE_JDE_OUT` | Extraction brute de l'OUT depuis JDE. |
-| `LICENSE_JDE_OUT_OBJECTS` | Agrégation par objet. |
-| `LICENSE_JDE_OUT_USERS` | Agrégation par utilisateur. |
-| `LICENSE_JDE_OUT_PURGE` | Purge des lignes plus anciennes que le paramètre de rétention. |
-| `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées. |
-
-**Alerte d'exécution longue** — 15 minutes.
-
-**Quand l'exécuter** — quotidiennement. Les données OUT s'accumulent rapidement ; un passage quotidien garde le tableau de bord pertinent et l'étape de purge maintient la base à une taille raisonnable.
-
----
-
-## Tâches SoD \{#sod\}
-
-### `nomasx1-sod-1` \{#nomasx1-sod-1\}
-
-**Collecte des séparations des tâches (SoD) à partir des données de sécurité et de la matrice définie dans *Nomasx-1 → Paramètres → SoD*.** Les données de sécurité sont un prérequis — à exécuter après `nomasx1-security-1`.
-
-| Étape | Description |
-|---|---|
-| `SOD_CONFLICT_DETAILS` | Lignes de détail par utilisateur et par conflit. |
-| `SOD_CONFLICT_SUMMARY` | Décomptes agrégés qui alimentent le tableau de bord SoD. |
-| `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées. |
-
-**Alerte d'exécution longue** — 10 minutes.
-
-**Quand l'exécuter** — quotidiennement, planifiée après `nomasx1-security-1` (afin que l'analyse SoD voie les affectations les plus fraîches). Ou à la demande après une action majeure de revue d'accès.
-
----
-
-## Tâches base de données \{#database\}
-
-Lecture des métadonnées Oracle depuis la base hébergeant JDE (ou toute cible Oracle câblée en tant que `oracle-target`). Alimente la page *Base de données → Oracle*.
-
-### `nomasx1-database-1` \{#nomasx1-database-1\}
-
-**Collecte des propriétés de la base Oracle.**
-
-| Étape | Description |
-|---|---|
-| `DB_ORA_PROPERTIES` | Version, édition, paramètres. |
-| `DB_ORA_OPTIONS` | Options installées (Spatial, OLAP, RAC, etc.). |
-| `DB_ORA_FEATURES` | Utilisation des fonctionnalités depuis `DBA_FEATURE_USAGE_STATISTICS`. |
-| `DB_ORA_PARTITIONS` | Utilisation du partitionnement par schéma. |
-| `DB_ORA_LICENSES` | Signaux agrégés pertinents pour la licence (utilisation des options, fonctionnalités et partitionnement). |
-
-**Connecteur source** — `oracle-target` (un connecteur que vous configurez vers la base Oracle à introspecter). La tâche ne lira pas depuis `jdedwards` — par conception, afin qu'une cible Oracle distincte puisse être auditée sans accorder de droits de lecture supplémentaires au connecteur JDE de Nomasx-1.
-
-**Alerte d'exécution longue** — 10 minutes.
-
-**Quand l'exécuter** — un passage mensuel suffit généralement. Les données qui alimentent les tableaux de bord Oracle évoluent lentement.
+**Planification** — le 1er de chaque mois à 06:00 (Europe/Paris) ; livrées désactivées. Les activer une fois le compte de messagerie renseigné dans les [notifications](./notifications.md#smtp).
 
 ---
 
@@ -519,7 +447,7 @@ Capture de données modifiées pilotée par LogMiner depuis la base source d'aud
 
 ### `nomasx1-audit-trail-reset-scn-1` \{#nomasx1-audit-trail-reset-scn-1\}
 
-**Remise à zéro du dernier SCN utilisé par Audit Trail pour une application.** À utiliser après une longue pause (la reprise de l'audit trail sur un historique trop long serait lente) ou après un changement de source d'audit. La valeur par défaut `scn = 0` fait reprendre la prochaine exécution sur le SCN courant — c'est-à-dire un démarrage à neuf depuis « maintenant ». Surcharger `scn` via *Exécuter avec paramètres* pour fixer un SCN précis.
+**Remise à zéro du dernier SCN utilisé par Audit Trail pour une application.** À utiliser après une longue pause (la reprise de l'audit trail sur un historique trop long serait lente) ou après un changement de source d'audit. La valeur par défaut `scn = 0` fait reprendre la prochaine exécution sur le SCN courant — c'est-à-dire un démarrage à neuf depuis « maintenant ». Surcharger `scn` via *Exécuter avec des paramètres* pour fixer un SCN précis.
 
 | Étape | Appelable |
 |---|---|
@@ -590,22 +518,6 @@ Enregistre le nombre de lignes de valeurs écrites.
 
 ---
 
-### `nomasx1-xref-1` \{#nomasx1-xref-1\}
-
-**Génération des références croisées pour les objets JD Edwards.** Construit la table JDE_XREF_APPS qui alimente les vues de références croisées (quelle application référence quel objet).
-
-| Étape | Appelable |
-|---|---|
-| `JDE_XREF_APPS` | `nomasx1.xref:j_jde_xref_apps` |
-
-**Paramètres** — `object_id = "all"` (défaut — traite chaque objet). À surcharger par un identifiant d'objet précis pour une reconstruction ciblée.
-
-**Alerte d'exécution longue** — 30 minutes.
-
-**Quand l'exécuter** — hebdomadairement. Les données XRef évoluent lentement ; seuls les objets ajoutés ou modifiés dans JDE comptent.
-
----
-
 ### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
 
 **Diagnostic : extraction de la définition brute d'un objet JD Edwards.** Écrit dans des fichiers le XML OMW décompressé des écrans de l'objet (F98751) et les textes qu'ils référencent (F98750), pour en examiner la structure brute — par exemple un onglet ou un identifiant de contrôle manquant. En lecture seule : rien n'est écrit dans la base cible.
@@ -618,24 +530,10 @@ Enregistre le nombre de lignes de valeurs écrites.
 
 | Paramètre | Défaut | Signification |
 |---|---|---|
-| `object_id` | `P01012` | L'objet à extraire — à renseigner dans *Exécuter avec paramètres*. |
+| `object_id` | `P01012` | L'objet à extraire — à renseigner dans *Exécuter avec des paramètres*. |
 | `output_dir` | `""` | Le dossier des fichiers. Vide : un dossier temporaire sur le serveur. |
 
 **Quand l'exécuter** — à la demande, pour analyser un manque dans les références croisées. Non planifiée.
-
----
-
-### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
-
-**Rafraîchissement du journal d'activité.** Interroge chaque table JDE modifiée récemment et agrège les enregistrements par utilisateur et par date. **Seules les tables modifiées sont parcourues** — la tâche suit un repère par table afin de ne pas relire l'historique complet à chaque exécution.
-
-| Étape | Appelable |
-|---|---|
-| `SECURITY_ACTIVITY_LOG` | `nomasx1.activity_log:j_security_activity_log` |
-
-**Alerte d'exécution longue** — 15 minutes.
-
-**Quand l'exécuter** — quotidiennement.
 
 ---
 
@@ -657,21 +555,18 @@ Enregistre le nombre de versions supprimées. Deux tentatives au total en cas d'
 
 ## Conseils de planification
 
-Un rythme quotidien typique sur une installation active :
+Un rythme type sur une installation active :
 
 | Heure | Tâche |
 |---|---|
-| 02h30 | `nomajde-daily-sync` (planification livrée). |
-| 03h00 | `nomasx1-security-1`. |
-| 03h30 | `nomasx1-license-1`. |
-| 04h00 | `nomasx1-out-1`. |
-| 04h30 | `nomasx1-ldap-1`. |
-| 05h00 | `nomasx1-sod-1` (après la sécurité, afin de disposer des affectations les plus fraîches). |
-| 05h30 | `nomasx1-activity-log-1`. |
+| 02:30 | `nomajde-daily-sync` (planification livrée). |
+| 03:00 | `nomasx1-collect-all`, préréglage *Security and SoD*, toutes les applications. |
+| Dimanche 04:00 | `nomasx1-collect-all`, préréglage *Licences*. |
+| Le 1er du mois à 06:00 | Les deux tâches de rapport. |
 
-L'audit trail (`nomasx1-audit-trail-1`) s'exécute généralement toutes les 15 à 60 minutes — sur un rythme distinct du rafraîchissement sécurité et licences.
+L'audit trail (`nomasx1-audit-trail-1`) s'exécute en général toutes les 15 à 60 minutes — un rythme distinct de la collecte.
 
-Les tâches livrées sont **enabled = false** par défaut. Définir la planification par tâche depuis *Nomaflow → Catalogue → \<tâche\> → onglet Planifications*, puis basculer `Enabled` sur la fiche du catalogue.
+Les tâches livrées sont **enabled = false** par défaut. Définir une planification dans l'éditeur de tâche, sur la tâche ou sur un préréglage, puis activer la tâche depuis sa ligne de la page des Tâches. Les principales — la collecte, les deux rapports, la synchronisation JD Edwards — figurent en tête de liste, dans **Tâches principales**.
 
 ---
 
@@ -679,11 +574,11 @@ Les tâches livrées sont **enabled = false** par défaut. Définir la planifica
 
 | Erreur | Symptôme | Correctif |
 |---|---|---|
-| `jobs.toml` du bundle écrasé lors de la mise à niveau du wheel — modifications locales perdues. | Les blocs `[[jobs]]` personnalisés disparaissent après `liberty-apps install`. | Conserver les tâches personnalisées dans un `jobs.toml` séparé hors du répertoire plugin du bundle ; ou sauvegarder le fichier avant la mise à niveau. |
+| Une tâche livrée dont les étapes ont été modifiées n'est pas mise à jour par le nouveau wheel. | La mise à jour la signale comme conservée. | Planifications, préréglages, alertes et valeurs des paramètres survivent d'eux-mêmes à une mise à jour ; garder les étapes telles que livrées, ou marquer la tâche `override = true` — voir [Déployer les applications préfabriquées](../installation/deploy-prebuilt-apps.md#merge). |
 | Une tâche de collecte échoue avec `No module named 'nomasx1'`. | Le code du plugin n'est pas dans le chemin des plugins du framework. | Exécuter `liberty-apps install --target $LIBERTY_APPS_DIR` pour matérialiser la charge ; recharger le framework. |
 | `nomasx1-import-reference` échoue avec *« target application not found »*. | Application non créée dans *Paramètres → Applications*. | Créer d'abord l'application dans l'interface ; le pré-contrôle refuse de démarrer sinon. |
 | `deploy-databases` produit une erreur de droits refusés. | Le pool `default` ne peut créer ni bases, ni rôles. | Pointer temporairement `default` sur un superutilisateur Postgres ; revenir en arrière après l'exécution. |
-| Planification définie mais la tâche ne se déclenche pas. | Le bascule sur la fiche du catalogue est sur OFF (le bundle livre `enabled = false`). | Activer `Enabled` sur la fiche APRÈS avoir défini la planification. |
+| Planification définie mais la tâche ne se déclenche pas. | La tâche est désactivée (le bundle livre `enabled = false`). | L'activer depuis sa ligne de la page des Tâches, une fois la planification définie. |
 | La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Paramètres → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
 | L'audit trail commence à produire des milliers de lignes par minute. | La tâche a démarré au SCN 0 — relecture de l'intégralité du journal d'archive. | Exécuter `nomasx1-audit-trail-reset-scn-1` (valeur par défaut `scn = 0` → la prochaine exécution reprend sur le SCN courant) pour repartir à neuf. |
 | Les vues matérialisées affichent des données obsolètes après une correction SQL manuelle. | L'étape REFRESH_VIEWS de fin de chaîne de la tâche de collecte ne s'est pas exécutée (vous l'avez court-circuitée). | Exécuter `nomasx1-refresh-views` manuellement. |
@@ -693,6 +588,6 @@ Les tâches livrées sont **enabled = false** par défaut. Définir la planifica
 ## Pour la suite
 
 - [Déployer les applications préfabriquées](../installation/deploy-prebuilt-apps.md) — comment le bundle parvient à l'installation au départ.
-- [Nomaflow → Tâches → Catalogue](./jobs/catalog.md) — l'interface de la fiche catalogue : activation des planifications, exécution à la demande, *Exécuter avec paramètres*.
+- [Nomaflow → Tâches → Catalogue](./jobs/catalog.md) — la page des Tâches : activation des planifications, exécution à la demande, *Exécuter avec des paramètres*.
 - [Nomaflow → Exécutions → Historique](./runs/history.md) — la page de détail par exécution où atterrissent les sorties des tâches livrées.
 - [Nomaflow → Python personnalisé](./custom-python.md) — comment écrire vos propres appelables aux côtés de ceux livrés dans `nomasx1.*`.

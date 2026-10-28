@@ -1,6 +1,6 @@
 ---
 title: Étapes
-description: "Les neuf types d'étapes de Nomaflow — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution."
+description: "Les dix types d'étapes de Nomaflow — sql_query, sql_copy, file_load, file_export, python, http, ldap_sync, call_job, report, notify — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution."
 keywords: [Nomaflow, étapes, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, chargement de tableur, CSV, replace_partition, Liberty Next]
 ---
 
@@ -13,6 +13,7 @@ Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent 
 | lance une requête nommée d'un connecteur SQL | **`sql_query`** |
 | copie une table entière d'un connecteur à un autre | **`sql_copy`** |
 | charge un classeur ou un fichier CSV dans une table | **`file_load`** |
+| écrit le résultat d'une requête de lecture dans un fichier Excel ou CSV | **`file_export`** |
 | appelle une fonction Python d'un plugin | **`python`** |
 | appelle une URL | **`http`** |
 | lit un annuaire LDAP / Active Directory dans une table | **`ldap_sync`** |
@@ -100,8 +101,8 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 | Champ | Défaut | Remarques |
 |---|---|---|
 | `name` | — | Affiché dans le détail de l'exécution ; unique dans la tâche. |
-| `type` | — | L'un des neuf types. |
-| `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Run with parameters**. |
+| `type` | — | L'un des dix types. |
+| `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Exécuter avec des paramètres**. |
 | `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
 
 Quand une étape échoue sur une erreur de base de données, le détail de l'exécution affiche la phrase de la base elle-même — *invalid input for query argument $1: 2025 (expected str, got int)* — et l'instruction part dans le journal du serveur.
@@ -149,7 +150,7 @@ Charge un classeur Excel (`.xlsx`, `.xlsm`) ou un fichier texte (`.csv`, `.txt`,
 
 Le fichier vient, par ordre de priorité :
 
-1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Run with parameters** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
+1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Exécuter avec des paramètres** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
 2. **de `path`** — un chemin sur le serveur, qui peut contenir `${params.x}` (un paramètre d'exécution), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx` ;
 3. **d'un dossier surveillé** — `watch_dir` et `watch_pattern` (`*.xlsx`) : chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur.
 
@@ -360,7 +361,9 @@ Produit un document dans la zone de travail de l'exécution : une [analyse ou un
 | **Rendre comme l'utilisateur** | Le document contient ce que voit cet utilisateur : le périmètre de données de ses rôles, avec ses attributs. Une synthèse rendue pour le responsable d'une société ne contient que cette société. |
 | **Rendre comme le rôle** | Le périmètre de données d'un rôle. Une règle dont les valeurs viennent d'un attribut utilisateur n'autorise rien dans ce cas : pour ces rôles, préférer **Rendre comme l'utilisateur**. |
 
-Sans l'un ni l'autre, le document est **sans restriction**. Le détail de l'exécution propose le fichier au téléchargement sous l'étape ; le journal le nomme avec sa taille.
+Pour un rapport de plugin, les paramètres de l'exécution — ceux de la tâche, ceux choisis au lancement, les paramètres utilisateur — sont transmis au rapport en plus de ceux de l'étape, convertis dans le type que déclare le rapport (un nombre reste un nombre) ; une valeur vide laisse la valeur par défaut du rapport.
+
+Sans utilisateur ni rôle, le document est **sans restriction**. Le détail de l'exécution propose le fichier au téléchargement sous l'étape ; le journal le nomme avec sa taille.
 
 ---
 
@@ -398,6 +401,24 @@ attach = ["*"]
 ```
 
 Planifier la tâche le premier du mois (cron `0 7 1 * *`) — voir [Planifications](./jobs/schedules.md).
+
+---
+
+## Export de fichier — `file_export` \{#file-export\}
+
+Écrit le résultat d'une requête **de lecture** nommée dans un fichier de la zone de travail de l'exécution — pour qu'un autre système le récupère, ou qu'une étape `notify` le joigne. Une requête d'écriture est refusée.
+
+| Champ (éditeur) | Remarques |
+|---|---|
+| **Connecteur**, **Requête** | La requête de lecture à exécuter. |
+| **Paramètres** | Ses paramètres liés ; ceux de l'exécution sont transmis aussi. Une valeur peut utiliser `${params.x}`. |
+| **Format** | *Excel (xlsx)* (par défaut) ou *CSV*. |
+| **Nom du fichier (par défaut : la requête)** | Peut utiliser `${params.x}` et `${run.id}` : `sales-${params.period}`. |
+| **Feuille** | Excel seulement — le nom de la requête par défaut. |
+| **Séparateur CSV**, **Encodage** | CSV seulement — `;` et `utf-8-sig` par défaut. |
+| **Copier aussi dans ce dossier (optionnel)** | Un dossier du serveur où une copie est également écrite, créé s'il n'existe pas : `/data/out/${params.period}`. |
+
+Les lignes sont lues dans la base au fil de l'eau, dans la limite de lignes du connecteur — le journal indique quand l'export a été plafonné. La ligne d'en-tête porte les libellés des colonnes ; les colonnes masquées sont écartées. Le détail de l'exécution propose le fichier sous l'étape, et la rétention de la zone de travail s'y applique — pas à la copie dans l'autre dossier.
 
 ---
 

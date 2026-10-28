@@ -1,6 +1,6 @@
 ---
 title: Tableau de bord Vue d'ensemble
-description: "Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche et les dernières exécutions — sur les 7 derniers jours par défaut."
+description: "Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche, les dernières exécutions et la dernière réussite par tâche, avec la carte des tâches planifiées — sur les 7 derniers jours par défaut."
 keywords: [Nomaflow, vue d'ensemble, tableau de bord, exécutions, échecs, planifications manquées, en cours, durée, attention, supervision]
 ---
 
@@ -123,10 +123,12 @@ La page s'ouvre sur **7 derniers jours** ; le sélecteur de période de la barre
 | **Échecs** — exécutions terminées en erreur | Les exécutions en échec, le nombre de tâches concernées et les planifications manquées. |
 | **En cours** — en ce moment | En exécution · en attente. |
 | **Durée moyenne** — exécutions terminées | La durée moyenne, et la plus longue. |
+| **Tâches planifiées** | Ce qui s'exécute ensuite : chaque tâche planifiée avec sa prochaine exécution ou *En pause*, sa planification en clair et son dernier état, et les boutons **Exécuter**, **Mettre la planification en pause** et **Reprendre la planification**. Réservé aux superutilisateurs. |
 | **Exécutions par jour** | Une barre par jour, par issue. |
 | **Ce qui demande attention** | Par tâche : les échecs avec leur dernière erreur, les planifications manquées, les exécutions en cours depuis plus d'une heure — en rouge pour un échec, en orange pour le reste, avec la date de la dernière occurrence. |
 | **Exécutions par tâche** | La part des exécutions de chaque tâche sur la période. |
 | **Durée moyenne par tâche** | En secondes, les plus lentes d'abord. |
 | **Dernières exécutions** | Les dernières exécutions, avec leur état ; l'erreur, ou le déclencheur, sous chacune. |
+| **Dernière réussite par tâche** | Chaque tâche avec sa dernière exécution réussie, les échecs depuis et son dernier état : les tâches en échec d'abord, une tâche sans réussite depuis une semaine en orange ; le chiffre donne les jours depuis la dernière réussite. |
 
-Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md).
+Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md). La même carte des tâches peut être ajoutée à n'importe quel tableau de bord — voir [Tableaux de bord → Tâches](../framework/dashboards.md#jobs).

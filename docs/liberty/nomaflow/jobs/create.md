@@ -110,7 +110,7 @@ keywords: [Nomaflow, create job, job editor, schedule, timezone, presets, retry 
 | Field | Notes |
 |---|---|
 | **Id** | Letters, digits, `-` and `_`. Fixed once the job exists — it keys the run history. To rename, **Clone** under the new id, then delete the old job. |
-| **Description** | Shown on the card. |
+| **Description** | Shown on the job's line and on its page. |
 | **Schedule (cron)** | Ready-made choices (Manual, Hourly, Daily, Weekly, Monthly) or a five-field cron; **Next runs** previews the next five. Blank: manual only. See [Schedules](./schedules.md). |
 | **Timezone** | The IANA name the schedule is evaluated in. |
 | **Tags** | Free labels, used by the filter of the Jobs page. |
@@ -126,7 +126,7 @@ Presets are saved from **Run with parameters → Save as preset…**. Here each 
 
 ### Alerts
 
-**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
+**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. **Must have succeeded by** sets a deadline (`07:00`, in the job's timezone): on a day the job is scheduled, if no run has succeeded by then, the recipients get *Job &lt;id&gt; is late* — still running, failed, or never started. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
 
 ### Shared params
 

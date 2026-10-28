@@ -415,7 +415,7 @@ Nomaflow est le planificateur de tâches intégré à Liberty Next : des tâches
 - **Pas de graphe de tâches.** Les étapes s'exécutent l'une après l'autre ; une tâche peut en lancer une autre (`call_job`) et l'attendre, mais rien ne s'exécute en parallèle dans une tâche.
 - **Un seul serveur.** Le planificateur s'exécute dans le processus du serveur : une seule instance.
 - **Pas de rattrapage automatique.** Une heure manquée pendant un arrêt du serveur est enregistrée **MISSED** et peut être notifiée ; la relancer reste une décision manuelle.
-- **Pas de bouton de rejeu.** Pour relancer avec les mêmes valeurs, les enregistrer comme préréglage ou les choisir de nouveau dans **Run with parameters**.
+- **Pas de bouton de rejeu.** Pour relancer avec les mêmes valeurs, les enregistrer comme préréglage ou les choisir de nouveau dans **Exécuter avec des paramètres**.
 
 ---
 
@@ -716,12 +716,13 @@ La barre latérale découpe le travail quotidien en sept sections plus la zone d
 | Section | Ce qu'elle couvre |
 |---|---|
 | **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
+| **Séparation des tâches**, **Revue de sécurité** | Deux tableaux de bord sous la Vue d'ensemble : les [conflits](./sod-dashboard.md) — tendance, risques, paires de rôles, conflits avérés — et la [revue des accès](./security-review.md) — douze contrôles et les comptes à revoir d'abord. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
 | **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |
 | **Licences** | Contrats CSI, photographie JD Edwards, licences Oracle requises, licences acquises, rapport d'utilisation, rapport financier. |
-| **Tâches** | [Collecter les données de sécurité ou les transactions de licences](./jobs.md) à la demande, avec un journal en direct. |
+| **Tâches** | [Collecter la sécurité et la SoD ou les licences, produire les deux rapports d'audit](./jobs.md), pour une ou plusieurs applications, avec un journal en direct. |
 | **Paramètres** | Définitions des sources (applications, schémas JDE, catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
 
 ---
@@ -2881,7 +2882,9 @@ Sur une installation Python, les mêmes étapes tiennent en trois commandes — 
 
 ## 3 — Connecter le système source \{#source\}
 
-Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Paramètres → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer les tâches de collecte depuis **Nomaflow**. L'ordre et les paramètres de ces tâches sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
+Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Paramètres → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer **`nomasx1-roles`** pour créer les rôles d'auditeur et d'administrateur, et la collecte — `nomasx1-collect-all` — depuis **Nomaflow** ou depuis *Nomasx-1 → Tâches*. Les tâches et leurs paramètres sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
+
+Nomajde écrit aussi dans JD Edwards par son serveur AIS : l'adresse, l'utilisateur et la vérification du certificat viennent des variables d'environnement `JDE_AIS_URL`, `JDE_AIS_USER` et `JDE_AIS_VERIFY_SSL` (dans `.env` ou `secrets.env`), ou se règlent directement dans **Paramètres → Connecteurs**. Une valeur réglée dans les Paramètres est conservée à chaque mise à jour.
 
 ---
 
@@ -2898,7 +2901,10 @@ Un nouveau wheel apporte de nouveaux écrans, entrées de menu, éléments du di
 | Créée sur le serveur | Toujours conservée. |
 | Retirée par l'éditeur | Supprimée seulement si elle n'a jamais été modifiée. |
 | Pools et chaque secret `ENC:` | Toujours repris de la configuration en place. |
+| Une valeur fixée sur le serveur là où le wheel livre une variable (`${JDE_AIS_USER:-JDE}`) | Toujours la vôtre — une vérification TLS désactivée dans les Paramètres le reste. |
 | `theme.toml` | Toujours le vôtre. |
+
+**Les tâches Nomaflow** sont fusionnées tâche par tâche. La partie produit d'une tâche livrée — ses étapes, sa description, ses étiquettes, les paramètres qu'elle propose — est mise à jour ; ce qui a été réglé dessus est conservé : activation, planification, fuseau horaire, préréglages, alertes, réessais, niveau de journal, délai et valeurs de ses paramètres. Les tâches créées sur le serveur restent. Une tâche livrée dont les étapes ont été modifiées est conservée telle quelle et listée à la fin ; une tâche marquée `override = true` dans `jobs.toml` est toujours conservée telle qu'enregistrée.
 
 Ce qui a été livré est enregistré sous `config/.bundled/` : la mise à jour suivante distingue ainsi « jamais modifié » de « modifié ». Les entités conservées parce qu'elles ont été modifiées localement sont listées en fin d'exécution : les marquer `override = true` pour les garder définitivement, ou relancer avec `--force-config` pour prendre la version de l'éditeur.
 
@@ -4179,7 +4185,7 @@ Ajouter `STALLED = 'N'` à `deals_put` : toute modification d'une affaire efface
 | Étape | **Add step: `sql_query`**, nom `flag-stalled`, connecteur `crm`, requête `flag_stalled_deals`. |
 | Alerts | **Send alerts**, **On failure**, destinataires `user:<identifiant>`. |
 
-Enregistrer, puis **Run with parameters** pour l'exécuter une fois : le détail de l'exécution indique les lignes mises à jour. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
+Enregistrer, puis **Exécuter avec des paramètres** pour l'exécuter une fois : le détail de l'exécution indique les lignes mises à jour. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
 
 ### La notification
 
@@ -4338,7 +4344,7 @@ Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
 
 | Onglet | Contenu |
 |---|---|
-| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **Vérification SSL** (*true*, *false*, ou une variable comme `${JDE_AIS_VERIFY_SSL:-true}`, conservée telle quelle), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type** : *None*, *Basic* (utilisateur et mot de passe), *Bearer* (jeton fixe), *API Key* (nom de l'en-tête et clé), *OAuth2 / JWT* (endpoint de jeton, corps et en-têtes de la demande, champ du jeton, durée de vie). Les secrets sont chiffrés à l'enregistrement. |
 | **Endpoints** | Les endpoints nommés — voir ci-dessous. |
 | **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |
@@ -7750,6 +7756,7 @@ Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui 
 | **`type`** | `job` — *Job (run it, follow its log)* dans la liste des types. |
 | **`target`** | L'identifiant de la tâche. La liste présente chaque tâche avec la première ligne de sa description. |
 | **`connector`** | NE doit PAS être renseigné. |
+| **`params`** | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
 
 L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Beyond the menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
 
@@ -8268,9 +8275,10 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Paramètres → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
 | **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
+| **Tâches** | Les tâches Nomaflow avec leur prochaine exécution, leur planification en clair et leur dernier état, et **Exécuter** / **Mettre en pause** / **Reprendre**. Réservé aux superutilisateurs. | **Tâches (ids, dans l'ordre)** — vide = toutes les tâches planifiées —, **Seulement ces étiquettes**, **Lignes maximum** (12 si vide). |
 | **Liens** | Une carte de points d'entrée : des éléments du menu de l'application du tableau de bord, ou des adresses web. | **Liens par ligne** (1 à 4) ; pour chaque lien, un **Élément de menu** ou une **URL**, une **Icône**, un **Libellé** (vide : celui de l'élément de menu) et une **Description**. |
 
-Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche.
+Un widget dont l'utilisateur ne peut pas lancer la requête est masqué ; le reste du tableau de bord s'affiche. Chaque carte porte son titre et son sous-titre à l'intérieur, et la page s'agrandit avec ses widgets : elle défile jusqu'au dernier.
 
 ### Chiffre, liste et barres \{#synthesis\}
 
@@ -8284,11 +8292,17 @@ Ces trois widgets font d'un tableau de bord une **page de synthèse** : les chif
 
 L'éditeur affiche un aperçu du widget dès que le connecteur, la requête et les colonnes obligatoires sont choisis.
 
+### Tâches \{#jobs\}
+
+Une carte **Tâches** place l'ordonnanceur sur un tableau de bord. Chaque ligne présente la tâche — un clic l'ouvre dans Nomaflow —, sa prochaine exécution ou *En pause*, sa planification en clair (*chaque jour à 03:00*), l'état de sa dernière exécution, et trois boutons : **Exécuter** avec les valeurs enregistrées de la tâche, **Mettre la planification en pause**, **Reprendre la planification** — appliqués aussitôt. Sans identifiants, la carte liste les tâches planifiées, la plus proche d'abord, éventuellement limitées à certaines étiquettes (`main`, `nomasx1`). La carte se rafraîchit d'elle-même pendant une exécution.
+
+La carte est réservée aux superutilisateurs : pour les autres, elle n'apparaît pas sur le tableau de bord.
+
 ### Texte et liens \{#text-links\}
 
 Ces deux widgets font d'un tableau de bord la **page d'accueil d'une application** : quelques lignes sur ce qu'elle fait, les chiffres, puis par où commencer.
 
-- Un widget **Texte** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son texte, sans barre de défilement ; plus étroit, il défile dans sa tuile.
+- Un widget **Texte** ou **Liens** occupant toute la largeur de la grille (12 colonnes) prend la hauteur de son contenu, sans barre de défilement ; plus étroit, il défile dans sa tuile.
 - Un widget **Liens** n'affiche que les éléments de menu que l'utilisateur peut ouvrir : une entrée que ses rôles n'accordent pas disparaît de la carte. Une URL s'ouvre dans un nouvel onglet du navigateur. Un lien vers une URL exige un libellé.
 - À l'export, un texte garde son Markdown et une carte de liens devient un tableau (*Lien*, *Description*).
 
@@ -8369,7 +8383,7 @@ Dans **Paramètres → Tableaux de bord**, choisir l'application, puis ajouter o
 | Général | Titre, description. |
 | Période | **Ajouter une période** : *S'ouvre sur* (un préréglage, ou la valeur de l'application), *Colonne de date* ou *élément du dictionnaire*, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
 | Filtres | **Ajouter un filtre** : les listes déroulantes de la barre. |
-| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte** ou **Liens**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
+| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
 
 Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
 
@@ -11549,7 +11563,7 @@ La suite de tests du framework lui-même utilise ce schéma — fixtures câblé
 
 ### Exécuter une tâche de bout en bout
 
-Lancer la tâche depuis la page des Tâches Nomaflow avec **Run with parameters** : même chargement du plugin, mêmes injections, mêmes lignes de journal qu'une exécution planifiée. L'API REST propose le même appel (`POST /admin/jobs/{job_id}/run`) pour les scripts.
+Lancer la tâche depuis la page des Tâches Nomaflow avec **Exécuter avec des paramètres** : même chargement du plugin, mêmes injections, mêmes lignes de journal qu'une exécution planifiée. L'API REST propose le même appel (`POST /admin/jobs/{job_id}/run`) pour les scripts.
 
 ---
 
@@ -11752,7 +11766,7 @@ Les écrans n'ont **pas de champ pièce jointe** : un dialogue ne peut ni enregi
 |---|---|
 | Retrouver le document d'une ligne | Une **colonne d'adresse** : la ligne enregistre l'adresse du document dans le stockage documentaire déjà en place (partage de fichiers, SharePoint, stockage objet). |
 | Charger les lignes d'un fichier Excel / CSV dans une table, depuis un écran | L'**import** de l'écran — voir [Import en masse](./bulk-import.md). |
-| Charger un fichier dans une table, par une tâche | Une étape Nomaflow **`file_load`** : le fichier est choisi dans la fenêtre **Run with parameters**, lu sur un chemin du serveur ou pris dans un dossier surveillé — voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load). |
+| Charger un fichier dans une table, par une tâche | Une étape Nomaflow **`file_load`** : le fichier est choisi dans la fenêtre **Exécuter avec des paramètres**, lu sur un chemin du serveur ou pris dans un dossier surveillé — voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load). |
 
 ## Adresse d'un document
 
@@ -12333,6 +12347,7 @@ Surveiller un serveur Liberty Next en fonctionnement : la page Surveillance pour
 | Outil | Affiche | Pour |
 |---|---|---|
 | **La page Surveillance** | Ce qui se passe maintenant : utilisateurs connectés, verrous d'enregistrement, pools de base, runtime, journal en direct. | Les superutilisateurs, depuis l'entrée **Surveillance** du menu latéral. Voir [La page Surveillance](./dashboard.md). |
+| **Journal du serveur** et **Rétention** | Toutes les lignes écrites par le serveur, avec recherche ; ce que le serveur conserve et la place occupée. | Les superutilisateurs, dans les deux autres onglets de la page Surveillance. Voir [Journal du serveur](./server-log.md) et [Rétention](./retention.md). |
 | **Points de santé** | `/health` (le processus fonctionne), `/ready` (la base du framework répond), `/info` (version et compteurs). | Répartiteurs de charge, contrôles de santé des conteneurs, sondes externes. Voir [Points de santé](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, santé, migrations en attente, problèmes de configuration. | Les administrateurs sur le serveur. Voir [Exploitation](../installation/operations.md). |
 
@@ -12343,7 +12358,8 @@ Surveiller un serveur Liberty Next en fonctionnement : la page Surveillance pour
 | Situation | Premier contrôle |
 |---|---|
 | Les utilisateurs trouvent l'application lente | **Database pools** : toutes les connexions *In use*, ou *Overflow* supérieur à 0. |
-| Une erreur sur un écran | Le journal en direct filtré sur **ERROR** ; le message de l'utilisateur donne un `error_id` à rechercher. |
+| Une erreur sur un écran | Le [journal du serveur](./server-log.md), en cherchant l'identifiant de requête donné par le message de l'utilisateur. |
+| Le disque se remplit | La [rétention](./retention.md) : la taille de chaque stockage, puis **Aperçu** et **Purger**. |
 | Un enregistrement ne peut pas être sauvegardé | **Record locks** : quelqu'un d'autre l'a peut-être ouvert. |
 | Le serveur semble bloqué | `/ready`, puis `./liberty status`. |
 | Une tâche planifiée ne s'est pas exécutée | L'[historique des exécutions](../nomaflow/runs/history.md) Nomaflow — une exécution **MISSED** l'enregistre. |
@@ -12361,7 +12377,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/monitoring/dashboard/
 
 Bloc par bloc, la page Surveillance de Liberty Next : les quatre indicateurs, les pools de base, le runtime, les utilisateurs connectés, les verrous d'enregistrement et le journal en direct — la signification de chaque valeur et quand agir.
 
-**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO).
+**Surveillance** dans le menu latéral ouvre une vue en direct du serveur. Elle n'est proposée qu'aux superutilisateurs et se rafraîchit par la connexion en temps réel (Socket.IO). Cette page décrit son premier onglet, **En direct** ; les deux autres sont [Journal du serveur](./server-log.md) et [Rétention](./retention.md).
 
 ---
 
@@ -12416,7 +12432,107 @@ Les dernières lignes du journal du serveur, les plus récentes en bas.
 | **Filter…** | Un texte dans le nom du logger ou le message — un `error_id`, un identifiant de requête, un connecteur. **Clear filter** le vide. |
 | **Pause** / **Resume** | Fige le défilement pour lire ; les nouvelles lignes continuent d'arriver. |
 
-Les erreurs sont en rouge, les avertissements en orange, les lignes de débogage atténuées ; une ligne avec une pile d'appels se déplie (**traceback**). Pour les lignes plus anciennes, utiliser `./liberty logs` ou `liberty-ops logs`.
+Les erreurs sont en rouge, les avertissements en orange, les lignes de débogage atténuées ; une ligne avec une pile d'appels se déplie (**traceback**). Pour les lignes plus anciennes, chercher dans l'onglet [Journal du serveur](./server-log.md).
+
+---
+
+## Liberty Next — Journal du serveur
+Source: https://docs.nomana-it.fr/fr/liberty/monitoring/server-log/
+
+Surveillance → Journal du serveur dans Liberty Next : le journal du serveur conservé sur disque avec rotation par taille, la recherche par niveau, module, texte et période, l'ouverture d'une exception, le suivi d'une requête, l'export des résultats, le téléchargement des fichiers, et le niveau de journal de chaque module modifié à chaud.
+
+**Surveillance → Journal du serveur** permet de chercher dans ce que le serveur a écrit : le framework, les applications et les bibliothèques qu'elles utilisent, quel que soit le mode de démarrage du serveur. Le journal est conservé sur disque, dans des fichiers à rotation par taille — 10 Mo par fichier, les cinq fichiers précédents conservés —, et survit donc à un redémarrage. Seuls les superutilisateurs voient la page Surveillance.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Rechercher \{#search\}
+
+| Contrôle | Effet |
+|---|---|
+| **Chercher** | Un texte dans le message, le module, l'exception ou l'identifiant de requête. |
+| Niveau | *Tout niveau*, ou un seuil : *WARNING et plus* garde les avertissements, les erreurs et les messages critiques. |
+| **Tout module** | Un module et ses sous-modules — `liberty.jobs`, `nomasx1`. Un nom peut être saisi. |
+| Période | *Dernière heure*, *Dernières 24 heures* (par défaut), *7 derniers jours*, *Tout ce qui est conservé*. |
+| **Recharger** | Relit les fichiers. |
+
+Les filtres sont conservés par le navigateur. La page affiche les 500 résultats les plus récents — *N entrées (sur M lignes)*, avec les fichiers lus et leur taille — ; quand il y en a davantage, elle l'indique : affiner la recherche.
+
+Un clic sur une ligne la déplie : le message complet et son exception. L'identifiant de requête entre crochets après un message — celui qu'une page d'erreur montre à l'utilisateur — ne garde que cette requête : toutes les lignes écrites pour la traiter.
+
+Un même message écrit de nombreuses fois de suite n'est conservé qu'une fois, suivi de *(previous message repeated N times)*.
+
+---
+
+## Exporter et télécharger \{#export\}
+
+| Bouton | Donne |
+|---|---|
+| **Exporter** | Les entrées retenues dans un fichier texte, les plus anciennes d'abord — jusqu'à 100 000. |
+| **Télécharger les fichiers** | Les fichiers de journal eux-mêmes, courant et précédents, dans un ZIP. |
+
+---
+
+## Niveaux de journal par module \{#levels\}
+
+La carte du bas règle le volume écrit par chaque module. Choisir un niveau pour un module — *Hériter* reprend celui de son parent —, ou ajouter un module par son nom. Le changement s'applique aussitôt, sans redémarrage, et reste valable au démarrage suivant (● signale un module réglé ainsi). Passer un module en `DEBUG` le temps d'une analyse, puis le remettre : un module bavard remplit vite les fichiers.
+
+---
+
+## Voir aussi
+
+- [La page Surveillance](./dashboard.md) — la vue en direct.
+- [Rétention](./retention.md) — ce que le serveur conserve, et combien de temps.
+
+---
+
+## Liberty Next — Rétention
+Source: https://docs.nomana-it.fr/fr/liberty/monitoring/retention/
+
+Surveillance → Rétention dans Liberty Next : chaque stockage qui grossit sur le serveur — exécutions des tâches, fichiers des tâches, notifications, versions de configuration, paquets de modifications, vues enregistrées, journal du serveur — avec sa règle, sa taille, un aperçu à blanc et une purge immédiate.
+
+**Surveillance → Rétention** réunit au même endroit tout ce que le serveur conserve et laisse grossir : ce qui est gardé, où cela se règle, la place occupée, et le moyen de nettoyer tout de suite. Seuls les superutilisateurs la voient.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Les stockages \{#stores\}
+
+| Stockage | Ce qui part | Réglage |
+|---|---|---|
+| **Exécutions des tâches** | Les exécutions terminées avec leurs étapes et journaux, au-delà des jours conservés ou du plafond par tâche. | Nomaflow — [Rétention de l'historique](../nomaflow/administration.md#retention). |
+| **Fichiers des tâches** | Fichiers envoyés, rapports de rejets, rapports, exports, archives des dossiers surveillés. | Nomaflow — **Fichiers conservés (jours)** dans le même panneau. |
+| **Notifications** | Les notifications lues, au-delà des jours fixés. | Paramètres → App → Notifications — [Conserver les notifications lues](../nomaflow/notifications.md#smtp). |
+| **Versions de configuration** | Les instantanés de configuration au-delà du nombre gardé par fichier, ou trop anciens ; le plus récent de chaque fichier reste toujours. | La [tâche `config-versions-purge`](../nomaflow/bundled-jobs.md), sinon 20 par fichier et 90 jours. |
+| **Paquets de modifications** | Les paquets exportés ou promus et les journaux d'import plus anciens que les jours fixés. Les brouillons ne sont jamais touchés. | Conservés par défaut. |
+| **Vues enregistrées** | Les vues et analyses des utilisateurs. | Jamais purgées — affichées pour leur taille. |
+| **Journal du serveur** | Rotation par taille : 10 Mo par fichier, cinq fichiers précédents. | — |
+
+Les exécutions et fichiers des tâches figurent quand Nomaflow fonctionne sur le serveur.
+
+---
+
+## Aperçu et purge \{#actions\}
+
+| Bouton | Effet |
+|---|---|
+| **Aperçu** | Un essai à blanc : *Supprimerait N élément(s)*, avec la taille. Rien n'est supprimé. |
+| **Purger** | Après confirmation, applique aussitôt la règle : *N élément(s) supprimé(s)*. |
+
+Les boutons ne s'affichent que là où il y a quelque chose à purger : ni pour les vues enregistrées et le journal du serveur, ni pour les notifications et les paquets de modifications tant qu'ils sont conservés sans limite. Les nettoyages automatiques continuent selon leur propre rythme.
+
+---
+
+## Voir aussi
+
+- [Journal du serveur](./server-log.md) — chercher dans ce que le serveur a écrit.
+- [Administration de Nomaflow](../nomaflow/administration.md) — la règle de rétention des tâches.
 
 ---
 
@@ -12752,7 +12868,7 @@ Les tâches elles-mêmes se modifient par `/admin/config/jobs/parsed`.
 ## Nomaflow — Tableau de bord Vue d'ensemble
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/dashboard/
 
-Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche et les dernières exécutions — sur les 7 derniers jours par défaut.
+Le tableau de bord Vue d'ensemble de Nomaflow : les exécutions par issue sur la période, les échecs et planifications manquées, ce qui est en cours, la durée moyenne, les exécutions par jour, ce qui demande attention, les exécutions et durées par tâche, les dernières exécutions et la dernière réussite par tâche, avec la carte des tâches planifiées — sur les 7 derniers jours par défaut.
 
 **Vue d'ensemble**, première entrée du menu de Nomaflow, donne aux exploitants l'état de l'ordonnanceur en un coup d'œil : l'issue des exécutions, ce qui a échoué ou a été manqué, ce qui est en cours d'exécution, les tâches les plus actives et les plus lentes, et les dernières exécutions.
 
@@ -12776,13 +12892,15 @@ La page s'ouvre sur **7 derniers jours** ; le sélecteur de période de la barre
 | **Échecs** — exécutions terminées en erreur | Les exécutions en échec, le nombre de tâches concernées et les planifications manquées. |
 | **En cours** — en ce moment | En exécution · en attente. |
 | **Durée moyenne** — exécutions terminées | La durée moyenne, et la plus longue. |
+| **Tâches planifiées** | Ce qui s'exécute ensuite : chaque tâche planifiée avec sa prochaine exécution ou *En pause*, sa planification en clair et son dernier état, et les boutons **Exécuter**, **Mettre la planification en pause** et **Reprendre la planification**. Réservé aux superutilisateurs. |
 | **Exécutions par jour** | Une barre par jour, par issue. |
 | **Ce qui demande attention** | Par tâche : les échecs avec leur dernière erreur, les planifications manquées, les exécutions en cours depuis plus d'une heure — en rouge pour un échec, en orange pour le reste, avec la date de la dernière occurrence. |
 | **Exécutions par tâche** | La part des exécutions de chaque tâche sur la période. |
 | **Durée moyenne par tâche** | En secondes, les plus lentes d'abord. |
 | **Dernières exécutions** | Les dernières exécutions, avec leur état ; l'erreur, ou le déclencheur, sous chacune. |
+| **Dernière réussite par tâche** | Chaque tâche avec sa dernière exécution réussie, les échecs depuis et son dernier état : les tâches en échec d'abord, une tâche sans réussite depuis une semaine en orange ; le chiffre donne les jours depuis la dernière réussite. |
 
-Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md).
+Le détail d'une exécution se trouve dans **Exploitation → Exécutions** — voir [Historique des exécutions](./runs/history.md). La même carte des tâches peut être ajoutée à n'importe quel tableau de bord — voir [Tableaux de bord → Tâches](../framework/dashboards.md#jobs).
 
 ---
 
@@ -12803,7 +12921,7 @@ Une **tâche** est une entrée de `jobs.toml` : un **identifiant** (lettres, chi
 
 ## Étape \{#step\}
 
-Une **étape** est une unité de travail, de l'un des neuf types : `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
+Une **étape** est une unité de travail, de l'un des dix types : `sql_query`, `sql_copy`, `file_load`, `file_export`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
 
 ## Planification \{#schedule\}
 
@@ -12811,7 +12929,7 @@ Un **cron** à cinq zones évalué dans le **fuseau horaire** de la tâche. Les 
 
 ## Préréglage \{#preset\}
 
-Un jeu de valeurs d'exécution enregistré — paramètres partagés, arguments d'étapes, étapes désactivées, niveau de journal — créé depuis **Run with parameters**. Un préréglage peut avoir sa propre planification : une tâche, plusieurs planifications avec des entrées différentes.
+Un jeu de valeurs d'exécution enregistré — paramètres partagés, arguments d'étapes, étapes désactivées, niveau de journal — créé depuis **Exécuter avec des paramètres**. Un préréglage peut avoir sa propre planification : une tâche, plusieurs planifications avec des entrées différentes.
 
 ## Déclencheur \{#trigger\}
 
@@ -12827,7 +12945,7 @@ Un passage d'une tâche, avec un identifiant, son déclencheur, son début et sa
 |---|---|---|
 | Paramètres partagés | La tâche | Les arguments de chaque étape `python`. |
 | Arguments d'étape (`op_kwargs`) | L'étape | Cette étape — ils l'emportent sur les paramètres partagés. |
-| Run with parameters | Une exécution | Cette exécution seulement ; `jobs.toml` n'est pas modifié. |
+| Exécuter avec des paramètres | Une exécution | Cette exécution seulement ; `jobs.toml` n'est pas modifié. |
 
 `file_load` lit les paramètres d'exécution sous la forme `${params.x}` dans son chemin et ses constantes ; `sql_query` prend ses propres `params`.
 
@@ -12854,9 +12972,9 @@ La tâche `sales-load` a trois étapes : `file_load` (charger le fichier du mois
 ## Nomaflow — Catalogue — la page des Tâches
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/catalog/
 
-La page des Tâches de Nomaflow : la barre d'outils, les panneaux de rétention et de planifications manquées, le contenu d'une carte de tâche, l'activation d'une tâche, Exécuter et Run with parameters (préréglages, étapes, envoi de fichiers, niveau de journal), Annuler, Cloner, Supprimer et Export.
+La page des Tâches de Nomaflow : recherche et filtres, les tâches groupées par application avec les tâches principales en tête, le contenu d'une ligne de tâche, l'activation d'une tâche, Exécuter et Exécuter avec des paramètres (préréglages, paramètres, plusieurs valeurs, étapes, envoi de fichiers, niveau de journal), Annuler, Cloner, Supprimer et Exporter.
 
-La page **Tâches** présente chaque tâche de `jobs.toml` sous forme de carte, avec son état, sa planification et sa dernière exécution. Elle est réservée aux superutilisateurs.
+La page **Tâches** présente chaque tâche de `jobs.toml`, une ligne par tâche, groupées par application, avec sa dernière exécution, sa planification et ses actions. Elle est réservée aux superutilisateurs.
 
 ---
 
@@ -12864,56 +12982,65 @@ La page **Tâches** présente chaque tâche de `jobs.toml` sous forme de carte, 
 
 ---
 
-## La barre d'outils \{#toolbar\}
+## Recherche et filtres \{#toolbar\}
 
 | Élément | Usage |
 |---|---|
+| **Rechercher** | Trouve une tâche par son identifiant, sa description ou une étiquette. |
+| **Toutes les applications**, **Tout statut**, **Toute étiquette** | Restreignent la liste. Statut : *Activées*, *Désactivées*, *Planifiées (activées avec une prochaine exécution)*, *En cours*, *Dernière exécution en échec*. |
+| **Effacer** | Remet à zéro la recherche et les filtres. |
+| *N sur M tâches* | Le nombre de tâches retenues par les filtres. |
 | **+ Nouvelle tâche** | Ouvre l'éditeur de tâche — voir [Créer une tâche](./create.md). |
-| **Planning** | Toutes les planifications par prochaine exécution — voir [Planifications](./schedules.md#schedule-view). |
-| **↻** | Recharge la liste. |
-| **Filtre :** | Une pastille par étiquette utilisée ; en choisir pour n'afficher que ces tâches, **Effacer** pour tout afficher. |
 
-En dessous, deux panneaux repliés portent les politiques communes à toutes les tâches : **Run history retention** ([Administration](../administration.md#retention)) et **Planifications manquées** ([Planifications](./schedules.md#missed)).
+La recherche et les filtres sont conservés par le navigateur d'une visite à l'autre. Deux panneaux repliés regroupent les règles communes à toutes les tâches : **Rétention de l'historique** ([Administration](../administration.md#retention)) et **Planifications manquées** ([Planifications](./schedules.md#missed)).
 
 ---
 
-## Une carte de tâche \{#card\}
+## Groupes \{#groups\}
+
+- **Tâches principales** vient en tête : les tâches portant l'étiquette `main`, celles que les exploitants lancent le plus souvent — la collecte d'une application, une synchronisation de nuit.
+- Viennent ensuite un groupe par **application**, par ordre alphabétique : une tâche appartient à l'application que nomment ses étiquettes ou son identifiant (`nomasx1-collect-all` → Nomasx-1) ; les autres vont dans **Framework**, en dernier.
+
+Un clic sur le titre d'un groupe le replie ou le déplie.
+
+---
+
+## Une ligne de tâche \{#card\}
 
 | Élément | Signification |
 |---|---|
-| Identifiant, description, étiquettes | Issus des réglages de la tâche. |
-| **activée** / **désactivée** | Un clic active ou suspend la planification propre de la tâche. **Exécuter** fonctionne dans les deux cas, et les planifications des préréglages ne sont pas concernées. |
-| Pastille de planification | Le cron, ou **Manuelle**. |
-| *N planning(s) de préréglage* | Les préréglages qui ont leur propre planification. |
-| prochaine · dernière | La prochaine exécution planifiée, ainsi que l'état et la durée de la dernière — un clic ouvre son détail. |
-| *N étapes* | Le nombre d'étapes. |
+| Identifiant, description | Un clic sur l'identifiant ouvre l'éditeur de la tâche. |
+| Dernière exécution | L'état de la dernière exécution ; un clic en ouvre le détail. |
+| Planification | Le cron, ou **Manuelle**, avec la prochaine exécution. |
+| **activée** / **désactivée** | Un clic active ou désactive aussitôt la planification propre de la tâche, sans recharger la configuration. **Exécuter** fonctionne dans les deux cas, et les planifications des préréglages ne sont pas concernées. |
 
-Les boutons de la carte :
+Les icônes en fin de ligne :
 
-| Bouton | Effet |
+| Icône | Effet |
 |---|---|
-| **▶ Exécuter** | Lance la tâche. Quand il y a quelque chose à choisir — paramètres partagés, arguments d'étapes, plusieurs étapes, une étape `file_load` — il ouvre d'abord **Run with parameters**. |
-| **Annuler** | Affiché pendant l'exécution : annule l'exécution en cours. |
-| **Modifier** | Ouvre l'éditeur de tâche. |
-| **Cloner** | Demande un nouvel identifiant (`<id>_copy` proposé) et crée une copie désactivée et sans aucune planification : ni celle de la tâche, ni celles de ses préréglages. |
+| **Exécuter** | Lance la tâche. Quand il y a quelque chose à choisir — paramètres, arguments d'étape, plusieurs étapes, une étape `file_load` —, la fenêtre **Exécuter avec des paramètres** s'ouvre d'abord. Pendant l'exécution, l'icône devient **Annuler**. |
+| **Modifier** | Ouvre l'éditeur de la tâche. |
+| **Cloner** | Demande un nouvel identifiant et crée une copie désactivée, sans aucune planification : ni la sienne, ni celles des préréglages. |
+| **Exporter** | Télécharge un ZIP contenant l'entrée `jobs.toml` de la tâche et un `MANIFEST.md`. Les connecteurs et requêtes utilisés ne sont pas inclus. |
 | **Supprimer** | Retire la tâche de `jobs.toml` après confirmation. Son historique d'exécutions est conservé. |
-| **Export** | Télécharge un ZIP avec l'entrée `jobs.toml` de la tâche et un `MANIFEST.md`. Les connecteurs et requêtes qu'elle utilise ne sont pas inclus. |
 
 ---
 
-## Run with parameters \{#run-with-parameters\}
+## Exécuter avec des paramètres \{#run-with-parameters\}
 
 La fenêtre ne vaut que pour cette exécution — `jobs.toml` n'est pas modifié.
 
 | Partie | Contenu |
 |---|---|
-| **Preset** | Choisir un préréglage enregistré et l'appliquer (**Apply**) ; **Save as preset…** enregistre l'état de la fenêtre sous un nom, dans `jobs.toml`. |
-| **Shared params (apply to every step)** | Les paramètres partagés de la tâche, modifiables pour cette exécution. |
-| **Steps** | Une ligne par étape avec une case pour la sauter (**All** / **None**) ; **Edit parameters** ouvre les arguments d'une étape. Une étape `file_load` reçoit un sélecteur de fichier — voir [Étapes](../steps.md#file-load). |
-| **Log level** | *WARNING — warnings + errors only*, *INFO — row counts + progress markers*, *DEBUG — full SQL of every query*. |
-| **Run** | Envoie les fichiers choisis, puis lance l'exécution. |
+| **Préréglage** | Choisir un préréglage enregistré puis **Appliquer** : la fenêtre revient d'abord aux valeurs enregistrées de la tâche, puis applique le préréglage — comme le fait l'ordonnanceur. *(choisir un préréglage…)* ramène aux valeurs enregistrées. **Enregistrer comme préréglage…** enregistre l'état courant de la fenêtre sous un nom, dans `jobs.toml`. |
+| **Paramètres partagés (toutes les étapes)** | Les paramètres partagés de la tâche, modifiables pour cette exécution. Un paramètre proposé aux utilisateurs s'affiche en liste déroulante — ses choix peuvent venir d'une requête, comme les applications de Nomasx-1 —, ou en cases à cocher précédées de **Tout** quand plusieurs valeurs sont permises. |
+| **Étapes** | Une ligne par étape avec une case pour la sauter (**Toutes** / **Aucune**) ; **Modifier les paramètres** ouvre les arguments d'une étape. Une étape `file_load` reçoit un sélecteur de fichier — voir [Étapes](../steps.md#file-load). |
+| **Niveau de journal** | *WARNING — avertissements et erreurs seulement*, *INFO — nombres de lignes et jalons*, *DEBUG — le SQL complet de chaque requête*. |
+| **Exécuter** | Envoie les fichiers choisis, puis démarre l'exécution. |
 
-Usages courants : relancer seulement l'étape en échec, recharger un mois, exécuter en `DEBUG` pour voir le SQL, lancer un préréglage à la main.
+**Plusieurs valeurs, plusieurs exécutions.** Une tâche prévue pour s'exécuter *par valeur* — par application, par société — s'exécute une fois pour chaque valeur cochée, l'une après l'autre, chacune avec une seule valeur ; une valeur en échec n'empêche pas les suivantes. **Tout** reprend toutes les valeurs proposées. Dans les [exécutions](../runs/history.md), chaque exécution indique la valeur traitée.
+
+Usages courants : relancer seulement l'étape en échec, recharger un mois, exécuter en `DEBUG` pour voir le SQL, lancer un préréglage à la main, collecter trois applications d'un coup.
 
 ---
 
@@ -12943,7 +13070,7 @@ L'éditeur de tâche de Nomaflow : la section Tâche (identifiant, planification
 | Champ | Remarques |
 |---|---|
 | **Identifiant** | Lettres, chiffres, `-` et `_`. Figé une fois la tâche créée — il indexe l'historique des exécutions. Pour renommer : **Cloner** sous le nouvel identifiant, puis supprimer l'ancienne tâche. |
-| **Description** | Affichée sur la carte. |
+| **Description** | Affichée sur la ligne de la tâche et sur sa page. |
 | **Planification (cron)** | Des choix tout faits (Manuelle, Horaire, Quotidienne, Hebdomadaire, Mensuelle) ou un cron à cinq zones ; **Prochaines exécutions** en affiche les cinq suivantes. Vide : tâche manuelle. Voir [Planifications](./schedules.md). |
 | **Fuseau horaire** | Le nom IANA dans lequel la planification est évaluée. |
 | **Étiquettes** | Libellés libres, utilisés par le filtre de la page des Tâches. |
@@ -12951,7 +13078,7 @@ L'éditeur de tâche de Nomaflow : la section Tâche (identifiant, planification
 
 ### Préréglages & plannings
 
-Les préréglages s'enregistrent depuis **Run with parameters → Save as preset…**. Ici, chacun peut recevoir sa propre **Planification (cron)**, son **Fuseau horaire** et une case **Planning activé** — voir [Préréglages planifiables](./schedules.md#schedulable-presets).
+Les préréglages s'enregistrent depuis **Exécuter avec des paramètres → Enregistrer comme préréglage…**. Ici, chacun peut recevoir sa propre **Planification (cron)**, son **Fuseau horaire** et une case **Planning activé** — voir [Préréglages planifiables](./schedules.md#schedulable-presets).
 
 ### Politique de réessai
 
@@ -12959,11 +13086,11 @@ Les préréglages s'enregistrent depuis **Run with parameters → Save as preset
 
 ### Alertes
 
-**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
+**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. **Doit avoir réussi avant** fixe une échéance (`07:00`, dans le fuseau horaire de la tâche) : un jour où la tâche est planifiée, si aucune exécution n'a réussi à cette heure, les destinataires reçoivent *Job &lt;id&gt; is late* — encore en cours, en échec ou jamais démarrée. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
 
 ### Paramètres partagés
 
-Des paires nom / valeur fusionnées dans les arguments de chaque étape `python` (la valeur propre d'une étape l'emporte). Elles apparaissent aussi, modifiables, dans **Run with parameters**. La section s'intitule *Shared params* dans l'éditeur.
+Des paires nom / valeur fusionnées dans les arguments de chaque étape `python` (la valeur propre d'une étape l'emporte). Elles apparaissent aussi, modifiables, dans **Exécuter avec des paramètres**. La section s'intitule *Shared params* dans l'éditeur.
 
 ### Étapes
 
@@ -12977,7 +13104,7 @@ Quelques réglages n'ont pas de champ dans l'éditeur ; ils se définissent dans
 
 | Clé | Défaut | Signification |
 |---|---|---|
-| `log_level` (tâche) | `INFO` | Le niveau des exécutions planifiées : `WARNING`, `INFO` ou `DEBUG`. Une exécution manuelle choisit le sien dans **Run with parameters**. |
+| `log_level` (tâche) | `INFO` | Le niveau des exécutions planifiées : `WARNING`, `INFO` ou `DEBUG`. Une exécution manuelle choisit le sien dans **Exécuter avec des paramètres**. |
 | `timeout_seconds` (tâche) | `14400` | L'exécution entière s'arrête après ce délai. |
 | `enabled` (étape) | `true` | `false` saute toujours l'étape. |
 | `timeout_seconds` (étape) | `3600` | L'étape s'arrête après ce délai. |
@@ -13012,7 +13139,7 @@ name = "load-sales"
 
 - Donner à chaque étape un nom court verbe-objet (`load-sales`, `refresh-totals`) : c'est ce qu'affiche le détail de l'exécution.
 - Garder une tâche par flux métier ; enchaîner les tâches par une étape `call_job` plutôt que de copier des étapes.
-- Enregistrer, puis lancer une fois à la main avec **Run with parameters** en `DEBUG` avant d'activer la planification.
+- Enregistrer, puis lancer une fois à la main avec **Exécuter avec des paramètres** en `DEBUG` avant d'activer la planification.
 
 ---
 
@@ -13073,18 +13200,22 @@ Le champ **Planification (cron)** de l'éditeur propose des choix tout faits —
 
 ## La vue Planning \{#schedule-view\}
 
-**Planning**, dans la barre d'outils des Tâches, liste toutes les planifications, par prochaine exécution :
+**Exploitation → Planning**, dans le menu de Nomaflow, montre ce qui s'exécute et quand, jour par jour.
 
-| Groupe | Contenu |
+| Partie | Contenu |
 |---|---|
-| **À venir** | Une ligne par planification active — celle de la tâche, et une par préréglage planifié (le nom du préréglage s'affiche à côté de la tâche). Colonnes : Tâche, Planification, Prochaine exécution, Dernière exécution. |
-| **Manuelles / désactivées** | Les tâches sans planification, et les planifications définies mais désactivées — marquées *(désactivé)*. |
+| Compteurs | Les exécutions prévues dans les 24 h, les planifications actives, les planifications désactivées, les tâches lancées à la main uniquement. |
+| **À venir** | Chaque planification active à sa prochaine exécution — celle de la tâche, et une par préréglage planifié (le nom du préréglage à côté de la tâche) —, groupées par jour : *Aujourd'hui*, *Demain*, puis la date. Chaque ligne présente l'heure, la tâche, la planification en clair (*chaque jour à 03:00*, *chaque lundi à 07:00*) avec le cron en dessous, l'échéance et l'état de la dernière exécution. |
+| **Planifiées mais désactivées** | Les planifications définies mais désactivées. |
+| **Lancées à la main uniquement** | Les tâches sans aucune planification, repliées ; un clic sur l'une ouvre son éditeur. |
+
+Les planifications que la page ne sait pas exprimer en clair — listes d'heures, plusieurs mois — n'affichent que leur cron.
 
 ---
 
 ## Préréglages planifiables \{#schedulable-presets\}
 
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
 
 Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
 
@@ -13117,7 +13248,7 @@ La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manq
 
 | Option | Effet |
 |---|---|
-| Le switch **Activée** de la tâche dans la page des Tâches | La planification propre de la tâche s'arrête. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
+| La pastille **activée** / **désactivée** de la tâche dans la page des Tâches, ou **Mettre la planification en pause** sur la carte des tâches d'un tableau de bord | La planification propre de la tâche s'arrête aussitôt, sans rechargement. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
 | **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
 | **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
 
@@ -13150,10 +13281,11 @@ Une entrée de menu de type **job** place une tâche Nomaflow dans le menu d'une
 | Partie | Contenu |
 |---|---|
 | Titre et description | Le libellé de l'entrée de menu, puis la description de la tâche. |
-| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. |
+| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. Un paramètre qui accepte plusieurs valeurs s'affiche en cases à cocher précédées de **Tout**. |
 | Fichiers | Un sélecteur par étape `file_load` qui attend un fichier — **Fichier pour l'étape « load »**, avec la feuille quand l'étape en nomme une. Formats acceptés : `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. Une étape dotée de son propre chemin ou d'un dossier surveillé ne demande rien : elle lit son fichier. |
 | **Lancer** | Envoie les fichiers et démarre l'exécution. *Choisissez d'abord le ou les fichiers.* ou *« Société » est obligatoire.* quand un élément manque. Une seule exécution à la fois : tant qu'une exécution est en cours, le bouton reste en attente. |
 | **Journal** | L'état de l'exécution et son journal, rafraîchi toutes les 2 secondes tant que l'exécution est en attente ou en cours, l'erreur en rouge. **Fichiers de l'exécution** propose les fichiers produits — les lignes rejetées d'un chargement. |
+| **Fichier chargé** | Sous le journal, le fichier envoyé pour l'exécution sélectionnée, à télécharger à nouveau. |
 | **Exécutions précédentes** | Les 20 dernières exécutions : début, état, durée, auteur (ou déclencheur, pour une exécution planifiée), lignes traitées et début de l'erreur. Un clic sur une exécution affiche son journal. |
 
 L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouvent dans l'[historique des exécutions](../runs/history.md), et ses notifications et alertes s'appliquent.
@@ -13163,6 +13295,12 @@ L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouve
 ## Placer une tâche dans un menu \{#menu\}
 
 Dans **Paramètres → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+
+---
+
+### Un préréglage dans le menu \{#preset\}
+
+Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-presets) de la tâche avec `params = { preset = "Licences" }` : la page lance alors la tâche avec les paramètres et les étapes actives de ce préréglage. Une même tâche donne ainsi plusieurs entrées de menu — *Collecter la sécurité et la SoD*, *Collecter les licences* —, chacune sur un préréglage. Le libellé de l'entrée de menu donne son titre à la page.
 
 ---
 
@@ -13191,13 +13329,16 @@ choices_from = "explorer_models:nomajde"
 |---|---|
 | `name` | L'argument de l'étape qui reçoit la valeur. |
 | `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
-| `step` | L'étape qui reçoit la valeur. |
+| `step` | L'étape qui reçoit la valeur. Sans elle, la valeur va à toutes les étapes de la tâche. |
 | `default` | La valeur préremplie. |
 | `required` | `true` : la tâche ne démarre pas sans valeur. |
 | `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
-| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application. |
+| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application ; ou `query:<connecteur>/<requête>:<colonne valeur>:<colonne libellé>` — les lignes d'une requête de lecture, comme les applications de Nomasx-1. |
+| `multiple` | `true` : plusieurs valeurs peuvent être cochées, avec **Tout**. |
 
-Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique.
+Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique. Les mêmes paramètres apparaissent dans la fenêtre **Exécuter avec des paramètres** des exploitants.
+
+**Une exécution par valeur.** Une tâche qui déclare `for_each = "<paramètre>"` s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
 
 ---
 
@@ -13205,7 +13346,7 @@ Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'
 
 | Application | Dossier | Tâches |
 |---|---|---|
-| Nomasx-1 | **Tâches** | Collecter la sécurité, Collecter les licences — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
+| Nomasx-1 | **Tâches** | Collecter la sécurité et la SoD, Collecter les licences, Rapport d'audit des licences, Rapport sécurité et SoD — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
 | Nomajde | **Tâches** | Refusionner la sécurité (paquet de changements), Refusionner la sécurité (tous les rôles), Rafraîchir le dictionnaire (modèles Explorateur) — voir [Tâches de Nomajde](../../nomajde/jobs.md). |
 | Démo des ventes | **Import** | Fichier articles, Fichier sociétés, Fichier ventes (un mois), Recalculer les périodes, Charger les fichiers d'exemple — voir [La démo des ventes](../../framework/demo-app.md#loads). |
 
@@ -13214,7 +13355,7 @@ Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'
 ## Nomaflow — Étapes
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/steps/
 
-Les neuf types d'étapes de Nomaflow — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution.
+Les dix types d'étapes de Nomaflow — sql_query, sql_copy, file_load, file_export, python, http, ldap_sync, call_job, report, notify — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution.
 
 Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent dans l'ordre ; quand l'une échoue, les suivantes sont enregistrées comme *skipped: earlier step failed*.
 
@@ -13223,6 +13364,7 @@ Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent 
 | lance une requête nommée d'un connecteur SQL | **`sql_query`** |
 | copie une table entière d'un connecteur à un autre | **`sql_copy`** |
 | charge un classeur ou un fichier CSV dans une table | **`file_load`** |
+| écrit le résultat d'une requête de lecture dans un fichier Excel ou CSV | **`file_export`** |
 | appelle une fonction Python d'un plugin | **`python`** |
 | appelle une URL | **`http`** |
 | lit un annuaire LDAP / Active Directory dans une table | **`ldap_sync`** |
@@ -13243,8 +13385,8 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 | Champ | Défaut | Remarques |
 |---|---|---|
 | `name` | — | Affiché dans le détail de l'exécution ; unique dans la tâche. |
-| `type` | — | L'un des neuf types. |
-| `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Run with parameters**. |
+| `type` | — | L'un des dix types. |
+| `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Exécuter avec des paramètres**. |
 | `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
 
 Quand une étape échoue sur une erreur de base de données, le détail de l'exécution affiche la phrase de la base elle-même — *invalid input for query argument $1: 2025 (expected str, got int)* — et l'instruction part dans le journal du serveur.
@@ -13292,7 +13434,7 @@ Charge un classeur Excel (`.xlsx`, `.xlsm`) ou un fichier texte (`.csv`, `.txt`,
 
 Le fichier vient, par ordre de priorité :
 
-1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Run with parameters** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
+1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Exécuter avec des paramètres** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
 2. **de `path`** — un chemin sur le serveur, qui peut contenir `${params.x}` (un paramètre d'exécution), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx` ;
 3. **d'un dossier surveillé** — `watch_dir` et `watch_pattern` (`*.xlsx`) : chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur.
 
@@ -13417,7 +13559,9 @@ Produit un document dans la zone de travail de l'exécution : une [analyse ou un
 | **Rendre comme l'utilisateur** | Le document contient ce que voit cet utilisateur : le périmètre de données de ses rôles, avec ses attributs. Une synthèse rendue pour le responsable d'une société ne contient que cette société. |
 | **Rendre comme le rôle** | Le périmètre de données d'un rôle. Une règle dont les valeurs viennent d'un attribut utilisateur n'autorise rien dans ce cas : pour ces rôles, préférer **Rendre comme l'utilisateur**. |
 
-Sans l'un ni l'autre, le document est **sans restriction**. Le détail de l'exécution propose le fichier au téléchargement sous l'étape ; le journal le nomme avec sa taille.
+Pour un rapport de plugin, les paramètres de l'exécution — ceux de la tâche, ceux choisis au lancement, les paramètres utilisateur — sont transmis au rapport en plus de ceux de l'étape, convertis dans le type que déclare le rapport (un nombre reste un nombre) ; une valeur vide laisse la valeur par défaut du rapport.
+
+Sans utilisateur ni rôle, le document est **sans restriction**. Le détail de l'exécution propose le fichier au téléchargement sous l'étape ; le journal le nomme avec sa taille.
 
 ---
 
@@ -13458,6 +13602,24 @@ Planifier la tâche le premier du mois (cron `0 7 1 * *`) — voir [Planificatio
 
 ---
 
+## Export de fichier — `file_export` \{#file-export\}
+
+Écrit le résultat d'une requête **de lecture** nommée dans un fichier de la zone de travail de l'exécution — pour qu'un autre système le récupère, ou qu'une étape `notify` le joigne. Une requête d'écriture est refusée.
+
+| Champ (éditeur) | Remarques |
+|---|---|
+| **Connecteur**, **Requête** | La requête de lecture à exécuter. |
+| **Paramètres** | Ses paramètres liés ; ceux de l'exécution sont transmis aussi. Une valeur peut utiliser `${params.x}`. |
+| **Format** | *Excel (xlsx)* (par défaut) ou *CSV*. |
+| **Nom du fichier (par défaut : la requête)** | Peut utiliser `${params.x}` et `${run.id}` : `sales-${params.period}`. |
+| **Feuille** | Excel seulement — le nom de la requête par défaut. |
+| **Séparateur CSV**, **Encodage** | CSV seulement — `;` et `utf-8-sig` par défaut. |
+| **Copier aussi dans ce dossier (optionnel)** | Un dossier du serveur où une copie est également écrite, créé s'il n'existe pas : `/data/out/${params.period}`. |
+
+Les lignes sont lues dans la base au fil de l'eau, dans la limite de lignes du connecteur — le journal indique quand l'export a été plafonné. La ligne d'en-tête porte les libellés des colonnes ; les colonnes masquées sont écartées. Le détail de l'exécution propose le fichier sous l'étape, et la rétention de la zone de travail s'y applique — pas à la copie dans l'autre dossier.
+
+---
+
 ## Réessais et délais \{#retry\}
 
 Le bloc **Politique de réessai** de la tâche (`attempts`, `backoff` fixe ou exponentiel, `base_seconds`) s'applique à chaque étape : une étape est tentée jusqu'à `attempts` fois au total (`1`, la valeur par défaut, signifie aucune nouvelle tentative), avec une attente de `base_seconds` entre deux tentatives — constante, ou doublée à chaque fois avec `exponential`. La tâche entière s'arrête après `timeout_seconds` (4 heures par défaut).
@@ -13467,7 +13629,7 @@ Le bloc **Politique de réessai** de la tâche (`attempts`, `backoff` fixe ou ex
 ## Nomaflow — Historique des exécutions
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/runs/history/
 
-Où sont enregistrées les exécutions Nomaflow et comment en lire une : les états d'exécution, la page Détail de l'exécution (résumé, paramètres de l'exécution, étapes, journal avec Suivre et Télécharger), la liste des exécutions, et la durée de conservation de l'historique.
+Où sont enregistrées les exécutions Nomaflow et comment les lire : la page Exécutions (recherche, filtres, effectifs par état, exécutions par jour, avancement en direct), les états d'exécution, la page Détail de l'exécution (résumé, paramètres de l'exécution, étapes, fichier envoyé, journal avec Suivre et Télécharger), et la durée de conservation de l'historique.
 
 Chaque exécution d'une tâche — planifiée, manuelle, lancée par une autre tâche ou manquée — est enregistrée avec ses étapes et son journal.
 
@@ -13477,13 +13639,25 @@ Chaque exécution d'une tâche — planifiée, manuelle, lancée par une autre t
 
 ---
 
-## Où trouver les exécutions \{#where\}
+## La page Exécutions \{#where\}
 
-| Depuis | Ouvre |
+**Exploitation → Exécutions**, dans le menu de Nomaflow, liste toutes les exécutions, les plus récentes en premier.
+
+| Élément | Usage |
 |---|---|
-| *dernière* sur une carte de tâche | Le détail de la dernière exécution de la tâche. |
-| La liste **Exécutions** (menu Nomaflow ; lien **Exécutions** en haut d'un détail) | Les dernières exécutions de toutes les tâches. |
-| Une notification sur une exécution | Son détail, par le lien de la notification. |
+| **Chercher** | Une tâche, un utilisateur, un message d'erreur. |
+| **Toutes les tâches** | Une seule tâche. |
+| Période | *Dernières 24 heures*, *7 derniers jours* (par défaut), *30 derniers jours*, *Tout*. |
+| Pastilles d'état | **Tout**, puis chaque état présent avec son effectif — `RUNNING`, `QUEUED`, `FAILED`, `SUCCEEDED`, `CANCELED`, `MISSED`. Un clic ne garde que cet état ; un second clic l'efface. |
+
+Les filtres sont conservés par le navigateur. Les exécutions sont groupées par jour — *Aujourd'hui*, *Hier*, puis la date — et chaque ligne présente :
+
+- l'état et l'heure de début ;
+- la tâche et les paramètres de l'exécution : pour une tâche exécutée par application, l'application traitée ;
+- son origine : la planification, un utilisateur, ou la tâche appelante ;
+- la durée — qui s'incrémente pendant l'exécution, avec une barre des étapes terminées —, les lignes traitées, et sous une exécution en échec son erreur.
+
+Tant qu'une exécution est en cours, la page se rafraîchit d'elle-même (*en direct*). Un clic sur une ligne ouvre le détail de l'exécution ; **Afficher plus** charge les plus anciennes. Le détail d'une exécution s'ouvre aussi depuis l'état de la dernière exécution sur la [page des Tâches](../jobs/catalog.md#card) et depuis le lien d'une notification.
 
 ---
 
@@ -13509,8 +13683,8 @@ La page se rafraîchit toutes les deux secondes tant que l'exécution est en cou
 | Partie | Contenu |
 |---|---|
 | **Résumé** | Tâche, Déclencheur (`scheduled` ou `manual`, et qui l'a lancée — un nom d'utilisateur, ou `call_job:<tâche>@<exécution>` pour une tâche lancée par une autre), Démarrée, Terminée, Lignes affectées. |
-| **Run with parameters** | Affiché quand l'exécution a été lancée avec des valeurs particulières : celles choisies pour cette exécution (paramètres partagés, arguments des étapes, étapes sautées, niveau de journal). |
-| **Étapes** | Une ligne par étape : n°, nom, Type, Tentative, État, Erreur. Une étape `file_load` affiche aussi *N read · N inserted · N rejected* et, si besoin, **Rejected rows (csv)**. |
+| **Exécuter avec des paramètres** | Affiché quand l'exécution a été lancée avec des valeurs particulières : celles choisies pour cette exécution (paramètres partagés, arguments des étapes, étapes sautées, niveau de journal). |
+| **Étapes** | Une ligne par étape : n°, nom, Type, Tentative, État, Erreur. Une étape `file_load` affiche aussi *N read · N inserted · N rejected*, le fichier envoyé pour cette exécution — un clic le télécharge à nouveau — et, si besoin, **Rejected rows (csv)**. |
 | **Journal** | Les lignes écrites pendant l'exécution, au niveau de journal de l'exécution. **Suivre** garde les dernières lignes visibles (**Pause** l'arrête) ; **Télécharger** enregistre le journal complet. |
 
 Le journal conserve les 5 000 dernières lignes d'une exécution.
@@ -13519,7 +13693,7 @@ Le journal conserve les 5 000 dernières lignes d'une exécution.
 
 ## Durée de conservation \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches supprime les anciennes exécutions avec leurs étapes et leurs journaux : par défaut, celles de plus de 30 jours, en gardant au plus 100 exécutions par tâche, avec un contrôle toutes les 60 minutes. Voir [Administration](../administration.md#retention).
+Le panneau **Rétention de l'historique des exécutions** de la page des Tâches supprime les anciennes exécutions avec leurs étapes et leurs journaux : par défaut, celles de plus de 30 jours, en gardant au plus 100 exécutions par tâche, avec un contrôle toutes les 60 minutes. Voir [Administration](../administration.md#retention).
 
 ---
 
@@ -13528,7 +13702,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/runs/troubleshoot/
 
 Corriger les exécutions Nomaflow : une exécution en échec, une étape qui fait autre chose que prévu, une exécution bloquée, une annulation qui n'arrête pas une étape Python, une planification qui ne se déclenche pas, une tâche absente de la liste, un journal vide.
 
-Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec, puis le **Journal**. Relancer avec **Run with parameters** en `DEBUG` pour voir le SQL de chaque requête.
+Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec, puis le **Journal**. Relancer avec **Exécuter avec des paramètres** en `DEBUG` pour voir le SQL de chaque requête.
 
 ---
 
@@ -13543,7 +13717,7 @@ Partir du détail de l'exécution : la colonne **Erreur** de l'étape en échec,
 | *period … is closed* (file_load) | La requête de refus de l'étape a volontairement rejeté le chargement. |
 | *control total mismatch …* (file_load) | Le total chargé diffère du total attendu ; rien n'a été écrit. |
 
-Après correction, ne relancer que l'étape en échec : **Run with parameters**, décocher les étapes déjà réussies, **Run**.
+Après correction, ne relancer que l'étape en échec : **Exécuter avec des paramètres**, décocher les étapes déjà réussies, **Run**.
 
 ---
 
@@ -13671,7 +13845,7 @@ Dans **Paramètres → Notifications**, une règle sur *A job event* : tâche `n
 
 ## Vérifier \{#check\}
 
-**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Run with parameters** affiche les requêtes. Une fois le résultat juste, laisser la planification active.
+**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Exécuter avec des paramètres** affiche les requêtes. Une fois le résultat juste, laisser la planification active.
 
 ---
 
@@ -13840,7 +14014,7 @@ callable = "housekeeping.audit:purge_audit"
 op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
 ```
 
-Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Run with parameters**.
+Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Exécuter avec des paramètres**.
 
 ---
 
@@ -13857,7 +14031,7 @@ Le détail de l'exécution affiche les lignes supprimées ; le journal indique s
 ## Nomaflow — Tâches livrées
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/bundled-jobs/
 
-Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de rafraîchissement, de synchronisation, de SoD et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Catalogue → ▶ Exécuter, planification via le planificateur standard ou déclenchement depuis la CI.
+Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de synchronisation, de collecte, de rapport et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Catalogue → ▶ Exécuter, planification via le planificateur standard ou déclenchement depuis la CI.
 
 Le wheel **`liberty-apps`** embarque un catalogue de tâches Nomaflow curaté dans `plugins/nomaflow/jobs.toml`. Ces tâches apparaissent automatiquement dans le catalogue Nomaflow après l'installation du wheel et un rechargement du framework — aucun bloc `[[jobs]]` à rédiger, aucune planification à câbler à la main.
 
@@ -13868,12 +14042,10 @@ Chaque tâche est une fine enveloppe autour d'un appelable Python livré dans le
 | **Installation** | Provisionnement unique des bases de données et du schéma. | [Tâches d'installation](#install) |
 | **Préchargement** | Export/import de données de référence curatées — pour les nouvelles installations client ou la promotion entre environnements. | [Tâches de préchargement](#preload) |
 | **Synchronisation** | Copie des tables de contrôle et de dictionnaire en amont vers le miroir Nomajde local. | [Tâches de synchronisation](#sync) |
-| **Collecte sécurité** | Lecture de la sécurité JD Edwards et du LDAP dans le schéma Nomasx-1. | [Tâches de collecte sécurité](#security) |
-| **Collecte licences** | Lecture des données de licence, employés et OUT depuis JDE vers le schéma Nomasx-1. | [Tâches de collecte licences](#license) |
-| **Détection SoD** | Application de la matrice de séparation des tâches sur les données de sécurité collectées. | [Tâches SoD](#sod) |
-| **Propriétés base de données** | Lecture des métadonnées Oracle (options, fonctionnalités, partitionnement, licences). | [Tâches base de données](#database) |
+| **Collecte** | Une seule tâche collecte tout ce dont Nomasx-1 a besoin pour une ou plusieurs applications : sécurité JD Edwards, séparation des tâches, licences, Object Usage Tracking, et au besoin l'annuaire, le journal d'activité, les propriétés de la base Oracle et les références croisées. | [Tâche de collecte](#collect) |
+| **Rapports** | Les deux rapports d'audit, produits chaque mois et envoyés aux auditeurs. | [Tâches de rapport](#reports) |
 | **Audit trail** | Capture des modifications via LogMiner depuis la base source d'audit. | [Tâches d'audit trail](#audit-trail) |
-| **Maintenance** | Rafraîchissement des vues matérialisées, reconstruction des références croisées, remise à zéro de SCN, mise à niveau du schéma. | [Tâches de maintenance](#maintenance) |
+| **Maintenance** | Rafraîchissement des vues matérialisées, extraction des références croisées, purge des versions de configuration. | [Tâches de maintenance](#maintenance) |
 
 Toutes les tâches livrées arrivent avec **`enabled = false`** — elles apparaissent dans le catalogue mais ne se déclenchent pas automatiquement. L'opérateur active une planification (ou les exécute à la demande) une fois l'installation câblée.
 
@@ -13914,7 +14086,7 @@ La plupart des tâches du bundle partagent la même forme de paramètres sous `[
 | `target_connector` | `nomasx1` | Connecteur d'**écriture**. À surcharger pour une installation parallèle (`nomasx1b`). |
 | `target_schema` | `nomasx1` | Nom du schéma à l'intérieur du connecteur cible. |
 
-Surcharges à l'exécution : ouvrir *Exécuter avec paramètres* sur la fiche de la tâche avant ▶ Exécuter. Surcharges par planification : les définir sur le bloc `[[jobs.schedules]]` dans votre `jobs.toml` de surcharge.
+Surcharges à l'exécution : **Exécuter**, sur la ligne de la tâche, ouvre *Exécuter avec des paramètres*. Surcharges par planification : les définir sur le bloc `[[jobs.schedules]]` dans le `jobs.toml` de surcharge.
 
 ---
 
@@ -14022,13 +14194,26 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 
 ---
 
+### `nomasx1-roles` \{#nomasx1-roles\}
+
+**Crée ou met à jour les rôles de Nomasx-1.**
+
+| Rôle | Accorde |
+|---|---|
+| `nomasx1_auditor` | Toutes les lectures des données de Nomasx-1, l'explorateur de données, l'assistant IA et les deux tâches de rapport ; les rapports mensuels lui sont envoyés. |
+| `nomasx1_admin` | Tout : l'application entière, ses paramètres et toutes les tâches `nomasx1-*`. |
+
+À lancer une fois après l'installation et après chaque mise à jour, pour que les nouvelles requêtes de lecture soient accordées ; attribuer ensuite les rôles aux utilisateurs dans **Paramètres → Access**. Peut être relancée sans risque ; livrée désactivée.
+
+---
+
 ## Tâches de préchargement \{#preload\}
 
 Le **bundle de référence** curaté est livré dans `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz`. La tâche d'export construit le bundle depuis une installation source ; la tâche d'import le charge dans une installation cible.
 
 ### `nomasx1-export-reference` \{#nomasx1-export-reference\}
 
-**Extraction des tables de référence Nomasx-1 curatées vers un bundle `.tar.gz`.** Le bundle contient les lignes de référence `settings_*` et `sod_*` (~2 000 lignes, ~35 Ko) — les données de référence curatées livrées avec Nomasx-1, adaptées à l'amorçage des nouvelles installations client. Surcharger `output_path` ou `source_connector` via *Exécuter avec paramètres*.
+**Extraction des tables de référence Nomasx-1 curatées vers un bundle `.tar.gz`.** Le bundle contient les lignes de référence `settings_*` et `sod_*` (~2 000 lignes, ~35 Ko) — les données de référence curatées livrées avec Nomasx-1, adaptées à l'amorçage des nouvelles installations client. Surcharger `output_path` ou `source_connector` via *Exécuter avec des paramètres*.
 
 | Étape | Appelable |
 |---|---|
@@ -14092,7 +14277,7 @@ Réplication des tables de contrôle et de dictionnaire en amont depuis JD Edwar
 
 Chaque étape utilise `type_coercion = "jde"` et `decimal_mode = "truncate"` — les types de colonne JDE sont mis en correspondance avec du SQL standard à l'entrée (par exemple `JULIANDATE` → `DATE`, `STRING(N)` tronqué en `VARCHAR`), avec troncature plutôt qu'arrondi sur les décimales.
 
-**Planification** — `30 2 * * *` (02h30 chaque jour, fuseau Europe/Paris dans le bundle). `enabled = false` par défaut — à activer depuis la fiche du catalogue une fois `jdedwards` câblé et après une première exécution manuelle ▶ Exécuter réussie.
+**Planification** — `30 2 * * *` (02h30 chaque jour, fuseau Europe/Paris dans le bundle). `enabled = false` par défaut — à activer depuis la ligne de la tâche une fois `jdedwards` câblé et après une première exécution manuelle ▶ Exécuter réussie.
 
 **Reprise et alertes** — 2 tentatives de reprise, alerte quand l'exécution dépasse 120 minutes.
 
@@ -14141,137 +14326,54 @@ Pour une re-fusion partielle — uniquement les parents affectés par *cette* mo
 
 ---
 
-## Tâches de collecte sécurité \{#security\}
+## Tâche de collecte \{#collect\}
 
-Lecture des données de sécurité JD Edwards vers le schéma Nomasx-1. La structure prend la forme d'une longue chaîne d'étapes mono-appelable — une fonction Python par entité JDE ou par table dérivée Nomasx-1.
+### `nomasx1-collect-all` \{#nomasx1-collect-all\}
 
-### `nomasx1-security-1` \{#nomasx1-security-1\}
+**Collecte, dans l'ordre, tout ce dont Nomasx-1 a besoin pour une application**, puis rafraîchit une seule fois les vues matérialisées à la fin.
 
-**Collecte de toutes les données de sécurité pour une application** — Utilisateurs / Rôles / Affectations / Menus / Accès. Chaque étape extrait une entité JDE (objets, sec objects, sec menus, etc.) ou construit une table dérivée Nomasx-1 (security_users, security_rights_actions, etc.).
-
-| Famille | Étapes | Description |
+| Famille | Étapes | Active par défaut |
 |---|---|---|
-| Entités JDE | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `JDE_TASKS`, `JDE_MENUS` | Extraction brute depuis F00950, F0094, F0092, F9012, F9001, F9000. |
-| Catalogues Nomasx-1 | `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `SECURITY_MENUS` | Utilisateurs, rôles, affectations de rôles et arbres de menus par application. |
-| Droits dérivés | `SECURITY_RIGHTS_MENUS`, `SECURITY_RIGHTS_APPS`, `SECURITY_RIGHTS_ACTIONS`, `SECURITY_RIGHTS_APPS_USERS`, `SECURITY_RIGHTS_ACTIONS_USERS` | Droits effectifs — par rôle, par utilisateur, sur les menus, applications et actions. |
-| Audit | `SECURITY_RIGHTS_AUDIT` | Piste d'audit des octrois et révocations de droits. |
-| Rafraîchissement | `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées en fin de chaîne. |
+| Sécurité JD Edwards | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `JDE_TASKS`, `JDE_MENUS`, `SECURITY_MENUS`, `SECURITY_RIGHTS_*` (menus, applications, actions, par utilisateur, audit) | Oui |
+| Séparation des tâches | `SOD_CONFLICT_DETAILS`, `SOD_CONFLICT_SUMMARY` — la matrice de *Paramètres → Séparation des tâches* appliquée à la sécurité tout juste collectée | Oui |
+| Licences | `LICENSE_JDE_EMPLOYEES`, `LICENSE_JDE_USERS` | Oui |
+| Object Usage Tracking | `LICENSE_JDE_OUT`, `LICENSE_JDE_OUT_OBJECTS`, `LICENSE_JDE_OUT_USERS`, `LICENSE_JDE_OUT_PURGE` | Oui |
+| Annuaire | `SECURITY_LDAP` — le LDAP / Active Directory défini dans *Paramètres → LDAP* | Non |
+| Journal d'activité | `SECURITY_ACTIVITY_LOG` | Non |
+| Base Oracle | `DB_ORA_PROPERTIES`, `DB_ORA_OPTIONS`, `DB_ORA_FEATURES`, `DB_ORA_PARTITIONS`, `DB_ORA_LICENSES` | Non |
+| Références croisées | `JDE_XREF_APPS` | Non |
+| Vues | `REFRESH_VIEWS` | Oui |
 
-Toutes les étapes s'exécutent séquentiellement (aucun parallélisme — l'ordre est important pour les tables dérivées).
+**Préréglages**
 
-**Paramètres standards** (`apps_id`, `source_connector = jdedwards`, `target_connector = nomasx1`, `target_schema = nomasx1`).
+| Préréglage | Exécute |
+|---|---|
+| **Security and SoD** | La sécurité et la séparation des tâches — les étapes de licences et d'OUT désactivées. |
+| **Licences** | Les licences et l'OUT — les étapes de sécurité et de SoD désactivées. |
+| **Everything** | Toutes les étapes, y compris l'annuaire, le journal d'activité, la base et les références croisées. |
 
-**Reprise et alertes** — 2 tentatives, alerte d'exécution longue à 30 minutes.
+**Applications** — la tâche propose les applications de *Paramètres → Applications* en cases à cocher, avec **Tout**. Elle s'exécute une fois par application cochée, l'une après l'autre. Dans une planification ou un préréglage, `apps_id = "all"` collecte toutes les applications à chaque déclenchement.
 
-**Quand l'exécuter** — quotidiennement pour les installations actives (lecture seule sur JDE). La première exécution après un nouveau rôle, utilisateur ou octroi de droit dans JDE rafraîchit le catalogue Nomasx-1 ; jusque-là, l'interface affiche l'instantané précédent.
+**Paramètres** — `source_connector = jdedwards`, `target_connector = nomasx1`. Deux tentatives en cas d'échec ; une alerte au-delà de 90 minutes.
+
+**Menu** — *Nomasx-1 → Tâches → Collecter la sécurité et la SoD* et *Collecter les licences* lancent les deux préréglages. Voir [Tâches de Nomasx-1](../nomasx1/jobs.md).
+
+**Quand l'exécuter** — chaque jour sur une installation active, avec une planification sur un préréglage : *Security and SoD* chaque nuit, *Licences* chaque semaine.
 
 ---
 
-### `nomasx1-ldap-1` \{#nomasx1-ldap-1\}
+## Tâches de rapport \{#reports\}
 
-**Collecte des utilisateurs Active Directory** via la connexion LDAP/AD configurée dans *Paramètres → LDAP*. Peuple la table Nomasx-1 `security_ldap` qui alimente les pages de réconciliation LDAP.
+### `nomasx1-report-licences` et `nomasx1-report-security-sox` \{#nomasx1-reports\}
 
-| Étape | Appelable |
+**Produisent un rapport d'audit et l'envoient.** Une [étape `report`](./steps.md#report) produit le PDF — l'[audit des licences](../nomasx1/reports/audit-licences.md) ou l'[évaluation Sécurité & SoD](../nomasx1/reports/security-sox.md) — pour une application ; une [étape `notify`](./steps.md#notify) l'envoie au rôle `nomasx1_auditor`, fichier joint.
+
+| Paramètre | Rôle |
 |---|---|
-| `SECURITY_LDAP` | `nomasx1.ldap:j_security_ldap` |
+| **Applications** | Une ou plusieurs applications, ou **Tout** — un rapport par application. |
+| **Language** | `fr` ou `en`. |
 
-**Paramètres** — forme standard (`source_connector = unused` — le serveur LDAP est configuré séparément).
-
-**Quand l'exécuter** — quotidiennement, après le rafraîchissement de la source LDAP ; ou à la demande avant une revue d'accès trimestrielle.
-
----
-
-## Tâches de collecte licences \{#license\}
-
-Lecture des données JDE pertinentes pour les licences — employés, utilisateurs transactionnels, Object Usage Tracking — vers le schéma Nomasx-1. Alimentent les tableaux de bord *Licences → JD Edwards*.
-
-### `nomasx1-employees-1` \{#nomasx1-employees-1\}
-
-**Collecte des employés depuis les modules RH de JD Edwards** — internes et externes. Peuple la table `license_jde_employees` ; rafraîchit les vues matérialisées en fin de chaîne.
-
-| Étape | Appelable |
-|---|---|
-| `LICENSE_JDE_EMPLOYEES` | `nomasx1.license:j_license_jde_employees` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Alerte d'exécution longue** — 5 minutes.
-
-**Quand l'exécuter** — hebdomadairement. Les données RH ne changent pas quotidiennement.
-
----
-
-### `nomasx1-license-1` \{#nomasx1-license-1\}
-
-**Collecte des utilisateurs depuis les tables JD Edwards — transactions uniquement.** Lit qui a effectivement réalisé des transactions dans JDE sur la fenêtre récente (sert d'entrée au comptage des utilisateurs licenciables). Peuple `license_jde_users`.
-
-| Étape | Appelable |
-|---|---|
-| `LICENSE_JDE_USERS` | `nomasx1.license:j_license_jde_users` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Alerte d'exécution longue** — 30 minutes.
-
-**Quand l'exécuter** — quotidiennement (installations actives) ou hebdomadairement (installations moins sollicitées). À associer avec `nomasx1-employees-1` pour que les utilisateurs transactionnels soient rapprochés des fiches employés.
-
----
-
-### `nomasx1-out-1` \{#nomasx1-out-1\}
-
-**Collecte de l'Object Usage Tracking depuis JD Edwards.** Agrège les données OUT et purge les lignes conservées selon la rétention définie dans *Nomasx-1 → Paramètres → JDE → Rétention OUT*. Alimente les tableaux de bord OUT (composants, utilisateurs, objets).
-
-| Étape | Description |
-|---|---|
-| `LICENSE_JDE_OUT` | Extraction brute de l'OUT depuis JDE. |
-| `LICENSE_JDE_OUT_OBJECTS` | Agrégation par objet. |
-| `LICENSE_JDE_OUT_USERS` | Agrégation par utilisateur. |
-| `LICENSE_JDE_OUT_PURGE` | Purge des lignes plus anciennes que le paramètre de rétention. |
-| `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées. |
-
-**Alerte d'exécution longue** — 15 minutes.
-
-**Quand l'exécuter** — quotidiennement. Les données OUT s'accumulent rapidement ; un passage quotidien garde le tableau de bord pertinent et l'étape de purge maintient la base à une taille raisonnable.
-
----
-
-## Tâches SoD \{#sod\}
-
-### `nomasx1-sod-1` \{#nomasx1-sod-1\}
-
-**Collecte des séparations des tâches (SoD) à partir des données de sécurité et de la matrice définie dans *Nomasx-1 → Paramètres → SoD*.** Les données de sécurité sont un prérequis — à exécuter après `nomasx1-security-1`.
-
-| Étape | Description |
-|---|---|
-| `SOD_CONFLICT_DETAILS` | Lignes de détail par utilisateur et par conflit. |
-| `SOD_CONFLICT_SUMMARY` | Décomptes agrégés qui alimentent le tableau de bord SoD. |
-| `REFRESH_VIEWS` | Rafraîchissement des vues matérialisées. |
-
-**Alerte d'exécution longue** — 10 minutes.
-
-**Quand l'exécuter** — quotidiennement, planifiée après `nomasx1-security-1` (afin que l'analyse SoD voie les affectations les plus fraîches). Ou à la demande après une action majeure de revue d'accès.
-
----
-
-## Tâches base de données \{#database\}
-
-Lecture des métadonnées Oracle depuis la base hébergeant JDE (ou toute cible Oracle câblée en tant que `oracle-target`). Alimente la page *Base de données → Oracle*.
-
-### `nomasx1-database-1` \{#nomasx1-database-1\}
-
-**Collecte des propriétés de la base Oracle.**
-
-| Étape | Description |
-|---|---|
-| `DB_ORA_PROPERTIES` | Version, édition, paramètres. |
-| `DB_ORA_OPTIONS` | Options installées (Spatial, OLAP, RAC, etc.). |
-| `DB_ORA_FEATURES` | Utilisation des fonctionnalités depuis `DBA_FEATURE_USAGE_STATISTICS`. |
-| `DB_ORA_PARTITIONS` | Utilisation du partitionnement par schéma. |
-| `DB_ORA_LICENSES` | Signaux agrégés pertinents pour la licence (utilisation des options, fonctionnalités et partitionnement). |
-
-**Connecteur source** — `oracle-target` (un connecteur que vous configurez vers la base Oracle à introspecter). La tâche ne lira pas depuis `jdedwards` — par conception, afin qu'une cible Oracle distincte puisse être auditée sans accorder de droits de lecture supplémentaires au connecteur JDE de Nomasx-1.
-
-**Alerte d'exécution longue** — 10 minutes.
-
-**Quand l'exécuter** — un passage mensuel suffit généralement. Les données qui alimentent les tableaux de bord Oracle évoluent lentement.
+**Planification** — le 1er de chaque mois à 06:00 (Europe/Paris) ; livrées désactivées. Les activer une fois le compte de messagerie renseigné dans les [notifications](./notifications.md#smtp).
 
 ---
 
@@ -14297,7 +14399,7 @@ Capture de données modifiées pilotée par LogMiner depuis la base source d'aud
 
 ### `nomasx1-audit-trail-reset-scn-1` \{#nomasx1-audit-trail-reset-scn-1\}
 
-**Remise à zéro du dernier SCN utilisé par Audit Trail pour une application.** À utiliser après une longue pause (la reprise de l'audit trail sur un historique trop long serait lente) ou après un changement de source d'audit. La valeur par défaut `scn = 0` fait reprendre la prochaine exécution sur le SCN courant — c'est-à-dire un démarrage à neuf depuis « maintenant ». Surcharger `scn` via *Exécuter avec paramètres* pour fixer un SCN précis.
+**Remise à zéro du dernier SCN utilisé par Audit Trail pour une application.** À utiliser après une longue pause (la reprise de l'audit trail sur un historique trop long serait lente) ou après un changement de source d'audit. La valeur par défaut `scn = 0` fait reprendre la prochaine exécution sur le SCN courant — c'est-à-dire un démarrage à neuf depuis « maintenant ». Surcharger `scn` via *Exécuter avec des paramètres* pour fixer un SCN précis.
 
 | Étape | Appelable |
 |---|---|
@@ -14368,22 +14470,6 @@ Enregistre le nombre de lignes de valeurs écrites.
 
 ---
 
-### `nomasx1-xref-1` \{#nomasx1-xref-1\}
-
-**Génération des références croisées pour les objets JD Edwards.** Construit la table JDE_XREF_APPS qui alimente les vues de références croisées (quelle application référence quel objet).
-
-| Étape | Appelable |
-|---|---|
-| `JDE_XREF_APPS` | `nomasx1.xref:j_jde_xref_apps` |
-
-**Paramètres** — `object_id = "all"` (défaut — traite chaque objet). À surcharger par un identifiant d'objet précis pour une reconstruction ciblée.
-
-**Alerte d'exécution longue** — 30 minutes.
-
-**Quand l'exécuter** — hebdomadairement. Les données XRef évoluent lentement ; seuls les objets ajoutés ou modifiés dans JDE comptent.
-
----
-
 ### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
 
 **Diagnostic : extraction de la définition brute d'un objet JD Edwards.** Écrit dans des fichiers le XML OMW décompressé des écrans de l'objet (F98751) et les textes qu'ils référencent (F98750), pour en examiner la structure brute — par exemple un onglet ou un identifiant de contrôle manquant. En lecture seule : rien n'est écrit dans la base cible.
@@ -14396,24 +14482,10 @@ Enregistre le nombre de lignes de valeurs écrites.
 
 | Paramètre | Défaut | Signification |
 |---|---|---|
-| `object_id` | `P01012` | L'objet à extraire — à renseigner dans *Exécuter avec paramètres*. |
+| `object_id` | `P01012` | L'objet à extraire — à renseigner dans *Exécuter avec des paramètres*. |
 | `output_dir` | `""` | Le dossier des fichiers. Vide : un dossier temporaire sur le serveur. |
 
 **Quand l'exécuter** — à la demande, pour analyser un manque dans les références croisées. Non planifiée.
-
----
-
-### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
-
-**Rafraîchissement du journal d'activité.** Interroge chaque table JDE modifiée récemment et agrège les enregistrements par utilisateur et par date. **Seules les tables modifiées sont parcourues** — la tâche suit un repère par table afin de ne pas relire l'historique complet à chaque exécution.
-
-| Étape | Appelable |
-|---|---|
-| `SECURITY_ACTIVITY_LOG` | `nomasx1.activity_log:j_security_activity_log` |
-
-**Alerte d'exécution longue** — 15 minutes.
-
-**Quand l'exécuter** — quotidiennement.
 
 ---
 
@@ -14435,21 +14507,18 @@ Enregistre le nombre de versions supprimées. Deux tentatives au total en cas d'
 
 ## Conseils de planification
 
-Un rythme quotidien typique sur une installation active :
+Un rythme type sur une installation active :
 
 | Heure | Tâche |
 |---|---|
-| 02h30 | `nomajde-daily-sync` (planification livrée). |
-| 03h00 | `nomasx1-security-1`. |
-| 03h30 | `nomasx1-license-1`. |
-| 04h00 | `nomasx1-out-1`. |
-| 04h30 | `nomasx1-ldap-1`. |
-| 05h00 | `nomasx1-sod-1` (après la sécurité, afin de disposer des affectations les plus fraîches). |
-| 05h30 | `nomasx1-activity-log-1`. |
+| 02:30 | `nomajde-daily-sync` (planification livrée). |
+| 03:00 | `nomasx1-collect-all`, préréglage *Security and SoD*, toutes les applications. |
+| Dimanche 04:00 | `nomasx1-collect-all`, préréglage *Licences*. |
+| Le 1er du mois à 06:00 | Les deux tâches de rapport. |
 
-L'audit trail (`nomasx1-audit-trail-1`) s'exécute généralement toutes les 15 à 60 minutes — sur un rythme distinct du rafraîchissement sécurité et licences.
+L'audit trail (`nomasx1-audit-trail-1`) s'exécute en général toutes les 15 à 60 minutes — un rythme distinct de la collecte.
 
-Les tâches livrées sont **enabled = false** par défaut. Définir la planification par tâche depuis *Nomaflow → Catalogue → \<tâche\> → onglet Planifications*, puis basculer `Enabled` sur la fiche du catalogue.
+Les tâches livrées sont **enabled = false** par défaut. Définir une planification dans l'éditeur de tâche, sur la tâche ou sur un préréglage, puis activer la tâche depuis sa ligne de la page des Tâches. Les principales — la collecte, les deux rapports, la synchronisation JD Edwards — figurent en tête de liste, dans **Tâches principales**.
 
 ---
 
@@ -14457,11 +14526,11 @@ Les tâches livrées sont **enabled = false** par défaut. Définir la planifica
 
 | Erreur | Symptôme | Correctif |
 |---|---|---|
-| `jobs.toml` du bundle écrasé lors de la mise à niveau du wheel — modifications locales perdues. | Les blocs `[[jobs]]` personnalisés disparaissent après `liberty-apps install`. | Conserver les tâches personnalisées dans un `jobs.toml` séparé hors du répertoire plugin du bundle ; ou sauvegarder le fichier avant la mise à niveau. |
+| Une tâche livrée dont les étapes ont été modifiées n'est pas mise à jour par le nouveau wheel. | La mise à jour la signale comme conservée. | Planifications, préréglages, alertes et valeurs des paramètres survivent d'eux-mêmes à une mise à jour ; garder les étapes telles que livrées, ou marquer la tâche `override = true` — voir [Déployer les applications préfabriquées](../installation/deploy-prebuilt-apps.md#merge). |
 | Une tâche de collecte échoue avec `No module named 'nomasx1'`. | Le code du plugin n'est pas dans le chemin des plugins du framework. | Exécuter `liberty-apps install --target $LIBERTY_APPS_DIR` pour matérialiser la charge ; recharger le framework. |
 | `nomasx1-import-reference` échoue avec *« target application not found »*. | Application non créée dans *Paramètres → Applications*. | Créer d'abord l'application dans l'interface ; le pré-contrôle refuse de démarrer sinon. |
 | `deploy-databases` produit une erreur de droits refusés. | Le pool `default` ne peut créer ni bases, ni rôles. | Pointer temporairement `default` sur un superutilisateur Postgres ; revenir en arrière après l'exécution. |
-| Planification définie mais la tâche ne se déclenche pas. | Le bascule sur la fiche du catalogue est sur OFF (le bundle livre `enabled = false`). | Activer `Enabled` sur la fiche APRÈS avoir défini la planification. |
+| Planification définie mais la tâche ne se déclenche pas. | La tâche est désactivée (le bundle livre `enabled = false`). | L'activer depuis sa ligne de la page des Tâches, une fois la planification définie. |
 | La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Paramètres → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
 | L'audit trail commence à produire des milliers de lignes par minute. | La tâche a démarré au SCN 0 — relecture de l'intégralité du journal d'archive. | Exécuter `nomasx1-audit-trail-reset-scn-1` (valeur par défaut `scn = 0` → la prochaine exécution reprend sur le SCN courant) pour repartir à neuf. |
 | Les vues matérialisées affichent des données obsolètes après une correction SQL manuelle. | L'étape REFRESH_VIEWS de fin de chaîne de la tâche de collecte ne s'est pas exécutée (vous l'avez court-circuitée). | Exécuter `nomasx1-refresh-views` manuellement. |
@@ -14471,7 +14540,7 @@ Les tâches livrées sont **enabled = false** par défaut. Définir la planifica
 ## Pour la suite
 
 - [Déployer les applications préfabriquées](../installation/deploy-prebuilt-apps.md) — comment le bundle parvient à l'installation au départ.
-- [Nomaflow → Tâches → Catalogue](./jobs/catalog.md) — l'interface de la fiche catalogue : activation des planifications, exécution à la demande, *Exécuter avec paramètres*.
+- [Nomaflow → Tâches → Catalogue](./jobs/catalog.md) — la page des Tâches : activation des planifications, exécution à la demande, *Exécuter avec des paramètres*.
 - [Nomaflow → Exécutions → Historique](./runs/history.md) — la page de détail par exécution où atterrissent les sorties des tâches livrées.
 - [Nomaflow → Python personnalisé](./custom-python.md) — comment écrire vos propres appelables aux côtés de ceux livrés dans `nomasx1.*`.
 
@@ -14807,7 +14876,7 @@ async def refresh(*, period: str, target_connector: str,
 
 | Argument | Provenance |
 |---|---|
-| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Run with parameters**. Les valeurs sont converties au type annoté (`apps_id: int`). |
+| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Exécuter avec des paramètres**. Les valeurs sont converties au type annoté (`apps_id: int`). |
 | `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
 | `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
 | `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
@@ -14839,7 +14908,7 @@ from liberty.jobs.runlog import register_namespace
 register_namespace("reports")
 ```
 
-Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Run with parameters** → niveau de journal) s'applique.
+Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Exécuter avec des paramètres** → niveau de journal) s'applique.
 
 ---
 
@@ -14861,7 +14930,7 @@ Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écr
 ## Nomaflow — Notifications
 Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/notifications/
 
-Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche.
+Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue, retard) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche.
 
 Une notification prévient quelqu'un qu'un événement s'est produit : une période clôturée, une tâche de nuit en échec, une planification manquée. Les **règles** décident quand ; les **canaux** décident comment — la cloche de l'application, un e-mail, ou un appel à un connecteur.
 
@@ -14908,7 +14977,7 @@ Les règles se modifient dans **Paramètres → Notifications** et s'enregistren
 | Déclencheur | Se déclenche quand | Réglages |
 |---|---|---|
 | **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **A job event** | Une exécution Nomaflow se termine. | Jobs (vide = toutes les tâches) et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes. |
+| **A job event** | Une exécution Nomaflow se termine. | Jobs (vide = toutes les tâches) et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
 | **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
 
 `long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
@@ -14940,7 +15009,7 @@ L'objet, le corps et le lien acceptent des variables `{NOM}`, en majuscules ou e
 | Déclencheur | Variables |
 |---|---|
 | Événement d'écran | Chaque colonne de la ligne écrite, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
-| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée. |
+| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée ou une échéance. |
 | Action d'écran | Les valeurs transmises par l'action, plus `USER`. |
 
 Une variable inconnue est laissée telle quelle.
@@ -15016,7 +15085,7 @@ Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur
 | Historique des exécutions | Dans la base de données du framework, cinq tables : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage. |
 | Tâches | Le fichier des tâches `plugins/nomaflow/jobs.toml`, à côté du dossier de configuration — modifié depuis les pages des Tâches. |
 | Journal d'exécution | Les 5 000 dernières lignes de chaque exécution sont conservées. |
-| Fichiers | Les fichiers envoyés par **Run with parameters** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
+| Fichiers | Les fichiers envoyés par **Exécuter avec des paramètres** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
 | Taille d'envoi | 200 Mo au plus par fichier. |
 
 ---
@@ -15037,16 +15106,17 @@ Exécuter **une seule** instance de Liberty Next : le planificateur se déclench
 
 ## Rétention de l'historique \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches :
+Le panneau **Rétention de l'historique des exécutions** de la page des Tâches :
 
 | Réglage | Défaut | Signification |
 |---|---|---|
-| **Auto-sweep** | activé | Le nettoyage récurrent. |
-| **Days kept** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
-| **Cap per job** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
-| **Sweep interval (min)** | 60 | La fréquence du nettoyage. |
+| **Nettoyage automatique** | activé | Le nettoyage récurrent. |
+| **Jours conservés** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
+| **Plafond par tâche** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
+| **Intervalle de nettoyage (min)** | 60 | La fréquence du nettoyage. |
+| **Fichiers conservés (jours)** | vide | Les fichiers plus anciens de la zone de travail sont supprimés : fichiers envoyés, rapports de rejets, rapports, exports, et archives `done/` / `failed/` des dossiers surveillés. Vide = **Jours conservés** ; `0` = garder les fichiers. Une copie écrite dans un dossier d'export n'est jamais touchée. |
 
-**Clean now** le lance aussitôt. La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
+**Nettoyer maintenant** le lance aussitôt et indique les exécutions et les fichiers supprimés. Les mêmes stockages figurent, avec leur taille, dans [Surveillance → Rétention](../monitoring/retention.md). La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
 
 ---
 
@@ -15174,6 +15244,133 @@ Chaque widget ne s'affiche que si l'utilisateur peut lancer sa requête : sans a
 
 ---
 
+## Nomasx-1 — Séparation des tâches
+Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/sod-dashboard/
+
+Le tableau de bord de suivi de la séparation des tâches de Nomasx-1 : utilisateurs en conflit, lignes de conflit, conflits avérés par l'activité et rôles impliqués, les conflits par rafraîchissement et par niveau de risque, les risques touchés, les paires de rôles en cause, les utilisateurs les plus en conflit, le détail par processus, et les liens vers les écrans de conflits et l'explorateur.
+
+**Séparation des tâches**, juste sous **Vue d'ensemble** dans le menu de Nomasx-1, suit les conflits que la [matrice SoD](./settings/sod/matrix.md) détecte dans les accès de chaque application connectée : combien, quels risques, quels rôles les provoquent, quels conflits ont réellement été exercés, et leur évolution d'un rafraîchissement à l'autre.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La barre \{#bar\}
+
+La **Période** — *12 derniers mois* à l'ouverture — s'applique au graphique de tendance. **Application** : **Tous** donne les totaux de l'ensemble des applications ; en choisir une restreint chaque widget à celle-ci. **Excel** et **PDF** exportent la page telle qu'elle se présente.
+
+---
+
+## Les quatre chiffres \{#figures\}
+
+| Carte | Chiffre | Ligne de détail |
+|---|---|---|
+| **Utilisateurs en conflit** — au dernier rafraîchissement | Les utilisateurs porteurs d'au moins un conflit. | Ceux à privilèges, et la date du dernier rafraîchissement. |
+| **Lignes de conflit** — utilisateur × risque × paire d'activités | Chaque conflit relevé. | Les risques touchés et les processus concernés. |
+| **Avérés par l'activité** — les deux activités en conflit réellement utilisées | Les utilisateurs qui ont utilisé les deux côtés d'un conflit, d'après le journal d'activité. | Les lignes de conflit avérées. |
+| **Rôles impliqués** — rôles portant un côté d'un conflit | Les rôles en cause. | Les paires de rôles à l'origine des conflits. |
+
+Un conflit est **avéré** quand le journal d'activité de l'utilisateur montre des transactions sur les objets des deux activités incompatibles : le risque n'est plus théorique. Cela suppose la collecte du journal d'activité.
+
+---
+
+## Tendance et détail \{#detail\}
+
+| Widget | Contenu |
+|---|---|
+| **Conflits par rafraîchissement** | Les lignes de conflit à chaque rafraîchissement de la période, empilées par niveau de risque — la tendance de la remédiation. |
+| **Risques touchés** | Les risques qui concernent le plus d'utilisateurs d'abord ; la pastille donne le niveau de risque — rouge pour élevé ou critique, orange pour moyen, bleu sinon. |
+| **Paires de rôles** | Les paires de rôles qui créent le plus de conflits, avec les utilisateurs concernés : en rouge un conflit à l'intérieur d'un seul rôle — corriger le rôle règle le cas de tous ses titulaires —, en orange deux rôles détenus ensemble. |
+| **Utilisateurs les plus en conflit** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes à privilèges sont signalés. |
+| **Par processus** | Les utilisateurs en conflit par processus métier. |
+| **Analyser** | Les liens vers les écrans de conflits — Synthèse, Détails, Avérés, Utilisateurs, Rôles — et vers l'explorateur de données, où le modèle *Segregation of duties* permet d'aller plus loin. |
+
+---
+
+## Qui le voit \{#access\}
+
+Chaque widget ne s'affiche que si l'utilisateur peut lancer sa requête, et le périmètre de données des rôles de l'utilisateur s'applique à chaque chiffre et à l'export.
+
+---
+
+## Voir aussi
+
+- [Vue d'ensemble — Synthèse d'audit](./audit-synthesis.md) — la synthèse de toute l'application.
+- [Revue de sécurité](./security-review.md) — les comptes et droits à revoir.
+- [Tâches](./jobs.md) — rafraîchir les conflits : *Collecter la sécurité et la SoD*.
+
+---
+
+## Nomasx-1 — Revue de sécurité
+Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/security-review/
+
+Le tableau de bord Revue de sécurité de Nomasx-1 : les failles dans les accès d'une application connectée — comptes actifs, à privilèges et dormants, comptes absents de l'annuaire ou dont le compte d'annuaire a expiré, comptes génériques, objets ouverts à *PUBLIC — douze contrôles avec leur gravité, les comptes à revoir d'abord, les connexions par ancienneté, et les écrans où agir.
+
+**Revue de sécurité**, sous **Vue d'ensemble** dans le menu de Nomasx-1, est la page d'une revue des accès : elle liste ce qui ne va pas dans les accès de chaque application connectée, les comptes à examiner en premier, et les écrans où agir.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Les quatre chiffres \{#figures\}
+
+| Carte | Chiffre | Ligne de détail |
+|---|---|---|
+| **Comptes actifs** — comptes pouvant se connecter | Les comptes actifs. | Dormants — sans connexion depuis 90 jours — et jamais connectés. |
+| **Comptes à privilèges** — actifs, avec accès super-utilisateur | Les comptes à privilèges actifs. | Ceux inutilisés depuis 90 jours. |
+| **Absents de l'annuaire** — comptes nominatifs actifs sans compte d'annuaire | Les comptes qu'aucune entrée d'annuaire ne reconnaît. | Si l'annuaire est collecté. |
+| **Ouverts à \*PUBLIC** — objets exécutables par tous | Les objets accordés à *PUBLIC. | Les utilisateurs titulaires de droits propres. |
+
+Le filtre **Application** fonctionne comme sur les autres tableaux de bord : **Tous** donne les totaux.
+
+---
+
+## Les contrôles \{#checks\}
+
+Chaque contrôle avec son nombre, rouge d'abord, vert quand rien n'est à signaler.
+
+| Contrôle | Gravité | Action attendue |
+|---|---|---|
+| **Comptes à privilèges dormants** | Rouge | Accès super-utilisateur inutilisé depuis 90 jours : le désactiver ou recertifier son propriétaire. |
+| **Comptes actifs absents de l'annuaire** | Rouge | Aucun compte d'annuaire correspondant : un départ, ou un compte sans propriétaire. |
+| **Compte d'annuaire expiré, toujours actif** | Rouge | Le compte d'annuaire de la personne a expiré : désactiver le compte. |
+| **Comptes actifs dormants** | Orange | Pas de connexion depuis 90 jours : désactiver ou recertifier. |
+| **Jamais utilisés après un mois** | Orange | Créés il y a plus de 30 jours et jamais connectés : créés par erreur, ou devenus inutiles. |
+| **Comptes génériques / partagés actifs** | Orange | Les actions ne sont pas attribuables à une personne : les remplacer par des comptes nominatifs. |
+| **Plusieurs comptes pour une personne** | Orange | Comptes actifs partageant un numéro de carnet d'adresses : n'en garder qu'un par personne. |
+| **Objets ouverts à \*PUBLIC** | Orange | Tous les utilisateurs peuvent utiliser ces objets par défaut : vérifier qu'aucun n'est sensible. |
+| **Droits donnés directement aux utilisateurs** | Bleu | Droits posés sur un utilisateur plutôt qu'un rôle, hors du contrôle par rôles. |
+| **Comptes actifs sans rôle** | Bleu | Provisionnement incomplet, ou comptes à désactiver. |
+| **Affectations de rôles expirées** | Bleu | Affectations dont la date d'expiration est passée : les nettoyer. |
+| **Rôles orphelins** | Bleu | Rôles attribués à personne : les supprimer ou les réaffecter. |
+
+Les deux contrôles d'annuaire supposent sa collecte — la collecte *Everything*, ou l'étape LDAP activée ; d'ici là, ils indiquent *Aucun annuaire collecté*.
+
+---
+
+## Les comptes et les objets \{#detail\}
+
+| Widget | Contenu |
+|---|---|
+| **Comptes à revoir d'abord** | Les comptes à privilèges et dormants, les départs, les comptes génériques ; le chiffre donne les jours depuis la dernière connexion. |
+| **Dernière connexion** | Les comptes actifs selon l'ancienneté de leur dernière connexion : moins de 30 jours, 30 à 90 jours, 3 à 12 mois, plus d'un an, jamais. |
+| **Objets ouverts à \*PUBLIC** | Les objets exécutables par tous, ceux qui permettent aussi des modifications d'abord. |
+| **Agir** | Les liens vers les écrans derrière chaque contrôle : Utilisateurs, Utilisateurs sans AD, Doublons utilisateurs, Utilisateurs sans rôles, Rôles non utilisés, Propriétés utilisateurs. |
+
+---
+
+## Voir aussi
+
+- [Utilisateurs](./security/users.md), [Utilisateurs sans rôle](./security/users-without-roles.md), [Rôles non utilisés](./security/roles-not-used.md) — les écrans où agir.
+- [Utilisateurs LDAP sans AD](./security/ldap/users-without-ad.md) — les comptes absents de l'annuaire.
+- [Séparation des tâches](./sod-dashboard.md) — les conflits.
+
+---
+
 ## Nomasx-1 — Explorateur de données
 Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/data-explorer/
 
@@ -15191,7 +15388,7 @@ Le fonctionnement de l'explorateur — champs, étagères, vues, exploration du 
 
 ## Où le trouver \{#menu\}
 
-**Explorateur de données**, juste sous **Vue d'ensemble** dans le menu de Nomasx-1, ouvre l'explorateur avec les trois modèles de Nomasx-1 dans son sélecteur. Le sélecteur passe d'un modèle à l'autre à tout moment ; les analyses et tableaux de bord suivent le modèle.
+**Explorateur de données**, en haut du menu de Nomasx-1 après les trois tableaux de bord, ouvre l'explorateur avec les trois modèles de Nomasx-1 dans son sélecteur. Le sélecteur passe d'un modèle à l'autre à tout moment ; les analyses et tableaux de bord suivent le modèle.
 
 ---
 
@@ -15252,32 +15449,49 @@ Les analyses et tableaux de bord ci-dessus sont **partagés** : tout utilisateur
 ## Nomasx-1 — Tâches
 Source: https://docs.nomana-it.fr/fr/liberty/nomasx1/jobs/
 
-Le dossier Tâches du menu de Nomasx-1 : collecter à la demande les données de sécurité et les transactions de licences d'une application connectée, suivre le journal en direct et retrouver les exécutions précédentes — sans ouvrir Nomaflow.
+Le dossier Tâches du menu de Nomasx-1 : collecter les données de sécurité et de séparation des tâches ou les données de licences d'une ou plusieurs applications, produire l'audit des licences et l'évaluation Sécurité & SoD puis les envoyer — à la demande avec un journal en direct, ou chaque mois selon une planification. Les rôles d'auditeur et d'administrateur.
 
-Le dossier **Tâches**, en bas du menu de Nomasx-1, permet à l'équipe conformité de rafraîchir elle-même les données — avant une revue, après une série de modifications dans le système source — sans ouvrir Nomaflow. Chaque entrée ouvre la page de la tâche : **Lancer**, le journal suivi en direct, les exécutions précédentes avec leur auteur.
-
-Les collectes planifiées continuent de s'exécuter normalement ; ces entrées lancent les mêmes tâches à la demande.
+Le dossier **Tâches**, en bas du menu de Nomasx-1, permet à l'équipe conformité de rafraîchir elle-même les données et de produire les rapports — avant une revue, après une série de modifications dans le système source — sans ouvrir Nomaflow. Chaque entrée ouvre la page de la tâche : les applications à traiter, **Lancer**, le journal suivi en direct, les exécutions précédentes avec leur auteur. Voir [Lancer une tâche depuis le menu d'une application](../nomaflow/jobs/run-from-menu.md).
 
 ---
 
 ## Les entrées \{#entries\}
 
-| Entrée | Tâche | Rafraîchit |
-|---|---|---|
-| **Collecter la sécurité** | [`nomasx1-security-1`](../nomaflow/bundled-jobs.md#nomasx1-security-1) | Les utilisateurs, rôles, affectations, menus et droits effectifs de l'application — tout ce qui figure sous **Sécurité** et **Applications**, ainsi que les chiffres de la [synthèse d'audit](./audit-synthesis.md). |
-| **Collecter les licences** | [`nomasx1-license-1`](../nomaflow/bundled-jobs.md#nomasx1-license-1) | Les transactions des utilisateurs — la base de l'usage des licences sous **Licences** et du modèle *Licence compliance* de l'[explorateur de données](./data-explorer.md). |
+| Entrée | Rôle |
+|---|---|
+| **Collecter la sécurité et la SoD** | Collecte les utilisateurs, rôles, affectations, menus et droits effectifs, puis calcule les conflits de séparation des tâches d'après la [matrice](./settings/sod/matrix.md) — tout ce qui figure sous **Sécurité**, **Applications** et dans le tableau de bord [Séparation des tâches](./sod-dashboard.md). |
+| **Collecter les licences** | Collecte les salariés, les transactions des utilisateurs et l'Object Usage Tracking — la base de **Licences** et du modèle *Licence compliance* de l'[explorateur de données](./data-explorer.md). |
+| **Rapport d'audit des licences** | Produit l'[audit des licences](./reports/audit-licences.md) en PDF et l'envoie aux auditeurs. |
+| **Rapport sécurité et SoD** | Produit l'[évaluation Sécurité & SoD](./reports/security-sox.md) en PDF et l'envoie aux auditeurs. |
 
-Après une collecte, **Dernière collecte** et la liste *Fraîcheur des données* de la synthèse d'audit affichent la nouvelle date.
+**Applications** — chaque entrée propose les applications en cases à cocher, avec **Tout** : la tâche s'exécute une fois par application cochée, l'une après l'autre. Les deux rapports demandent aussi la **langue**, `fr` ou `en`.
+
+Après une collecte, **Dernière collecte** et la liste *Fraîcheur des données* de la [synthèse d'audit](./audit-synthesis.md) affichent la nouvelle date.
 
 :::info[Spécifique à JDE]
-Les deux tâches lisent JD Edwards EnterpriseOne. Pour un autre système source, la collecte est celle que fournit son connecteur.
+Les collectes lisent JD Edwards EnterpriseOne. Pour un autre système source, la collecte est celle que fournit son connecteur.
 :::
+
+---
+
+## Selon une planification \{#reports\}
+
+Les exploitants planifient les mêmes tâches dans Nomaflow : la collecte chaque nuit sur toutes les applications, les deux rapports le 1er de chaque mois — envoyés aux titulaires du rôle `nomasx1_auditor`, PDF joint, une fois le compte de messagerie renseigné. Les tâches sont livrées désactivées. Voir [Tâches livrées](../nomaflow/bundled-jobs.md#collect).
 
 ---
 
 ## Qui peut les lancer \{#access\}
 
-Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes. Voir [Lancer une tâche depuis le menu d'une application](../nomaflow/jobs/run-from-menu.md).
+Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Beyond the menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
+
+Nomasx-1 livre deux rôles, créés par une tâche que l'administrateur lance une fois après l'installation et après chaque mise à jour :
+
+| Rôle | Pour |
+|---|---|
+| `nomasx1_auditor` | Consulter tous les écrans, tableaux de bord et modèles de l'explorateur, utiliser l'assistant IA et lancer les deux rapports ; il reçoit les rapports mensuels. |
+| `nomasx1_admin` | Tout, y compris les paramètres et toutes les tâches de Nomasx-1. |
+
+Les attribuer aux utilisateurs dans **Paramètres → Access**. Voir [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).
 
 ---
 
@@ -17481,6 +17695,8 @@ Chaque liste déroulante se résout côté serveur sur des catalogues vivants �
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` quand on veut éditer ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
+**Chaque mois, par e-mail** — *Tâches → Rapport d'audit des licences* produit le même PDF pour une ou plusieurs applications et l'envoie au rôle des auditeurs ; planifié le 1er du mois une fois activé. Voir [Tâches de Nomasx-1](../jobs.md#reports).
+
 ---
 
 ## Avant d'exécuter
@@ -17517,7 +17733,7 @@ L'**Évaluation Sécurité & Séparation des tâches** est un rapport généré,
 Il s'appuie sur les données que Nomasx-1 collecte déjà — le référentiel des utilisateurs, les rôles et leurs affectations, les droits sur les objets (Security Workbench) et la matrice de séparation des tâches — et les transforme en un document narratif unique, guidé par les attentes de contrôle informatique **Sarbanes-Oxley (SOX)**. C'est une revue générale de posture de sécurité, pas une attestation formelle de contrôle.
 
 :::info[Spécifique à JDE]
-Les sections de **séparation des tâches** s'appuient sur le rafraîchissement des conflits SoD (`nomasx1-sod-1`), qui analyse aujourd'hui les lignes `SECURITY_RIGHTS` de **JD Edwards EnterpriseOne**. Les sections d'hygiène des utilisateurs, des rôles et des objets lisent directement les tables `security_*` et valent pour toute application connectée ; la matrice SoD et le vocabulaire `*PUBLIC` / Security Workbench restent propres à JDE.
+Les sections de **séparation des tâches** s'appuient sur le rafraîchissement des conflits SoD (la collecte *Security and SoD*, `nomasx1-collect-all`), qui analyse aujourd'hui les lignes `SECURITY_RIGHTS` de **JD Edwards EnterpriseOne**. Les sections d'hygiène des utilisateurs, des rôles et des objets lisent directement les tables `security_*` et valent pour toute application connectée ; la matrice SoD et le vocabulaire `*PUBLIC` / Security Workbench restent propres à JDE.
 :::
 
 ---
@@ -17575,7 +17791,7 @@ Un **conflit**, c'est un même utilisateur actif capable d'exécuter les **deux*
 
 La gravité vient des niveaux que l'opérateur porte sur la matrice — le **Risk Level** (tri principal) et, en repli, le **Critical Level** de la dimension risque. Le chiffre de tête *total des violations* compte des **paires utilisateur × entrée de matrice** (combien d'utilisateurs déclenchent chaque règle), pas un nombre brut de règles.
 
-La matrice elle-même — processus, activités, objets, risques et paires incompatibles — se gère sous **Paramètres → Ségrégation des tâches**, et alimente les tables de conflits via la tâche `nomasx1-sod-1`. Lancez cette tâche avant le rapport pour que les chiffres soient à jour.
+La matrice elle-même — processus, activités, objets, risques et paires incompatibles — se gère sous **Paramètres → Ségrégation des tâches**, et alimente les tables de conflits via la tâche de collecte `nomasx1-collect-all` (*Tâches → Collecter la sécurité et la SoD*). Lancez cette tâche avant le rapport pour que les chiffres soient à jour.
 
 ---
 
@@ -17597,6 +17813,8 @@ Chaque liste déroulante se résout côté serveur sur des catalogues vivants �
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` pour retravailler ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
+**Chaque mois, par e-mail** — *Tâches → Rapport sécurité et SoD* produit le même PDF pour une ou plusieurs applications et l'envoie au rôle des auditeurs ; planifié le 1er du mois une fois activé. Voir [Tâches de Nomasx-1](../jobs.md#reports).
+
 ---
 
 ## Avant de l'exécuter
@@ -17606,7 +17824,7 @@ L'audit lit les données que Nomasx-1 a déjà collectées pour l'application �
 - **Le référentiel des utilisateurs** — comptes déclarés, statut et dernière connexion, plus les marqueurs entretenus sur chaque utilisateur (privilégié / technique / générique / lié).
 - **Les rôles et affectations** — le catalogue des rôles et les affectations utilisateur ⟷ rôle.
 - **La sécurité des objets** — les droits du Security Workbench (exécution / ajout / modification / suppression, directs ou via `*ROLE`, et les droits `*PUBLIC`).
-- **Les tables de conflits SoD** — rafraîchies par `nomasx1-sod-1`, enrichies par la matrice et ses dimensions processus / activité / objet / risque.
+- **Les tables de conflits SoD** — rafraîchies par `nomasx1-collect-all`, enrichies par la matrice et ses dimensions processus / activité / objet / risque.
 - **Le registre des applications** — pour la garde et le périmètre.
 
 Une exécution sur une application sans données collectées produit quand même le document, mais les sections concernées s'affichent vides plutôt que fausses.
@@ -17615,7 +17833,7 @@ Une exécution sur une application sans données collectées produit quand même
 
 ## Conseils et bonnes pratiques
 
-- **Rafraîchissez le SoD d'abord.** Lancez `nomasx1-sod-1` juste avant le rapport pour que les comptes de conflits et la tendance collent à la réalité.
+- **Rafraîchissez le SoD d'abord.** Lancez *Tâches → Collecter la sécurité et la SoD* juste avant le rapport pour que les comptes de conflits et la tendance collent à la réalité.
 - **Commencez par les constats au niveau des rôles.** Les rôles auto-conflictuels et les rôles les plus conflictuels sont les gains les plus rapides — une correction lève les conflits de tous les utilisateurs qui portent le rôle.
 - **Renseignez le *Libellé de date* et le *Nom du client*** pour une page de garde prête à diffuser ; laissez-les vides pour un brouillon interne.
 - **Markdown pour itérer, PDF pour livrer.** La sortie Markdown est le même contenu sans la mise en forme de garde, pratique pour relire avant l'export final.

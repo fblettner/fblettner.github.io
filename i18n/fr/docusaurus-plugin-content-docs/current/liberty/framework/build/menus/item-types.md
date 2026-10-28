@@ -266,6 +266,7 @@ Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui 
 | **`type`** | `job` — *Job (run it, follow its log)* dans la liste des types. |
 | **`target`** | L'identifiant de la tâche. La liste présente chaque tâche avec la première ligne de sa description. |
 | **`connector`** | NE doit PAS être renseigné. |
+| **`params`** | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
 
 L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Beyond the menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
 

@@ -282,7 +282,7 @@ La suite de tests du framework lui-même utilise ce schéma — fixtures câblé
 
 ### Exécuter une tâche de bout en bout
 
-Lancer la tâche depuis la page des Tâches Nomaflow avec **Run with parameters** : même chargement du plugin, mêmes injections, mêmes lignes de journal qu'une exécution planifiée. L'API REST propose le même appel (`POST /admin/jobs/{job_id}/run`) pour les scripts.
+Lancer la tâche depuis la page des Tâches Nomaflow avec **Exécuter avec des paramètres** : même chargement du plugin, mêmes injections, mêmes lignes de journal qu'une exécution planifiée. L'API REST propose le même appel (`POST /admin/jobs/{job_id}/run`) pour les scripts.
 
 ---
 

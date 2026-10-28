@@ -86,7 +86,7 @@ keywords: [Nomaflow, planificateur, tâches, exécutions, ETL, cron, chargement 
 - **Pas de graphe de tâches.** Les étapes s'exécutent l'une après l'autre ; une tâche peut en lancer une autre (`call_job`) et l'attendre, mais rien ne s'exécute en parallèle dans une tâche.
 - **Un seul serveur.** Le planificateur s'exécute dans le processus du serveur : une seule instance.
 - **Pas de rattrapage automatique.** Une heure manquée pendant un arrêt du serveur est enregistrée **MISSED** et peut être notifiée ; la relancer reste une décision manuelle.
-- **Pas de bouton de rejeu.** Pour relancer avec les mêmes valeurs, les enregistrer comme préréglage ou les choisir de nouveau dans **Run with parameters**.
+- **Pas de bouton de rejeu.** Pour relancer avec les mêmes valeurs, les enregistrer comme préréglage ou les choisir de nouveau dans **Exécuter avec des paramètres**.
 
 ---
 

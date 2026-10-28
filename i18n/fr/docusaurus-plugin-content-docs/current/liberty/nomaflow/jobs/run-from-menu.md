@@ -99,10 +99,11 @@ Une entrée de menu de type **job** place une tâche Nomaflow dans le menu d'une
 | Partie | Contenu |
 |---|---|
 | Titre et description | Le libellé de l'entrée de menu, puis la description de la tâche. |
-| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. |
+| Paramètres | Les [paramètres utilisateur](#user-params) déclarés par la tâche : une liste déroulante quand les valeurs sont fixées, une zone de saisie sinon, chacun prérempli de sa valeur par défaut. Un paramètre obligatoire porte `*` ; une liste facultative propose *(tous)*. Un paramètre qui accepte plusieurs valeurs s'affiche en cases à cocher précédées de **Tout**. |
 | Fichiers | Un sélecteur par étape `file_load` qui attend un fichier — **Fichier pour l'étape « load »**, avec la feuille quand l'étape en nomme une. Formats acceptés : `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. Une étape dotée de son propre chemin ou d'un dossier surveillé ne demande rien : elle lit son fichier. |
 | **Lancer** | Envoie les fichiers et démarre l'exécution. *Choisissez d'abord le ou les fichiers.* ou *« Société » est obligatoire.* quand un élément manque. Une seule exécution à la fois : tant qu'une exécution est en cours, le bouton reste en attente. |
 | **Journal** | L'état de l'exécution et son journal, rafraîchi toutes les 2 secondes tant que l'exécution est en attente ou en cours, l'erreur en rouge. **Fichiers de l'exécution** propose les fichiers produits — les lignes rejetées d'un chargement. |
+| **Fichier chargé** | Sous le journal, le fichier envoyé pour l'exécution sélectionnée, à télécharger à nouveau. |
 | **Exécutions précédentes** | Les 20 dernières exécutions : début, état, durée, auteur (ou déclencheur, pour une exécution planifiée), lignes traitées et début de l'erreur. Un clic sur une exécution affiche son journal. |
 
 L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouvent dans l'[historique des exécutions](../runs/history.md), et ses notifications et alertes s'appliquent.
@@ -112,6 +113,12 @@ L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouve
 ## Placer une tâche dans un menu \{#menu\}
 
 Dans **Paramètres → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+
+---
+
+### Un préréglage dans le menu \{#preset\}
+
+Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-presets) de la tâche avec `params = { preset = "Licences" }` : la page lance alors la tâche avec les paramètres et les étapes actives de ce préréglage. Une même tâche donne ainsi plusieurs entrées de menu — *Collecter la sécurité et la SoD*, *Collecter les licences* —, chacune sur un préréglage. Le libellé de l'entrée de menu donne son titre à la page.
 
 ---
 
@@ -140,13 +147,16 @@ choices_from = "explorer_models:nomajde"
 |---|---|
 | `name` | L'argument de l'étape qui reçoit la valeur. |
 | `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
-| `step` | L'étape qui reçoit la valeur. |
+| `step` | L'étape qui reçoit la valeur. Sans elle, la valeur va à toutes les étapes de la tâche. |
 | `default` | La valeur préremplie. |
 | `required` | `true` : la tâche ne démarre pas sans valeur. |
 | `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
-| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application. |
+| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application ; ou `query:<connecteur>/<requête>:<colonne valeur>:<colonne libellé>` — les lignes d'une requête de lecture, comme les applications de Nomasx-1. |
+| `multiple` | `true` : plusieurs valeurs peuvent être cochées, avec **Tout**. |
 
-Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique.
+Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique. Les mêmes paramètres apparaissent dans la fenêtre **Exécuter avec des paramètres** des exploitants.
+
+**Une exécution par valeur.** Une tâche qui déclare `for_each = "<paramètre>"` s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
 
 ---
 
@@ -154,6 +164,6 @@ Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'
 
 | Application | Dossier | Tâches |
 |---|---|---|
-| Nomasx-1 | **Tâches** | Collecter la sécurité, Collecter les licences — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
+| Nomasx-1 | **Tâches** | Collecter la sécurité et la SoD, Collecter les licences, Rapport d'audit des licences, Rapport sécurité et SoD — voir [Tâches de Nomasx-1](../../nomasx1/jobs.md). |
 | Nomajde | **Tâches** | Refusionner la sécurité (paquet de changements), Refusionner la sécurité (tous les rôles), Rafraîchir le dictionnaire (modèles Explorateur) — voir [Tâches de Nomajde](../../nomajde/jobs.md). |
 | Démo des ventes | **Import** | Fichier articles, Fichier sociétés, Fichier ventes (un mois), Recalculer les périodes, Charger les fichiers d'exemple — voir [La démo des ventes](../../framework/demo-app.md#loads). |

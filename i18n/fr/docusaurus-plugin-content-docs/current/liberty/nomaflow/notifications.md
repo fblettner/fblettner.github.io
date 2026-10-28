@@ -1,6 +1,6 @@
 ---
 title: Notifications
-description: "Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche."
+description: "Les notifications de Liberty Next : des règles qui réagissent à une écriture dans un écran, à un événement de tâche Nomaflow (échec, succès, annulation, planification manquée, exécution longue, retard) ou à une action d'écran, et qui délivrent dans la cloche de l'application, par e-mail ou par une requête ou un endpoint de connecteur. Compte SMTP, destinataires, variables, alertes de tâche."
 keywords: [Liberty Next, Nomaflow, notifications, alertes, cloche, boîte de réception, e-mail, SMTP, notifications.toml, échec de tâche, planification manquée, exécution longue, send_notification, webhook]
 ---
 
@@ -175,7 +175,7 @@ Les règles se modifient dans **Paramètres → Notifications** et s'enregistren
 | Déclencheur | Se déclenche quand | Réglages |
 |---|---|---|
 | **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **A job event** | Une exécution Nomaflow se termine. | Jobs (vide = toutes les tâches) et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes. |
+| **A job event** | Une exécution Nomaflow se termine. | Jobs (vide = toutes les tâches) et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
 | **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
 
 `long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
@@ -207,7 +207,7 @@ L'objet, le corps et le lien acceptent des variables `{NOM}`, en majuscules ou e
 | Déclencheur | Variables |
 |---|---|
 | Événement d'écran | Chaque colonne de la ligne écrite, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
-| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée. |
+| Événement de tâche | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, et `EXPECTED_AT` pour une planification manquée ou une échéance. |
 | Action d'écran | Les valeurs transmises par l'action, plus `USER`. |
 
 Une variable inconnue est laissée telle quelle.

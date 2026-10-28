@@ -78,4 +78,4 @@ Dans **Paramètres → Notifications**, une règle sur *A job event* : tâche `n
 
 ## Vérifier \{#check\}
 
-**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Run with parameters** affiche les requêtes. Une fois le résultat juste, laisser la planification active.
+**▶ Exécuter**, puis ouvrir l'exécution : chaque étape affiche ses lignes ; `DEBUG` dans **Exécuter avec des paramètres** affiche les requêtes. Une fois le résultat juste, laisser la planification active.

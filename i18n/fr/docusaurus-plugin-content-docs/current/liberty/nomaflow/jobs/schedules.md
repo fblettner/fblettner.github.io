@@ -58,89 +58,98 @@ Le champ **Planification (cron)** de l'éditeur propose des choix tout faits —
 
 ## La vue Planning \{#schedule-view\}
 
-**Planning**, dans la barre d'outils des Tâches, liste toutes les planifications, par prochaine exécution :
+**Exploitation → Planning**, dans le menu de Nomaflow, montre ce qui s'exécute et quand, jour par jour.
 
-<svg viewBox="0 0 1200 390" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 430" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="sch-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="sch-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="sch-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfs-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfs-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfs-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="370" rx="14" fill="url(#sch-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Planning</text>
-  <text x="240" y="64" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Toutes les tâches, par prochaine exécution</text>
-  <text x="240" y="92" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">À VENIR (4)</text>
-  <rect x="240" y="100" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TÂCHE</text>
-  <text x="500" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PLANIFICATION</text>
-  <text x="700" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCHAINE EXÉCUTION</text>
-  <text x="850" y="117.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DERNIÈRE EXÉCUTION</text>
-  <rect x="240" y="132" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="148.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load</text>
-  <text x="500" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
-  <text x="700" y="148.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 02:00</text>
-  <rect x="850" y="137.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="880.0" y="148.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <rect x="240" y="162" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="178.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">sales-load · fin de mois</text>
-  <text x="500" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
-  <text x="700" y="178.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">01/11 06:00</text>
-  <text x="850" y="178.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <rect x="240" y="192" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="208.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">nomajde-daily-sync</text>
-  <text x="500" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">30 2 ∗ ∗ ∗</text>
-  <text x="700" y="208.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 02:30</text>
-  <rect x="850" y="197.0" width="46" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="873.0" y="208.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">MISSED</text>
-  <rect x="240" y="222" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="238.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">config-versions-purge</text>
-  <text x="500" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 3 ∗ ∗ ∗</text>
-  <text x="700" y="238.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">demain 03:00</text>
-  <rect x="850" y="227.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="880.0" y="238.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="240" y="274" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MANUELLES / DÉSACTIVÉES (2)</text>
-  <rect x="240" y="282" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TÂCHE</text>
-  <text x="500" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PLANIFICATION</text>
-  <text x="700" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCHAINE EXÉCUTION</text>
-  <text x="850" y="299.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DERNIÈRE EXÉCUTION</text>
-  <rect x="240" y="314" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">nomasx1-init-db</text>
-  <text x="500" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <text x="700" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <text x="850" y="330.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <rect x="240" y="344" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">reporting-refresh (désactivé)</text>
-  <text x="500" y="360.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
-  <text x="700" y="360.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <rect x="850" y="349.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="880.0" y="360.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <rect x="10" y="130" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une ligne par planification</text>
-  <text x="20" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le cron de la tâche + chaque préréglage</text>
-  <line x1="210" y1="147.0" x2="260" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
-  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Planification manquée</text>
-  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">enregistrée en exécution MISSED</text>
-  <line x1="1000" y1="207.0" x2="920" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
-  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ne se déclenche pas</text>
-  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">manuelle ou désactivée</text>
-  <line x1="210" y1="317.0" x2="280" y2="352" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sch-arrow)"/>
+  <rect x="220" y="14" width="760" height="420" rx="14" fill="url(#nfs-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Planning</text>
+  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Ce qui s'exécute et quand, jour par jour</text>
+  <text x="240" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">6</text>
+  <text x="262" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">dans les 24 h</text>
+  <text x="400" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">9</text>
+  <text x="422" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">planifications actives</text>
+  <text x="560" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">2</text>
+  <text x="582" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">désactivées</text>
+  <text x="720" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">14</text>
+  <text x="742" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">à la main uniquement</text>
+  <text x="240" y="120" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">À VENIR (9)</text>
+  <text x="240" y="146" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Aujourd'hui</text>
+  <rect x="240" y="154" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="175" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">14:00</text>
+  <text x="310" y="175" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-hourly-refresh</text>
+  <text x="580" y="170" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">chaque heure à :00</text>
+  <text x="580" y="182" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 ∗ ∗ ∗ ∗</text>
+  <rect x="870" y="163" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="896.5" y="174.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="240" y="212" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Demain</text>
+  <rect x="240" y="220" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="241" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">02:00</text>
+  <text x="310" y="241" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
+  <text x="580" y="236" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">chaque jour à 02:00</text>
+  <text x="580" y="248" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <rect x="870" y="229" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="896.5" y="240.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="240" y="258" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="279" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">06:00</text>
+  <text x="310" y="279" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <rect x="465" y="267" width="85" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="507.5" y="278.2" fill="#c084fc" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Security and SoD</text>
+  <text x="580" y="274" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">chaque jour à 06:00</text>
+  <text x="580" y="286" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
+  <rect x="870" y="267" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="896.5" y="278.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <rect x="240" y="296" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="317" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">08:00</text>
+  <text x="310" y="317" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-daily-pipeline</text>
+  <text x="580" y="312" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">du lundi au vendredi à 08:00</text>
+  <text x="580" y="324" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 8 ∗ ∗ mon-fri</text>
+  <rect x="870" y="305" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="896.5" y="316.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
+  <text x="240" y="356" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PLANIFIÉES MAIS DÉSACTIVÉES (2)</text>
+  <text x="240" y="378" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">▸ LANCÉES À LA MAIN UNIQUEMENT (14)</text>
+  <rect x="10" y="74" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En un coup d'œil</text>
+  <text x="20" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">24 h, actives, désactivées, manuelles</text>
+  <line x1="210" y1="91.0" x2="240" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
+  <rect x="10" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Jour par jour</text>
+  <text x="20" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque planning à sa prochaine exécution</text>
+  <line x1="210" y1="187.0" x2="240" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
+  <rect x="1000" y="180" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En clair</text>
+  <text x="1010" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le cron en dessous</text>
+  <line x1="1000" y1="197.0" x2="690" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
+  <rect x="10" y="267" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="282" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Planning des préréglages</text>
+  <text x="20" y="295" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le nom du préréglage</text>
+  <line x1="210" y1="284.0" x2="510" y2="284" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
+  <rect x="10" y="380" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">À la main</text>
+  <text x="20" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">repliées</text>
+  <line x1="210" y1="397.0" x2="240" y2="374" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
 </svg>
 
-| Groupe | Contenu |
+| Partie | Contenu |
 |---|---|
-| **À venir** | Une ligne par planification active — celle de la tâche, et une par préréglage planifié (le nom du préréglage s'affiche à côté de la tâche). Colonnes : Tâche, Planification, Prochaine exécution, Dernière exécution. |
-| **Manuelles / désactivées** | Les tâches sans planification, et les planifications définies mais désactivées — marquées *(désactivé)*. |
+| Compteurs | Les exécutions prévues dans les 24 h, les planifications actives, les planifications désactivées, les tâches lancées à la main uniquement. |
+| **À venir** | Chaque planification active à sa prochaine exécution — celle de la tâche, et une par préréglage planifié (le nom du préréglage à côté de la tâche) —, groupées par jour : *Aujourd'hui*, *Demain*, puis la date. Chaque ligne présente l'heure, la tâche, la planification en clair (*chaque jour à 03:00*, *chaque lundi à 07:00*) avec le cron en dessous, l'échéance et l'état de la dernière exécution. |
+| **Planifiées mais désactivées** | Les planifications définies mais désactivées. |
+| **Lancées à la main uniquement** | Les tâches sans aucune planification, repliées ; un clic sur l'une ouvre son éditeur. |
+
+Les planifications que la page ne sait pas exprimer en clair — listes d'heures, plusieurs mois — n'affichent que leur cron.
 
 ---
 
 ## Préréglages planifiables \{#schedulable-presets\}
 
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Run with parameters** avec **Save as preset…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
 
 Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
 
@@ -173,7 +182,7 @@ La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manq
 
 | Option | Effet |
 |---|---|
-| Le switch **Activée** de la tâche dans la page des Tâches | La planification propre de la tâche s'arrête. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
+| La pastille **activée** / **désactivée** de la tâche dans la page des Tâches, ou **Mettre la planification en pause** sur la carte des tâches d'un tableau de bord | La planification propre de la tâche s'arrête aussitôt, sans rechargement. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
 | **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
 | **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
 

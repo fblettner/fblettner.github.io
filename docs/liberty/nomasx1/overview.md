@@ -332,12 +332,13 @@ The sidebar splits the day-to-day work into seven sections plus the configuratio
 | Section | What it covers |
 |---|---|
 | **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
+| **Segregation of duties**, **Security review** | Two dashboards under Overview: the [conflicts](./sod-dashboard.md) — trend, risks, role pairs, proven conflicts — and the [access review](./security-review.md) — twelve checks and the accounts to review first. |
 | **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
 | **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed Licenses, Usage Report, Financial Report. |
-| **Jobs** | [Collect the security data or the licence transactions](./jobs.md) on demand, with a live log. |
+| **Jobs** | [Collect the security and SoD data or the licences, produce the two audit reports](./jobs.md), for one or several applications, with a live log. |
 | **Settings** | Source-system definitions (applications, JDE schemas, Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
 
 ---

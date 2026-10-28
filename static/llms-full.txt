@@ -716,12 +716,13 @@ The sidebar splits the day-to-day work into seven sections plus the configuratio
 | Section | What it covers |
 |---|---|
 | **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
+| **Segregation of duties**, **Security review** | Two dashboards under Overview: the [conflicts](./sod-dashboard.md) — trend, risks, role pairs, proven conflicts — and the [access review](./security-review.md) — twelve checks and the accounts to review first. |
 | **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
 | **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed Licenses, Usage Report, Financial Report. |
-| **Jobs** | [Collect the security data or the licence transactions](./jobs.md) on demand, with a live log. |
+| **Jobs** | [Collect the security and SoD data or the licences, produce the two audit reports](./jobs.md), for one or several applications, with a live log. |
 | **Settings** | Source-system definitions (applications, JDE schemas, Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
 
 ---
@@ -2910,7 +2911,9 @@ On a Python install, the same steps are three commands — see [Python server](.
 
 ## 3 — Connect the source system \{#source\}
 
-The apps read their data from your source system through a pool. Open **Settings → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run the collection jobs from **Nomaflow**. The order and the parameters of these jobs are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
+The apps read their data from your source system through a pool. Open **Settings → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run **`nomasx1-roles`** to create the auditor and administrator roles, and the collection — `nomasx1-collect-all` — from **Nomaflow** or from *Nomasx-1 → Jobs*. The jobs and their parameters are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
+
+Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Settings → Connectors**. A value set in Settings is kept on every upgrade.
 
 ---
 
@@ -2927,7 +2930,10 @@ A new wheel brings new screens, menu items, dictionary entries, queries and dash
 | Created on the server | Always kept. |
 | Withdrawn by the vendor | Removed only if it was never changed. |
 | Pools and every `ENC:` secret | Always taken from your configuration. |
+| A value set on the server where the wheel ships a variable (`${JDE_AIS_USER:-JDE}`) | Always yours — a TLS check switched off in Settings stays off. |
 | `theme.toml` | Always yours. |
+
+**The Nomaflow jobs** are merged job by job. The product's part of a delivered job — its steps, description, tags, the parameters it offers — is refreshed; what you set on it is kept: enabled or not, schedule, timezone, presets, alerts, retry, log level, timeout and the values of its parameters. Your own jobs stay. A delivered job whose steps you changed is kept as it is and listed at the end; a job marked `override = true` in `jobs.toml` is always kept as saved.
 
 What was delivered is recorded under `config/.bundled/`, so the next upgrade knows "never changed" from "changed". The entities kept because they were changed locally are listed at the end of the run: mark them `override = true` to keep them for good, or install again with `--force-config` to take the vendor version.
 
@@ -4367,7 +4373,7 @@ An API connector calls a web API. Its editor has five tabs:
 
 | Tab | Content |
 |---|---|
-| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify** (*true*, *false*, or a variable such as `${JDE_AIS_VERIFY_SSL:-true}`, kept as written), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type**: *None*, *Basic* (user and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint, request body and headers, token field, token lifetime). Secrets are encrypted when saved. |
 | **Endpoints** | The named endpoints — see below. |
 | **Webhooks** | Not available yet: external systems cannot push events into Liberty Next. |
@@ -7776,6 +7782,7 @@ A `job` leaf opens the page of a Nomaflow job for users who do not administer No
 | **`type`** | `job` — *Job (run it, follow its log)* in the type list. |
 | **`target`** | The job id. The dropdown lists every job with the first line of its description. |
 | **`connector`** | Must NOT be set. |
+| **`params`** | Optional: `{ preset = "Licences" }` runs the job with one of its presets — one job, several menu entries. |
 
 The item needs the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
 
@@ -8287,9 +8294,10 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 | **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
+| **Jobs** | The Nomaflow jobs with their next run, their schedule in words and their last state, and **Run now** / **Pause** / **Resume**. Superusers only. | **Jobs (ids, in order)** — empty = every scheduled job —, **Only these tags**, **Max rows** (12 when blank). |
 | **Links** | A card of entry points: menu items of the dashboard's application, or web addresses. | **Links per row** (1 to 4); per link a **Menu item** or a **URL**, an **Icon**, a **Label** (blank: the menu item's) and a **Description**. |
 
-A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
+A widget whose query the user may not run is hidden; the rest of the dashboard still shows. Every card carries its title and subtitle inside it, and the page grows with its widgets: it scrolls to the last one.
 
 ### Figure, List and Bars \{#synthesis\}
 
@@ -8303,11 +8311,17 @@ These three widgets turn a dashboard into a **synthesis page**: the figures that
 
 The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
 
+### Jobs \{#jobs\}
+
+A **Jobs** card puts the scheduler on a dashboard. Each line shows the job — a click opens it in Nomaflow —, its next run or *Paused*, its schedule in words (*every day at 03:00*), the state of its last run, and three buttons: **Run now** with the job's saved values, **Pause the schedule**, **Resume the schedule** — applied at once. Without ids, the card lists the scheduled jobs, the next to run first, optionally narrowed to some tags (`main`, `nomasx1`). The card refreshes itself while a run is going.
+
+The card is for superusers only: for anyone else, it does not show on the dashboard.
+
 ### Text and Links \{#text-links\}
 
 These two widgets turn a dashboard into the **home page of an application**: a few lines on what it does, the figures, then where to go.
 
-- A **Text** widget the full width of the grid (12 columns) takes the height of its text, with no scroll bar; a narrower one scrolls within its tile.
+- A **Text** or **Links** widget the full width of the grid (12 columns) takes the height of its content, with no scroll bar; a narrower one scrolls within its tile.
 - A **Links** widget only shows the menu items the user may open: an entry their roles do not grant disappears from the card. A URL opens in a new browser tab. A URL link needs a label.
 - In an export, a text keeps its Markdown and a links card becomes a table (*Link*, *Description*).
 
@@ -8388,7 +8402,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text** or **Links**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
 A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
 
@@ -12353,6 +12367,7 @@ How to watch a running Liberty Next server: the Monitoring page for superusers (
 | Surface | Shows | For |
 |---|---|---|
 | **The Monitoring page** | What happens now: connected users, record locks, database pools, runtime, the live log. | Superusers, from the **Monitoring** entry of the sidebar. See [The Monitoring page](./dashboard.md). |
+| **Server log** and **Retention** | Every line the server wrote, searchable; what the server keeps and how much it takes. | Superusers, the other two tabs of the Monitoring page. See [Server log](./server-log.md) and [Retention](./retention.md). |
 | **Health endpoints** | `/health` (the process is up), `/ready` (the framework database answers), `/info` (version and counts). | Load balancers, container healthchecks, external probes. See [Health endpoints](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, health, pending migrations, configuration problems. | Administrators on the server. See [Operations](../installation/operations.md). |
 
@@ -12363,7 +12378,8 @@ How to watch a running Liberty Next server: the Monitoring page for superusers (
 | Situation | First check |
 |---|---|
 | Users find the application slow | **Database pools**: connections all *In use*, or *Overflow* above 0. |
-| An error on a screen | The live log filtered on **ERROR**; the user's message gives an `error_id` to search for. |
+| An error on a screen | The [server log](./server-log.md) searched for the request id the user's message gives. |
+| The disk fills up | [Retention](./retention.md): the size of each store, then **Preview** and **Run now**. |
 | A record cannot be saved | **Record locks**: someone else may have it open. |
 | The server seems stuck | `/ready`, then `./liberty status`. |
 | A scheduled job did not run | The Nomaflow [run history](../nomaflow/runs/history.md) — a **MISSED** run records it. |
@@ -12381,7 +12397,7 @@ Source: https://docs.nomana-it.fr/liberty/monitoring/dashboard/
 
 Block by block, the Liberty Next Monitoring page: the four KPIs, database pools, runtime, connected users, record locks and the live log tail — what each value means and when to act.
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO).
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). This page describes its first tab, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
 
 ---
 
@@ -12436,7 +12452,107 @@ The latest lines of the server log, newest at the bottom.
 | **Filter…** | Text in the logger name or the message — an `error_id`, a request id, a connector. **Clear filter** empties it. |
 | **Pause** / **Resume** | Stops the scrolling to read; new lines keep arriving. |
 
-Errors are red, warnings orange, debug lines dimmed; a line with a stack trace can be unfolded (**traceback**). For older lines, use `./liberty logs` or `liberty-ops logs`.
+Errors are red, warnings orange, debug lines dimmed; a line with a stack trace can be unfolded (**traceback**). For older lines, search the [Server log](./server-log.md) tab.
+
+---
+
+## Liberty Next — Server log
+Source: https://docs.nomana-it.fr/liberty/monitoring/server-log/
+
+Monitoring → Server log in Liberty Next: the server log kept on disk and rotated by size, searched by level, module, text and period, an exception opened, one request followed, the matches exported, the files downloaded, and the log level of each module changed at once.
+
+**Monitoring → Server log** searches what the server has written: the framework, the applications and the libraries they use, whatever started the server. The log is kept on disk, in files rotated by size — 10 MB per file, the five previous files kept —, so it survives a restart. Only superusers see the Monitoring page.
+
+---
+
+## At a glance
+
+---
+
+## Searching \{#search\}
+
+| Control | Effect |
+|---|---|
+| **Search** | Text in the message, the module, the exception or the request id. |
+| Level | *Any level*, or a floor: *WARNING and above* keeps the warnings, the errors and the critical messages. |
+| **Any module** | One module and its sub-modules — `liberty.jobs`, `nomasx1`. A name can be typed. |
+| Period | *Last hour*, *Last 24 hours* (the default), *Last 7 days*, *Everything kept*. |
+| **Reload** | Reads the files again. |
+
+The filters are kept in the browser. The page shows the 500 newest matches — *N entries (from M lines)*, with the files read and their size —; when there are more, it says so: narrow the search.
+
+A click on a line opens it: the full message and its exception. The request id in brackets after a message — the one an error page shows the user — keeps that request only: every line written while serving it.
+
+The same message written many times in a row is kept once, followed by *(previous message repeated N times)*.
+
+---
+
+## Export and download \{#export\}
+
+| Button | Gives |
+|---|---|
+| **Export** | The matching entries as a text file, oldest first — up to 100,000. |
+| **Download files** | The log files themselves, current and previous, in a ZIP. |
+
+---
+
+## Log levels per module \{#levels\}
+
+The card at the bottom sets how much each module writes. Pick a level for a module — *Inherit* takes its parent's —, or add a module by name. A change applies at once, without a restart, and is kept for the next start (● marks a module set this way). Raise a module to `DEBUG` while investigating, then set it back: a verbose module fills the files quickly.
+
+---
+
+## Related
+
+- [The Monitoring page](./dashboard.md) — the live view.
+- [Retention](./retention.md) — what the server keeps, and for how long.
+
+---
+
+## Liberty Next — Retention
+Source: https://docs.nomana-it.fr/liberty/monitoring/retention/
+
+Monitoring → Retention in Liberty Next: every store the server keeps growing — job runs, job files, notifications, configuration versions, change packages, saved views, the server log — with its policy, its size, a dry-run Preview and Run now.
+
+**Monitoring → Retention** gathers in one place everything the server keeps and lets grow, with what is kept, where that is set, how much it takes, and a way to clean up now. Only superusers see it.
+
+---
+
+## At a glance
+
+---
+
+## The stores \{#stores\}
+
+| Store | What goes | Set in |
+|---|---|---|
+| **Job runs** | Finished runs with their steps and logs, beyond the days kept or the cap per job. | Nomaflow — [Run history retention](../nomaflow/administration.md#retention). |
+| **Job files** | Uploaded files, rejects reports, reports, exports, watched-folder archives. | Nomaflow — **Files kept (days)** in the same panel. |
+| **Notifications** | Read notifications older than the days set. | Settings → App → Notifications — [Keep read notifications](../nomaflow/notifications.md#smtp). |
+| **Config versions** | The configuration snapshots beyond the number kept per file, or too old; the newest of each file always stays. | The [`config-versions-purge` job](../nomaflow/bundled-jobs.md), else 20 per file and 90 days. |
+| **Change packages** | Exported or promoted packages and import logs older than the days set. Drafts are never touched. | Kept by default. |
+| **Saved views** | The users' own views and analyses. | Never purged — shown for their size. |
+| **Server log** | Rotated by size: 10 MB per file, five older files. | — |
+
+Job runs and job files show when Nomaflow runs on the server.
+
+---
+
+## Preview and Run now \{#actions\}
+
+| Button | Effect |
+|---|---|
+| **Preview** | A dry run: *Would delete N item(s)*, with the size. Nothing is deleted. |
+| **Run now** | After a confirmation, applies the policy at once: *Deleted N item(s)*. |
+
+The buttons show only where there is something to purge: not for saved views and the server log, nor for notifications and change packages while they are kept without limit. The automatic clean-ups keep running on their own schedule.
+
+---
+
+## Related
+
+- [Server log](./server-log.md) — search what the server wrote.
+- [Nomaflow administration](../nomaflow/administration.md) — the jobs' retention policy.
 
 ---
 
@@ -12772,7 +12888,7 @@ Jobs themselves are edited through `/admin/config/jobs/parsed`.
 ## Nomaflow — Overview dashboard
 Source: https://docs.nomana-it.fr/liberty/nomaflow/dashboard/
 
-The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the runs per day, what needs attention, the runs and durations per job and the latest runs — last 7 days by default.
+The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the scheduled jobs with Run now / Pause / Resume, the runs per day, what needs attention, the runs and durations per job, the latest runs and the last success per job — last 7 days by default.
 
 **Overview**, the first entry of the Nomaflow menu, gives the operators the state of the scheduler at a glance: how the runs ended, what failed or was missed, what is running now, which jobs are the busiest or the slowest, and the latest runs.
 
@@ -12796,13 +12912,15 @@ The page opens on **Last 7 days**; the period control in the bar offers the othe
 | **Failures** — runs that ended in error | The failed runs, the number of jobs concerned and the missed schedules. |
 | **In flight** — right now | Running · queued. |
 | **Average duration** — completed runs | The average duration, and the longest. |
+| **Scheduled jobs** | What runs next: each scheduled job with its next run or *Paused*, its schedule in words and its last state, and the buttons **Run now**, **Pause the schedule** and **Resume the schedule**. Superusers only. |
 | **Runs per day** | One bar per day, by outcome. |
 | **What needs attention** | Per job: the failures with their last error, the missed schedules, the runs going for more than an hour — red for a failure, orange for the rest, with the date of the last occurrence. |
 | **Runs per job** | The share of the runs of each job over the period. |
 | **Average duration per job** | In seconds, the slowest first. |
 | **Recent runs** | The latest runs, with their state; the error, or the trigger, under each. |
+| **Last success per job** | Every job with its last successful run, the failures since and its last state: the failing jobs first, a job without a success for a week in orange; the figure is the days since the last success. |
 
-The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md).
+The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md). The same jobs card can be added to any dashboard — see [Dashboards → Jobs](../framework/dashboards.md#jobs).
 
 ---
 
@@ -12823,7 +12941,7 @@ A **job** is an entry of `jobs.toml`: an **id** (letters, digits, `-`, `_`; fixe
 
 ## Step \{#step\}
 
-A **step** is one unit of work, of one of nine types: `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
+A **step** is one unit of work, of one of ten types: `sql_query`, `sql_copy`, `file_load`, `file_export`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
 
 ## Schedule \{#schedule\}
 
@@ -12874,9 +12992,9 @@ The job `sales-load` has three steps: `file_load` (load the month's file), `sql_
 ## Nomaflow — Catalogue — the Jobs page
 Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/catalog/
 
-The Nomaflow Jobs page: the toolbar, the retention and missed-schedule panels, what a job card shows, switching a job on or off, Run now and Run with parameters (presets, steps, file uploads, log level), Cancel, Clone, Delete and Export.
+The Nomaflow Jobs page: search and filters, the jobs grouped by application with the main jobs first, what a job line shows, switching a job on or off, Run now and Run with parameters (presets, parameters, several values, steps, file uploads, log level), Cancel, Clone, Delete and Export.
 
-The **Jobs** page lists every job of `jobs.toml` as a card, with its state, its schedule and its last run. It is reserved to superusers.
+The **Jobs** page lists every job of `jobs.toml`, one line per job, grouped by application, with its last run, its schedule and its actions. It is reserved to superusers.
 
 ---
 
@@ -12884,40 +13002,47 @@ The **Jobs** page lists every job of `jobs.toml` as a card, with its state, its 
 
 ---
 
-## The toolbar \{#toolbar\}
+## Search and filters \{#toolbar\}
 
 | Element | Use |
 |---|---|
+| **Search** | Finds a job by its id, its description or a tag. |
+| **All applications**, **Any status**, **Any tag** | Narrow the list. Status: *Enabled*, *Disabled*, *Scheduled (enabled with a next run)*, *Running now*, *Last run failed*. |
+| **Clear** | Resets the search and the filters. |
+| *N of M jobs* | How many jobs the filters leave. |
 | **+ New job** | Opens the job editor — see [Create a job](./create.md). |
-| **Schedule** | Every schedule by next run — see [Schedules](./schedules.md#schedule-view). |
-| **↻** | Reloads the list. |
-| **Filter:** | One chip per tag in use; pick some to show only those jobs, **Clear** to show all. |
 
-Below it, two folded panels hold the policies shared by every job: **Run history retention** ([Administration](../administration.md#retention)) and **Missed schedules** ([Schedules](./schedules.md#missed)).
+The search and the filters are kept in the browser from one visit to the next. Two folded panels hold the policies shared by every job: **Run history retention** ([Administration](../administration.md#retention)) and **Missed schedules** ([Schedules](./schedules.md#missed)).
 
 ---
 
-## A job card \{#card\}
+## Groups \{#groups\}
+
+- **Main jobs** comes first: the jobs tagged `main`, the ones operators run most — the collection of an application, a nightly sync.
+- Then one group per **application**, in alphabetical order: a job belongs to the application its tags or its id name (`nomasx1-collect-all` → Nomasx-1); the others go to **Framework**, last.
+
+A click on a group's title folds or unfolds it.
+
+---
+
+## A job line \{#card\}
 
 | Element | Meaning |
 |---|---|
-| Id, description, tags | From the job's settings. |
-| **enabled** / **disabled** | Click to switch the job's own schedule on or off. **Run now** works either way, and preset schedules are not affected. |
-| Schedule chip | The cron, or **Manual only**. |
-| *N preset schedule(s)* | Presets that carry their own schedule. |
-| next · last | The next scheduled run, and the state and duration of the last one — click it to open its detail. |
-| *N steps* | The number of steps. |
+| Id, description | A click on the id opens the job editor. |
+| Last run | The state of the last run; a click opens its detail. |
+| Schedule | The cron, or **Manual only**, with the next run. |
+| **enabled** / **disabled** | A click switches the job's own schedule on or off at once, without reloading the configuration. **Run now** works either way, and preset schedules are not affected. |
 
-The card's buttons:
+The icons at the end of the line:
 
-| Button | Effect |
+| Icon | Effect |
 |---|---|
-| **▶ Run now** | Runs the job. When there is something to choose — shared parameters, step arguments, several steps, a `file_load` step — it opens **Run with parameters** first. |
-| **Cancel** | Shown while the job runs: cancels the run in progress. |
+| **Run now** | Runs the job. When there is something to choose — parameters, step arguments, several steps, a `file_load` step — it opens **Run with parameters** first. While the job runs, it becomes **Cancel**. |
 | **Edit** | Opens the job editor. |
-| **Clone** | Asks for a new id (`<id>_copy` proposed) and creates a disabled copy without any schedule: neither the job's own nor its presets'. |
-| **Delete** | Removes the job from `jobs.toml` after confirmation. Its run history is kept. |
+| **Clone** | Asks for a new id and creates a disabled copy without any schedule: neither the job's own nor its presets'. |
 | **Export** | Downloads a ZIP with the job's `jobs.toml` entry and a `MANIFEST.md`. The connectors and queries it uses are not included. |
+| **Delete** | Removes the job from `jobs.toml` after confirmation. Its run history is kept. |
 
 ---
 
@@ -12927,13 +13052,15 @@ The window applies to this run only — `jobs.toml` is not changed.
 
 | Part | Content |
 |---|---|
-| **Preset** | Pick a saved preset and **Apply** it; **Save as preset…** saves the window's current state under a name, in `jobs.toml`. |
-| **Shared params (apply to every step)** | The job's shared parameters, editable for this run. |
+| **Preset** | Pick a saved preset and **Apply** it: the window first goes back to the job's saved values, then applies the preset — as the scheduler does. *(pick a preset…)* returns to the saved values. **Save as preset…** saves the window's current state under a name, in `jobs.toml`. |
+| **Shared params (apply to every step)** | The job's shared parameters, editable for this run. A parameter offered to users shows as a dropdown — its choices may come from a query, such as the applications of Nomasx-1 —, or as checkboxes headed by **All** when several values are allowed. |
 | **Steps** | One line per step with a checkbox to skip it (**All** / **None**); **Edit parameters** opens a step's arguments. A `file_load` step gets a file picker — see [Steps](../steps.md#file-load). |
 | **Log level** | *WARNING — warnings + errors only*, *INFO — row counts + progress markers*, *DEBUG — full SQL of every query*. |
 | **Run** | Uploads the chosen files, then starts the run. |
 
-Typical uses: rerun only the step that failed, load one month again, run with `DEBUG` to see the SQL, run a preset by hand.
+**Several values, several runs.** A job built to run *per value* — per application, per company — runs once for each value ticked, one run after the other, each with a single value; a failed value does not stop the next ones. **All** takes every value offered. In [Job Runs](../runs/history.md), each run shows the value it ran for.
+
+Typical uses: rerun only the step that failed, load one month again, run with `DEBUG` to see the SQL, run a preset by hand, collect three applications in one go.
 
 ---
 
@@ -12963,7 +13090,7 @@ The Nomaflow job editor: the Job section (id, schedule, timezone, tags, enabled)
 | Field | Notes |
 |---|---|
 | **Id** | Letters, digits, `-` and `_`. Fixed once the job exists — it keys the run history. To rename, **Clone** under the new id, then delete the old job. |
-| **Description** | Shown on the card. |
+| **Description** | Shown on the job's line and on its page. |
 | **Schedule (cron)** | Ready-made choices (Manual, Hourly, Daily, Weekly, Monthly) or a five-field cron; **Next runs** previews the next five. Blank: manual only. See [Schedules](./schedules.md). |
 | **Timezone** | The IANA name the schedule is evaluated in. |
 | **Tags** | Free labels, used by the filter of the Jobs page. |
@@ -12979,7 +13106,7 @@ Presets are saved from **Run with parameters → Save as preset…**. Here each 
 
 ### Alerts
 
-**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
+**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. **Must have succeeded by** sets a deadline (`07:00`, in the job's timezone): on a day the job is scheduled, if no run has succeeded by then, the recipients get *Job &lt;id&gt; is late* — still running, failed, or never started. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
 
 ### Shared params
 
@@ -13093,12 +13220,16 @@ The **Schedule (cron)** field of the job editor offers ready-made choices — **
 
 ## The Schedule view \{#schedule-view\}
 
-**Schedule** in the Jobs toolbar lists every schedule, by next run:
+**Operations → Schedule**, in the Nomaflow menu, shows what runs when, day by day.
 
-| Group | Content |
+| Part | Content |
 |---|---|
-| **Upcoming** | One row per active schedule — the job's own, and one per preset with a schedule (the preset's name is shown next to the job). Columns: Job, Schedule, Next run, Last run. |
-| **Manual / disabled** | Jobs without a schedule, and schedules that are set but switched off — marked *(disabled)*. |
+| Counters | The runs due in the next 24 hours, the active schedules, the schedules switched off, the jobs run by hand only. |
+| **Upcoming** | Each active schedule at its next run — the job's own, and one per preset with a schedule (the preset's name next to the job) —, grouped by day: *Today*, *Tomorrow*, then the date. Each line shows the time, the job, the schedule in words (*every day at 03:00*, *every Monday at 07:00*) with the cron under it, when it comes, and the state of the last run. |
+| **Scheduled but switched off** | Schedules that are set but disabled. |
+| **Run by hand only** | The jobs without any schedule, folded; a click on one opens its editor. |
+
+Schedules the page cannot put into words — lists of hours, several months — show their cron only.
 
 ---
 
@@ -13137,7 +13268,7 @@ The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recor
 
 | Option | Effect |
 |---|---|
-| The job's **Enabled** switch on the Jobs page | The job's own schedule stops. **Run** still works; preset schedules keep running unless switched off. |
+| The job's **enabled** / **disabled** pill on the Jobs page, or **Pause** on a dashboard's jobs card | The job's own schedule stops at once, without a reload. **Run** still works; preset schedules keep running unless switched off. |
 | **Manual** in the Schedule field | The job's own schedule is removed. |
 | **Schedule enabled** off on a preset | That preset's schedule stops. |
 
@@ -13170,10 +13301,11 @@ A **job** menu item puts a Nomaflow job in an application's menu, for users who 
 | Part | Content |
 |---|---|
 | Title and description | The menu item's label, then the job's description. |
-| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. |
+| Parameters | The [user parameters](#user-params) the job declares: a dropdown when the values are fixed, a text input otherwise, each pre-filled with its default. A required one carries `*`; an optional dropdown offers *(all)*. A parameter that accepts several values shows as checkboxes headed by **All**. |
 | Files | One picker per `file_load` step that needs a file — **File for the step “load”**, with the sheet when the step names one. Accepted: `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv`. A step with its own path or a watched folder asks for nothing: it reads its file. |
 | **Run** | Uploads the files and starts the run. *Pick the file(s) first.* or *“Company” is required.* when something is missing. One run at a time: while one is going, the button waits. |
 | **Log** | The run's state and its log, refreshed every 2 seconds while the run is queued or running, the error in red. **Files of the run** offers the files it produced — the rejected rows of a load. |
+| **File loaded** | Under the log, the file uploaded for the selected run, to download again. |
 | **Previous runs** | The last 20 runs: start, state, duration, who ran it (or the trigger, for a scheduled run), rows and the start of the error. A click on a run shows its log. |
 
 The run is an ordinary Nomaflow run: the operators see it in the [run history](../runs/history.md), its notifications and alerts apply.
@@ -13183,6 +13315,12 @@ The run is an ordinary Nomaflow run: the operators see it in the [run history](.
 ## Putting a job in a menu \{#menu\}
 
 In **Settings → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+
+---
+
+### A preset in the menu \{#preset\}
+
+An item can pin one of the job's [presets](./schedules.md#schedulable-presets) with `params = { preset = "Licences" }`: the page then runs the job with that preset's parameters and step switches. One job thus gives several menu entries — *Collect security and SoD*, *Collect licences* —, each a preset. The menu item's label names the page.
 
 ---
 
@@ -13211,13 +13349,16 @@ choices_from = "explorer_models:nomajde"
 |---|---|
 | `name` | The step argument the value is given to. |
 | `label`, `l` | The label shown, per language. Default: the name. |
-| `step` | The step that receives the value. |
+| `step` | The step that receives the value. Without it, the value goes to every step of the job. |
 | `default` | The pre-filled value. |
 | `required` | `true`: the job does not start without a value. |
 | `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
-| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application. |
+| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application; or `query:<connector>/<query>:<value column>:<label column>` — the rows of a read query, such as the applications of Nomasx-1. |
+| `multiple` | `true`: several values may be ticked, with **All**. |
 
-A blank value means *not set*: the step's own default applies.
+A blank value means *not set*: the step's own default applies. The same parameters show in the operators' **Run with parameters** window.
+
+**One run per value.** A job that declares `for_each = "<parameter>"` runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
 
 ---
 
@@ -13225,7 +13366,7 @@ A blank value means *not set*: the step's own default applies.
 
 | Application | Folder | Jobs |
 |---|---|---|
-| Nomasx-1 | **Jobs** | Collect security, Collect licences — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
+| Nomasx-1 | **Jobs** | Collect security and SoD, Collect licences, Licence audit report, Security & SoD report — see [Nomasx-1 jobs](../../nomasx1/jobs.md). |
 | Nomajde | **Jobs** | Re-merge security (change package), Re-merge security (all roles), Refresh data dictionary (Explorer models) — see [Nomajde jobs](../../nomajde/jobs.md). |
 | Sales demo | **Import** | Items file, Companies file, Sales file (one month), Refresh periods, Load the sample files — see [The sales demo](../../framework/demo-app.md#loads). |
 
@@ -13234,7 +13375,7 @@ A blank value means *not set*: the step's own default applies.
 ## Nomaflow — Steps
 Source: https://docs.nomana-it.fr/liberty/nomaflow/steps/
 
-The nine Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run.
+The ten Nomaflow step types — sql_query, sql_copy, file_load, file_export, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run.
 
 A **step** is one unit of work in a job. Steps run in order; when one fails, the following ones are recorded as *skipped: earlier step failed*.
 
@@ -13243,6 +13384,7 @@ A **step** is one unit of work in a job. Steps run in order; when one fails, the
 | runs one named query of a SQL connector | **`sql_query`** |
 | copies a whole table from one connector to another | **`sql_copy`** |
 | loads a spreadsheet or a CSV file into a table | **`file_load`** |
+| writes the result of a read query to an Excel or CSV file | **`file_export`** |
 | calls a Python function of a plugin | **`python`** |
 | calls a URL | **`http`** |
 | reads an LDAP / Active Directory directory into a table | **`ldap_sync`** |
@@ -13263,7 +13405,7 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | Field | Default | Notes |
 |---|---|---|
 | `name` | — | Shown in the run detail; unique within the job. |
-| `type` | — | One of the nine types. |
+| `type` | — | One of the ten types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
 
@@ -13437,7 +13579,9 @@ Renders a document into the run's work area: a [saved analysis or dashboard of t
 | **Render as user** | The document holds what that user sees: the data scope of their roles, with their attributes. A digest rendered as the manager of one company holds that company only. |
 | **Render as role** | The data scope of a role. A rule whose values come from a user attribute allows nothing here: prefer **Render as user** for such roles. |
 
-With neither, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
+For a plugin report, the run's parameters — the job's, those chosen when running it, the user parameters — are passed to the report on top of the step's own, converted to the type the report declares (a number stays a number); a blank value leaves the report's default.
+
+With neither user nor role, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
 
 ---
 
@@ -13478,6 +13622,24 @@ Schedule the job on the first of the month (cron `0 7 1 * *`) — see [Schedules
 
 ---
 
+## File export — `file_export` \{#file-export\}
+
+Writes the result of a named **read** query to a file in the run's work area — for another system to pick up, or for a `notify` step to attach. A query that writes is refused.
+
+| Field (editor) | Notes |
+|---|---|
+| **Connector**, **Query** | The read query to run. |
+| **Parameters** | Its binds; the run's parameters are passed too. A value may use `${params.x}`. |
+| **Format** | *Excel (xlsx)* (default) or *CSV*. |
+| **File name (default: the query)** | May use `${params.x}` and `${run.id}`: `sales-${params.period}`. |
+| **Sheet** | Excel only — the query's name by default. |
+| **CSV delimiter**, **Encoding** | CSV only — `;` and `utf-8-sig` by default. |
+| **Also copy to this folder (optional)** | A server folder where a copy is written as well, created if missing: `/data/out/${params.period}`. |
+
+The rows are read from the database as they come, up to the connector's row limit — the log says when the export was capped. The header row carries the columns' labels; hidden columns are left out. The run detail offers the file under the step, and the retention of the work area applies to it — not to the copy in the other folder.
+
+---
+
 ## Retries and timeouts \{#retry\}
 
 The job's **Retry policy** block (`attempts`, `backoff` fixed or exponential, `base_seconds`) applies to each step: a step is tried up to `attempts` times in all (`1`, the default, means no retry), with a wait of `base_seconds` between tries — constant, or doubling with `exponential`. The job as a whole stops after `timeout_seconds` (4 hours by default).
@@ -13487,7 +13649,7 @@ The job's **Retry policy** block (`attempts`, `backoff` fixed or exponential, `b
 ## Nomaflow — Run history
 Source: https://docs.nomana-it.fr/liberty/nomaflow/runs/history/
 
-Where Nomaflow runs are recorded and how to read one: the run states, the Run detail page (summary, per-fire overrides, steps, log with Follow and Download), the Job Runs list, and how long the history is kept.
+Where Nomaflow runs are recorded and how to read them: the Job Runs page (search, filters, state counts, runs by day, live progress), the run states, the Run detail page (summary, per-fire overrides, steps, uploaded file, log with Follow and Download), and how long the history is kept.
 
 Every run of a job — scheduled, manual, called by another job, or missed — is recorded with its steps and its log.
 
@@ -13497,13 +13659,25 @@ Every run of a job — scheduled, manual, called by another job, or missed — i
 
 ---
 
-## Where to find runs \{#where\}
+## The Job Runs page \{#where\}
 
-| From | Opens |
+**Operations → Job Runs**, in the Nomaflow menu, lists every run, newest first.
+
+| Element | Use |
 |---|---|
-| *last* on a job card | The detail of the job's last run. |
-| The **Job Runs** list (the Nomaflow menu; **Job Runs** at the top of a run detail) | The latest runs of every job. |
-| A notification about a run | Its detail, through the notification's link. |
+| **Search** | A job, a user, an error message. |
+| **All jobs** | One job only. |
+| Period | *Last 24 hours*, *Last 7 days* (the default), *Last 30 days*, *All time*. |
+| State chips | **All**, then each state present with its count — `RUNNING`, `QUEUED`, `FAILED`, `SUCCEEDED`, `CANCELED`, `MISSED`. A click keeps that state only; a second click clears it. |
+
+The filters are kept in the browser. The runs are grouped by day — *Today*, *Yesterday*, then the date — and each line shows:
+
+- the state and the start time;
+- the job and the parameters of the run: for a job run per application, the application it ran for;
+- what started it: the schedule, a user, or the job that called it;
+- the duration — counting while the run goes, with a bar of the steps done —, the rows affected, and under a failed run its error.
+
+While a run is going, the page refreshes itself (*live*). A click on a line opens the run's detail; **Show more** loads the older runs. The detail of a run is also reached from the last-run state on the [Jobs page](../jobs/catalog.md#card) and from the link of a notification.
 
 ---
 
@@ -13530,7 +13704,7 @@ The page refreshes itself every two seconds while the run is in progress (*live*
 |---|---|
 | **Summary** | Job, Trigger (`scheduled` or `manual`, and who started it — a user name, or `call_job:<job>@<run>` for a job called by another), Started, Finished, Rows affected. |
 | **Run with parameters** | Shown when the run was started with overrides: the values chosen for this run (shared parameters, step arguments, skipped steps, log level). |
-| **Steps** | One row per step: #, name, Type, Attempt, State, Error. A `file_load` step also shows *N read · N inserted · N rejected* and, if needed, **Rejected rows (csv)**. |
+| **Steps** | One row per step: #, name, Type, Attempt, State, Error. A `file_load` step also shows *N read · N inserted · N rejected*, the file uploaded for this run — a click downloads it again — and, if needed, **Rejected rows (csv)**. |
 | **Log** | The lines written during the run, at the run's log level. **Follow** keeps the newest lines in view (**Pause** stops it); **Download** saves the whole log. |
 
 The log keeps the last 5,000 lines of a run.
@@ -13877,7 +14051,7 @@ The run detail shows the rows deleted; the log tells whether the threshold was r
 ## Nomaflow — Bundled jobs
 Source: https://docs.nomana-it.fr/liberty/nomaflow/bundled-jobs/
 
-The Nomaflow job catalogue shipped with the liberty-apps wheel — install / preload / refresh / sync / SOD / audit jobs that drive Nomasx-1 and Nomajde without the operator writing a single line of TOML. Run from Nomaflow → Catalogue → ▶ Run now, schedule via the standard scheduler, or trigger from CI.
+The Nomaflow job catalogue shipped with the liberty-apps wheel — install / preload / refresh / sync / collection / report / audit jobs that drive Nomasx-1 and Nomajde without the operator writing a single line of TOML. Run from Nomaflow → Catalogue → ▶ Run now, schedule via the standard scheduler, or trigger from CI.
 
 The **`liberty-apps`** wheel ships a curated catalogue of Nomaflow jobs in `plugins/nomaflow/jobs.toml`. They land in Nomaflow's catalogue automatically after the wheel install + a framework reload — no `[[jobs]]` block to author, no scheduling to wire by hand.
 
@@ -13888,12 +14062,10 @@ Each job is a thin wrapper over a Python callable shipped in the **`nomasx1`** p
 | **Install** | One-time provisioning of databases + schema. | [Install jobs](#install) |
 | **Preload** | Curated reference data export / import — for fresh customer installs or cross-env promotion. | [Preload jobs](#preload) |
 | **Sync** | Copy upstream control + dictionary tables to the local Nomajde mirror. | [Sync jobs](#sync) |
-| **Security collection** | Read JD Edwards security + LDAP into the Nomasx-1 schema. | [Security collection jobs](#security) |
-| **License collection** | Read JDE license / employee / OUT data into the Nomasx-1 schema. | [License collection jobs](#license) |
-| **SoD detection** | Run the segregation-of-duties matrix against the collected security data. | [SoD jobs](#sod) |
-| **Database properties** | Read Oracle database metadata (options, features, partitioning, licenses). | [Database jobs](#database) |
+| **Collection** | One job collects everything Nomasx-1 needs for one or several applications: JD Edwards security, segregation of duties, licences, Object Usage Tracking, and optionally the directory, the activity log, the Oracle database properties and the cross reference. | [Collection job](#collect) |
+| **Reports** | The two audit reports, rendered every month and mailed to the auditors. | [Report jobs](#reports) |
 | **Audit trail** | LogMiner-driven change capture from the audit-source DB. | [Audit-trail jobs](#audit-trail) |
-| **Maintenance** | Materialised-view refresh, cross-reference rebuild, SCN reset, schema upgrade. | [Maintenance jobs](#maintenance) |
+| **Maintenance** | Materialised-view refresh, cross-reference dump, configuration versions purge. | [Maintenance jobs](#maintenance) |
 
 All bundled jobs ship with **`enabled = false`** — they appear in the catalogue but don't fire automatically. The operator enables a schedule (or runs them on demand) once the install is wired.
 
@@ -13934,7 +14106,7 @@ Most jobs in the bundle share the same parameter shape under `[jobs.params]`:
 | `target_connector` | `nomasx1` | The connector to **write to**. Override for a parallel install (`nomasx1b`). |
 | `target_schema` | `nomasx1` | The schema name inside the target connector. |
 
-Overrides at run time: open *Run with parameters* on the job card before ▶ Run now. Per-schedule overrides: set them on the `[[jobs.schedules]]` block in your override `jobs.toml`.
+Overrides at run time: **Run now** on the job's line opens *Run with parameters*. Per-schedule overrides: set them on the `[[jobs.schedules]]` block in your override `jobs.toml`.
 
 ---
 
@@ -14042,6 +14214,19 @@ One-time provisioning. Run **once** at customer-stand-up; safe to re-run (idempo
 
 ---
 
+### `nomasx1-roles` \{#nomasx1-roles\}
+
+**Create or refresh the Nomasx-1 roles.**
+
+| Role | Grants |
+|---|---|
+| `nomasx1_auditor` | Every read of the Nomasx-1 data, the Data Explorer, the AI assistant and the two report jobs; the monthly reports are mailed to it. |
+| `nomasx1_admin` | Everything: the whole application, its settings and every `nomasx1-*` job. |
+
+Run it once after the install and after each upgrade, so that new read queries are granted; then assign the roles to users under **Settings → Access**. Idempotent; shipped disabled.
+
+---
+
 ## Preload jobs \{#preload\}
 
 The curated **reference bundle** ships in `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz`. The export job builds the bundle from a source install; the import job loads it into a target install.
@@ -14112,7 +14297,7 @@ Mirror upstream control / dictionary tables from JD Edwards into the local Nomaj
 
 Each step uses `type_coercion = "jde"` + `decimal_mode = "truncate"` — JDE column types are mapped to standard SQL on the way in (e.g. `JULIANDATE` → `DATE`, `STRING(N)` trimmed to `VARCHAR`), with truncation rather than rounding on decimals.
 
-**Schedule** — `30 2 * * *` (02:30 daily, Europe/Paris timezone in the bundle). `enabled = false` by default — enable from the catalogue card once `jdedwards` is wired and the first run succeeded as a manual ▶ Run now.
+**Schedule** — `30 2 * * *` (02:30 daily, Europe/Paris timezone in the bundle). `enabled = false` by default — enable it from its line on the Jobs page once `jdedwards` is wired and the first run succeeded as a manual ▶ Run now.
 
 **Retry / alerts** — 2 retry attempts, alert when the run exceeds 120 minutes.
 
@@ -14159,137 +14344,54 @@ For a partial re-merge — only the parents affected by *this* change — use `n
 
 ---
 
-## Security collection jobs \{#security\}
+## Collection job \{#collect\}
 
-Read JD Edwards security data into the Nomasx-1 schema. The shape is a long chain of single-callable steps — one Python function per JDE entity / Nomasx-1 derived table.
+### `nomasx1-collect-all` \{#nomasx1-collect-all\}
 
-### `nomasx1-security-1` \{#nomasx1-security-1\}
+**Collect everything Nomasx-1 needs for an application, in order**, then refresh the materialised views once at the end.
 
-**Collect all security data for an application** — Users / Roles / Assignments / Menus / Access. Each step extracts one JDE entity (objects, sec objects, sec menus, etc.) or builds one Nomasx-1 derived table (security_users, security_rights_actions, etc.).
-
-| Family | Steps | What |
+| Family | Steps | On by default |
 |---|---|---|
-| JDE entities | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `JDE_TASKS`, `JDE_MENUS` | Raw extraction from F00950, F0094, F0092, F9012, F9001, F9000. |
-| Nomasx-1 catalogs | `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `SECURITY_MENUS` | Per-app users + roles + role assignments + menu trees. |
-| Derived rights | `SECURITY_RIGHTS_MENUS`, `SECURITY_RIGHTS_APPS`, `SECURITY_RIGHTS_ACTIONS`, `SECURITY_RIGHTS_APPS_USERS`, `SECURITY_RIGHTS_ACTIONS_USERS` | Effective rights — by role, by user, on menus / apps / actions. |
-| Audit | `SECURITY_RIGHTS_AUDIT` | Audit trail of right grants/revocations. |
-| Refresh | `REFRESH_VIEWS` | Materialised-view refresh at the end. |
+| JD Edwards security | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `JDE_TASKS`, `JDE_MENUS`, `SECURITY_MENUS`, `SECURITY_RIGHTS_*` (menus, applications, actions, per user, audit) | Yes |
+| Segregation of duties | `SOD_CONFLICT_DETAILS`, `SOD_CONFLICT_SUMMARY` — the matrix of *Settings → Segregation of duties* against the security just collected | Yes |
+| Licences | `LICENSE_JDE_EMPLOYEES`, `LICENSE_JDE_USERS` | Yes |
+| Object Usage Tracking | `LICENSE_JDE_OUT`, `LICENSE_JDE_OUT_OBJECTS`, `LICENSE_JDE_OUT_USERS`, `LICENSE_JDE_OUT_PURGE` | Yes |
+| Directory | `SECURITY_LDAP` — the LDAP / Active Directory set in *Settings → LDAP* | No |
+| Activity log | `SECURITY_ACTIVITY_LOG` | No |
+| Oracle database | `DB_ORA_PROPERTIES`, `DB_ORA_OPTIONS`, `DB_ORA_FEATURES`, `DB_ORA_PARTITIONS`, `DB_ORA_LICENSES` | No |
+| Cross reference | `JDE_XREF_APPS` | No |
+| Views | `REFRESH_VIEWS` | Yes |
 
-All steps run sequentially (no parallelism — order matters for the derived tables).
+**Presets**
 
-**Standard params** (`apps_id`, `source_connector = jdedwards`, `target_connector = nomasx1`, `target_schema = nomasx1`).
+| Preset | Runs |
+|---|---|
+| **Security and SoD** | The security and the segregation of duties — the licence and OUT steps off. |
+| **Licences** | The licences and OUT — the security and SoD steps off. |
+| **Everything** | Every step, the directory, the activity log, the database and the cross reference included. |
 
-**Retry / alerts** — 2 attempts, long-run alert at 30 minutes.
+**Applications** — the job offers the applications of *Settings → Applications* as checkboxes, with **All**. It runs once per application ticked, one after the other. On a schedule or in a preset, `apps_id = "all"` collects every application at each fire.
 
-**When to run** — daily for active installs (read-only against JDE). The first run after a new role / user / right grant in JDE refreshes the Nomasx-1 catalog; until then the UI shows the previous snapshot.
+**Params** — `source_connector = jdedwards`, `target_connector = nomasx1`. Two attempts on failure; an alert after 90 minutes.
+
+**Menu** — *Nomasx-1 → Jobs → Collect security and SoD* and *Collect licences* run the two presets. See [Nomasx-1 jobs](../nomasx1/jobs.md).
+
+**When to run** — daily on an active install, with a schedule on a preset: *Security and SoD* every night, *Licences* weekly.
 
 ---
 
-### `nomasx1-ldap-1` \{#nomasx1-ldap-1\}
+## Report jobs \{#reports\}
 
-**Collect Active Directory users** through the LDAP / AD connection configured in *Settings → LDAP*. Populates the Nomasx-1 `security_ldap` table that backs the LDAP reconciliation pages.
+### `nomasx1-report-licences` and `nomasx1-report-security-sox` \{#nomasx1-reports\}
 
-| Step | Callable |
+**Render an audit report and mail it.** A [`report` step](./steps.md#report) renders the PDF — the [licence audit](../nomasx1/reports/audit-licences.md) or the [Security & SoD assessment](../nomasx1/reports/security-sox.md) — for one application; a [`notify` step](./steps.md#notify) sends it to the `nomasx1_auditor` role with the file attached.
+
+| Parameter | Use |
 |---|---|
-| `SECURITY_LDAP` | `nomasx1.ldap:j_security_ldap` |
+| **Applications** | One or several applications, or **All** — one report per application. |
+| **Language** | `fr` or `en`. |
 
-**Params** — standard shape (`source_connector = unused` — the LDAP server is configured separately).
-
-**When to run** — daily, after the LDAP source has been refreshed; or on-demand before a quarterly access review.
-
----
-
-## License collection jobs \{#license\}
-
-Read JDE license-relevant data — employees, transactional users, Object Usage Tracking — into the Nomasx-1 schema. Drive the *Licenses → JD Edwards* dashboards.
-
-### `nomasx1-employees-1` \{#nomasx1-employees-1\}
-
-**Collect employees from JD Edwards HR modules** — internal + external. Populates the `license_jde_employees` table; refresh the materialised views at the end.
-
-| Step | Callable |
-|---|---|
-| `LICENSE_JDE_EMPLOYEES` | `nomasx1.license:j_license_jde_employees` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Long-run alert** — 5 minutes.
-
-**When to run** — weekly. The HR data doesn't change daily.
-
----
-
-### `nomasx1-license-1` \{#nomasx1-license-1\}
-
-**Collect users from JD Edwards tables — transactions only.** Reads who's actually transacted in JDE over the recent window (used as the input for licensable-user counting). Populates `license_jde_users`.
-
-| Step | Callable |
-|---|---|
-| `LICENSE_JDE_USERS` | `nomasx1.license:j_license_jde_users` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Long-run alert** — 30 minutes.
-
-**When to run** — daily (active installs) or weekly (slower installs). Pair with `nomasx1-employees-1` so transactional users join back to employee records.
-
----
-
-### `nomasx1-out-1` \{#nomasx1-out-1\}
-
-**Collect Object Usage Tracking from JD Edwards.** Aggregates the OUT data and purges retained rows per the retention defined in *Nomasx-1 → Settings → JDE → OUT retention*. Drives the OUT dashboards (components, users, objects).
-
-| Step | What |
-|---|---|
-| `LICENSE_JDE_OUT` | Raw OUT extraction from JDE. |
-| `LICENSE_JDE_OUT_OBJECTS` | Per-object aggregation. |
-| `LICENSE_JDE_OUT_USERS` | Per-user aggregation. |
-| `LICENSE_JDE_OUT_PURGE` | Purge rows older than the retention setting. |
-| `REFRESH_VIEWS` | Materialised-view refresh. |
-
-**Long-run alert** — 15 minutes.
-
-**When to run** — daily. OUT data accumulates fast; running daily keeps the dashboard relevant and the purge step keeps the DB bounded.
-
----
-
-## SoD jobs \{#sod\}
-
-### `nomasx1-sod-1` \{#nomasx1-sod-1\}
-
-**Collect Segregation of Duties (SoD) based on the security data and the matrix defined in *Nomasx-1 → Settings → SoD*.** Security data is a prerequisite — run after `nomasx1-security-1`.
-
-| Step | What |
-|---|---|
-| `SOD_CONFLICT_DETAILS` | Per-user-per-conflict detail rows. |
-| `SOD_CONFLICT_SUMMARY` | Aggregated counts driving the SoD dashboard. |
-| `REFRESH_VIEWS` | Materialised-view refresh. |
-
-**Long-run alert** — 10 minutes.
-
-**When to run** — daily, scheduled after `nomasx1-security-1` (so the SoD scan sees the freshest assignments). Or on-demand after a major access-review action.
-
----
-
-## Database jobs \{#database\}
-
-Read Oracle metadata from the JDE-hosting database (or any Oracle target wired as `oracle-target`). Drives the *Database → Oracle* page.
-
-### `nomasx1-database-1` \{#nomasx1-database-1\}
-
-**Collect Oracle database properties.**
-
-| Step | What |
-|---|---|
-| `DB_ORA_PROPERTIES` | Version, edition, parameters. |
-| `DB_ORA_OPTIONS` | Installed options (Spatial, OLAP, RAC, etc.). |
-| `DB_ORA_FEATURES` | Feature usage from `DBA_FEATURE_USAGE_STATISTICS`. |
-| `DB_ORA_PARTITIONS` | Partitioning usage per schema. |
-| `DB_ORA_LICENSES` | Aggregated license-relevant signals (option + feature + partitioning use). |
-
-**Source connector** — `oracle-target` (a connector you configure pointing at the Oracle DB you want introspected). The job won't read from `jdedwards` — by design, so a separate Oracle target can be audited without giving Nomasx-1's JDE connector extra read rights.
-
-**Long-run alert** — 10 minutes.
-
-**When to run** — monthly is typically enough. The data feeding the Oracle dashboards changes slowly.
+**Schedule** — the 1st of each month at 06:00 (Europe/Paris); shipped disabled. Enable it once the e-mail account is set in [Notifications](./notifications.md#smtp).
 
 ---
 
@@ -14386,22 +14488,6 @@ Records the number of value rows written.
 
 ---
 
-### `nomasx1-xref-1` \{#nomasx1-xref-1\}
-
-**Generate cross-reference for JD Edwards objects.** Builds the JDE_XREF_APPS table that backs the cross-reference views (which app references which object).
-
-| Step | Callable |
-|---|---|
-| `JDE_XREF_APPS` | `nomasx1.xref:j_jde_xref_apps` |
-
-**Params** — `object_id = "all"` (default — process every object). Override to a specific object id for a targeted rebuild.
-
-**Long-run alert** — 30 minutes.
-
-**When to run** — weekly. XRef data changes slowly; only objects added/modified in JDE matter.
-
----
-
 ### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
 
 **Diagnostic: dump the raw definition of one JD Edwards object.** Writes to files the decompressed OMW XML of the object's forms (F98751) and the text it references (F98750), to inspect the raw structure — for example a missing tab or control id. Read-only: nothing is written to the target database.
@@ -14418,20 +14504,6 @@ Records the number of value rows written.
 | `output_dir` | `""` | The folder of the files. Empty: a temporary folder on the server. |
 
 **When to run** — on demand, to analyse a cross-reference gap. Not scheduled.
-
----
-
-### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
-
-**Refresh Activity Log.** Queries every JDE table that has been modified recently and aggregates records for user + date. **Only the modified tables are scanned** — the job tracks per-table watermarks so it doesn't re-read the whole history each run.
-
-| Step | Callable |
-|---|---|
-| `SECURITY_ACTIVITY_LOG` | `nomasx1.activity_log:j_security_activity_log` |
-
-**Long-run alert** — 15 minutes.
-
-**When to run** — daily.
 
 ---
 
@@ -14453,21 +14525,18 @@ Records the number of versions removed. Two attempts in all on failure.
 
 ## Scheduling tips
 
-A typical daily cadence on an active install:
+A typical cadence on an active install:
 
 | Time | Job |
 |---|---|
 | 02:30 | `nomajde-daily-sync` (the shipped schedule). |
-| 03:00 | `nomasx1-security-1`. |
-| 03:30 | `nomasx1-license-1`. |
-| 04:00 | `nomasx1-out-1`. |
-| 04:30 | `nomasx1-ldap-1`. |
-| 05:00 | `nomasx1-sod-1` (after security so it has the freshest assignments). |
-| 05:30 | `nomasx1-activity-log-1`. |
+| 03:00 | `nomasx1-collect-all`, preset *Security and SoD*, every application. |
+| Sunday 04:00 | `nomasx1-collect-all`, preset *Licences*. |
+| 1st of the month 06:00 | The two report jobs. |
 
-Audit-trail (`nomasx1-audit-trail-1`) typically runs every 15-60 minutes — it's a separate cadence from the security / license refresh.
+Audit-trail (`nomasx1-audit-trail-1`) typically runs every 15-60 minutes — a separate cadence from the collection.
 
-The bundled jobs are **enabled = false** out of the box. Set the schedule per job from *Nomaflow → Catalogue → \<job\> → Schedules tab*, then toggle `Enabled` on the catalogue card.
+The bundled jobs are **enabled = false** out of the box. Set a schedule in the job editor, on the job or on a preset, then switch the job on from its line on the Jobs page. The main ones — the collection, the two reports, the JD Edwards sync — head the list under **Main jobs**.
 
 ---
 
@@ -14475,11 +14544,11 @@ The bundled jobs are **enabled = false** out of the box. Set the schedule per jo
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Bundle's `jobs.toml` overwritten on wheel upgrade — local edits lost. | Custom `[[jobs]]` blocks disappear after `liberty-apps install`. | Keep custom jobs in a separate `jobs.toml` outside the bundle's plugin dir; or back up the file before upgrading. |
+| A delivered job whose steps were changed is not updated by a wheel upgrade. | The upgrade lists it as kept. | Schedules, presets, alerts and parameter values survive an upgrade on their own; keep the steps as delivered, or mark the job `override = true` — see [Deploy prebuilt apps](../installation/deploy-prebuilt-apps.md#merge). |
 | Collection job fails with `No module named 'nomasx1'`. | Plugin code isn't in the framework's plugins path. | Run `liberty-apps install --target $LIBERTY_APPS_DIR` to materialise the payload; reload the framework. |
 | `nomasx1-import-reference` fails with *"target application not found"*. | Application not created in *Settings → Applications*. | Create the app in the UI first; the precheck refuses to start otherwise. |
 | `deploy-databases` errors with permission denied. | `default` pool can't create DBs / roles. | Temporarily point `default` at a Postgres superuser; revert after the run. |
-| Schedule set but job doesn't fire. | Toggle on the catalogue card is OFF (the bundle ships `enabled = false`). | Toggle `Enabled` on the card AFTER setting the schedule. |
+| Schedule set but job doesn't fire. | The job is disabled (the bundle ships `enabled = false`). | Switch it on from its line on the Jobs page after setting the schedule. |
 | Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Settings → Connectors → jdedwards* — test the connection from the UI before the next run. |
 | Audit trail starts producing thousands of rows per minute. | The job started from SCN 0 — replaying the whole archive log. | Run `nomasx1-audit-trail-reset-scn-1` (default `scn = 0` → next run picks current SCN) to start fresh. |
 | Materialised views show stale data after a custom SQL fix. | The collection job's end-of-run REFRESH_VIEWS step didn't run (you bypassed it). | Run `nomasx1-refresh-views` manually. |
@@ -14489,7 +14558,7 @@ The bundled jobs are **enabled = false** out of the box. Set the schedule per jo
 ## What's next
 
 - [Deploy prebuilt apps](../installation/deploy-prebuilt-apps.md) — how the bundle reaches the install in the first place.
-- [Nomaflow → Jobs → Catalog](./jobs/catalog.md) — the catalogue card UI: enabling schedules, running on demand, *Run with parameters*.
+- [Nomaflow → Jobs → Catalog](./jobs/catalog.md) — the Jobs page: enabling schedules, running on demand, *Run with parameters*.
 - [Nomaflow → Runs → History](./runs/history.md) — the per-run detail page where the bundled jobs' output lands.
 - [Nomaflow → Custom Python](./custom-python.md) — how to write your own callables alongside the bundled `nomasx1.*` ones.
 
@@ -14881,7 +14950,7 @@ Then `logging.getLogger(__name__)` in any module of the package writes to the ru
 ## Nomaflow — Notifications
 Source: https://docs.nomana-it.fr/liberty/nomaflow/notifications/
 
-Liberty Next notifications: rules that react to a screen write, a Nomaflow job event (failure, success, cancel, missed schedule, long run) or a screen action, and deliver to the in-app bell, by e-mail or through a connector query or endpoint. SMTP account, recipients, placeholders, job alerts.
+Liberty Next notifications: rules that react to a screen write, a Nomaflow job event (failure, success, cancel, missed schedule, long run, late) or a screen action, and deliver to the in-app bell, by e-mail or through a connector query or endpoint. SMTP account, recipients, placeholders, job alerts.
 
 A notification tells someone that something happened: a period was closed, a nightly job failed, a schedule was missed. **Rules** decide when; **channels** decide how — the bell in the application, an e-mail, or a call to a connector.
 
@@ -14928,7 +14997,7 @@ Rules are edited in **Settings → Notifications** and saved in `notifications.t
 | Trigger | Fires when | Settings |
 |---|---|---|
 | **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
-| **A job event** | A Nomaflow run ends. | Jobs (empty = every job) and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes. |
+| **A job event** | A Nomaflow run ends. | Jobs (empty = every job) and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
 | **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
 
 `long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
@@ -14960,7 +15029,7 @@ Subject, body and link take `{NAME}` placeholders, written in any case:
 | Trigger | Placeholders |
 |---|---|
 | Screen event | Every column of the written row, plus `USER`, `APP`, `SCREEN`, `EVENT`. |
-| Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule. |
+| Job event | `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES`, `ROWS`, and `EXPECTED_AT` for a missed schedule or a deadline. |
 | Screen action | The values passed by the action, plus `USER`. |
 
 An unknown placeholder is left as written.
@@ -15065,8 +15134,9 @@ The **Run history retention** panel of the Jobs page:
 | **Days kept** | 30 | Finished runs older than this are deleted, with their steps and logs. |
 | **Cap per job** | 100 | Each job keeps at most this many recent runs. |
 | **Sweep interval (min)** | 60 | How often the clean-up runs. |
+| **Files kept (days)** | blank | The work area's files older than this are deleted: uploads, rejects reports, reports, exports, and the `done/` / `failed/` archives of watched folders. Blank = **Days kept**; `0` = keep the files. A copy written to an export folder is never touched. |
 
-**Clean now** runs it at once. The policy is saved in `jobs.toml` under `[meta.retention]`.
+**Clean now** runs it at once and reports the runs and the files deleted. The same stores show, with their size, in [Monitoring → Retention](../monitoring/retention.md). The policy is saved in `jobs.toml` under `[meta.retention]`.
 
 ---
 
@@ -15194,6 +15264,133 @@ Each widget shows only when the user may run its query: a user without access to
 
 ---
 
+## Nomasx-1 — Segregation of duties
+Source: https://docs.nomana-it.fr/liberty/nomasx1/sod-dashboard/
+
+The Nomasx-1 Segregation-of-duties monitoring dashboard: users in conflict, conflict lines, conflicts proven by activity and roles involved, the conflicts per refresh by risk level, the risks hit, the role pairs behind them, the users with the most conflicts, per process, and the links to the conflict screens and the Explorer.
+
+**Segregation of duties**, right under **Overview** in the Nomasx-1 menu, follows the conflicts the [SoD matrix](./settings/sod/matrix.md) finds in the access of every connected application: how many, which risks, which roles cause them, which conflicts were actually exercised, and how it evolves from one refresh to the next.
+
+---
+
+## At a glance
+
+---
+
+## The bar \{#bar\}
+
+The **Period** — *Last 12 months* when the page opens — applies to the trend chart. **Application**: **All** gives the totals across the applications; picking one narrows every widget to it. **Excel** and **PDF** export the page as it stands.
+
+---
+
+## The four figures \{#figures\}
+
+| Card | Figure | Detail line |
+|---|---|---|
+| **Users in conflict** — at the latest refresh | The users carrying at least one conflict. | The privileged ones, and the date of the latest refresh. |
+| **Conflict lines** — user × risk × activity pair | Every conflict found. | The risks hit and the processes concerned. |
+| **Proven by activity** — both conflicting activities actually used | The users who used both sides of a conflict, according to the activity log. | The proven conflict lines. |
+| **Roles involved** — roles carrying one side of a conflict | The roles involved. | The role pairs behind the conflicts. |
+
+A conflict is **proven** when the user's activity log shows transactions on the objects of both incompatible activities: the risk is not theoretical. It needs the activity log to be collected.
+
+---
+
+## Trend and detail \{#detail\}
+
+| Widget | Shows |
+|---|---|
+| **Conflicts per refresh** | The conflict lines at each refresh of the period, stacked by risk level — the trend of the remediation. |
+| **Risks hit** | The risks with the most users first; the dot gives the risk level — red for high or critical, orange for medium, blue otherwise. |
+| **Role pairs** | The pairs of roles that create the most conflicts, with the users concerned: red for a conflict inside a single role — fix the role and every holder is resolved —, orange for two roles held together. |
+| **Users with the most conflicts** | The users carrying the most conflict lines, with the number of processes; privileged accounts are flagged. |
+| **Per process** | The users in conflict per business process. |
+| **Investigate** | Links to the conflict screens — Summary, Details, Proven, Users, Roles — and to the Data Explorer, where the *Segregation of duties* model goes further. |
+
+---
+
+## Who sees it \{#access\}
+
+Each widget shows only when the user may run its query, and the row-level scope of the user's roles applies to every figure and to the export.
+
+---
+
+## Related
+
+- [Overview — Audit synthesis](./audit-synthesis.md) — the synthesis of the whole application.
+- [Security review](./security-review.md) — the accounts and rights to review.
+- [Jobs](./jobs.md) — refresh the conflicts: *Collect security and SoD*.
+
+---
+
+## Nomasx-1 — Security review
+Source: https://docs.nomana-it.fr/liberty/nomasx1/security-review/
+
+The Nomasx-1 Security review dashboard: the holes in the access of a connected application — enabled, privileged and dormant accounts, accounts missing from the directory or whose directory account expired, generic accounts, objects open to *PUBLIC — twelve checks with their severity, the accounts to review first, logins by age, and the screens to act on.
+
+**Security review**, under **Overview** in the Nomasx-1 menu, is the page for an access review: it lists what is wrong in the access of each connected application, the accounts to look at first, and the screens where to act.
+
+---
+
+## At a glance
+
+---
+
+## The four figures \{#figures\}
+
+| Card | Figure | Detail line |
+|---|---|---|
+| **Enabled accounts** — accounts that can sign in | The enabled accounts. | Dormant — no login for 90 days — and never logged in. |
+| **Privileged accounts** — enabled, with super-user access | The enabled privileged accounts. | Those unused for 90 days. |
+| **Missing from the directory** — enabled named accounts with no directory account | The accounts no directory entry matches. | Whether the directory is collected. |
+| **Open to \*PUBLIC** — objects every user can run | The objects granted to *PUBLIC. | The users holding rights of their own. |
+
+The **Application** filter works as on the other dashboards: **All** gives the totals.
+
+---
+
+## The checks \{#checks\}
+
+Each check with its count, red first, green when there is nothing to report.
+
+| Check | Severity | What to do |
+|---|---|---|
+| **Privileged accounts left dormant** | Red | Super-user access unused for 90 days: disable it or re-certify its owner. |
+| **Enabled accounts missing from the directory** | Red | No matching directory account: a leaver, or an account nobody owns. |
+| **Directory account expired, still enabled** | Red | The person's directory account has expired: disable the account. |
+| **Dormant enabled accounts** | Orange | No login within 90 days: disable or re-certify. |
+| **Never used after a month** | Orange | Created over 30 days ago and never logged in: provisioned by mistake, or no longer needed. |
+| **Generic / shared accounts enabled** | Orange | Actions cannot be traced to a person: replace them by named accounts. |
+| **Several accounts for one person** | Orange | Enabled accounts sharing an address book number: keep one per person. |
+| **Objects open to \*PUBLIC** | Orange | Every user can use these objects by default: confirm none is sensitive. |
+| **Rights given to users directly** | Blue | Rights set on a user instead of a role, outside role-based control. |
+| **Enabled accounts without roles** | Blue | Incomplete provisioning, or accounts to disable. |
+| **Expired role assignments on file** | Blue | Assignments past their expiry date: clean them up. |
+| **Orphan roles** | Blue | Roles assigned to nobody: remove or repurpose them. |
+
+The two directory checks need the directory collected — the *Everything* collection, or the LDAP step switched on; until then they say *No directory collected*.
+
+---
+
+## The accounts and the objects \{#detail\}
+
+| Widget | Shows |
+|---|---|
+| **Accounts to review first** | The privileged and dormant accounts, the leavers, the generic accounts; the figure is the days since the last login. |
+| **Last login** | The enabled accounts by time since their last login: within 30 days, 30 to 90 days, 3 to 12 months, over a year, never. |
+| **Objects open to \*PUBLIC** | The objects every user can run, those that also allow changes first. |
+| **Act on it** | Links to the screens behind each check: Users, Users without AD, Duplicate users, Users without roles, Roles not used, Users properties. |
+
+---
+
+## Related
+
+- [Users](./security/users.md), [Users without roles](./security/users-without-roles.md), [Roles not used](./security/roles-not-used.md) — the screens to act on.
+- [LDAP users without AD](./security/ldap/users-without-ad.md) — the accounts missing from the directory.
+- [Segregation of duties](./sod-dashboard.md) — the conflicts.
+
+---
+
 ## Nomasx-1 — Data Explorer
 Source: https://docs.nomana-it.fr/liberty/nomasx1/data-explorer/
 
@@ -15211,7 +15408,7 @@ How the explorer works — fields, shelves, views, drill, calculated fields — 
 
 ## Where to find it \{#menu\}
 
-**Data Explorer**, right under **Overview** in the Nomasx-1 menu, opens the explorer with the three Nomasx-1 models in its picker. The picker switches from one model to another at any time; the analyses and dashboards follow the model.
+**Data Explorer**, at the top of the Nomasx-1 menu after the three dashboards, opens the explorer with the three Nomasx-1 models in its picker. The picker switches from one model to another at any time; the analyses and dashboards follow the model.
 
 ---
 
@@ -15272,32 +15469,49 @@ The analyses and dashboards above are **shared**: every user who may open the mo
 ## Nomasx-1 — Jobs
 Source: https://docs.nomana-it.fr/liberty/nomasx1/jobs/
 
-The Jobs folder of the Nomasx-1 menu: collect the security data and the licence transactions of a connected application on demand, follow the log live and find the previous runs — without opening Nomaflow.
+The Jobs folder of the Nomasx-1 menu: collect the security and segregation-of-duties data or the licence data of one or several applications, render the licence audit and the Security & SoD assessment and mail them — run on demand with a live log, or monthly on a schedule. The auditor and administrator roles.
 
-The **Jobs** folder, at the bottom of the Nomasx-1 menu, lets the compliance team refresh the data themselves — before a review, after a wave of changes in the source system — without opening Nomaflow. Each entry opens the job's page: **Run**, the log followed live, the previous runs with who ran them.
-
-The scheduled collections keep running as usual; these entries run the same jobs on demand.
+The **Jobs** folder, at the bottom of the Nomasx-1 menu, lets the compliance team refresh the data and produce the reports themselves — before a review, after a wave of changes in the source system — without opening Nomaflow. Each entry opens the job's page: the applications to process, **Run**, the log followed live, the previous runs with who ran them. See [Run a job from an application's menu](../nomaflow/jobs/run-from-menu.md).
 
 ---
 
 ## The entries \{#entries\}
 
-| Entry | Job | Refreshes |
-|---|---|---|
-| **Collect security** | [`nomasx1-security-1`](../nomaflow/bundled-jobs.md#nomasx1-security-1) | Users, roles, assignments, menus and effective rights of the application — everything under **Security** and **Applications**, and the figures of the [Audit synthesis](./audit-synthesis.md). |
-| **Collect licences** | [`nomasx1-license-1`](../nomaflow/bundled-jobs.md#nomasx1-license-1) | The users' transactions — the input of the licence usage under **Licenses** and of the *Licence compliance* model of the [Data Explorer](./data-explorer.md). |
+| Entry | Does |
+|---|---|
+| **Collect security and SoD** | Collects the users, roles, assignments, menus and effective rights, then computes the segregation-of-duties conflicts from the [matrix](./settings/sod/matrix.md) — everything under **Security**, **Applications** and the [Segregation of duties](./sod-dashboard.md) dashboard. |
+| **Collect licences** | Collects the employees, the users' transactions and the Object Usage Tracking — the input of **Licenses** and of the *Licence compliance* model of the [Data Explorer](./data-explorer.md). |
+| **Licence audit report** | Renders the [licence audit](./reports/audit-licences.md) in PDF and mails it to the auditors. |
+| **Security & SoD report** | Renders the [Security & SoD assessment](./reports/security-sox.md) in PDF and mails it to the auditors. |
 
-After a collection, **Last Refresh** and the *Data freshness* list of the Audit synthesis show the new date.
+**Applications** — each entry offers the applications as checkboxes, with **All**: the job runs once per application ticked, one after the other. The two reports also ask for the **Language**, `fr` or `en`.
+
+After a collection, **Last Refresh** and the *Data freshness* list of the [Audit synthesis](./audit-synthesis.md) show the new date.
 
 :::info[JDE-specific]
-Both jobs read JD Edwards EnterpriseOne. For another source system, the collection is the one its connector provides.
+The collections read JD Edwards EnterpriseOne. For another source system, the collection is the one its connector provides.
 :::
+
+---
+
+## On a schedule \{#reports\}
+
+The operators schedule the same jobs in Nomaflow: the collection every night on every application, the two reports on the 1st of each month — mailed to the holders of the `nomasx1_auditor` role, the PDF attached, once the e-mail account is set. The jobs are delivered switched off. See [Bundled jobs](../nomaflow/bundled-jobs.md#collect).
 
 ---
 
 ## Who may run them \{#access\}
 
-An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own. See [Run a job from an application's menu](../nomaflow/jobs/run-from-menu.md).
+An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own.
+
+Nomasx-1 delivers two roles, created by a job the administrator runs once after the install and after each upgrade:
+
+| Role | For |
+|---|---|
+| `nomasx1_auditor` | Reading every screen, dashboard and Explorer model, the AI assistant, and running the two reports; it receives the monthly reports. |
+| `nomasx1_admin` | Everything, the settings and every Nomasx-1 job included. |
+
+Assign them to users under **Settings → Access**. See [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).
 
 ---
 
@@ -17501,6 +17715,8 @@ Every dropdown resolves server-side against live catalogs — *Application* agai
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 
+**Every month, by e-mail** — *Jobs → Licence audit report* renders the same PDF for one or several applications and mails it to the auditors' role; scheduled on the 1st of the month once enabled. See [Nomasx-1 jobs](../jobs.md#reports).
+
 ---
 
 ## Before you run
@@ -17537,7 +17753,7 @@ The **Security & Segregation of Duties Assessment** is a generated report, not a
 It draws on the data Nomasx-1 already collects — the user registry, roles and assignments, the object-security grants (Security Workbench) and the segregation-of-duties matrix — and turns it into a single narrative document, driven by **Sarbanes-Oxley (SOX)** IT general-control expectations. It is framed as a general security-posture review, not a formal control attestation.
 
 :::info[JDE-specific]
-The **segregation-of-duties** sections build on the SoD conflict refresh (`nomasx1-sod-1`), which today evaluates **JD Edwards EnterpriseOne** `SECURITY_RIGHTS` rows. The user, role and object-security hygiene sections read the `security_*` tables directly and apply to any connected application; the SoD matrix and `*PUBLIC` / Security Workbench language is JDE-flavoured.
+The **segregation-of-duties** sections build on the SoD conflict refresh (the *Security and SoD* collection, `nomasx1-collect-all`), which today evaluates **JD Edwards EnterpriseOne** `SECURITY_RIGHTS` rows. The user, role and object-security hygiene sections read the `security_*` tables directly and apply to any connected application; the SoD matrix and `*PUBLIC` / Security Workbench language is JDE-flavoured.
 :::
 
 ---
@@ -17595,7 +17811,7 @@ A **conflict** is a single enabled user who can perform **both** sides of an inc
 
 Severity comes from the operator's own levels on the matrix — the **Risk Level** (the primary sort) and, as a fallback, the **Critical Level** on the risk dimension. The headline *total violations* is a count of **user × matrix-entry pairings** (how many users trip each rule), not a raw count of rules.
 
-The matrix itself — processes, activities, objects, risks and the incompatible pairs — is maintained under **Settings → Segregation of duties**, and refreshed into the conflict tables by the `nomasx1-sod-1` job. Run that job before the report so the figures are current.
+The matrix itself — processes, activities, objects, risks and the incompatible pairs — is maintained under **Settings → Segregation of duties**, and refreshed into the conflict tables by the collection job, `nomasx1-collect-all` (*Jobs → Collect security and SoD*). Run it before the report so the figures are current.
 
 ---
 
@@ -17617,6 +17833,8 @@ Every dropdown resolves server-side against live catalogs — *Application* agai
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 
+**Every month, by e-mail** — *Jobs → Security & SoD report* renders the same PDF for one or several applications and mails it to the auditors' role; scheduled on the 1st of the month once enabled. See [Nomasx-1 jobs](../jobs.md#reports).
+
 ---
 
 ## Before you run
@@ -17626,7 +17844,7 @@ The audit reads the data Nomasx-1 has already collected for the application — 
 - **The user registry** — declared accounts, status and last sign-in, plus the curated flags (privileged / technical / generic / linked) maintained on each user.
 - **Roles and assignments** — the role catalog and the user-role assignments.
 - **Object security** — the Security Workbench grants (run / add / change / delete, direct or via `*ROLE`, and `*PUBLIC` grants).
-- **The SoD conflict tables** — refreshed by `nomasx1-sod-1`, decorated by the matrix and its process / activity / object / risk dimensions.
+- **The SoD conflict tables** — refreshed by `nomasx1-collect-all`, decorated by the matrix and its process / activity / object / risk dimensions.
 - **The applications registry** — for the cover and scope.
 
 A run against an application with no collected data still produces the document, but the affected sections read as empty rather than wrong.
@@ -17635,7 +17853,7 @@ A run against an application with no collected data still produces the document,
 
 ## Tips & best practices
 
-- **Refresh SoD first.** Run `nomasx1-sod-1` right before the report so the conflict counts and the trend match reality.
+- **Refresh SoD first.** Run *Jobs → Collect security and SoD* right before the report so the conflict counts and the trend match reality.
 - **Start with the role-level findings.** Self-conflicting roles and the most-conflicted roles are the fastest wins — one fix clears conflicts for every user who holds the role.
 - **Set the *Report date label* and *Client name*** for an external-ready cover page; leave them empty for an internal draft.
 - **Use *markdown* to iterate, *PDF* to deliver.** The Markdown output is the same content without the cover styling, handy for review before the final export.

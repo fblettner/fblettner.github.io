@@ -71,7 +71,7 @@ Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur
 | Historique des exécutions | Dans la base de données du framework, cinq tables : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage. |
 | Tâches | Le fichier des tâches `plugins/nomaflow/jobs.toml`, à côté du dossier de configuration — modifié depuis les pages des Tâches. |
 | Journal d'exécution | Les 5 000 dernières lignes de chaque exécution sont conservées. |
-| Fichiers | Les fichiers envoyés par **Run with parameters** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
+| Fichiers | Les fichiers envoyés par **Exécuter avec des paramètres** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
 | Taille d'envoi | 200 Mo au plus par fichier. |
 
 ---
@@ -92,16 +92,17 @@ Exécuter **une seule** instance de Liberty Next : le planificateur se déclench
 
 ## Rétention de l'historique \{#retention\}
 
-Le panneau **Run history retention** de la page des Tâches :
+Le panneau **Rétention de l'historique des exécutions** de la page des Tâches :
 
 | Réglage | Défaut | Signification |
 |---|---|---|
-| **Auto-sweep** | activé | Le nettoyage récurrent. |
-| **Days kept** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
-| **Cap per job** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
-| **Sweep interval (min)** | 60 | La fréquence du nettoyage. |
+| **Nettoyage automatique** | activé | Le nettoyage récurrent. |
+| **Jours conservés** | 30 | Les exécutions terminées plus anciennes sont supprimées, avec leurs étapes et leurs journaux. |
+| **Plafond par tâche** | 100 | Chaque tâche garde au plus ce nombre d'exécutions récentes. |
+| **Intervalle de nettoyage (min)** | 60 | La fréquence du nettoyage. |
+| **Fichiers conservés (jours)** | vide | Les fichiers plus anciens de la zone de travail sont supprimés : fichiers envoyés, rapports de rejets, rapports, exports, et archives `done/` / `failed/` des dossiers surveillés. Vide = **Jours conservés** ; `0` = garder les fichiers. Une copie écrite dans un dossier d'export n'est jamais touchée. |
 
-**Clean now** le lance aussitôt. La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
+**Nettoyer maintenant** le lance aussitôt et indique les exécutions et les fichiers supprimés. Les mêmes stockages figurent, avec leur taille, dans [Surveillance → Rétention](../monitoring/retention.md). La politique s'enregistre dans `jobs.toml`, sous `[meta.retention]`.
 
 ---
 

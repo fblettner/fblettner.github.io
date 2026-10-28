@@ -1,6 +1,6 @@
 ---
 title: Bundled jobs
-description: "The Nomaflow job catalogue shipped with the liberty-apps wheel — install / preload / refresh / sync / SOD / audit jobs that drive Nomasx-1 and Nomajde without the operator writing a single line of TOML. Run from Nomaflow → Catalogue → ▶ Run now, schedule via the standard scheduler, or trigger from CI."
+description: "The Nomaflow job catalogue shipped with the liberty-apps wheel — install / preload / refresh / sync / collection / report / audit jobs that drive Nomasx-1 and Nomajde without the operator writing a single line of TOML. Run from Nomaflow → Catalogue → ▶ Run now, schedule via the standard scheduler, or trigger from CI."
 keywords: [Nomaflow, bundled jobs, jobs.toml, Nomasx-1, Nomajde, liberty-apps, preload, install, refresh, sync, SOD, audit trail, LDAP, deploy-databases, init-schema, security, license]
 ---
 
@@ -15,12 +15,10 @@ Each job is a thin wrapper over a Python callable shipped in the **`nomasx1`** p
 | **Install** | One-time provisioning of databases + schema. | [Install jobs](#install) |
 | **Preload** | Curated reference data export / import — for fresh customer installs or cross-env promotion. | [Preload jobs](#preload) |
 | **Sync** | Copy upstream control + dictionary tables to the local Nomajde mirror. | [Sync jobs](#sync) |
-| **Security collection** | Read JD Edwards security + LDAP into the Nomasx-1 schema. | [Security collection jobs](#security) |
-| **License collection** | Read JDE license / employee / OUT data into the Nomasx-1 schema. | [License collection jobs](#license) |
-| **SoD detection** | Run the segregation-of-duties matrix against the collected security data. | [SoD jobs](#sod) |
-| **Database properties** | Read Oracle database metadata (options, features, partitioning, licenses). | [Database jobs](#database) |
+| **Collection** | One job collects everything Nomasx-1 needs for one or several applications: JD Edwards security, segregation of duties, licences, Object Usage Tracking, and optionally the directory, the activity log, the Oracle database properties and the cross reference. | [Collection job](#collect) |
+| **Reports** | The two audit reports, rendered every month and mailed to the auditors. | [Report jobs](#reports) |
 | **Audit trail** | LogMiner-driven change capture from the audit-source DB. | [Audit-trail jobs](#audit-trail) |
-| **Maintenance** | Materialised-view refresh, cross-reference rebuild, SCN reset, schema upgrade. | [Maintenance jobs](#maintenance) |
+| **Maintenance** | Materialised-view refresh, cross-reference dump, configuration versions purge. | [Maintenance jobs](#maintenance) |
 
 All bundled jobs ship with **`enabled = false`** — they appear in the catalogue but don't fire automatically. The operator enables a schedule (or runs them on demand) once the install is wired.
 
@@ -54,8 +52,8 @@ All bundled jobs ship with **`enabled = false`** — they appear in the catalogu
   <rect x="315" y="146" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="373.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
   <rect x="605" y="74" width="355" height="102" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="617" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-security-1</text>
-  <text x="617" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">JDE security → nomasx1</text>
+  <text x="617" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <text x="617" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">every collection → nomasx1</text>
   <rect x="617" y="122" width="48" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
   <text x="641.0" y="134.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">manual</text>
   <text x="945" y="94" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">○ off</text>
@@ -136,7 +134,7 @@ Most jobs in the bundle share the same parameter shape under `[jobs.params]`:
 | `target_connector` | `nomasx1` | The connector to **write to**. Override for a parallel install (`nomasx1b`). |
 | `target_schema` | `nomasx1` | The schema name inside the target connector. |
 
-Overrides at run time: open *Run with parameters* on the job card before ▶ Run now. Per-schedule overrides: set them on the `[[jobs.schedules]]` block in your override `jobs.toml`.
+Overrides at run time: **Run now** on the job's line opens *Run with parameters*. Per-schedule overrides: set them on the `[[jobs.schedules]]` block in your override `jobs.toml`.
 
 ---
 
@@ -244,6 +242,19 @@ One-time provisioning. Run **once** at customer-stand-up; safe to re-run (idempo
 
 ---
 
+### `nomasx1-roles` \{#nomasx1-roles\}
+
+**Create or refresh the Nomasx-1 roles.**
+
+| Role | Grants |
+|---|---|
+| `nomasx1_auditor` | Every read of the Nomasx-1 data, the Data Explorer, the AI assistant and the two report jobs; the monthly reports are mailed to it. |
+| `nomasx1_admin` | Everything: the whole application, its settings and every `nomasx1-*` job. |
+
+Run it once after the install and after each upgrade, so that new read queries are granted; then assign the roles to users under **Settings → Access**. Idempotent; shipped disabled.
+
+---
+
 ## Preload jobs \{#preload\}
 
 The curated **reference bundle** ships in `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz`. The export job builds the bundle from a source install; the import job loads it into a target install.
@@ -314,7 +325,7 @@ Mirror upstream control / dictionary tables from JD Edwards into the local Nomaj
 
 Each step uses `type_coercion = "jde"` + `decimal_mode = "truncate"` — JDE column types are mapped to standard SQL on the way in (e.g. `JULIANDATE` → `DATE`, `STRING(N)` trimmed to `VARCHAR`), with truncation rather than rounding on decimals.
 
-**Schedule** — `30 2 * * *` (02:30 daily, Europe/Paris timezone in the bundle). `enabled = false` by default — enable from the catalogue card once `jdedwards` is wired and the first run succeeded as a manual ▶ Run now.
+**Schedule** — `30 2 * * *` (02:30 daily, Europe/Paris timezone in the bundle). `enabled = false` by default — enable it from its line on the Jobs page once `jdedwards` is wired and the first run succeeded as a manual ▶ Run now.
 
 **Retry / alerts** — 2 retry attempts, alert when the run exceeds 120 minutes.
 
@@ -361,137 +372,54 @@ For a partial re-merge — only the parents affected by *this* change — use `n
 
 ---
 
-## Security collection jobs \{#security\}
+## Collection job \{#collect\}
 
-Read JD Edwards security data into the Nomasx-1 schema. The shape is a long chain of single-callable steps — one Python function per JDE entity / Nomasx-1 derived table.
+### `nomasx1-collect-all` \{#nomasx1-collect-all\}
 
-### `nomasx1-security-1` \{#nomasx1-security-1\}
+**Collect everything Nomasx-1 needs for an application, in order**, then refresh the materialised views once at the end.
 
-**Collect all security data for an application** — Users / Roles / Assignments / Menus / Access. Each step extracts one JDE entity (objects, sec objects, sec menus, etc.) or builds one Nomasx-1 derived table (security_users, security_rights_actions, etc.).
-
-| Family | Steps | What |
+| Family | Steps | On by default |
 |---|---|---|
-| JDE entities | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `JDE_TASKS`, `JDE_MENUS` | Raw extraction from F00950, F0094, F0092, F9012, F9001, F9000. |
-| Nomasx-1 catalogs | `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `SECURITY_MENUS` | Per-app users + roles + role assignments + menu trees. |
-| Derived rights | `SECURITY_RIGHTS_MENUS`, `SECURITY_RIGHTS_APPS`, `SECURITY_RIGHTS_ACTIONS`, `SECURITY_RIGHTS_APPS_USERS`, `SECURITY_RIGHTS_ACTIONS_USERS` | Effective rights — by role, by user, on menus / apps / actions. |
-| Audit | `SECURITY_RIGHTS_AUDIT` | Audit trail of right grants/revocations. |
-| Refresh | `REFRESH_VIEWS` | Materialised-view refresh at the end. |
+| JD Edwards security | `JDE_OBJECTS`, `JDE_OBJECTS_VERSIONS`, `JDE_SEC_OBJECTS`, `JDE_SEC_MENUS`, `SECURITY_USERS`, `SECURITY_USERS_DATA`, `SECURITY_ROLES`, `SECURITY_ASSIGNMENTS`, `JDE_TASKS`, `JDE_MENUS`, `SECURITY_MENUS`, `SECURITY_RIGHTS_*` (menus, applications, actions, per user, audit) | Yes |
+| Segregation of duties | `SOD_CONFLICT_DETAILS`, `SOD_CONFLICT_SUMMARY` — the matrix of *Settings → Segregation of duties* against the security just collected | Yes |
+| Licences | `LICENSE_JDE_EMPLOYEES`, `LICENSE_JDE_USERS` | Yes |
+| Object Usage Tracking | `LICENSE_JDE_OUT`, `LICENSE_JDE_OUT_OBJECTS`, `LICENSE_JDE_OUT_USERS`, `LICENSE_JDE_OUT_PURGE` | Yes |
+| Directory | `SECURITY_LDAP` — the LDAP / Active Directory set in *Settings → LDAP* | No |
+| Activity log | `SECURITY_ACTIVITY_LOG` | No |
+| Oracle database | `DB_ORA_PROPERTIES`, `DB_ORA_OPTIONS`, `DB_ORA_FEATURES`, `DB_ORA_PARTITIONS`, `DB_ORA_LICENSES` | No |
+| Cross reference | `JDE_XREF_APPS` | No |
+| Views | `REFRESH_VIEWS` | Yes |
 
-All steps run sequentially (no parallelism — order matters for the derived tables).
+**Presets**
 
-**Standard params** (`apps_id`, `source_connector = jdedwards`, `target_connector = nomasx1`, `target_schema = nomasx1`).
+| Preset | Runs |
+|---|---|
+| **Security and SoD** | The security and the segregation of duties — the licence and OUT steps off. |
+| **Licences** | The licences and OUT — the security and SoD steps off. |
+| **Everything** | Every step, the directory, the activity log, the database and the cross reference included. |
 
-**Retry / alerts** — 2 attempts, long-run alert at 30 minutes.
+**Applications** — the job offers the applications of *Settings → Applications* as checkboxes, with **All**. It runs once per application ticked, one after the other. On a schedule or in a preset, `apps_id = "all"` collects every application at each fire.
 
-**When to run** — daily for active installs (read-only against JDE). The first run after a new role / user / right grant in JDE refreshes the Nomasx-1 catalog; until then the UI shows the previous snapshot.
+**Params** — `source_connector = jdedwards`, `target_connector = nomasx1`. Two attempts on failure; an alert after 90 minutes.
+
+**Menu** — *Nomasx-1 → Jobs → Collect security and SoD* and *Collect licences* run the two presets. See [Nomasx-1 jobs](../nomasx1/jobs.md).
+
+**When to run** — daily on an active install, with a schedule on a preset: *Security and SoD* every night, *Licences* weekly.
 
 ---
 
-### `nomasx1-ldap-1` \{#nomasx1-ldap-1\}
+## Report jobs \{#reports\}
 
-**Collect Active Directory users** through the LDAP / AD connection configured in *Settings → LDAP*. Populates the Nomasx-1 `security_ldap` table that backs the LDAP reconciliation pages.
+### `nomasx1-report-licences` and `nomasx1-report-security-sox` \{#nomasx1-reports\}
 
-| Step | Callable |
+**Render an audit report and mail it.** A [`report` step](./steps.md#report) renders the PDF — the [licence audit](../nomasx1/reports/audit-licences.md) or the [Security & SoD assessment](../nomasx1/reports/security-sox.md) — for one application; a [`notify` step](./steps.md#notify) sends it to the `nomasx1_auditor` role with the file attached.
+
+| Parameter | Use |
 |---|---|
-| `SECURITY_LDAP` | `nomasx1.ldap:j_security_ldap` |
+| **Applications** | One or several applications, or **All** — one report per application. |
+| **Language** | `fr` or `en`. |
 
-**Params** — standard shape (`source_connector = unused` — the LDAP server is configured separately).
-
-**When to run** — daily, after the LDAP source has been refreshed; or on-demand before a quarterly access review.
-
----
-
-## License collection jobs \{#license\}
-
-Read JDE license-relevant data — employees, transactional users, Object Usage Tracking — into the Nomasx-1 schema. Drive the *Licenses → JD Edwards* dashboards.
-
-### `nomasx1-employees-1` \{#nomasx1-employees-1\}
-
-**Collect employees from JD Edwards HR modules** — internal + external. Populates the `license_jde_employees` table; refresh the materialised views at the end.
-
-| Step | Callable |
-|---|---|
-| `LICENSE_JDE_EMPLOYEES` | `nomasx1.license:j_license_jde_employees` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Long-run alert** — 5 minutes.
-
-**When to run** — weekly. The HR data doesn't change daily.
-
----
-
-### `nomasx1-license-1` \{#nomasx1-license-1\}
-
-**Collect users from JD Edwards tables — transactions only.** Reads who's actually transacted in JDE over the recent window (used as the input for licensable-user counting). Populates `license_jde_users`.
-
-| Step | Callable |
-|---|---|
-| `LICENSE_JDE_USERS` | `nomasx1.license:j_license_jde_users` |
-| `REFRESH_VIEWS` | `nomasx1.security:j_refresh_views` |
-
-**Long-run alert** — 30 minutes.
-
-**When to run** — daily (active installs) or weekly (slower installs). Pair with `nomasx1-employees-1` so transactional users join back to employee records.
-
----
-
-### `nomasx1-out-1` \{#nomasx1-out-1\}
-
-**Collect Object Usage Tracking from JD Edwards.** Aggregates the OUT data and purges retained rows per the retention defined in *Nomasx-1 → Settings → JDE → OUT retention*. Drives the OUT dashboards (components, users, objects).
-
-| Step | What |
-|---|---|
-| `LICENSE_JDE_OUT` | Raw OUT extraction from JDE. |
-| `LICENSE_JDE_OUT_OBJECTS` | Per-object aggregation. |
-| `LICENSE_JDE_OUT_USERS` | Per-user aggregation. |
-| `LICENSE_JDE_OUT_PURGE` | Purge rows older than the retention setting. |
-| `REFRESH_VIEWS` | Materialised-view refresh. |
-
-**Long-run alert** — 15 minutes.
-
-**When to run** — daily. OUT data accumulates fast; running daily keeps the dashboard relevant and the purge step keeps the DB bounded.
-
----
-
-## SoD jobs \{#sod\}
-
-### `nomasx1-sod-1` \{#nomasx1-sod-1\}
-
-**Collect Segregation of Duties (SoD) based on the security data and the matrix defined in *Nomasx-1 → Settings → SoD*.** Security data is a prerequisite — run after `nomasx1-security-1`.
-
-| Step | What |
-|---|---|
-| `SOD_CONFLICT_DETAILS` | Per-user-per-conflict detail rows. |
-| `SOD_CONFLICT_SUMMARY` | Aggregated counts driving the SoD dashboard. |
-| `REFRESH_VIEWS` | Materialised-view refresh. |
-
-**Long-run alert** — 10 minutes.
-
-**When to run** — daily, scheduled after `nomasx1-security-1` (so the SoD scan sees the freshest assignments). Or on-demand after a major access-review action.
-
----
-
-## Database jobs \{#database\}
-
-Read Oracle metadata from the JDE-hosting database (or any Oracle target wired as `oracle-target`). Drives the *Database → Oracle* page.
-
-### `nomasx1-database-1` \{#nomasx1-database-1\}
-
-**Collect Oracle database properties.**
-
-| Step | What |
-|---|---|
-| `DB_ORA_PROPERTIES` | Version, edition, parameters. |
-| `DB_ORA_OPTIONS` | Installed options (Spatial, OLAP, RAC, etc.). |
-| `DB_ORA_FEATURES` | Feature usage from `DBA_FEATURE_USAGE_STATISTICS`. |
-| `DB_ORA_PARTITIONS` | Partitioning usage per schema. |
-| `DB_ORA_LICENSES` | Aggregated license-relevant signals (option + feature + partitioning use). |
-
-**Source connector** — `oracle-target` (a connector you configure pointing at the Oracle DB you want introspected). The job won't read from `jdedwards` — by design, so a separate Oracle target can be audited without giving Nomasx-1's JDE connector extra read rights.
-
-**Long-run alert** — 10 minutes.
-
-**When to run** — monthly is typically enough. The data feeding the Oracle dashboards changes slowly.
+**Schedule** — the 1st of each month at 06:00 (Europe/Paris); shipped disabled. Enable it once the e-mail account is set in [Notifications](./notifications.md#smtp).
 
 ---
 
@@ -588,22 +516,6 @@ Records the number of value rows written.
 
 ---
 
-### `nomasx1-xref-1` \{#nomasx1-xref-1\}
-
-**Generate cross-reference for JD Edwards objects.** Builds the JDE_XREF_APPS table that backs the cross-reference views (which app references which object).
-
-| Step | Callable |
-|---|---|
-| `JDE_XREF_APPS` | `nomasx1.xref:j_jde_xref_apps` |
-
-**Params** — `object_id = "all"` (default — process every object). Override to a specific object id for a targeted rebuild.
-
-**Long-run alert** — 30 minutes.
-
-**When to run** — weekly. XRef data changes slowly; only objects added/modified in JDE matter.
-
----
-
 ### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
 
 **Diagnostic: dump the raw definition of one JD Edwards object.** Writes to files the decompressed OMW XML of the object's forms (F98751) and the text it references (F98750), to inspect the raw structure — for example a missing tab or control id. Read-only: nothing is written to the target database.
@@ -620,20 +532,6 @@ Records the number of value rows written.
 | `output_dir` | `""` | The folder of the files. Empty: a temporary folder on the server. |
 
 **When to run** — on demand, to analyse a cross-reference gap. Not scheduled.
-
----
-
-### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
-
-**Refresh Activity Log.** Queries every JDE table that has been modified recently and aggregates records for user + date. **Only the modified tables are scanned** — the job tracks per-table watermarks so it doesn't re-read the whole history each run.
-
-| Step | Callable |
-|---|---|
-| `SECURITY_ACTIVITY_LOG` | `nomasx1.activity_log:j_security_activity_log` |
-
-**Long-run alert** — 15 minutes.
-
-**When to run** — daily.
 
 ---
 
@@ -655,21 +553,18 @@ Records the number of versions removed. Two attempts in all on failure.
 
 ## Scheduling tips
 
-A typical daily cadence on an active install:
+A typical cadence on an active install:
 
 | Time | Job |
 |---|---|
 | 02:30 | `nomajde-daily-sync` (the shipped schedule). |
-| 03:00 | `nomasx1-security-1`. |
-| 03:30 | `nomasx1-license-1`. |
-| 04:00 | `nomasx1-out-1`. |
-| 04:30 | `nomasx1-ldap-1`. |
-| 05:00 | `nomasx1-sod-1` (after security so it has the freshest assignments). |
-| 05:30 | `nomasx1-activity-log-1`. |
+| 03:00 | `nomasx1-collect-all`, preset *Security and SoD*, every application. |
+| Sunday 04:00 | `nomasx1-collect-all`, preset *Licences*. |
+| 1st of the month 06:00 | The two report jobs. |
 
-Audit-trail (`nomasx1-audit-trail-1`) typically runs every 15-60 minutes — it's a separate cadence from the security / license refresh.
+Audit-trail (`nomasx1-audit-trail-1`) typically runs every 15-60 minutes — a separate cadence from the collection.
 
-The bundled jobs are **enabled = false** out of the box. Set the schedule per job from *Nomaflow → Catalogue → \<job\> → Schedules tab*, then toggle `Enabled` on the catalogue card.
+The bundled jobs are **enabled = false** out of the box. Set a schedule in the job editor, on the job or on a preset, then switch the job on from its line on the Jobs page. The main ones — the collection, the two reports, the JD Edwards sync — head the list under **Main jobs**.
 
 ---
 
@@ -677,11 +572,11 @@ The bundled jobs are **enabled = false** out of the box. Set the schedule per jo
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Bundle's `jobs.toml` overwritten on wheel upgrade — local edits lost. | Custom `[[jobs]]` blocks disappear after `liberty-apps install`. | Keep custom jobs in a separate `jobs.toml` outside the bundle's plugin dir; or back up the file before upgrading. |
+| A delivered job whose steps were changed is not updated by a wheel upgrade. | The upgrade lists it as kept. | Schedules, presets, alerts and parameter values survive an upgrade on their own; keep the steps as delivered, or mark the job `override = true` — see [Deploy prebuilt apps](../installation/deploy-prebuilt-apps.md#merge). |
 | Collection job fails with `No module named 'nomasx1'`. | Plugin code isn't in the framework's plugins path. | Run `liberty-apps install --target $LIBERTY_APPS_DIR` to materialise the payload; reload the framework. |
 | `nomasx1-import-reference` fails with *"target application not found"*. | Application not created in *Settings → Applications*. | Create the app in the UI first; the precheck refuses to start otherwise. |
 | `deploy-databases` errors with permission denied. | `default` pool can't create DBs / roles. | Temporarily point `default` at a Postgres superuser; revert after the run. |
-| Schedule set but job doesn't fire. | Toggle on the catalogue card is OFF (the bundle ships `enabled = false`). | Toggle `Enabled` on the card AFTER setting the schedule. |
+| Schedule set but job doesn't fire. | The job is disabled (the bundle ships `enabled = false`). | Switch it on from its line on the Jobs page after setting the schedule. |
 | Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Settings → Connectors → jdedwards* — test the connection from the UI before the next run. |
 | Audit trail starts producing thousands of rows per minute. | The job started from SCN 0 — replaying the whole archive log. | Run `nomasx1-audit-trail-reset-scn-1` (default `scn = 0` → next run picks current SCN) to start fresh. |
 | Materialised views show stale data after a custom SQL fix. | The collection job's end-of-run REFRESH_VIEWS step didn't run (you bypassed it). | Run `nomasx1-refresh-views` manually. |
@@ -691,6 +586,6 @@ The bundled jobs are **enabled = false** out of the box. Set the schedule per jo
 ## What's next
 
 - [Deploy prebuilt apps](../installation/deploy-prebuilt-apps.md) — how the bundle reaches the install in the first place.
-- [Nomaflow → Jobs → Catalog](./jobs/catalog.md) — the catalogue card UI: enabling schedules, running on demand, *Run with parameters*.
+- [Nomaflow → Jobs → Catalog](./jobs/catalog.md) — the Jobs page: enabling schedules, running on demand, *Run with parameters*.
 - [Nomaflow → Runs → History](./runs/history.md) — the per-run detail page where the bundled jobs' output lands.
 - [Nomaflow → Custom Python](./custom-python.md) — how to write your own callables alongside the bundled `nomasx1.*` ones.

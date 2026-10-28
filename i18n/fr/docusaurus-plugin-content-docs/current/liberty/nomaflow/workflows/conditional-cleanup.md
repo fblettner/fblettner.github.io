@@ -75,7 +75,7 @@ callable = "housekeeping.audit:purge_audit"
 op_kwargs = { connector = "ops-db", days = 90, threshold = 10000 }
 ```
 
-Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Run with parameters**.
+Le détail de l'exécution affiche les lignes supprimées ; le journal indique si le seuil était atteint. `days` et `threshold` se changent pour une exécution dans **Exécuter avec des paramètres**.
 
 ---
 

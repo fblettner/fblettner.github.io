@@ -1,6 +1,6 @@
 ---
 title: Overview dashboard
-description: "The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the runs per day, what needs attention, the runs and durations per job and the latest runs — last 7 days by default."
+description: "The Nomaflow Overview dashboard: the runs by outcome over the period, the failures and missed schedules, what is in flight, the average duration, the scheduled jobs with Run now / Pause / Resume, the runs per day, what needs attention, the runs and durations per job, the latest runs and the last success per job — last 7 days by default."
 keywords: [Nomaflow, overview, dashboard, runs, failures, missed schedules, in flight, duration, attention, monitoring]
 ---
 
@@ -123,10 +123,12 @@ The page opens on **Last 7 days**; the period control in the bar offers the othe
 | **Failures** — runs that ended in error | The failed runs, the number of jobs concerned and the missed schedules. |
 | **In flight** — right now | Running · queued. |
 | **Average duration** — completed runs | The average duration, and the longest. |
+| **Scheduled jobs** | What runs next: each scheduled job with its next run or *Paused*, its schedule in words and its last state, and the buttons **Run now**, **Pause the schedule** and **Resume the schedule**. Superusers only. |
 | **Runs per day** | One bar per day, by outcome. |
 | **What needs attention** | Per job: the failures with their last error, the missed schedules, the runs going for more than an hour — red for a failure, orange for the rest, with the date of the last occurrence. |
 | **Runs per job** | The share of the runs of each job over the period. |
 | **Average duration per job** | In seconds, the slowest first. |
 | **Recent runs** | The latest runs, with their state; the error, or the trigger, under each. |
+| **Last success per job** | Every job with its last successful run, the failures since and its last state: the failing jobs first, a job without a success for a week in orange; the figure is the days since the last success. |
 
-The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md).
+The detail of a run is in **Operations → Job Runs** — see [Run history](./runs/history.md). The same jobs card can be added to any dashboard — see [Dashboards → Jobs](../framework/dashboards.md#jobs).

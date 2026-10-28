@@ -18,7 +18,7 @@ Les écrans n'ont **pas de champ pièce jointe** : un dialogue ne peut ni enregi
 |---|---|
 | Retrouver le document d'une ligne | Une **colonne d'adresse** : la ligne enregistre l'adresse du document dans le stockage documentaire déjà en place (partage de fichiers, SharePoint, stockage objet). |
 | Charger les lignes d'un fichier Excel / CSV dans une table, depuis un écran | L'**import** de l'écran — voir [Import en masse](./bulk-import.md). |
-| Charger un fichier dans une table, par une tâche | Une étape Nomaflow **`file_load`** : le fichier est choisi dans la fenêtre **Run with parameters**, lu sur un chemin du serveur ou pris dans un dossier surveillé — voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load). |
+| Charger un fichier dans une table, par une tâche | Une étape Nomaflow **`file_load`** : le fichier est choisi dans la fenêtre **Exécuter avec des paramètres**, lu sur un chemin du serveur ou pris dans un dossier surveillé — voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load). |
 
 ## Adresse d'un document
 

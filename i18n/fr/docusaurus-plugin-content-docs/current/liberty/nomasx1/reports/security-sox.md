@@ -11,7 +11,7 @@ L'**Évaluation Sécurité & Séparation des tâches** est un rapport généré,
 Il s'appuie sur les données que Nomasx-1 collecte déjà — le référentiel des utilisateurs, les rôles et leurs affectations, les droits sur les objets (Security Workbench) et la matrice de séparation des tâches — et les transforme en un document narratif unique, guidé par les attentes de contrôle informatique **Sarbanes-Oxley (SOX)**. C'est une revue générale de posture de sécurité, pas une attestation formelle de contrôle.
 
 :::info[Spécifique à JDE]
-Les sections de **séparation des tâches** s'appuient sur le rafraîchissement des conflits SoD (`nomasx1-sod-1`), qui analyse aujourd'hui les lignes `SECURITY_RIGHTS` de **JD Edwards EnterpriseOne**. Les sections d'hygiène des utilisateurs, des rôles et des objets lisent directement les tables `security_*` et valent pour toute application connectée ; la matrice SoD et le vocabulaire `*PUBLIC` / Security Workbench restent propres à JDE.
+Les sections de **séparation des tâches** s'appuient sur le rafraîchissement des conflits SoD (la collecte *Security and SoD*, `nomasx1-collect-all`), qui analyse aujourd'hui les lignes `SECURITY_RIGHTS` de **JD Edwards EnterpriseOne**. Les sections d'hygiène des utilisateurs, des rôles et des objets lisent directement les tables `security_*` et valent pour toute application connectée ; la matrice SoD et le vocabulaire `*PUBLIC` / Security Workbench restent propres à JDE.
 :::
 
 ---
@@ -106,7 +106,7 @@ Un **conflit**, c'est un même utilisateur actif capable d'exécuter les **deux*
 
 La gravité vient des niveaux que l'opérateur porte sur la matrice — le **Risk Level** (tri principal) et, en repli, le **Critical Level** de la dimension risque. Le chiffre de tête *total des violations* compte des **paires utilisateur × entrée de matrice** (combien d'utilisateurs déclenchent chaque règle), pas un nombre brut de règles.
 
-La matrice elle-même — processus, activités, objets, risques et paires incompatibles — se gère sous **Paramètres → Ségrégation des tâches**, et alimente les tables de conflits via la tâche `nomasx1-sod-1`. Lancez cette tâche avant le rapport pour que les chiffres soient à jour.
+La matrice elle-même — processus, activités, objets, risques et paires incompatibles — se gère sous **Paramètres → Ségrégation des tâches**, et alimente les tables de conflits via la tâche de collecte `nomasx1-collect-all` (*Tâches → Collecter la sécurité et la SoD*). Lancez cette tâche avant le rapport pour que les chiffres soient à jour.
 
 ---
 
@@ -128,6 +128,8 @@ Chaque liste déroulante se résout côté serveur sur des catalogues vivants �
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` pour retravailler ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
+**Chaque mois, par e-mail** — *Tâches → Rapport sécurité et SoD* produit le même PDF pour une ou plusieurs applications et l'envoie au rôle des auditeurs ; planifié le 1er du mois une fois activé. Voir [Tâches de Nomasx-1](../jobs.md#reports).
+
 ---
 
 ## Avant de l'exécuter
@@ -137,7 +139,7 @@ L'audit lit les données que Nomasx-1 a déjà collectées pour l'application �
 - **Le référentiel des utilisateurs** — comptes déclarés, statut et dernière connexion, plus les marqueurs entretenus sur chaque utilisateur (privilégié / technique / générique / lié).
 - **Les rôles et affectations** — le catalogue des rôles et les affectations utilisateur ⟷ rôle.
 - **La sécurité des objets** — les droits du Security Workbench (exécution / ajout / modification / suppression, directs ou via `*ROLE`, et les droits `*PUBLIC`).
-- **Les tables de conflits SoD** — rafraîchies par `nomasx1-sod-1`, enrichies par la matrice et ses dimensions processus / activité / objet / risque.
+- **Les tables de conflits SoD** — rafraîchies par `nomasx1-collect-all`, enrichies par la matrice et ses dimensions processus / activité / objet / risque.
 - **Le registre des applications** — pour la garde et le périmètre.
 
 Une exécution sur une application sans données collectées produit quand même le document, mais les sections concernées s'affichent vides plutôt que fausses.
@@ -146,7 +148,7 @@ Une exécution sur une application sans données collectées produit quand même
 
 ## Conseils et bonnes pratiques
 
-- **Rafraîchissez le SoD d'abord.** Lancez `nomasx1-sod-1` juste avant le rapport pour que les comptes de conflits et la tendance collent à la réalité.
+- **Rafraîchissez le SoD d'abord.** Lancez *Tâches → Collecter la sécurité et la SoD* juste avant le rapport pour que les comptes de conflits et la tendance collent à la réalité.
 - **Commencez par les constats au niveau des rôles.** Les rôles auto-conflictuels et les rôles les plus conflictuels sont les gains les plus rapides — une correction lève les conflits de tous les utilisateurs qui portent le rôle.
 - **Renseignez le *Libellé de date* et le *Nom du client*** pour une page de garde prête à diffuser ; laissez-les vides pour un brouillon interne.
 - **Markdown pour itérer, PDF pour livrer.** La sortie Markdown est le même contenu sans la mise en forme de garde, pratique pour relire avant l'export final.

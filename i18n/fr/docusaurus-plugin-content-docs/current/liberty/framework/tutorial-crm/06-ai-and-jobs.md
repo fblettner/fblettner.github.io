@@ -121,7 +121,7 @@ Ajouter `STALLED = 'N'` à `deals_put` : toute modification d'une affaire efface
 | Étape | **Add step: `sql_query`**, nom `flag-stalled`, connecteur `crm`, requête `flag_stalled_deals`. |
 | Alerts | **Send alerts**, **On failure**, destinataires `user:<identifiant>`. |
 
-Enregistrer, puis **Run with parameters** pour l'exécuter une fois : le détail de l'exécution indique les lignes mises à jour. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
+Enregistrer, puis **Exécuter avec des paramètres** pour l'exécuter une fois : le détail de l'exécution indique les lignes mises à jour. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
 
 ### La notification
 

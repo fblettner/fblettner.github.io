@@ -49,7 +49,7 @@ async def refresh(*, period: str, target_connector: str,
 
 | Argument | Provenance |
 |---|---|
-| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Run with parameters**. Les valeurs sont converties au type annoté (`apps_id: int`). |
+| Ses propres arguments (`period`, `target_connector`) | Les paramètres partagés de la tâche, puis les `op_kwargs` de l'étape (l'étape l'emporte), puis les valeurs saisies dans **Exécuter avec des paramètres**. Les valeurs sont converties au type annoté (`apps_id: int`). |
 | `connectors` | Le registre des connecteurs — pour lancer les requêtes nommées ou les endpoints d'un connecteur. Fourni seulement si la fonction le déclare. |
 | `ctx` | L'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected` (lignes de l'étape précédente). Fourni seulement s'il est déclaré. |
 | `settings` | Les paramètres du serveur. Fourni seulement s'il est déclaré. |
@@ -81,7 +81,7 @@ from liberty.jobs.runlog import register_namespace
 register_namespace("reports")
 ```
 
-Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Run with parameters** → niveau de journal) s'applique.
+Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écrit dans le journal de l'exécution, contrairement à `print()`. Le niveau de journal de l'exécution (**Exécuter avec des paramètres** → niveau de journal) s'applique.
 
 ---
 

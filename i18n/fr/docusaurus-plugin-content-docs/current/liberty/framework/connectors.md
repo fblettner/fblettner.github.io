@@ -208,7 +208,7 @@ Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
 
 | Onglet | Contenu |
 |---|---|
-| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **SSL Verify**, **Show in switcher**, **Home**. |
+| **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **Vérification SSL** (*true*, *false*, ou une variable comme `${JDE_AIS_VERIFY_SSL:-true}`, conservée telle quelle), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type** : *None*, *Basic* (utilisateur et mot de passe), *Bearer* (jeton fixe), *API Key* (nom de l'en-tête et clé), *OAuth2 / JWT* (endpoint de jeton, corps et en-têtes de la demande, champ du jeton, durée de vie). Les secrets sont chiffrés à l'enregistrement. |
 | **Endpoints** | Les endpoints nommés — voir ci-dessous. |
 | **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |

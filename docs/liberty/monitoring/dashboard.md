@@ -6,7 +6,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 # The Monitoring page
 
-**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO).
+**Monitoring** in the sidebar opens a live view of the server. It is shown to superusers only and refreshes itself through the live connection (Socket.IO). This page describes its first tab, **Live**; the other two are [Server log](./server-log.md) and [Retention](./retention.md).
 
 ---
 
@@ -182,4 +182,4 @@ The latest lines of the server log, newest at the bottom.
 | **Filter…** | Text in the logger name or the message — an `error_id`, a request id, a connector. **Clear filter** empties it. |
 | **Pause** / **Resume** | Stops the scrolling to read; new lines keep arriving. |
 
-Errors are red, warnings orange, debug lines dimmed; a line with a stack trace can be unfolded (**traceback**). For older lines, use `./liberty logs` or `liberty-ops logs`.
+Errors are red, warnings orange, debug lines dimmed; a line with a stack trace can be unfolded (**traceback**). For older lines, search the [Server log](./server-log.md) tab.

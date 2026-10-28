@@ -49,7 +49,9 @@ On a Python install, the same steps are three commands — see [Python server](.
 
 ## 3 — Connect the source system \{#source\}
 
-The apps read their data from your source system through a pool. Open **Settings → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run the collection jobs from **Nomaflow**. The order and the parameters of these jobs are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
+The apps read their data from your source system through a pool. Open **Settings → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run **`nomasx1-roles`** to create the auditor and administrator roles, and the collection — `nomasx1-collect-all` — from **Nomaflow** or from *Nomasx-1 → Jobs*. The jobs and their parameters are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
+
+Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Settings → Connectors**. A value set in Settings is kept on every upgrade.
 
 ---
 
@@ -66,7 +68,10 @@ A new wheel brings new screens, menu items, dictionary entries, queries and dash
 | Created on the server | Always kept. |
 | Withdrawn by the vendor | Removed only if it was never changed. |
 | Pools and every `ENC:` secret | Always taken from your configuration. |
+| A value set on the server where the wheel ships a variable (`${JDE_AIS_USER:-JDE}`) | Always yours — a TLS check switched off in Settings stays off. |
 | `theme.toml` | Always yours. |
+
+**The Nomaflow jobs** are merged job by job. The product's part of a delivered job — its steps, description, tags, the parameters it offers — is refreshed; what you set on it is kept: enabled or not, schedule, timezone, presets, alerts, retry, log level, timeout and the values of its parameters. Your own jobs stay. A delivered job whose steps you changed is kept as it is and listed at the end; a job marked `override = true` in `jobs.toml` is always kept as saved.
 
 What was delivered is recorded under `config/.bundled/`, so the next upgrade knows "never changed" from "changed". The entities kept because they were changed locally are listed at the end of the run: mark them `override = true` to keep them for good, or install again with `--force-config` to take the vendor version.
 

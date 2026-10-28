@@ -176,6 +176,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'liberty/monitoring/overview',
         'liberty/monitoring/dashboard',
+        'liberty/monitoring/server-log',
+        'liberty/monitoring/retention',
         'liberty/monitoring/health-endpoints',
       ],
     },
@@ -243,6 +245,8 @@ const sidebars: SidebarsConfig = {
   nomasx1Sidebar: [
     'liberty/nomasx1/overview',
     'liberty/nomasx1/audit-synthesis',
+    'liberty/nomasx1/sod-dashboard',
+    'liberty/nomasx1/security-review',
     'liberty/nomasx1/data-explorer',
     'liberty/nomasx1/jobs',
     {

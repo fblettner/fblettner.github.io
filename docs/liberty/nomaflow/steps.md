@@ -1,6 +1,6 @@
 ---
 title: Steps
-description: "The nine Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run."
+description: "The ten Nomaflow step types — sql_query, sql_copy, file_load, file_export, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run."
 keywords: [Nomaflow, steps, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify, digest, spreadsheet load, CSV, replace_partition, Liberty Next]
 ---
 
@@ -13,6 +13,7 @@ A **step** is one unit of work in a job. Steps run in order; when one fails, the
 | runs one named query of a SQL connector | **`sql_query`** |
 | copies a whole table from one connector to another | **`sql_copy`** |
 | loads a spreadsheet or a CSV file into a table | **`file_load`** |
+| writes the result of a read query to an Excel or CSV file | **`file_export`** |
 | calls a Python function of a plugin | **`python`** |
 | calls a URL | **`http`** |
 | reads an LDAP / Active Directory directory into a table | **`ldap_sync`** |
@@ -100,7 +101,7 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | Field | Default | Notes |
 |---|---|---|
 | `name` | — | Shown in the run detail; unique within the job. |
-| `type` | — | One of the nine types. |
+| `type` | — | One of the ten types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
 
@@ -360,7 +361,9 @@ Renders a document into the run's work area: a [saved analysis or dashboard of t
 | **Render as user** | The document holds what that user sees: the data scope of their roles, with their attributes. A digest rendered as the manager of one company holds that company only. |
 | **Render as role** | The data scope of a role. A rule whose values come from a user attribute allows nothing here: prefer **Render as user** for such roles. |
 
-With neither, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
+For a plugin report, the run's parameters — the job's, those chosen when running it, the user parameters — are passed to the report on top of the step's own, converted to the type the report declares (a number stays a number); a blank value leaves the report's default.
+
+With neither user nor role, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
 
 ---
 
@@ -398,6 +401,24 @@ attach = ["*"]
 ```
 
 Schedule the job on the first of the month (cron `0 7 1 * *`) — see [Schedules](./jobs/schedules.md).
+
+---
+
+## File export — `file_export` \{#file-export\}
+
+Writes the result of a named **read** query to a file in the run's work area — for another system to pick up, or for a `notify` step to attach. A query that writes is refused.
+
+| Field (editor) | Notes |
+|---|---|
+| **Connector**, **Query** | The read query to run. |
+| **Parameters** | Its binds; the run's parameters are passed too. A value may use `${params.x}`. |
+| **Format** | *Excel (xlsx)* (default) or *CSV*. |
+| **File name (default: the query)** | May use `${params.x}` and `${run.id}`: `sales-${params.period}`. |
+| **Sheet** | Excel only — the query's name by default. |
+| **CSV delimiter**, **Encoding** | CSV only — `;` and `utf-8-sig` by default. |
+| **Also copy to this folder (optional)** | A server folder where a copy is written as well, created if missing: `/data/out/${params.period}`. |
+
+The rows are read from the database as they come, up to the connector's row limit — the log says when the export was capped. The header row carries the columns' labels; hidden columns are left out. The run detail offers the file under the step, and the retention of the work area applies to it — not to the copy in the other folder.
 
 ---
 
