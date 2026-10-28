@@ -25,14 +25,6 @@ function Hero() {
               'Guides, references and examples for the software Nomana-IT publishes: the Liberty Next low-code platform, the applications built on it, and NomaUBL for French e-invoicing.',
           })}
         </p>
-        <div className={styles.heroActions}>
-          <Link className="button button--primary button--lg" to="/liberty/getting-started/">
-            {translate({id: 'homepage.hero.start', message: 'Start with Liberty Next'})}
-          </Link>
-          <a className={`button button--lg ${styles.ghostButton}`} href="#demos">
-            {translate({id: 'homepage.hero.demo', message: 'Try a demo'})}
-          </a>
-        </div>
       </div>
     </header>
   );
@@ -55,6 +47,7 @@ function products(): Product[] {
       key: 'liberty',
       label: translate({id: 'homepage.products.liberty.label', message: 'Open-source low-code platform'}),
       title: 'Liberty Next',
+      tagline: translate({id: 'homepage.products.liberty.tagline', message: 'Screens, dashboards, jobs and AI'}),
       description: translate({
         id: 'homepage.products.liberty.description',
         message:
@@ -138,12 +131,12 @@ function products(): Product[] {
   ];
 }
 
-function ProductCard({p, featured}: {p: Product; featured?: boolean}) {
+function ProductCard({p}: {p: Product}) {
   const {i18n} = useDocusaurusContext();
   const lang = i18n.currentLocale === 'fr' ? 'fr' : 'en';
   const img = useBaseUrl(`/img/products/${p.key}-${lang}.svg`);
   return (
-    <Link to={p.to} className={`${styles.productCard} ${featured ? styles.productFeatured : ''}`}>
+    <Link to={p.to} className={styles.productCard}>
       <img className={styles.productImage} src={img} alt="" loading="lazy" />
       <div className={styles.productBody}>
         <span className={styles.productLabel}>{p.label}</span>
@@ -164,7 +157,9 @@ function ProductCard({p, featured}: {p: Product; featured?: boolean}) {
 }
 
 function Products() {
-  const [first, ...rest] = products();
+  const all = products();
+  const platforms = all.filter(p => p.key === 'liberty' || p.key === 'nomaubl');
+  const apps = all.filter(p => p.key !== 'liberty' && p.key !== 'nomaubl');
   return (
     <section className={styles.section}>
       <span className={styles.sectionEyebrow}>
@@ -180,9 +175,13 @@ function Products() {
             'Five products, built for ERP teams. Liberty Next is the open-source platform; Nomasx-1, Nomajde and Nomaflow are built with and for it; NomaUBL is our standalone e-invoicing platform.',
         })}
       </p>
-      <ProductCard p={first} featured />
+      <div className={styles.platformGrid}>
+        {platforms.map(p => (
+          <ProductCard key={p.key} p={p} />
+        ))}
+      </div>
       <div className={styles.productGrid}>
-        {rest.map(p => (
+        {apps.map(p => (
           <ProductCard key={p.key} p={p} />
         ))}
       </div>

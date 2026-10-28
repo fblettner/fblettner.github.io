@@ -381,12 +381,6 @@
   "homepage.hero.subtitle": {
     "message": "Guides, références et exemples pour les logiciels édités par Nomana-IT : la plateforme low-code Liberty Next, les applications construites dessus, et NomaUBL pour la facturation électronique."
   },
-  "homepage.hero.start": {
-    "message": "Commencer avec Liberty Next"
-  },
-  "homepage.hero.demo": {
-    "message": "Essayer une démo"
-  },
   "homepage.products.builtOn": {
     "message": "Construit sur Liberty Next"
   },
@@ -503,5 +497,8 @@
   },
   "homepage.products.nomaubl.tagline": {
     "message": "Facturation et e-reporting"
+  },
+  "homepage.products.liberty.tagline": {
+    "message": "Écrans, tableaux de bord, tâches et IA"
   }
 }
