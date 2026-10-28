@@ -137,7 +137,9 @@ function ProductCard({p}: {p: Product}) {
   const img = useBaseUrl(`/img/products/${p.key}-${lang}.svg`);
   return (
     <Link to={p.to} className={styles.productCard}>
-      <img className={styles.productImage} src={img} alt="" loading="lazy" />
+      <div className={styles.productMedia}>
+        <img className={styles.productImage} src={img} alt="" loading="lazy" />
+      </div>
       <div className={styles.productBody}>
         <span className={styles.productLabel}>{p.label}</span>
         <h3 className={styles.productTitle}>{p.title}</h3>

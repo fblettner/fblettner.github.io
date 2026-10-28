@@ -95,12 +95,25 @@
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
 }
 
+.productMedia {
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
 .productImage {
   display: block;
   width: 100%;
   aspect-ratio: 560 / 340;
   object-fit: cover;
-  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+/* Light theme: the dark illustration sits in a light frame, like a screenshot */
+[data-theme='light'] .productMedia {
+  padding: 14px 14px 0;
+  background: linear-gradient(180deg, #eef2f8, #f6f8fb);
+}
+[data-theme='light'] .productImage {
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
 }
 
 .productBody {
