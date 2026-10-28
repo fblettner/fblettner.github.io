@@ -158,8 +158,8 @@ function ProductCard({p}: {p: Product}) {
 
 function Products() {
   const all = products();
-  const platforms = all.filter(p => p.key === 'liberty' || p.key === 'nomaubl');
-  const apps = all.filter(p => p.key !== 'liberty' && p.key !== 'nomaubl');
+  const platforms = ['liberty', 'nomaflow'].map(k => all.find(p => p.key === k)!);
+  const apps = ['nomasx1', 'nomajde', 'nomaubl'].map(k => all.find(p => p.key === k)!);
   return (
     <section className={styles.section}>
       <span className={styles.sectionEyebrow}>
