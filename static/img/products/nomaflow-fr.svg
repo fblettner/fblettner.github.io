@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" role="img" aria-label="Nomaflow : pipeline Cron, SQL Copy, Python, Notify et son historique d’exécutions">
+<defs>
+  <radialGradient id="gA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(280.0 225.0)">
+    <stop offset="0" stop-color="#1d4ed8" stop-opacity="0.35"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(400 250) scale(240.0 200.0)">
+    <stop offset="0" stop-color="#7c3aed" stop-opacity="0.28"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gLine" x1="0" x2="1"><stop offset="0" stop-color="#4a9eff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+</defs>
+<rect width="400" height="250" fill="#0d121c"/>
+<rect width="400" height="250" fill="url(#gA)"/>
+<rect width="400" height="250" fill="url(#gB)"/>
+<rect x="16" y="22" width="82" height="62" rx="10" fill="#151b28" stroke="#20C5A8" stroke-opacity="0.6"/>
+<text x="28" y="46" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e5e7eb" text-anchor="start" >Cron</text>
+<text x="28" y="64" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" font-weight="400" fill="#8b93a7" text-anchor="start" >02:00</text>
+<circle cx="96" cy="24" r="8" fill="#0d121c"/><circle cx="96" cy="24" r="7" fill="#20C5A8" fill-opacity="0.18" stroke="#20C5A8"/><path d="M93 24 l2.2 2.4 l4 -4.6" fill="none" stroke="#20C5A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M100 53 h8" stroke="url(#gLine)" stroke-width="2" stroke-linecap="round"/>
+<rect x="110" y="22" width="82" height="62" rx="10" fill="#151b28" stroke="#20C5A8" stroke-opacity="0.6"/>
+<text x="122" y="46" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e5e7eb" text-anchor="start" >SQL Copy</text>
+<text x="122" y="64" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" font-weight="400" fill="#8b93a7" text-anchor="start" >erp → dw</text>
+<circle cx="190" cy="24" r="8" fill="#0d121c"/><circle cx="190" cy="24" r="7" fill="#20C5A8" fill-opacity="0.18" stroke="#20C5A8"/><path d="M187 24 l2.2 2.4 l4 -4.6" fill="none" stroke="#20C5A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M194 53 h8" stroke="url(#gLine)" stroke-width="2" stroke-linecap="round"/>
+<rect x="204" y="22" width="82" height="62" rx="10" fill="#151b28" stroke="#20C5A8" stroke-opacity="0.6"/>
+<text x="216" y="46" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e5e7eb" text-anchor="start" >Python</text>
+<text x="216" y="64" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" font-weight="400" fill="#8b93a7" text-anchor="start" >transform</text>
+<circle cx="284" cy="24" r="8" fill="#0d121c"/><circle cx="284" cy="24" r="7" fill="#20C5A8" fill-opacity="0.18" stroke="#20C5A8"/><path d="M281 24 l2.2 2.4 l4 -4.6" fill="none" stroke="#20C5A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M288 53 h8" stroke="url(#gLine)" stroke-width="2" stroke-linecap="round"/>
+<rect x="298" y="22" width="82" height="62" rx="10" fill="#151b28" stroke="#4a9eff" stroke-opacity="0.6"/>
+<text x="310" y="46" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e5e7eb" text-anchor="start" >Notify</text>
+<text x="310" y="64" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" font-weight="400" fill="#8b93a7" text-anchor="start" >Slack</text>
+<circle cx="378" cy="24" r="8" fill="#0d121c"/><circle cx="378" cy="24" r="6" fill="none" stroke="#4a9eff" stroke-width="2" stroke-dasharray="20 8"/>
+<rect x="16" y="102" width="368" height="132" rx="12" fill="#20C5A8"/><rect x="16" y="105" width="368" height="129" rx="12" fill="#151b28" stroke="#2a3245" stroke-opacity="0.8"/><text x="32" y="129" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e5e7eb" text-anchor="start" >Historique des exécutions</text><circle cx="366" cy="124" r="3.5" fill="#3a4357"/><circle cx="353" cy="124" r="3.5" fill="#3a4357"/><circle cx="340" cy="124" r="3.5" fill="#3a4357"/><line x1="16" x2="384" y1="144" y2="144" stroke="#2a3245"/>
+<circle cx="34" cy="166" r="4.5" fill="#20C5A8"/>
+<text x="48" y="170" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >nightly_sync</text>
+<text x="250" y="170" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" font-weight="400" fill="#8b93a7" text-anchor="start" >02:00</text>
+<text x="368" y="170" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#8b93a7" text-anchor="end" >1m 12s</text>
+<circle cx="34" cy="190" r="4.5" fill="#20C5A8"/>
+<text x="48" y="194" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >ldap_mirror</text>
+<text x="250" y="194" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" font-weight="400" fill="#8b93a7" text-anchor="start" >04:00</text>
+<text x="368" y="194" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#8b93a7" text-anchor="end" >18s</text>
+<circle cx="34" cy="214" r="4.5" fill="#4a9eff"/>
+<text x="48" y="218" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >api_pull</text>
+<text x="250" y="218" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" font-weight="400" fill="#8b93a7" text-anchor="start" >10:15</text>
+<rect x="310" y="205" width="60" height="18" rx="9.0" fill="#4a9eff2e" stroke="#4a9eff" stroke-opacity="0.7"/><text x="340.0" y="217.42" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#4a9eff" text-anchor="middle" >en cours</text>
+</svg>

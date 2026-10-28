@@ -369,22 +369,139 @@
     "message": "Documentation des logiciels édités par Nomana-IT : la plateforme low-code Liberty Next, Nomaflow, Nomasx-1, Nomajde pour JD Edwards EnterpriseOne, la facturation électronique NomaUBL et les API JD Edwards / BI Publisher, avec des assistants IA intégrés fondés sur Claude.",
     "description": "Meta description of the home page"
   },
-  "homepage.demo.liberty.title": {
-    "message": "Essayer la démo Liberty"
-  },
-  "homepage.demo.liberty.subtitle": {
-    "message": "Applications disponibles : LIBERTY, NOMASX-1 et NOMAJDE."
-  },
-  "homepage.demo.launch": {
-    "message": "Lancer la démo →"
-  },
-  "homepage.demo.nomaubl.title": {
-    "message": "Essayer la démo NomaUBL"
-  },
-  "homepage.demo.nomaubl.subtitle": {
-    "message": "La facturation électronique sur des données fictives : factures, cycles de vie, e-reporting et rapports."
-  },
   "homepage.demo.nomaubl.noLogin": {
     "message": "Sans identifiant"
+  },
+  "homepage.hero.eyebrow": {
+    "message": "Documentation"
+  },
+  "homepage.hero.title": {
+    "message": "Documentation Nomana-IT"
+  },
+  "homepage.hero.subtitle": {
+    "message": "Guides, références et exemples pour les logiciels édités par Nomana-IT : la plateforme low-code Liberty Next, les applications construites dessus, et NomaUBL pour la facturation électronique."
+  },
+  "homepage.hero.start": {
+    "message": "Commencer avec Liberty Next"
+  },
+  "homepage.hero.demo": {
+    "message": "Essayer une démo"
+  },
+  "homepage.products.builtOn": {
+    "message": "Construit sur Liberty Next"
+  },
+  "homepage.products.liberty.label": {
+    "message": "Plateforme low-code open source"
+  },
+  "homepage.products.liberty.description": {
+    "message": "Connecter des sources SQL ou API, puis construire écrans, tableaux de bord et analyses de données depuis les Paramètres, sans code. Tâches planifiées, rôles, sécurité au niveau des lignes et un assistant Claude sur vos données sont intégrés."
+  },
+  "homepage.products.liberty.tag1": {
+    "message": "Low-code"
+  },
+  "homepage.products.liberty.tag2": {
+    "message": "Connecteurs SQL + API"
+  },
+  "homepage.products.liberty.tag3": {
+    "message": "Assistant IA"
+  },
+  "homepage.products.nomasx1.tagline": {
+    "message": "Licences, sécurité et SoD"
+  },
+  "homepage.products.nomasx1.description": {
+    "message": "Sécurité, Object Usage Tracking, conformité des licences Oracle et JD Edwards et séparation des tâches pour chaque application connectée, avec une synthèse d'audit et des analyses prêtes à l'emploi."
+  },
+  "homepage.products.nomasx1.tag1": {
+    "message": "Conformité des licences"
+  },
+  "homepage.products.nomasx1.tag2": {
+    "message": "JD Edwards et Oracle"
+  },
+  "homepage.products.nomajde.tagline": {
+    "message": "Le compagnon de JD Edwards"
+  },
+  "homepage.products.nomajde.description": {
+    "message": "Utilisateurs, rôles, Security Workbench et codes UDC dans des grilles avec recherche, modification en ligne et import Excel, écrits directement dans JD Edwards EnterpriseOne."
+  },
+  "homepage.products.nomajde.tag2": {
+    "message": "Sécurité"
+  },
+  "homepage.products.nomajde.tag3": {
+    "message": "Données de base"
+  },
+  "homepage.products.nomaflow.tagline": {
+    "message": "Ordonnancement et orchestration"
+  },
+  "homepage.products.nomaflow.description": {
+    "message": "Tâches planifiées, chargements de fichiers, étapes ETL, synchronisation LDAP et rapports envoyés par e-mail, avec historique des exécutions, journal en direct et alertes — en réutilisant les connecteurs et les permissions de Liberty."
+  },
+  "homepage.products.nomaflow.tag1": {
+    "message": "Tâches"
+  },
+  "homepage.products.nomaubl.label": {
+    "message": "Facturation électronique B2B"
+  },
+  "homepage.products.nomaubl.description": {
+    "message": "Produit des factures UBL 2.1, les valide (XSD, Schematron, règles CTC) et suit l'e-reporting et le cycle de vie entre votre ERP et une Plateforme Agréée."
+  },
+  "homepage.products.nomaubl.tag2": {
+    "message": "Réforme 2026"
+  },
+  "homepage.products.nomaubl.tag3": {
+    "message": "Tout ERP"
+  },
+  "homepage.products.read": {
+    "message": "Lire la documentation"
+  },
+  "homepage.products.eyebrow": {
+    "message": "Éditeur de logiciels"
+  },
+  "homepage.products.title": {
+    "message": "Nos produits"
+  },
+  "homepage.products.intro": {
+    "message": "Cinq produits, conçus pour les équipes ERP. Liberty Next est la plateforme open source ; Nomasx-1, Nomajde et Nomaflow sont construits avec elle et pour elle ; NomaUBL est notre plateforme autonome de facturation électronique."
+  },
+  "homepage.resources.title": {
+    "message": "Ressources"
+  },
+  "homepage.resources.api.title": {
+    "message": "API JD Edwards et BI Publisher"
+  },
+  "homepage.resources.api.text": {
+    "message": "API Java et recettes d'intégration : codes-barres, exports de BLOB, réglage d'AIS."
+  },
+  "homepage.resources.blog.title": {
+    "message": "Blog"
+  },
+  "homepage.resources.blog.text": {
+    "message": "Articles sur JD Edwards, Oracle, la facturation électronique et l'IA."
+  },
+  "homepage.resources.github.title": {
+    "message": "Open source"
+  },
+  "homepage.resources.github.text": {
+    "message": "Les dépôts publics de Nomana-IT sur GitHub."
+  },
+  "homepage.demo.open": {
+    "message": "Ouvrir la démo"
+  },
+  "homepage.demo.title": {
+    "message": "Essayer en ligne"
+  },
+  "homepage.demo.liberty.text": {
+    "message": "La plateforme Liberty Next avec les applications Nomasx-1 et Nomajde."
+  },
+  "homepage.demo.login": {
+    "message": "Identifiant"
+  },
+  "homepage.demo.password": {
+    "message": "Mot de passe"
+  },
+  "homepage.demo.nomaubl.text": {
+    "message": "La facturation électronique sur des données fictives : factures, cycles de vie, e-reporting et rapports."
+  },
+  "homepage.products.nomaubl.tagline": {
+    "message": "Facturation et e-reporting"
   }
 }

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" role="img" aria-label="Liberty Next: the screen assistant turns a connector into a customer grid, with an AI assistant answer">
+<defs>
+  <radialGradient id="gA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(392.0 306.0)">
+    <stop offset="0" stop-color="#1d4ed8" stop-opacity="0.35"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(560 340) scale(336.0 272.0)">
+    <stop offset="0" stop-color="#7c3aed" stop-opacity="0.28"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gLine" x1="0" x2="1"><stop offset="0" stop-color="#4a9eff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+</defs>
+<rect width="560" height="340" fill="#0d121c"/>
+<rect width="560" height="340" fill="url(#gA)"/>
+<rect width="560" height="340" fill="url(#gB)"/>
+<rect x="20" y="30" width="214" height="282" rx="12" fill="#10151f" stroke="#2a3245"/>
+<text x="36" y="56" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e5e7eb" text-anchor="start" >✦ Screen assistant</text>
+<line x1="20" x2="234" y1="70" y2="70" stroke="#2a3245"/>
+<circle cx="44" cy="90" r="8" fill="#4a9eff2e" stroke="#4a9eff" stroke-opacity="0.7"/>
+<text x="44" y="93.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#4a9eff" text-anchor="middle" >1</text>
+<text x="58" y="94" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="start" >SOURCE</text>
+<rect x="36" y="102" width="182" height="24" rx="6" fill="#1a2131" stroke="#2a3245"/>
+<text x="46" y="118" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >crm · customers</text>
+<circle cx="44" cy="150" r="8" fill="#4a9eff2e" stroke="#4a9eff" stroke-opacity="0.7"/>
+<text x="44" y="153.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#4a9eff" text-anchor="middle" >2</text>
+<text x="58" y="154" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="start" >COLUMNS</text>
+<rect x="36" y="164" width="14" height="14" rx="3.5" fill="#4a9eff"/><path d="M39.5 171.2 l2.4 2.5 l4.6 -5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="56" y="175.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#e5e7eb" text-anchor="start" >Name</text>
+<rect x="128" y="164" width="14" height="14" rx="3.5" fill="#4a9eff"/><path d="M131.5 171.2 l2.4 2.5 l4.6 -5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="175.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#e5e7eb" text-anchor="start" >City</text>
+<rect x="36" y="188" width="14" height="14" rx="3.5" fill="#4a9eff"/><path d="M39.5 195.2 l2.4 2.5 l4.6 -5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="56" y="199.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#e5e7eb" text-anchor="start" >Status</text>
+<rect x="128" y="188" width="14" height="14" rx="3.5" fill="none" stroke="#8b93a7"/>
+<text x="148" y="199.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8b93a7" text-anchor="start" >Created</text>
+<circle cx="44" cy="234" r="8" fill="#4a9eff2e" stroke="#4a9eff" stroke-opacity="0.7"/>
+<text x="44" y="237.5" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#4a9eff" text-anchor="middle" >3</text>
+<text x="58" y="238" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="start" >MENU</text>
+<rect x="36" y="246" width="182" height="24" rx="6" fill="#1a2131" stroke="#2a3245"/>
+<text x="46" y="262" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >Sales › Customers</text>
+<rect x="36" y="280" width="182" height="22" rx="11" fill="url(#gLine)"/>
+<text x="127.0" y="295" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" >Create screen</text>
+<path d="M240 170 H266" stroke="url(#gLine)" stroke-width="2.5" stroke-linecap="round"/><path d="M262 164 L270 170 L262 176" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="276" y="22" width="264" height="296" rx="12" fill="#4a9eff"/><rect x="276" y="25" width="264" height="293" rx="12" fill="#151b28" stroke="#2a3245" stroke-opacity="0.8"/><text x="292" y="49" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e5e7eb" text-anchor="start" >Customers</text><circle cx="522" cy="44" r="3.5" fill="#3a4357"/><circle cx="509" cy="44" r="3.5" fill="#3a4357"/><circle cx="496" cy="44" r="3.5" fill="#3a4357"/><line x1="276" x2="540" y1="64" y2="64" stroke="#2a3245"/>
+<rect x="292" y="78" width="64" height="22" rx="11.0" fill="none" stroke="#8b93a7" stroke-opacity="0.7"/><text x="324.0" y="92.6" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="500" fill="#8b93a7" text-anchor="middle" >City ▾</text>
+<rect x="364" y="78" width="72" height="22" rx="11.0" fill="none" stroke="#8b93a7" stroke-opacity="0.7"/><text x="400.0" y="92.6" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="500" fill="#8b93a7" text-anchor="middle" >Status ▾</text>
+<rect x="444" y="78" width="80" height="22" rx="11" fill="#1a2131" stroke="#2a3245"/><text x="456" y="93" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="400" fill="#8b93a7" text-anchor="start" >Search…</text>
+<text x="292" y="124" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="start" >NAME</text>
+<text x="404" y="124" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="start" >CITY</text>
+<text x="524" y="124" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#8b93a7" text-anchor="end" >STATUS</text>
+<text x="292" y="151" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#e5e7eb" text-anchor="start" >Atelier Martin</text>
+<text x="404" y="151" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8b93a7" text-anchor="start" >Lyon</text>
+<rect x="462" y="138" width="62" height="18" rx="9.0" fill="#22c55e2e" stroke="#22c55e" stroke-opacity="0.7"/><text x="493.0" y="150.42" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#22c55e" text-anchor="middle" >Active</text>
+<rect x="284" y="163" width="248" height="26" rx="6" fill="#4a9eff1f"/><rect x="284" y="163" width="3" height="26" rx="1.5" fill="#4a9eff"/>
+<text x="292" y="180" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#e5e7eb" text-anchor="start" >Garage Moreau</text>
+<text x="404" y="180" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8b93a7" text-anchor="start" >Nantes</text>
+<rect x="462" y="167" width="62" height="18" rx="9.0" fill="#fb923c2e" stroke="#fb923c" stroke-opacity="0.7"/><text x="493.0" y="179.42" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#fb923c" text-anchor="middle" >On hold</text>
+<text x="292" y="209" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#e5e7eb" text-anchor="start" >Hôtel du Parc</text>
+<text x="404" y="209" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8b93a7" text-anchor="start" >Nice</text>
+<rect x="462" y="196" width="62" height="18" rx="9.0" fill="#22c55e2e" stroke="#22c55e" stroke-opacity="0.7"/><text x="493.0" y="208.42" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#22c55e" text-anchor="middle" >Active</text>
+<text x="292" y="238" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#e5e7eb" text-anchor="start" >Ferme Saules</text>
+<text x="404" y="238" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8b93a7" text-anchor="start" >Nantes</text>
+<rect x="462" y="225" width="62" height="18" rx="9.0" fill="#fb923c2e" stroke="#fb923c" stroke-opacity="0.7"/><text x="493.0" y="237.42" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#fb923c" text-anchor="middle" >On hold</text>
+<rect x="288" y="262" width="240" height="48" rx="12" fill="#1c2742" stroke="#4a9eff" stroke-opacity="0.55"/>
+<text x="302" y="282" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#4a9eff" text-anchor="start" >✦ Assistant</text>
+<text x="302" y="299" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#e5e7eb" text-anchor="start" >2 customers on hold, both in Nantes.</text>
+</svg>

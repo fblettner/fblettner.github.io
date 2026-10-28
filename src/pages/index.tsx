@@ -2,6 +2,8 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {translate} from '@docusaurus/Translate';
 
 import styles from './index.module.css';
@@ -10,189 +12,268 @@ function Hero() {
   return (
     <header className={styles.hero}>
       <div className={styles.heroInner}>
-        <span className={styles.eyebrow}>NOMANA-IT</span>
+        <span className={styles.eyebrow}>
+          {translate({id: 'homepage.hero.eyebrow', message: 'Documentation'})}
+        </span>
         <Heading as="h1" className={styles.heroTitle}>
-          Documentation, Blog and Resources
+          {translate({id: 'homepage.hero.title', message: 'Nomana-IT documentation'})}
         </Heading>
         <p className={styles.heroSubtitle}>
-          Information about our products and services with targeted solutions,
-          getting-started guides, and content for advanced use cases.
+          {translate({
+            id: 'homepage.hero.subtitle',
+            message:
+              'Guides, references and examples for the software Nomana-IT publishes: the Liberty Next low-code platform, the applications built on it, and NomaUBL for French e-invoicing.',
+          })}
         </p>
         <div className={styles.heroActions}>
           <Link className="button button--primary button--lg" to="/liberty/getting-started/">
-            Liberty
+            {translate({id: 'homepage.hero.start', message: 'Start with Liberty Next'})}
           </Link>
-          <Link className="button button--secondary button--lg" to="/liberty/nomasx1/overview/">
-            Nomasx-1
-          </Link>
-          <Link className="button button--secondary button--lg" to="/liberty/nomajde/overview/">
-            Nomajde
-          </Link>
-          <Link className="button button--secondary button--lg" to="/nomaubl/getting-started/">
-            NomaUBL
-          </Link>
-          <Link className="button button--secondary button--lg" to="/api/getting-started/">
-            API
-          </Link>
-          <Link className="button button--secondary button--lg" href="https://nomana-it.fr/insights/">
-            Blog
-          </Link>
-        </div>
-        <div className={styles.sponsor}>
-          <iframe
-            src="https://github.com/sponsors/fblettner/button"
-            title="Sponsor fblettner"
-            height="32"
-            width="114"
-            style={{border: 0, borderRadius: 6}}
-          />
+          <a className={`button button--lg ${styles.ghostButton}`} href="#demos">
+            {translate({id: 'homepage.hero.demo', message: 'Try a demo'})}
+          </a>
         </div>
       </div>
     </header>
   );
 }
 
-type FeatureProps = {
+type Product = {
+  key: string;
+  label: string;
   title: string;
-  description: ReactNode;
-  cta: {label: string; to: string};
-  external?: boolean;
+  tagline?: string;
+  description: string;
+  tags: string[];
+  to: string;
 };
 
-const features: FeatureProps[] = [
-  {
-    title: 'Liberty Framework',
-    description: (
-      <>
-        A no-code development platform for rapid web app creation with{' '}
-        <strong>React</strong>, <strong>Node.js</strong>, and <strong>PostgreSQL</strong>.
-        Build robust applications with zero coding skills required.
-      </>
-    ),
-    cta: {label: 'Get started →', to: '/liberty/getting-started/'},
-  },
-  {
-    title: 'Nomasx-1',
-    description: (
-      <>
-        Centralized security &amp; compliance application. Reconciles users,
-        roles, assignments and segregation-of-duties risks across every
-        connected ERP — JD&nbsp;Edwards, SAP, NetSuite and beyond.
-      </>
-    ),
-    cta: {label: 'Get started →', to: '/liberty/nomasx1/overview/'},
-  },
-  {
-    title: 'Nomajde',
-    description: (
-      <>
-        JD&nbsp;Edwards EnterpriseOne companion. Consolidates dozens of native
-        JDE screens into simplified workflows with grid editing for master
-        data and security maintenance.
-      </>
-    ),
-    cta: {label: 'Get started →', to: '/liberty/nomajde/overview/'},
-  },
-  {
-    title: 'NomaUBL',
-    description: (
-      <>
-        E-Invoicing &amp; UBL editing workspace. Generate, validate and dispatch
-        UBL documents to French Plateformes Agréées with full lifecycle tracking.
-      </>
-    ),
-    cta: {label: 'Get started →', to: '/nomaubl/getting-started/'},
-  },
-  {
-    title: 'JD Edwards & BI Publisher',
-    description: (
-      <>
-        Java APIs and integration recipes for Oracle JD&nbsp;Edwards EnterpriseOne
-        and BI&nbsp;Publisher — barcode generation, BLOB exports, AIS tuning.
-      </>
-    ),
-    cta: {label: 'Browse APIs →', to: '/api/getting-started/'},
-  },
-  {
-    title: 'Open source',
-    description: (
-      <>
-        All public repositories developed by NOMANA-IT. Contributions and stars
-        appreciated.
-      </>
-    ),
-    cta: {label: 'GitHub →', to: 'https://github.com/fblettner?tab=repositories'},
-    external: true,
-  },
-];
+function products(): Product[] {
+  const builtOn = translate({id: 'homepage.products.builtOn', message: 'Built on Liberty Next'});
+  return [
+    {
+      key: 'liberty',
+      label: translate({id: 'homepage.products.liberty.label', message: 'Open-source low-code platform'}),
+      title: 'Liberty Next',
+      description: translate({
+        id: 'homepage.products.liberty.description',
+        message:
+          'Connect SQL or API sources, then build screens, dashboards and data explorations from the Settings, without code. Scheduled jobs, roles, row-level security and a Claude assistant over your data come built in.',
+      }),
+      tags: [
+        translate({id: 'homepage.products.liberty.tag1', message: 'Low-code'}),
+        translate({id: 'homepage.products.liberty.tag2', message: 'SQL + API connectors'}),
+        translate({id: 'homepage.products.liberty.tag3', message: 'AI assistant'}),
+      ],
+      to: '/liberty/getting-started/',
+    },
+    {
+      key: 'nomasx1',
+      label: builtOn,
+      title: 'Nomasx-1',
+      tagline: translate({id: 'homepage.products.nomasx1.tagline', message: 'Licences, security & SoD'}),
+      description: translate({
+        id: 'homepage.products.nomasx1.description',
+        message:
+          'Security, Object Usage Tracking, Oracle and JD Edwards licence compliance and segregation of duties for every connected application, with an audit synthesis and ready-made analyses.',
+      }),
+      tags: [
+        translate({id: 'homepage.products.nomasx1.tag1', message: 'Licence compliance'}),
+        translate({id: 'homepage.products.nomasx1.tag2', message: 'JD Edwards & Oracle'}),
+        'SoD',
+      ],
+      to: '/liberty/nomasx1/overview/',
+    },
+    {
+      key: 'nomajde',
+      label: builtOn,
+      title: 'Nomajde',
+      tagline: translate({id: 'homepage.products.nomajde.tagline', message: 'The JD Edwards companion'}),
+      description: translate({
+        id: 'homepage.products.nomajde.description',
+        message:
+          'Users, roles, Security Workbench and UDC codes on searchable grids with inline editing and Excel upload, written straight to JD Edwards EnterpriseOne.',
+      }),
+      tags: [
+        'JD Edwards',
+        translate({id: 'homepage.products.nomajde.tag2', message: 'Security'}),
+        translate({id: 'homepage.products.nomajde.tag3', message: 'Master data'}),
+      ],
+      to: '/liberty/nomajde/overview/',
+    },
+    {
+      key: 'nomaflow',
+      label: builtOn,
+      title: 'Nomaflow',
+      tagline: translate({id: 'homepage.products.nomaflow.tagline', message: 'Scheduler & orchestration'}),
+      description: translate({
+        id: 'homepage.products.nomaflow.description',
+        message:
+          'Scheduled jobs, file loads, ETL steps, LDAP sync and e-mailed reports, with run history, a live log and alerts — reusing the Liberty connectors and permissions.',
+      }),
+      tags: [
+        translate({id: 'homepage.products.nomaflow.tag1', message: 'Jobs'}),
+        'ETL',
+        'Cron',
+      ],
+      to: '/liberty/nomaflow/overview/',
+    },
+    {
+      key: 'nomaubl',
+      label: translate({id: 'homepage.products.nomaubl.label', message: 'French B2B e-invoicing'}),
+      title: 'NomaUBL',
+      tagline: translate({id: 'homepage.products.nomaubl.tagline', message: 'E-invoicing & e-reporting'}),
+      description: translate({
+        id: 'homepage.products.nomaubl.description',
+        message:
+          'Generates UBL 2.1 invoices, validates them against XSD, Schematron and CTC rules, and tracks e-reporting and lifecycle between your ERP and a Plateforme Agréée.',
+      }),
+      tags: [
+        'UBL 2.1',
+        translate({id: 'homepage.products.nomaubl.tag2', message: '2026 reform'}),
+        translate({id: 'homepage.products.nomaubl.tag3', message: 'Any ERP'}),
+      ],
+      to: '/nomaubl/getting-started/',
+    },
+  ];
+}
 
-function Features() {
+function ProductCard({p, featured}: {p: Product; featured?: boolean}) {
+  const {i18n} = useDocusaurusContext();
+  const lang = i18n.currentLocale === 'fr' ? 'fr' : 'en';
+  const img = useBaseUrl(`/img/products/${p.key}-${lang}.svg`);
   return (
-    <section className={styles.features}>
-      <div className={styles.featuresGrid}>
-        {features.map(f => (
-          <div key={f.title} className={styles.featureCard}>
-            <h3 className={styles.featureTitle}>{f.title}</h3>
-            <p className={styles.featureBody}>{f.description}</p>
-            <Link
-              className={styles.featureLink}
-              to={f.cta.to}
-              {...(f.external ? {target: '_blank', rel: 'noopener'} : {})}>
-              {f.cta.label}
-            </Link>
-          </div>
+    <Link to={p.to} className={`${styles.productCard} ${featured ? styles.productFeatured : ''}`}>
+      <img className={styles.productImage} src={img} alt="" loading="lazy" />
+      <div className={styles.productBody}>
+        <span className={styles.productLabel}>{p.label}</span>
+        <h3 className={styles.productTitle}>{p.title}</h3>
+        {p.tagline && <p className={styles.productTagline}>{p.tagline}</p>}
+        <p className={styles.productDescription}>{p.description}</p>
+        <ul className={styles.productTags}>
+          {p.tags.map(t => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+        <span className={styles.productLink}>
+          {translate({id: 'homepage.products.read', message: 'Read the documentation'})} →
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function Products() {
+  const [first, ...rest] = products();
+  return (
+    <section className={styles.section}>
+      <span className={styles.sectionEyebrow}>
+        {translate({id: 'homepage.products.eyebrow', message: 'Software publisher'})}
+      </span>
+      <Heading as="h2" className={styles.sectionTitle}>
+        {translate({id: 'homepage.products.title', message: 'Our products'})}
+      </Heading>
+      <p className={styles.sectionIntro}>
+        {translate({
+          id: 'homepage.products.intro',
+          message:
+            'Five products, built for ERP teams. Liberty Next is the open-source platform; Nomasx-1, Nomajde and Nomaflow are built with and for it; NomaUBL is our standalone e-invoicing platform.',
+        })}
+      </p>
+      <ProductCard p={first} featured />
+      <div className={styles.productGrid}>
+        {rest.map(p => (
+          <ProductCard key={p.key} p={p} />
         ))}
       </div>
     </section>
   );
 }
 
-function DemoCard() {
+function Resources() {
+  const items = [
+    {
+      title: translate({id: 'homepage.resources.api.title', message: 'JD Edwards & BI Publisher APIs'}),
+      text: translate({
+        id: 'homepage.resources.api.text',
+        message: 'Java APIs and integration recipes: barcodes, BLOB exports, AIS tuning.',
+      }),
+      to: '/api/getting-started/',
+    },
+    {
+      title: translate({id: 'homepage.resources.blog.title', message: 'Blog'}),
+      text: translate({
+        id: 'homepage.resources.blog.text',
+        message: 'Articles on JD Edwards, Oracle, e-invoicing and AI.',
+      }),
+      to: 'https://nomana-it.fr/insights/',
+    },
+    {
+      title: translate({id: 'homepage.resources.github.title', message: 'Open source'}),
+      text: translate({
+        id: 'homepage.resources.github.text',
+        message: 'The public repositories of Nomana-IT on GitHub.',
+      }),
+      to: 'https://github.com/fblettner?tab=repositories',
+    },
+  ];
   return (
-    <section className={styles.demo}>
-      <div className={styles.demoInner}>
-        <div>
-          <h2 className={styles.demoTitle}>
-            {translate({id: 'homepage.demo.liberty.title', message: 'Try the Liberty demo'})}
-          </h2>
-          <p className={styles.demoSubtitle}>
-            {translate({id: 'homepage.demo.liberty.subtitle', message: 'Apps available: LIBERTY, NOMASX-1 and NOMAJDE.'})}
-          </p>
-        </div>
-        <pre className={styles.demoCreds}>
-          <code>{`Login    = demo
-Password = demo2026`}</code>
-        </pre>
-        <Link
-          className="button button--primary button--lg"
-          to="https://liberty.nomana-it.fr/"
-          target="_blank"
-          rel="noopener">
-          {translate({id: 'homepage.demo.launch', message: 'Launch demo →'})}
-        </Link>
+    <section className={styles.section}>
+      <Heading as="h2" className={styles.sectionTitleSmall}>
+        {translate({id: 'homepage.resources.title', message: 'Resources'})}
+      </Heading>
+      <div className={styles.resourceGrid}>
+        {items.map(r => (
+          <Link key={r.title} to={r.to} className={styles.resourceCard}>
+            <span className={styles.resourceTitle}>{r.title} →</span>
+            <span className={styles.resourceText}>{r.text}</span>
+          </Link>
+        ))}
       </div>
-      <div className={styles.demoInner}>
-        <div>
-          <h2 className={styles.demoTitle}>
-            {translate({id: 'homepage.demo.nomaubl.title', message: 'Try the NomaUBL demo'})}
-          </h2>
-          <p className={styles.demoSubtitle}>
+    </section>
+  );
+}
+
+function Demos() {
+  const open = translate({id: 'homepage.demo.open', message: 'Open the demo'});
+  return (
+    <section className={styles.section} id="demos">
+      <Heading as="h2" className={styles.sectionTitleSmall}>
+        {translate({id: 'homepage.demo.title', message: 'Try it online'})}
+      </Heading>
+      <div className={styles.demoGrid}>
+        <div className={styles.demoCard}>
+          <h3 className={styles.demoTitle}>Liberty Next</h3>
+          <p className={styles.demoText}>
             {translate({
-              id: 'homepage.demo.nomaubl.subtitle',
+              id: 'homepage.demo.liberty.text',
+              message: 'The Liberty Next platform with the Nomasx-1 and Nomajde applications.',
+            })}
+          </p>
+          <p className={styles.demoMeta}>
+            {translate({id: 'homepage.demo.login', message: 'Login'})} <code>demo</code>
+            {' · '}
+            {translate({id: 'homepage.demo.password', message: 'Password'})} <code>demo2026</code>
+          </p>
+          <Link className={`button button--primary ${styles.demoButton}`} to="https://liberty.nomana-it.fr/">
+            {open}
+          </Link>
+        </div>
+        <div className={styles.demoCard}>
+          <h3 className={styles.demoTitle}>NomaUBL</h3>
+          <p className={styles.demoText}>
+            {translate({
+              id: 'homepage.demo.nomaubl.text',
               message: 'E-invoicing on fictitious data: invoices, lifecycles, e-reporting and reports.',
             })}
           </p>
+          <p className={styles.demoMeta}>
+            {translate({id: 'homepage.demo.nomaubl.noLogin', message: 'No login required'})}
+          </p>
+          <Link className={`button button--primary ${styles.demoButton}`} to="https://nomaubl.nomana-it.fr/">
+            {open}
+          </Link>
         </div>
-        <span className={styles.demoCreds}>
-          {translate({id: 'homepage.demo.nomaubl.noLogin', message: 'No login required'})}
-        </span>
-        <Link
-          className="button button--primary button--lg"
-          to="https://nomaubl.nomana-it.fr/"
-          target="_blank"
-          rel="noopener">
-          {translate({id: 'homepage.demo.launch', message: 'Launch demo →'})}
-        </Link>
       </div>
     </section>
   );
@@ -208,9 +289,10 @@ export default function Home(): ReactNode {
         description: 'Meta description of the home page',
       })}>
       <Hero />
-      <main>
-        <Features />
-        <DemoCard />
+      <main className={styles.main}>
+        <Products />
+        <Resources />
+        <Demos />
       </main>
     </Layout>
   );

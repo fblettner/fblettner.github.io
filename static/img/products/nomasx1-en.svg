@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" role="img" aria-label="Nomasx-1: licence compliance usage report, required versus subscribed licences per component">
+<defs>
+  <radialGradient id="gA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(280.0 225.0)">
+    <stop offset="0" stop-color="#1d4ed8" stop-opacity="0.35"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(400 250) scale(240.0 200.0)">
+    <stop offset="0" stop-color="#7c3aed" stop-opacity="0.28"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gLine" x1="0" x2="1"><stop offset="0" stop-color="#4a9eff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+</defs>
+<rect width="400" height="250" fill="#0d121c"/>
+<rect width="400" height="250" fill="url(#gA)"/>
+<rect width="400" height="250" fill="url(#gB)"/>
+<rect x="14" y="14" width="372" height="222" rx="12" fill="#22c55e"/><rect x="14" y="17" width="372" height="219" rx="12" fill="#151b28" stroke="#2a3245" stroke-opacity="0.8"/><text x="30" y="41" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e5e7eb" text-anchor="start" >Licence compliance · usage report</text><circle cx="368" cy="36" r="3.5" fill="#3a4357"/><circle cx="355" cy="36" r="3.5" fill="#3a4357"/><circle cx="342" cy="36" r="3.5" fill="#3a4357"/><line x1="14" x2="386" y1="56" y2="56" stroke="#2a3245"/>
+<rect x="28" y="66" width="108" height="50" rx="9" fill="#1a2131" stroke="#e5e7eb" stroke-opacity="0.3"/>
+<text x="40" y="89" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#e5e7eb" text-anchor="start" >142</text>
+<text x="40" y="106" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="500" fill="#8b93a7" text-anchor="start" >Required</text>
+<rect x="146" y="66" width="108" height="50" rx="9" fill="#1a2131" stroke="#e5e7eb" stroke-opacity="0.3"/>
+<text x="158" y="89" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#e5e7eb" text-anchor="start" >160</text>
+<text x="158" y="106" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="500" fill="#8b93a7" text-anchor="start" >Subscribed</text>
+<rect x="264" y="66" width="108" height="50" rx="9" fill="#1a2131" stroke="#4a9eff" stroke-opacity="0.3"/>
+<text x="276" y="89" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#4a9eff" text-anchor="start" >18</text>
+<text x="276" y="106" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="500" fill="#8b93a7" text-anchor="start" >To reclaim</text>
+<rect x="24" y="130" width="352" height="27" rx="6" fill="#1a2131"/>
+<text x="36" y="148" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >JDE Financials</text>
+<rect x="184" y="140" width="66" height="7" rx="3.5" fill="#2a3245"/>
+<rect x="184" y="140" width="63.8" height="7" rx="3.5" fill="#22c55e"/>
+<text x="256" y="147.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="9.5" font-weight="400" fill="#8b93a7" text-anchor="start" >58/60</text>
+<rect x="306" y="135" width="60" height="17" rx="8.5" fill="#22c55e2e" stroke="#22c55e" stroke-opacity="0.7"/><text x="336.0" y="146.92" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#22c55e" text-anchor="middle" >Compliant</text>
+<rect x="24" y="162" width="352" height="27" rx="6" fill="#1a2131"/>
+<text x="36" y="180" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >JDE Procurement</text>
+<rect x="184" y="172" width="66" height="7" rx="3.5" fill="#2a3245"/>
+<rect x="184" y="172" width="49.2" height="7" rx="3.5" fill="#4a9eff"/>
+<text x="256" y="179.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="9.5" font-weight="400" fill="#8b93a7" text-anchor="start" >41/55</text>
+<rect x="306" y="167" width="60" height="17" rx="8.5" fill="#4a9eff2e" stroke="#4a9eff" stroke-opacity="0.7"/><text x="336.0" y="178.92" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#4a9eff" text-anchor="middle" >Surplus</text>
+<rect x="24" y="194" width="352" height="27" rx="6" fill="#1a2131"/>
+<text x="36" y="212" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#e5e7eb" text-anchor="start" >Oracle Partitioning</text>
+<rect x="184" y="204" width="66" height="7" rx="3.5" fill="#2a3245"/>
+<rect x="184" y="204" width="66.0" height="7" rx="3.5" fill="#f87171"/>
+<text x="256" y="211.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="9.5" font-weight="400" fill="#8b93a7" text-anchor="start" >1/0</text>
+<rect x="306" y="199" width="60" height="17" rx="8.5" fill="#f871712e" stroke="#f87171" stroke-opacity="0.7"/><text x="336.0" y="210.92" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#f87171" text-anchor="middle" >Gap</text>
+</svg>
