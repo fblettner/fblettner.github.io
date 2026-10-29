@@ -962,7 +962,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
-| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the latest health check of every JD Edwards server and its history. |
+| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
 
 ---
@@ -5709,12 +5709,16 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 |---|---|
 | `text`, `textarea` | Text, on one line or several. |
 | `number`, `integer`, `decimal`, `currency` | A number. |
-| `date`, `datetime`, `timestamp` | A date, with or without time. |
+| `date`, `datetime`, `timestamp` | A date, with or without time. The form, the bulk edit and the filters offer the application's date picker: a field where the date can be typed (an impossible day goes back to the previous value) and a month calendar with *Today* and *Clear*, whose title opens a month and year chooser. A `datetime` or `timestamp` field adds a time field (`hh:mm` or `hh:mm:ss`). A value carrying its time zone (a PostgreSQL `timestamptz`) shows in the browser's local time; a value without a zone (Oracle `DATE`, JD Edwards dates) shows as stored. |
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
 | `jdenumber` | A JD Edwards amount stored without its decimal point: with **Decimals** = 2, the stored `12345` reads and is entered as `123.45`, and is written back as `12345`. Filters are typed in real units; the Data Explorer totals and detail rows are scaled the same way. The [scan](#scan-a-table) of a JD Edwards table fills the decimals from the data dictionary. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
-| `email`, `url`, `color` | Text, shown as entered. |
+| `url` | A link opening in a new tab; the form's field gets a button that opens it. Only `http(s)` addresses become links (`www.…` gets `https://`). |
+| `email` | A `mailto:` link; the form's field gets a button that opens it. Only a value shaped like an address becomes a link. |
+| `color` | The code with a colour swatch beside it; in the form, the swatch opens the system colour picker. Hex codes and `rgb()` only. |
+
+For `url`, `email` and `color`, any other value stays plain text, and sorting, filtering and export keep the raw value.
 
 The **Framework** tab can add values to this list.
 
@@ -6015,7 +6019,7 @@ Three regions:
 
 ## The Screen Designer modal
 
-Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes; Cancel prompts on unsaved changes.
+Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes — in `screens.toml`, only that screen is rewritten, without its default values and in the file's key order, every other screen staying as it is; Cancel prompts on unsaved changes.
 
 Inside the modal, nine tabs organise everything:
 
@@ -6068,7 +6072,7 @@ There's no `kind` discriminator; you get different screen shapes by which fields
 | Filled in | Behaviour |
 |---|---|
 | `read_query` only | Read-only grid. The user sees rows; no edit, no add. |
-| `read_query` + `editable = true` | Inline grid editing — the user edits cells in place, the grid's *Save* button writes back. Requires `update_query`. |
+| `read_query` + `editable = true` | Inline grid editing — [Bulk edit](../../bulk-edit.md): cells edited in place, rows added, cloned, pasted or deleted, the grid's *Save* writing everything. Requires `update_query` or `insert_query`. |
 | `read_query` + `dialog` | Grid + dialog. The user adds/edits rows through the form. Requires the matching `insert_query` / `update_query`. |
 | `read_query` + `row_click_screen` | Master/detail. Clicking a row opens a sibling screen's dialog narrowed to that row. |
 | `read_query` + `row_click_route` | Master/page. Clicking a row navigates to a SPA route — escape hatch for hand-written React pages (live-streamed logs, multi-source merges). |
@@ -6313,7 +6317,8 @@ A key is not locked automatically when a row is edited: tick **disable_on_edit**
 
 | Field | Notes |
 |---|---|
-| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. |
+| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. A date column (`date`, `datetime`, `timestamp` format, or a date type in the database) filters by a [period](#period). |
+| **`filter_period`** | On a date column with `filter`, the period the filter opens on: `today`, `yesterday`, `last7`, `last30`, `thisMonth`, `lastMonth`, `thisQuarter`, `thisYear`, `lastYear`, `last12`. Blank or `all`: no period, every row. The screen's first automatic run already applies it. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
 | **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
 
@@ -6359,6 +6364,12 @@ The Columns tab is therefore mostly **empty** for well-dictionary'd installs —
 ## Filtering and cascading filters
 
 When a column has `filter = true`, a chip for it appears in the grid's filter panel. The user picks a value, the grid re-runs the read query with that value bound to the matching `:placeholder` param. The query is responsible for accepting the bind.
+
+### A period on a date column \{#period\}
+
+On a date column, the filter panel shows a period instead of a single date: the same picker as the dashboards, with its presets (*Today*, *Yesterday*, *Last 7 days*, *Last 30 days*, *This month*, *Last month*, *This quarter*, *This year*, *Last year*, *Last 12 months*, *All dates*) and a two-month calendar for a custom range. The run sends the two bounds as `<COL>_from` and `<COL>_to`, and the server bounds the column itself — the read query needs no placeholder for them. A period ending on a day keeps all of that day's rows, times included.
+
+A drill or a link that passes a date to a date column opens the screen on that one day.
 
 **Cascading filters** narrow one filter's options based on another. The classic case: a *Role* dropdown that shows only roles for the currently-picked *Application*:
 
@@ -7160,6 +7171,85 @@ Filtering a timestamp column doesn't force you to type a full `YYYY-MM-DD HH:MM:
 - **Save the layouts you reuse.** A "month-end" view with the right columns, filter and sort is one click away every time.
 - **Publish the team's standard as a shared default.** Author it once in the Designer's *Views* tab and mark it default, so everyone opens the grid on the agreed layout.
 - **Reach for *Reset* when a grid looks wrong after an upgrade.** If a column became conditionally hidden, an old saved state can fight the new rule — *Reset* clears it back to the screen's default.
+
+---
+
+## Liberty Next — Bulk edit
+Source: https://docs.nomana-it.fr/liberty/framework/bulk-edit/
+
+Edit a screen's rows directly in the grid — change cells, add, clone, copy, paste and delete rows, paste from Excel or import a file — then write every change with one Save, the row hooks included.
+
+**Bulk edit** turns a screen's grid into an editor: cells are changed in place, rows are added, cloned, copied, pasted or marked for deletion, and a single **Save** writes everything — through the same queries as the dialog, with the same row hooks.
+
+---
+
+## At a glance
+
+---
+
+## Opening bulk edit \{#open\}
+
+The grid's toolbar shows **Bulk edit** when the screen has an update or an insert query — **Edit** when the screen has no dialog. The button is hidden on a screen that is [read-only](./build/screens/overview.md) or whose `editable` setting is off; the server's permissions still apply on top.
+
+In bulk edit, the toolbar becomes:
+
+| Button | Effect |
+|---|---|
+| **Save (n)** | Writes the pending changes; *n* counts the edited, new and deleted rows. |
+| **Cancel** | Drops every pending change and leaves bulk edit. |
+| **Add row** | Adds an empty row at the top of the grid, filled with the columns' default values. |
+| **Import** | Reads an Excel or CSV file into the grid — see [Import a file](#import). Shown when the screen allows imports. |
+| **Copy (n)** | Copies the ticked rows. |
+| **Paste (n)** | Adds the copied rows as new rows. |
+| **Delete selected (n)** | Marks the ticked rows for deletion; a ticked new row is simply removed. |
+
+**Add row**, **Paste**, **Clone row** and **Import** need an insert query and are hidden when the screen disables adding. A refresh of the grid ends bulk edit without saving; the copied rows stay available.
+
+## Rows and cells \{#rows\}
+
+Each row starts with a check box, a marker and two buttons:
+
+| Element | Meaning |
+|---|---|
+| **+** | A new row, not written yet. |
+| **●** | An existing row with edited cells. |
+| **−** | A row marked for deletion. |
+| **Clone row** | Adds a copy of the row at the top — see [Clone, copy and paste](#clone). |
+| **×** | Marks the row for deletion (a second click undoes it); on a new row, removes it. |
+| Padlock | The row is read-only: the screen's `editable_when` rule excludes it, so its cells stay plain and it cannot be deleted. |
+
+A cell stays read-only when its column is disabled — `disabled`, or `disabled_when` for the row's values —, or locked for that kind of row: `disable_on_add` on a new row, `disable_on_edit` on an existing one. See [Conditional fields](./build/screens/conditional-fields.md).
+
+## Clone, copy and paste \{#clone\}
+
+**Clone row**, and **Paste** of copied rows, add new rows that keep every value of the source, keys included — copy a row, then change the one value that differs. The only exception is a column filled by a `SEQUENCE` rule: it is left empty, and the insert takes a new number from the sequence; the related one-to-one tables of the screen follow that new key.
+
+A row born from a clone or a paste is a duplicate: on Save it fires the screen's `on_duplicate` hook, with the source row's values under `SOURCE_<column>`, exactly as the dialog's **Duplicate** does — see [Actions and lifecycle](./build/screens/actions-and-lifecycle.md).
+
+## Paste from Excel \{#paste-excel\}
+
+Cells copied from Excel (or any tab-separated text) and pasted into the grid — with no cell being edited — become new rows:
+
+- when the first pasted line matches at least two column headers, it is read as a header line and each value goes to the column of that name, whatever the order;
+- otherwise the values follow the order of the visible columns, as an export of the grid lays them out.
+
+A column with a lookup fills its dependent columns from the pasted code, as when the code is picked in the list.
+
+## Import a file \{#import\}
+
+**Import** in bulk edit reads an Excel or CSV file whose first line holds the column headers. A line whose key columns match a row already in the grid becomes an edit of that row; the other lines become new rows. Nothing is written until **Save**, so the result can be reviewed and corrected first.
+
+Outside bulk edit, the toolbar's **Import** opens the Import dialog instead, which checks every line against the screen's rules before saving — see [Bulk import](./cookbook/bulk-import.md).
+
+## Save \{#save\}
+
+**Save** writes the rows in one pass:
+
+- each edited row through the update query, each new row through the insert query, each row marked for deletion through the delete query — together with the columns stored in the screen's related one-to-one tables;
+- a column whose default is forced by a condition (`default_when`) is written with that value even when its cell was not edited;
+- then, row by row, the hooks: `on_update`, `on_insert` (or `on_duplicate` for a cloned or pasted row) and `on_delete`.
+
+When a write or a hook fails, its message shows and bulk edit stays open. After a successful save, bulk edit closes and the grid reloads.
 
 ---
 
@@ -8877,7 +8967,7 @@ Fields already in use are highlighted. **New calculated field**, at the bottom o
 |---|---|
 | **Rows** | The dimensions to group by. A date gets a grouping: *Exact value*, *Day*, *Week*, *Month* (the default), *Quarter*, *Year*. In the detail view, this shelf lists the columns shown. |
 | **Measures** | One aggregate per chip: *Sum*, *Average*, *Min*, *Max*, *Count*, *Distinct count* for a number; *Count* or *Distinct count* otherwise. **+** adds a row count. A dimension dropped here counts its distinct values. |
-| **Filters** | A field, an operator, a value. Text: *contains*, `=`, `≠`, *starts with*, *ends with*, *in*, *is empty*, *is not empty*. Numbers and dates: `=`, `≠`, *between*, `<`, `≤`, `>`, `≥`, *in*, *is empty*, *is not empty*. A field with a list of values offers its values; *in* takes a comma-separated list. |
+| **Filters** | A field, an operator, a value. Text: *contains*, `=`, `≠`, *starts with*, *ends with*, *in*, *is empty*, *is not empty*. Numbers and dates: `=`, `≠`, *between*, `<`, `≤`, `>`, `≥`, *in*, *is empty*, *is not empty*. A field with a list of values offers its values; *in* takes a comma-separated list. On a date or date-time field, a day stands for the whole day: `≤` and the end of *between* keep that day's rows whatever their time, `=` and `≠` mean within or outside that day; the date is picked with the application's date picker. |
 
 Chips move by drag within a shelf; the cross removes one. A filter value applies on **Enter** or when leaving the field.
 
@@ -16418,7 +16508,7 @@ The directory pull is the *single source of truth* for human identity. The scree
 | **Department** | `LDAP_DEPARTMENT` — `department`. | The grouping key that drives the *Users by applications* mapping. |
 | **Description** | `LDAP_DESCRIPTION` — `description`. | Free text — often carries the HR registration / matricule used to match the AD entry to the source-system account. |
 | **Display Name** | `LDAP_DISPLAY_NAME` — `displayName`. | What appears in the AD address book. |
-| **Mail** | `LDAP_MAIL` — `mail`. | Email address. |
+| **Mail** | `LDAP_MAIL` — `mail`. | Email address, as a `mailto:` link. |
 | **Manager** | `LDAP_MANAGER` — `manager`. | DN of the manager — useful for approval workflows. |
 | **Office** | `LDAP_OFFICE` — `physicalDeliveryOfficeName`. | Office location. |
 | **Telephone** | `LDAP_TELEPHONE` — `telephoneNumber`. | Office phone. |
@@ -20353,9 +20443,9 @@ This is what makes a JDE security promotion repeatable: pair it with the [`nomaj
 ## Nomajde — JDE Servers
 Source: https://docs.nomana-it.fr/liberty/nomajde/monitoring/jde-servers/
 
-Monitoring → JDE Servers in Nomajde: the latest health check of every JD Edwards enterprise, web and REST server seen by Server Manager — state, health, failed checks, action taken — its history, the overview figures and the job that collects them.
+Monitoring → JDE Servers in Nomajde: every health check of the JD Edwards enterprise, web and REST servers seen by Server Manager — state, health, failed checks, action taken — over a period, the history of a server, the overview figures and the job that collects them.
 
-**Monitoring → JDE Servers** shows the JD Edwards servers as the last health check saw them: one row per instance, its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
+**Monitoring → JDE Servers** lists the health checks of the JD Edwards servers, newest first: one row per instance and per check, with its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
 
 ---
 
@@ -20365,7 +20455,7 @@ Monitoring → JDE Servers in Nomajde: the latest health check of every JD Edwar
 
 ## The grid \{#grid\}
 
-The grid is read-only and lists the latest check of each instance checked in the last 24 hours.
+The grid is read-only and lists every check kept, newest first. It opens on the checks of the last 7 days: the period on **Checked at**, in the advanced filters, widens or narrows that window (*All dates* shows every check kept, see `keep_days` in [Parameters](#parameters)).
 
 | Column | Content |
 |---|---|
@@ -20380,11 +20470,11 @@ The grid is read-only and lists the latest check of each instance checked in the
 | **Detail** | The error message, or the reason of a failure inherited from the enterprise server. |
 | **Checked at** | The time of the check. |
 
-The **Host**, **Instance**, **Server type** and **Health** columns can be filtered.
+The **Host**, **Instance**, **Server type** and **Health** columns can be filtered too. With a check every five minutes, an instance adds 288 rows a day: to follow a single server, filter on its instance or open its history.
 
 ## The history of an instance \{#history\}
 
-Opening a row shows the instance in a dialog. The **General** tab repeats the fields of the grid; the **History** tab lists every check kept for the instance, most recent first: time, state, health, failed checks, enterprise server, action, detail.
+Opening a row shows the instance in a dialog. The **General** tab repeats the fields of the grid; the **History** tab lists every check kept for that instance, most recent first: time, state, health, failed checks, enterprise server, action, detail.
 
 ---
 

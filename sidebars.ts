@@ -81,6 +81,7 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/build/screens/actions-and-lifecycle',
             'liberty/framework/build/screens/nested-tabs',
             'liberty/framework/saved-views',
+            'liberty/framework/bulk-edit',
           ],
         },
         {

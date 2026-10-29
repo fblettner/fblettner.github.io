@@ -954,7 +954,7 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
-| **Supervision** | [Serveurs JDE](./monitoring/jde-servers.md) : la dernière vérification de chaque serveur JD Edwards et son historique. |
+| **Supervision** | [Serveurs JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
 
 ---
@@ -5678,12 +5678,16 @@ La barre de l'élément propose **Find usages**, **Renommer**, **Cloner** et **S
 |---|---|
 | `text`, `textarea` | Du texte, sur une ou plusieurs lignes. |
 | `number`, `integer`, `decimal`, `currency` | Un nombre. |
-| `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. |
+| `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. Le formulaire, la saisie en masse et les filtres proposent le sélecteur de date de l'application : un champ où la date reste saisissable (un jour impossible rétablit la valeur précédente) et un calendrier mensuel avec *Aujourd'hui* et *Effacer*, dont le titre ouvre le choix du mois et de l'année. Un champ `datetime` ou `timestamp` y ajoute un champ d'heure (`hh:mm` ou `hh:mm:ss`). Une valeur qui porte son fuseau horaire (un `timestamptz` PostgreSQL) s'affiche à l'heure locale du navigateur ; une valeur sans fuseau (`DATE` Oracle, dates JD Edwards) s'affiche telle qu'elle est stockée. |
 | `jdedate`, `jdetime` | Une date (CYYDDD) ou une heure (HHMMSS) JD Edwards, affichée comme une date ou une heure ordinaire. |
 | `jdenumber` | Un montant JD Edwards stocké sans sa virgule : avec **Decimals** à 2, la valeur stockée `12345` se lit et se saisit `123,45`, puis s'écrit de nouveau `12345`. Les filtres se saisissent en unités réelles ; les totaux et les lignes de détail de l'explorateur de données sont ramenés à la même échelle. L'[analyse](#scan-a-table) d'une table JD Edwards renseigne les décimales d'après le dictionnaire de données. |
 | `boolean` | Une coche ou une croix. |
 | `password` | Une valeur masquée. |
-| `email`, `url`, `color` | Du texte, affiché tel quel. |
+| `url` | Un lien qui s'ouvre dans un nouvel onglet ; dans le formulaire, un bouton à côté du champ l'ouvre. Seules les adresses `http(s)` deviennent des liens (`www.…` reçoit `https://`). |
+| `email` | Un lien `mailto:` ; dans le formulaire, un bouton à côté du champ l'ouvre. Seule une valeur ayant la forme d'une adresse devient un lien. |
+| `color` | Le code, accompagné d'une pastille de couleur ; dans le formulaire, la pastille ouvre le sélecteur de couleur du système. Codes hexadécimaux et `rgb()` uniquement. |
+
+Pour `url`, `email` et `color`, toute autre valeur reste du texte simple, et le tri, le filtrage et l'export conservent la valeur brute.
 
 L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 
@@ -5984,7 +5988,7 @@ Trois régions :
 
 ## La boîte de dialogue modale du Concepteur d'écran
 
-Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran** qui héberge le **ScreenEditor**. L'en-tête présente *Agrandir / Restaurer* (plein écran par défaut), *Annuler* et *Enregistrer* — Enregistrer valide **uniquement les modifications de cet écran** et ferme ; Annuler demande confirmation en cas de modifications non enregistrées.
+Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran** qui héberge le **ScreenEditor**. L'en-tête présente *Agrandir / Restaurer* (plein écran par défaut), *Annuler* et *Enregistrer* — Enregistrer valide **uniquement les modifications de cet écran** et ferme — dans `screens.toml`, seul cet écran est réécrit, sans ses valeurs par défaut et dans l'ordre des clés du fichier, les autres écrans restant inchangés ; Annuler demande confirmation en cas de modifications non enregistrées.
 
 La fenêtre répartit l'ensemble en neuf onglets :
 
@@ -6037,7 +6041,7 @@ Il n'y a pas de discriminant `kind` ; les différentes formes d'écran provienne
 | Champs renseignés | Comportement |
 |---|---|
 | `read_query` seul | Grille en lecture seule. L'utilisateur voit les lignes ; pas d'édition, pas d'ajout. |
-| `read_query` + `editable = true` | Édition en ligne dans la grille — l'utilisateur édite les cellules sur place, le bouton *Enregistrer* de la grille écrit en retour. Nécessite `update_query`. |
+| `read_query` + `editable = true` | Modification dans la grille — [Modifier en lot](../../bulk-edit.md) : cellules modifiées sur place, lignes ajoutées, clonées, collées ou supprimées, le bouton *Enregistrer* de la grille écrivant l'ensemble. Nécessite `update_query` ou `insert_query`. |
 | `read_query` + `dialog` | Grille + dialogue. L'utilisateur ajoute/modifie les lignes via le formulaire. Nécessite les `insert_query` / `update_query` correspondantes. |
 | `read_query` + `row_click_screen` | Maître/détail. Cliquer sur une ligne ouvre le dialogue d'un écran voisin restreint à cette ligne. |
 | `read_query` + `row_click_route` | Maître/page. Cliquer sur une ligne navigue vers une route SPA — échappatoire pour les pages React écrites à la main (logs diffusés en direct, fusions multi-sources). |
@@ -6282,7 +6286,8 @@ Une clé n'est pas verrouillée d'office à la modification d'une ligne : cocher
 
 | Champ | Notes |
 |---|---|
-| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. |
+| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. Une colonne de date (format `date`, `datetime`, `timestamp`, ou type date dans la base) se filtre par une [période](#period). |
+| **`filter_period`** | Sur une colonne de date avec `filter`, la période proposée à l'ouverture de l'écran : `today`, `yesterday`, `last7`, `last30`, `thisMonth`, `lastMonth`, `thisQuarter`, `thisYear`, `lastYear`, `last12`. Vide ou `all` : aucune période, toutes les lignes. Le premier chargement automatique de l'écran l'applique déjà. |
 | **`filter_from`** | Filtre en cascade — restreint les options de cette colonne en fonction de la valeur d'un autre filtre. Sélectionne une colonne `source` (déjà filtrée) et une `column` sur le résultat de la requête de recherche que la source met en correspondance. |
 | **`visible_when`** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans le dialogue, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
 
@@ -6328,6 +6333,12 @@ L'onglet Colonnes est donc majoritairement **vide** pour les installations bien 
 ## Filtrage et filtres en cascade
 
 Quand une colonne a `filter = true`, une puce pour celle-ci apparaît dans le panneau de filtres de la grille. L'utilisateur choisit une valeur, la grille réexécute la requête de lecture avec cette valeur liée au paramètre `:placeholder` correspondant. La requête est responsable d'accepter la liaison.
+
+### Une période sur une colonne de date \{#period\}
+
+Sur une colonne de date, le panneau de filtres présente une période et non une date unique : le même sélecteur que sur les tableaux de bord, avec ses préréglages (*Aujourd'hui*, *Hier*, *7 derniers jours*, *30 derniers jours*, *Ce mois-ci*, *Mois dernier*, *Ce trimestre*, *Cette année*, *Année dernière*, *12 derniers mois*, *Toutes les dates*) et un calendrier sur deux mois pour une période libre. L'exécution transmet les deux bornes sous la forme `<COL>_from` et `<COL>_to`, et le serveur borne lui-même la colonne : la requête de lecture n'a besoin d'aucun paramètre pour elles. Une période qui se termine sur un jour conserve toutes les lignes de ce jour, quelle que soit leur heure.
+
+Un lien ou une navigation qui transmet une date à une colonne de date ouvre l'écran sur ce seul jour.
 
 Les **filtres en cascade** restreignent les options d'un filtre selon un autre. Le cas classique : une liste déroulante *Rôle* qui n'affiche que les rôles pour l'*Application* actuellement sélectionnée :
 
@@ -7129,6 +7140,85 @@ Filtrer une colonne horodatée n'oblige pas à saisir une borne complète `YYYY-
 - **Enregistrer les dispositions réutilisées.** Une vue « fin de mois » avec les bonnes colonnes, le bon filtre et le bon tri est à un clic, à chaque fois.
 - **Publiez le standard de l'équipe comme vue partagée par défaut.** Créez-la une fois dans l'onglet *Vues* du Concepteur et marquez-la par défaut, pour que tout le monde ouvre la grille sur la disposition convenue.
 - **Pensez à *Réinit.* quand une grille semble fausse après une mise à niveau.** Si une colonne est devenue masquée sous condition, un ancien état enregistré peut contrarier la nouvelle règle — *Réinit.* le ramène à la vue par défaut de l'écran.
+
+---
+
+## Liberty Next — Modifier en lot
+Source: https://docs.nomana-it.fr/fr/liberty/framework/bulk-edit/
+
+Modifier les lignes d'un écran directement dans la grille — cellules, ajout, clonage, copie, collage et suppression de lignes, collage depuis Excel ou import d'un fichier — puis écrire l'ensemble des changements en un seul enregistrement, actions de ligne comprises.
+
+**Modifier en lot** transforme la grille d'un écran en éditeur : les cellules se modifient sur place, les lignes s'ajoutent, se clonent, se copient, se collent ou se marquent pour suppression, et un seul **Enregistrer** écrit l'ensemble — avec les mêmes requêtes que la fenêtre de saisie et les mêmes actions de ligne.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Ouvrir la modification en lot \{#open\}
+
+La barre d'outils de la grille propose **Modifier en lot** dès que l'écran dispose d'une requête de mise à jour ou d'insertion — **Modifier** sur un écran sans fenêtre de saisie. Le bouton n'apparaît pas sur un écran en [lecture seule](./build/screens/overview.md) ni sur un écran dont le réglage `editable` est désactivé ; les permissions du serveur s'appliquent en plus.
+
+En modification en lot, la barre d'outils devient :
+
+| Bouton | Effet |
+|---|---|
+| **Enregistrer (n)** | Écrit les changements en attente ; *n* compte les lignes modifiées, nouvelles et à supprimer. |
+| **Annuler** | Abandonne tous les changements en attente et quitte la modification en lot. |
+| **Ajouter une ligne** | Ajoute une ligne vide en tête de la grille, garnie des valeurs par défaut des colonnes. |
+| **Importer** | Charge un fichier Excel ou CSV dans la grille — voir [Importer un fichier](#import). Présent quand l'écran autorise l'import. |
+| **Copier (n)** | Copie les lignes cochées. |
+| **Coller (n)** | Ajoute les lignes copiées comme nouvelles lignes. |
+| **Supprimer la sélection (n)** | Marque les lignes cochées pour suppression ; une nouvelle ligne cochée est simplement retirée. |
+
+**Ajouter une ligne**, **Coller**, **Cloner la ligne** et **Importer** nécessitent une requête d'insertion et disparaissent quand l'écran interdit l'ajout. Une actualisation de la grille met fin à la modification en lot sans rien enregistrer ; les lignes copiées restent disponibles.
+
+## Lignes et cellules \{#rows\}
+
+Chaque ligne commence par une case à cocher, un repère et deux boutons :
+
+| Élément | Signification |
+|---|---|
+| **+** | Une nouvelle ligne, pas encore écrite. |
+| **●** | Une ligne existante dont des cellules ont été modifiées. |
+| **−** | Une ligne marquée pour suppression. |
+| **Cloner la ligne** | Ajoute une copie de la ligne en tête — voir [Cloner, copier et coller](#clone). |
+| **×** | Marque la ligne pour suppression (un second clic annule) ; sur une nouvelle ligne, la retire. |
+| Cadenas | La ligne est en lecture seule : la règle `editable_when` de l'écran l'exclut, ses cellules restent en affichage simple et elle ne peut pas être supprimée. |
+
+Une cellule reste en lecture seule quand sa colonne est désactivée — `disabled`, ou `disabled_when` selon les valeurs de la ligne —, ou verrouillée pour ce type de ligne : `disable_on_add` sur une nouvelle ligne, `disable_on_edit` sur une ligne existante. Voir [Champs conditionnels](./build/screens/conditional-fields.md).
+
+## Cloner, copier et coller \{#clone\}
+
+**Cloner la ligne**, comme **Coller** des lignes copiées, ajoute de nouvelles lignes qui reprennent toutes les valeurs de la ligne source, clés comprises : il suffit ensuite de changer la valeur qui diffère. Seule exception, une colonne alimentée par une règle `SEQUENCE` reste vide, et l'insertion prend un nouveau numéro dans la séquence ; les tables liées un-à-un de l'écran suivent cette nouvelle clé.
+
+Une ligne issue d'un clonage ou d'un collage est un duplicata : à l'enregistrement, elle déclenche l'action `on_duplicate` de l'écran, avec les valeurs de la ligne source sous `SOURCE_<colonne>`, exactement comme le bouton **Dupliquer** de la fenêtre de saisie — voir [Actions et cycle de vie](./build/screens/actions-and-lifecycle.md).
+
+## Coller depuis Excel \{#paste-excel\}
+
+Des cellules copiées depuis Excel (ou tout texte séparé par des tabulations) puis collées dans la grille, sans cellule en cours de saisie, deviennent de nouvelles lignes :
+
+- si la première ligne collée reprend au moins deux en-têtes de colonnes, elle sert de ligne d'en-têtes et chaque valeur rejoint la colonne du même nom, quel que soit l'ordre ;
+- sinon, les valeurs suivent l'ordre des colonnes visibles, celui d'un export de la grille.
+
+Une colonne dotée d'un lookup renseigne ses colonnes dépendantes à partir du code collé, comme si le code avait été choisi dans la liste.
+
+## Importer un fichier \{#import\}
+
+En modification en lot, **Importer** lit un fichier Excel ou CSV dont la première ligne porte les en-têtes de colonnes. Une ligne dont les colonnes clés correspondent à une ligne déjà présente dans la grille devient une modification de celle-ci ; les autres deviennent de nouvelles lignes. Rien n'est écrit avant **Enregistrer** : le résultat peut être relu et corrigé au préalable.
+
+Hors modification en lot, le bouton **Importer** de la barre d'outils ouvre la fenêtre d'import, qui contrôle chaque ligne selon les règles de l'écran avant d'enregistrer — voir [Import en masse](./cookbook/bulk-import.md).
+
+## Enregistrer \{#save\}
+
+**Enregistrer** écrit les lignes en une seule passe :
+
+- chaque ligne modifiée par la requête de mise à jour, chaque nouvelle ligne par la requête d'insertion, chaque ligne à supprimer par la requête de suppression — avec les colonnes stockées dans les tables liées un-à-un de l'écran ;
+- une colonne dont la valeur par défaut est imposée par une condition (`default_when`) est écrite avec cette valeur, même si sa cellule n'a pas été modifiée ;
+- puis, ligne par ligne, les actions : `on_update`, `on_insert` (ou `on_duplicate` pour une ligne clonée ou collée) et `on_delete`.
+
+En cas d'échec d'une écriture ou d'une action, le message s'affiche et la modification en lot reste ouverte. Après un enregistrement réussi, la modification en lot se ferme et la grille se recharge.
 
 ---
 
@@ -8857,7 +8947,7 @@ Les champs déjà utilisés sont mis en évidence. **Nouveau champ calculé**, e
 |---|---|
 | **Lignes** | Les dimensions de regroupement. Une date reçoit une granularité : *Valeur exacte*, *Jour*, *Semaine*, *Mois* (par défaut), *Trimestre*, *Année*. En vue détail, cette étagère liste les colonnes affichées. |
 | **Mesures** | Un agrégat par pastille : *Somme*, *Moyenne*, *Min*, *Max*, *Nombre*, *Nombre distinct* pour un nombre ; *Nombre* ou *Nombre distinct* sinon. **+** ajoute un nombre de lignes. Une dimension déposée ici compte ses valeurs distinctes. |
-| **Filtres** | Un champ, un opérateur, une valeur. Texte : *contient*, `=`, `≠`, *commence par*, *finit par*, *parmi*, *est vide*, *n'est pas vide*. Nombres et dates : `=`, `≠`, *entre*, `<`, `≤`, `>`, `≥`, *parmi*, *est vide*, *n'est pas vide*. Un champ doté d'une liste de valeurs propose ses valeurs ; *parmi* accepte une liste séparée par des virgules. |
+| **Filtres** | Un champ, un opérateur, une valeur. Texte : *contient*, `=`, `≠`, *commence par*, *finit par*, *parmi*, *est vide*, *n'est pas vide*. Nombres et dates : `=`, `≠`, *entre*, `<`, `≤`, `>`, `≥`, *parmi*, *est vide*, *n'est pas vide*. Un champ doté d'une liste de valeurs propose ses valeurs ; *parmi* accepte une liste séparée par des virgules. Sur un champ date ou date-heure, un jour vaut pour la journée entière : `≤` et la fin d'*entre* conservent les lignes de ce jour quelle que soit leur heure, `=` et `≠` signifient dans ce jour ou en dehors ; la date se choisit avec le sélecteur de date de l'application. |
 
 Les pastilles se réordonnent par glisser-déposer dans une même étagère ; la croix en retire une. Une valeur de filtre s'applique avec **Entrée** ou en quittant le champ.
 
@@ -16398,7 +16488,7 @@ L'extraction de l'annuaire est la *référence unique* de l'identité humaine. L
 | **Département** | `LDAP_DEPARTMENT` — `department`. | Clé de regroupement qui pilote la matrice *Utilisateurs par applications*. |
 | **Description** | `LDAP_DESCRIPTION` — `description`. | Texte libre — porte souvent le matricule RH utilisé pour rapprocher l'entrée AD du compte source. |
 | **Nom affiché** | `LDAP_DISPLAY_NAME` — `displayName`. | Nom tel qu'il apparaît dans le carnet d'adresses AD. |
-| **Mail** | `LDAP_MAIL` — `mail`. | Adresse email. |
+| **Mail** | `LDAP_MAIL` — `mail`. | Adresse email, sous forme de lien `mailto:`. |
 | **Manager** | `LDAP_MANAGER` — `manager`. | DN du responsable hiérarchique — utile pour les flux d'approbation. |
 | **Bureau** | `LDAP_OFFICE` — `physicalDeliveryOfficeName`. | Localisation du bureau. |
 | **Téléphone** | `LDAP_TELEPHONE` — `telephoneNumber`. | Téléphone fixe. |
@@ -20249,9 +20339,9 @@ C'est ce qui rend une promotion de sécurité JDE reproductible : associez-y le 
 ## Nomajde — Serveurs JDE
 Source: https://docs.nomana-it.fr/fr/liberty/nomajde/monitoring/jde-servers/
 
-Supervision → Serveurs JDE dans Nomajde : la dernière vérification de chaque serveur enterprise, web et REST de JD Edwards suivi par Server Manager — état, santé, contrôles en échec, action menée —, son historique, les indicateurs de la vue d'ensemble et la tâche qui les collecte.
+Supervision → Serveurs JDE dans Nomajde : les vérifications des serveurs enterprise, web et REST de JD Edwards suivis par Server Manager — état, santé, contrôles en échec, action menée — sur une période, l'historique d'un serveur, les indicateurs de la vue d'ensemble et la tâche qui les collecte.
 
-**Supervision → Serveurs JDE** présente les serveurs JD Edwards tels que les a vus la dernière vérification : une ligne par instance, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
+**Supervision → Serveurs JDE** liste les vérifications des serveurs JD Edwards, de la plus récente à la plus ancienne : une ligne par instance et par vérification, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
 
 ---
 
@@ -20261,7 +20351,7 @@ Supervision → Serveurs JDE dans Nomajde : la dernière vérification de chaque
 
 ## La grille \{#grid\}
 
-La grille, en consultation seule, reprend la dernière vérification de chaque instance contrôlée au cours des dernières 24 heures.
+La grille, en consultation seule, liste toutes les vérifications conservées, de la plus récente à la plus ancienne. Elle s'ouvre sur celles des 7 derniers jours : la période sur **Vérifié le**, dans les filtres avancés, élargit ou restreint cette fenêtre (*Toutes les dates* affiche l'ensemble des vérifications conservées, voir `keep_days` dans [Paramètres](#parameters)).
 
 | Colonne | Contenu |
 |---|---|
@@ -20276,11 +20366,11 @@ La grille, en consultation seule, reprend la dernière vérification de chaque i
 | **Détail** | Le message d'erreur, ou la cause d'un échec hérité du serveur enterprise. |
 | **Vérifié le** | L'heure de la vérification. |
 
-Les colonnes **Hôte**, **Instance**, **Type de serveur** et **Santé** sont filtrables.
+Les colonnes **Hôte**, **Instance**, **Type de serveur** et **Santé** sont également filtrables. Avec une vérification toutes les cinq minutes, une instance ajoute 288 lignes par jour : pour suivre un seul serveur, filtrer sur son instance ou ouvrir son historique.
 
 ## L'historique d'une instance \{#history\}
 
-Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général** reprend les champs de la grille ; l'onglet **Historique** liste toutes les vérifications conservées pour l'instance, de la plus récente à la plus ancienne : heure, état, santé, contrôles en échec, serveur enterprise, action, détail.
+Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général** reprend les champs de la grille ; l'onglet **Historique** liste toutes les vérifications conservées pour cette instance, de la plus récente à la plus ancienne : heure, état, santé, contrôles en échec, serveur enterprise, action, détail.
 
 ---
 

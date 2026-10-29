@@ -160,7 +160,7 @@ Il n'y a pas de discriminant `kind` ; les différentes formes d'écran provienne
 | Champs renseignés | Comportement |
 |---|---|
 | `read_query` seul | Grille en lecture seule. L'utilisateur voit les lignes ; pas d'édition, pas d'ajout. |
-| `read_query` + `editable = true` | Édition en ligne dans la grille — l'utilisateur édite les cellules sur place, le bouton *Enregistrer* de la grille écrit en retour. Nécessite `update_query`. |
+| `read_query` + `editable = true` | Modification dans la grille — [Modifier en lot](../../bulk-edit.md) : cellules modifiées sur place, lignes ajoutées, clonées, collées ou supprimées, le bouton *Enregistrer* de la grille écrivant l'ensemble. Nécessite `update_query` ou `insert_query`. |
 | `read_query` + `dialog` | Grille + dialogue. L'utilisateur ajoute/modifie les lignes via le formulaire. Nécessite les `insert_query` / `update_query` correspondantes. |
 | `read_query` + `row_click_screen` | Maître/détail. Cliquer sur une ligne ouvre le dialogue d'un écran voisin restreint à cette ligne. |
 | `read_query` + `row_click_route` | Maître/page. Cliquer sur une ligne navigue vers une route SPA — échappatoire pour les pages React écrites à la main (logs diffusés en direct, fusions multi-sources). |

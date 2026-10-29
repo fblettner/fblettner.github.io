@@ -160,7 +160,7 @@ There's no `kind` discriminator; you get different screen shapes by which fields
 | Filled in | Behaviour |
 |---|---|
 | `read_query` only | Read-only grid. The user sees rows; no edit, no add. |
-| `read_query` + `editable = true` | Inline grid editing — the user edits cells in place, the grid's *Save* button writes back. Requires `update_query`. |
+| `read_query` + `editable = true` | Inline grid editing — [Bulk edit](../../bulk-edit.md): cells edited in place, rows added, cloned, pasted or deleted, the grid's *Save* writing everything. Requires `update_query` or `insert_query`. |
 | `read_query` + `dialog` | Grid + dialog. The user adds/edits rows through the form. Requires the matching `insert_query` / `update_query`. |
 | `read_query` + `row_click_screen` | Master/detail. Clicking a row opens a sibling screen's dialog narrowed to that row. |
 | `read_query` + `row_click_route` | Master/page. Clicking a row navigates to a SPA route — escape hatch for hand-written React pages (live-streamed logs, multi-source merges). |
