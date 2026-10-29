@@ -60,8 +60,9 @@ The moment you tick any seed, the right panel kicks off the walker (`POST /admin
 | Kind | What's pulled |
 |---|---|
 | **`screen`** | The screen's main query, all referenced sub-queries (from screen actions, nested tabs, conditional fields), every dictionary entry that backs a column, every lookup the dialog uses, every sequence and enum, the connector each query belongs to (and its pool). |
-| **`menu_item`** | The screen / dashboard / endpoint the menu item targets, then the closure of *that*. |
-| **`dashboard`** | Every chart on the dashboard, every query each chart reads from, the connectors. |
+| **`menu_item`** | The screen, query, endpoint, dashboard or job the menu item targets, then the closure of *that*. |
+| **`dashboard`** | Every chart on the dashboard, every query each chart reads from, the connectors. A dashboard named `<app>.<id>` is looked up in that app. |
+| **`notification_rule`** | The screen or the jobs its trigger names. |
 
 The closure is **recursive but bounded** (default depth = 50). Cycles are detected and short-circuited.
 

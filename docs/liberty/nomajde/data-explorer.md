@@ -42,6 +42,7 @@ The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assis
 | Accounts Receivable | Customer Ledger (F03B11), Receipts (F03B13). |
 | Inventory | Item (F4101). |
 | Sales | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Procurement | Purchase Order (F4311, one row per order line), Receipts (F43121, one row per receipt or match), Receipt Routing (F43092, one row per routing step: dock, inspection, transfer, stock). |
 | Manufacturing | Work Order (F4801), Production Cost (F3102). |
 | Product Data Management | Bill of Material (F3002), Routing (F3003). |
 | Product Costing | Item Cost Components (F30026). |

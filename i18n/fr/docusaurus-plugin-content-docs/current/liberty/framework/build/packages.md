@@ -60,8 +60,9 @@ Dès qu'une amorce est cochée, le panneau de droite déclenche le résolveur (`
 | Type | Ce qui est rapatrié |
 |---|---|
 | **`screen`** | La requête principale de l'écran, toutes les sous-requêtes référencées (depuis les actions d'écran, les onglets imbriqués, les champs conditionnels), chaque entrée de dictionnaire qui adosse une colonne, chaque lookup utilisé par la boîte de dialogue, chaque séquence et énumération, le connecteur auquel chaque requête appartient (et son pool). |
-| **`menu_item`** | L'écran / tableau de bord / endpoint visé par l'entrée de menu, puis la clôture de *celui-ci*. |
-| **`dashboard`** | Chaque graphique du tableau de bord, chaque requête lue par chaque graphique, les connecteurs. |
+| **`menu_item`** | L'écran, la requête, l'endpoint, le tableau de bord ou la tâche visé par l'entrée de menu, puis la clôture de *celui-ci*. |
+| **`dashboard`** | Chaque graphique du tableau de bord, chaque requête lue par chaque graphique, les connecteurs. Un tableau de bord nommé `<app>.<id>` est recherché dans cette application. |
+| **`notification_rule`** | L'écran ou les tâches cités par son déclencheur. |
 
 La clôture est **récursive mais bornée** (profondeur par défaut = 50). Les cycles sont détectés et court-circuités.
 

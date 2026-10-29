@@ -107,6 +107,7 @@ keywords: [Liberty Next, surveillance, rétention, purge, exécutions, fichiers 
 | **Versions de configuration** | Les instantanés de configuration au-delà du nombre gardé par fichier, ou trop anciens ; le plus récent de chaque fichier reste toujours. | La [tâche `config-versions-purge`](../nomaflow/bundled-jobs.md), sinon 20 par fichier et 90 jours. |
 | **Paquets de modifications** | Les paquets exportés ou promus et les journaux d'import plus anciens que les jours fixés. Les brouillons ne sont jamais touchés. | Conservés par défaut. |
 | **Vues enregistrées** | Les vues et analyses des utilisateurs. | Jamais purgées — affichées pour leur taille. |
+| **Rapports de documentation** | Les rapports d'implémentation et techniques produits, conservés tels que téléchargés. | Conservés jusqu'à leur suppression depuis la page [Rapports de documentation](../framework/configuration/documentation-reports.md#copies). |
 | **Journal du serveur** | Rotation par taille : 10 Mo par fichier, cinq fichiers précédents. | — |
 
 Les exécutions et fichiers des tâches figurent quand Nomaflow fonctionne sur le serveur.

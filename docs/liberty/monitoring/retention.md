@@ -107,6 +107,7 @@ keywords: [Liberty Next, monitoring, retention, purge, job runs, job files, noti
 | **Config versions** | The configuration snapshots beyond the number kept per file, or too old; the newest of each file always stays. | The [`config-versions-purge` job](../nomaflow/bundled-jobs.md), else 20 per file and 90 days. |
 | **Change packages** | Exported or promoted packages and import logs older than the days set. Drafts are never touched. | Kept by default. |
 | **Saved views** | The users' own views and analyses. | Never purged — shown for their size. |
+| **Documentation reports** | The implementation and technical reports produced, kept as downloaded. | Kept until deleted from the [Documentation reports](../framework/configuration/documentation-reports.md#copies) page. |
 | **Server log** | Rotated by size: 10 MB per file, five older files. | — |
 
 Job runs and job files show when Nomaflow runs on the server.

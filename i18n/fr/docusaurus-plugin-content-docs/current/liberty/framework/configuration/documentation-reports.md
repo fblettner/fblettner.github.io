@@ -105,6 +105,10 @@ keywords: [Liberty Next, rapports de documentation, rapport d'implémentation, r
 
 Toute valeur dont le nom désigne un secret — mots de passe, clés, jetons — est masquée, de même que les adresses de connexion.
 
+## Copies conservées \{#copies\}
+
+Chaque rapport produit est aussi conservé sur le serveur, à côté de la configuration — une sauvegarde l'emporte donc. Sous **Copies conservées**, la page du rapport les liste avec leur auteur, la langue et le nombre de sections : **Télécharger** en récupère une, **Supprimer la copie** retire le fichier du serveur. Les copies restent jusqu'à leur suppression ; la page [Rétention](../../monitoring/retention.md) en indique le nombre et la taille.
+
 ---
 
 ## Voir aussi

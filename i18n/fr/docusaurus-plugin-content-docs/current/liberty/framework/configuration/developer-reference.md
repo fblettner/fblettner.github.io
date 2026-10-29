@@ -1,14 +1,14 @@
 ---
 title: Référence développeur
-description: "La Référence développeur de Liberty Next (Liberty Next → Documenter) : le modèle de données du framework et de chaque connecteur, chaque réglage avec la page qui le modifie et le code qui le lit, chaque route de l'API avec l'accès qu'elle exige — avec recherche, pour les superutilisateurs."
-keywords: [Liberty Next, référence développeur, modèle de données, référence de configuration, réglages, routes de l'API, permissions, superutilisateur, documentation]
+description: "La Référence développeur de Liberty Next (Liberty Next → Documenter) : le modèle de données du framework et de chaque connecteur, chaque réglage avec la page qui le modifie et le code qui le lit, chaque route de l'API avec l'accès qu'elle exige et sa réponse, chaque ligne de commande avec ses arguments, et l'impact d'une modification sur la configuration — avec recherche, pour les superutilisateurs."
+keywords: [Liberty Next, référence développeur, modèle de données, référence de configuration, réglages, routes de l'API, permissions, ligne de commande, CLI, analyse d'impact, dépendances, entités inutilisées, superutilisateur, documentation]
 ---
 
 # Référence développeur
 
-**Liberty Next → Documenter → Référence développeur** décrit l'installation en service de l'intérieur : ses tables, ses réglages et ses routes d'API, lus dans le code et la configuration en vigueur. Elle s'adresse à ceux qui assurent le support de l'installation — superutilisateurs uniquement — et ne modifie rien.
+**Liberty Next → Documenter → Référence développeur** décrit l'installation en service de l'intérieur : ses tables, ses réglages, ses routes d'API, ses lignes de commande et les liens entre les éléments de sa configuration, lus dans le code et la configuration en vigueur. Elle s'adresse à ceux qui assurent le support de l'installation — superutilisateurs uniquement — et ne modifie rien.
 
-La page compte trois onglets ; elle s'ouvre sur **Configuration**, puis sur le dernier onglet utilisé.
+La page compte cinq onglets — **Modèle de données**, **Configuration**, **API**, **Ligne de commande**, **Impact** ; elle s'ouvre sur **Configuration**, puis sur le dernier onglet utilisé.
 
 ---
 
@@ -24,12 +24,16 @@ La page compte trois onglets ; elle s'ouvre sur **Configuration**, puis sur le d
 
   <rect x="220" y="14" width="760" height="372" rx="14" fill="url(#dvr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Référence développeur</text>
-  <rect x="240" y="56" width="246" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="56" width="415" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="297.0" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Modèle de données</text>
   <rect x="355" y="57" width="91" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="400.5" y="71.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Configuration</text>
   <line x1="447" y1="61" x2="447" y2="75" stroke="#334155" strokeWidth="1"/>
   <text x="466.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">API</text>
+  <line x1="486" y1="61" x2="486" y2="75" stroke="#334155" strokeWidth="1"/>
+  <text x="543.0" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Ligne de commande</text>
+  <line x1="600" y1="61" x2="600" y2="75" stroke="#334155" strokeWidth="1"/>
+  <text x="627.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Impact</text>
   <text x="240" y="104" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">142 modifiés dans un écran · 21 fichier / environnement seulement · 0 pas dans l'interface</text>
   <rect x="780" y="88" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="790" y="102.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Tous les états ▾</text>
@@ -69,8 +73,8 @@ La page compte trois onglets ; elle s'ouvre sur **Configuration**, puis sur le d
   <text x="800" y="265.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">default</text>
   <text x="890" y="265.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2</text>
   <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois onglets</text>
-  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">modèle, réglages, API</text>
+  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cinq onglets</text>
+  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">modèle, réglages, API, CLI, impact</text>
   <line x1="210" y1="67.0" x2="240" y2="68" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dvr-arrow)"/>
   <rect x="10" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
@@ -112,9 +116,37 @@ L'en-tête dénombre les réglages modifiés dans un écran, ceux fixés seuleme
 
 ## API \{#api\}
 
-Chaque route du serveur, par module : **Méthode**, **Chemin**, **Résumé**, **Module** et **Accès** — *public*, *tout utilisateur connecté*, *superutilisateur*, une *permission* ou un *rôle*, lu dans le code. Un clic sur une route en ouvre les paramètres, la requête et la réponse, ainsi que l'emplacement de son traitement. Les boutons de l'en-tête ouvrent la documentation interactive de l'API du serveur.
+Chaque route du serveur, par module : **Méthode**, **Chemin**, **Résumé**, **Module** et **Accès** — *public*, *tout utilisateur connecté*, *superutilisateur*, une *permission* ou un *rôle*, lu dans le code. Un clic sur une route en ouvre les paramètres, la requête et la réponse, ainsi que l'emplacement de son traitement. Pour les principales routes de lecture — connecteurs, menus, écrans, adresses externes, explorateur de données, tâches et exécutions Nomaflow —, la section **Réponse** donne la structure du JSON renvoyé, avec un exemple. Les boutons de l'en-tête ouvrent la documentation interactive de l'API du serveur.
 
 La recherche porte sur tous les modules et indique, par groupe, le nombre de résultats.
+
+---
+
+## Ligne de commande \{#cli\}
+
+Chaque commande installée avec le serveur — `liberty-admin`, `liberty-ops`, `liberty-connectors`, `liberty-crypto`, `liberty-license`… —, lue dans son analyseur d'arguments. À gauche, les commandes avec une recherche, repliées par défaut, avec **Tout déplier** / **Tout replier**.
+
+Une commande présente son rôle, sa syntaxe avec **Copier**, les **Options de toutes les commandes**, puis chaque sous-commande avec ses arguments : **Argument**, **Valeur**, **Défaut**, *obligatoire*, *répétable*. Sous Docker, `./liberty` prend en charge l'installation, la mise à jour, les sauvegardes et la base de données : voir [Exploitation](../../installation/operations.md). La section « ligne de commande » du [rapport technique](./documentation-reports.md) repose sur la même lecture.
+
+---
+
+## Impact \{#impact\}
+
+Chaque entité de la configuration avec ce qu'elle utilise et ce qui l'utilise, de proche en proche : ce qu'atteint la modification d'un pool, d'une requête, d'un écran ou d'un élément du dictionnaire. Les liens sont ceux que suit l'analyse des dépendances du [Package](../build/packages.md).
+
+À gauche, les entités par nature — pools, connecteurs, requêtes, endpoints API, éléments du dictionnaire, listes, séquences, énumérations, écrans, éléments de menu, graphiques, tableaux de bord, actions partagées, modèles Explorer, tâches, règles de notification, blocs IA —, repliées par défaut, avec une recherche (`scope.nom`). **Inutilisées seulement** ne garde que les entités auxquelles rien ne fait référence — éléments de menu, tâches, règles de notification, pools, modèles Explorer et éléments du dictionnaire, ouverts ou atteints autrement, ne sont jamais comptés comme inutilisés —, et **Référencées mais non définies** liste les références à une entité inexistante.
+
+Une entité choisie présente :
+
+| Partie | Contenu |
+|---|---|
+| En-tête | *utilise N · utilisée par N*, et **Ouvrir dans l'éditeur**, qui mène à son éditeur. |
+| **Une modification ici atteint** | Les entités atteintes, comptées par nature : une requête → ses écrans → les éléments de menu qui les ouvrent, les graphiques → leurs tableaux de bord, les tâches et actions qui l'exécutent. |
+| **Utilisée par** | L'arbre de ce qui l'utilise, niveau par niveau (jusqu'à 8 niveaux). |
+| **Utilise** | Ce qu'elle utilise directement. |
+| **Tout ce dont elle a besoin** | Toutes les entités dont elle dépend, de proche en proche. |
+
+Un clic sur une entité de l'arbre recentre la vue sur elle ; **Retour** revient à la précédente. Un élément du dictionnaire n'a pas de référence explicite : une colonne rejoint son élément par son nom.
 
 ---
 

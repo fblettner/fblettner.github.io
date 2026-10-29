@@ -5940,7 +5940,7 @@ A **catalog preset** is a ready-made starting point: a base table plus pre-wired
 Presets are operator-managed files under the deployment's `presets/` directory; each file holds one or more `[[presets]]` entries with a base table and its joined tables. They are configuration, not code — add your own to seed the screens your team builds most often.
 
 :::info[JDE-specific]
-Liberty Apps ships nine JD Edwards catalogs, built from the Oracle E1 data models: **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Manufacturing**, **Product Data Management** and **Product Costing**. The *full* presets of each area (the A/P ledger with supplier, address and company; the sales order with lines, customer, item and branch…) also give the [Data Explorer](../explorer/model.md#preset) a ready-made model.
+Liberty Apps ships ten JD Edwards catalogs, built from the Oracle E1 data models: **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Procurement**, **Manufacturing**, **Product Data Management** and **Product Costing**. **Procurement** covers purchase orders, receipts and voucher matches, receipt routing, the P.O. detail ledger, supplier / item relationships, the supplier price catalog, landed cost rules and order addresses, combined with the supplier, the item, the branch and the A/P voucher. The *full* presets of each area (the A/P ledger with supplier, address and company; the sales order with lines, customer, item and branch…) also give the [Data Explorer](../explorer/model.md#preset) a ready-made model.
 
 The **Address Book** catalog (`config/presets/jdedwards/address_book.toml`): the `F0101` master left-joined to who's-who, phones, email, addresses, customer and supplier, plus each related table as its own base preset. The join conditions are written by **data item** (e.g. `F0101.AN8`); the assistant resolves the JDE prefix to the real column (`ABAN8`, `AIAN8`, …) so the joins auto-fill. A preset table can name a `query` (a `SELECT * FROM <table>` already defined on the connector) so the assistant reads its columns by describing that query — much faster on a large JDE catalog.
 :::
@@ -11635,6 +11635,7 @@ Monitoring → Retention in Liberty Next: every store the server keeps growing �
 | **Config versions** | The configuration snapshots beyond the number kept per file, or too old; the newest of each file always stays. | The [`config-versions-purge` job](../nomaflow/bundled-jobs.md), else 20 per file and 90 days. |
 | **Change packages** | Exported or promoted packages and import logs older than the days set. Drafts are never touched. | Kept by default. |
 | **Saved views** | The users' own views and analyses. | Never purged — shown for their size. |
+| **Documentation reports** | The implementation and technical reports produced, kept as downloaded. | Kept until deleted from the [Documentation reports](../framework/configuration/documentation-reports.md#copies) page. |
 | **Server log** | Rotated by size: 10 MB per file, five older files. | — |
 
 Job runs and job files show when Nomaflow runs on the server.
@@ -11778,8 +11779,9 @@ The moment you tick any seed, the right panel kicks off the walker (`POST /admin
 | Kind | What's pulled |
 |---|---|
 | **`screen`** | The screen's main query, all referenced sub-queries (from screen actions, nested tabs, conditional fields), every dictionary entry that backs a column, every lookup the dialog uses, every sequence and enum, the connector each query belongs to (and its pool). |
-| **`menu_item`** | The screen / dashboard / endpoint the menu item targets, then the closure of *that*. |
-| **`dashboard`** | Every chart on the dashboard, every query each chart reads from, the connectors. |
+| **`menu_item`** | The screen, query, endpoint, dashboard or job the menu item targets, then the closure of *that*. |
+| **`dashboard`** | Every chart on the dashboard, every query each chart reads from, the connectors. A dashboard named `<app>.<id>` is looked up in that app. |
+| **`notification_rule`** | The screen or the jobs its trigger names. |
 
 The closure is **recursive but bounded** (default depth = 50). Cycles are detected and short-circuited.
 
@@ -12059,11 +12061,11 @@ The **Liberty Next → Document → Release notes** tab is the full changelog bu
 ## Liberty Next — Developer reference
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/developer-reference/
 
-The Developer reference of Liberty Next (Liberty Next → Document): the data model of the framework and of every connector, every setting with the page that edits it and the code that reads it, every API route with the access it requires — searchable, for superusers.
+The Developer reference of Liberty Next (Liberty Next → Document): the data model of the framework and of every connector, every setting with the page that edits it and the code that reads it, every API route with the access it requires and its response, every command line with its arguments, and the impact of a change on the configuration — searchable, for superusers.
 
-**Liberty Next → Document → Developer reference** describes the running installation from the inside: its tables, its settings and its API routes, read from the code and the configuration in force. It is for the people who support the install — superusers only — and changes nothing.
+**Liberty Next → Document → Developer reference** describes the running installation from the inside: its tables, its settings, its API routes, its command lines and the links between the pieces of its configuration, read from the code and the configuration in force. It is for the people who support the install — superusers only — and changes nothing.
 
-The page has three tabs; it opens on **Configuration** and then on the last tab used.
+The page has five tabs — **Data model**, **Configuration**, **API**, **Command line**, **Impact**; it opens on **Configuration** and then on the last tab used.
 
 ---
 
@@ -12095,9 +12097,37 @@ The header counts the settings edited in a screen, those set in the file or the 
 
 ## API \{#api\}
 
-Every route of the server, by module: **Method**, **Path**, **Summary**, **Module** and **Access** — *public*, *any signed-in user*, *superuser*, a *permission* or a *role*, read from the code. A click on a route opens its parameters, its request and its response, and the place of its handler. The buttons in the header open the interactive API documentation of the server.
+Every route of the server, by module: **Method**, **Path**, **Summary**, **Module** and **Access** — *public*, *any signed-in user*, *superuser*, a *permission* or a *role*, read from the code. A click on a route opens its parameters, its request and its response, and the place of its handler. For the main read routes — connectors, menus, screens, external addresses, the Data Explorer, Nomaflow jobs and runs — the **Response** section gives the shape of the JSON returned, with an example. The buttons in the header open the interactive API documentation of the server.
 
 The search runs across every module and shows, per group, the number of matches.
+
+---
+
+## Command line \{#cli\}
+
+Every command installed with the server — `liberty-admin`, `liberty-ops`, `liberty-connectors`, `liberty-crypto`, `liberty-license`… —, read from its argument parser. On the left, the commands with a search, folded by default, with **Expand all** / **Collapse all**.
+
+A command shows what it does, its usage with **Copy**, the **Options of every command**, then each sub-command with its arguments: **Argument**, **Value**, **Default**, *required*, *repeatable*. Under Docker, `./liberty` wraps the installation, the upgrade, the backups and the database: see [Operations](../../installation/operations.md). The command-line section of the [technical report](./documentation-reports.md) is built from the same reading.
+
+---
+
+## Impact \{#impact\}
+
+Every entity of the configuration with what it uses and what uses it, followed through: what a change to a pool, a query, a screen or a dictionary entry reaches. The links are the ones the [Package](../build/packages.md) dependency walk follows.
+
+On the left, the entities by kind — pools, connectors, queries, API endpoints, dictionary entries, lookups, sequences, enums, screens, menu items, charts, dashboards, shared actions, Explorer models, jobs, notification rules, AI blocks —, folded by default, with a search (`scope.name`). **Unused only** keeps the entities nothing points at — menu items, jobs, notification rules, pools, Explorer models and dictionary entries, opened or reached otherwise, are never counted as unused —, and **Referenced but not defined** lists the references to an entity that does not exist.
+
+A picked entity shows:
+
+| Part | Content |
+|---|---|
+| Header | *uses N · used by N*, and **Open in editor**, which goes to its builder. |
+| **A change here reaches** | The entities reached, counted by kind: a query → its screens → the menu items opening them, the charts → their dashboards, the jobs and actions running it. |
+| **Used by** | The tree of what uses it, level by level (up to 8 levels). |
+| **Uses** | What it uses directly. |
+| **Everything it needs** | Every entity it depends on, followed through. |
+
+A click on an entity of the tree re-centres the view on it; **Back** returns to the previous one. A dictionary entry has no explicit reference: a column reaches its entry by name.
 
 ---
 
@@ -12138,6 +12168,10 @@ Liberty Next → Document → Documentation reports: the implementation report (
 4. **Download the PDF**, or **Markdown** to edit it further.
 
 Every value whose name says it is a secret — passwords, keys, tokens — is masked, and so are the connection addresses.
+
+## Kept copies \{#copies\}
+
+Every report produced is also kept on the server, next to the configuration — so a backup carries it. Under **Kept copies**, the report's page lists them with who built it, the language and the number of sections: **Download** fetches one again, **Delete the copy** removes the file from the server. The copies stay until they are deleted; [Retention](../../monitoring/retention.md) shows their number and size.
 
 ---
 
@@ -12258,7 +12292,6 @@ Encrypts values for the configuration files with the install's master key. **Set
 | Command | Effect |
 |---|---|
 | `liberty-crypto encrypt [VALUE]` | Prints `ENC:…`. Reads the value from standard input when it is not given — better for a password. |
-| `liberty-crypto decrypt [ENC:…]` | Prints the clear value. |
 | `liberty-crypto is-encrypted [VALUE]` | Says whether the value starts with `ENC:`. |
 
 The key comes from `LIBERTY_MASTER_KEY`; `--master-key` and `--config` override it.
@@ -19591,6 +19624,7 @@ The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assis
 | Accounts Receivable | Customer Ledger (F03B11), Receipts (F03B13). |
 | Inventory | Item (F4101). |
 | Sales | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Procurement | Purchase Order (F4311, one row per order line), Receipts (F43121, one row per receipt or match), Receipt Routing (F43092, one row per routing step: dock, inspection, transfer, stock). |
 | Manufacturing | Work Order (F4801), Production Cost (F3102). |
 | Product Data Management | Bill of Material (F3002), Routing (F3003). |
 | Product Costing | Item Cost Components (F30026). |

@@ -5909,7 +5909,7 @@ Un **preset de catalogue** est un point de départ prêt à l'emploi : une table
 Les presets sont des fichiers gérés par l'opérateur, sous le répertoire `presets/` du déploiement ; chaque fichier porte une ou plusieurs entrées `[[presets]]` avec une table de base et ses tables jointes. C'est de la configuration, pas du code — ajoutez les vôtres pour amorcer les écrans que votre équipe construit le plus souvent.
 
 :::info[Spécifique à JDE]
-Liberty Apps livre neuf catalogues JD Edwards, construits d'après les modèles de données Oracle E1 : **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Manufacturing**, **Product Data Management** et **Product Costing**. Les préréglages *complets* de chaque domaine (le grand livre fournisseurs avec fournisseur, adresse et société ; la commande client avec lignes, client, article et établissement…) fournissent aussi un modèle prêt à l'emploi à l'[explorateur de données](../explorer/model.md#preset).
+Liberty Apps livre dix catalogues JD Edwards, construits d'après les modèles de données Oracle E1 : **Address Book**, **General Accounting**, **Accounts Payable**, **Accounts Receivable**, **Inventory**, **Sales**, **Procurement**, **Manufacturing**, **Product Data Management** et **Product Costing**. **Procurement** couvre les commandes d'achat, les réceptions et rapprochements de factures, le cheminement des réceptions, l'historique des lignes de commande, les relations fournisseur / article, le catalogue de prix fournisseurs, les règles de coûts annexes et les adresses de commande, combinés avec le fournisseur, l'article, l'établissement et la facture fournisseur. Les préréglages *complets* de chaque domaine (le grand livre fournisseurs avec fournisseur, adresse et société ; la commande client avec lignes, client, article et établissement…) fournissent aussi un modèle prêt à l'emploi à l'[explorateur de données](../explorer/model.md#preset).
 
 Le catalogue **Address Book** (`config/presets/jdedwards/address_book.toml`) : la table maître `F0101` jointe en LEFT au who's-who, aux téléphones, e-mails, adresses, au client et au fournisseur, plus chaque table liée comme preset de base à part entière. Les conditions de jointure s'écrivent par **data item** (ex. `F0101.AN8`) ; l'assistant résout le préfixe JDE jusqu'à la colonne réelle (`ABAN8`, `AIAN8`, …) pour remplir les jointures. Une table de preset peut nommer une `query` (un `SELECT * FROM <table>` déjà défini sur le connecteur) : l'assistant lit alors ses colonnes en décrivant cette requête — bien plus rapide sur un gros catalogue JDE.
 :::
@@ -11615,6 +11615,7 @@ Surveillance → Rétention dans Liberty Next : chaque stockage qui grossit sur 
 | **Versions de configuration** | Les instantanés de configuration au-delà du nombre gardé par fichier, ou trop anciens ; le plus récent de chaque fichier reste toujours. | La [tâche `config-versions-purge`](../nomaflow/bundled-jobs.md), sinon 20 par fichier et 90 jours. |
 | **Paquets de modifications** | Les paquets exportés ou promus et les journaux d'import plus anciens que les jours fixés. Les brouillons ne sont jamais touchés. | Conservés par défaut. |
 | **Vues enregistrées** | Les vues et analyses des utilisateurs. | Jamais purgées — affichées pour leur taille. |
+| **Rapports de documentation** | Les rapports d'implémentation et techniques produits, conservés tels que téléchargés. | Conservés jusqu'à leur suppression depuis la page [Rapports de documentation](../framework/configuration/documentation-reports.md#copies). |
 | **Journal du serveur** | Rotation par taille : 10 Mo par fichier, cinq fichiers précédents. | — |
 
 Les exécutions et fichiers des tâches figurent quand Nomaflow fonctionne sur le serveur.
@@ -11758,8 +11759,9 @@ Dès qu'une amorce est cochée, le panneau de droite déclenche le résolveur (`
 | Type | Ce qui est rapatrié |
 |---|---|
 | **`screen`** | La requête principale de l'écran, toutes les sous-requêtes référencées (depuis les actions d'écran, les onglets imbriqués, les champs conditionnels), chaque entrée de dictionnaire qui adosse une colonne, chaque lookup utilisé par la boîte de dialogue, chaque séquence et énumération, le connecteur auquel chaque requête appartient (et son pool). |
-| **`menu_item`** | L'écran / tableau de bord / endpoint visé par l'entrée de menu, puis la clôture de *celui-ci*. |
-| **`dashboard`** | Chaque graphique du tableau de bord, chaque requête lue par chaque graphique, les connecteurs. |
+| **`menu_item`** | L'écran, la requête, l'endpoint, le tableau de bord ou la tâche visé par l'entrée de menu, puis la clôture de *celui-ci*. |
+| **`dashboard`** | Chaque graphique du tableau de bord, chaque requête lue par chaque graphique, les connecteurs. Un tableau de bord nommé `<app>.<id>` est recherché dans cette application. |
+| **`notification_rule`** | L'écran ou les tâches cités par son déclencheur. |
 
 La clôture est **récursive mais bornée** (profondeur par défaut = 50). Les cycles sont détectés et court-circuités.
 
@@ -12039,11 +12041,11 @@ L'onglet **Liberty Next → Documenter → Notes de version** est le journal com
 ## Liberty Next — Référence développeur
 Source: https://docs.nomana-it.fr/fr/liberty/framework/configuration/developer-reference/
 
-La Référence développeur de Liberty Next (Liberty Next → Documenter) : le modèle de données du framework et de chaque connecteur, chaque réglage avec la page qui le modifie et le code qui le lit, chaque route de l'API avec l'accès qu'elle exige — avec recherche, pour les superutilisateurs.
+La Référence développeur de Liberty Next (Liberty Next → Documenter) : le modèle de données du framework et de chaque connecteur, chaque réglage avec la page qui le modifie et le code qui le lit, chaque route de l'API avec l'accès qu'elle exige et sa réponse, chaque ligne de commande avec ses arguments, et l'impact d'une modification sur la configuration — avec recherche, pour les superutilisateurs.
 
-**Liberty Next → Documenter → Référence développeur** décrit l'installation en service de l'intérieur : ses tables, ses réglages et ses routes d'API, lus dans le code et la configuration en vigueur. Elle s'adresse à ceux qui assurent le support de l'installation — superutilisateurs uniquement — et ne modifie rien.
+**Liberty Next → Documenter → Référence développeur** décrit l'installation en service de l'intérieur : ses tables, ses réglages, ses routes d'API, ses lignes de commande et les liens entre les éléments de sa configuration, lus dans le code et la configuration en vigueur. Elle s'adresse à ceux qui assurent le support de l'installation — superutilisateurs uniquement — et ne modifie rien.
 
-La page compte trois onglets ; elle s'ouvre sur **Configuration**, puis sur le dernier onglet utilisé.
+La page compte cinq onglets — **Modèle de données**, **Configuration**, **API**, **Ligne de commande**, **Impact** ; elle s'ouvre sur **Configuration**, puis sur le dernier onglet utilisé.
 
 ---
 
@@ -12075,9 +12077,37 @@ L'en-tête dénombre les réglages modifiés dans un écran, ceux fixés seuleme
 
 ## API \{#api\}
 
-Chaque route du serveur, par module : **Méthode**, **Chemin**, **Résumé**, **Module** et **Accès** — *public*, *tout utilisateur connecté*, *superutilisateur*, une *permission* ou un *rôle*, lu dans le code. Un clic sur une route en ouvre les paramètres, la requête et la réponse, ainsi que l'emplacement de son traitement. Les boutons de l'en-tête ouvrent la documentation interactive de l'API du serveur.
+Chaque route du serveur, par module : **Méthode**, **Chemin**, **Résumé**, **Module** et **Accès** — *public*, *tout utilisateur connecté*, *superutilisateur*, une *permission* ou un *rôle*, lu dans le code. Un clic sur une route en ouvre les paramètres, la requête et la réponse, ainsi que l'emplacement de son traitement. Pour les principales routes de lecture — connecteurs, menus, écrans, adresses externes, explorateur de données, tâches et exécutions Nomaflow —, la section **Réponse** donne la structure du JSON renvoyé, avec un exemple. Les boutons de l'en-tête ouvrent la documentation interactive de l'API du serveur.
 
 La recherche porte sur tous les modules et indique, par groupe, le nombre de résultats.
+
+---
+
+## Ligne de commande \{#cli\}
+
+Chaque commande installée avec le serveur — `liberty-admin`, `liberty-ops`, `liberty-connectors`, `liberty-crypto`, `liberty-license`… —, lue dans son analyseur d'arguments. À gauche, les commandes avec une recherche, repliées par défaut, avec **Tout déplier** / **Tout replier**.
+
+Une commande présente son rôle, sa syntaxe avec **Copier**, les **Options de toutes les commandes**, puis chaque sous-commande avec ses arguments : **Argument**, **Valeur**, **Défaut**, *obligatoire*, *répétable*. Sous Docker, `./liberty` prend en charge l'installation, la mise à jour, les sauvegardes et la base de données : voir [Exploitation](../../installation/operations.md). La section « ligne de commande » du [rapport technique](./documentation-reports.md) repose sur la même lecture.
+
+---
+
+## Impact \{#impact\}
+
+Chaque entité de la configuration avec ce qu'elle utilise et ce qui l'utilise, de proche en proche : ce qu'atteint la modification d'un pool, d'une requête, d'un écran ou d'un élément du dictionnaire. Les liens sont ceux que suit l'analyse des dépendances du [Package](../build/packages.md).
+
+À gauche, les entités par nature — pools, connecteurs, requêtes, endpoints API, éléments du dictionnaire, listes, séquences, énumérations, écrans, éléments de menu, graphiques, tableaux de bord, actions partagées, modèles Explorer, tâches, règles de notification, blocs IA —, repliées par défaut, avec une recherche (`scope.nom`). **Inutilisées seulement** ne garde que les entités auxquelles rien ne fait référence — éléments de menu, tâches, règles de notification, pools, modèles Explorer et éléments du dictionnaire, ouverts ou atteints autrement, ne sont jamais comptés comme inutilisés —, et **Référencées mais non définies** liste les références à une entité inexistante.
+
+Une entité choisie présente :
+
+| Partie | Contenu |
+|---|---|
+| En-tête | *utilise N · utilisée par N*, et **Ouvrir dans l'éditeur**, qui mène à son éditeur. |
+| **Une modification ici atteint** | Les entités atteintes, comptées par nature : une requête → ses écrans → les éléments de menu qui les ouvrent, les graphiques → leurs tableaux de bord, les tâches et actions qui l'exécutent. |
+| **Utilisée par** | L'arbre de ce qui l'utilise, niveau par niveau (jusqu'à 8 niveaux). |
+| **Utilise** | Ce qu'elle utilise directement. |
+| **Tout ce dont elle a besoin** | Toutes les entités dont elle dépend, de proche en proche. |
+
+Un clic sur une entité de l'arbre recentre la vue sur elle ; **Retour** revient à la précédente. Un élément du dictionnaire n'a pas de référence explicite : une colonne rejoint son élément par son nom.
 
 ---
 
@@ -12118,6 +12148,10 @@ Liberty Next → Documenter → Rapports de documentation : le rapport d'implém
 4. **Télécharger le PDF**, ou **Markdown** pour le retravailler.
 
 Toute valeur dont le nom désigne un secret — mots de passe, clés, jetons — est masquée, de même que les adresses de connexion.
+
+## Copies conservées \{#copies\}
+
+Chaque rapport produit est aussi conservé sur le serveur, à côté de la configuration — une sauvegarde l'emporte donc. Sous **Copies conservées**, la page du rapport les liste avec leur auteur, la langue et le nombre de sections : **Télécharger** en récupère une, **Supprimer la copie** retire le fichier du serveur. Les copies restent jusqu'à leur suppression ; la page [Rétention](../../monitoring/retention.md) en indique le nombre et la taille.
 
 ---
 
@@ -12238,7 +12272,6 @@ Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l
 | Commande | Effet |
 |---|---|
 | `liberty-crypto encrypt [VALEUR]` | Affiche `ENC:…`. Lit la valeur sur l'entrée standard quand elle n'est pas fournie — préférable pour un mot de passe. |
-| `liberty-crypto decrypt [ENC:…]` | Affiche la valeur en clair. |
 | `liberty-crypto is-encrypted [VALEUR]` | Indique si la valeur commence par `ENC:`. |
 
 La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplacent.
@@ -19487,6 +19520,7 @@ Les préréglages JD Edwards de l'[assistant de création d'écran](../framework
 | Comptabilité clients | Customer Ledger (F03B11), Receipts (F03B13). |
 | Stocks | Item (F4101). |
 | Ventes | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Achats | Purchase Order (F4311, une ligne par ligne de commande), Receipts (F43121, une ligne par réception ou rapprochement), Receipt Routing (F43092, une ligne par étape de cheminement : quai, contrôle, transfert, stock). |
 | Production | Work Order (F4801), Production Cost (F3102). |
 | Données techniques | Bill of Material (F3002), Routing (F3003). |
 | Calcul des coûts | Item Cost Components (F30026). |

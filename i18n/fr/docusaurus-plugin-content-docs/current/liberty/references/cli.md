@@ -112,7 +112,6 @@ Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l
 | Commande | Effet |
 |---|---|
 | `liberty-crypto encrypt [VALEUR]` | Affiche `ENC:…`. Lit la valeur sur l'entrée standard quand elle n'est pas fournie — préférable pour un mot de passe. |
-| `liberty-crypto decrypt [ENC:…]` | Affiche la valeur en clair. |
 | `liberty-crypto is-encrypted [VALEUR]` | Indique si la valeur commence par `ENC:`. |
 
 La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplacent.

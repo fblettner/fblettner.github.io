@@ -1,14 +1,14 @@
 ---
 title: Developer reference
-description: "The Developer reference of Liberty Next (Liberty Next → Document): the data model of the framework and of every connector, every setting with the page that edits it and the code that reads it, every API route with the access it requires — searchable, for superusers."
-keywords: [Liberty Next, developer reference, data model, configuration reference, settings, API routes, permissions, superuser, documentation]
+description: "The Developer reference of Liberty Next (Liberty Next → Document): the data model of the framework and of every connector, every setting with the page that edits it and the code that reads it, every API route with the access it requires and its response, every command line with its arguments, and the impact of a change on the configuration — searchable, for superusers."
+keywords: [Liberty Next, developer reference, data model, configuration reference, settings, API routes, permissions, command line, CLI, impact analysis, dependencies, unused entities, superuser, documentation]
 ---
 
 # Developer reference
 
-**Liberty Next → Document → Developer reference** describes the running installation from the inside: its tables, its settings and its API routes, read from the code and the configuration in force. It is for the people who support the install — superusers only — and changes nothing.
+**Liberty Next → Document → Developer reference** describes the running installation from the inside: its tables, its settings, its API routes, its command lines and the links between the pieces of its configuration, read from the code and the configuration in force. It is for the people who support the install — superusers only — and changes nothing.
 
-The page has three tabs; it opens on **Configuration** and then on the last tab used.
+The page has five tabs — **Data model**, **Configuration**, **API**, **Command line**, **Impact**; it opens on **Configuration** and then on the last tab used.
 
 ---
 
@@ -24,12 +24,16 @@ The page has three tabs; it opens on **Configuration** and then on the last tab 
 
   <rect x="220" y="14" width="760" height="372" rx="14" fill="url(#dvr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Developer reference</text>
-  <rect x="240" y="56" width="209" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="56" width="351" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="278.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Data model</text>
   <rect x="318" y="57" width="91" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="363.5" y="71.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Configuration</text>
   <line x1="410" y1="61" x2="410" y2="75" stroke="#334155" strokeWidth="1"/>
   <text x="429.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">API</text>
+  <line x1="449" y1="61" x2="449" y2="75" stroke="#334155" strokeWidth="1"/>
+  <text x="492.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Command line</text>
+  <line x1="536" y1="61" x2="536" y2="75" stroke="#334155" strokeWidth="1"/>
+  <text x="563.5" y="71.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Impact</text>
   <text x="240" y="104" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">142 edited in a screen · 21 file / environment only · 0 not in the UI</text>
   <rect x="780" y="88" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="790" y="102.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Every status ▾</text>
@@ -69,8 +73,8 @@ The page has three tabs; it opens on **Configuration** and then on the last tab 
   <text x="800" y="265.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">default</text>
   <text x="890" y="265.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2</text>
   <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three tabs</text>
-  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">data model, settings, API</text>
+  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five tabs</text>
+  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">model, settings, API, CLI, impact</text>
   <line x1="210" y1="67.0" x2="240" y2="68" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dvr-arrow)"/>
   <rect x="10" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
@@ -112,9 +116,37 @@ The header counts the settings edited in a screen, those set in the file or the 
 
 ## API \{#api\}
 
-Every route of the server, by module: **Method**, **Path**, **Summary**, **Module** and **Access** — *public*, *any signed-in user*, *superuser*, a *permission* or a *role*, read from the code. A click on a route opens its parameters, its request and its response, and the place of its handler. The buttons in the header open the interactive API documentation of the server.
+Every route of the server, by module: **Method**, **Path**, **Summary**, **Module** and **Access** — *public*, *any signed-in user*, *superuser*, a *permission* or a *role*, read from the code. A click on a route opens its parameters, its request and its response, and the place of its handler. For the main read routes — connectors, menus, screens, external addresses, the Data Explorer, Nomaflow jobs and runs — the **Response** section gives the shape of the JSON returned, with an example. The buttons in the header open the interactive API documentation of the server.
 
 The search runs across every module and shows, per group, the number of matches.
+
+---
+
+## Command line \{#cli\}
+
+Every command installed with the server — `liberty-admin`, `liberty-ops`, `liberty-connectors`, `liberty-crypto`, `liberty-license`… —, read from its argument parser. On the left, the commands with a search, folded by default, with **Expand all** / **Collapse all**.
+
+A command shows what it does, its usage with **Copy**, the **Options of every command**, then each sub-command with its arguments: **Argument**, **Value**, **Default**, *required*, *repeatable*. Under Docker, `./liberty` wraps the installation, the upgrade, the backups and the database: see [Operations](../../installation/operations.md). The command-line section of the [technical report](./documentation-reports.md) is built from the same reading.
+
+---
+
+## Impact \{#impact\}
+
+Every entity of the configuration with what it uses and what uses it, followed through: what a change to a pool, a query, a screen or a dictionary entry reaches. The links are the ones the [Package](../build/packages.md) dependency walk follows.
+
+On the left, the entities by kind — pools, connectors, queries, API endpoints, dictionary entries, lookups, sequences, enums, screens, menu items, charts, dashboards, shared actions, Explorer models, jobs, notification rules, AI blocks —, folded by default, with a search (`scope.name`). **Unused only** keeps the entities nothing points at — menu items, jobs, notification rules, pools, Explorer models and dictionary entries, opened or reached otherwise, are never counted as unused —, and **Referenced but not defined** lists the references to an entity that does not exist.
+
+A picked entity shows:
+
+| Part | Content |
+|---|---|
+| Header | *uses N · used by N*, and **Open in editor**, which goes to its builder. |
+| **A change here reaches** | The entities reached, counted by kind: a query → its screens → the menu items opening them, the charts → their dashboards, the jobs and actions running it. |
+| **Used by** | The tree of what uses it, level by level (up to 8 levels). |
+| **Uses** | What it uses directly. |
+| **Everything it needs** | Every entity it depends on, followed through. |
+
+A click on an entity of the tree re-centres the view on it; **Back** returns to the previous one. A dictionary entry has no explicit reference: a column reaches its entry by name.
 
 ---
 

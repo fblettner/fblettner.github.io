@@ -112,7 +112,6 @@ Encrypts values for the configuration files with the install's master key. **Set
 | Command | Effect |
 |---|---|
 | `liberty-crypto encrypt [VALUE]` | Prints `ENC:…`. Reads the value from standard input when it is not given — better for a password. |
-| `liberty-crypto decrypt [ENC:…]` | Prints the clear value. |
 | `liberty-crypto is-encrypted [VALUE]` | Says whether the value starts with `ENC:`. |
 
 The key comes from `LIBERTY_MASTER_KEY`; `--master-key` and `--config` override it.

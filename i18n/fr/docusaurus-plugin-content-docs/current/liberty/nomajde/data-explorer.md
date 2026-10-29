@@ -42,6 +42,7 @@ Les préréglages JD Edwards de l'[assistant de création d'écran](../framework
 | Comptabilité clients | Customer Ledger (F03B11), Receipts (F03B13). |
 | Stocks | Item (F4101). |
 | Ventes | Sales Order (F4201), Sales History (F42019 + F42119). |
+| Achats | Purchase Order (F4311, une ligne par ligne de commande), Receipts (F43121, une ligne par réception ou rapprochement), Receipt Routing (F43092, une ligne par étape de cheminement : quai, contrôle, transfert, stock). |
 | Production | Work Order (F4801), Production Cost (F3102). |
 | Données techniques | Bill of Material (F3002), Routing (F3003). |
 | Calcul des coûts | Item Cost Components (F30026). |

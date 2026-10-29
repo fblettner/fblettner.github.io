@@ -104,6 +104,10 @@ keywords: [Liberty Next, documentation reports, implementation report, technical
 
 Every value whose name says it is a secret — passwords, keys, tokens — is masked, and so are the connection addresses.
 
+## Kept copies \{#copies\}
+
+Every report produced is also kept on the server, next to the configuration — so a backup carries it. Under **Kept copies**, the report's page lists them with who built it, the language and the number of sections: **Download** fetches one again, **Delete the copy** removes the file from the server. The copies stay until they are deleted; [Retention](../../monitoring/retention.md) shows their number and size.
+
 ---
 
 ## Related
