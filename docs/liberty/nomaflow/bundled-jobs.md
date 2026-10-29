@@ -372,6 +372,75 @@ For a partial re-merge — only the parents affected by *this* change — use `n
 
 ---
 
+## JD Edwards monitoring and AIS jobs \{#nomajde-jde\}
+
+Jobs that reach the JD Edwards servers themselves: Server Manager for the health of the instances, the AIS server for reports and data.
+
+### `nomajde-jde-health` \{#nomajde-jde-health\}
+
+**Health check of the JD Edwards servers through Server Manager.** The `nomajde.monitoring:health_check` step asks the `jde_server_manager` API connector for the instances (`instancesinfo`), runs Server Manager's health check (`health`) on every running enterprise, web and REST server, and writes one row per instance to the `jde_health` table of the Nomajde database. The rows feed [Monitoring → JDE Servers](../nomajde/monitoring/jde-servers.md) and the overview tiles.
+
+| Parameter | Default | What |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | The Server Manager checks that count; blank = all of them. |
+| `groups` | blank | JSON `{"<host>-<enterprise server>": ["<host>-<instance>", …]}` — an enterprise server down or unhealthy fails its instances without checking them; when set, only the instances listed are monitored. |
+| `auto_stop` | `false` | Stops a running instance that failed (`stopinstance`), and the running instances of a failed enterprise server. |
+| `keep_days` | `30` | Rows older than this are removed at each run. |
+
+**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address and the `jde_admin` password on the `jde_server_manager` connector in **Liberty Next → Build → Connectors**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
+
+**Alerts** — the run fails when an instance did not pass (`failed`, `down` or `error`), after writing the rows; `on_failure` alerts are on.
+
+---
+
+### `nomajde-ais-report` \{#nomajde-ais-report\}
+
+**Run a JD Edwards report (UBE) through AIS and wait until it is done.** Step `nomajde.ais_steps:j_ais_report` over the `ais_connection` connector.
+
+| Parameter | Default | What |
+|---|---|---|
+| `report` | — | The report to run, e.g. `R0010P`. Asked at launch, required. |
+| `version` | `XJDE0001` | The version. |
+| `queue` | blank | The job queue; blank = the default queue. |
+| `po_values` | blank | Processing options by id, JSON: `{"1": "20261029"}` (dates `yyyyMMdd`). |
+| `wait` | `true` | Waits for the end of the report. |
+| `timeout_seconds` | `3600` | The run fails when the report is still running after this delay. |
+
+The run fails when the report ends in error. The log gives the job number, the server and the final status. Run it by hand with **Run with parameters**, or copy it with fixed parameters and a schedule.
+
+---
+
+### `nomajde-ais-export` \{#nomajde-ais-export\}
+
+**Export a JD Edwards table or business view to an xlsx file.** Step `nomajde.ais_steps:j_ais_export`: browses the table or view through AIS and writes `<run>-<name>.xlsx` among the files of the run, the headers being AIS's column titles. The file is downloaded from the run detail; to mail it, add a `notify` step with `attach = ["*"]`.
+
+| Parameter | Default | What |
+|---|---|---|
+| `table` / `view` | — | The table (`F0101`) or the business view to export — one of the two. |
+| `columns` | blank | Data items separated by commas (`AN8, ALPH`; `F4102.LITM` for a view's column); blank = every column. |
+| `conditions` | blank | JSON: `{"AT1": "C"}` (equals) or `[["AN8", ">=", 500]]`. |
+| `max_rows` | `5000` | The row limit; `0` = no limit. The log warns when JD Edwards holds more rows. |
+| `filename` | blank | The file name; blank = the table or view name. |
+
+---
+
+### The AIS steps \{#ais-steps\}
+
+The `nomajde.ais_steps` entry points appear in the job editor's callable picker for a `python` step and in the list of the `call_plugin` screen action. All use the `ais_connection` connector.
+
+| Entry point | Does |
+|---|---|
+| `j_ais_report` | Runs a report / version, on a queue, with processing options; waits for its end. |
+| `j_ais_export` | Exports a table or a view to an xlsx file of the run. |
+| `j_ais_count` | Counts the rows of a table or a view matching conditions. |
+| `j_ais_bsfn` | Calls a business function with its parameters; returns its output values. |
+| `j_ais_orchestration` | Runs an orchestration with its inputs; returns its response. |
+| `j_ais_scheduler` | Starts or stops the JD Edwards scheduler of an environment (`action = start` / `stop`). |
+
+Conditions, processing options, parameters and inputs are given as TOML tables in the job, or as JSON text when typed in **Run with parameters** or an action's parameters. An empty text means *not set*. On an AIS error, the step fails with AIS's own message.
+
+---
+
 ## Collection job \{#collect\}
 
 ### `nomasx1-collect-all` \{#nomasx1-collect-all\}

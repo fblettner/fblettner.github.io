@@ -454,6 +454,11 @@ const sidebars: SidebarsConfig = {
         'liberty/nomajde/security-maintenance/security-workbench',
       ],
     },
+    {
+      type: 'category',
+      label: 'Monitoring',
+      items: ['liberty/nomajde/monitoring/jde-servers'],
+    },
     'liberty/nomajde/jobs',
   ],
 

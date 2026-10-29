@@ -194,9 +194,9 @@ A web application that sits next to JD Edwards and reads its data live — throu
     <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#c084fc', fontWeight: 800, marginBottom: '8px'}}>04 · Monitoring</div>
     <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>JDE in production, live</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
-      <li>Live counters of AP / AR / GL transactions, drill-through to the underlying screen.</li>
-      <li>The JDE job-control queue as a grid — status, owner, runtime, output.</li>
-      <li>Performance indicators: database latency, AIS response time, transaction throughput.</li>
+      <li>The enterprise, web and AIS servers checked through Server Manager every five minutes — state, health, failed checks.</li>
+      <li>Availability over 24 hours per instance on the overview, the instances in trouble first.</li>
+      <li>A failed check sends the job's alerts; a failed instance can be stopped automatically.</li>
     </ul>
   </div>
 
@@ -328,7 +328,8 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
-| **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |
+| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the latest health check of every JD Edwards server and its history. |
+| **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
 
 ---
 
@@ -340,7 +341,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **AP / AR operator** | The transaction grid — open invoices across companies and environments on one page, with bulk filters and drill-through. |
 | **Master-data steward** | Address Book, customer and supplier maintenance with required-field checks; UDC types and codes for the catalogue work. |
 | **Reporting analyst** | One form to schedule BIP, the archive of past runs, e-mail distribution. |
-| **Ops engineer** | The Monitoring section — live counters, job queue, performance indicators. |
+| **Ops engineer** | [JDE Servers](./monitoring/jde-servers.md) — the health of every enterprise, web and AIS server, its availability over 24 hours, the alerts of the check. |
 
 ---
 

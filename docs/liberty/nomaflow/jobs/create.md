@@ -8,6 +8,8 @@ keywords: [Nomaflow, create job, job editor, schedule, timezone, presets, retry 
 
 **+ New job** on the Jobs page, or **Edit** on a card, opens the job editor. One **Save** at the top writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page; **Cancel** leaves without saving. An invalid job is refused with a message at the top of the editor.
 
+Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep their text as it is — comments, `${…}` references, `step_defaults` —, and the saved job gets its `${…}` references back wherever its value still matches.
+
 ---
 
 ## At a glance

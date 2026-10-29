@@ -935,9 +935,9 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
     04 · Supervision
     JDE en production, en direct
     
-      Compteurs en direct des transactions AP / AR / GL, drill vers l'écran sous-jacent.
-      La file de job-control JDE sous forme de grille — statut, propriétaire, durée, sortie.
-      Indicateurs de performance : latence base, temps de réponse AIS, débit transactionnel.
+      Les serveurs enterprise, web et AIS contrôlés par Server Manager toutes les cinq minutes — état, santé, contrôles en échec.
+      La disponibilité sur 24 heures de chaque instance sur la vue d'ensemble, les instances en défaut en tête.
+      Un contrôle en échec déclenche les alertes de la tâche ; une instance en échec peut être arrêtée automatiquement.
     
   
 
@@ -954,7 +954,8 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
-| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |
+| **Supervision** | [Serveurs JDE](./monitoring/jde-servers.md) : la dernière vérification de chaque serveur JD Edwards et son historique. |
+| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
 
 ---
 
@@ -966,7 +967,7 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Opérateur AP / AR** | La grille de transactions — factures ouvertes inter-sociétés et inter-environnements sur une page, avec filtres en masse et drill. |
 | **Référent données maîtres** | Maintenance Address Book, clients, fournisseurs avec contrôles de champs obligatoires ; types et valeurs UDC pour le catalogue. |
 | **Analyste reporting** | Un formulaire unique pour planifier BIP, l'archive des runs passés, la distribution par courriel. |
-| **Ingénieur ops** | La section Supervision — compteurs en direct, file de jobs, indicateurs de performance. |
+| **Ingénieur ops** | [Serveurs JDE](./monitoring/jde-servers.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle. |
 
 ---
 
@@ -2411,7 +2412,7 @@ Les données affichées par les applications restent dans **leurs** bases d'orig
 |---|---|---|---|
 | **Serveur** | Conteneur `liberty-next` | Conteneur `liberty-next` | Paquet pipx lancé par systemd |
 | **Autour** | — | Conteneurs PostgreSQL 16, Traefik, pgAdmin, Portainer | Un PostgreSQL existant, un proxy inverse existant |
-| **Base du framework** | SQLite | PostgreSQL fourni | Un PostgreSQL existant (SQLite pour un essai) |
+| **Base du framework** | SQLite | PostgreSQL fourni, ou un serveur PostgreSQL existant ([base externe](./operations.md#external-db)) | Un PostgreSQL existant (SQLite pour un essai) |
 | **Adresse** | `http://<hôte>:8000/` | `http(s)://<hôte>/` | `http://<hôte>:8000/` derrière un proxy inverse |
 | **HTTPS** | Un proxy inverse existant | Traefik ([HTTPS et Traefik](./traefik.md)) | Un proxy inverse existant |
 | **Applications sous licence** | Possible, mais elles demandent PostgreSQL | Oui | Oui |
@@ -2451,8 +2452,8 @@ apps/
 | `app.toml`, `auth.toml` | volume `liberty-config` | volume `liberty-config` | `/var/lib/liberty-next/config/` |
 | Autres fichiers de configuration | volume `liberty-config`, ou `release/apps/config/` avec les applications sous licence | idem | `/var/lib/liberty-next/apps/config/` |
 | Code et données des applications sous licence | `release/apps/plugins/`, `release/apps/data/` (montés sur `/apps`) | idem | `/var/lib/liberty-next/apps/plugins/`, `…/data/` |
-| Base du framework | SQLite dans le volume `liberty-data` | PostgreSQL dans le volume `pg-data` | le serveur PostgreSQL existant |
-| Bases des applications sous licence (`nomasx1`, `nomajde`) | — | PostgreSQL dans `pg-data` | le serveur PostgreSQL existant |
+| Base du framework | SQLite dans le volume `liberty-data` | PostgreSQL dans le volume `pg-data`, ou le serveur PostgreSQL existant | le serveur PostgreSQL existant |
+| Bases des applications sous licence (`nomasx1`, `nomajde`) | — | PostgreSQL dans `pg-data`, ou le serveur PostgreSQL existant | le serveur PostgreSQL existant |
 | Secrets | `release/.env` | `release/.env` | `/etc/liberty/secrets.env` |
 | Outils, certificats | — | volumes `pgadmin-data`, `portainer-data`, `traefik-acme` | — |
 | Sauvegardes | `release/backups/` | `release/backups/` | `backups/` à côté du dossier de configuration |
@@ -3034,6 +3035,12 @@ Quand un proxy d'entreprise ou un répartiteur de charge termine déjà le HTTPS
 
 - relayer les connexions WebSocket sur `/socket.io` (mises à jour en temps réel : cloche des notifications, verrous d'enregistrement, réponses de l'assistant) ;
 - garder un utilisateur sur la même instance s'il y en a plusieurs (Traefik le fait avec le cookie `liberty_sticky`).
+
+### Publication sous un sous-chemin \{#sub-path\}
+
+Pour publier Liberty Next sous un chemin d'un site existant — `https://intranet.example.com/liberty/` —, renseigner `/liberty` dans **Sous-chemin derrière un proxy inverse**, sous [Liberty Next → Administrer → App](../framework/build/settings-app.md#app), puis redémarrer le serveur. La page, ses ressources, l'API, les téléchargements, la connexion en direct et les liens se résolvent sous ce chemin, que le proxy retire le préfixe avant de transmettre la requête ou qu'il le conserve. Les adresses construites par le serveur — le retour de l'authentification unique — l'intègrent : déclarer cette adresse de retour, sous-chemin compris, auprès du fournisseur d'identité.
+
+Le sous-chemin s'applique aussi à l'[application installée](./production.md#pwa), et une [instance cible de promotion](../framework/build/packages.md#promotion) se déclare avec le sous-chemin dans son URL.
 
 ---
 
@@ -10468,7 +10475,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 |---|---|
 | **Nom de l'application** | Le nom de l'application. |
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
-| **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent. **Redémarrage nécessaire.** |
+| **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent — voir [Publication sous un sous-chemin](../../installation/traefik.md#sub-path). **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
 | **Recharger à chaud les fichiers TOML de configuration quand ils changent** | Appliquer les fichiers de configuration dès qu'ils changent — voir [Rechargement à chaud](../configuration/hot-reload.md). |
 | **Mode épais Oracle (…)** | L'Oracle Instant Client pour tous les pools Oracle — nécessaire pour le chiffrement réseau natif et les LOB au travers d'un DB link. Pris en compte après un redémarrage. Voir [Connecteurs](../connectors.md#oracle-thick). |
@@ -13334,6 +13341,8 @@ L'éditeur de tâche de Nomaflow : la section Tâche (identifiant, planification
 
 **+ Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur une carte, ouvre l'éditeur de tâche. Un seul **Enregistrer**, en haut, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches ; **Annuler** quitte sans enregistrer. Une tâche invalide est refusée avec un message en haut de l'éditeur.
 
+Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.toml` conservent leur texte à l'identique — commentaires, références `${…}`, `step_defaults` —, et la tâche enregistrée retrouve ses références `${…}` partout où la valeur correspond toujours.
+
 ---
 
 ## Vue d'ensemble
@@ -14478,6 +14487,75 @@ Voir aussi : [Paquets de modifications](./change-packages.md).
 **Quand l'exécuter** — une fois après un import propre des tables de sécurité JDE (`F00950` / `F00926` issus d'une extraction neuve), ou comme étape de récupération après une fusion défectueuse identifiée. Non planifiée par défaut ; pas trivialement ré-exécutable sans danger — relancer sur un système stable n'a pas d'effet sur les données mais réécrit les mêmes lignes, ce qui peut prendre plusieurs minutes sur une installation JDE volumineuse.
 
 Pour une re-fusion partielle — uniquement les parents affectés par *cette* modification — utiliser `nomajde-remerge-security` (`scope = "package"`).
+
+---
+
+## Tâches de supervision et AIS de JD Edwards \{#nomajde-jde\}
+
+Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pour la santé des instances, le serveur AIS pour les états et les données.
+
+### `nomajde-jde-health` \{#nomajde-jde-health\}
+
+**Contrôle de santé des serveurs JD Edwards au travers de Server Manager.** L'étape `nomajde.monitoring:health_check` demande les instances au connecteur API `jde_server_manager` (`instancesinfo`), lance le contrôle de santé de Server Manager (`health`) sur chaque serveur enterprise, web et REST démarré, puis écrit une ligne par instance dans la table `jde_health` de la base Nomajde. Ces lignes alimentent [Supervision → Serveurs JDE](../nomajde/monitoring/jde-servers.md) et les tuiles de la vue d'ensemble.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | Les contrôles de Server Manager pris en compte ; vide = tous. |
+| `groups` | vide | JSON `{"<hôte>-<serveur enterprise>": ["<hôte>-<instance>", …]}` — un serveur enterprise arrêté ou en mauvaise santé met ses instances en échec sans les contrôler ; une fois renseigné, seules les instances citées sont suivies. |
+| `auto_stop` | `false` | Arrête une instance démarrée en échec (`stopinstance`), ainsi que les instances démarrées d'un serveur enterprise en échec. |
+| `keep_days` | `30` | Les lignes plus anciennes sont supprimées à chaque exécution. |
+
+**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager et le mot de passe de `jde_admin` sur le connecteur `jde_server_manager` dans **Liberty Next → Construire → Connecteurs**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
+
+**Alertes** — l'exécution échoue dès qu'une instance n'a pas réussi ses contrôles (`failed`, `down` ou `error`), après l'écriture des lignes ; les alertes `on_failure` sont actives.
+
+---
+
+### `nomajde-ais-report` \{#nomajde-ais-report\}
+
+**Lancement d'un état JD Edwards (UBE) au travers d'AIS, avec attente de sa fin.** Étape `nomajde.ais_steps:j_ais_report` sur le connecteur `ais_connection`.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `report` | — | L'état à lancer, par exemple `R0010P`. Demandé au lancement, obligatoire. |
+| `version` | `XJDE0001` | La version. |
+| `queue` | vide | La file d'attente ; vide = la file par défaut. |
+| `po_values` | vide | Les options de traitement par identifiant, en JSON : `{"1": "20261029"}` (dates au format `yyyyMMdd`). |
+| `wait` | `true` | Attend la fin de l'état. |
+| `timeout_seconds` | `3600` | L'exécution échoue si l'état est toujours en cours au-delà de ce délai. |
+
+L'exécution échoue si l'état se termine en erreur. Le journal indique le numéro de travail, le serveur et le statut final. La tâche se lance à la main avec **Exécuter avec des paramètres**, ou se copie avec des paramètres fixes et une planification.
+
+---
+
+### `nomajde-ais-export` \{#nomajde-ais-export\}
+
+**Export d'une table ou d'une vue métier JD Edwards dans un fichier xlsx.** L'étape `nomajde.ais_steps:j_ais_export` parcourt la table ou la vue au travers d'AIS et écrit `<exécution>-<nom>.xlsx` parmi les fichiers de l'exécution, avec les titres de colonnes d'AIS en en-tête. Le fichier se télécharge depuis le détail de l'exécution ; pour l'envoyer par e-mail, ajouter une étape `notify` avec `attach = ["*"]`.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `table` / `view` | — | La table (`F0101`) ou la vue métier à exporter — l'une des deux. |
+| `columns` | vide | Les éléments de données séparés par des virgules (`AN8, ALPH` ; `F4102.LITM` pour une colonne de vue) ; vide = toutes les colonnes. |
+| `conditions` | vide | En JSON : `{"AT1": "C"}` (égalité) ou `[["AN8", ">=", 500]]`. |
+| `max_rows` | `5000` | Le nombre maximal de lignes ; `0` = sans limite. Le journal signale quand JD Edwards contient davantage de lignes. |
+| `filename` | vide | Le nom du fichier ; vide = le nom de la table ou de la vue. |
+
+---
+
+### Les étapes AIS \{#ais-steps\}
+
+Les points d'entrée de `nomajde.ais_steps` figurent dans le sélecteur de fonctions d'une étape `python` de l'éditeur de tâches, et dans la liste de l'action d'écran `call_plugin`. Tous utilisent le connecteur `ais_connection`.
+
+| Point d'entrée | Rôle |
+|---|---|
+| `j_ais_report` | Lance un état / version, sur une file d'attente, avec des options de traitement ; attend sa fin. |
+| `j_ais_export` | Exporte une table ou une vue dans un fichier xlsx de l'exécution. |
+| `j_ais_count` | Compte les lignes d'une table ou d'une vue qui répondent aux conditions. |
+| `j_ais_bsfn` | Appelle une fonction métier avec ses paramètres ; renvoie ses valeurs de sortie. |
+| `j_ais_orchestration` | Exécute une orchestration avec ses entrées ; renvoie sa réponse. |
+| `j_ais_scheduler` | Démarre ou arrête le planificateur JD Edwards d'un environnement (`action = start` / `stop`). |
+
+Conditions, options de traitement, paramètres et entrées se donnent sous forme de tables TOML dans la tâche, ou de texte JSON quand ils sont saisis dans **Exécuter avec des paramètres** ou dans les paramètres d'une action. Un texte vide signifie *non renseigné*. En cas d'erreur AIS, l'étape échoue avec le message d'AIS lui-même.
 
 ---
 
@@ -19349,8 +19427,9 @@ La page d'accueil de Nomajde : ce que fait Nomajde, les chiffres en direct de l'
 | **Maintenance de la sécurité** | [Gestion des utilisateurs](./security-maintenance/user-management.md), User Preferences, [Affectations Rôles](./security-maintenance/role-management.md), [Relations de rôles](./security-maintenance/role-relationships.md), [Environnements](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
 | **Développement** | Object Librarian, Data Dictionary, Références croisées — en lecture. |
 | **Analyse et tâches** | L'[explorateur de données](./data-explorer.md), les [tâches](./jobs.md) et la page produit. |
+| **Serveurs JDE** | Le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification, et la liste des instances avec leur état et leur disponibilité sur 24 heures — voir [Serveurs JDE](./monitoring/jde-servers.md#overview). |
 
-Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page.
+Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page ; les tuiles **Serveurs JDE** reprennent la dernière vérification enregistrée par la tâche `nomajde-jde-health`.
 
 ---
 
@@ -20133,10 +20212,88 @@ C'est ce qui rend une promotion de sécurité JDE reproductible : associez-y le 
 
 ---
 
+## Nomajde — Serveurs JDE
+Source: https://docs.nomana-it.fr/fr/liberty/nomajde/monitoring/jde-servers/
+
+Supervision → Serveurs JDE dans Nomajde : la dernière vérification de chaque serveur enterprise, web et REST de JD Edwards suivi par Server Manager — état, santé, contrôles en échec, action menée —, son historique, les indicateurs de la vue d'ensemble et la tâche qui les collecte.
+
+**Supervision → Serveurs JDE** présente les serveurs JD Edwards tels que les a vus la dernière vérification : une ligne par instance, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## La grille \{#grid\}
+
+La grille, en consultation seule, reprend la dernière vérification de chaque instance contrôlée au cours des dernières 24 heures.
+
+| Colonne | Contenu |
+|---|---|
+| **Hôte** | L'hôte de l'agent Server Manager de l'instance. |
+| **Instance** | Le nom de l'instance dans Server Manager. |
+| **Type de serveur** | `entserver` (serveur enterprise), `webserver` (serveur HTML) ou `restserver` (serveur AIS). |
+| **État** | L'état remonté par Server Manager, par exemple `RUNNING`. |
+| **Santé** | `passed` (contrôles réussis), `failed` (un contrôle en échec, ou un serveur enterprise de rattachement en mauvaise santé), `down` (instance arrêtée) ou `error` (Server Manager n'a pas pu être interrogé pour cette instance, ou ne la connaît pas). |
+| **Contrôles en échec** | Les contrôles de Server Manager en échec, parmi ceux suivis (voir [Paramètres](#parameters)). |
+| **Serveur enterprise** | Pour une instance déclarée dans un groupe, le serveur enterprise dont elle dépend. |
+| **Action** | `stopped` quand la vérification a arrêté l'instance, `stop failed` quand l'arrêt a été refusé. |
+| **Détail** | Le message d'erreur, ou la cause d'un échec hérité du serveur enterprise. |
+| **Vérifié le** | L'heure de la vérification. |
+
+Les colonnes **Hôte**, **Instance**, **Type de serveur** et **Santé** sont filtrables.
+
+## L'historique d'une instance \{#history\}
+
+Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général** reprend les champs de la grille ; l'onglet **Historique** liste toutes les vérifications conservées pour l'instance, de la plus récente à la plus ancienne : heure, état, santé, contrôles en échec, serveur enterprise, action, détail.
+
+---
+
+## Sur la vue d'ensemble \{#overview\}
+
+La [page d'accueil](../home.md) de Nomajde comporte deux tuiles **Serveurs JDE**, calculées sur la dernière vérification de chaque instance au cours des 24 dernières heures :
+
+- le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification ;
+- la liste des instances : type de serveur et hôte, contrôles en échec et action menée, une pastille d'état — **OK**, **En échec**, **Arrêtée**, **Erreur** —, la disponibilité sur 24 heures (la part de vérifications réussies) et le nombre de vérifications. Les instances en défaut apparaissent en premier ; une instance dont la dernière vérification date de plus de 30 minutes passe en orange, avec la pastille **En retard**.
+
+---
+
+## La tâche de collecte \{#job\}
+
+La tâche `nomajde-jde-health` vérifie les serveurs au travers de l'API REST de Server Manager. Elle est livrée **désactivée**, planifiée toutes les cinq minutes (Europe/Paris).
+
+1. Dans **Liberty Next → Construire → Connecteurs**, ouvrir le connecteur `jde_server_manager` et renseigner l'adresse de Server Manager et le mot de passe du compte `jde_admin`.
+2. Dans **Nomaflow → Tâches**, ajuster au besoin les paramètres de `nomajde-jde-health`, puis l'activer.
+3. **Tâches → Vérifier les serveurs JDE**, dans le menu Nomajde, lance la vérification immédiatement, sans attendre la planification.
+
+Chaque exécution demande à Server Manager la liste des instances et lance son contrôle de santé sur chaque instance démarrée. L'exécution **échoue** — et déclenche les alertes de la tâche — dès qu'une instance n'a pas réussi ses contrôles ; les lignes sont enregistrées auparavant, si bien que la grille affiche l'échec.
+
+### Paramètres \{#parameters\}
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | Les contrôles de Server Manager pris en compte ; les autres sont ignorés. Vide : tous les contrôles comptent. |
+| `groups` | vide | Les instances rattachées à un serveur enterprise, en JSON : `{"<hôte>-<serveur enterprise>": ["<hôte>-<instance>", …]}`. Quand le serveur enterprise est arrêté ou en mauvaise santé, ses instances sont déclarées en échec sans être contrôlées. Une fois renseigné, seules les instances citées sont suivies. |
+| `auto_stop` | `false` | `true` arrête une instance démarrée en échec, ainsi que les instances démarrées d'un serveur enterprise en échec. |
+| `keep_days` | `30` | Le nombre de jours de vérifications conservés ; les lignes plus anciennes sont supprimées à chaque exécution. |
+
+Détail de la tâche : [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## Voir aussi
+
+- [Tâches](../jobs.md) — les tâches Nomajde, dont *Vérifier les serveurs JDE*.
+- [Notifications](../../nomaflow/notifications.md) — pour être alerté d'un échec de la vérification.
+- [Vue d'ensemble — la page d'accueil](../home.md).
+
+---
+
 ## Nomajde — Tâches
 Source: https://docs.nomana-it.fr/fr/liberty/nomajde/jobs/
 
-Le dossier Tâches du menu de Nomajde : refusionner la sécurité JD Edwards des rôles touchés par un paquet de changements ou de tous les rôles, et rafraîchir le dictionnaire de données des modèles de l'explorateur — à la demande, avec un journal en direct.
+Le dossier Tâches du menu de Nomajde : refusionner la sécurité JD Edwards des rôles touchés par un paquet de changements ou de tous les rôles, rafraîchir le dictionnaire de données des modèles de l'explorateur, vérifier les serveurs JD Edwards — à la demande, avec un journal en direct ; et les tâches AIS qui lancent un état ou exportent une table depuis Nomaflow.
 
 Le dossier **Tâches**, en bas du menu de Nomajde, lance à la demande les tâches de maintenance de JD Edwards sans ouvrir Nomaflow. Chaque entrée ouvre la page de la tâche : ses paramètres, **Lancer**, le journal suivi en direct, les exécutions précédentes avec leur auteur. Voir [Lancer une tâche depuis le menu d'une application](../nomaflow/jobs/run-from-menu.md).
 
@@ -20159,6 +20316,23 @@ Crée les entrées de dictionnaire qui manquent aux modèles de l'[explorateur d
 | **Modèle Explorateur (vide = tous les modèles)** | L'un des modèles de Nomajde, ou vide pour tous. |
 
 Le journal liste, par modèle, les tables analysées et les entrées créées.
+
+## Vérifier les serveurs JDE \{#jde-health\}
+
+Lance immédiatement le contrôle de santé des serveurs JD Edwards au travers de Server Manager, sans attendre la planification toutes les cinq minutes, et enregistre le résultat affiché dans [Supervision → Serveurs JDE](./monitoring/jde-servers.md). L'exécution échoue dès qu'une instance n'a pas réussi ses contrôles. Détails : [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## Tâches AIS de JD Edwards \{#ais\}
+
+Deux tâches accèdent à JD Edwards au travers de son serveur AIS (connecteur `ais_connection`). Absentes du menu de Nomajde, elles se lancent depuis **Nomaflow → Tâches** avec **Exécuter avec des paramètres**, ou se copient dans une tâche dédiée avec des paramètres fixes et une planification.
+
+| Tâche | Rôle | Paramètres demandés au lancement |
+|---|---|---|
+| [`nomajde-ais-report`](../nomaflow/bundled-jobs.md#nomajde-ais-report) | Lance un état JD Edwards (UBE) et attend sa fin ; l'exécution échoue si l'état se termine en erreur ou reste en cours au-delà du délai. | **État**, **Version** (`XJDE0001` par défaut), **File d'attente**, **Options de traitement (JSON)**. |
+| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exporte une table ou une vue métier dans un fichier xlsx de l'exécution, avec les titres de colonnes d'AIS en en-tête ; le fichier se télécharge depuis le détail de l'exécution. | **Table** ou **Vue métier**, **Colonnes**, **Conditions (JSON)**, **Lignes max** (`5000` par défaut). |
+
+Les mêmes appels AIS — et quelques autres : comptage de lignes, appel d'une fonction métier, exécution d'une orchestration, démarrage ou arrêt du planificateur — sont disponibles comme étapes Python d'une tâche et comme actions d'écran : voir [les étapes AIS](../nomaflow/bundled-jobs.md#ais-steps).
 
 ---
 

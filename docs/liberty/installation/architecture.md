@@ -105,7 +105,7 @@ The data the applications show stays in **your** databases (Oracle, PostgreSQL�
 |---|---|---|---|
 | **Server** | `liberty-next` container | `liberty-next` container | pipx package run by systemd |
 | **Around it** | — | PostgreSQL 16, Traefik, pgAdmin, Portainer containers | Your PostgreSQL, your reverse proxy |
-| **Framework database** | SQLite | Bundled PostgreSQL | Your PostgreSQL (SQLite for a trial) |
+| **Framework database** | SQLite | Bundled PostgreSQL, or your PostgreSQL server ([external database](./operations.md#external-db)) | Your PostgreSQL (SQLite for a trial) |
 | **Address** | `http://<host>:8000/` | `http(s)://<host>/` | `http://<host>:8000/` behind your proxy |
 | **HTTPS** | Your own proxy | Traefik ([HTTPS and Traefik](./traefik.md)) | Your own proxy |
 | **Licensed apps** | Possible, but they need PostgreSQL | Yes | Yes |
@@ -145,8 +145,8 @@ apps/
 | `app.toml`, `auth.toml` | volume `liberty-config` | volume `liberty-config` | `/var/lib/liberty-next/config/` |
 | Other configuration files | volume `liberty-config`, or `release/apps/config/` with the licensed apps | same | `/var/lib/liberty-next/apps/config/` |
 | Licensed apps code and data | `release/apps/plugins/`, `release/apps/data/` (mounted on `/apps`) | same | `/var/lib/liberty-next/apps/plugins/`, `…/data/` |
-| Framework database | SQLite in volume `liberty-data` | PostgreSQL in volume `pg-data` | your PostgreSQL server |
-| Licensed apps databases (`nomasx1`, `nomajde`) | — | PostgreSQL in `pg-data` | your PostgreSQL server |
+| Framework database | SQLite in volume `liberty-data` | PostgreSQL in volume `pg-data`, or your PostgreSQL server | your PostgreSQL server |
+| Licensed apps databases (`nomasx1`, `nomajde`) | — | PostgreSQL in `pg-data`, or your PostgreSQL server | your PostgreSQL server |
 | Secrets | `release/.env` | `release/.env` | `/etc/liberty/secrets.env` |
 | Tools, certificates | — | volumes `pgadmin-data`, `portainer-data`, `traefik-acme` | — |
 | Backups | `release/backups/` | `release/backups/` | `backups/` next to the configuration folder |

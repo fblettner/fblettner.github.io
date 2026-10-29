@@ -100,8 +100,9 @@ keywords: [Nomajde, overview, home, dashboard, JD Edwards, JDE, users, roles, se
 | **Security Maintenance** | [User Management](./security-maintenance/user-management.md), User Preferences, [Role Management](./security-maintenance/role-management.md), [Role Relationships](./security-maintenance/role-relationships.md), [Environments](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
 | **Development** | Object Librarian, Data Dictionary, Cross Reference — read-only. |
 | **Analysis and jobs** | The [Data Explorer](./data-explorer.md), the [jobs](./jobs.md) and the product page. |
+| **JDE servers** | The number of healthy instances out of the instances monitored, with the time of the last check, and the list of instances with their status and availability over 24 hours — see [JDE Servers](./monitoring/jde-servers.md#overview). |
 
-The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**).
+The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**); the **JDE servers** tiles show the last health check recorded by the `nomajde-jde-health` job.
 
 ---
 

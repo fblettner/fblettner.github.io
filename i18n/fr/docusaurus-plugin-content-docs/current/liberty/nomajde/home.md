@@ -100,8 +100,9 @@ keywords: [Nomajde, vue d'ensemble, accueil, tableau de bord, JD Edwards, JDE, u
 | **Maintenance de la sécurité** | [Gestion des utilisateurs](./security-maintenance/user-management.md), User Preferences, [Affectations Rôles](./security-maintenance/role-management.md), [Relations de rôles](./security-maintenance/role-relationships.md), [Environnements](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
 | **Développement** | Object Librarian, Data Dictionary, Références croisées — en lecture. |
 | **Analyse et tâches** | L'[explorateur de données](./data-explorer.md), les [tâches](./jobs.md) et la page produit. |
+| **Serveurs JDE** | Le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification, et la liste des instances avec leur état et leur disponibilité sur 24 heures — voir [Serveurs JDE](./monitoring/jde-servers.md#overview). |
 
-Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page.
+Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page ; les tuiles **Serveurs JDE** reprennent la dernière vérification enregistrée par la tâche `nomajde-jde-health`.
 
 ---
 

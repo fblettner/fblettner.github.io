@@ -374,6 +374,75 @@ Pour une re-fusion partielle — uniquement les parents affectés par *cette* mo
 
 ---
 
+## Tâches de supervision et AIS de JD Edwards \{#nomajde-jde\}
+
+Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pour la santé des instances, le serveur AIS pour les états et les données.
+
+### `nomajde-jde-health` \{#nomajde-jde-health\}
+
+**Contrôle de santé des serveurs JD Edwards au travers de Server Manager.** L'étape `nomajde.monitoring:health_check` demande les instances au connecteur API `jde_server_manager` (`instancesinfo`), lance le contrôle de santé de Server Manager (`health`) sur chaque serveur enterprise, web et REST démarré, puis écrit une ligne par instance dans la table `jde_health` de la base Nomajde. Ces lignes alimentent [Supervision → Serveurs JDE](../nomajde/monitoring/jde-servers.md) et les tuiles de la vue d'ensemble.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | Les contrôles de Server Manager pris en compte ; vide = tous. |
+| `groups` | vide | JSON `{"<hôte>-<serveur enterprise>": ["<hôte>-<instance>", …]}` — un serveur enterprise arrêté ou en mauvaise santé met ses instances en échec sans les contrôler ; une fois renseigné, seules les instances citées sont suivies. |
+| `auto_stop` | `false` | Arrête une instance démarrée en échec (`stopinstance`), ainsi que les instances démarrées d'un serveur enterprise en échec. |
+| `keep_days` | `30` | Les lignes plus anciennes sont supprimées à chaque exécution. |
+
+**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager et le mot de passe de `jde_admin` sur le connecteur `jde_server_manager` dans **Liberty Next → Construire → Connecteurs**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
+
+**Alertes** — l'exécution échoue dès qu'une instance n'a pas réussi ses contrôles (`failed`, `down` ou `error`), après l'écriture des lignes ; les alertes `on_failure` sont actives.
+
+---
+
+### `nomajde-ais-report` \{#nomajde-ais-report\}
+
+**Lancement d'un état JD Edwards (UBE) au travers d'AIS, avec attente de sa fin.** Étape `nomajde.ais_steps:j_ais_report` sur le connecteur `ais_connection`.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `report` | — | L'état à lancer, par exemple `R0010P`. Demandé au lancement, obligatoire. |
+| `version` | `XJDE0001` | La version. |
+| `queue` | vide | La file d'attente ; vide = la file par défaut. |
+| `po_values` | vide | Les options de traitement par identifiant, en JSON : `{"1": "20261029"}` (dates au format `yyyyMMdd`). |
+| `wait` | `true` | Attend la fin de l'état. |
+| `timeout_seconds` | `3600` | L'exécution échoue si l'état est toujours en cours au-delà de ce délai. |
+
+L'exécution échoue si l'état se termine en erreur. Le journal indique le numéro de travail, le serveur et le statut final. La tâche se lance à la main avec **Exécuter avec des paramètres**, ou se copie avec des paramètres fixes et une planification.
+
+---
+
+### `nomajde-ais-export` \{#nomajde-ais-export\}
+
+**Export d'une table ou d'une vue métier JD Edwards dans un fichier xlsx.** L'étape `nomajde.ais_steps:j_ais_export` parcourt la table ou la vue au travers d'AIS et écrit `<exécution>-<nom>.xlsx` parmi les fichiers de l'exécution, avec les titres de colonnes d'AIS en en-tête. Le fichier se télécharge depuis le détail de l'exécution ; pour l'envoyer par e-mail, ajouter une étape `notify` avec `attach = ["*"]`.
+
+| Paramètre | Valeur par défaut | Rôle |
+|---|---|---|
+| `table` / `view` | — | La table (`F0101`) ou la vue métier à exporter — l'une des deux. |
+| `columns` | vide | Les éléments de données séparés par des virgules (`AN8, ALPH` ; `F4102.LITM` pour une colonne de vue) ; vide = toutes les colonnes. |
+| `conditions` | vide | En JSON : `{"AT1": "C"}` (égalité) ou `[["AN8", ">=", 500]]`. |
+| `max_rows` | `5000` | Le nombre maximal de lignes ; `0` = sans limite. Le journal signale quand JD Edwards contient davantage de lignes. |
+| `filename` | vide | Le nom du fichier ; vide = le nom de la table ou de la vue. |
+
+---
+
+### Les étapes AIS \{#ais-steps\}
+
+Les points d'entrée de `nomajde.ais_steps` figurent dans le sélecteur de fonctions d'une étape `python` de l'éditeur de tâches, et dans la liste de l'action d'écran `call_plugin`. Tous utilisent le connecteur `ais_connection`.
+
+| Point d'entrée | Rôle |
+|---|---|
+| `j_ais_report` | Lance un état / version, sur une file d'attente, avec des options de traitement ; attend sa fin. |
+| `j_ais_export` | Exporte une table ou une vue dans un fichier xlsx de l'exécution. |
+| `j_ais_count` | Compte les lignes d'une table ou d'une vue qui répondent aux conditions. |
+| `j_ais_bsfn` | Appelle une fonction métier avec ses paramètres ; renvoie ses valeurs de sortie. |
+| `j_ais_orchestration` | Exécute une orchestration avec ses entrées ; renvoie sa réponse. |
+| `j_ais_scheduler` | Démarre ou arrête le planificateur JD Edwards d'un environnement (`action = start` / `stop`). |
+
+Conditions, options de traitement, paramètres et entrées se donnent sous forme de tables TOML dans la tâche, ou de texte JSON quand ils sont saisis dans **Exécuter avec des paramètres** ou dans les paramètres d'une action. Un texte vide signifie *non renseigné*. En cas d'erreur AIS, l'étape échoue avec le message d'AIS lui-même.
+
+---
+
 ## Tâche de collecte \{#collect\}
 
 ### `nomasx1-collect-all` \{#nomasx1-collect-all\}

@@ -935,9 +935,9 @@ A web application that sits next to JD Edwards and reads its data live — throu
     04 · Monitoring
     JDE in production, live
     
-      Live counters of AP / AR / GL transactions, drill-through to the underlying screen.
-      The JDE job-control queue as a grid — status, owner, runtime, output.
-      Performance indicators: database latency, AIS response time, transaction throughput.
+      The enterprise, web and AIS servers checked through Server Manager every five minutes — state, health, failed checks.
+      Availability over 24 hours per instance on the overview, the instances in trouble first.
+      A failed check sends the job's alerts; a failed instance can be stopped automatically.
     
   
 
@@ -962,7 +962,8 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
-| **Jobs** | [Re-merge the security, refresh the data dictionary](./jobs.md), with a live log. |
+| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the latest health check of every JD Edwards server and its history. |
+| **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
 
 ---
 
@@ -974,7 +975,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **AP / AR operator** | The transaction grid — open invoices across companies and environments on one page, with bulk filters and drill-through. |
 | **Master-data steward** | Address Book, customer and supplier maintenance with required-field checks; UDC types and codes for the catalogue work. |
 | **Reporting analyst** | One form to schedule BIP, the archive of past runs, e-mail distribution. |
-| **Ops engineer** | The Monitoring section — live counters, job queue, performance indicators. |
+| **Ops engineer** | [JDE Servers](./monitoring/jde-servers.md) — the health of every enterprise, web and AIS server, its availability over 24 hours, the alerts of the check. |
 
 ---
 
@@ -2440,7 +2441,7 @@ The data the applications show stays in **your** databases (Oracle, PostgreSQL�
 |---|---|---|---|
 | **Server** | `liberty-next` container | `liberty-next` container | pipx package run by systemd |
 | **Around it** | — | PostgreSQL 16, Traefik, pgAdmin, Portainer containers | Your PostgreSQL, your reverse proxy |
-| **Framework database** | SQLite | Bundled PostgreSQL | Your PostgreSQL (SQLite for a trial) |
+| **Framework database** | SQLite | Bundled PostgreSQL, or your PostgreSQL server ([external database](./operations.md#external-db)) | Your PostgreSQL (SQLite for a trial) |
 | **Address** | `http://<host>:8000/` | `http(s)://<host>/` | `http://<host>:8000/` behind your proxy |
 | **HTTPS** | Your own proxy | Traefik ([HTTPS and Traefik](./traefik.md)) | Your own proxy |
 | **Licensed apps** | Possible, but they need PostgreSQL | Yes | Yes |
@@ -2480,8 +2481,8 @@ apps/
 | `app.toml`, `auth.toml` | volume `liberty-config` | volume `liberty-config` | `/var/lib/liberty-next/config/` |
 | Other configuration files | volume `liberty-config`, or `release/apps/config/` with the licensed apps | same | `/var/lib/liberty-next/apps/config/` |
 | Licensed apps code and data | `release/apps/plugins/`, `release/apps/data/` (mounted on `/apps`) | same | `/var/lib/liberty-next/apps/plugins/`, `…/data/` |
-| Framework database | SQLite in volume `liberty-data` | PostgreSQL in volume `pg-data` | your PostgreSQL server |
-| Licensed apps databases (`nomasx1`, `nomajde`) | — | PostgreSQL in `pg-data` | your PostgreSQL server |
+| Framework database | SQLite in volume `liberty-data` | PostgreSQL in volume `pg-data`, or your PostgreSQL server | your PostgreSQL server |
+| Licensed apps databases (`nomasx1`, `nomajde`) | — | PostgreSQL in `pg-data`, or your PostgreSQL server | your PostgreSQL server |
 | Secrets | `release/.env` | `release/.env` | `/etc/liberty/secrets.env` |
 | Tools, certificates | — | volumes `pgadmin-data`, `portainer-data`, `traefik-acme` | — |
 | Backups | `release/backups/` | `release/backups/` | `backups/` next to the configuration folder |
@@ -3063,6 +3064,12 @@ When a company proxy or load balancer already terminates HTTPS, keep Liberty Nex
 
 - forward WebSocket upgrades on `/socket.io` (live updates: the notification bell, record locks, assistant replies);
 - keep a user on the same backend if there are several (Traefik does it with the `liberty_sticky` cookie).
+
+### Serving under a sub-path \{#sub-path\}
+
+To publish Liberty Next under a path of an existing site — `https://intranet.example.com/liberty/` — set **Sub-path behind a reverse proxy** to `/liberty` in [Liberty Next → Administer → App](../framework/build/settings-app.md#app), then restart the server. The page, its assets, the API, the downloads, the live connection and the links all resolve under that path, whether the proxy strips the prefix before forwarding or passes it through. The addresses the server builds itself — the single sign-on callback — carry it: register the callback with the sub-path at the identity provider.
+
+The sub-path also applies to the [installed application](./production.md#pwa), and a [promotion target](../framework/build/packages.md#promotion) is declared with its sub-path in its URL.
 
 ---
 
@@ -10488,7 +10495,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 |---|---|
 | **App name** | The application's name. |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
-| **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it. **Restart needed.** |
+| **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it — see [Serving under a sub-path](../../installation/traefik.md#sub-path). **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
 | **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
 | **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
@@ -13354,6 +13361,8 @@ The Nomaflow job editor: the Job section (id, schedule, timezone, tags, enabled)
 
 **+ New job** on the Jobs page, or **Edit** on a card, opens the job editor. One **Save** at the top writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page; **Cancel** leaves without saving. An invalid job is refused with a message at the top of the editor.
 
+Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep their text as it is — comments, `${…}` references, `step_defaults` —, and the saved job gets its `${…}` references back wherever its value still matches.
+
 ---
 
 ## At a glance
@@ -14496,6 +14505,75 @@ The job's diagnostics land in the run log under the `nomajde.*` logger namespace
 **When to run** — once after a clean import of the JDE security tables (`F00950` / `F00926` from a fresh extract), or as a recovery step after a known-bad merge. Not scheduled by default; not idempotent in the trivial sense (re-running on a stable system is a no-op data-wise but writes the same rows again, which can take minutes on a large JDE install).
 
 For a partial re-merge — only the parents affected by *this* change — use `nomajde-remerge-security` (`scope = "package"`).
+
+---
+
+## JD Edwards monitoring and AIS jobs \{#nomajde-jde\}
+
+Jobs that reach the JD Edwards servers themselves: Server Manager for the health of the instances, the AIS server for reports and data.
+
+### `nomajde-jde-health` \{#nomajde-jde-health\}
+
+**Health check of the JD Edwards servers through Server Manager.** The `nomajde.monitoring:health_check` step asks the `jde_server_manager` API connector for the instances (`instancesinfo`), runs Server Manager's health check (`health`) on every running enterprise, web and REST server, and writes one row per instance to the `jde_health` table of the Nomajde database. The rows feed [Monitoring → JDE Servers](../nomajde/monitoring/jde-servers.md) and the overview tiles.
+
+| Parameter | Default | What |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | The Server Manager checks that count; blank = all of them. |
+| `groups` | blank | JSON `{"<host>-<enterprise server>": ["<host>-<instance>", …]}` — an enterprise server down or unhealthy fails its instances without checking them; when set, only the instances listed are monitored. |
+| `auto_stop` | `false` | Stops a running instance that failed (`stopinstance`), and the running instances of a failed enterprise server. |
+| `keep_days` | `30` | Rows older than this are removed at each run. |
+
+**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address and the `jde_admin` password on the `jde_server_manager` connector in **Liberty Next → Build → Connectors**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
+
+**Alerts** — the run fails when an instance did not pass (`failed`, `down` or `error`), after writing the rows; `on_failure` alerts are on.
+
+---
+
+### `nomajde-ais-report` \{#nomajde-ais-report\}
+
+**Run a JD Edwards report (UBE) through AIS and wait until it is done.** Step `nomajde.ais_steps:j_ais_report` over the `ais_connection` connector.
+
+| Parameter | Default | What |
+|---|---|---|
+| `report` | — | The report to run, e.g. `R0010P`. Asked at launch, required. |
+| `version` | `XJDE0001` | The version. |
+| `queue` | blank | The job queue; blank = the default queue. |
+| `po_values` | blank | Processing options by id, JSON: `{"1": "20261029"}` (dates `yyyyMMdd`). |
+| `wait` | `true` | Waits for the end of the report. |
+| `timeout_seconds` | `3600` | The run fails when the report is still running after this delay. |
+
+The run fails when the report ends in error. The log gives the job number, the server and the final status. Run it by hand with **Run with parameters**, or copy it with fixed parameters and a schedule.
+
+---
+
+### `nomajde-ais-export` \{#nomajde-ais-export\}
+
+**Export a JD Edwards table or business view to an xlsx file.** Step `nomajde.ais_steps:j_ais_export`: browses the table or view through AIS and writes `<run>-<name>.xlsx` among the files of the run, the headers being AIS's column titles. The file is downloaded from the run detail; to mail it, add a `notify` step with `attach = ["*"]`.
+
+| Parameter | Default | What |
+|---|---|---|
+| `table` / `view` | — | The table (`F0101`) or the business view to export — one of the two. |
+| `columns` | blank | Data items separated by commas (`AN8, ALPH`; `F4102.LITM` for a view's column); blank = every column. |
+| `conditions` | blank | JSON: `{"AT1": "C"}` (equals) or `[["AN8", ">=", 500]]`. |
+| `max_rows` | `5000` | The row limit; `0` = no limit. The log warns when JD Edwards holds more rows. |
+| `filename` | blank | The file name; blank = the table or view name. |
+
+---
+
+### The AIS steps \{#ais-steps\}
+
+The `nomajde.ais_steps` entry points appear in the job editor's callable picker for a `python` step and in the list of the `call_plugin` screen action. All use the `ais_connection` connector.
+
+| Entry point | Does |
+|---|---|
+| `j_ais_report` | Runs a report / version, on a queue, with processing options; waits for its end. |
+| `j_ais_export` | Exports a table or a view to an xlsx file of the run. |
+| `j_ais_count` | Counts the rows of a table or a view matching conditions. |
+| `j_ais_bsfn` | Calls a business function with its parameters; returns its output values. |
+| `j_ais_orchestration` | Runs an orchestration with its inputs; returns its response. |
+| `j_ais_scheduler` | Starts or stops the JD Edwards scheduler of an environment (`action = start` / `stop`). |
+
+Conditions, processing options, parameters and inputs are given as TOML tables in the job, or as JSON text when typed in **Run with parameters** or an action's parameters. An empty text means *not set*. On an AIS error, the step fails with AIS's own message.
 
 ---
 
@@ -19453,8 +19531,9 @@ The Nomajde home page: what Nomajde does, the live figures of the JD Edwards Ent
 | **Security Maintenance** | [User Management](./security-maintenance/user-management.md), User Preferences, [Role Management](./security-maintenance/role-management.md), [Role Relationships](./security-maintenance/role-relationships.md), [Environments](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
 | **Development** | Object Librarian, Data Dictionary, Cross Reference — read-only. |
 | **Analysis and jobs** | The [Data Explorer](./data-explorer.md), the [jobs](./jobs.md) and the product page. |
+| **JDE servers** | The number of healthy instances out of the instances monitored, with the time of the last check, and the list of instances with their status and availability over 24 hours — see [JDE Servers](./monitoring/jde-servers.md#overview). |
 
-The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**).
+The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**); the **JDE servers** tiles show the last health check recorded by the `nomajde-jde-health` job.
 
 ---
 
@@ -20237,10 +20316,88 @@ This is what makes a JDE security promotion repeatable: pair it with the [`nomaj
 
 ---
 
+## Nomajde — JDE Servers
+Source: https://docs.nomana-it.fr/liberty/nomajde/monitoring/jde-servers/
+
+Monitoring → JDE Servers in Nomajde: the latest health check of every JD Edwards enterprise, web and REST server seen by Server Manager — state, health, failed checks, action taken — its history, the overview figures and the job that collects them.
+
+**Monitoring → JDE Servers** shows the JD Edwards servers as the last health check saw them: one row per instance, its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
+
+---
+
+## At a glance
+
+---
+
+## The grid \{#grid\}
+
+The grid is read-only and lists the latest check of each instance checked in the last 24 hours.
+
+| Column | Content |
+|---|---|
+| **Host** | The Server Manager agent host of the instance. |
+| **Instance** | The instance name in Server Manager. |
+| **Server type** | `entserver` (enterprise server), `webserver` (HTML server) or `restserver` (AIS server). |
+| **State** | The state reported by Server Manager, e.g. `RUNNING`. |
+| **Health** | `passed`, `failed` (a check did not pass, or its enterprise server is not healthy), `down` (the instance is not running) or `error` (Server Manager could not be queried for it, or the instance is unknown to Server Manager). |
+| **Failed checks** | The Server Manager checks that did not pass, among the ones monitored (see [Parameters](#parameters)). |
+| **Enterprise server** | For an instance declared in a group, the enterprise server it depends on. |
+| **Action** | `stopped` when the check stopped the instance, `stop failed` when the stop was refused. |
+| **Detail** | The error message, or the reason of a failure inherited from the enterprise server. |
+| **Checked at** | The time of the check. |
+
+The **Host**, **Instance**, **Server type** and **Health** columns can be filtered.
+
+## The history of an instance \{#history\}
+
+Opening a row shows the instance in a dialog. The **General** tab repeats the fields of the grid; the **History** tab lists every check kept for the instance, most recent first: time, state, health, failed checks, enterprise server, action, detail.
+
+---
+
+## On the overview \{#overview\}
+
+The Nomajde [home page](../home.md) carries two **JDE servers** tiles, based on the last check of each instance over 24 hours:
+
+- the number of healthy instances out of the instances monitored, with the time of the last check;
+- the list of instances: the server type and host, the failed checks and the action taken, a status pill — **OK**, **Failed**, **Down**, **Error** —, the availability over 24 hours (the share of passed checks) and the number of checks. Instances in trouble come first; an instance whose last check is older than 30 minutes is shown in amber, tagged **Late**.
+
+---
+
+## The collection job \{#job\}
+
+The `nomajde-jde-health` job checks the servers through the Server Manager REST API. It ships **disabled**, scheduled every five minutes (Europe/Paris).
+
+1. In **Liberty Next → Build → Connectors**, open the `jde_server_manager` connector and set the Server Manager address and the password of the `jde_admin` account.
+2. In **Nomaflow → Jobs**, adjust the parameters of `nomajde-jde-health` if needed, then enable it.
+3. **Jobs → Check the JDE servers** in the Nomajde menu runs the check at once, without waiting for the schedule.
+
+Each run asks Server Manager for the list of instances and runs its health check on each running instance. The run **fails** — and triggers the job's alerts — when an instance did not pass; the rows are written beforehand, so the grid shows the failure.
+
+### Parameters \{#parameters\}
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| `checks` | `UBE, BSFN, Port Test, Login, Interactive App, OVR` | The Server Manager checks that count; the others are ignored. Blank: every check counts. |
+| `groups` | blank | The instances that depend on an enterprise server, as JSON: `{"<host>-<enterprise server>": ["<host>-<instance>", …]}`. When the enterprise server is down or not healthy, its instances are marked failed without being checked. When set, only the instances named here are monitored. |
+| `auto_stop` | `false` | `true` stops a running instance that failed, and the running instances of a failed enterprise server. |
+| `keep_days` | `30` | The number of days of checks kept; older rows are removed at each run. |
+
+Details of the job: [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## Related
+
+- [Jobs](../jobs.md) — the Nomajde jobs, including *Check the JDE servers*.
+- [Notifications](../../nomaflow/notifications.md) — to be alerted when the check fails.
+- [Overview — the home page](../home.md).
+
+---
+
 ## Nomajde — Jobs
 Source: https://docs.nomana-it.fr/liberty/nomajde/jobs/
 
-The Jobs folder of the Nomajde menu: re-merge the JD Edwards security of the roles touched by a change package or of every role, and refresh the data dictionary of the Explorer models — run on demand with a live log.
+The Jobs folder of the Nomajde menu: re-merge the JD Edwards security of the roles touched by a change package or of every role, refresh the data dictionary of the Explorer models, check the JD Edwards servers — run on demand with a live log; and the AIS jobs that run a report or export a table from Nomaflow.
 
 The **Jobs** folder, at the bottom of the Nomajde menu, runs the JD Edwards maintenance jobs on demand without opening Nomaflow. Each entry opens the job's page: its parameters, **Run**, the log followed live, the previous runs with who ran them. See [Run a job from an application's menu](../nomaflow/jobs/run-from-menu.md).
 
@@ -20263,6 +20420,23 @@ Creates the dictionary entries the [Data Explorer](./data-explorer.md) models la
 | **Explorer model (blank = every model)** | One of the Nomajde models, or blank for all. |
 
 The log lists, per model, the tables scanned and the entries created.
+
+## Check the JDE servers \{#jde-health\}
+
+Runs the health check of the JD Edwards servers through Server Manager at once, without waiting for the five-minute schedule, and records the result shown in [Monitoring → JDE Servers](./monitoring/jde-servers.md). The run fails when an instance did not pass. Details: [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## JD Edwards AIS jobs \{#ais\}
+
+Two jobs reach JD Edwards through its AIS server (connector `ais_connection`). They are not in the Nomajde menu: they are run from **Nomaflow → Jobs** with **Run with parameters**, or copied into a job of their own with fixed parameters and a schedule.
+
+| Job | What it does | Parameters asked at launch |
+|---|---|---|
+| [`nomajde-ais-report`](../nomaflow/bundled-jobs.md#nomajde-ais-report) | Runs a JD Edwards report (UBE) and waits until it is done; the run fails when the report ends in error or is still running after the time limit. | **Report**, **Version** (`XJDE0001` by default), **Queue**, **Processing options (JSON)**. |
+| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exports a table or a business view to an xlsx file of the run, with AIS's column titles as headers; the file is downloaded from the run detail. | **Table** or **Business view**, **Columns**, **Conditions (JSON)**, **Max rows** (`5000` by default). |
+
+The same AIS calls — and a few more: count rows, call a business function, run an orchestration, start or stop the scheduler — are available as Python steps of a job and as screen actions: see [the AIS steps](../nomaflow/bundled-jobs.md#ais-steps).
 
 ---
 

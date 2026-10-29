@@ -214,7 +214,8 @@ Company: https://nomana-it.fr/ · AI services: https://nomana-it.fr/ai/ · Full 
 - [Nomajde — Role Relationships](https://docs.nomana-it.fr/liberty/nomajde/security-maintenance/role-relationships/): Maintain the JD Edwards role-inheritance graph in a single grid — pair source and target roles, set effective and expiration dates, bulk-upload from Excel.
 - [Nomajde — Environments](https://docs.nomana-it.fr/liberty/nomajde/security-maintenance/environments/): Maintain the JD Edwards environment list per user and per role — production, test, development, conference room, with the order in which they appear at sign-on.
 - [Nomajde — Security Workbench](https://docs.nomana-it.fr/liberty/nomajde/security-maintenance/security-workbench/): Maintain every JD Edwards security entry — application, action, row, column, processing-option, tab, exit, image — on a single grid with inline edit.
-- [Nomajde — Jobs](https://docs.nomana-it.fr/liberty/nomajde/jobs/): The Jobs folder of the Nomajde menu: re-merge the JD Edwards security of the roles touched by a change package or of every role, and refresh the data dictionary of the Explorer models — run on demand with a live log.
+- [Nomajde — JDE Servers](https://docs.nomana-it.fr/liberty/nomajde/monitoring/jde-servers/): Monitoring → JDE Servers in Nomajde: the latest health check of every JD Edwards enterprise, web and REST server seen by Server Manager — state, health, failed checks, action taken — its history, the overview figures and the job that collects them.
+- [Nomajde — Jobs](https://docs.nomana-it.fr/liberty/nomajde/jobs/): The Jobs folder of the Nomajde menu: re-merge the JD Edwards security of the roles touched by a change package or of every role, refresh the data dictionary of the Explorer models, check the JD Edwards servers — run on demand with a live log; and the AIS jobs that run a report or export a table from Nomaflow.
 
 ## NomaUBL — e-invoicing
 

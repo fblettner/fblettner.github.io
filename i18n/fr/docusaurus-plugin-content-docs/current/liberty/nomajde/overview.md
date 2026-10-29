@@ -194,9 +194,9 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
     <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#c084fc', fontWeight: 800, marginBottom: '8px'}}>04 · Supervision</div>
     <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>JDE en production, en direct</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
-      <li>Compteurs en direct des transactions AP / AR / GL, drill vers l'écran sous-jacent.</li>
-      <li>La file de job-control JDE sous forme de grille — statut, propriétaire, durée, sortie.</li>
-      <li>Indicateurs de performance : latence base, temps de réponse AIS, débit transactionnel.</li>
+      <li>Les serveurs enterprise, web et AIS contrôlés par Server Manager toutes les cinq minutes — état, santé, contrôles en échec.</li>
+      <li>La disponibilité sur 24 heures de chaque instance sur la vue d'ensemble, les instances en défaut en tête.</li>
+      <li>Un contrôle en échec déclenche les alertes de la tâche ; une instance en échec peut être arrêtée automatiquement.</li>
     </ul>
   </div>
 
@@ -215,7 +215,8 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
-| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données](./jobs.md), avec un journal en direct. |
+| **Supervision** | [Serveurs JDE](./monitoring/jde-servers.md) : la dernière vérification de chaque serveur JD Edwards et son historique. |
+| **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
 
 ---
 
@@ -227,7 +228,7 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Opérateur AP / AR** | La grille de transactions — factures ouvertes inter-sociétés et inter-environnements sur une page, avec filtres en masse et drill. |
 | **Référent données maîtres** | Maintenance Address Book, clients, fournisseurs avec contrôles de champs obligatoires ; types et valeurs UDC pour le catalogue. |
 | **Analyste reporting** | Un formulaire unique pour planifier BIP, l'archive des runs passés, la distribution par courriel. |
-| **Ingénieur ops** | La section Supervision — compteurs en direct, file de jobs, indicateurs de performance. |
+| **Ingénieur ops** | [Serveurs JDE](./monitoring/jde-servers.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle. |
 
 ---
 

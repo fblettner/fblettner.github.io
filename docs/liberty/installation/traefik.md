@@ -122,3 +122,9 @@ When a company proxy or load balancer already terminates HTTPS, keep Liberty Nex
 
 - forward WebSocket upgrades on `/socket.io` (live updates: the notification bell, record locks, assistant replies);
 - keep a user on the same backend if there are several (Traefik does it with the `liberty_sticky` cookie).
+
+### Serving under a sub-path \{#sub-path\}
+
+To publish Liberty Next under a path of an existing site — `https://intranet.example.com/liberty/` — set **Sub-path behind a reverse proxy** to `/liberty` in [Liberty Next → Administer → App](../framework/build/settings-app.md#app), then restart the server. The page, its assets, the API, the downloads, the live connection and the links all resolve under that path, whether the proxy strips the prefix before forwarding or passes it through. The addresses the server builds itself — the single sign-on callback — carry it: register the callback with the sub-path at the identity provider.
+
+The sub-path also applies to the [installed application](./production.md#pwa), and a [promotion target](../framework/build/packages.md#promotion) is declared with its sub-path in its URL.

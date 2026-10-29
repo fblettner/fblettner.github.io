@@ -105,7 +105,7 @@ Les données affichées par les applications restent dans **leurs** bases d'orig
 |---|---|---|---|
 | **Serveur** | Conteneur `liberty-next` | Conteneur `liberty-next` | Paquet pipx lancé par systemd |
 | **Autour** | — | Conteneurs PostgreSQL 16, Traefik, pgAdmin, Portainer | Un PostgreSQL existant, un proxy inverse existant |
-| **Base du framework** | SQLite | PostgreSQL fourni | Un PostgreSQL existant (SQLite pour un essai) |
+| **Base du framework** | SQLite | PostgreSQL fourni, ou un serveur PostgreSQL existant ([base externe](./operations.md#external-db)) | Un PostgreSQL existant (SQLite pour un essai) |
 | **Adresse** | `http://<hôte>:8000/` | `http(s)://<hôte>/` | `http://<hôte>:8000/` derrière un proxy inverse |
 | **HTTPS** | Un proxy inverse existant | Traefik ([HTTPS et Traefik](./traefik.md)) | Un proxy inverse existant |
 | **Applications sous licence** | Possible, mais elles demandent PostgreSQL | Oui | Oui |
@@ -145,8 +145,8 @@ apps/
 | `app.toml`, `auth.toml` | volume `liberty-config` | volume `liberty-config` | `/var/lib/liberty-next/config/` |
 | Autres fichiers de configuration | volume `liberty-config`, ou `release/apps/config/` avec les applications sous licence | idem | `/var/lib/liberty-next/apps/config/` |
 | Code et données des applications sous licence | `release/apps/plugins/`, `release/apps/data/` (montés sur `/apps`) | idem | `/var/lib/liberty-next/apps/plugins/`, `…/data/` |
-| Base du framework | SQLite dans le volume `liberty-data` | PostgreSQL dans le volume `pg-data` | le serveur PostgreSQL existant |
-| Bases des applications sous licence (`nomasx1`, `nomajde`) | — | PostgreSQL dans `pg-data` | le serveur PostgreSQL existant |
+| Base du framework | SQLite dans le volume `liberty-data` | PostgreSQL dans le volume `pg-data`, ou le serveur PostgreSQL existant | le serveur PostgreSQL existant |
+| Bases des applications sous licence (`nomasx1`, `nomajde`) | — | PostgreSQL dans `pg-data`, ou le serveur PostgreSQL existant | le serveur PostgreSQL existant |
 | Secrets | `release/.env` | `release/.env` | `/etc/liberty/secrets.env` |
 | Outils, certificats | — | volumes `pgadmin-data`, `portainer-data`, `traefik-acme` | — |
 | Sauvegardes | `release/backups/` | `release/backups/` | `backups/` à côté du dossier de configuration |

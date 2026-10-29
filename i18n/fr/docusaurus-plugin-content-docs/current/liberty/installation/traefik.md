@@ -122,3 +122,9 @@ Quand un proxy d'entreprise ou un répartiteur de charge termine déjà le HTTPS
 
 - relayer les connexions WebSocket sur `/socket.io` (mises à jour en temps réel : cloche des notifications, verrous d'enregistrement, réponses de l'assistant) ;
 - garder un utilisateur sur la même instance s'il y en a plusieurs (Traefik le fait avec le cookie `liberty_sticky`).
+
+### Publication sous un sous-chemin \{#sub-path\}
+
+Pour publier Liberty Next sous un chemin d'un site existant — `https://intranet.example.com/liberty/` —, renseigner `/liberty` dans **Sous-chemin derrière un proxy inverse**, sous [Liberty Next → Administrer → App](../framework/build/settings-app.md#app), puis redémarrer le serveur. La page, ses ressources, l'API, les téléchargements, la connexion en direct et les liens se résolvent sous ce chemin, que le proxy retire le préfixe avant de transmettre la requête ou qu'il le conserve. Les adresses construites par le serveur — le retour de l'authentification unique — l'intègrent : déclarer cette adresse de retour, sous-chemin compris, auprès du fournisseur d'identité.
+
+Le sous-chemin s'applique aussi à l'[application installée](./production.md#pwa), et une [instance cible de promotion](../framework/build/packages.md#promotion) se déclare avec le sous-chemin dans son URL.

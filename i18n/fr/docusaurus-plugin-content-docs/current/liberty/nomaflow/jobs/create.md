@@ -8,6 +8,8 @@ keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fusea
 
 **+ Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur une carte, ouvre l'éditeur de tâche. Un seul **Enregistrer**, en haut, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches ; **Annuler** quitte sans enregistrer. Une tâche invalide est refusée avec un message en haut de l'éditeur.
 
+Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.toml` conservent leur texte à l'identique — commentaires, références `${…}`, `step_defaults` —, et la tâche enregistrée retrouve ses références `${…}` partout où la valeur correspond toujours.
+
 ---
 
 ## Vue d'ensemble

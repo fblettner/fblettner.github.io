@@ -101,7 +101,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 |---|---|
 | **App name** | The application's name. |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
-| **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it. **Restart needed.** |
+| **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it — see [Serving under a sub-path](../../installation/traefik.md#sub-path). **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
 | **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
 | **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |

@@ -519,6 +519,10 @@
     "message": "Données de base",
     "description": "The label for category 'Master Data' in sidebar 'nomajdeSidebar'"
   },
+  "sidebar.nomajdeSidebar.category.Monitoring": {
+    "message": "Supervision",
+    "description": "The label for category 'Monitoring' in sidebar 'nomajdeSidebar'"
+  },
   "sidebar.nomajdeSidebar.category.Security Maintenance": {
     "message": "Maintenance de la sécurité",
     "description": "The label for category 'Security Maintenance' in sidebar 'nomajdeSidebar'"
