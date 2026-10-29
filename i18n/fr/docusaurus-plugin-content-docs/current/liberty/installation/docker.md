@@ -82,9 +82,11 @@ Le contenu des deux installations est décrit sur [Architecture](./architecture.
 Récupérer le dossier `release/` :
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ```
+
+Seul le dossier `release/` est récupéré (quelques centaines de Ko, sans l'historique du projet). Un `git pull` dans ce dossier apporte les scripts de la version suivante — `main` ne reçoit que les versions publiées ; ajouter `--branch v<version>` au clone pour en figer une. Ce que l'installation y écrit (`.env`, `apps/`, `backups/`) est ignoré par git : un pull n'y touche jamais. Un hôte qui a cloné tout le projet continue de fonctionner tel quel.
 
 Toutes les commandes de cette page et des suivantes se lancent depuis ce dossier `release/`.
 

@@ -75,8 +75,8 @@ Les applications sous licence (Nomasx-1, Nomajde) et les tâches Nomaflow livré
 Sur un hôte Linux équipé de Docker et du plugin Compose :
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ./liberty install full          # ou : ./liberty install light
 ```
 

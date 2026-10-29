@@ -75,8 +75,8 @@ The licensed applications (Nomasx-1, Nomajde) and the bundled Nomaflow jobs need
 On a Linux host with Docker and the Compose plugin:
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ./liberty install full          # or: ./liberty install light
 ```
 

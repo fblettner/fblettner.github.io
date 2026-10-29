@@ -82,9 +82,11 @@ For what the two layouts contain, see [Architecture](./architecture.md#layouts).
 Fetch the release folder:
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ```
+
+Only the `release/` folder is fetched (a few hundred KB, without the project's history). `git pull` in it brings the scripts of the next release — `main` only receives releases; add `--branch v<version>` to the clone to pin one. What the install writes there (`.env`, `apps/`, `backups/`) is ignored by git, so a pull never touches it. A host that cloned the whole project keeps working as it is.
 
 Every command on this page and on the following ones is run from this `release/` folder.
 
