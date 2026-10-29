@@ -200,16 +200,19 @@ The pool is chosen at runtime:
 
 The reachable set is the default `pool` plus `pools`; a request or a job can never reach a pool outside it, and only pool **names** reach the picker — never a URL or credentials. A connector with just a `pool` behaves exactly as before.
 
+An API connector called from those screens — AIS, for JD Edwards — can follow the same environments: see [One server per environment](#api-environments).
+
 ---
 
 ## API connector \{#api\}
 
-An API connector calls a web API. Its editor has five tabs:
+An API connector calls a web API. Its editor has six tabs:
 
 | Tab | Content |
 |---|---|
 | **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify** (*true*, *false*, or a variable such as `${JDE_AIS_VERIFY_SSL:-true}`, kept as written), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type**: *None*, *Basic* (user and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint, request body and headers, token field, token lifetime). Secrets are encrypted when saved. |
+| **Environments** | One server per environment, for a connector used with several JDE environments — see [One server per environment](#api-environments). |
 | **Endpoints** | The named endpoints — see below. |
 | **Webhooks** | Not available yet: external systems cannot push events into Liberty Next. |
 | **Test** | **Test connection** checks the authentication; **Run** calls an endpoint with parameter values and shows the response. Nothing is saved. |
@@ -227,6 +230,31 @@ An endpoint has:
 | **Label**, **Description** | Shown in the pickers and to the AI assistant. |
 
 Endpoints are called by screen actions (`call_api`), menu entries (type `endpoint`), notification rules (`action` channel), plugins (`connectors.api(…).call(…)`) and — when allowed — the AI assistant. A Nomaflow `http` step calls a URL directly, without a connector.
+
+### One server per environment \{#api-environments\}
+
+When the screens run on a [multi-pool connector](#multi-pool) — several JD Edwards environments — each environment usually has its own AIS server. The **Environments** tab gives the API connector one server per environment; the endpoints stay defined once.
+
+| Field | Effect |
+|---|---|
+| **Environment (pool)** | The environment (pool) of the connector's own server — its **Base URL** and credentials. Required as soon as there is another environment. |
+| **Other environments** | One entry per other pool: **Base URL**, **Username**, **Password**, **Token**, **SSL Verify**. A blank field takes the connector's value. Passwords and tokens are encrypted when saved. |
+
+Nobody chooses the server. A call follows the environment the screen runs on — the **Pool** picked in the sidebar, or the default — and a job step's `pool` (any step type). That covers screen actions (`call_api`), plugins, `/api/http` and the AI assistant.
+
+A call made for one of the connector's environments with no server is **refused** ("no target for pool …"); it is never sent to the connector's own server, which is another environment — often production. The environments are the connector's pool plus every pool of the SQL connectors running on it, so a JDE environment added on the SQL side and forgotten here is refused too. The tab lists those environments without a server, and so does *Settings → Integrity*.
+
+```toml
+[connectors.ais_connection]
+base_url = "${JDE_AIS_URL}"
+pool = "jdedwards"                          # the environment of base_url
+
+[connectors.ais_connection.targets.jdedwards_dev]
+base_url = "https://ais-dev.example.com:7077/jderest/v2"
+auth_password = "ENC:…"                     # only what differs
+```
+
+To name the environment before a sensitive call, use `#POOL#` in a `confirm` message: `Reset the password of {INPUT.user} on #POOL#?`. An upgrade of the licensed apps keeps an install's `pool` and `targets`.
 
 ---
 

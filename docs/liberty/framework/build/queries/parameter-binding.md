@@ -150,6 +150,7 @@ These sources are read in the browser at the time of the call:
 | `#LOGIN_USER#` (or `#LOGIN#`, `#USER#`) | The signed-in user's name. |
 | `#LOGIN_EMAIL#` (or `#EMAIL#`) | The user's e-mail address. |
 | `#LANGUAGE#` (or `#LANG#`) | The interface language. |
+| `#POOL#` (or `#ENVIRONMENT#`) | The **Pool** picked in the sidebar. In a `confirm` / `notify` message: the environment the screen runs on — that pick when the screen's connector has it, else the connector's own pool. |
 | `#SYSDATE#` (or `#CURRENT_DATE#`, `#TODAY#`) | Today's date, `YYYY-MM-DD`. |
 | `#NOW#` (or `#CURRENT_TIMESTAMP#`) | The current date and time. |
 | `#CURRENT_TIME#` | The current time, `HH:MM:SS`. |

@@ -72,8 +72,8 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`navigate`** | Ouvre une autre vue : un écran (`screen`) ou une requête (`to`), les `param_binds` lui étant transmis comme paramètres. | `connector`, `screen` ou `to`, `param_binds` |
 | **`open_url`** | Ouvre une adresse externe — une autre application sur la fiche de la ligne. | `url`, `new_tab` |
 | **`set_field`** | Écrit une valeur dans un champ du formulaire. | `target`, `value` ou `source` |
-| **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. | `message`, `confirm_label`, `cancel_label` |
-| **`notify`** | Affiche un message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. Le message se remplit comme un modèle `open_url` (`{COLONNE}`, `{INPUT.x}`, sources intégrées), sans encodage : `Reset the password of {INPUT.user} on #POOL#?`. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Affiche un message, rempli de la même façon. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
 | **`send_notification`** | Déclenche une règle de notification de type *action* (e-mail, cloche…). | `rule`, `param_binds` |
 | **`refresh`** | Recharge la grille. | — |
 

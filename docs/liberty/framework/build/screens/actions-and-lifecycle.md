@@ -72,8 +72,8 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`navigate`** | Opens another view: a screen (`screen`) or a query (`to`), with `param_binds` passed as its parameters. | `connector`, `screen` or `to`, `param_binds` |
 | **`open_url`** | Opens an external address — another application on the row's record. | `url`, `new_tab` |
 | **`set_field`** | Writes a value into a form field. | `target`, `value` or `source` |
-| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. | `message`, `confirm_label`, `cancel_label` |
-| **`notify`** | Shows a message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. The message is filled like an `open_url` template (`{COLUMN}`, `{INPUT.x}`, built-ins), not encoded: `Reset the password of {INPUT.user} on #POOL#?`. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Shows a message, filled the same way. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
 | **`send_notification`** | Fires a notification rule of type *action* (e-mail, portal…). | `rule`, `param_binds` |
 | **`refresh`** | Reloads the grid. | — |
 

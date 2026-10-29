@@ -200,16 +200,19 @@ Le pool se choisit à l'exécution :
 
 L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
 
+Un connecteur API appelé depuis ces écrans — AIS, pour JD Edwards — peut suivre les mêmes environnements : voir [Un serveur par environnement](#api-environments).
+
 ---
 
 ## Connecteur API \{#api\}
 
-Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
+Un connecteur API appelle une API web. Son éditeur comporte six onglets :
 
 | Onglet | Contenu |
 |---|---|
 | **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **Vérification SSL** (*true*, *false*, ou une variable comme `${JDE_AIS_VERIFY_SSL:-true}`, conservée telle quelle), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type** : *None*, *Basic* (utilisateur et mot de passe), *Bearer* (jeton fixe), *API Key* (nom de l'en-tête et clé), *OAuth2 / JWT* (endpoint de jeton, corps et en-têtes de la demande, champ du jeton, durée de vie). Les secrets sont chiffrés à l'enregistrement. |
+| **Environnements** | Un serveur par environnement, pour un connecteur utilisé avec plusieurs environnements JDE — voir [Un serveur par environnement](#api-environments). |
 | **Endpoints** | Les endpoints nommés — voir ci-dessous. |
 | **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |
 | **Test** | **Tester la connexion** vérifie l'authentification ; **Run** appelle un endpoint avec des valeurs de paramètres et affiche la réponse. Rien n'est enregistré. |
@@ -227,6 +230,31 @@ Un endpoint comporte :
 | **Label**, **Description** | Affichés dans les listes de choix et à l'assistant IA. |
 
 Les endpoints sont appelés par les actions d'écran (`call_api`), les entrées de menu (type `endpoint`), les règles de notification (canal `action`), les plugins (`connectors.api(…).call(…)`) et — s'il y est autorisé — l'assistant IA. Une étape Nomaflow `http` appelle directement une URL, sans connecteur.
+
+### Un serveur par environnement \{#api-environments\}
+
+Quand les écrans s'appuient sur un [connecteur multi-pools](#multi-pool) — plusieurs environnements JD Edwards — chaque environnement a en général son propre serveur AIS. L'onglet **Environnements** donne au connecteur API un serveur par environnement ; les endpoints restent définis une seule fois.
+
+| Champ | Effet |
+|---|---|
+| **Environnement (pool)** | L'environnement (pool) du serveur du connecteur — sa **Base URL** et ses identifiants. Obligatoire dès qu'il y a un autre environnement. |
+| **Autres environnements** | Une entrée par autre pool : **Base URL**, **Username**, **Password**, **Token**, **Vérification SSL**. Un champ vide reprend la valeur du connecteur. Mots de passe et jetons sont chiffrés à l'enregistrement. |
+
+Personne ne choisit le serveur. Un appel suit l'environnement de l'écran — le **Pool** choisi dans la barre latérale, ou celui par défaut — et le `pool` d'une étape de tâche (tout type d'étape). Cela couvre les actions d'écran (`call_api`), les plugins, `/api/http` et l'assistant IA.
+
+Un appel fait pour un des environnements du connecteur sans serveur est **refusé** (« no target for pool … ») ; il n'est jamais envoyé au serveur du connecteur, qui est un autre environnement — souvent la production. Les environnements sont le pool du connecteur plus tous les pools des connecteurs SQL qui s'appuient dessus : un environnement JDE ajouté côté SQL et oublié ici est refusé lui aussi. L'onglet liste ces environnements sans serveur, *Paramètres → Intégrité* aussi.
+
+```toml
+[connectors.ais_connection]
+base_url = "${JDE_AIS_URL}"
+pool = "jdedwards"                          # l'environnement de base_url
+
+[connectors.ais_connection.targets.jdedwards_dev]
+base_url = "https://ais-dev.example.com:7077/jderest/v2"
+auth_password = "ENC:…"                     # seulement ce qui diffère
+```
+
+Pour nommer l'environnement avant un appel sensible, utilisez `#POOL#` dans le message d'un `confirm` : `Reset the password of {INPUT.user} on #POOL#?`. Une mise à jour des applications sous licence conserve le `pool` et les `targets` d'une installation.
 
 ---
 

@@ -150,6 +150,7 @@ Ces sources sont lues dans le navigateur au moment de l'appel :
 | `#LOGIN_USER#` (ou `#LOGIN#`, `#USER#`) | Le nom de l'utilisateur connecté. |
 | `#LOGIN_EMAIL#` (ou `#EMAIL#`) | L'adresse e-mail de l'utilisateur. |
 | `#LANGUAGE#` (ou `#LANG#`) | La langue de l'interface. |
+| `#POOL#` (ou `#ENVIRONMENT#`) | Le **Pool** choisi dans la barre latérale. Dans le message d'un `confirm` / `notify` : l'environnement de l'écran — ce choix quand le connecteur de l'écran l'a, sinon le pool du connecteur. |
 | `#SYSDATE#` (ou `#CURRENT_DATE#`, `#TODAY#`) | La date du jour, `YYYY-MM-DD`. |
 | `#NOW#` (ou `#CURRENT_TIMESTAMP#`) | La date et l'heure courantes. |
 | `#CURRENT_TIME#` | L'heure courante, `HH:MM:SS`. |
