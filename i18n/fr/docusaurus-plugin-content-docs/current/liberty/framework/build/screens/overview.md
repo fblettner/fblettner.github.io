@@ -76,7 +76,7 @@ Trois régions :
 
 ## La boîte de dialogue modale du Concepteur d'écran
 
-Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran** qui héberge le **ScreenEditor**. L'en-tête présente *Agrandir / Restaurer* (plein écran par défaut), *Annuler* et *Enregistrer* — Enregistrer valide **uniquement les modifications de cet écran** et ferme ; Annuler demande confirmation en cas de modifications non enregistrées.
+Cliquer sur une carte ouvre une **boîte de dialogue modale quasi plein écran** qui héberge le **ScreenEditor**. L'en-tête présente *Agrandir / Restaurer* (plein écran par défaut), *Annuler* et *Enregistrer* — Enregistrer valide **uniquement les modifications de cet écran** et ferme — dans `screens.toml`, seul cet écran est réécrit, sans ses valeurs par défaut et dans l'ordre des clés du fichier, les autres écrans restant inchangés ; Annuler demande confirmation en cas de modifications non enregistrées.
 
 La fenêtre répartit l'ensemble en neuf onglets :
 

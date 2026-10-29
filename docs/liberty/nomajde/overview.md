@@ -328,7 +328,7 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
-| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the latest health check of every JD Edwards server and its history. |
+| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
 
 ---

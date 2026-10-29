@@ -123,7 +123,8 @@ A key is not locked automatically when a row is edited: tick **disable_on_edit**
 
 | Field | Notes |
 |---|---|
-| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. |
+| **`filter`** | When on, the column appears in the table's filter panel. The user picks a value to narrow the grid; on a column with a list of values (an enum), several values at once, and a code typed beyond the list is accepted. A lookup column keeps a single choice. A date column (`date`, `datetime`, `timestamp` format, or a date type in the database) filters by a [period](#period). |
+| **`filter_period`** | On a date column with `filter`, the period the filter opens on: `today`, `yesterday`, `last7`, `last30`, `thisMonth`, `lastMonth`, `thisQuarter`, `thisYear`, `lastYear`, `last12`. Blank or `all`: no period, every row. The screen's first automatic run already applies it. |
 | **`filter_from`** | Cascading filter — narrow this column's options based on another filter's value. Picks a `source` column (already-filtered) and a `column` on the lookup query's result that the source matches against. |
 | **`visible_when`** | In the grid, hides the column when a filter is set to a value outside the condition; in the dialog, shows the field only while the form's values match. |
 
@@ -169,6 +170,12 @@ The Columns tab is therefore mostly **empty** for well-dictionary'd installs —
 ## Filtering and cascading filters
 
 When a column has `filter = true`, a chip for it appears in the grid's filter panel. The user picks a value, the grid re-runs the read query with that value bound to the matching `:placeholder` param. The query is responsible for accepting the bind.
+
+### A period on a date column \{#period\}
+
+On a date column, the filter panel shows a period instead of a single date: the same picker as the dashboards, with its presets (*Today*, *Yesterday*, *Last 7 days*, *Last 30 days*, *This month*, *Last month*, *This quarter*, *This year*, *Last year*, *Last 12 months*, *All dates*) and a two-month calendar for a custom range. The run sends the two bounds as `<COL>_from` and `<COL>_to`, and the server bounds the column itself — the read query needs no placeholder for them. A period ending on a day keeps all of that day's rows, times included.
+
+A drill or a link that passes a date to a date column opens the screen on that one day.
 
 **Cascading filters** narrow one filter's options based on another. The classic case: a *Role* dropdown that shows only roles for the currently-picked *Application*:
 

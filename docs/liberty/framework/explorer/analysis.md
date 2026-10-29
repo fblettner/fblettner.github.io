@@ -33,7 +33,7 @@ Fields already in use are highlighted. **New calculated field**, at the bottom o
 |---|---|
 | **Rows** | The dimensions to group by. A date gets a grouping: *Exact value*, *Day*, *Week*, *Month* (the default), *Quarter*, *Year*. In the detail view, this shelf lists the columns shown. |
 | **Measures** | One aggregate per chip: *Sum*, *Average*, *Min*, *Max*, *Count*, *Distinct count* for a number; *Count* or *Distinct count* otherwise. **+** adds a row count. A dimension dropped here counts its distinct values. |
-| **Filters** | A field, an operator, a value. Text: *contains*, `=`, `≠`, *starts with*, *ends with*, *in*, *is empty*, *is not empty*. Numbers and dates: `=`, `≠`, *between*, `<`, `≤`, `>`, `≥`, *in*, *is empty*, *is not empty*. A field with a list of values offers its values; *in* takes a comma-separated list. |
+| **Filters** | A field, an operator, a value. Text: *contains*, `=`, `≠`, *starts with*, *ends with*, *in*, *is empty*, *is not empty*. Numbers and dates: `=`, `≠`, *between*, `<`, `≤`, `>`, `≥`, *in*, *is empty*, *is not empty*. A field with a list of values offers its values; *in* takes a comma-separated list. On a date or date-time field, a day stands for the whole day: `≤` and the end of *between* keep that day's rows whatever their time, `=` and `≠` mean within or outside that day; the date is picked with the application's date picker. |
 
 Chips move by drag within a shelf; the cross removes one. A filter value applies on **Enter** or when leaving the field.
 

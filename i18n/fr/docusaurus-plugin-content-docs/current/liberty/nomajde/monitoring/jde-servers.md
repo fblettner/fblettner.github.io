@@ -1,12 +1,12 @@
 ---
 title: Serveurs JDE
-description: "Supervision → Serveurs JDE dans Nomajde : la dernière vérification de chaque serveur enterprise, web et REST de JD Edwards suivi par Server Manager — état, santé, contrôles en échec, action menée —, son historique, les indicateurs de la vue d'ensemble et la tâche qui les collecte."
+description: "Supervision → Serveurs JDE dans Nomajde : les vérifications des serveurs enterprise, web et REST de JD Edwards suivis par Server Manager — état, santé, contrôles en échec, action menée — sur une période, l'historique d'un serveur, les indicateurs de la vue d'ensemble et la tâche qui les collecte."
 keywords: [Nomajde, JD Edwards, supervision, Server Manager, contrôle de santé, serveur enterprise, serveur web, AIS, disponibilité, nomajde-jde-health]
 ---
 
 # Serveurs JDE
 
-**Supervision → Serveurs JDE** présente les serveurs JD Edwards tels que les a vus la dernière vérification : une ligne par instance, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
+**Supervision → Serveurs JDE** liste les vérifications des serveurs JD Edwards, de la plus récente à la plus ancienne : une ligne par instance et par vérification, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
 
 ---
 
@@ -107,11 +107,11 @@ keywords: [Nomajde, JD Edwards, supervision, Server Manager, contrôle de santé
   <text x="918" y="431" fill="#64748b" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">288 vérifications en 24 h</text>
   <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres</text>
-  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">hôte, instance, type, santé</text>
+  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">période, hôte, type, santé</text>
   <line x1="210" y1="77.0" x2="240" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jds-arrow)"/>
   <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dernière vérification</text>
-  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par instance, 24 h</text>
+  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toutes les vérifications</text>
+  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">récentes d'abord, 7 derniers jours</text>
   <line x1="210" y1="167.0" x2="240" y2="145" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jds-arrow)"/>
   <rect x="10" y="290" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Instances en bonne santé</text>
@@ -135,7 +135,7 @@ keywords: [Nomajde, JD Edwards, supervision, Server Manager, contrôle de santé
 
 ## La grille \{#grid\}
 
-La grille, en consultation seule, reprend la dernière vérification de chaque instance contrôlée au cours des dernières 24 heures.
+La grille, en consultation seule, liste toutes les vérifications conservées, de la plus récente à la plus ancienne. Elle s'ouvre sur celles des 7 derniers jours : la période sur **Vérifié le**, dans les filtres avancés, élargit ou restreint cette fenêtre (*Toutes les dates* affiche l'ensemble des vérifications conservées, voir `keep_days` dans [Paramètres](#parameters)).
 
 | Colonne | Contenu |
 |---|---|
@@ -150,11 +150,11 @@ La grille, en consultation seule, reprend la dernière vérification de chaque i
 | **Détail** | Le message d'erreur, ou la cause d'un échec hérité du serveur enterprise. |
 | **Vérifié le** | L'heure de la vérification. |
 
-Les colonnes **Hôte**, **Instance**, **Type de serveur** et **Santé** sont filtrables.
+Les colonnes **Hôte**, **Instance**, **Type de serveur** et **Santé** sont également filtrables. Avec une vérification toutes les cinq minutes, une instance ajoute 288 lignes par jour : pour suivre un seul serveur, filtrer sur son instance ou ouvrir son historique.
 
 ## L'historique d'une instance \{#history\}
 
-Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général** reprend les champs de la grille ; l'onglet **Historique** liste toutes les vérifications conservées pour l'instance, de la plus récente à la plus ancienne : heure, état, santé, contrôles en échec, serveur enterprise, action, détail.
+Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général** reprend les champs de la grille ; l'onglet **Historique** liste toutes les vérifications conservées pour cette instance, de la plus récente à la plus ancienne : heure, état, santé, contrôles en échec, serveur enterprise, action, détail.
 
 ---
 

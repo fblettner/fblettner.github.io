@@ -76,7 +76,7 @@ Three regions:
 
 ## The Screen Designer modal
 
-Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes; Cancel prompts on unsaved changes.
+Clicking a card opens a **near-fullscreen modal** hosting the **ScreenEditor**. The header has *Maximize / Restore* (default fullscreen), *Cancel* and *Save* — Save commits **just this screen's edits** and closes — in `screens.toml`, only that screen is rewritten, without its default values and in the file's key order, every other screen staying as it is; Cancel prompts on unsaved changes.
 
 Inside the modal, nine tabs organise everything:
 

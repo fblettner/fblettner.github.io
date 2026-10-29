@@ -184,12 +184,16 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 |---|---|
 | `text`, `textarea` | Text, on one line or several. |
 | `number`, `integer`, `decimal`, `currency` | A number. |
-| `date`, `datetime`, `timestamp` | A date, with or without time. |
+| `date`, `datetime`, `timestamp` | A date, with or without time. The form, the bulk edit and the filters offer the application's date picker: a field where the date can be typed (an impossible day goes back to the previous value) and a month calendar with *Today* and *Clear*, whose title opens a month and year chooser. A `datetime` or `timestamp` field adds a time field (`hh:mm` or `hh:mm:ss`). A value carrying its time zone (a PostgreSQL `timestamptz`) shows in the browser's local time; a value without a zone (Oracle `DATE`, JD Edwards dates) shows as stored. |
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
 | `jdenumber` | A JD Edwards amount stored without its decimal point: with **Decimals** = 2, the stored `12345` reads and is entered as `123.45`, and is written back as `12345`. Filters are typed in real units; the Data Explorer totals and detail rows are scaled the same way. The [scan](#scan-a-table) of a JD Edwards table fills the decimals from the data dictionary. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
-| `email`, `url`, `color` | Text, shown as entered. |
+| `url` | A link opening in a new tab; the form's field gets a button that opens it. Only `http(s)` addresses become links (`www.…` gets `https://`). |
+| `email` | A `mailto:` link; the form's field gets a button that opens it. Only a value shaped like an address becomes a link. |
+| `color` | The code with a colour swatch beside it; in the form, the swatch opens the system colour picker. Hex codes and `rgb()` only. |
+
+For `url`, `email` and `color`, any other value stays plain text, and sorting, filtering and export keep the raw value.
 
 The **Framework** tab can add values to this list.
 

@@ -123,7 +123,8 @@ Une clé n'est pas verrouillée d'office à la modification d'une ligne : cocher
 
 | Champ | Notes |
 |---|---|
-| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. |
+| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. Une colonne de date (format `date`, `datetime`, `timestamp`, ou type date dans la base) se filtre par une [période](#period). |
+| **`filter_period`** | Sur une colonne de date avec `filter`, la période proposée à l'ouverture de l'écran : `today`, `yesterday`, `last7`, `last30`, `thisMonth`, `lastMonth`, `thisQuarter`, `thisYear`, `lastYear`, `last12`. Vide ou `all` : aucune période, toutes les lignes. Le premier chargement automatique de l'écran l'applique déjà. |
 | **`filter_from`** | Filtre en cascade — restreint les options de cette colonne en fonction de la valeur d'un autre filtre. Sélectionne une colonne `source` (déjà filtrée) et une `column` sur le résultat de la requête de recherche que la source met en correspondance. |
 | **`visible_when`** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans le dialogue, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
 
@@ -169,6 +170,12 @@ L'onglet Colonnes est donc majoritairement **vide** pour les installations bien 
 ## Filtrage et filtres en cascade
 
 Quand une colonne a `filter = true`, une puce pour celle-ci apparaît dans le panneau de filtres de la grille. L'utilisateur choisit une valeur, la grille réexécute la requête de lecture avec cette valeur liée au paramètre `:placeholder` correspondant. La requête est responsable d'accepter la liaison.
+
+### Une période sur une colonne de date \{#period\}
+
+Sur une colonne de date, le panneau de filtres présente une période et non une date unique : le même sélecteur que sur les tableaux de bord, avec ses préréglages (*Aujourd'hui*, *Hier*, *7 derniers jours*, *30 derniers jours*, *Ce mois-ci*, *Mois dernier*, *Ce trimestre*, *Cette année*, *Année dernière*, *12 derniers mois*, *Toutes les dates*) et un calendrier sur deux mois pour une période libre. L'exécution transmet les deux bornes sous la forme `<COL>_from` et `<COL>_to`, et le serveur borne lui-même la colonne : la requête de lecture n'a besoin d'aucun paramètre pour elles. Une période qui se termine sur un jour conserve toutes les lignes de ce jour, quelle que soit leur heure.
+
+Un lien ou une navigation qui transmet une date à une colonne de date ouvre l'écran sur ce seul jour.
 
 Les **filtres en cascade** restreignent les options d'un filtre selon un autre. Le cas classique : une liste déroulante *Rôle* qui n'affiche que les rôles pour l'*Application* actuellement sélectionnée :
 

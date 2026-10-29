@@ -87,7 +87,7 @@ The directory pull is the *single source of truth* for human identity. The scree
 | **Department** | `LDAP_DEPARTMENT` — `department`. | The grouping key that drives the *Users by applications* mapping. |
 | **Description** | `LDAP_DESCRIPTION` — `description`. | Free text — often carries the HR registration / matricule used to match the AD entry to the source-system account. |
 | **Display Name** | `LDAP_DISPLAY_NAME` — `displayName`. | What appears in the AD address book. |
-| **Mail** | `LDAP_MAIL` — `mail`. | Email address. |
+| **Mail** | `LDAP_MAIL` — `mail`. | Email address, as a `mailto:` link. |
 | **Manager** | `LDAP_MANAGER` — `manager`. | DN of the manager — useful for approval workflows. |
 | **Office** | `LDAP_OFFICE` — `physicalDeliveryOfficeName`. | Office location. |
 | **Telephone** | `LDAP_TELEPHONE` — `telephoneNumber`. | Office phone. |

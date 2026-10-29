@@ -87,7 +87,7 @@ L'extraction de l'annuaire est la *référence unique* de l'identité humaine. L
 | **Département** | `LDAP_DEPARTMENT` — `department`. | Clé de regroupement qui pilote la matrice *Utilisateurs par applications*. |
 | **Description** | `LDAP_DESCRIPTION` — `description`. | Texte libre — porte souvent le matricule RH utilisé pour rapprocher l'entrée AD du compte source. |
 | **Nom affiché** | `LDAP_DISPLAY_NAME` — `displayName`. | Nom tel qu'il apparaît dans le carnet d'adresses AD. |
-| **Mail** | `LDAP_MAIL` — `mail`. | Adresse email. |
+| **Mail** | `LDAP_MAIL` — `mail`. | Adresse email, sous forme de lien `mailto:`. |
 | **Manager** | `LDAP_MANAGER` — `manager`. | DN du responsable hiérarchique — utile pour les flux d'approbation. |
 | **Bureau** | `LDAP_OFFICE` — `physicalDeliveryOfficeName`. | Localisation du bureau. |
 | **Téléphone** | `LDAP_TELEPHONE` — `telephoneNumber`. | Téléphone fixe. |

@@ -33,7 +33,7 @@ Les champs déjà utilisés sont mis en évidence. **Nouveau champ calculé**, e
 |---|---|
 | **Lignes** | Les dimensions de regroupement. Une date reçoit une granularité : *Valeur exacte*, *Jour*, *Semaine*, *Mois* (par défaut), *Trimestre*, *Année*. En vue détail, cette étagère liste les colonnes affichées. |
 | **Mesures** | Un agrégat par pastille : *Somme*, *Moyenne*, *Min*, *Max*, *Nombre*, *Nombre distinct* pour un nombre ; *Nombre* ou *Nombre distinct* sinon. **+** ajoute un nombre de lignes. Une dimension déposée ici compte ses valeurs distinctes. |
-| **Filtres** | Un champ, un opérateur, une valeur. Texte : *contient*, `=`, `≠`, *commence par*, *finit par*, *parmi*, *est vide*, *n'est pas vide*. Nombres et dates : `=`, `≠`, *entre*, `<`, `≤`, `>`, `≥`, *parmi*, *est vide*, *n'est pas vide*. Un champ doté d'une liste de valeurs propose ses valeurs ; *parmi* accepte une liste séparée par des virgules. |
+| **Filtres** | Un champ, un opérateur, une valeur. Texte : *contient*, `=`, `≠`, *commence par*, *finit par*, *parmi*, *est vide*, *n'est pas vide*. Nombres et dates : `=`, `≠`, *entre*, `<`, `≤`, `>`, `≥`, *parmi*, *est vide*, *n'est pas vide*. Un champ doté d'une liste de valeurs propose ses valeurs ; *parmi* accepte une liste séparée par des virgules. Sur un champ date ou date-heure, un jour vaut pour la journée entière : `≤` et la fin d'*entre* conservent les lignes de ce jour quelle que soit leur heure, `=` et `≠` signifient dans ce jour ou en dehors ; la date se choisit avec le sélecteur de date de l'application. |
 
 Les pastilles se réordonnent par glisser-déposer dans une même étagère ; la croix en retire une. Une valeur de filtre s'applique avec **Entrée** ou en quittant le champ.
 

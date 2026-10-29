@@ -1,12 +1,12 @@
 ---
 title: JDE Servers
-description: "Monitoring → JDE Servers in Nomajde: the latest health check of every JD Edwards enterprise, web and REST server seen by Server Manager — state, health, failed checks, action taken — its history, the overview figures and the job that collects them."
+description: "Monitoring → JDE Servers in Nomajde: every health check of the JD Edwards enterprise, web and REST servers seen by Server Manager — state, health, failed checks, action taken — over a period, the history of a server, the overview figures and the job that collects them."
 keywords: [Nomajde, JD Edwards, monitoring, Server Manager, health check, enterprise server, web server, AIS, availability, nomajde-jde-health]
 ---
 
 # JDE Servers
 
-**Monitoring → JDE Servers** shows the JD Edwards servers as the last health check saw them: one row per instance, its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
+**Monitoring → JDE Servers** lists the health checks of the JD Edwards servers, newest first: one row per instance and per check, with its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
 
 ---
 
@@ -107,11 +107,11 @@ keywords: [Nomajde, JD Edwards, monitoring, Server Manager, health check, enterp
   <text x="918" y="431" fill="#64748b" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">288 checks in 24 h</text>
   <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filters</text>
-  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">host, instance, type, health</text>
+  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">period, host, type, health</text>
   <line x1="210" y1="77.0" x2="240" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jds-arrow)"/>
   <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Latest check</text>
-  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one row per instance, 24 h</text>
+  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Every check</text>
+  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">newest first, last 7 days</text>
   <line x1="210" y1="167.0" x2="240" y2="145" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jds-arrow)"/>
   <rect x="10" y="290" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Healthy instances</text>
@@ -135,7 +135,7 @@ keywords: [Nomajde, JD Edwards, monitoring, Server Manager, health check, enterp
 
 ## The grid \{#grid\}
 
-The grid is read-only and lists the latest check of each instance checked in the last 24 hours.
+The grid is read-only and lists every check kept, newest first. It opens on the checks of the last 7 days: the period on **Checked at**, in the advanced filters, widens or narrows that window (*All dates* shows every check kept, see `keep_days` in [Parameters](#parameters)).
 
 | Column | Content |
 |---|---|
@@ -150,11 +150,11 @@ The grid is read-only and lists the latest check of each instance checked in the
 | **Detail** | The error message, or the reason of a failure inherited from the enterprise server. |
 | **Checked at** | The time of the check. |
 
-The **Host**, **Instance**, **Server type** and **Health** columns can be filtered.
+The **Host**, **Instance**, **Server type** and **Health** columns can be filtered too. With a check every five minutes, an instance adds 288 rows a day: to follow a single server, filter on its instance or open its history.
 
 ## The history of an instance \{#history\}
 
-Opening a row shows the instance in a dialog. The **General** tab repeats the fields of the grid; the **History** tab lists every check kept for the instance, most recent first: time, state, health, failed checks, enterprise server, action, detail.
+Opening a row shows the instance in a dialog. The **General** tab repeats the fields of the grid; the **History** tab lists every check kept for that instance, most recent first: time, state, health, failed checks, enterprise server, action, detail.
 
 ---
 

@@ -184,12 +184,16 @@ La barre de l'élément propose **Find usages**, **Renommer**, **Cloner** et **S
 |---|---|
 | `text`, `textarea` | Du texte, sur une ou plusieurs lignes. |
 | `number`, `integer`, `decimal`, `currency` | Un nombre. |
-| `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. |
+| `date`, `datetime`, `timestamp` | Une date, avec ou sans l'heure. Le formulaire, la saisie en masse et les filtres proposent le sélecteur de date de l'application : un champ où la date reste saisissable (un jour impossible rétablit la valeur précédente) et un calendrier mensuel avec *Aujourd'hui* et *Effacer*, dont le titre ouvre le choix du mois et de l'année. Un champ `datetime` ou `timestamp` y ajoute un champ d'heure (`hh:mm` ou `hh:mm:ss`). Une valeur qui porte son fuseau horaire (un `timestamptz` PostgreSQL) s'affiche à l'heure locale du navigateur ; une valeur sans fuseau (`DATE` Oracle, dates JD Edwards) s'affiche telle qu'elle est stockée. |
 | `jdedate`, `jdetime` | Une date (CYYDDD) ou une heure (HHMMSS) JD Edwards, affichée comme une date ou une heure ordinaire. |
 | `jdenumber` | Un montant JD Edwards stocké sans sa virgule : avec **Decimals** à 2, la valeur stockée `12345` se lit et se saisit `123,45`, puis s'écrit de nouveau `12345`. Les filtres se saisissent en unités réelles ; les totaux et les lignes de détail de l'explorateur de données sont ramenés à la même échelle. L'[analyse](#scan-a-table) d'une table JD Edwards renseigne les décimales d'après le dictionnaire de données. |
 | `boolean` | Une coche ou une croix. |
 | `password` | Une valeur masquée. |
-| `email`, `url`, `color` | Du texte, affiché tel quel. |
+| `url` | Un lien qui s'ouvre dans un nouvel onglet ; dans le formulaire, un bouton à côté du champ l'ouvre. Seules les adresses `http(s)` deviennent des liens (`www.…` reçoit `https://`). |
+| `email` | Un lien `mailto:` ; dans le formulaire, un bouton à côté du champ l'ouvre. Seule une valeur ayant la forme d'une adresse devient un lien. |
+| `color` | Le code, accompagné d'une pastille de couleur ; dans le formulaire, la pastille ouvre le sélecteur de couleur du système. Codes hexadécimaux et `rgb()` uniquement. |
+
+Pour `url`, `email` et `color`, toute autre valeur reste du texte simple, et le tri, le filtrage et l'export conservent la valeur brute.
 
 L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 
