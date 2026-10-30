@@ -104,6 +104,9 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | `type` | — | One of the ten types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
+| `continue_on_failure` | `false` | `true`: when the step fails (after its retries), the next steps run anyway and the run ends failed, naming it — for a job chaining independent work. A checkbox in the step editor; for every step of a job, `[jobs.step_defaults]`. |
+
+**Turn a step off for an install.** A step the install doesn't need — the LDAP collection without LDAP — is listed in the job's `disabled_steps = ["SECURITY_LDAP"]` (the step editor's *Turned off for this install* checkbox). It never runs, even when a run or a preset selects every step: the **Run with parameters** window shows it off and not selectable, the run records it as *skipped: turned off for this install*. Unlike `enabled` — the default a run may override — it is the operator's last word, and the licensed apps installer keeps it across upgrades.
 
 When a step fails on a database error, the run detail shows the database's own sentence — *invalid input for query argument $1: 2025 (expected str, got int)* — and the statement goes to the server log.
 

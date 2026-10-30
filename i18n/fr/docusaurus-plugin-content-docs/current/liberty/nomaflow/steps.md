@@ -104,6 +104,9 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 | `type` | — | L'un des dix types. |
 | `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Exécuter avec des paramètres**. |
 | `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
+| `continue_on_failure` | `false` | `true` : quand l'étape échoue (après ses tentatives), les suivantes s'exécutent quand même et l'exécution finit en échec en la nommant — pour une tâche qui enchaîne des traitements indépendants. Une case à cocher dans l'éditeur d'étape ; pour toutes les étapes d'une tâche, `[jobs.step_defaults]`. |
+
+**Désactiver une étape pour une installation.** Une étape dont l'installation n'a pas besoin — la collecte LDAP sans LDAP — se liste dans `disabled_steps = ["SECURITY_LDAP"]` de la tâche (la case *Désactivée pour cette installation* de l'éditeur d'étape). Elle ne s'exécute jamais, même quand une exécution ou un préréglage sélectionne toutes les étapes : la fenêtre **Exécuter avec des paramètres** la montre désactivée et non sélectionnable, l'exécution l'enregistre comme *skipped: turned off for this install*. Contrairement à `enabled` — la valeur par défaut qu'une exécution peut remplacer — c'est le dernier mot de l'exploitant, et l'installateur des applications sous licence la conserve d'une mise à jour à l'autre.
 
 Quand une étape échoue sur une erreur de base de données, le détail de l'exécution affiche la phrase de la base elle-même — *invalid input for query argument $1: 2025 (expected str, got int)* — et l'instruction part dans le journal du serveur.
 

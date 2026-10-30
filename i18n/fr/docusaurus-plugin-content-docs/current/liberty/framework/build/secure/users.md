@@ -130,8 +130,9 @@ Cliquer sur **＋ Ajouter un utilisateur**. L'éditeur d'utilisateur s'ouvre ave
 |---|---|---|
 | **Nom d'utilisateur** | oui | Lettres, chiffres, soulignés, points et tirets. Sert d'identifiant de connexion, de sujet JWT et d'identité d'audit. **Immuable** après création. |
 | **Nom complet** | non | Le nom d'affichage montré dans les en-têtes et les colonnes d'audit. |
-| **Courriel** | non | Adresse destinataire pour les invitations, la réinitialisation de mot de passe (quand implémentée) et les routes de notification. |
+| **Courriel** | non | Où un lien *Mot de passe oublié ?* est envoyé (voir [plus bas](#forgot)), et l'adresse des notifications. |
 | **Mot de passe** | oui (pour les nouveaux utilisateurs) | Au moins 8 caractères. Enregistré sous forme de hachage Argon2id, jamais relisible. Laisser vide en modification pour conserver le mot de passe actuel. |
+| **Demander un nouveau mot de passe à la prochaine connexion** | coché par défaut pour un nouvel utilisateur | Le mot de passe saisi ici est temporaire : l'utilisateur choisit le sien à la première connexion (voir [plus bas](#first-sign-in)). Comptes locaux uniquement. |
 | **Rôles** | non | Sélecteur de pastilles — taper ou choisir dans la liste. La liste contient chaque rôle configuré sous l'onglet Rôles. |
 | **Actif** | oui (activé par défaut) | Désactivé, l'utilisateur ne peut pas se connecter ; les sessions existantes s'arrêtent au prochain rafraîchissement de jeton. |
 | **Superutilisateur** | non | Activé, passe outre chaque vérification de permission et chaque périmètre de données. À utiliser avec parcimonie. |
@@ -172,6 +173,14 @@ Les changements n'interrompent pas la session courante. Les nouveaux rôles / le
 :::
 
 ---
+
+## Un nouveau mot de passe à la première connexion \{#first-sign-in\}
+
+Un compte créé — ou réinitialisé par un administrateur — avec **Demander un nouveau mot de passe à la prochaine connexion** s'ouvre sur *Choisissez votre mot de passe* : le mot de passe temporaire, le nouveau (8 caractères ou plus) et sa confirmation. Tant que ce n'est pas fait, le serveur refuse tout appel sauf le changement lui-même (HTTP 403 *password change required*) : le mot de passe temporaire ne sert à rien d'autre, ni par la page ni par l'API. Le nouveau mot de passe prend effet aussitôt — sans nouvelle connexion. En ligne de commande : `liberty-admin create-user … --must-change`, `liberty-admin set-password … --must-change`. Un compte OIDC n'est jamais concerné (son mot de passe est celui du fournisseur d'identité).
+
+## Mot de passe oublié \{#forgot\}
+
+Quand le SMTP est configuré (*Liberty Next → Administrer → App*, notifications), la page de connexion affiche **Mot de passe oublié ?**. L'utilisateur indique **son identifiant et l'e-mail du compte** ; quand les deux correspondent à un compte local actif, un lien est envoyé à cette adresse. Le lien sert **une seule fois et pendant une heure** — il est lié au mot de passe pour lequel il a été émis : tout changement de mot de passe, la réinitialisation comprise, l'annule. La page répond la même chose que les deux correspondent ou non : elle ne révèle jamais qui a un compte ; les demandes sont limitées par adresse. Le lien pointe vers **Adresse publique** (*App*, `[app] public_url`) — à renseigner quand les utilisateurs passent par un proxy inverse ou un autre nom ; vide, l'adresse du navigateur est utilisée.
 
 ## Attributs de périmètre de données \{#attributes\}
 
@@ -223,7 +232,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 3. Attribuer les rôles selon son équipe (`analyst`, `reporter`, …).
 4. Enregistrer.
 5. Lui transmettre les identifiants temporaires par le canal habituel de l'entreprise.
-6. Elle se connecte, atteint l'assistant IA ou le flux de changement de mot de passe pour définir le sien.
+6. Elle se connecte avec et arrive sur *Choisissez votre mot de passe* — avec **Demander un nouveau mot de passe à la prochaine connexion** coché (par défaut), rien d'autre ne s'ouvre tant qu'elle n'a pas défini le sien.
 
 ### Onboarder une recrue OIDC
 
@@ -235,9 +244,11 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 ### Changer le mot de passe d'un utilisateur (en tant qu'administrateur)
 
 1. *Liberty Next → Administrer → Accès → Utilisateurs*, cliquer sur l'utilisateur.
-2. Saisir le nouveau mot de passe dans le champ **Mot de passe** (8 caractères ou +).
+2. Saisir le nouveau mot de passe dans le champ **Mot de passe** (8 caractères ou +) ; cocher **Demander un nouveau mot de passe à la prochaine connexion** pour qu'il soit temporaire.
 3. Enregistrer.
-4. Le prévenir. Il se connecte avec le nouveau mot de passe ; sa session existante continue de fonctionner jusqu'à expiration du jeton d'accès.
+4. Le prévenir. Il se connecte avec le nouveau mot de passe (et, s'il est temporaire, choisit le sien) ; sa session existante continue de fonctionner jusqu'à expiration du jeton d'accès.
+
+Avec le SMTP configuré, les utilisateurs peuvent aussi le réinitialiser eux-mêmes — [Mot de passe oublié ?](#forgot).
 
 ### Révoquer un compte immédiatement
 

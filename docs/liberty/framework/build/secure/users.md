@@ -130,8 +130,9 @@ Click **＋ Add user**. The User editor opens with every field empty.
 |---|---|---|
 | **Username** | yes | Letters, digits, underscores, dots and hyphens. Used as the sign-in handle, the JWT subject, and the audit identity. **Immutable** after creation. |
 | **Full name** | no | The display name shown in headers and audit columns. |
-| **Email** | no | Recipient address for invites, password reset (when implemented), notification routes. |
+| **Email** | no | Where a *Forgot password?* link is mailed (see [below](#forgot)), and the notifications' address. |
 | **Password** | yes (for new users) | At least 8 characters. Stored as an Argon2id hash, never readable back. Leave blank on edit to keep the current password. |
+| **Ask for a new password at the next sign-in** | default on for a new user | The password given here is a temporary one: the user chooses their own at the first sign-in (see [below](#first-sign-in)). Local accounts only. |
 | **Roles** | no | Chip picker — type or pick from the dropdown. The dropdown lists every role configured under the Roles tab. |
 | **Active** | yes (default on) | When off, the user can't sign in; existing sessions die on next token refresh. |
 | **Superuser** | no | When on, bypasses every permission check and every data scope. Use sparingly. |
@@ -172,6 +173,14 @@ Changes don't break their current session. The new roles / disabled flag / passw
 :::
 
 ---
+
+## A new password at the first sign-in \{#first-sign-in\}
+
+An account created — or reset by an administrator — with **Ask for a new password at the next sign-in** opens on *Choose your password*: the temporary password, the new one (8+ characters) and its confirmation. Until it's done, the server refuses every call but the change itself (HTTP 403 *password change required*), so the temporary password can't be used for anything else, through the page or the API. The new password takes effect at once — no new sign-in. The same from the command line: `liberty-admin create-user … --must-change`, `liberty-admin set-password … --must-change`. An OIDC account is never asked (its password is the identity provider's).
+
+## Forgot password \{#forgot\}
+
+When SMTP is configured (*Liberty Next → Administer → App*, notifications), the sign-in page shows **Forgot password?**. The user gives their **username and the account's e-mail**; when both match an active local account, a link is mailed to that address. The link works **once and for an hour** — it is bound to the password it was issued for, so any password change, the reset included, ends it. The page answers the same whether or not the two match, so it never tells who has an account; requests are limited per address. The link points at **Public address** (*App*, `[app] public_url`) — set it when users reach the server through a reverse proxy or another name; blank, the browser's address is used.
 
 ## Data-scope attributes \{#attributes\}
 
@@ -223,7 +232,7 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 3. Assign roles per their team (`analyst`, `reporter`, …).
 4. Save.
 5. Send them the temporary credentials through whatever channel your company uses.
-6. They sign in, they reach the AI assistant or change-password flow to set their own password.
+6. They sign in with it and land on *Choose your password* — with **Ask for a new password at the next sign-in** ticked (the default), nothing else opens until they've set their own.
 
 ### Onboard an OIDC hire
 
@@ -235,9 +244,11 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 ### Change a user's password (you're the admin)
 
 1. *Liberty Next → Administer → Access → Users*, click the user.
-2. Type the new password in the **Password** field (8+ chars).
+2. Type the new password in the **Password** field (8+ chars); tick **Ask for a new password at the next sign-in** to make it a temporary one.
 3. Save.
-4. Tell the user. They sign in with the new password; their existing session keeps working until the access token expires.
+4. Tell the user. They sign in with the new password (and, if temporary, choose their own); their existing session keeps working until the access token expires.
+
+With SMTP configured, users can also reset it themselves — [Forgot password?](#forgot).
 
 ### Revoke an account immediately
 
