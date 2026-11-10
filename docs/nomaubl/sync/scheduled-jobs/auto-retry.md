@@ -113,17 +113,17 @@ Several jobs can coexist, each with its own time and its own statuses. The job u
 
 | Field | Default | Description |
 |---|---|---|
-| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md). Several codes combine with OR. With no status picked, nothing runs. |
+| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md), except `9905` (*Validation failed*), which is never resent. Several codes combine with OR. With no status picked, nothing runs. |
 | **Only retry invoices from the last N days** | `0` | Keeps only the invoices whose **issue date** falls in the last N days. `0` keeps every invoice in the chosen statuses. |
 
-The picker offers every code of the *Error – tech* group, but a resend accepts only the internal `99xx` statuses other than `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
+A resend accepts only the internal `99xx` statuses other than `9905`, `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
 
 | Code | Label | Resent? |
 |---|---|---|
 | `9904` | *Send failed* | Yes — the usual target. |
 | `9907` | *PA import failed* | Yes. |
 | `9909` | *PA export failed* | Yes. |
-| `9905` | *Validation failed* | Yes, but the stored UBL is sent as it is: correct the data first and prefer a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
+| `9905` | *Validation failed* | Not offered — a UBL that failed validation is never sent: correct the invoice, or run a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
 | `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoices.md#fix-buyer), which revalidates it and can resend it. |
 
 ### Throttle
@@ -140,7 +140,7 @@ The connector's own [request limits](../../configuration/api-connectors.md) appl
 ## What happens at the scheduled time
 
 1. The job selects the invoices whose status is one of the chosen codes, narrowed to the last N days of issue date when set — up to 100,000 invoices per run.
-2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL or platform status → failed, without a call to the platform.
+2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL, validation failure or platform status → failed, without a call to the platform.
 3. The run ends with a summary `ok=… fail=… of …`, shown in the *Result* column of the Scheduled jobs page and in its run history.
 
 **Run now** on the Scheduled jobs page fires the job at once with its current settings; the next scheduled run is unchanged. A run missed while the server was stopped is not caught up: the next one fires at its usual time.
@@ -150,7 +150,7 @@ The connector's own [request limits](../../configuration/api-connectors.md) appl
 ## Tips & best practices
 
 - **One job for 9904 is enough in most cases.** Add a job only for another time or another set of statuses.
-- **Leave `213` and `9905` out.** A `213` is always refused by the resend (an addressing reject goes through Fix buyer); a `9905` needs a correction and a full reprocess rather than a resend.
+- **Leave `213` out.** A `213` is always refused by the resend; an addressing reject goes through Fix buyer.
 - **Shift the minutes.** Two jobs at the same minute compete for the database connections and the platform.
 - **Raise the wait on `429`.** A *Too Many Requests* answer from the platform means the rate is too high: raise the wait or lower the workers.
 - **Disable rather than delete** during a known platform outage: the job stays visible and is easy to turn back on.

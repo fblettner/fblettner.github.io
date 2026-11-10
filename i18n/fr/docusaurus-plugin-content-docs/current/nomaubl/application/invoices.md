@@ -309,7 +309,7 @@ Les deux demandent l'action *Marquer comme traitée* (`invoice.review`) dans la 
 
 ### Renvoi groupé \{#bulk-resend\}
 
-Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Une ligne dont le type de document est réglé sur *Ne pas envoyer* ne peut être cochée que pour un retraitement ou un marquage, et l'action **Renvoyer** unitaire y est masquée. Chaque facture du lot passe par les [règles de renvoi](#resend-reprocess-rules) : une facture déjà prise en charge par la plateforme est refusée et comptée en échec.
+Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne cochée peut être renvoyée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Le bouton ne compte et n'envoie que les factures cochées renvoyables selon les [règles de renvoi](#resend-reprocess-rules) — ni type de document *Ne pas envoyer*, ni *Échec de validation* (`9905`), ni statut déjà traité par la plateforme. Une telle ligne reste cochable pour un retraitement ou un marquage. Le serveur applique les mêmes règles à chaque facture du lot.
 
 ### Retraitement \{#reprocess\}
 
@@ -327,17 +327,17 @@ Le serveur applique ces règles à chaque renvoi et à chaque retraitement, quel
 
 | Condition | Règle |
 |---|---|
-| **Statut** | Accepté pour tout statut interne `99xx` sauf `9911` et `9913` : `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refusé pour tout statut standard de la plateforme — tout code numérique qui ne commence pas par `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — ainsi que pour `9911` / `9913`, étapes déjà acceptées par la plateforme. |
+| **Statut** | Accepté pour tout statut interne `99xx` sauf `9905`, `9911` et `9913` : `9900`, `9901`, `9902`, `9903`, `9904`, `9906`, `9907`, `9912`… Refusé pour `9905` (*Échec de validation*) : un UBL en échec de validation n'est jamais envoyé — corriger d'abord la facture (modification, Corriger destinataire) ou lancer un retraitement complet. Refusé pour tout statut standard de la plateforme — tout code numérique qui ne commence pas par `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — ainsi que pour `9911` / `9913`, étapes déjà acceptées par la plateforme. |
 | **Motif** | Non contrôlé. |
 | **Type de document** | Refusé quand l'indicateur d'envoi du [type de document](../configuration/system/document-types.md) est *Ne pas envoyer* (`FEEV10` = `2`). |
 | **UBL enregistré** | Refusé quand l'en-tête de la facture ne contient aucun UBL. |
 | **Utilisateur** | Action *Renvoyer à la PA* (`invoice.resend`) sur la page [Rôles](../configuration/security/roles.md), et facture visible par l'utilisateur. |
 
-La fenêtre facture ne masque **Renvoyer à la PA** que pour un utilisateur sans cette permission et pour un type de document *Ne pas envoyer*. Sur un statut protégé, le bouton reste affiché et le renvoi se termine par le message *Already processed by the PA (status …) — resend refused*.
+La fenêtre facture masque **Renvoyer à la PA** dans tous les cas que le serveur refuserait : utilisateur sans la permission, type de document *Ne pas envoyer*, `9905`, statut déjà traité par la plateforme. Un appel passé malgré tout (API, écran antérieur) se termine par *Validation failed (status 9905) — correct the invoice before resending* ou *Already processed by the PA (status …) — resend refused*.
 
-Un renvoi groupé — **Renvoyer la sélection**, **Tout renvoyer (N)** du tableau de bord, une tâche de relance automatique — sélectionne les factures par statut (`9904` par défaut pour la relance automatique, ou une liste comme `9904,9905,9907`), puis applique les mêmes règles à chaque facture.
+Un renvoi groupé — **Renvoyer la sélection**, **Tout renvoyer (N)** du tableau de bord, une tâche de relance automatique — sélectionne les factures (par statut pour le tableau de bord et la reprise auto : `9904` par défaut, ou une liste comme `9904,9907`), puis applique les mêmes règles à chaque facture.
 
-La seule exception à cette protection est la réparation [Corriger destinataire](#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA.
+La seule exception à cette protection est la réparation [Corriger destinataire](#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA — envoi seulement si la revalidation réussit.
 
 #### Retraitement — deux variantes, choisies d'après le statut
 
@@ -354,7 +354,7 @@ Les deux variantes demandent aussi :
 L'indicateur d'envoi du type de document n'entre pas en compte : un retraitement n'envoie jamais rien de lui-même.
 
 :::info[Tout autre statut]
-Une facture hors de ces règles — une `9904` pour une réimpression, un statut standard de la plateforme pour un renvoi — ne peut évoluer que par **Définir statut**.
+Une facture hors de ces règles — une `9904` pour une réimpression, un statut standard de la plateforme pour un renvoi — ne peut évoluer que par **Définir statut**. Une `9905` se corrige, puis se valide de nouveau à l'enregistrement ou au retraitement complet.
 :::
 
 ### Export

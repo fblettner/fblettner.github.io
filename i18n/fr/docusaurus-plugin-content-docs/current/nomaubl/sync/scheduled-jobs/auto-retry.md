@@ -113,17 +113,17 @@ Plusieurs tâches peuvent coexister, chacune avec son heure et ses statuts. La t
 
 | Champ | Défaut | Description |
 |---|---|---|
-| **Statuts à reprendre** | `9904` | Un ou plusieurs codes, choisis parmi les statuts du groupe *Erreur – technique* du [Catalogue des statuts](../../configuration/system/statuses.md). Plusieurs codes se combinent en OU. Sans statut choisi, rien ne s'exécute. |
+| **Statuts à reprendre** | `9904` | Un ou plusieurs codes, choisis parmi les statuts du groupe *Erreur – technique* du [Catalogue des statuts](../../configuration/system/statuses.md), sauf `9905` (*Échec de validation*), jamais renvoyé. Plusieurs codes se combinent en OU. Sans statut choisi, rien ne s'exécute. |
 | **Ne reprendre que les factures des N derniers jours** | `0` | Ne garde que les factures dont la **date de facture** tombe dans les N derniers jours. `0` garde toutes les factures des statuts choisis. |
 
-Le sélecteur propose tous les codes du groupe *Erreur – technique*, mais un renvoi n'accepte que les statuts internes `99xx` autres que `9911` et `9913` (voir les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules)) :
+Un renvoi n'accepte que les statuts internes `99xx` autres que `9905`, `9911` et `9913` (voir les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules)) :
 
 | Code | Libellé | Renvoyée ? |
 |---|---|---|
 | `9904` | *Échec d'envoi à la PA* | Oui — la cible habituelle. |
 | `9907` | *Échec d'import par la PA* | Oui. |
 | `9909` | *Échec d'export par la PA* | Oui. |
-| `9905` | *Échec de validation* | Oui, mais l'UBL enregistré part tel quel : corriger d'abord les données et préférer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
+| `9905` | *Échec de validation* | Non proposé — un UBL en échec de validation n'est jamais envoyé : corriger la facture, ou lancer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
 | `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoices.md#fix-buyer), qui la revalide et peut la renvoyer. |
 
 ### Cadencement
@@ -140,7 +140,7 @@ Les [limites de requêtes](../../configuration/api-connectors.md) du connecteur 
 ## Déroulement à l'heure prévue
 
 1. La tâche sélectionne les factures dont le statut fait partie des codes choisis, restreintes aux N derniers jours de date de facture si ce réglage est renseigné — jusqu'à 100 000 factures par exécution.
-2. Chaque facture est renvoyée selon les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules) : type de document *Ne pas envoyer*, UBL absent ou statut de la plateforme → échec, sans appel à la plateforme.
+2. Chaque facture est renvoyée selon les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules) : type de document *Ne pas envoyer*, UBL absent, échec de validation ou statut de la plateforme → échec, sans appel à la plateforme.
 3. L'exécution se termine par un résumé `ok=… fail=… of …`, affiché dans la colonne *Résultat* de la page Tâches planifiées et dans son historique.
 
 **Lancer maintenant**, sur la page Tâches planifiées, déclenche la tâche immédiatement avec ses réglages en cours ; la prochaine exécution planifiée reste inchangée. Une exécution manquée pendant un arrêt du serveur n'est pas rattrapée : la suivante part à son heure habituelle.
@@ -150,7 +150,7 @@ Les [limites de requêtes](../../configuration/api-connectors.md) du connecteur 
 ## Conseils & bonnes pratiques
 
 - **Une tâche sur 9904 suffit le plus souvent.** N'en ajouter une que pour une autre heure ou d'autres statuts.
-- **Laisser `213` et `9905` de côté.** Une `213` est toujours refusée par le renvoi (un rejet d'adressage passe par Corriger destinataire) ; une `9905` demande une correction puis un retraitement complet plutôt qu'un renvoi.
+- **Laisser `213` de côté.** Une `213` est toujours refusée par le renvoi ; un rejet d'adressage passe par Corriger destinataire.
 - **Décaler les minutes.** Deux tâches à la même minute se disputent les connexions à la base et la plateforme.
 - **Augmenter l'attente en cas de `429`.** Une réponse *Too Many Requests* de la plateforme signale un débit trop élevé : augmenter l'attente ou réduire les envois en parallèle.
 - **Désactiver plutôt que supprimer** pendant une indisponibilité connue de la plateforme : la tâche reste visible et se réactive facilement.

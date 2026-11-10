@@ -23157,7 +23157,7 @@ Both require the *Mark reviewed* action (`invoice.review`) on the [Roles](../con
 
 ### Bulk resend \{#bulk-resend\}
 
-Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). A row whose document type is set to *Do not send* can be ticked only for a reprocess or a review, and the per-invoice **Resend** action is hidden on it. Each invoice of the batch goes through the [resend rules](#resend-reprocess-rules): an invoice the platform already holds is refused and counted as failed.
+Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one ticked row can be resent. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). The button counts and sends only the ticked invoices that can be resent under the [resend rules](#resend-reprocess-rules) — not a *Do not send* document type, not a *Validation failed* (`9905`), not a status the platform already processed. Such a row can still be ticked for a reprocess or a review. The server applies the same rules to each invoice of the batch.
 
 ### Reprocess \{#reprocess\}
 
@@ -23175,17 +23175,17 @@ The server checks these rules on every resend and every reprocess, whatever star
 
 | Condition | Rule |
 |---|---|
-| **Status** | Accepted for any internal `99xx` status except `9911` and `9913`: `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refused for every standard platform status — any numeric code that does not start with `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — and for `9911` / `9913`, stages the platform has already accepted. |
+| **Status** | Accepted for any internal `99xx` status except `9905`, `9911` and `9913`: `9900`, `9901`, `9902`, `9903`, `9904`, `9906`, `9907`, `9912`… Refused for `9905` (*Validation failed*): a UBL that failed validation is never sent — correct the invoice (edit, Fix buyer) or run a full reprocess first. Refused for every standard platform status — any numeric code that does not start with `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — and for `9911` / `9913`, stages the platform has already accepted. |
 | **Reason code** | Not checked. |
 | **Document type** | Refused when the send flag of the [document type](../configuration/system/document-types.md) is *Do not send* (`FEEV10` = `2`). |
 | **Stored UBL** | Refused when the invoice has no UBL stored in its header. |
 | **User** | The *Resend to PA* action (`invoice.resend`) on the [Roles](../configuration/security/roles.md) page, and the invoice must be visible to the user. |
 
-The invoice window hides **Resend to PA** only for a user without the permission and for a *Do not send* document type. On a protected status the button stays visible, and the resend ends with *Already processed by the PA (status …) — resend refused*.
+The invoice window hides **Resend to PA** whenever the server would refuse it: user without the permission, *Do not send* document type, `9905`, status already processed by the platform. A call made anyway (API, older screen) ends with *Validation failed (status 9905) — correct the invoice before resending* or *Already processed by the PA (status …) — resend refused*.
 
-A bulk resend — **Resend selected**, **Resend all N** on the dashboard, an Auto-retry job — selects the invoices by status (`9904` by default for Auto-retry, or a list such as `9904,9905,9907`), then applies the same rules to each invoice.
+A bulk resend — **Resend selected**, **Resend all N** on the dashboard, an Auto-retry job — selects the invoices (by status for the dashboard and Auto-retry: `9904` by default, or a list such as `9904,9907`), then applies the same rules to each invoice.
 
-The only opening in the protection is the [Fix buyer](#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option.
+The only opening in the protection is the [Fix buyer](#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option — sent only when the revalidation passes.
 
 #### Reprocess — two kinds, chosen from the status
 
@@ -23202,7 +23202,7 @@ Both kinds also require:
 The send flag of the document type plays no part in the eligibility: a reprocess never sends by itself.
 
 :::info[Any other status]
-An invoice outside these rules — a `9904` for a reprint, a standard platform status for a resend — can only be moved on with **Set Status**.
+An invoice outside these rules — a `9904` for a reprint, a standard platform status for a resend — can only be moved on with **Set Status**. A `9905` is corrected, then validated again by the save or the full reprocess.
 :::
 
 ### Export
@@ -26282,17 +26282,17 @@ Several jobs can coexist, each with its own time and its own statuses. The job u
 
 | Field | Default | Description |
 |---|---|---|
-| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md). Several codes combine with OR. With no status picked, nothing runs. |
+| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md), except `9905` (*Validation failed*), which is never resent. Several codes combine with OR. With no status picked, nothing runs. |
 | **Only retry invoices from the last N days** | `0` | Keeps only the invoices whose **issue date** falls in the last N days. `0` keeps every invoice in the chosen statuses. |
 
-The picker offers every code of the *Error – tech* group, but a resend accepts only the internal `99xx` statuses other than `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
+A resend accepts only the internal `99xx` statuses other than `9905`, `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
 
 | Code | Label | Resent? |
 |---|---|---|
 | `9904` | *Send failed* | Yes — the usual target. |
 | `9907` | *PA import failed* | Yes. |
 | `9909` | *PA export failed* | Yes. |
-| `9905` | *Validation failed* | Yes, but the stored UBL is sent as it is: correct the data first and prefer a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
+| `9905` | *Validation failed* | Not offered — a UBL that failed validation is never sent: correct the invoice, or run a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
 | `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoices.md#fix-buyer), which revalidates it and can resend it. |
 
 ### Throttle
@@ -26309,7 +26309,7 @@ The connector's own [request limits](../../configuration/api-connectors.md) appl
 ## What happens at the scheduled time
 
 1. The job selects the invoices whose status is one of the chosen codes, narrowed to the last N days of issue date when set — up to 100,000 invoices per run.
-2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL or platform status → failed, without a call to the platform.
+2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL, validation failure or platform status → failed, without a call to the platform.
 3. The run ends with a summary `ok=… fail=… of …`, shown in the *Result* column of the Scheduled jobs page and in its run history.
 
 **Run now** on the Scheduled jobs page fires the job at once with its current settings; the next scheduled run is unchanged. A run missed while the server was stopped is not caught up: the next one fires at its usual time.
@@ -26319,7 +26319,7 @@ The connector's own [request limits](../../configuration/api-connectors.md) appl
 ## Tips & best practices
 
 - **One job for 9904 is enough in most cases.** Add a job only for another time or another set of statuses.
-- **Leave `213` and `9905` out.** A `213` is always refused by the resend (an addressing reject goes through Fix buyer); a `9905` needs a correction and a full reprocess rather than a resend.
+- **Leave `213` out.** A `213` is always refused by the resend; an addressing reject goes through Fix buyer.
 - **Shift the minutes.** Two jobs at the same minute compete for the database connections and the platform.
 - **Raise the wait on `429`.** A *Too Many Requests* answer from the platform means the rate is too high: raise the wait or lower the workers.
 - **Disable rather than delete** during a known platform outage: the job stays visible and is easy to turn back on.
@@ -34777,6 +34777,14 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   
 
 {/* versions:end */}
+
+---
+
+## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Fixes
+- **No resend after a failed validation.** An invoice in "Validation failed" is no longer sent to the platform: the Resend button is hidden, "Resend selected" counts only the invoices that can be sent, and an automatic retry leaves those invoices aside. Correct the invoice or reprocess it in full first.
+- **Resend hidden once the platform has processed the invoice.** In the invoice window, the button no longer appears on a status the platform has returned, where the send was refused anyway.
 
 ---
 

@@ -17,17 +17,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
+    <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
+    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
     <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
     <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
     <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
     <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
-    <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (126)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (127)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
       <a href="#v2026-10-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-27</span></a>
       <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
       <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
@@ -170,6 +171,14 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   </details>
 </div>
 {/* versions:end */}
+
+---
+
+## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Corrections
+- **Plus de renvoi d'une facture en échec de validation.** Une facture en « Échec de validation » n'est plus envoyée à la plateforme : le bouton Renvoyer disparaît, « Renvoyer la sélection » ne compte que les factures réellement envoyables et la reprise automatique les ignore. Corrigez d'abord la facture ou relancez un retraitement complet.
+- **Renvoi masqué une fois la facture traitée par la plateforme.** Dans la fenêtre de la facture, le bouton n'apparaît plus sur un statut renvoyé par la plateforme, où l'envoi était de toute façon refusé.
 
 ---
 
