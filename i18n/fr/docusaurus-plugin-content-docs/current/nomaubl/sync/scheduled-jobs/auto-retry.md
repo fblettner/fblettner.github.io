@@ -124,7 +124,7 @@ Le sélecteur propose tous les codes du groupe *Erreur – technique*, mais un r
 | `9907` | *Échec d'import par la PA* | Oui. |
 | `9909` | *Échec d'export par la PA* | Oui. |
 | `9905` | *Échec de validation* | Oui, mais l'UBL enregistré part tel quel : corriger d'abord les données et préférer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
-| `213` | *Rejetée* | Non — statut de la plateforme : chaque facture est refusée et comptée en échec. |
+| `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoices.md#fix-buyer), qui la revalide et peut la renvoyer. |
 
 ### Cadencement
 
@@ -150,7 +150,7 @@ Les [limites de requêtes](../../configuration/api-connectors.md) du connecteur 
 ## Conseils & bonnes pratiques
 
 - **Une tâche sur 9904 suffit le plus souvent.** N'en ajouter une que pour une autre heure ou d'autres statuts.
-- **Laisser `213` et `9905` de côté.** Une `213` est toujours refusée ; une `9905` demande une correction puis un retraitement complet plutôt qu'un renvoi.
+- **Laisser `213` et `9905` de côté.** Une `213` est toujours refusée par le renvoi (un rejet d'adressage passe par Corriger destinataire) ; une `9905` demande une correction puis un retraitement complet plutôt qu'un renvoi.
 - **Décaler les minutes.** Deux tâches à la même minute se disputent les connexions à la base et la plateforme.
 - **Augmenter l'attente en cas de `429`.** Une réponse *Too Many Requests* de la plateforme signale un débit trop élevé : augmenter l'attente ou réduire les envois en parallèle.
 - **Désactiver plutôt que supprimer** pendant une indisponibilité connue de la plateforme : la tâche reste visible et se réactive facilement.

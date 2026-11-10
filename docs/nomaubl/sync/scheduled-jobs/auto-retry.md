@@ -124,7 +124,7 @@ The picker offers every code of the *Error – tech* group, but a resend accepts
 | `9907` | *PA import failed* | Yes. |
 | `9909` | *PA export failed* | Yes. |
 | `9905` | *Validation failed* | Yes, but the stored UBL is sent as it is: correct the data first and prefer a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
-| `213` | *Rejected* | No — a platform status: every invoice is refused and counted as failed. |
+| `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoices.md#fix-buyer), which revalidates it and can resend it. |
 
 ### Throttle
 
@@ -150,7 +150,7 @@ The connector's own [request limits](../../configuration/api-connectors.md) appl
 ## Tips & best practices
 
 - **One job for 9904 is enough in most cases.** Add a job only for another time or another set of statuses.
-- **Leave `213` and `9905` out.** A `213` is always refused; a `9905` needs a correction and a full reprocess rather than a resend.
+- **Leave `213` and `9905` out.** A `213` is always refused by the resend (an addressing reject goes through Fix buyer); a `9905` needs a correction and a full reprocess rather than a resend.
 - **Shift the minutes.** Two jobs at the same minute compete for the database connections and the platform.
 - **Raise the wait on `429`.** A *Too Many Requests* answer from the platform means the rate is too high: raise the wait or lower the workers.
 - **Disable rather than delete** during a known platform outage: the job stays visible and is easy to turn back on.
