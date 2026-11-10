@@ -192,14 +192,14 @@ Four cards count the invoices waiting for an IT action, each with a button that 
 
 ### Send failed (9904) \{#send-failed\}
 
-A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
+A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend runs **4 sends in parallel, with 100 ms between two calls of each**, so the PA stays inside its rate budget, and each invoice goes through the [resend rules](invoices.md#resend-reprocess-rules).
 
 | Element | Behaviour |
 |---|---|
 | Count | Live total — refreshed by the page's *Refresh* button and at every dashboard mount. Coloured red when non-zero. |
 | **Resend all N** button | Disabled when the count is zero. Click to replay every status-`9904` invoice; opens the progress window. |
 | Progress window | Live counters (*processed* / *succeeded* / *failed*), a *Cancel* button and a *Run in background* button — same component as every long-running operation on the platform. |
-| Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
+| Throttle | 4 parallel sends, 100 ms between two calls of each — fixed here; not operator-tunable. The [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page — same code path, no operator action required.
 
@@ -209,7 +209,7 @@ A big-number card that counts the invoices **held before sending** — the ones 
 
 ### To reprocess \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see the [reprocess rules](invoices.md#resend-reprocess-rules), [Documents → Allow reprocess](../management/documents.md) for the per-document switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### To reprocess in full \{#to-reprocess-full\}
 

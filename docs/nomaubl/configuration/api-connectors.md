@@ -122,8 +122,24 @@ The editor has **five tabs**:
 |---|---|
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
+| **Min. interval between requests (ms)** | Minimum gap between two requests to the connector's **host**. Empty or `0` = off. See [Request limits](#request-limits). |
+| **Error limit (per 120 s)** | Holds the requests to the host while this many error responses sit in the last 120 seconds. Empty or `0` = off. See [Request limits](#request-limits). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
 | **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each capped at the `debugBodyLimit` length so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+
+### Request limits \{#request-limits\}
+
+Some platforms cap the request rate and refuse the excess with `429 Too Many Requests`, or block a client after too many errors. The two limits above protect the platform's **host** (the host name of the request URL):
+
+- **Min. interval between requests** spaces every request to the host by at least this many milliseconds.
+- **Error limit (per 120 s)** counts the `400`, `403`, `404`, `405`, `429` and `444` responses of the last 120 seconds; once the limit is reached, requests wait until the oldest errors leave the window.
+- **After a `429`**, the host is paused for the time given by the platform's `Retry-After` header (300 s at most, 30 s without it), then the refused request is sent again once — a send caught by the limit is not reported as failed.
+
+Requests wait; none is refused. The limits are shared by everything that calls the host from the server's machine: sends, status polls, scheduled jobs and command-line processing runs count together. Set the same values **on every connector that calls the platform** (send, import status, lifecycle…). When requests are held, the service log shows `** WARN ** API ** LIMIT : <host> — requests held for N s (…)`.
+
+:::tip[Suggested values for TX2]
+`300` ms and `20`, on every connector calling it.
+:::
 
 ### Default Headers
 

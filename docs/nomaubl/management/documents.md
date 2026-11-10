@@ -170,6 +170,8 @@ The **Document key (doc / dct / kco)** group decides how a UBL document gets its
 | **From cbc:ID (regex pattern)** *(default)* | The key is parsed from the invoice's `cbc:ID` with a regex — see below. |
 | **Sequence (NomaUBL numbers the document)** | NomaUBL hands out the document number itself, under a fixed document type and company. |
 
+**Find company by** — *As configured below* (default) / *VAT number* / *SIRET* / *SIREN* / *VAT, then SIREN, then SIRET*: searches the [supplier companies](../ubl-tools/ubl-defaults/suppliers-companies.md) with the seller's identifier in the UBL (the buyer's when the direction is `R`) to set the company. No match stops the document.
+
 #### Sequence mode
 
 Meant for **received invoices**, whose `cbc:ID` follows each supplier's own format, and usable for emitted UBL when the numbering format is not known.
@@ -268,6 +270,7 @@ Running a connector-sourced document is described on [Processing → Process Doc
 | Field | Description |
 |---|---|
 | **Burst Key** | XML tag name used to split the spool into individual documents. This element marks the **root of one document** — every occurrence in the spool produces one output document. |
+| **JDE invoice key** | JD Edwards PDF whose sections differ from the standard invoice print: `section:field` of the invoice number (e.g. `11:3`). Gives one `<Invoice>` per value, with the burst key `Invoice`. Set it from the [PDF to XML](../processing/pdf-to-xml.md) page. |
 
 ### Document Identification *(when Source = XML)*
 
@@ -294,6 +297,8 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 | **Routing Code** | Code used to route the document to the correct **delivery channel**: archive, email, postal mail, dispatch to a Plateforme Agréée, etc. |
 | **Office** | XML tag in the spool that contains the **office / business unit** code. |
 | **Processing Type** | XML tag carrying the processing-type code (B2B, B2BINT…). Leave empty to fall back to the **default defined in Document Types**. |
+| **Find company by** | *Company (JDE) above* (default) / *VAT number* / *SIRET* / *SIREN* — XML and PDF sources. Searches the [supplier companies](../ubl-tools/ubl-defaults/suppliers-companies.md) with the identifier read from **Identifier element**, and adds the company found as `<CompanyCode>` (map `TAG_COMPANY_CODE` to `CompanyCode`). A SIRET without a match falls back to its SIREN. **No match stops the invoice**, with the reason in the processing log (*… not found in the supplier companies*, *… is on several supplier companies*). |
+| **Identifier element** | Element holding the identifier searched (e.g. `TaxId2_ID7`). Shown once *Find company by* is set. |
 
 > 💡 Each Document Data field has its own **default value**. Defaults are used when the XML tag is missing or empty, which is useful when a value is constant for a given template.
 
@@ -364,10 +369,17 @@ The **PDF extraction** group sets the conversion:
 | Field | Description |
 |---|---|
 | **Table start** | Regex matched on a row: that row's cells name the table columns (e.g. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Header rows** | Number of rows of a table header printed on several rows, the *Table start* row being the first (default `1`). The header is merged per column and cells stacked on a line are placed in their own column. With more than one row, the table stops at the first end anchor. |
 | **Table end** | Regex matched on the first row after the table — the row itself is not part of it. |
+| **Invoice split** | Regex whose first group is the invoice number, for a PDF holding several invoices (e.g. `N° de facture :\s*(\S+)`): one `<Document>` per number, each with its own pages. Empty = one invoice per PDF. |
+| **VAT table start** | Regex on the header row of the VAT summary: its rows become `<Recap_TVA>/<Ligne_TVA>`, one per rate. Empty = no VAT summary read. |
+| **VAT columns** | Header cells kept from the left, when another block is printed beside the summary. Empty = all. |
+| **VAT table end** | Regex on the first row after the rates; empty = the first row without a value. |
 | **Layout match** | Optional regex the page text must contain; a file that does not match is refused — useful when a folder mixes several layouts. |
 | **Page match** | Optional regex: only the pages whose text matches are converted — a print holding a statement and the invoice keeps the invoice pages only. |
 | **Field 1** … **Field 5** | `Name\|regex` run on the page text; the first group (else the whole match) becomes `<Name>`. Add `=>text` to rewrite the match, `$1` allowed — `Type_JDE\|^FACTURE=>F9`. Two fields may share a name when only one of them can match. |
+
+The table, VAT summary, invoice number and company settings are easiest to set on the [PDF to XML](../processing/pdf-to-xml.md) page, by clicking the rows of a sample PDF.
 
 A converted sample looks like this:
 
@@ -425,8 +437,8 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Post-transform** | path | Stylesheet run on the validated UBL to write another syntax next to it — for example the shipped `ubl-to-cii.xsl` (UBL to CII D16B). Blank = none. See [Post-transform](../ubl-tools/post-transform.md). |
 | **Post-transform output** | suffix, default `-cii.xml` | Replaces the `.xml` of the UBL file name; the download of the invoice and document windows uses the same name. |
 | **Post-transform name** | text | Short name of the converted syntax on the download buttons (`CII` → *Download CII*). The platform connector can send the converted file with `{{derivedContent}}` / `{{derivedFilePath}}`. |
-| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
-| **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. For a PDF source, `source` attaches the input PDF itself as a **PJA** — with *Invoice split*, only that invoice's pages. |
+| **LISIBLE** | `Y` / `N` / `source` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. For a PDF source, `source` embeds the input PDF as the LISIBLE copy instead of a rendered one — with *Invoice split*, only that invoice's pages. The input PDF is not kept after processing, so a full reprocess cannot embed it again. |
 | **Invert sign** | `N – No` (default) / `Credit notes only` / `All documents` | Flips the sign of the amounts read from the source: line net amounts, document totals, prepaid and rounding amounts, total VAT and every VAT breakdown row. The unit price is always emitted as a positive value, allowance and charge amounts are read as absolute values, and the quantity takes the sign of its line amount. *Credit notes only* applies to documents resolved as `381`, `396`, `261`, `262`, `502` or `503`. A spool that prints a credit note with negative amounts thus yields the positive CreditNote the standard expects, with no change to the document XSL. |
 
 ### Processing rules \{#processing-rules\}
@@ -501,7 +513,7 @@ A template with *Source = UBL* embeds the same PDFs as the XML flow — after va
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the source archived at first processing (source XML, or the XML produced from a PDF source) — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI; the full set of conditions is in the [reprocess rules](../application/invoices.md#resend-reprocess-rules). |
 | **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
 
 ---

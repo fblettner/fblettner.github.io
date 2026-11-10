@@ -192,14 +192,14 @@ Quatre cartes comptent les factures qui attendent une action de l'informatique, 
 
 ### Échec d'envoi (9904) \{#send-failed\}
 
-Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
+Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi mène **4 envois en parallèle, avec 100 ms entre deux appels de chacun**, pour que la PA reste dans sa limite de débit, et chaque facture passe par les [règles de renvoi](invoices.md#resend-reprocess-rules).
 
 | Élément | Comportement |
 |---|---|
 | Compteur | Total en direct — rafraîchi par le bouton *Actualiser* de la page et à chaque montage du tableau de bord. Affiché en rouge quand il n'est pas à zéro. |
 | Bouton **Tout renvoyer (N)** | Désactivé quand le compteur est à zéro. Un clic rejoue chaque facture au statut `9904` ; la fenêtre de progression s'ouvre. |
 | Fenêtre de progression | Compteurs en direct (*traitées* / *réussies* / *échecs*), bouton *Annuler* et bouton *Continuer en arrière-plan* — même composant que pour chaque traitement long de la plateforme. |
-| Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../sync/scheduled-jobs/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
+| Limitation de débit | 4 envois en parallèle, 100 ms entre deux appels de chacun — valeurs fixes, non paramétrables ici. La planification [Reprise auto](../sync/scheduled-jobs/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
 
 Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../sync/scheduled-jobs/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
 
@@ -209,7 +209,7 @@ Une carte en grand chiffre qui compte les factures **retenues avant envoi** — 
 
 ### À retraiter \{#to-reprocess\}
 
-Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir les [règles de retraitement](invoices.md#resend-reprocess-rules), [Documents → Allow reprocess](../management/documents.md) pour le réglage par document et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 ### À retraiter en totalité \{#to-reprocess-full\}
 

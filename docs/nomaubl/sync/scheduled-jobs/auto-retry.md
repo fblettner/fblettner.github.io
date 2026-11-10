@@ -1,210 +1,156 @@
 ---
 title: Auto-Retry
-description: "Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the IT dashboard. The overnight pickup for batches stuck on the PA side."
-keywords: [NomaUBL, auto-retry, nightly retry, send failed, status 9904, 9905, 9907, Plateforme Agréée, PA replay, scheduled sweep, throttle, lookback, JD Edwards, SAP, NetSuite, custom ERP]
+description: "NomaUBL Scheduled jobs → Auto-retry resends to the Plateforme Agréée, once a day, every invoice in the chosen technical-error statuses (9904 by default at 3 a.m.), with an issue-date window, a wait between calls and parallel workers; each invoice goes through the resend rules."
+keywords: [NomaUBL, auto-retry, nightly retry, send failed, status 9904, 9907, Plateforme Agréée, PA resend, scheduled job, throttle, parallel workers, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Auto-Retry
 
 :::info[Where to find it]
-This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Auto-Retry* page has left the menu.
+This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart.
 :::
 
-The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
+An **Auto-retry** job resends to the Plateforme Agréée (PA), once a day, every invoice currently in the chosen statuses. The usual job resends the *Send failed* (`9904`) invoices at 3 a.m., so that what failed during the day — a platform outage, a timeout — is sent again before the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [IT dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
-
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
-
----
-
-## Opening the editor
-
-- Sidebar → **Configuration → System → Auto-Retry**.
-- Or from the [IT dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
+Several jobs can coexist, each with its own time and its own statuses. The job uses the same resend as the **Resend all N** button of the [IT dashboard's Send failed card](../../application/tech-dashboard.md#send-failed), and each invoice goes through the [resend rules](../../application/invoices.md#resend-reprocess-rules). The job works the same whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP: it resends the UBL stored for each invoice.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 492" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="ar-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="ar-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="ar-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="ar-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="ar-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="530" rx="14" fill="url(#ar-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Auto-Retry</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="80" height="28" rx="6" fill="url(#ar-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="280" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">＋ Add</text>
-
-  <rect x="328" y="84" width="160" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="408" y="102" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Status (multi) ▾</text>
-
-  <rect x="496" y="84" width="140" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="504" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☑ Enabled only</text>
-
-  <rect x="704" y="84" width="78" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="743" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
-
-  <rect x="240" y="128" width="540" height="120" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="148" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Overnight send-failed sweep</text>
-  <text x="252" y="164" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Replays every invoice in technical-error status to the PA</text>
-  <text x="252" y="184" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Every day · 03:00 Europe/Paris · throttle = 100 ms</text>
-  <text x="252" y="200" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Statuses: 9904 (Send failed) · Lookback: 7 days</text>
-  <rect x="252" y="214" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="280" y="228" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ENABLED</text>
-  <rect x="314" y="214" width="120" height="20" rx="10" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="374" y="228" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">last run 06/03 · 12 retried</text>
-  <rect x="708" y="214" width="60" height="22" rx="6" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="738" y="229" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Edit</text>
-
-  <rect x="240" y="262" width="540" height="120" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="282" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Mid-day tech-error catch-up</text>
-  <text x="252" y="298" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Hourly retry on every technical-error bucket</text>
-  <text x="252" y="318" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Every hour · 50-minute offset · throttle = 250 ms</text>
-  <text x="252" y="334" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Statuses: 9904, 9905, 9907 · Lookback: 24 hours</text>
-  <rect x="252" y="348" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="280" y="362" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ENABLED</text>
-
-  <rect x="240" y="396" width="540" height="120" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="416" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">PA-outage drain (manual trigger)</text>
-  <text x="252" y="432" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Throttled drain — re-enable after a PA incident</text>
-  <text x="252" y="452" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Disabled by default · throttle = 50 ms</text>
-  <text x="252" y="468" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Statuses: 9904, 9905, 9907, 213 · Lookback: 0 (no filter)</text>
-  <rect x="252" y="482" width="64" height="20" rx="10" fill="rgba(255,255,255,0.04)" stroke="#475569" strokeWidth="1"/>
-  <text x="284" y="496" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">DISABLED</text>
-
-  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add sweep</text>
-  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">One row per schedule</text>
-  <line x1="200" y1="92" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-
-  <rect x="820" y="128" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="143" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cron-style schedule</text>
-  <text x="830" y="156" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Hour + minute + timezone</text>
-  <line x1="820" y1="144" x2="788" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-
-  <rect x="820" y="240" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Multi-status picker</text>
-  <text x="830" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Tagged Error – tech only</text>
-  <line x1="820" y1="254" x2="788" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-
-  <rect x="20" y="396" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="411" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enable / disable</text>
-  <text x="30" y="424" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Pause without deleting</text>
-  <line x1="200" y1="412" x2="240" y2="492" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#ar-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Auto-retry · retry-send-failed</text>
+  <text x="240" y="78" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">GENERAL</text>
+  <text x="240" y="100" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <rect x="240" y="106" width="720" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Overnight resend of send failures</text>
+  <rect x="240" y="139" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M242.5,144.5 L244.8,146.8 L248.8,142" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="257" y="148" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Enabled</text>
+  <text x="240" y="170" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHEDULE</text>
+  <text x="240" y="192" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HOUR</text>
+  <rect x="240" y="198" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="212.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">3</text>
+  <text x="380" y="192" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MINUTE</text>
+  <rect x="380" y="198" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="390" y="212.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0</text>
+  <text x="240" y="238" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TARGET</text>
+  <text x="240" y="260" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUSES TO RETRY</text>
+  <rect x="240" y="268" width="118" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="299.0" y="280.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9904 · Send failed ×</text>
+  <rect x="366" y="268" width="144" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="438.0" y="280.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9907 · PA import failed ×</text>
+  <rect x="240" y="292" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="306.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">— add status —</text>
+  <text x="600" y="260" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ONLY RETRY INVOICES FROM THE LAST N DAYS</text>
+  <rect x="600" y="266" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="610" y="280.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0</text>
+  <text x="600" y="302" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">0 = no date narrowing</text>
+  <text x="240" y="330" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">THROTTLE</text>
+  <text x="240" y="352" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WAIT BETWEEN PA CALLS (MS)</text>
+  <rect x="240" y="358" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="372.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">100</text>
+  <text x="600" y="352" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARALLEL WORKERS</text>
+  <rect x="600" y="358" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="610" y="372.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">4</text>
+  <line x1="240" y1="398" x2="960" y2="398" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="790" y="410" width="170" height="22" rx="5" fill="url(#ar-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="875.0" y="424.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save &amp; apply</text>
+  <rect x="20" y="118" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="133" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enabled</text>
+  <text x="30" y="146" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">off = kept, never fired</text>
+  <line x1="200" y1="135.0" x2="240" y2="148" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="20" y="199" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="214" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Daily time</text>
+  <text x="30" y="227" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">server time, once a day</text>
+  <line x1="200" y1="216.0" x2="240" y2="209" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="20" y="287" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="302" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Error – tech codes</text>
+  <text x="30" y="315" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">9904 by default · OR between codes</text>
+  <line x1="200" y1="304.0" x2="240" y2="277" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="237" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="252" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Issue date</text>
+  <text x="1010" y="265" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">last N days · 0 = all</text>
+  <line x1="1000" y1="254.0" x2="720" y2="277" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="339" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="354" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Parallel workers</text>
+  <text x="1010" y="367" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">1 to 8 · the wait applies to each</text>
+  <line x1="1000" y1="356.0" x2="720" y2="369" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save &amp; apply</text>
+  <text x="1010" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reloads schedules, no restart</text>
+  <line x1="1000" y1="445.0" x2="960" y2="421" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
 </svg>
 
 ---
 
-## Sweep fields
+## Fields
 
-Each row is one entry in the catalogue. The edit pane has four sections.
+### General
 
-### 1. Identification
-
-| Field | Required | What |
+| Field | Default | Description |
 |---|---|---|
-| **Name** | yes | Free text. Shown in the catalogue list and on the IT dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
-| **Description** | no | One-line caption to help colleagues understand what the sweep is for. |
-| **Enabled** | yes (default: `on`) | When `off`, the row stays in the catalogue but the scheduler skips it. Useful for pausing during a maintenance window or a deliberate PA outage. |
+| **Name** | — | Given when the job is created (**New job**); it identifies the job on the Scheduled jobs page. |
+| **Description** | empty | Free text: what the job covers. |
+| **Enabled** | on | Off, the job is kept but never fired on schedule. |
 
-### 2. Schedule
+### Schedule
 
-| Field | Required | What |
+| Field | Default | Description |
 |---|---|---|
-| **Hour** | yes (default: `03`) | Hour of day in 24-h format. The sweep fires at that hour exactly. |
-| **Minute** | no (default: `00`) | Minute of the hour. Use this to spread several sweeps across an hour so they don't all start at the same second. |
-| **Timezone** | yes (default: server timezone) | IANA timezone (e.g. `Europe/Paris`). Each sweep runs in its own timezone so a multi-region install can stagger sweeps per region. |
-| **Cadence** | yes (default: `daily`) | `daily`, `hourly`, or `every N hours`. Hourly + a 50-minute offset gives a sweep at `00:50`, `01:50`, … — a busy install benefits from the higher cadence; the default daily 03:00 is enough for most. |
+| **Hour** | `3` | Hour of the daily run (0–23), server time. |
+| **Minute** | `0` | Minute of the run (0–59). Shifting the minute keeps two jobs from starting together. |
 
-### 3. Status filter
+### Target
 
-The multi-select picker lists only statuses tagged **Error – tech** in the [Status catalogue](../../configuration/system/statuses.md):
-
-| Code | Label | When it applies |
+| Field | Default | Description |
 |---|---|---|
-| `9904` | *Send failed* | PA submission rejected at HTTP level (timeout, 4xx, 5xx). The default sweep target. |
-| `9905` | *Mock send failed* | Same as 9904 but in mock mode. Typically only seen during testing. |
-| `9907` | *Status retrieval failed* | PA submission landed but the lifecycle poll keeps erroring. |
-| `213` | *PA technical rejection* | The PA side reported a technical reject after acceptance. |
+| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md). Several codes combine with OR. With no status picked, nothing runs. |
+| **Only retry invoices from the last N days** | `0` | Keeps only the invoices whose **issue date** falls in the last N days. `0` keeps every invoice in the chosen statuses. |
 
-Pick one or several. A single row can sweep every tech-error bucket at once — useful in a single nightly catch-up that covers everything.
+The picker offers every code of the *Error – tech* group, but a resend accepts only the internal `99xx` statuses other than `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
 
-Business-error statuses (`206`, `207`, `208`, …) are deliberately **not selectable** here — they need operator action upstream, not a blind replay. The picker enforces that constraint.
-
-### 4. Replay options
-
-| Field | Default | What |
+| Code | Label | Resent? |
 |---|---|---|
-| **Lookback window** | `0` *(no time filter)* | When set, restricts the sweep to invoices whose status was last updated within the window (in hours or days). `7 days` is the typical *catch up on the last week* setting; `0` means *every invoice in the matching status, regardless of age*. |
-| **Throttle** | `100` ms | Delay between two PA calls. Matches the manual *Resend all* button on the dashboard. Raise it (250 ms, 500 ms) for installs where the PA rate-limits aggressively; lower it (50 ms) for a one-off drain after a PA outage. |
-| **Max invoices per run** | unlimited | Cap the sweep at N invoices to bound the run time on big batches. The sweep picks the oldest matching invoices first and stops at N; the rest are picked up on the next scheduled run. |
+| `9904` | *Send failed* | Yes — the usual target. |
+| `9907` | *PA import failed* | Yes. |
+| `9909` | *PA export failed* | Yes. |
+| `9905` | *Validation failed* | Yes, but the stored UBL is sent as it is: correct the data first and prefer a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
+| `213` | *Rejected* | No — a platform status: every invoice is refused and counted as failed. |
+
+### Throttle
+
+| Field | Default | Description |
+|---|---|---|
+| **Wait between PA calls (ms)** | `100` | Pause between two sends. Raise it when the platform limits the request rate; `0` sends without pause. |
+| **Parallel workers** | `4` | Number of sends run at the same time (1 to 8). The wait applies to each worker, so the rate towards the platform is about *workers ÷ wait*. `1` sends one invoice after the other. |
+
+The connector's own [request limits](../../configuration/api-connectors.md) apply on top of these settings.
 
 ---
 
-## What happens at the scheduled hour
+## What happens at the scheduled time
 
-The scheduler is a daemon inside NomaUBL that wakes up every minute and checks every enabled row for *next-fire* time. The query is cheap; the catalogue is small.
+1. The job selects the invoices whose status is one of the chosen codes, narrowed to the last N days of issue date when set — up to 100,000 invoices per run.
+2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL or platform status → failed, without a call to the platform.
+3. The run ends with a summary `ok=… fail=… of …`, shown in the *Result* column of the Scheduled jobs page and in its run history.
 
-| Step | What |
-|---|---|
-| **1. Select invoices** | `SELECT * FROM F564231 WHERE current_status IN (<status_list>)`, with optional `last_update >= NOW() - <lookback>` and `LIMIT <max>` when set. Oldest first. |
-| **2. Replay each one** | For every invoice, call the PA api-connector's `submit` task — same code path as the original *Send* action. The lifecycle row is updated with the new status. |
-| **3. Throttle** | Wait `<throttle>` ms between two calls. |
-| **4. Honour Cancel** | The sweep checks for a cancel signal between two invoices — operators can cancel from the dashboard's Scheduler card without waiting for the run to finish. |
-| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the IT dashboard's *Live process events* widget. |
-
-The run progress is also visible in the [shared progress window](../../application/tech-dashboard.md#shared-progress-window) — same component as the manual *Resend all* button. Click any active sweep on the Scheduler card to open it.
-
-If the scheduler is offline (server stopped, JVM crash) when a row was due to fire, the run is **skipped silently** — there is no missed-run replay. The next scheduled hour fires normally. To pick up missed work, run the manual *Resend all* on the dashboard or trigger the row from the catalogue with *Run now*.
-
-### Run-now button
-
-Each row in the catalogue has a *Run now* button that fires the sweep immediately, using the row's current configuration. Useful for:
-
-- Verifying a new sweep before letting it run on its schedule.
-- Recovering a missed run after a server restart.
-- One-off catch-up after a PA outage — flip a disabled *PA-outage drain* row on, *Run now*, flip it off when done.
-
-The *Run now* run honours the same throttle, same lookback, same status list as a scheduled run. It does **not** advance the scheduled-run cadence — the next scheduled time still fires.
+**Run now** on the Scheduled jobs page fires the job at once with its current settings; the next scheduled run is unchanged. A run missed while the server was stopped is not caught up: the next one fires at its usual time.
 
 ---
 
 ## Tips & best practices
 
-- **Keep the default 03:00 sweep alone.** It covers the most common case (overnight batches stuck on the PA). Adding a row only makes sense when you need a different cadence or a different status set.
-- **Spread sweeps with a minute offset.** Two sweeps both firing at `:00` compete for connection pool slots. Stagger them at `:00`, `:15`, `:30` to flatten the load.
-- **Raise the throttle when the PA rate-limits.** A `429 Too Many Requests` after a few minutes of sweeping is a hint to bump the throttle to 250 ms or 500 ms. Match the throttle to the PA's documented per-second budget.
-- **Disable rather than delete during a known outage.** A row marked *DISABLED* is intentional and visible; a deleted row is invisible and easy to forget when the outage ends.
-- **Don't replay business errors.** The picker blocks it. If an invoice is in `207` (*Disputed by recipient*), no amount of replay fixes it — only operator action upstream does.
-- **Use the dashboard for one-shots, Auto-Retry for habits.** The two paths share code; what differs is who fires them. A one-off drain after an incident is a click; the daily safety net is a row.
-
----
-
-## Troubleshooting
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Scheduled row doesn't fire. | Row is *DISABLED*. | Open the row, toggle *Enabled* on, save. |
-| Row fires but processes zero invoices. | The status list and the lookback window combine to zero matches. | Inspect the [E-Invoicing](../../application/invoices.md) page with the same status filter; either widen the lookback or relax the status list. |
-| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
-| `429 Too Many Requests` errors in the run log. | PA rate-limit hit. | Raise the throttle (e.g. 100 ms → 250 ms) on the row and re-run. |
-| Two rows both fired at `03:00` and one stalled the other. | No minute offset — they hit the connection pool simultaneously. | Stagger the rows (`:00`, `:15`, `:30`). |
-| *Run now* button is greyed out. | The sweep is already running (a scheduled or earlier *Run now*). | Open the dashboard's Scheduler card → click the active row → use the modal's *Cancel* if needed, or wait. |
-| Last-run badge stays *never* on a new row. | The row's hour is in the future — it hasn't fired yet — and no *Run now* has been clicked. | Click *Run now* to verify the configuration; the next scheduled run lands as expected. |
-
----
-
-## What's next
-
-- [IT dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
-- [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
-- [E-Invoicing](../../configuration/system/einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
-- [Statuses](../../configuration/system/statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
-- [Daily Digest](./daily-digest.md) — schedule a daily email summarising the integration errors; useful pairing with Auto-Retry so the on-call team sees what the sweep couldn't fix.
+- **One job for 9904 is enough in most cases.** Add a job only for another time or another set of statuses.
+- **Leave `213` and `9905` out.** A `213` is always refused; a `9905` needs a correction and a full reprocess rather than a resend.
+- **Shift the minutes.** Two jobs at the same minute compete for the database connections and the platform.
+- **Raise the wait on `429`.** A *Too Many Requests* answer from the platform means the rate is too high: raise the wait or lower the workers.
+- **Disable rather than delete** during a known platform outage: the job stays visible and is easy to turn back on.

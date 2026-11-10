@@ -4,7 +4,7 @@
 # Absolute links (/nomaubl/...) in JSX/src are NOT rewritten: grep them after.
 # zsh: call it once per page, never through a "for p in 'a b'" loop.
 import os,re,sys,glob,subprocess,posixpath as pp
-os.chdir("/Users/franckblettner/Documents/Tools/GithubProjects/fblettner.github.io")
+os.chdir("/Users/franckblettner/Developer/nomana/fblettner.github.io")
 old,new=sys.argv[1],sys.argv[2]
 ROOTS=["docs","i18n/fr/docusaurus-plugin-content-docs/current"]
 def ext(root,i):

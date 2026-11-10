@@ -170,6 +170,8 @@ Le groupe **Document key (doc / dct / kco)** détermine comment un document UBL 
 | **From cbc:ID (regex pattern)** *(défaut)* | La clé est extraite du `cbc:ID` de la facture par une regex — voir plus bas. |
 | **Sequence (NomaUBL numbers the document)** | NomaUBL attribue lui-même le numéro de document, sous un type de document et une société fixes. |
 
+**Find company by** — *As configured below* (défaut) / *VAT number* / *SIRET* / *SIREN* / *VAT, then SIREN, then SIRET* : recherche dans les [sociétés fournisseur](../ubl-tools/ubl-defaults/suppliers-companies.md) l'identifiant du vendeur présent dans l'UBL (celui de l'acheteur quand le sens est `R`) pour fixer la société. Sans correspondance, le document est arrêté.
+
 #### Mode séquence
 
 Prévu pour les **factures reçues**, dont le `cbc:ID` suit le format propre à chaque fournisseur ; utilisable aussi pour de l'UBL émis quand le format de numérotation n'est pas connu.
@@ -268,6 +270,7 @@ L'exécution d'un document à source connecteur est décrite sur [Traitement →
 | Champ | Description |
 |---|---|
 | **Burst Key** | Nom de balise XML utilisé pour découper le spool en documents individuels. Cet élément marque la **racine d'un document** — chaque occurrence dans le spool produit un document de sortie. |
+| **JDE invoice key** | PDF JD Edwards dont les sections diffèrent de l'impression de facture standard : `section:champ` du numéro de facture (par ex. `11:3`). Donne un `<Invoice>` par valeur, avec la clé de découpage `Invoice`. Se règle depuis la page [PDF vers XML](../processing/pdf-to-xml.md). |
 
 ### Identification du document *(quand Source = XML)*
 
@@ -294,6 +297,8 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 | **Routing Code** | Code utilisé pour router le document vers le bon **canal de distribution** : archivage, envoi par e-mail, envoi par courrier, transmission vers une Plateforme Agréée, etc. |
 | **Office** | Balise XML du spool contenant le code **bureau / unité opérationnelle**. |
 | **Processing Type** | Balise XML portant le code de type de traitement (B2B, B2BINT…). Laisser vide pour utiliser la **valeur par défaut définie dans Types de documents**. |
+| **Find company by** | *Company (JDE) above* (défaut) / *VAT number* / *SIRET* / *SIREN* — sources XML et PDF. Recherche dans les [sociétés fournisseur](../ubl-tools/ubl-defaults/suppliers-companies.md) l'identifiant lu dans **Identifier element**, et ajoute la société trouvée en `<CompanyCode>` (mapper `TAG_COMPANY_CODE` sur `CompanyCode`). Un SIRET sans correspondance se rabat sur son SIREN. **Sans correspondance, la facture est arrêtée**, avec le motif dans le journal de traitement (*… not found in the supplier companies*, *… is on several supplier companies*). |
+| **Identifier element** | Élément qui porte l'identifiant recherché (par ex. `TaxId2_ID7`). Affiché une fois *Find company by* renseigné. |
 
 > 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
@@ -364,10 +369,17 @@ Le groupe **PDF extraction** règle la conversion :
 | Champ | Description |
 |---|---|
 | **Table start** | Regex testée sur chaque ligne : les cellules de la ligne trouvée nomment les colonnes du tableau (par ex. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Header rows** | Nombre de lignes d'un en-tête de tableau imprimé sur plusieurs lignes, la ligne *Table start* étant la première (défaut `1`). L'en-tête est fusionné par colonne et les cellules empilées sur une ligne sont placées dans leur propre colonne. Au-delà d'une ligne, le tableau s'arrête à la première ancre de fin. |
 | **Table end** | Regex testée sur la première ligne qui suit le tableau — cette ligne n'en fait pas partie. |
+| **Invoice split** | Regex dont le premier groupe est le numéro de facture, pour un PDF qui contient plusieurs factures (par ex. `N° de facture :\s*(\S+)`) : un `<Document>` par numéro, chacun avec ses propres pages. Vide = une facture par PDF. |
+| **VAT table start** | Regex sur la ligne d'en-tête du récapitulatif TVA : ses lignes deviennent `<Recap_TVA>/<Ligne_TVA>`, une par taux. Vide = aucun récapitulatif TVA lu. |
+| **VAT columns** | Cellules d'en-tête conservées à partir de la gauche, quand un autre bloc est imprimé à côté du récapitulatif. Vide = toutes. |
+| **VAT table end** | Regex sur la première ligne après les taux ; vide = la première ligne sans valeur. |
 | **Layout match** | Regex facultative que le texte de la page doit contenir ; un fichier qui ne correspond pas est refusé — utile quand un dossier mélange plusieurs mises en page. |
 | **Page match** | Regex facultative : seules les pages dont le texte correspond sont converties — une impression qui contient un relevé et la facture ne garde que les pages de la facture. |
 | **Field 1** … **Field 5** | `Nom\|regex` appliquée au texte de la page ; le premier groupe (à défaut la correspondance entière) devient `<Nom>`. Ajouter `=>texte` pour réécrire la correspondance, `$1` admis — `Type_JDE\|^FACTURE=>F9`. Deux champs peuvent porter le même nom si un seul des deux peut correspondre. |
+
+Le tableau, le récapitulatif TVA, le numéro de facture et la société se règlent plus simplement sur la page [PDF vers XML](../processing/pdf-to-xml.md), en cliquant sur les lignes d'un PDF d'exemple.
 
 Un échantillon converti se présente ainsi :
 
@@ -425,8 +437,8 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **Post-transform** | chemin | Feuille appliquée à l'UBL validé pour écrire une autre syntaxe à côté de lui — par exemple la feuille livrée `ubl-to-cii.xsl` (UBL vers CII D16B). Vide = aucune. Voir [Post-transformation](../ubl-tools/post-transform.md). |
 | **Post-transform output** | suffixe, défaut `-cii.xml` | Remplace le `.xml` du nom du fichier UBL ; le téléchargement depuis les fenêtres de la facture et du document reprend ce nom. |
 | **Post-transform name** | texte | Nom court de la syntaxe produite sur les boutons de téléchargement (`CII` → *Télécharger CII*). Le connecteur de la plateforme peut envoyer le fichier converti avec `{{derivedContent}}` / `{{derivedFilePath}}`. |
-| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
-| **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
+| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. Pour une source PDF, `source` joint le PDF d'entrée lui-même en **PJA** — avec *Invoice split*, seulement les pages de la facture. |
+| **LISIBLE** | `Y` / `N` / `source` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. Pour une source PDF, `source` incorpore le PDF d'entrée comme copie LISIBLE au lieu d'un PDF généré — avec *Invoice split*, seulement les pages de la facture. Le PDF d'entrée n'est pas conservé après traitement : un retraitement complet ne peut donc pas l'incorporer de nouveau. |
 | **Invert sign** | `N – No` (défaut) / `Credit notes only` / `All documents` | Inverse le signe des montants lus dans la source : montants nets de ligne, totaux du document, montants payés d'avance et d'arrondi, TVA totale et chaque ligne du récapitulatif TVA. Le prix unitaire est toujours émis en positif, les remises et charges sont lues en valeur absolue, et la quantité prend le signe du montant de sa ligne. *Credit notes only* s'applique aux documents résolus en `381`, `396`, `261`, `262`, `502` ou `503`. Un spool qui imprime un avoir avec des montants négatifs donne ainsi l'avoir (CreditNote) positif attendu par la norme, sans modifier la XSL du document. |
 
 ### Règles de traitement \{#regles-de-traitement\}
@@ -501,7 +513,7 @@ Un modèle en *Source = UBL* embarque les mêmes PDF que le flux XML — après 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
-| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Les sources XML et PDF sont concernées. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir de la source archivée lors du premier traitement (XML source, ou XML issu d'une source PDF) — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Les sources XML et PDF sont concernées. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande ; l'ensemble des conditions figure dans les [règles de retraitement](../application/invoices.md#resend-reprocess-rules). |
 | **Allow full reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, une facture en *Échec de validation* (`9905`) peut être **retraitée en totalité** depuis sa source archivée, une fois les données corrigées dans le système source : l'enrichissement est interrogé de nouveau, l'UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle. Sources XML et PDF. Se déclenche depuis la fenêtre facture (bouton *Retraiter* sur une `9905`), la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess-full), l'API (`kind: "full"`) ou `-reprocess --full`. |
 
 ---

@@ -39,6 +39,26 @@ La liste complète des préfixes est gérée dans la liste de référence *note-
 
 ---
 
+## Notes par société \{#per-company\}
+
+Un sélecteur au-dessus des notes choisit les notes affichées :
+
+- **Toutes les sociétés** — les notes générales, utilisées par toute société sans jeu propre.
+- Une entrée par [société fournisseur](./suppliers-companies.md) ; une société qui a son propre jeu apparaît sous la forme *code (notes propres)*.
+
+Une société sélectionnée, l'onglet indique si elle **utilise ces notes à la place des notes générales** ou si elle **utilise les notes générales affichées ci-dessous** (alors grisées et non modifiables).
+
+| Bouton | Effet |
+|---|---|
+| **Définir les notes de cette société** | Copie les notes générales dans un jeu propre à la société, à modifier. |
+| **Revenir aux notes générales** | Supprime le jeu de la société, qui reprend les notes générales. |
+
+Le jeu d'une société **remplace** en bloc les notes générales pour ses factures ; toutes les autres sociétés gardent les notes générales. Le même sélecteur fonctionne dans le remplacement d'un document (**Remplacer pour ce fichier** d'abord) : un document peut alors porter ses propres notes générales et ses propres jeux par société.
+
+Les autres environnements disposent des notes par société après `nomaubl.sh upgrade <env>` ; une feuille de style de document non mise à jour conserve les notes générales.
+
+---
+
 ## Mentions françaises obligatoires (montage type)
 
 | Type | Texte requis | Quand |

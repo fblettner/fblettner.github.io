@@ -4,7 +4,7 @@
 set -e
 HERE=${0:A:h}
 SITE=${HERE:h:h:h:h}
-JAR=/Users/franckblettner/Documents/Tools/JavaProjects/nomaubl/nomaubl.jar
+JAR=/Users/franckblettner/Developer/nomaubl/nomaubl/nomaubl.jar
 TMP=$(mktemp -d)
 cp $HERE/Gen.java $TMP/
 (cd $TMP && javac -cp $JAR Gen.java 2>/dev/null && java -cp $JAR:. Gen > spec.json)

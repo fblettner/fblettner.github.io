@@ -42,7 +42,19 @@ The directory holds one card per company. Each card contains:
 | **GLN** | BT-29 | GS1 Global Location Number. |
 | **NAF (APE)** | — | French APE / NAF activity code (`00.00X`). Carried as additional party identification in the UBL output. |
 | **VAT** | BT-31 | VAT identifier (e.g. `FR00000000000`). |
-| **Capital** | BT-33 | Share capital text (e.g. `Capital de 100 000 €`). |
+| **Capital (if no legal text)** | BT-33 | Share capital, used only when **BT-33 – Legal information** is empty (see below). |
+| **BT-33 – Legal information** | BT-33 | Full legal text of the seller, written as is in the invoice: legal form, capital, RCS, registration number… (e.g. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+
+### Legal information (BT-33) \{#legal-information\}
+
+The seller's additional legal information (BT-33) is chosen in this order:
+
+1. the document's own text, mapped to the *Seller additional legal information (full text)* variable (`TAG_SUPPLIER_LEGAL_FORM`) in the [XSL editor](../xsl-editor.md#variable-mapping);
+2. otherwise the company's **BT-33 – Legal information**;
+3. otherwise, when a capital is set (the document's or the company's): `Capital <capital> Euros`, followed by ` - APE <code>` when an APE / NAF code is set;
+4. otherwise no BT-33 is written.
+
+Other environments get this behaviour after `nomaubl.sh upgrade <env>` (see [Upgrade](../../installation/upgrade.md)).
 
 ### Address
 
@@ -98,6 +110,6 @@ The directory is purely a **defaults** layer: any field the source XML carries e
 
 - **Keep one card per legal entity.** Even when several internal company codes share a single SIREN, separate cards make it easier to track which establishment (SIRET) and which address each code maps to.
 - **The country code drives the default country fallback.** When the source omits a postal address country, NomaUBL falls back to this card's `country` rather than to the global default in the [Header](./ubl-header-defaults.md) tab. Set it to `FR` for French sellers; do not leave it blank.
-- **Capital text appears verbatim.** The `Capital` field is rendered as-is in the UBL output (BT-33), so include the currency mark and any wording the regulatory body expects (e.g. `SAS au capital de 50 000 €`).
+- **Prefer the legal information text.** **BT-33 – Legal information** is written verbatim: put the full wording there (legal form, capital with its currency, RCS). The capital and APE fields are only a fallback.
 - **Override per template only when the template ships a different seller.** A subsidiary issuing invoices on its own SIREN is a legitimate override case; a one-off invoice for the main entity is not.
 - **The default selector is the right place to point at the most common seller.** When most invoices come from a single legal entity, set it as the default — only the exceptional records need a matching code in the source XML.

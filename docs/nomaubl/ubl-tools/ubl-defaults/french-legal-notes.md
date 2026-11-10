@@ -39,6 +39,26 @@ The full prefix list lives in the *note-types* reference list (*Configuration â†
 
 ---
 
+## Notes per company \{#per-company\}
+
+A selector above the notes picks whose notes are shown:
+
+- **All companies** â€” the general notes, used by every company without its own set.
+- One entry per [supplier company](./suppliers-companies.md); a company that has its own set is shown as *code (own notes)*.
+
+With a company selected, the tab says whether it **uses these notes instead of the general ones** or **uses the general notes shown below** (then greyed out and read-only).
+
+| Button | Effect |
+|---|---|
+| **Set notes for this company** | Copies the general notes into a set of the company's own, to edit. |
+| **Back to the general notes** | Deletes the company's set; the company uses the general notes again. |
+
+A company's set **replaces** the general notes as a whole for its invoices; every other company keeps the general notes. The same selector works in a document's override (**Override for this file** first): a document can then hold its own general notes and its own sets per company.
+
+Other environments get the notes per company after `nomaubl.sh upgrade <env>`; a document stylesheet that has not been upgraded keeps the general notes.
+
+---
+
 ## Mandatory French notes (typical setup)
 
 | Type | Required text | When |

@@ -2363,8 +2363,8 @@ The licensed applications (Nomasx-1, Nomajde) and the bundled Nomaflow jobs need
 On a Linux host with Docker and the Compose plugin:
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ./liberty install full          # or: ./liberty install light
 ```
 
@@ -2557,9 +2557,11 @@ For what the two layouts contain, see [Architecture](./architecture.md#layouts).
 Fetch the release folder:
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ```
+
+Only the `release/` folder is fetched (a few hundred KB, without the project's history). `git pull` in it brings the scripts of the next release — `main` only receives releases; add `--branch v<version>` to the clone to pin one. What the install writes there (`.env`, `apps/`, `backups/`) is ignored by git, so a pull never touches it. A host that cloned the whole project keeps working as it is.
 
 Every command on this page and on the following ones is run from this `release/` folder.
 
@@ -4483,16 +4485,19 @@ The pool is chosen at runtime:
 
 The reachable set is the default `pool` plus `pools`; a request or a job can never reach a pool outside it, and only pool **names** reach the picker — never a URL or credentials. A connector with just a `pool` behaves exactly as before.
 
+An API connector called from those screens — AIS, for JD Edwards — can follow the same environments: see [One server per environment](#api-environments).
+
 ---
 
 ## API connector \{#api\}
 
-An API connector calls a web API. Its editor has five tabs:
+An API connector calls a web API. Its editor has six tabs:
 
 | Tab | Content |
 |---|---|
 | **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted), **Default headers**, **Timeout**, **SSL Verify** (*true*, *false*, or a variable such as `${JDE_AIS_VERIFY_SSL:-true}`, kept as written), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type**: *None*, *Basic* (user and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint, request body and headers, token field, token lifetime). Secrets are encrypted when saved. |
+| **Environments** | One server per environment, for a connector used with several JDE environments — see [One server per environment](#api-environments). |
 | **Endpoints** | The named endpoints — see below. |
 | **Webhooks** | Not available yet: external systems cannot push events into Liberty Next. |
 | **Test** | **Test connection** checks the authentication; **Run** calls an endpoint with parameter values and shows the response. Nothing is saved. |
@@ -4510,6 +4515,31 @@ An endpoint has:
 | **Label**, **Description** | Shown in the pickers and to the AI assistant. |
 
 Endpoints are called by screen actions (`call_api`), menu entries (type `endpoint`), notification rules (`action` channel), plugins (`connectors.api(…).call(…)`) and — when allowed — the AI assistant. A Nomaflow `http` step calls a URL directly, without a connector.
+
+### One server per environment \{#api-environments\}
+
+When the screens run on a [multi-pool connector](#multi-pool) — several JD Edwards environments — each environment usually has its own AIS server. The **Environments** tab gives the API connector one server per environment; the endpoints stay defined once.
+
+| Field | Effect |
+|---|---|
+| **Environment (pool)** | The environment (pool) of the connector's own server — its **Base URL** and credentials. Required as soon as there is another environment. |
+| **Other environments** | One entry per other pool: **Base URL**, **Username**, **Password**, **Token**, **SSL Verify**. A blank field takes the connector's value. Passwords and tokens are encrypted when saved. |
+
+Nobody chooses the server. A call follows the environment the screen runs on — the **Pool** picked in the sidebar, or the default — and a job step's `pool` (any step type). That covers screen actions (`call_api`), plugins, `/api/http` and the AI assistant.
+
+A call made for one of the connector's environments with no server is **refused** ("no target for pool …"); it is never sent to the connector's own server, which is another environment — often production. The environments are the connector's pool plus every pool of the SQL connectors running on it, so a JDE environment added on the SQL side and forgotten here is refused too. The tab lists those environments without a server, and so does *Settings → Integrity*.
+
+```toml
+[connectors.ais_connection]
+base_url = "${JDE_AIS_URL}"
+pool = "jdedwards"                          # the environment of base_url
+
+[connectors.ais_connection.targets.jdedwards_dev]
+base_url = "https://ais-dev.example.com:7077/jderest/v2"
+auth_password = "ENC:…"                     # only what differs
+```
+
+To name the environment before a sensitive call, use `#POOL#` in a `confirm` message: `Reset the password of {INPUT.user} on #POOL#?`. An upgrade of the licensed apps keeps an install's `pool` and `targets`.
 
 ---
 
@@ -5327,6 +5357,7 @@ These sources are read in the browser at the time of the call:
 | `#LOGIN_USER#` (or `#LOGIN#`, `#USER#`) | The signed-in user's name. |
 | `#LOGIN_EMAIL#` (or `#EMAIL#`) | The user's e-mail address. |
 | `#LANGUAGE#` (or `#LANG#`) | The interface language. |
+| `#POOL#` (or `#ENVIRONMENT#`) | The **Pool** picked in the sidebar. In a `confirm` / `notify` message: the environment the screen runs on — that pick when the screen's connector has it, else the connector's own pool. |
 | `#SYSDATE#` (or `#CURRENT_DATE#`, `#TODAY#`) | Today's date, `YYYY-MM-DD`. |
 | `#NOW#` (or `#CURRENT_TIMESTAMP#`) | The current date and time. |
 | `#CURRENT_TIME#` | The current time, `HH:MM:SS`. |
@@ -6782,8 +6813,8 @@ Every action has an **id** (unique in its list, also its key in a chain's contex
 | **`navigate`** | Opens another view: a screen (`screen`) or a query (`to`), with `param_binds` passed as its parameters. | `connector`, `screen` or `to`, `param_binds` |
 | **`open_url`** | Opens an external address — another application on the row's record. | `url`, `new_tab` |
 | **`set_field`** | Writes a value into a form field. | `target`, `value` or `source` |
-| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. | `message`, `confirm_label`, `cancel_label` |
-| **`notify`** | Shows a message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`confirm`** | Asks for confirmation; **Cancel** stops the chain. The message is filled like an `open_url` template (`{COLUMN}`, `{INPUT.x}`, built-ins), not encoded: `Reset the password of {INPUT.user} on #POOL#?`. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Shows a message, filled the same way. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
 | **`send_notification`** | Fires a notification rule of type *action* (e-mail, portal…). | `rule`, `param_binds` |
 | **`refresh`** | Reloads the grid. | — |
 
@@ -11153,8 +11184,9 @@ Click **＋ Add user**. The User editor opens with every field empty.
 |---|---|---|
 | **Username** | yes | Letters, digits, underscores, dots and hyphens. Used as the sign-in handle, the JWT subject, and the audit identity. **Immutable** after creation. |
 | **Full name** | no | The display name shown in headers and audit columns. |
-| **Email** | no | Recipient address for invites, password reset (when implemented), notification routes. |
+| **Email** | no | Where a *Forgot password?* link is mailed (see [below](#forgot)), and the notifications' address. |
 | **Password** | yes (for new users) | At least 8 characters. Stored as an Argon2id hash, never readable back. Leave blank on edit to keep the current password. |
+| **Ask for a new password at the next sign-in** | default on for a new user | The password given here is a temporary one: the user chooses their own at the first sign-in (see [below](#first-sign-in)). Local accounts only. |
 | **Roles** | no | Chip picker — type or pick from the dropdown. The dropdown lists every role configured under the Roles tab. |
 | **Active** | yes (default on) | When off, the user can't sign in; existing sessions die on next token refresh. |
 | **Superuser** | no | When on, bypasses every permission check and every data scope. Use sparingly. |
@@ -11195,6 +11227,14 @@ Changes don't break their current session. The new roles / disabled flag / passw
 :::
 
 ---
+
+## A new password at the first sign-in \{#first-sign-in\}
+
+An account created — or reset by an administrator — with **Ask for a new password at the next sign-in** opens on *Choose your password*: the temporary password, the new one (8+ characters) and its confirmation. Until it's done, the server refuses every call but the change itself (HTTP 403 *password change required*), so the temporary password can't be used for anything else, through the page or the API. The new password takes effect at once — no new sign-in. The same from the command line: `liberty-admin create-user … --must-change`, `liberty-admin set-password … --must-change`. An OIDC account is never asked (its password is the identity provider's).
+
+## Forgot password \{#forgot\}
+
+When SMTP is configured (*Liberty Next → Administer → App*, notifications), the sign-in page shows **Forgot password?**. The user gives their **username and the account's e-mail**; when both match an active local account, a link is mailed to that address. The link works **once and for an hour** — it is bound to the password it was issued for, so any password change, the reset included, ends it. The page answers the same whether or not the two match, so it never tells who has an account; requests are limited per address. The link points at **Public address** (*App*, `[app] public_url`) — set it when users reach the server through a reverse proxy or another name; blank, the browser's address is used.
 
 ## Data-scope attributes \{#attributes\}
 
@@ -11246,7 +11286,7 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 3. Assign roles per their team (`analyst`, `reporter`, …).
 4. Save.
 5. Send them the temporary credentials through whatever channel your company uses.
-6. They sign in, they reach the AI assistant or change-password flow to set their own password.
+6. They sign in with it and land on *Choose your password* — with **Ask for a new password at the next sign-in** ticked (the default), nothing else opens until they've set their own.
 
 ### Onboard an OIDC hire
 
@@ -11258,9 +11298,11 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 ### Change a user's password (you're the admin)
 
 1. *Liberty Next → Administer → Access → Users*, click the user.
-2. Type the new password in the **Password** field (8+ chars).
+2. Type the new password in the **Password** field (8+ chars); tick **Ask for a new password at the next sign-in** to make it a temporary one.
 3. Save.
-4. Tell the user. They sign in with the new password; their existing session keeps working until the access token expires.
+4. Tell the user. They sign in with the new password (and, if temporary, choose their own); their existing session keeps working until the access token expires.
+
+With SMTP configured, users can also reset it themselves — [Forgot password?](#forgot).
 
 ### Revoke an account immediately
 
@@ -13608,6 +13650,9 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | `type` | — | One of the ten types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
+| `continue_on_failure` | `false` | `true`: when the step fails (after its retries), the next steps run anyway and the run ends failed, naming it — for a job chaining independent work. A checkbox in the step editor; for every step of a job, `[jobs.step_defaults]`. |
+
+**Turn a step off for an install.** A step the install doesn't need — the LDAP collection without LDAP — is listed in the job's `disabled_steps = ["SECURITY_LDAP"]` (the step editor's *Turned off for this install* checkbox). It never runs, even when a run or a preset selects every step: the **Run with parameters** window shows it off and not selectable, the run records it as *skipped: turned off for this install*. Unlike `enabled` — the default a run may override — it is the operator's last word, and the licensed apps installer keeps it across upgrades.
 
 When a step fails on a database error, the run detail shows the database's own sentence — *invalid input for query argument $1: 2025 (expected str, got int)* — and the statement goes to the server log.
 
@@ -22619,14 +22664,14 @@ Four cards count the invoices waiting for an IT action, each with a button that 
 
 ### Send failed (9904) \{#send-failed\}
 
-A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
+A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend runs **4 sends in parallel, with 100 ms between two calls of each**, so the PA stays inside its rate budget, and each invoice goes through the [resend rules](invoices.md#resend-reprocess-rules).
 
 | Element | Behaviour |
 |---|---|
 | Count | Live total — refreshed by the page's *Refresh* button and at every dashboard mount. Coloured red when non-zero. |
 | **Resend all N** button | Disabled when the count is zero. Click to replay every status-`9904` invoice; opens the progress window. |
 | Progress window | Live counters (*processed* / *succeeded* / *failed*), a *Cancel* button and a *Run in background* button — same component as every long-running operation on the platform. |
-| Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
+| Throttle | 4 parallel sends, 100 ms between two calls of each — fixed here; not operator-tunable. The [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page — same code path, no operator action required.
 
@@ -22636,7 +22681,7 @@ A big-number card that counts the invoices **held before sending** — the ones 
 
 ### To reprocess \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see the [reprocess rules](invoices.md#resend-reprocess-rules), [Documents → Allow reprocess](../management/documents.md) for the per-document switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### To reprocess in full \{#to-reprocess-full\}
 
@@ -23112,15 +23157,53 @@ Both require the *Mark reviewed* action (`invoice.review`) on the [Roles](../con
 
 ### Bulk resend \{#bulk-resend\}
 
-Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
+Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). A row whose document type is set to *Do not send* can be ticked only for a reprocess or a review, and the per-invoice **Resend** action is hidden on it. Each invoice of the batch goes through the [resend rules](#resend-reprocess-rules): an invoice the platform already holds is refused and counted as failed.
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the source archived at first processing (the source XML of an XML-source document, the XML produced by the conversion of a PDF-source document), into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a document with **Allow reprocess** enabled (an XML- or PDF-source document — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 The selection also covers **validation failures**: an invoice in *Validation failed* (`9905`) on a template with **Allow full reprocess** enabled is **reprocessed in full** — enrichment queried again, UBL regenerated, validated and sent to the PA when the template and document type say so; the history is kept and a new cycle starts. The confirmation states which invoices are reprinted and which are reprocessed in full. The invoice window offers the same full reprocess through a **Reprocess** button on a `9905`.
 
 Several invoices are reprocessed as **one batch per template**, in the background with its live log: their sources are staged in a working folder, the *Max threads* global setting bounds the parallelism and an invoice is never processed twice. A single invoice still runs on its own.
+
+### Resend and reprocess rules \{#resend-reprocess-rules\}
+
+The server checks these rules on every resend and every reprocess, whatever starts it: the invoice window, the list selection, the [IT dashboard](tech-dashboard.md#send-failed) cards, an [Auto-retry](../sync/scheduled-jobs/auto-retry.md) job, the command line or the [API](/nomaubl/api-reference).
+
+#### Resend — the stored UBL sent to the PA again
+
+| Condition | Rule |
+|---|---|
+| **Status** | Accepted for any internal `99xx` status except `9911` and `9913`: `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refused for every standard platform status — any numeric code that does not start with `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — and for `9911` / `9913`, stages the platform has already accepted. |
+| **Reason code** | Not checked. |
+| **Document type** | Refused when the send flag of the [document type](../configuration/system/document-types.md) is *Do not send* (`FEEV10` = `2`). |
+| **Stored UBL** | Refused when the invoice has no UBL stored in its header. |
+| **User** | The *Resend to PA* action (`invoice.resend`) on the [Roles](../configuration/security/roles.md) page, and the invoice must be visible to the user. |
+
+The invoice window hides **Resend to PA** only for a user without the permission and for a *Do not send* document type. On a protected status the button stays visible, and the resend ends with *Already processed by the PA (status …) — resend refused*.
+
+A bulk resend — **Resend selected**, **Resend all N** on the dashboard, an Auto-retry job — selects the invoices by status (`9904` by default for Auto-retry, or a list such as `9904,9905,9907`), then applies the same rules to each invoice.
+
+The only opening in the protection is the [Fix buyer](#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option.
+
+#### Reprocess — two kinds, chosen from the status
+
+| Kind | Status | Reason code | Document setting | Repeatable |
+|---|---|---|---|---|
+| **Reprint** — PDF and XML regenerated, nothing written to the database, no send | `200` | `NON_TRANSMISE` (exactly) | *Allow reprocess* = `Y` | No — once only: the `9912` marker left by the first reprint blocks a second one. |
+| **Full reprocess** — regenerated with the enrichment queried again, validated, then sent when the settings say so | `9905` | Not checked | *Allow full reprocess* = `Y` | Yes |
+
+Both kinds also require:
+
+- the document recorded on the invoice (`UHTMPL`) still exists;
+- that document has an **XML** or **PDF** source — a document with a UBL source cannot be reprocessed.
+
+The send flag of the document type plays no part in the eligibility: a reprocess never sends by itself.
+
+:::info[Any other status]
+An invoice outside these rules — a `9904` for a reprint, a standard platform status for a resend — can only be moved on with **Set Status**.
+:::
 
 ### Export
 
@@ -23615,7 +23698,7 @@ A **fullscreen toggle** in the header swaps between windowed and full-screen edi
 
 ### Resend confirmation
 
-The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
+The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée, within the [resend rules](#resend-reprocess-rules) — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
 
 ---
 
@@ -26162,24 +26245,15 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 ## NomaUBL — Auto-Retry
 Source: https://docs.nomana-it.fr/nomaubl/sync/scheduled-jobs/auto-retry/
 
-Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the IT dashboard. The overnight pickup for batches stuck on the PA side.
+NomaUBL Scheduled jobs → Auto-retry resends to the Plateforme Agréée, once a day, every invoice in the chosen technical-error statuses (9904 by default at 3 a.m.), with an issue-date window, a wait between calls and parallel workers; each invoice goes through the resend rules.
 
 :::info[Where to find it]
-This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Auto-Retry* page has left the menu.
+This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart.
 :::
 
-The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
+An **Auto-retry** job resends to the Plateforme Agréée (PA), once a day, every invoice currently in the chosen statuses. The usual job resends the *Send failed* (`9904`) invoices at 3 a.m., so that what failed during the day — a platform outage, a timeout — is sent again before the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [IT dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
-
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
-
----
-
-## Opening the editor
-
-- Sidebar → **Configuration → System → Auto-Retry**.
-- Or from the [IT dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
+Several jobs can coexist, each with its own time and its own statuses. The job uses the same resend as the **Resend all N** button of the [IT dashboard's Send failed card](../../application/tech-dashboard.md#send-failed), and each invoice goes through the [resend rules](../../application/invoices.md#resend-reprocess-rules). The job works the same whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP: it resends the UBL stored for each invoice.
 
 ---
 
@@ -26187,112 +26261,68 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ---
 
-## Sweep fields
+## Fields
 
-Each row is one entry in the catalogue. The edit pane has four sections.
+### General
 
-### 1. Identification
-
-| Field | Required | What |
+| Field | Default | Description |
 |---|---|---|
-| **Name** | yes | Free text. Shown in the catalogue list and on the IT dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
-| **Description** | no | One-line caption to help colleagues understand what the sweep is for. |
-| **Enabled** | yes (default: `on`) | When `off`, the row stays in the catalogue but the scheduler skips it. Useful for pausing during a maintenance window or a deliberate PA outage. |
+| **Name** | — | Given when the job is created (**New job**); it identifies the job on the Scheduled jobs page. |
+| **Description** | empty | Free text: what the job covers. |
+| **Enabled** | on | Off, the job is kept but never fired on schedule. |
 
-### 2. Schedule
+### Schedule
 
-| Field | Required | What |
+| Field | Default | Description |
 |---|---|---|
-| **Hour** | yes (default: `03`) | Hour of day in 24-h format. The sweep fires at that hour exactly. |
-| **Minute** | no (default: `00`) | Minute of the hour. Use this to spread several sweeps across an hour so they don't all start at the same second. |
-| **Timezone** | yes (default: server timezone) | IANA timezone (e.g. `Europe/Paris`). Each sweep runs in its own timezone so a multi-region install can stagger sweeps per region. |
-| **Cadence** | yes (default: `daily`) | `daily`, `hourly`, or `every N hours`. Hourly + a 50-minute offset gives a sweep at `00:50`, `01:50`, … — a busy install benefits from the higher cadence; the default daily 03:00 is enough for most. |
+| **Hour** | `3` | Hour of the daily run (0–23), server time. |
+| **Minute** | `0` | Minute of the run (0–59). Shifting the minute keeps two jobs from starting together. |
 
-### 3. Status filter
+### Target
 
-The multi-select picker lists only statuses tagged **Error – tech** in the [Status catalogue](../../configuration/system/statuses.md):
-
-| Code | Label | When it applies |
+| Field | Default | Description |
 |---|---|---|
-| `9904` | *Send failed* | PA submission rejected at HTTP level (timeout, 4xx, 5xx). The default sweep target. |
-| `9905` | *Mock send failed* | Same as 9904 but in mock mode. Typically only seen during testing. |
-| `9907` | *Status retrieval failed* | PA submission landed but the lifecycle poll keeps erroring. |
-| `213` | *PA technical rejection* | The PA side reported a technical reject after acceptance. |
+| **Statuses to retry** | `9904` | One or more codes, picked among the statuses of the *Error – tech* group of the [Status catalogue](../../configuration/system/statuses.md). Several codes combine with OR. With no status picked, nothing runs. |
+| **Only retry invoices from the last N days** | `0` | Keeps only the invoices whose **issue date** falls in the last N days. `0` keeps every invoice in the chosen statuses. |
 
-Pick one or several. A single row can sweep every tech-error bucket at once — useful in a single nightly catch-up that covers everything.
+The picker offers every code of the *Error – tech* group, but a resend accepts only the internal `99xx` statuses other than `9911` and `9913` (see the [resend rules](../../application/invoices.md#resend-reprocess-rules)):
 
-Business-error statuses (`206`, `207`, `208`, …) are deliberately **not selectable** here — they need operator action upstream, not a blind replay. The picker enforces that constraint.
-
-### 4. Replay options
-
-| Field | Default | What |
+| Code | Label | Resent? |
 |---|---|---|
-| **Lookback window** | `0` *(no time filter)* | When set, restricts the sweep to invoices whose status was last updated within the window (in hours or days). `7 days` is the typical *catch up on the last week* setting; `0` means *every invoice in the matching status, regardless of age*. |
-| **Throttle** | `100` ms | Delay between two PA calls. Matches the manual *Resend all* button on the dashboard. Raise it (250 ms, 500 ms) for installs where the PA rate-limits aggressively; lower it (50 ms) for a one-off drain after a PA outage. |
-| **Max invoices per run** | unlimited | Cap the sweep at N invoices to bound the run time on big batches. The sweep picks the oldest matching invoices first and stops at N; the rest are picked up on the next scheduled run. |
+| `9904` | *Send failed* | Yes — the usual target. |
+| `9907` | *PA import failed* | Yes. |
+| `9909` | *PA export failed* | Yes. |
+| `9905` | *Validation failed* | Yes, but the stored UBL is sent as it is: correct the data first and prefer a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
+| `213` | *Rejected* | No — a platform status: every invoice is refused and counted as failed. |
+
+### Throttle
+
+| Field | Default | Description |
+|---|---|---|
+| **Wait between PA calls (ms)** | `100` | Pause between two sends. Raise it when the platform limits the request rate; `0` sends without pause. |
+| **Parallel workers** | `4` | Number of sends run at the same time (1 to 8). The wait applies to each worker, so the rate towards the platform is about *workers ÷ wait*. `1` sends one invoice after the other. |
+
+The connector's own [request limits](../../configuration/api-connectors.md) apply on top of these settings.
 
 ---
 
-## What happens at the scheduled hour
+## What happens at the scheduled time
 
-The scheduler is a daemon inside NomaUBL that wakes up every minute and checks every enabled row for *next-fire* time. The query is cheap; the catalogue is small.
+1. The job selects the invoices whose status is one of the chosen codes, narrowed to the last N days of issue date when set — up to 100,000 invoices per run.
+2. Each invoice is resent with the [resend rules](../../application/invoices.md#resend-reprocess-rules): document type *Do not send*, missing UBL or platform status → failed, without a call to the platform.
+3. The run ends with a summary `ok=… fail=… of …`, shown in the *Result* column of the Scheduled jobs page and in its run history.
 
-| Step | What |
-|---|---|
-| **1. Select invoices** | `SELECT * FROM F564231 WHERE current_status IN (<status_list>)`, with optional `last_update >= NOW() - <lookback>` and `LIMIT <max>` when set. Oldest first. |
-| **2. Replay each one** | For every invoice, call the PA api-connector's `submit` task — same code path as the original *Send* action. The lifecycle row is updated with the new status. |
-| **3. Throttle** | Wait `<throttle>` ms between two calls. |
-| **4. Honour Cancel** | The sweep checks for a cancel signal between two invoices — operators can cancel from the dashboard's Scheduler card without waiting for the run to finish. |
-| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the IT dashboard's *Live process events* widget. |
-
-The run progress is also visible in the [shared progress window](../../application/tech-dashboard.md#shared-progress-window) — same component as the manual *Resend all* button. Click any active sweep on the Scheduler card to open it.
-
-If the scheduler is offline (server stopped, JVM crash) when a row was due to fire, the run is **skipped silently** — there is no missed-run replay. The next scheduled hour fires normally. To pick up missed work, run the manual *Resend all* on the dashboard or trigger the row from the catalogue with *Run now*.
-
-### Run-now button
-
-Each row in the catalogue has a *Run now* button that fires the sweep immediately, using the row's current configuration. Useful for:
-
-- Verifying a new sweep before letting it run on its schedule.
-- Recovering a missed run after a server restart.
-- One-off catch-up after a PA outage — flip a disabled *PA-outage drain* row on, *Run now*, flip it off when done.
-
-The *Run now* run honours the same throttle, same lookback, same status list as a scheduled run. It does **not** advance the scheduled-run cadence — the next scheduled time still fires.
+**Run now** on the Scheduled jobs page fires the job at once with its current settings; the next scheduled run is unchanged. A run missed while the server was stopped is not caught up: the next one fires at its usual time.
 
 ---
 
 ## Tips & best practices
 
-- **Keep the default 03:00 sweep alone.** It covers the most common case (overnight batches stuck on the PA). Adding a row only makes sense when you need a different cadence or a different status set.
-- **Spread sweeps with a minute offset.** Two sweeps both firing at `:00` compete for connection pool slots. Stagger them at `:00`, `:15`, `:30` to flatten the load.
-- **Raise the throttle when the PA rate-limits.** A `429 Too Many Requests` after a few minutes of sweeping is a hint to bump the throttle to 250 ms or 500 ms. Match the throttle to the PA's documented per-second budget.
-- **Disable rather than delete during a known outage.** A row marked *DISABLED* is intentional and visible; a deleted row is invisible and easy to forget when the outage ends.
-- **Don't replay business errors.** The picker blocks it. If an invoice is in `207` (*Disputed by recipient*), no amount of replay fixes it — only operator action upstream does.
-- **Use the dashboard for one-shots, Auto-Retry for habits.** The two paths share code; what differs is who fires them. A one-off drain after an incident is a click; the daily safety net is a row.
-
----
-
-## Troubleshooting
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Scheduled row doesn't fire. | Row is *DISABLED*. | Open the row, toggle *Enabled* on, save. |
-| Row fires but processes zero invoices. | The status list and the lookback window combine to zero matches. | Inspect the [E-Invoicing](../../application/invoices.md) page with the same status filter; either widen the lookback or relax the status list. |
-| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
-| `429 Too Many Requests` errors in the run log. | PA rate-limit hit. | Raise the throttle (e.g. 100 ms → 250 ms) on the row and re-run. |
-| Two rows both fired at `03:00` and one stalled the other. | No minute offset — they hit the connection pool simultaneously. | Stagger the rows (`:00`, `:15`, `:30`). |
-| *Run now* button is greyed out. | The sweep is already running (a scheduled or earlier *Run now*). | Open the dashboard's Scheduler card → click the active row → use the modal's *Cancel* if needed, or wait. |
-| Last-run badge stays *never* on a new row. | The row's hour is in the future — it hasn't fired yet — and no *Run now* has been clicked. | Click *Run now* to verify the configuration; the next scheduled run lands as expected. |
-
----
-
-## What's next
-
-- [IT dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
-- [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
-- [E-Invoicing](../../configuration/system/einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
-- [Statuses](../../configuration/system/statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
-- [Daily Digest](./daily-digest.md) — schedule a daily email summarising the integration errors; useful pairing with Auto-Retry so the on-call team sees what the sweep couldn't fix.
+- **One job for 9904 is enough in most cases.** Add a job only for another time or another set of statuses.
+- **Leave `213` and `9905` out.** A `213` is always refused; a `9905` needs a correction and a full reprocess rather than a resend.
+- **Shift the minutes.** Two jobs at the same minute compete for the database connections and the platform.
+- **Raise the wait on `429`.** A *Too Many Requests* answer from the platform means the rate is too high: raise the wait or lower the workers.
+- **Disable rather than delete** during a known platform outage: the job stays visible and is easy to turn back on.
 
 ---
 
@@ -26398,7 +26428,7 @@ The first decision a document makes is its **Source**. It is set on the **[Docum
 |---|---|---|
 | **XML** | XML spool from any ERP needing transformation to UBL. JDE BIP output, SAP IDoc-derived XML, NetSuite saved-search XML, custom ERP exports. | XSL transform → UBL 2.1 → XSD + Schematron → DB → optional PA submit. The page exposes the *Mode* selector (AUTO / SINGLE / BURST / UBL) and the *Send to PA* toggle. |
 | **UBL** | The file is already a UBL 2.1 invoice (your ERP emits UBL natively, or the file came from an upstream PA in UBL form). | Parse the invoice, extract `(doc, dct, kco)` from `cbc:ID`, validate, persist, optionally submit. The page exposes a *Validate only* mode and a *Send to PA* toggle. |
-| **PDF** | A text PDF from any system, with no XML or UBL export available. | The PDF is converted into a flat XML with the template's [PDF extraction](../management/documents.md#pdf-extraction) settings, then follows the XML pipeline. The page offers the same *Mode* selector and *Send to PA* options as XML; the file picker accepts `.pdf`. |
+| **PDF** | A text PDF from any system, with no XML or UBL export available. | The PDF is converted into a flat XML with the template's [PDF extraction](../management/documents.md#pdf-extraction) settings, then follows the XML pipeline. The page offers the same *Mode* selector and *Send to PA* options as XML; the file picker accepts `.pdf`. On an **XML**-source document, a JD Edwards tagged PDF is accepted too: it is converted with the document's *JDE invoice key* and the manifest of its [watched folder](../management/watched-folders.md) — see [PDF to XML](./pdf-to-xml.md#jde-pdf). |
 
 Once the template is selected, the **Source** field on the form shows the resolved value and the rest of the form reconfigures itself.
 
@@ -26718,6 +26748,100 @@ The result section displays:
 
 ---
 
+## NomaUBL — PDF to XML
+Source: https://docs.nomana-it.fr/nomaubl/processing/pdf-to-xml/
+
+NomaUBL Processing → PDF to XML: convert a text PDF or a JD Edwards tagged PDF, read the XML it produces, set the table, VAT summary, invoice number, invoice split and company lookup of a document by clicking the rows, and save them to the document.
+
+The **PDF to XML** page shows the XML a PDF produces, to start or adjust the mapping of a [PDF-source document](../management/documents.md#pdf-extraction). It converts a **text PDF** from any system — JD Edwards, SAP, NetSuite, a custom ERP or any invoicing tool — or a **JD Edwards tagged PDF**, with or without a document's settings, and saves to the document the settings tried on the page. Nothing is stored by a conversion: the page is a working tool.
+
+Access: **Processing → PDF to XML**.
+
+---
+
+## At a glance
+
+---
+
+## Converting a PDF
+
+| Control | Description |
+|---|---|
+| **Choose a PDF** | Picks the PDF on the computer and converts it at once. |
+| Converter | **Text PDF** (a PDF whose text can be selected, from any generator) or **JD Edwards PDF** (a BI Publisher / JD Edwards print carrying its section and field tags). |
+| Document | **Default settings**, or a document whose settings are loaded and tried. Picking a document also sets the converter: *Text PDF* for a PDF source, *JD Edwards PDF* otherwise, with the manifest of the [watched folder](../management/watched-folders.md) that uses the document. |
+| **New document** | Creates a document for the converter in use — **Name** (letters, digits, `-` and `_`) and **Description**. Its UBL XSLT points to `<name>.xsl`, to create in the [XSL editor](../ubl-tools/xsl-editor.md) if needed; the settings tried on the page stay pending, ready for **Save to document**. |
+| **Convert** | Converts again with the settings currently on the page, saved or not. |
+| **Download XML** | Saves the XML as `<pdf name>.xml`. |
+
+The XML appears on the right, read-only. A scanned PDF (images without text) is refused with *no text found … (scanned or empty PDF?)*.
+
+---
+
+## Text PDF \{#text-pdf\}
+
+### Invoice lines
+
+**Table start**, **Header rows** and **Table end** set the line table. The easiest way is to click the rows in the left pane, with **Invoice lines** selected:
+
+1. *Click the first row of the table header*;
+2. *Click the last row of the table header*;
+3. *Click the first row after the lines*.
+
+The page writes the three settings and converts again: the header rows are framed in indigo, the lines in green, the end row in red, and the count shows *N line(s) found*. **Start over** clears the clicks.
+
+### VAT summary
+
+With **VAT summary** selected, the same clicks set **VAT table start**, **Columns** and **VAT table end**: *Click the header row of the VAT summary*, *Click its last column* (one button per header cell — useful when another block is printed beside the summary), *Click the first row after the rates*. The rates become `<Recap_TVA>/<Ligne_TVA>`, and the count shows *N VAT rate(s) found*.
+
+### Document key
+
+| Control | Description |
+|---|---|
+| **Invoice number** | The element holding the invoice number. A number such as `36834.FU` (number then letters) or `FU-36834` is split into **Number** and **Type**, both read from the label printed before the value. |
+| **Document type** | Shown when the number cannot be split: the fixed document type (e.g. `RI`). |
+| **Several invoices** | For a PDF holding several invoices: the rule that gives one document per invoice number (*One invoice per PDF* when empty). **Split on this number** builds it from the label of the invoice number; the count then shows *N invoice(s)*. |
+| **Find company by** | *Not searched*, *VAT number*, *SIRET* or *SIREN*, then the element holding the identifier: the page shows the company found among the [supplier companies](../ubl-tools/ubl-defaults/suppliers-companies.md) (`→ 00001`), or why none matches. |
+| **Company** | Fixed company code, when the company is not searched. |
+
+### Save to document
+
+**Save to document** writes the settings to the document picked: table start, header rows and table end, VAT summary, invoice split, the number and type extraction rules, the company (or its lookup). A document without a burst key gets `Document`, one per invoice. The same settings can be edited afterwards in the [PDF extraction](../management/documents.md#pdf-extraction) group of the document.
+
+---
+
+## JD Edwards PDF \{#jde-pdf\}
+
+| Control | Description |
+|---|---|
+| **Manifest** | Server path of the manifest that names the tags; empty = data dictionary names. The folder button browses the server. |
+| **Starter manifest** | Downloads a manifest built from the PDF, to complete. |
+| **Invoice key** | For a report that does not follow the standard invoice layout: the `section:field` holding the invoice number, shown with the number of distinct values. Gives one `<Invoice>` per value (burst key `Invoice`). *None (standard sections)* keeps the standard layout. |
+| **Burst key**, **Document ID**, **Document type**, **Company** | Picked among the elements of the XML; **Find company by** replaces the fixed company as for a text PDF. The count shows *N invoice(s)*. |
+| **Save to document** | Writes the invoice key, burst key, document ID, type and company (or its lookup) to the document. |
+
+A PDF without JD Edwards tags shows *No JD Edwards tags in this PDF: it needs PDF compression turned off in the JDE INI.*
+
+A JD Edwards PDF can also be processed directly from [Process Document](./document.md) on an XML-source document: it is converted with the document's invoice key and the manifest of its watched folder.
+
+---
+
+## Access
+
+The page follows the **Process Document** page grant on the [Roles](../configuration/security/roles.md) page: a user who can process documents sees it.
+
+---
+
+## Tips & best practices
+
+- **Start from a real PDF of each layout.** One sample per layout is enough to set the table, the VAT summary and the key.
+- **Click rather than type the anchors.** The page writes the shortest rule that finds the row, numbers turned into `\d+`, so the next PDF of the same layout matches too.
+- **Check the counts before saving.** *Lines found*, *VAT rates found* and *invoices* must match the PDF; a red count means an anchor is wrong.
+- **Search the company when one PDF layout serves several companies.** The lookup by SIRET, SIREN or VAT number avoids one document per company; an identifier missing from the supplier companies stops the invoice.
+- **Use the AI Auto-Map for the values the converter merges.** Its [extraction rules](../ubl-tools/xsl-editor.md#ai-auto-map) are saved on the document and show up here on the next conversion.
+
+---
+
 ## NomaUBL — Validate
 Source: https://docs.nomana-it.fr/nomaubl/ubl-tools/validate/
 
@@ -26864,7 +26988,7 @@ The page header carries a fixed toolbar:
 
 The editor exposes two tabs that operate on the same XSLT file. The left tab is the visual mapping form; the right tab is the raw XSLT source.
 
-### Variable Mapping (default)
+### Variable Mapping (default) \{#variable-mapping\}
 
 This is the form-based mapping editor — the visual replacement for hand-written XSLT.
 
@@ -26903,7 +27027,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Supporting-document references — a reference (BT-122) with an optional description (BT-123), and optionally an embedded file (BT-125) carried as base64 in the source spool. Up to four per invoice. See [Supporting documents](#supporting-documents) below. |
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
-| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
+| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. The variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) gives the document its own legal information, ahead of the company's text set in [Supplier Companies](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
@@ -26912,6 +27036,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
 | **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount; a spool carrying net + gross but no discount amount — the usual JDE spool — gets the price discount (BT-147) derived as gross − net, with the gross as base (no discount when the gross is not above the net). Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. Line numbers (BT-126) run on continuously across delivery groups, so they stay unique within the invoice. The line's **despatch advice** (EXT-FR-FE-BG-07, `cac:DespatchLineReference`) takes `TAG_LINE_DESPATCH_REF` (EXT-FR-FE-140), `TAG_LINE_DESPATCH_DATE` (EXT-FR-FE-201) and `TAG_LINE_DESPATCH_LINE_ID` — the despatch line number, the invoice line number when empty. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
+| **Document Allowances/Charges** *(BG-20 / BG-21)* | BT-92 to BT-98, BT-99 to BT-105 | Document-level discounts and charges. *Repeating AC element within invoice* gives the repeated source element (empty or `.`: one allowance or charge read from the invoice itself); then the *Charge indicator* (`true` / `1` / `Y` = charge, not mapped = allowance), *reason code* and *reason text*, *amount* (absolute value), *base amount*, *percentage*, *VAT rate* and *VAT category* (empty: those of the document). With a percentage between 0 and 100, a missing amount is derived from the base, or a missing base from the amount; a zero amount writes nothing. Codes and texts follow the [Allowances / Charges](./ubl-defaults/allowances-charges.md) defaults. The totals follow: allowance total (BT-107), charge total (BT-108) and sum of lines (BT-106 = BT-109 + allowances − charges). |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and three order references in the same `cac:OrderLineReference` group (EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence): `TAG_LINE_ORDER_REF` → *Customer Order Reference*, the buyer's order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) that the PDF groups lines on; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`); `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, the line number inside the buyer's order (BT-132, `cbc:LineID`). When only the seller's order number is mapped, the mandatory order ID falls back to the header purchase order (BT-13). |
 | **Line Preceding Invoice** *(EXT-FR-FE-136)* | Line-level `cac:BillingReference` | Reference to a prior invoice at the line level — useful for line-level credits. Emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (with an optional issue date) inside the line, at the correct schema position. |
@@ -27040,7 +27165,19 @@ The AI Auto-Map modal is a shortcut for building a fresh mapping from scratch.
 | **Invoice root element** | The XML element wrapping a single invoice (e.g. `Invoices`). Pre-filled from the loaded XML's root, editable. |
 | **XML content** | The XML spool body. Auto-populated by the upload, editable manually. |
 
-Click **Auto-Map** to send the XML (and PDF if any) to the AI, along with the list of `TAG_*` variables and their BT/BG context. The AI returns a JSON mapping that respects the scoping rules (paths relative to `TAG_ROOT`, line-relative paths inside `TAG_LINE_ITEM`, etc.). The mapping is merged into the form; review and click **Save Mappings** to commit.
+Click **Auto-Map** to send the XML (and PDF if any) to the AI, along with the list of `TAG_*` variables and their BT/BG context, the sample values and the format hints. Nothing is applied directly: the proposals open in **Review the proposed mapping**.
+
+| Column | Content |
+|---|---|
+| **Variable**, **BT** | The variable and its business term. |
+| **Proposed** | The path proposed by the AI. |
+| **Value in the sample** | What that path holds in the loaded XML. |
+| **Current** | The value mapped today. |
+| **Check** | *New* (found in the sample, ticked), *Replaces current* (the current value already finds an element — not ticked), *Not in the sample* (path not found — not ticked), *Not checked* (an expression with `\|` or `{`). |
+
+Below the table, **Required fields still empty** lists the mandatory business terms that stay empty once the ticked proposals are applied, and **Notes** gives the AI's remarks. **Apply N selected** merges the ticked lines into the form; click **Save Mappings** to commit.
+
+For a **PDF-source** document, the AI can also propose **Values to extract from the PDF** — values merged or missing in the converted XML — with the extracted value, the rule (regular expression) and the reason. Pick the document (pre-filled with the PDF-source document using this XSL) and click **Add rules and map again**: the rules are saved on the document as extraction fields, the PDF is converted again and the mapping runs again. The [PDF to XML](../processing/pdf-to-xml.md) page shows the result of those rules.
 
 The AI is conservative — it omits any variable it is not confident about rather than guessing. Manual review remains necessary; the editor speeds up the work, it does not replace expertise.
 
@@ -28074,50 +28211,52 @@ Both resolutions happen at save time, so a corrected country label or a fixed li
 ## NomaUBL — Allowances / Charges
 Source: https://docs.nomana-it.fr/nomaubl/ubl-tools/ubl-defaults/allowances-charges/
 
-UBL Defaults — Allowances / Charges tab. Sets the fallback reason text and reason code per direction (BR-42 for allowances, BR-43 for charges); the ChargeIndicator picks the pair at emit time.
+NomaUBL UBL Defaults — Allowances / Charges tab: default reason code picked from the UNTDID 5189 (allowances) and 7161 (charges) lists, default reason text, and mapping of source codes to UBL codes, for document and line allowances and charges.
 
-The **Allowances / Charges** tab holds the fallback **reason text** and **reason code** that fill in `BR-42` (allowances) and `BR-43` (charges) when the per-invoice / per-line template returns empty for that field. `ChargeIndicator` picks the direction at emit time, so one configuration covers both cases.
+The **Allowances / Charges** tab sets how NomaUBL fills the **reason code** and the **reason text** of the allowances and charges, at document level (BG-20 / BG-21) and at line level (BG-27 / BG-28): source codes converted to the UNTDID 5189 / 7161 codes, a default code when the source has none, and the label of the list when the source gives no text. It works the same whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP.
 
-The override mechanism is described in the [Overview](./overview.md).
+The override mechanism (shared defaults, or an override for one document) is described in the [Overview](./overview.md).
 
 ---
 
-## Fallback reasons
+## Two blocks
 
-Two paired inputs — one pair for allowances (money off), one for charges (money on).
-
-| Field | Direction | Effect |
+| Block | Direction | Code / text |
 |---|---|---|
-| **Allowance reason** | Allowance (`ChargeIndicator = false`) | Free text emitted as the allowance reason when the mapped template value is empty (BR-42). |
-| **Allowance reason code** | Allowance | The corresponding reason code (UNCL 5189). |
-| **Charge reason** | Charge (`ChargeIndicator = true`) | Free text emitted as the charge reason when the mapped template value is empty (BR-43). |
-| **Charge reason code** | Charge | The corresponding reason code (UNCL 7161). |
+| **Allowance (ChargeIndicator = false)** | Money off | BT-98 / BT-140 (code), BT-97 / BT-139 (text) |
+| **Charge (ChargeIndicator = true)** | Money on | BT-105 / BT-145 (code), BT-104 / BT-144 (text) |
 
-The framework picks the pair by looking at the emitted `ChargeIndicator` — `true` selects the charge pair, `false` selects the allowance pair. The template stays free of a branching mapping.
+Each block has the same fields:
+
+| Field | Description |
+|---|---|
+| **Reason code** | Default code, picked from the list — allowance reasons (UNTDID 5189) or charge reasons (UNTDID 7161), shown with their label. Used when the source gives no code. Picking a code fills **Reason text** with its label, unless a text was already typed. |
+| **Reason text** | Default text, used with the default code (or when there is no code at all). |
+| **Source code mapping** | Table **External code** → **UBL code**: converts a code of the source system into a code of the list. A source code absent from the table goes through unchanged. |
+
+The two lists are delivered with NomaUBL in French and English (*list-allowance-reasons*, *list-charge-reasons*) and appear in the *Custom data* area of the Settings.
 
 ---
 
-## When each fallback applies
+## How the code and the text are chosen
 
-Both **document-level** and **line-level** allowances / charges look here for a fallback:
+For each allowance or charge, at document level or line level:
 
-```
-per-line or per-invoice reason path
-    │
-    ├─ resolves to a value? ────► that value is emitted
-    │
-    └─ empty?               ────► ChargeIndicator picks the fallback pair below
-```
+| | Rule |
+|---|---|
+| **Code** | No code in the source → the default code. Otherwise the source code, converted by the mapping when it is listed there. |
+| **Text** | 1. The source text. 2. Otherwise the default text, when the code is the default code or there is no code. 3. Otherwise the label of the code in the list (French label). |
 
-For the line-level case, this pairs with the *Line Allowances / Charges* section on the [XSL editor](../xsl-editor.md) — including the derived-percentage and group-less line modes documented there.
+The direction comes from the *Charge indicator* of the mapping: the charge block applies to charges, the allowance block to allowances. The mapping of the allowances and charges themselves — document-level section *Document Allowances/Charges* and line-level section *Line Allowances/Charges* — is described on the [XSL editor](../xsl-editor.md#variable-mapping) page.
 
 ---
 
 ## Tips & best practices
 
-- **Fill both pairs even if only one direction is used.** The `ChargeIndicator` picks whichever pair matches; leaving one direction empty means the fallback silently disappears on that direction and the line stays without a reason.
-- **Match the reason code to the reason text.** A schematron rule checks that the code belongs to the right code list — pick from UNCL 5189 for allowances and UNCL 7161 for charges.
-- **A per-document override is rarely necessary.** The defaults cover the common case where a partner expects the same wording across every allowance and charge; reserve document overrides for a template that genuinely uses different wording.
+- **Map the source codes rather than the texts.** A source system usually carries its own discount or fee codes: one mapping line per code gives a valid UNTDID code and, through the list, a readable reason.
+- **Set a default code for each direction in use.** Without a code or a text, an allowance or charge fails the EN 16931 rules on reasons.
+- **Keep the default text consistent with the default code.** The text is used with that code only; for any other code the label of the list applies.
+- **A per-document override is rarely necessary.** Reserve it for a document whose source uses its own codes.
 
 ---
 
@@ -28162,7 +28301,19 @@ The directory holds one card per company. Each card contains:
 | **GLN** | BT-29 | GS1 Global Location Number. |
 | **NAF (APE)** | — | French APE / NAF activity code (`00.00X`). Carried as additional party identification in the UBL output. |
 | **VAT** | BT-31 | VAT identifier (e.g. `FR00000000000`). |
-| **Capital** | BT-33 | Share capital text (e.g. `Capital de 100 000 €`). |
+| **Capital (if no legal text)** | BT-33 | Share capital, used only when **BT-33 – Legal information** is empty (see below). |
+| **BT-33 – Legal information** | BT-33 | Full legal text of the seller, written as is in the invoice: legal form, capital, RCS, registration number… (e.g. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+
+### Legal information (BT-33) \{#legal-information\}
+
+The seller's additional legal information (BT-33) is chosen in this order:
+
+1. the document's own text, mapped to the *Seller additional legal information (full text)* variable (`TAG_SUPPLIER_LEGAL_FORM`) in the [XSL editor](../xsl-editor.md#variable-mapping);
+2. otherwise the company's **BT-33 – Legal information**;
+3. otherwise, when a capital is set (the document's or the company's): `Capital <capital> Euros`, followed by ` - APE <code>` when an APE / NAF code is set;
+4. otherwise no BT-33 is written.
+
+Other environments get this behaviour after `nomaubl.sh upgrade <env>` (see [Upgrade](../../installation/upgrade.md)).
 
 ### Address
 
@@ -28218,7 +28369,7 @@ The directory is purely a **defaults** layer: any field the source XML carries e
 
 - **Keep one card per legal entity.** Even when several internal company codes share a single SIREN, separate cards make it easier to track which establishment (SIRET) and which address each code maps to.
 - **The country code drives the default country fallback.** When the source omits a postal address country, NomaUBL falls back to this card's `country` rather than to the global default in the [Header](./ubl-header-defaults.md) tab. Set it to `FR` for French sellers; do not leave it blank.
-- **Capital text appears verbatim.** The `Capital` field is rendered as-is in the UBL output (BT-33), so include the currency mark and any wording the regulatory body expects (e.g. `SAS au capital de 50 000 €`).
+- **Prefer the legal information text.** **BT-33 – Legal information** is written verbatim: put the full wording there (legal form, capital with its currency, RCS). The capital and APE fields are only a fallback.
 - **Override per template only when the template ships a different seller.** A subsidiary issuing invoices on its own SIREN is a legitimate override case; a one-off invoice for the main entity is not.
 - **The default selector is the right place to point at the most common seller.** When most invoices come from a single legal entity, set it as the default — only the exceptional records need a matching code in the source XML.
 
@@ -28259,6 +28410,26 @@ The trash icon removes the note; the **Add** button at the bottom appends an emp
 | `TXD` | Tax notice (additional VAT-related disclosures). |
 
 The full prefix list lives in the *note-types* reference list (*Configuration → Reference Lists*). Add a new entry there to expose new prefixes in the dropdown.
+
+---
+
+## Notes per company \{#per-company\}
+
+A selector above the notes picks whose notes are shown:
+
+- **All companies** — the general notes, used by every company without its own set.
+- One entry per [supplier company](./suppliers-companies.md); a company that has its own set is shown as *code (own notes)*.
+
+With a company selected, the tab says whether it **uses these notes instead of the general ones** or **uses the general notes shown below** (then greyed out and read-only).
+
+| Button | Effect |
+|---|---|
+| **Set notes for this company** | Copies the general notes into a set of the company's own, to edit. |
+| **Back to the general notes** | Deletes the company's set; the company uses the general notes again. |
+
+A company's set **replaces** the general notes as a whole for its invoices; every other company keeps the general notes. The same selector works in a document's override (**Override for this file** first): a document can then hold its own general notes and its own sets per company.
+
+Other environments get the notes per company after `nomaubl.sh upgrade <env>`; a document stylesheet that has not been upgraded keeps the general notes.
 
 ---
 
@@ -28546,6 +28717,8 @@ The **Document key (doc / dct / kco)** group decides how a UBL document gets its
 | **From cbc:ID (regex pattern)** *(default)* | The key is parsed from the invoice's `cbc:ID` with a regex — see below. |
 | **Sequence (NomaUBL numbers the document)** | NomaUBL hands out the document number itself, under a fixed document type and company. |
 
+**Find company by** — *As configured below* (default) / *VAT number* / *SIRET* / *SIREN* / *VAT, then SIREN, then SIRET*: searches the [supplier companies](../ubl-tools/ubl-defaults/suppliers-companies.md) with the seller's identifier in the UBL (the buyer's when the direction is `R`) to set the company. No match stops the document.
+
 #### Sequence mode
 
 Meant for **received invoices**, whose `cbc:ID` follows each supplier's own format, and usable for emitted UBL when the numbering format is not known.
@@ -28642,6 +28815,7 @@ Running a connector-sourced document is described on [Processing → Process Doc
 | Field | Description |
 |---|---|
 | **Burst Key** | XML tag name used to split the spool into individual documents. This element marks the **root of one document** — every occurrence in the spool produces one output document. |
+| **JDE invoice key** | JD Edwards PDF whose sections differ from the standard invoice print: `section:field` of the invoice number (e.g. `11:3`). Gives one `<Invoice>` per value, with the burst key `Invoice`. Set it from the [PDF to XML](../processing/pdf-to-xml.md) page. |
 
 ### Document Identification *(when Source = XML)*
 
@@ -28668,6 +28842,8 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 | **Routing Code** | Code used to route the document to the correct **delivery channel**: archive, email, postal mail, dispatch to a Plateforme Agréée, etc. |
 | **Office** | XML tag in the spool that contains the **office / business unit** code. |
 | **Processing Type** | XML tag carrying the processing-type code (B2B, B2BINT…). Leave empty to fall back to the **default defined in Document Types**. |
+| **Find company by** | *Company (JDE) above* (default) / *VAT number* / *SIRET* / *SIREN* — XML and PDF sources. Searches the [supplier companies](../ubl-tools/ubl-defaults/suppliers-companies.md) with the identifier read from **Identifier element**, and adds the company found as `<CompanyCode>` (map `TAG_COMPANY_CODE` to `CompanyCode`). A SIRET without a match falls back to its SIREN. **No match stops the invoice**, with the reason in the processing log (*… not found in the supplier companies*, *… is on several supplier companies*). |
+| **Identifier element** | Element holding the identifier searched (e.g. `TaxId2_ID7`). Shown once *Find company by* is set. |
 
 > 💡 Each Document Data field has its own **default value**. Defaults are used when the XML tag is missing or empty, which is useful when a value is constant for a given template.
 
@@ -28709,10 +28885,17 @@ The **PDF extraction** group sets the conversion:
 | Field | Description |
 |---|---|
 | **Table start** | Regex matched on a row: that row's cells name the table columns (e.g. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Header rows** | Number of rows of a table header printed on several rows, the *Table start* row being the first (default `1`). The header is merged per column and cells stacked on a line are placed in their own column. With more than one row, the table stops at the first end anchor. |
 | **Table end** | Regex matched on the first row after the table — the row itself is not part of it. |
+| **Invoice split** | Regex whose first group is the invoice number, for a PDF holding several invoices (e.g. `N° de facture :\s*(\S+)`): one `<Document>` per number, each with its own pages. Empty = one invoice per PDF. |
+| **VAT table start** | Regex on the header row of the VAT summary: its rows become `<Recap_TVA>/<Ligne_TVA>`, one per rate. Empty = no VAT summary read. |
+| **VAT columns** | Header cells kept from the left, when another block is printed beside the summary. Empty = all. |
+| **VAT table end** | Regex on the first row after the rates; empty = the first row without a value. |
 | **Layout match** | Optional regex the page text must contain; a file that does not match is refused — useful when a folder mixes several layouts. |
 | **Page match** | Optional regex: only the pages whose text matches are converted — a print holding a statement and the invoice keeps the invoice pages only. |
 | **Field 1** … **Field 5** | `Name\|regex` run on the page text; the first group (else the whole match) becomes `<Name>`. Add `=>text` to rewrite the match, `$1` allowed — `Type_JDE\|^FACTURE=>F9`. Two fields may share a name when only one of them can match. |
+
+The table, VAT summary, invoice number and company settings are easiest to set on the [PDF to XML](../processing/pdf-to-xml.md) page, by clicking the rows of a sample PDF.
 
 A converted sample looks like this:
 
@@ -28770,8 +28953,8 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Post-transform** | path | Stylesheet run on the validated UBL to write another syntax next to it — for example the shipped `ubl-to-cii.xsl` (UBL to CII D16B). Blank = none. See [Post-transform](../ubl-tools/post-transform.md). |
 | **Post-transform output** | suffix, default `-cii.xml` | Replaces the `.xml` of the UBL file name; the download of the invoice and document windows uses the same name. |
 | **Post-transform name** | text | Short name of the converted syntax on the download buttons (`CII` → *Download CII*). The platform connector can send the converted file with `{{derivedContent}}` / `{{derivedFilePath}}`. |
-| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
-| **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. For a PDF source, `source` attaches the input PDF itself as a **PJA** — with *Invoice split*, only that invoice's pages. |
+| **LISIBLE** | `Y` / `N` / `source` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. For a PDF source, `source` embeds the input PDF as the LISIBLE copy instead of a rendered one — with *Invoice split*, only that invoice's pages. The input PDF is not kept after processing, so a full reprocess cannot embed it again. |
 | **Invert sign** | `N – No` (default) / `Credit notes only` / `All documents` | Flips the sign of the amounts read from the source: line net amounts, document totals, prepaid and rounding amounts, total VAT and every VAT breakdown row. The unit price is always emitted as a positive value, allowance and charge amounts are read as absolute values, and the quantity takes the sign of its line amount. *Credit notes only* applies to documents resolved as `381`, `396`, `261`, `262`, `502` or `503`. A spool that prints a credit note with negative amounts thus yields the positive CreditNote the standard expects, with no change to the document XSL. |
 
 ### Processing rules \{#processing-rules\}
@@ -28844,7 +29027,7 @@ A template with *Source = UBL* embeds the same PDFs as the XML flow — after va
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the source archived at first processing (source XML, or the XML produced from a PDF source) — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI; the full set of conditions is in the [reprocess rules](../application/invoices.md#resend-reprocess-rules). |
 | **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
 
 ---
@@ -29019,8 +29202,8 @@ The drawer groups toggles by **`Category · Name`** prefix and arranges them in 
 The full list of toggles per preset section:
 
 - **Header** — nine `META · …` toggles (invoice number, issue date, due date, contract / despatch advice (BT-16) / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
-- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box.
-- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), an *Order line reference (BT-132)* toggle that prints the customer line number under each line — and, when order grouping is off, the two order numbers as detail rows too, column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries ten sub-detail toggles for line metadata (BT-127, BT-134/135, **line despatch advice** (EXT-FR-FE-BG-07), **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
+- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box; its identifier is labelled after its scheme (SIRET, GLN…), *ID* when the scheme is unknown.
+- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), two per-line options, on by default — *Order line number* prints the customer line number (*Customer line no.*) under each line, *Customer Order Reference* prints the customer order reference with the sales order under each line when *Group by order* is off (the order band carries it otherwise; a template saved before this option counts it as on), column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries ten sub-detail toggles for line metadata (BT-127, BT-134/135, **line despatch advice** (EXT-FR-FE-BG-07), **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
 - **Totals** — seven row toggles covering the full totals stack (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -30071,12 +30254,40 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 | `nomaubl.sh extract <env> <jobNumber> [flags]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [flags]` |
 | `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
+| `nomaubl.sh reprocess <env> [--full] [--verbose]` | `java -jar nomaubl.jar -reprocess <env>/config/config.json [--full] [--verbose]` — see [`-reprocess`](#reprocess). |
+| `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]` | `-watch-folders` — see [`watch-folders`](#watch-folders). |
+| `nomaubl.sh fetch-received <env>` | `-fetch-received` — pull the invoices received from suppliers through the PA. |
+| `nomaubl.sh send-waiting <env> [--delay <ms>] [--parallel <n>]` | `-send-waiting` — send to the PA every invoice held for review. |
+| `nomaubl.sh status-integrity <env> [--lookback <days>] [--since <ISO>] [--until <ISO>] [--company <kco>] [--apply] [--notify]` | `-status-integrity` — compare the platform's events with the recorded lifecycle; `--apply` adds the missing ones. |
+| `nomaubl.sh status-order-check <env> [--apply]` | `-status-order-check` — detect lifecycle events out of order; `--apply` puts them back in sequence. |
+| `nomaubl.sh purge <env> [--dry-run]` | `-purge` — retention purge (processing log, job runs, errors, notifications). |
+| `nomaubl.sh audit <env> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--format md\|pdf] [--out <file>]` | `-audit` — [audit report](../application/reports/audit-report.md) of a period (default: the previous month). |
+| `nomaubl.sh report <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-report` — [implementation report](../application/reports/implementation-report.md) of the instance. |
+| `nomaubl.sh techreport <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-techreport` — [technical report](../application/reports/technical-report.md) of the release. |
+| `nomaubl.sh validate-ddl <env>` | `-validate-ddl` — compare the bundled DDL with the live schema. |
+| `nomaubl.sh demo <env> [--invoices N] [--months N] [--seed N] [--reset]` | `-demo` — [demo corpus](../installation/demo-corpus.md), demo instances only. |
+| `nomaubl.sh pdf-manifest <input.pdf> <output.manifest.xml>` | `-pdf-manifest` — starter manifest built from a JD Edwards PDF. |
 
 The remainder of the page describes each direct JAR mode in detail.
 
+### `nomaubl.conf` — server settings next to the wrapper \{#nomaubl-conf\}
+
+`nomaubl.sh` reads an optional **`nomaubl.conf`** placed in the same folder. It holds the settings proper to the server, so `nomaubl.sh` itself is never edited and can be replaced on an update (the upgrade does not replace the script: copy the new `nomaubl.sh` next to the jar).
+
+| Variable | Default | Use |
+|---|---|---|
+| `JAVA_OPTS` | empty | JVM options forwarded to every Java call (memory, master key location…). |
+| `JAVA_COMMAND` | `java` | Java executable to run. |
+| `DEFAULT_PORT` | `8090` | Port of `start` / `restart` when none is given. |
+
+```bash title="nomaubl.conf"
+JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+DEFAULT_PORT=8090
+```
+
 ### `JAVA_OPTS` — passing JVM flags through the wrapper
 
-Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
+Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) read a **`JAVA_OPTS`** variable — for `nomaubl.sh`, set it in [`nomaubl.conf`](#nomaubl-conf) rather than in the script. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
 
 ```bash title="nomaubl.sh (top of file)"
 # JVM flags forwarded to every java invocation. Default: empty.
@@ -30353,10 +30564,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 ## `-reprocess` — reprocess eligible invoices \{#reprocess\}
 
 ```bash
-java -jar nomaubl.jar -reprocess <configFile> [--full]
+java -jar nomaubl.jar -reprocess <configFile> [--full] [--verbose]
 ```
 
-Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings.
+Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings and the [reprocess rules](../application/invoices.md#resend-reprocess-rules).
+
+The output prints the start (`REPROCESS ** START : N invoice(s), B batch(es), R not eligible`), each batch (`STAGE`, then `DONE : X OK, Y failed`) and the result (`END`, `ALL`), plus only the errors and warnings of the processing. **`--verbose`** prints every processing line. The command exits with `0` when no invoice failed, `1` otherwise. The web Reprocess screen always shows the full live log.
 
 ---
 
@@ -31007,7 +31220,9 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Watermark advance** | `Now` *(default)* | Search mode only. *Now* moves the cursor to the poll time. *Last event* moves it to the source `updatedAt` of the newest fetched item — for PAs that cap their search without paging (Yooz: 200 flows), so a burst is drained over successive polls instead of losing its tail. Needs the connector mapping `event.updatedAt` (e.g. `item.updatedAt`) and items returned oldest-first. |
 | **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
 | **Import parallel** | *(default `4`, max `8`)* | How many pending invoices (status 9906) the import-status check polls **at the same time**. Raise it to clear a large pending backlog faster; set `1` for the previous one-at-a-time behaviour. |
+| **Import group size** | *(default `1`, max `100`)* | `per-invoice` import mode only. Number of invoices per request, for a platform that accepts a list of ids (TX2: `10`): the endpoint body then carries `{{uuids}}` inside its JSON array — the ids, each in double quotes, separated by commas; `{{uuid}}` stays the first id. Invoices are grouped by company and flow, and an invoice without a platform id is polled alone. An invoice absent from the response, or without a status in it, stays pending. `1` = one request per invoice. |
 | **Poll parallel** | *(default `4`)* | Same setting for the per-invoice lifecycle poll — how many invoices its status is fetched for concurrently. |
+| **Poll group size** | *(default `1`, max `100`)* | Same grouping for the per-invoice lifecycle poll, for a platform that accepts a list of document ids (TX2: `10`), with `{{uuids}}` in the endpoint body. `1` = one request per invoice (`{{uuid}}`). |
 | **Min invoice date** | *(empty = no cutoff)* | An **ingestion cutoff**: an XML-pipeline invoice dated before this date is skipped at the door — no database write, no generation, no PA send. It guards re-runs of old BIP jobs and legacy archives (a document with an archive row but no header would otherwise look "never sent" and be resent). Empty or unparseable invoice dates are never blocked. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
@@ -32534,8 +32749,24 @@ The editor has **five tabs**:
 |---|---|
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
+| **Min. interval between requests (ms)** | Minimum gap between two requests to the connector's **host**. Empty or `0` = off. See [Request limits](#request-limits). |
+| **Error limit (per 120 s)** | Holds the requests to the host while this many error responses sit in the last 120 seconds. Empty or `0` = off. See [Request limits](#request-limits). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
 | **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each capped at the `debugBodyLimit` length so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+
+### Request limits \{#request-limits\}
+
+Some platforms cap the request rate and refuse the excess with `429 Too Many Requests`, or block a client after too many errors. The two limits above protect the platform's **host** (the host name of the request URL):
+
+- **Min. interval between requests** spaces every request to the host by at least this many milliseconds.
+- **Error limit (per 120 s)** counts the `400`, `403`, `404`, `405`, `429` and `444` responses of the last 120 seconds; once the limit is reached, requests wait until the oldest errors leave the window.
+- **After a `429`**, the host is paused for the time given by the platform's `Retry-After` header (300 s at most, 30 s without it), then the refused request is sent again once — a send caught by the limit is not reported as failed.
+
+Requests wait; none is refused. The limits are shared by everything that calls the host from the server's machine: sends, status polls, scheduled jobs and command-line processing runs count together. Set the same values **on every connector that calls the platform** (send, import status, lifecycle…). When requests are held, the service log shows `** WARN ** API ** LIMIT : <host> — requests held for N s (…)`.
+
+:::tip[Suggested values for TX2]
+`300` ms and `20`, on every connector calling it.
+:::
 
 ### Default Headers
 
@@ -34393,17 +34624,24 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
   
     Versions
-    2026.10.25.1 · 2026-10-25
-    2026.10.24.1 · 2026-10-24
-    2026.10.23.1 · 2026-10-23
-    2026.10.22.1 · 2026-10-22
-    2026.10.21.1 · 2026-10-21
-    2026.10.20.1 · 2026-10-20
+    2026.11.08.1 · 2026-11-08
+    2026.11.06.1 · 2026-11-06
+    2026.11.05.1 · 2026-11-05
+    2026.11.04.1 · 2026-11-04
+    2026.10.30.1 · 2026-10-30
+    2026.10.29.1 · 2026-10-29
   
   
-    All versions (119)
+    All versions (126)
     
       2026-10
+      2026.10.27.1 · 2026-10-27
+      2026.10.25.1 · 2026-10-25
+      2026.10.24.1 · 2026-10-24
+      2026.10.23.1 · 2026-10-23
+      2026.10.22.1 · 2026-10-22
+      2026.10.21.1 · 2026-10-21
+      2026.10.20.1 · 2026-10-20
       2026.10.19.1 · 2026-10-19
       2026.10.18.1 · 2026-10-18
       2026.10.16.1 · 2026-10-16
@@ -34542,6 +34780,110 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.11.08.1 — 2026-11-08 \{#v2026-11-08-1\}
+
+### Improvements
+- **Seller legal information (BT-33) as free text.** In UBL Defaults › Suppliers, each company has a "Legal information" field written as is in the invoice (legal form, capital, RCS, registration number…). A document can set its own through a new XSL Editor variable. Without text, the capital and APE wording stays as before. Other environments need `nomaubl.sh upgrade <env>`.
+- **Order line number and customer order reference shown separately.** In a PDF template's line table, each has its own option.
+- **PDF template options in plain words.** Option labels no longer carry field codes.
+
+### Fixes
+- **No more "Capital Euros" without an amount.** A company with neither legal text nor capital no longer gets this mention.
+- **Long contract reference.** An invoice whose contract reference exceeds 20 characters was missing from the invoice list; it is now listed, with the reference shortened in the list only (the invoice keeps it in full).
+- **Text PDF: values next to another column.** A value no longer includes the text printed further right on the same line, such as an address in a second column; that address now gives its own address block.
+- **Text PDF: values over several lines.** A value that wraps onto the next lines (a training title, for example) is read in full.
+- **Delivery identifier labelled after its type.** In the PDF delivery block, the identifier now shows its type (SIRET, GLN…) instead of "ID".
+- **Order reference taken from a line.** When only the lines carry an order reference, it no longer appears as the invoice's order reference in the PDF, the invoice window and the database.
+
+---
+
+## 2026.11.06.1 — 2026-11-06 \{#v2026-11-06-1\}
+
+### Improvements
+- **PDF to XML page (Processing menu).** Choose a text PDF and read the XML it produces, with or without a document's settings, then download it.
+- **Set a PDF's table by clicking its rows.** On that page, click the first and last header rows, then the first row after the lines: the settings are worked out, tried at once and saved to the document on request.
+- **Table headers printed on several rows.** A new "Header rows" setting (document, PDF extraction) merges the header per column and places cells stacked on a line in their own column. Documents that don't set it convert as before.
+- **AI Auto-Map: review before applying.** Each proposal shows its path, the value it holds in the sample and your current value, checked against the file. New paths are ticked; changes to existing values and paths not in the sample are not.
+- **AI Auto-Map: better proposals.** It now reads sample values and format hints, so it picks the element holding exactly the expected data, and lists required fields still empty.
+- **AI Auto-Map: extraction rules for PDF sources.** For values merged or missing in the XML, it proposes rules showing what they extract; they can be saved on the document, then the PDF is converted and mapped again.
+- **Document key from the PDF to XML page.** Pick the invoice number element: a number such as 36834.FU is split into number and type, and saving sets these on the document with the company and a blank burst key.
+- **VAT summary of a PDF.** A second table can be read into a repeating group, one line per rate, even with another block printed beside it; set it by clicking its rows on the PDF to XML page.
+- **Input PDF embedded in the invoice.** On a PDF-source document, LISIBLE and Attachment have a new "source" choice that embeds the input PDF itself, as LISIBLE or PJA, instead of a rendered one.
+- **Legal notes per company.** In UBL Defaults › Notes, and in a document's override, a company can have its own set of notes in place of the general ones; a company without its own shows the general notes. Other environments need `nomaubl.sh upgrade <env>` for this to apply.
+- **JD Edwards PDFs on the PDF to XML page.** A JD Edwards tagged PDF can be converted there too, with a manifest or a starter one, and its burst key, document ID, type and company saved on the document.
+- **New document from the PDF to XML page.** Creates a document for the converter in use, ready to receive the settings tried on the page.
+- **JD Edwards reports with other sections.** A new invoice key (document setting, or picked on the page) writes one invoice per document number with the sections as printed, for reports that don't follow the standard layout. Documents without it convert as before.
+- **Find the company from the invoice.** A document can find its company by VAT number, SIRET or SIREN in the supplier companies: from an element for PDF and XML sources, from the seller or buyer for UBL. No match stops the invoice. The PDF to XML page shows the company found.
+- **Several invoices in one text PDF.** A new setting gives one document per invoice number, and the embedded source PDF holds only that invoice's pages.
+- **JD Edwards PDFs on Process Document.** XML-source documents accept a PDF there, converted with the document's invoice key and the watched folder's manifest.
+
+### Fixes
+- **PDF attachments on file names with spaces.** Any attachment failed when the input file name held a space; it now works.
+- **Values printed together in a text PDF.** A value followed by labelled parts (SIRET - VAT - NAF) and an IBAN followed by its BIC now also give separate elements. The first element keeps only its own value.
+- **Status polling no longer fetches the last event again.** With the watermark set to "Last event", the newest event came back on every run until a newer one existed. A poll with nothing new now returns nothing.
+- **AI Auto-Map errors.** The real error is shown instead of "no JSON", and an answer can no longer be damaged in transit.
+- **PDF totals printed larger than their label.** A value printed slightly lower than its label, such as Total TTC, is now paired with it.
+
+---
+
+## 2026.11.05.1 — 2026-11-05 \{#v2026-11-05-1\}
+
+### Improvements
+- **Import status for several invoices in one request.** A new "Import group size" setting (Settings › E-invoicing › Status) sends up to that many invoices per request, for platforms that accept a list of ids (TX2: 10, with `{{uuids}}` in the endpoint body). An invoice absent from the response stays pending. At 1, the default, nothing changes.
+- **Request limits per platform.** Two new connector settings, off by default: a minimum interval between requests and an error limit over 120 seconds. They apply to everything calling that platform from the server, sends, status polls and processing runs included. After a 429, requests wait and the refused one is retried once. Suggested for TX2: 300 ms and 20, on every connector calling it.
+
+### Fixes
+- **A connector body with a syntax error no longer stops the server.** A body that is not valid JSON, such as a misplaced quote or a stray bracket in an endpoint saved from Settings, is now kept as typed and the configuration stays readable. Before, it could make whole sections of the configuration disappear and prevent the next start.
+- **Brackets in configuration values.** A value containing `[`, `]`, `{` or `}` is read correctly.
+- **Clear error on a damaged configuration file.** A file edited by hand with a syntax error is refused at startup and during an upgrade, with the file, line and column, instead of running on a partial configuration. An instance whose file has such an error must have it corrected to start.
+
+---
+
+## 2026.11.04.1 — 2026-11-04 \{#v2026-11-04-1\}
+
+### Improvements
+- **Document-level allowances and charges (BG-20 / BG-21).** The variable mapping of a document gains a "Document Allowances/Charges" section: repeating element, allowance or charge indicator, reason code and text, amount, base, percentage, VAT rate and category. Each occurrence becomes an allowance or a charge on the invoice, and the totals (sum of lines, total allowances, total charges) follow. Templates in place get the new fields on upgrade, empty: nothing changes until they are mapped.
+- **Allowance and charge reason codes.** Two new lists: allowance reasons (UNTDID 5189) and charge reasons (UNTDID 7161), in French and English. In the UBL defaults, the default code is picked from the list and fills the reason text; a source code can be mapped to a code of the list, globally or per document. When the source gives no reason text, the label of the code is used.
+
+### Fixes
+- **UBL validation keeps the file.** Validating an XML source no longer deletes the file from the input folder, whether it was uploaded or picked from the server.
+- **Process document: file picked from the input folder.** A file chosen in the template's own input folder was emptied before processing; it is now processed as is.
+- **Document charges total.** A charges total mapped alone (without charge lines) is now taken into account in the sum of lines, as the EN 16931 totals rule requires.
+
+---
+
+## 2026.10.30.1 — 2026-10-30 \{#v2026-10-30-1\}
+
+### Improvements
+- **Server settings outside the control script.** `nomaubl.sh` reads an optional `nomaubl.conf` placed next to it, for the settings proper to a server (Java options such as the memory or the master key location, the default port). The script itself no longer needs to be edited, so replacing it on an update keeps these settings.
+
+### Fixes
+- **PDF templates: setting the default no longer erases the global settings.** Choosing a default PDF template (or going back to the factory default) cleared every other global setting — database connection, schema, paths, scheduled batches. Only the default template is now changed. On an instance where it happened, restore `config.properties` from its version history (snapshot taken just before the change).
+
+---
+
+## 2026.10.29.1 — 2026-10-29 \{#v2026-10-29-1\}
+
+### Fixes
+- **Invert sign: price discount kept on credit notes.** On a credit note printed with negative prices, the gross price and the price discount (BT-148, BT-147) were dropped when they had to be derived from the net price, which French validation can reject; prices are now read as absolute values and both are emitted. A gross price or discount written with a decimal comma is read as well.
+- **Invert sign "All documents": discount lines on invoices.** On an invoice whose spool prints every amount negative, the normal lines were turned into document discounts and the discount lines kept as invoice lines; the sign is now read after inversion, so only the discount lines become document discounts. "Credit notes only" and "No" are unchanged.
+
+---
+
+## 2026.10.27.1 — 2026-10-27 \{#v2026-10-27-1\}
+
+### Improvements
+- **Reprocess from the command line: shorter output.** `reprocess` now prints the start, each batch and the result, plus only the errors and warnings of the processing; `--verbose` prints every line as before. The web Reprocess screen still shows the full live log. `nomaubl.sh reprocess <env>` now accepts `--full` and `--verbose`.
+- **Command-line script: every command available.** `nomaubl.sh` gains `fetch-received`, `send-waiting`, `status-integrity`, `status-order-check`, `purge`, `audit`, `report`, `techreport`, `validate-ddl` and `demo`, with their options; its help lists them, and `watch-folders`. The upgrade does not replace the script: copy the new `nomaubl.sh` next to the jar.
+
+### Fixes
+- **Reprint no longer fails on a UBL that cannot be rebuilt.** A reprint delivers the readable PDF and XML and keeps the archived UBL as the reference; when the UBL can no longer be regenerated from the source, this is now a warning, the invoice counts as reprinted and gets its reprocess marker. Before, it was counted as failed and stayed eligible, so the next run delivered its PDF and XML again.
+- **Processing summary reflects invoices in error.** When an invoice of a file hits an error while the file itself goes through, the end of the run says how many invoices are in error instead of "completed successfully", and the batch summary counts the file "with invoice errors" instead of OK.
+- **Oracle: "character set mismatch" with Exclude reviewed errors.** On databases whose invoice columns use the national character set, the dashboards, Statistics and the invoice list failed with ORA-12704 since the previous update whenever Exclude reviewed errors was on; they load again, with the same result.
+- **Readable separators in command-line output.** The run, batch and reprocess lines use plain dashes and arrows, which no longer turn into odd characters in cron mails and log viewers.
+
+---
+
 ## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
 
 ### Improvements
@@ -34601,7 +34943,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Promotion: a document's files on their own.** Each file a document uses (transform, XSL, RTF, UBL stylesheet, customer Schematron, PDF layout) is listed among the files, with the documents using it, and can be promoted alone — a stylesheet shared by several documents no longer requires promoting a document.
 - **Processing log: processing and scheduled jobs apart.** A switch Processing / Scheduled jobs / All sits next to Grouped / Flat; the log opens on Processing, so the runs of the status and import polls (every few minutes) no longer bury the file processing. A job run opened from Failures lands on Scheduled jobs. Their retention is already separate: Settings › Job defaults › Retention, "Job runs (days)".
 - **Start page.** Settings › Navigation & lists chooses the page shown after sign-in (Billing overview unless set): a dashboard, Invoices, E-Documents, E-reporting, VAT declaration, Diagnostics, Reports or the Explorer. A user whose role does not grant it opens the Billing overview, else the first page the role grants.
-- **Dashboards: cached figures.** The Billing overview, Statistics and Operations dashboards keep the figures they loaded, so coming back to them or changing page no longer queries again; an open dashboard reloads on its own after the delay, and Refresh reloads at once. On the IT dashboard, only documents processed per day is kept, on the server for every user. Each shows when its figures were loaded. Delay in Settings › Navigation & lists (60 minutes unless set, 0 = always reload).
+- **Dashboards: cached figures.** The Billing overview, Statistics and Operations dashboards keep the figures they loaded, so coming back to them or changing page no longer queries again; an open dashboard reloads on its own after the delay, and Refresh reloads at once. On the IT dashboard, only documents processed per day is kept, on the server for every user. Each shows when its figures were loaded; signing out or an expired session empties the cache. Delay in Settings › Navigation & lists (60 minutes unless set, 0 = always reload).
 - **Reviewed errors left out by default.** The Operations dashboard and the invoice list open with "Exclude reviewed errors" on, like the Billing overview and Statistics; a link from a dashboard keeps its own choice.
 - **Billing overview: transmission rate over the invoices to send.** The transmission rate, its issued / not issued split and the per-company share count only the invoices meant for the platform (sent, or held for review); invoices of document types not sent to the platform no longer lower it. The "Reached the platform" rate of the Statistics dashboard follows the same rule, and so does the daily digest.
 - **Portal notifications without a recipient go to everyone.** With sign-in enabled, a rule on the portal channel with no user or role recorded nothing; it now writes one entry visible in every inbox, as without sign-in. The rule editor names this choice "Everyone".

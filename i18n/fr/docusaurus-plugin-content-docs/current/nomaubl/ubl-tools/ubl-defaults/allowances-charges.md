@@ -1,50 +1,52 @@
 ---
 title: Remises / charges
-description: "Valeurs par défaut UBL — onglet Remises / charges. Texte et code de motif par défaut, par direction (BR-42 pour les remises, BR-43 pour les charges) ; `ChargeIndicator` choisit la paire au moment de l'émission."
-keywords: [NomaUBL, UBL, valeurs par défaut, remises, charges, BR-42, BR-43, motif, code motif, ChargeIndicator]
+description: "NomaUBL Valeurs par défaut UBL — onglet Remises / charges : code motif par défaut choisi dans les listes UNTDID 5189 (remises) et 7161 (frais), motif par défaut et correspondance des codes source vers les codes UBL, pour les remises et frais du document et des lignes."
+keywords: [NomaUBL, UBL, valeurs par défaut, remises, frais, charges, code motif, UNTDID 5189, UNTDID 7161, BT-97, BT-98, BT-104, BT-105, ChargeIndicator, JD Edwards, SAP, NetSuite, ERP sur mesure]
 ---
 
 # Remises / charges
 
-L'onglet **Remises / charges** porte le **texte de motif** et le **code motif** de repli qui viennent compléter `BR-42` (remises) et `BR-43` (charges) quand le modèle par facture ou par ligne renvoie vide pour ce champ. `ChargeIndicator` choisit la direction au moment de l'émission, donc une seule configuration couvre les deux cas.
+L'onglet **Remises / charges** règle la façon dont NomaUBL renseigne le **code motif** et le **motif** des remises et des frais, au niveau du document (BG-20 / BG-21) comme au niveau des lignes (BG-27 / BG-28) : codes source convertis en codes UNTDID 5189 / 7161, code par défaut si la source n'en donne pas, et libellé de la liste si la source ne donne pas de motif. Le fonctionnement est identique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure.
 
-Le mécanisme d'override est décrit dans la [vue d'ensemble](./overview.md).
+Le mécanisme de remplacement (valeurs partagées, ou remplacement pour un document) est décrit dans la [Vue d'ensemble](./overview.md).
 
 ---
 
-## Motifs de repli
+## Deux blocs
 
-Deux paires de champs — une pour les remises (montant en moins), une pour les charges (montant en plus).
-
-| Champ | Direction | Effet |
+| Bloc | Sens | Code / motif |
 |---|---|---|
-| **Motif de remise** | Remise (`ChargeIndicator = false`) | Texte libre émis comme motif de remise quand la valeur mappée est vide (BR-42). |
-| **Code motif remise** | Remise | Code motif correspondant (UNCL 5189). |
-| **Motif de charge** | Charge (`ChargeIndicator = true`) | Texte libre émis comme motif de charge quand la valeur mappée est vide (BR-43). |
-| **Code motif charge** | Charge | Code motif correspondant (UNCL 7161). |
+| **Remise (ChargeIndicator = false)** | Montant déduit | BT-98 / BT-140 (code), BT-97 / BT-139 (motif) |
+| **Frais (ChargeIndicator = true)** | Montant ajouté | BT-105 / BT-145 (code), BT-104 / BT-144 (motif) |
 
-Le moteur choisit la paire en regardant le `ChargeIndicator` émis — `true` prend la paire charge, `false` prend la paire remise. Le modèle n'a pas besoin de brancher.
+Chaque bloc comporte les mêmes champs :
 
----
+| Champ | Description |
+|---|---|
+| **Code motif** | Code par défaut, choisi dans la liste — motifs de remise (UNTDID 5189) ou motifs de frais (UNTDID 7161), affichés avec leur libellé. Utilisé quand la source ne donne pas de code. Le choix d'un code renseigne **Motif** avec son libellé, sauf si un texte a déjà été saisi. |
+| **Motif** | Motif par défaut, utilisé avec le code par défaut (ou en l'absence de tout code). |
+| **Correspondance des codes source** | Tableau **Code externe** → **Code UBL** : convertit un code du système source en code de la liste. Un code source absent du tableau est repris tel quel. |
 
-## Quand chaque repli s'applique
-
-Les remises / charges **au niveau document** comme **au niveau ligne** cherchent leur repli ici :
-
-```
-chemin de motif par ligne ou par facture
-    │
-    ├─ renvoie une valeur ? ────► cette valeur est émise
-    │
-    └─ vide ?               ────► ChargeIndicator choisit la paire de repli ci-dessus
-```
-
-Pour le cas ligne, ce paramétrage se combine avec la section *Line Allowances / Charges* de l'[éditeur XSL](../xsl-editor.md) — y compris les modes remise dérivée d'un pourcentage et remise sans groupe qui y sont documentés.
+Les deux listes sont livrées avec NomaUBL, en français et en anglais (*list-allowance-reasons*, *list-charge-reasons*), et figurent dans la zone *Custom data* des Paramètres.
 
 ---
 
-## Conseils et bonnes pratiques
+## Choix du code et du motif
 
-- **Renseigner les deux paires même si une seule direction sert.** Le `ChargeIndicator` prend la paire qui correspond ; laisser une direction vide fait disparaître le repli sur cette direction et la ligne reste sans motif.
-- **Faire correspondre le code motif au texte.** Une règle schematron vérifie que le code appartient à la bonne liste — piocher dans UNCL 5189 pour les remises et UNCL 7161 pour les charges.
-- **Une surcharge par document est rarement nécessaire.** Les valeurs par défaut couvrent le cas courant où un partenaire attend la même formulation pour toutes les remises et charges ; réserver une surcharge par document à un modèle qui utilise vraiment un texte différent.
+Pour chaque remise ou frais, au niveau du document ou de la ligne :
+
+| | Règle |
+|---|---|
+| **Code** | Pas de code dans la source → le code par défaut. Sinon le code source, converti par la correspondance s'il y figure. |
+| **Motif** | 1. Le motif de la source. 2. À défaut, le motif par défaut, si le code est le code par défaut ou s'il n'y a pas de code. 3. À défaut, le libellé du code dans la liste (libellé français). |
+
+Le sens vient de l'*indicateur de frais* du mapping : le bloc Frais s'applique aux frais, le bloc Remise aux remises. Le mapping des remises et frais eux-mêmes — section *Document Allowances/Charges* au niveau du document et *Line Allowances/Charges* au niveau des lignes — est décrit sur la page [Éditeur XSL](../xsl-editor.md#variable-mapping).
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Convertir les codes source plutôt que les motifs.** Un système source porte en général ses propres codes de remise ou de frais : une ligne de correspondance par code donne un code UNTDID valide et, par la liste, un motif lisible.
+- **Renseigner un code par défaut pour chaque sens utilisé.** Sans code ni motif, une remise ou des frais ne respectent pas les règles EN 16931 sur les motifs.
+- **Garder le motif par défaut cohérent avec le code par défaut.** Ce motif n'accompagne que ce code ; pour tout autre code, c'est le libellé de la liste qui s'applique.
+- **Un remplacement par document est rarement utile.** Le réserver à un document dont la source utilise ses propres codes.

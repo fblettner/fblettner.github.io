@@ -152,7 +152,7 @@
     "description": "The label for category 'Processing' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Processing.link.generated-index.description": {
-    "message": "Point d'entrée unique du traitement des documents (XML ou UBL, selon le modèle), enchaînement Extraire et traiter, et testeur des connecteurs API.",
+    "message": "Point d'entrée unique du traitement des documents (XML ou UBL, selon le modèle), enchaînement Extraire et traiter, testeur des connecteurs API et outil de conversion PDF vers XML.",
     "description": "The generated-index page description for category 'Processing' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.UBL Tools": {

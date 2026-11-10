@@ -122,8 +122,24 @@ L'éditeur comporte **cinq onglets** :
 |---|---|
 | **Base URL** | URL racine de l'API cible (par ex. `https://api.example.com:9300`). Tous les chemins d'endpoint y sont ajoutés. |
 | **Timeout (ms)** | Délai d'expiration des requêtes HTTP en millisecondes. Valeur par défaut `30000` (30 s). |
+| **Min. interval between requests (ms)** | Écart minimal entre deux requêtes vers l'**hôte** du connecteur. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
+| **Error limit (per 120 s)** | Retient les requêtes vers l'hôte tant que ce nombre de réponses en erreur figure dans les 120 dernières secondes. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
 | **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur est tracé dans le journal du service — l'URL et le code HTTP, les **en-têtes** de requête et de réponse (l'autorisation et les autres en-têtes sensibles étant masqués), et les **corps** complets de requête et de réponse, chacun tronqué à la longueur `debugBodyLimit` pour qu'un gros contenu ne noie pas le journal. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête, les en-têtes et les corps exacts échangés ; à désactiver une fois le connecteur stable. |
+
+### Limites de requêtes \{#request-limits\}
+
+Certaines plateformes plafonnent le débit et refusent l'excédent par `429 Too Many Requests`, ou bloquent un client après trop d'erreurs. Les deux limites ci-dessus protègent l'**hôte** de la plateforme (le nom d'hôte de l'URL appelée) :
+
+- **Min. interval between requests** espace chaque requête vers l'hôte d'au moins ce nombre de millisecondes.
+- **Error limit (per 120 s)** compte les réponses `400`, `403`, `404`, `405`, `429` et `444` des 120 dernières secondes ; une fois la limite atteinte, les requêtes attendent que les erreurs les plus anciennes sortent de la fenêtre.
+- **Après un `429`**, l'hôte est mis en pause pendant la durée indiquée par l'en-tête `Retry-After` de la plateforme (300 s au plus, 30 s en son absence), puis la requête refusée repart une fois — un envoi retenu par la limite n'est pas compté en échec.
+
+Les requêtes patientent ; aucune n'est refusée. Les limites sont communes à tout ce qui appelle l'hôte depuis la machine du serveur : envois, relevés de statuts, tâches planifiées et traitements lancés en ligne de commande sont comptés ensemble. Renseigner les mêmes valeurs **sur chaque connecteur qui appelle la plateforme** (envoi, statut d'import, cycle de vie…). Quand des requêtes sont retenues, le journal du service affiche `** WARN ** API ** LIMIT : <host> — requests held for N s (…)`.
+
+:::tip[Valeurs conseillées pour TX2]
+`300` ms et `20`, sur chaque connecteur qui l'appelle.
+:::
 
 ### Default Headers
 

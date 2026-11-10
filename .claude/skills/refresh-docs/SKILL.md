@@ -7,7 +7,7 @@ description: Refresh the documentation site (docs.nomana-it.fr) after new featur
 
 The user should only have to say *« mets à jour la doc NomaUBL »*. Everything below is the standing procedure; do not ask them to restate it. Ask only when something is genuinely ambiguous (a behaviour the code does not settle, a product whose sources are not listed).
 
-Site repo: `/Users/franckblettner/Documents/Tools/GithubProjects/fblettner.github.io` (Docusaurus 3, EN in `docs/`, FR in `i18n/fr/docusaurus-plugin-content-docs/current/`).
+Site repo: `/Users/franckblettner/Developer/nomana/fblettner.github.io` (Docusaurus 3, EN in `docs/`, FR in `i18n/fr/docusaurus-plugin-content-docs/current/`).
 
 Read first:
 - [references/products.md](references/products.md) — per product: source repo, release file, doc folders, product-specific rules.

@@ -309,15 +309,53 @@ Les deux demandent l'action *Marquer comme traitée* (`invoice.review`) dans la 
 
 ### Renvoi groupé \{#bulk-resend\}
 
-Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
+Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Une ligne dont le type de document est réglé sur *Ne pas envoyer* ne peut être cochée que pour un retraitement ou un marquage, et l'action **Renvoyer** unitaire y est masquée. Chaque facture du lot passe par les [règles de renvoi](#resend-reprocess-rules) : une facture déjà prise en charge par la plateforme est refusée et comptée en échec.
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir du XML JDE archivé lors du premier dépôt, dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir de la source archivée lors du premier traitement (le XML source d'un document à source XML, le XML issu de la conversion d'un document à source PDF), dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un document avec **Allow reprocess** activé (un document à source XML ou PDF — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 La sélection couvre aussi les **échecs de validation** : une facture en *Échec de validation* (`9905`) sur un modèle où **Allow full reprocess** est activé est **retraitée en totalité** — enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document ; l'historique est conservé et un nouveau cycle démarre. La confirmation précise quelles factures sont réimprimées et lesquelles sont retraitées en totalité. La fenêtre facture propose le même retraitement complet via un bouton **Retraiter** sur une `9905`.
 
 Plusieurs factures sont retraitées en **un lot par modèle**, en arrière-plan avec son journal en direct : leurs sources sont déposées dans un dossier de travail, le réglage global *Max threads* limite le parallélisme et une facture n'est jamais traitée deux fois. Une facture seule est toujours traitée à part.
+
+### Règles de renvoi et de retraitement \{#resend-reprocess-rules\}
+
+Le serveur applique ces règles à chaque renvoi et à chaque retraitement, quel qu'en soit le point de départ : fenêtre facture, sélection dans la liste, cartes du [Tableau de bord IT](tech-dashboard.md#send-failed), tâche de [relance automatique](../sync/scheduled-jobs/auto-retry.md), ligne de commande ou [API](/nomaubl/api-reference).
+
+#### Renvoi — l'UBL enregistré redéposé sur la PA
+
+| Condition | Règle |
+|---|---|
+| **Statut** | Accepté pour tout statut interne `99xx` sauf `9911` et `9913` : `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refusé pour tout statut standard de la plateforme — tout code numérique qui ne commence pas par `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — ainsi que pour `9911` / `9913`, étapes déjà acceptées par la plateforme. |
+| **Motif** | Non contrôlé. |
+| **Type de document** | Refusé quand l'indicateur d'envoi du [type de document](../configuration/system/document-types.md) est *Ne pas envoyer* (`FEEV10` = `2`). |
+| **UBL enregistré** | Refusé quand l'en-tête de la facture ne contient aucun UBL. |
+| **Utilisateur** | Action *Renvoyer à la PA* (`invoice.resend`) sur la page [Rôles](../configuration/security/roles.md), et facture visible par l'utilisateur. |
+
+La fenêtre facture ne masque **Renvoyer à la PA** que pour un utilisateur sans cette permission et pour un type de document *Ne pas envoyer*. Sur un statut protégé, le bouton reste affiché et le renvoi se termine par le message *Already processed by the PA (status …) — resend refused*.
+
+Un renvoi groupé — **Renvoyer la sélection**, **Tout renvoyer (N)** du tableau de bord, une tâche de relance automatique — sélectionne les factures par statut (`9904` par défaut pour la relance automatique, ou une liste comme `9904,9905,9907`), puis applique les mêmes règles à chaque facture.
+
+La seule exception à cette protection est la réparation [Corriger destinataire](#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA.
+
+#### Retraitement — deux variantes, choisies d'après le statut
+
+| Variante | Statut | Motif | Réglage du document | Renouvelable |
+|---|---|---|---|---|
+| **Réimpression** — PDF et XML régénérés, rien d'écrit en base, aucun envoi | `200` | `NON_TRANSMISE` (exactement) | *Allow reprocess* = `Y` | Non — une seule fois : le marqueur `9912` laissé par la première réimpression bloque la suivante. |
+| **Retraitement complet** — régénération avec un nouvel appel à l'enrichissement, validation, puis envoi si les réglages le prévoient | `9905` | Non contrôlé | *Allow full reprocess* = `Y` | Oui |
+
+Les deux variantes demandent aussi :
+
+- que le document enregistré sur la facture (`UHTMPL`) existe toujours ;
+- que ce document ait une source **XML** ou **PDF** — un document à source UBL ne se retraite pas.
+
+L'indicateur d'envoi du type de document n'entre pas en compte : un retraitement n'envoie jamais rien de lui-même.
+
+:::info[Tout autre statut]
+Une facture hors de ces règles — une `9904` pour une réimpression, un statut standard de la plateforme pour un renvoi — ne peut évoluer que par **Définir statut**.
+:::
 
 ### Export
 
@@ -832,7 +870,7 @@ Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écr
 
 ### Confirmation de redépôt
 
-Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
+Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée, dans le respect des [règles de renvoi](#resend-reprocess-rules) — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
 
 ---
 

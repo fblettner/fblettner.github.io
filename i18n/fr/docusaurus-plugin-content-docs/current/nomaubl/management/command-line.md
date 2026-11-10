@@ -100,12 +100,40 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 | `nomaubl.sh extract <env> <jobNumber> [options]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [options]` |
 | `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
+| `nomaubl.sh reprocess <env> [--full] [--verbose]` | `java -jar nomaubl.jar -reprocess <env>/config/config.json [--full] [--verbose]` — voir [`-reprocess`](#reprocess). |
+| `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]` | `-watch-folders` — voir [`watch-folders`](#watch-folders). |
+| `nomaubl.sh fetch-received <env>` | `-fetch-received` — récupère les factures reçues des fournisseurs via la PA. |
+| `nomaubl.sh send-waiting <env> [--delay <ms>] [--parallel <n>]` | `-send-waiting` — envoie à la PA toutes les factures retenues pour vérification. |
+| `nomaubl.sh status-integrity <env> [--lookback <days>] [--since <ISO>] [--until <ISO>] [--company <kco>] [--apply] [--notify]` | `-status-integrity` — compare les événements de la plateforme au cycle de vie enregistré ; `--apply` ajoute ceux qui manquent. |
+| `nomaubl.sh status-order-check <env> [--apply]` | `-status-order-check` — détecte les événements du cycle de vie dans le désordre ; `--apply` les remet en séquence. |
+| `nomaubl.sh purge <env> [--dry-run]` | `-purge` — purge de rétention (journal de traitement, exécutions de tâches, erreurs, notifications). |
+| `nomaubl.sh audit <env> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--format md\|pdf] [--out <file>]` | `-audit` — [rapport d'audit](../application/reports/audit-report.md) d'une période (par défaut le mois précédent). |
+| `nomaubl.sh report <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-report` — [rapport de mise en œuvre](../application/reports/implementation-report.md) de l'instance. |
+| `nomaubl.sh techreport <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-techreport` — [rapport technique](../application/reports/technical-report.md) de la version. |
+| `nomaubl.sh validate-ddl <env>` | `-validate-ddl` — compare le DDL livré au schéma en place. |
+| `nomaubl.sh demo <env> [--invoices N] [--months N] [--seed N] [--reset]` | `-demo` — [corpus de démonstration](../installation/demo-corpus.md), instances de démonstration uniquement. |
+| `nomaubl.sh pdf-manifest <input.pdf> <output.manifest.xml>` | `-pdf-manifest` — manifeste de départ construit à partir d'un PDF JD Edwards. |
 
 Le reste de la page détaille chacun des modes directs du JAR.
 
+### `nomaubl.conf` — réglages du serveur à côté du wrapper \{#nomaubl-conf\}
+
+`nomaubl.sh` lit un fichier **`nomaubl.conf`** facultatif placé dans le même dossier. Il porte les réglages propres au serveur : `nomaubl.sh` n'est ainsi jamais modifié et peut être remplacé lors d'une mise à jour (la mise à jour ne remplace pas le script : copier le nouveau `nomaubl.sh` à côté du jar).
+
+| Variable | Défaut | Usage |
+|---|---|---|
+| `JAVA_OPTS` | vide | Options JVM transmises à chaque appel Java (mémoire, emplacement de la clé maître…). |
+| `JAVA_COMMAND` | `java` | Exécutable Java à lancer. |
+| `DEFAULT_PORT` | `8090` | Port de `start` / `restart` quand aucun n'est indiqué. |
+
+```bash title="nomaubl.conf"
+JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+DEFAULT_PORT=8090
+```
+
 ### `JAVA_OPTS` — passer des options JVM via le wrapper
 
-Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) déclarent une variable **`JAVA_OPTS`** en haut du fichier. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
+Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) lisent une variable **`JAVA_OPTS`** — pour `nomaubl.sh`, la renseigner dans [`nomaubl.conf`](#nomaubl-conf) plutôt que dans le script. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
 
 ```bash title="nomaubl.sh (en-tête du fichier)"
 # Options JVM transmises à chaque invocation java. Défaut : vide.
@@ -430,10 +458,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 ## `-reprocess` — retraiter les factures concernées \{#reprocess\}
 
 ```bash
-java -jar nomaubl.jar -reprocess <configFile> [--full]
+java -jar nomaubl.jar -reprocess <configFile> [--full] [--verbose]
 ```
 
-Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle.
+Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle et les [règles de retraitement](../application/invoices.md#resend-reprocess-rules).
+
+La sortie affiche le début (`REPROCESS ** START : N invoice(s), B batch(es), R not eligible`), chaque lot (`STAGE`, puis `DONE : X OK, Y failed`) et le résultat (`END`, `ALL`), ainsi que les seules erreurs et alertes du traitement. **`--verbose`** affiche toutes les lignes du traitement. La commande se termine avec le code `0` si aucune facture n'a échoué, `1` sinon. L'écran Retraitement de l'interface affiche toujours le journal complet en direct.
 
 ---
 

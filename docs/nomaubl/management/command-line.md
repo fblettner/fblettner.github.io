@@ -100,12 +100,40 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 | `nomaubl.sh extract <env> <jobNumber> [flags]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [flags]` |
 | `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
+| `nomaubl.sh reprocess <env> [--full] [--verbose]` | `java -jar nomaubl.jar -reprocess <env>/config/config.json [--full] [--verbose]` — see [`-reprocess`](#reprocess). |
+| `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]` | `-watch-folders` — see [`watch-folders`](#watch-folders). |
+| `nomaubl.sh fetch-received <env>` | `-fetch-received` — pull the invoices received from suppliers through the PA. |
+| `nomaubl.sh send-waiting <env> [--delay <ms>] [--parallel <n>]` | `-send-waiting` — send to the PA every invoice held for review. |
+| `nomaubl.sh status-integrity <env> [--lookback <days>] [--since <ISO>] [--until <ISO>] [--company <kco>] [--apply] [--notify]` | `-status-integrity` — compare the platform's events with the recorded lifecycle; `--apply` adds the missing ones. |
+| `nomaubl.sh status-order-check <env> [--apply]` | `-status-order-check` — detect lifecycle events out of order; `--apply` puts them back in sequence. |
+| `nomaubl.sh purge <env> [--dry-run]` | `-purge` — retention purge (processing log, job runs, errors, notifications). |
+| `nomaubl.sh audit <env> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--format md\|pdf] [--out <file>]` | `-audit` — [audit report](../application/reports/audit-report.md) of a period (default: the previous month). |
+| `nomaubl.sh report <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-report` — [implementation report](../application/reports/implementation-report.md) of the instance. |
+| `nomaubl.sh techreport <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-techreport` — [technical report](../application/reports/technical-report.md) of the release. |
+| `nomaubl.sh validate-ddl <env>` | `-validate-ddl` — compare the bundled DDL with the live schema. |
+| `nomaubl.sh demo <env> [--invoices N] [--months N] [--seed N] [--reset]` | `-demo` — [demo corpus](../installation/demo-corpus.md), demo instances only. |
+| `nomaubl.sh pdf-manifest <input.pdf> <output.manifest.xml>` | `-pdf-manifest` — starter manifest built from a JD Edwards PDF. |
 
 The remainder of the page describes each direct JAR mode in detail.
 
+### `nomaubl.conf` — server settings next to the wrapper \{#nomaubl-conf\}
+
+`nomaubl.sh` reads an optional **`nomaubl.conf`** placed in the same folder. It holds the settings proper to the server, so `nomaubl.sh` itself is never edited and can be replaced on an update (the upgrade does not replace the script: copy the new `nomaubl.sh` next to the jar).
+
+| Variable | Default | Use |
+|---|---|---|
+| `JAVA_OPTS` | empty | JVM options forwarded to every Java call (memory, master key location…). |
+| `JAVA_COMMAND` | `java` | Java executable to run. |
+| `DEFAULT_PORT` | `8090` | Port of `start` / `restart` when none is given. |
+
+```bash title="nomaubl.conf"
+JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+DEFAULT_PORT=8090
+```
+
 ### `JAVA_OPTS` — passing JVM flags through the wrapper
 
-Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
+Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) read a **`JAVA_OPTS`** variable — for `nomaubl.sh`, set it in [`nomaubl.conf`](#nomaubl-conf) rather than in the script. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
 
 ```bash title="nomaubl.sh (top of file)"
 # JVM flags forwarded to every java invocation. Default: empty.
@@ -430,10 +458,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 ## `-reprocess` — reprocess eligible invoices \{#reprocess\}
 
 ```bash
-java -jar nomaubl.jar -reprocess <configFile> [--full]
+java -jar nomaubl.jar -reprocess <configFile> [--full] [--verbose]
 ```
 
-Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings.
+Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings and the [reprocess rules](../application/invoices.md#resend-reprocess-rules).
+
+The output prints the start (`REPROCESS ** START : N invoice(s), B batch(es), R not eligible`), each batch (`STAGE`, then `DONE : X OK, Y failed`) and the result (`END`, `ALL`), plus only the errors and warnings of the processing. **`--verbose`** prints every processing line. The command exits with `0` when no invoice failed, `1` otherwise. The web Reprocess screen always shows the full live log.
 
 ---
 

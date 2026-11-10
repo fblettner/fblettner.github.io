@@ -42,7 +42,19 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **GLN** | BT-29 | Global Location Number GS1. |
 | **NAF (APE)** | — | Code activité APE / NAF français (`00.00X`). Porté en tant qu'identifiant supplémentaire dans le document UBL. |
 | **VAT** | BT-31 | Identifiant à la TVA (par ex. `FR00000000000`). |
-| **Capital** | BT-33 | Texte du capital social (par ex. `Capital de 100 000 €`). |
+| **Capital (si mentions légales vides)** | BT-33 | Capital social, utilisé seulement quand **BT-33 – Mentions légales** est vide (voir ci-dessous). |
+| **BT-33 – Mentions légales** | BT-33 | Texte légal complet du vendeur, repris tel quel dans la facture : forme juridique, capital, RCS, numéro d'immatriculation… (par ex. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+
+### Mentions légales (BT-33) \{#legal-information\}
+
+Les informations juridiques complémentaires du vendeur (BT-33) sont retenues dans cet ordre :
+
+1. le texte propre au document, mappé sur la variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`) dans l'[Éditeur XSL](../xsl-editor.md#variable-mapping) ;
+2. à défaut, les **BT-33 – Mentions légales** de la société ;
+3. à défaut, quand un capital est renseigné (celui du document ou de la société) : `Capital <capital> Euros`, suivi de ` - APE <code>` si un code APE / NAF est renseigné ;
+4. sinon, aucun BT-33 n'est écrit.
+
+Les autres environnements appliquent ce fonctionnement après `nomaubl.sh upgrade <env>` (voir [Mise à jour](../../installation/upgrade.md)).
 
 ### Adresse
 
@@ -98,6 +110,6 @@ L'annuaire est uniquement une couche de **valeurs par défaut** : tout champ por
 
 - **Une carte par entité juridique.** Même quand plusieurs codes société internes partagent un même SIREN, des cartes distinctes facilitent le suivi de l'établissement (SIRET) et de l'adresse rattachés à chaque code.
 - **Le code pays alimente le repli pays.** Quand la source omet le pays d'une adresse postale, NomaUBL retombe sur le `country` de cette carte plutôt que sur le défaut global de l'onglet [Header](./ubl-header-defaults.md). Renseigner `FR` pour les vendeurs français ; ne pas laisser vide.
-- **Le texte du capital apparaît tel quel.** Le champ `Capital` est rendu textuellement dans le document UBL (BT-33), donc inclure la marque de devise et les mentions attendues par l'autorité réglementaire (par ex. `SAS au capital de 50 000 €`).
+- **Privilégier les mentions légales.** **BT-33 – Mentions légales** est repris tel quel : y placer la formulation complète (forme juridique, capital avec sa devise, RCS). Les champs Capital et APE ne servent que de repli.
 - **Surcharger par template uniquement quand le template porte un vendeur différent.** Une filiale qui émet ses factures sous son propre SIREN est un cas légitime de surcharge ; une facture ponctuelle de l'entité principale, non.
 - **Le sélecteur de défaut désigne la société émettrice la plus fréquente.** Quand la majorité des factures provient d'une seule entité juridique, la définir comme défaut — seuls les enregistrements exceptionnels demandent alors un code de correspondance dans le XML source.

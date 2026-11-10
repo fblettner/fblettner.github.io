@@ -187,7 +187,7 @@ The page header carries a fixed toolbar:
 
 The editor exposes two tabs that operate on the same XSLT file. The left tab is the visual mapping form; the right tab is the raw XSLT source.
 
-### Variable Mapping (default)
+### Variable Mapping (default) \{#variable-mapping\}
 
 This is the form-based mapping editor — the visual replacement for hand-written XSLT.
 
@@ -226,7 +226,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Supporting-document references — a reference (BT-122) with an optional description (BT-123), and optionally an embedded file (BT-125) carried as base64 in the source spool. Up to four per invoice. See [Supporting documents](#supporting-documents) below. |
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
-| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
+| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. The variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) gives the document its own legal information, ahead of the company's text set in [Supplier Companies](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
@@ -235,6 +235,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
 | **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount; a spool carrying net + gross but no discount amount — the usual JDE spool — gets the price discount (BT-147) derived as gross − net, with the gross as base (no discount when the gross is not above the net). Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. Line numbers (BT-126) run on continuously across delivery groups, so they stay unique within the invoice. The line's **despatch advice** (EXT-FR-FE-BG-07, `cac:DespatchLineReference`) takes `TAG_LINE_DESPATCH_REF` (EXT-FR-FE-140), `TAG_LINE_DESPATCH_DATE` (EXT-FR-FE-201) and `TAG_LINE_DESPATCH_LINE_ID` — the despatch line number, the invoice line number when empty. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
+| **Document Allowances/Charges** *(BG-20 / BG-21)* | BT-92 to BT-98, BT-99 to BT-105 | Document-level discounts and charges. *Repeating AC element within invoice* gives the repeated source element (empty or `.`: one allowance or charge read from the invoice itself); then the *Charge indicator* (`true` / `1` / `Y` = charge, not mapped = allowance), *reason code* and *reason text*, *amount* (absolute value), *base amount*, *percentage*, *VAT rate* and *VAT category* (empty: those of the document). With a percentage between 0 and 100, a missing amount is derived from the base, or a missing base from the amount; a zero amount writes nothing. Codes and texts follow the [Allowances / Charges](./ubl-defaults/allowances-charges.md) defaults. The totals follow: allowance total (BT-107), charge total (BT-108) and sum of lines (BT-106 = BT-109 + allowances − charges). |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and three order references in the same `cac:OrderLineReference` group (EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence): `TAG_LINE_ORDER_REF` → *Customer Order Reference*, the buyer's order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) that the PDF groups lines on; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`); `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, the line number inside the buyer's order (BT-132, `cbc:LineID`). When only the seller's order number is mapped, the mandatory order ID falls back to the header purchase order (BT-13). |
 | **Line Preceding Invoice** *(EXT-FR-FE-136)* | Line-level `cac:BillingReference` | Reference to a prior invoice at the line level — useful for line-level credits. Emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (with an optional issue date) inside the line, at the correct schema position. |
@@ -412,7 +413,19 @@ The AI Auto-Map modal is a shortcut for building a fresh mapping from scratch.
 | **Invoice root element** | The XML element wrapping a single invoice (e.g. `Invoices`). Pre-filled from the loaded XML's root, editable. |
 | **XML content** | The XML spool body. Auto-populated by the upload, editable manually. |
 
-Click **Auto-Map** to send the XML (and PDF if any) to the AI, along with the list of `TAG_*` variables and their BT/BG context. The AI returns a JSON mapping that respects the scoping rules (paths relative to `TAG_ROOT`, line-relative paths inside `TAG_LINE_ITEM`, etc.). The mapping is merged into the form; review and click **Save Mappings** to commit.
+Click **Auto-Map** to send the XML (and PDF if any) to the AI, along with the list of `TAG_*` variables and their BT/BG context, the sample values and the format hints. Nothing is applied directly: the proposals open in **Review the proposed mapping**.
+
+| Column | Content |
+|---|---|
+| **Variable**, **BT** | The variable and its business term. |
+| **Proposed** | The path proposed by the AI. |
+| **Value in the sample** | What that path holds in the loaded XML. |
+| **Current** | The value mapped today. |
+| **Check** | *New* (found in the sample, ticked), *Replaces current* (the current value already finds an element — not ticked), *Not in the sample* (path not found — not ticked), *Not checked* (an expression with `\|` or `{`). |
+
+Below the table, **Required fields still empty** lists the mandatory business terms that stay empty once the ticked proposals are applied, and **Notes** gives the AI's remarks. **Apply N selected** merges the ticked lines into the form; click **Save Mappings** to commit.
+
+For a **PDF-source** document, the AI can also propose **Values to extract from the PDF** — values merged or missing in the converted XML — with the extracted value, the rule (regular expression) and the reason. Pick the document (pre-filled with the PDF-source document using this XSL) and click **Add rules and map again**: the rules are saved on the document as extraction fields, the PDF is converted again and the mapping runs again. The [PDF to XML](../processing/pdf-to-xml.md) page shows the result of those rules.
 
 The AI is conservative — it omits any variable it is not confident about rather than guessing. Manual review remains necessary; the editor speeds up the work, it does not replace expertise.
 

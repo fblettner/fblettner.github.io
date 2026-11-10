@@ -2,9 +2,9 @@
 
 | Product | Source repo | Release notes in the source | Docs (EN) | Docs (FR) |
 |---|---|---|---|---|
-| **NomaUBL** | `/Users/franckblettner/Documents/Tools/JavaProjects/nomaubl` (Java `src/custom`, `src/nomaubl`; React `src/web-react/src`; i18n `src/web-react/src/i18n/locales/{en,fr}.json`; list views `src/config/list-views`; plans `docs/plans`) | `RELEASE.md`, `RELEASE.fr.md` (root) | `docs/nomaubl/` | `i18n/fr/.../current/nomaubl/` |
-| **Liberty Next** (framework, Nomaflow) | `/Users/franckblettner/Documents/Tools/Liberty/liberty-next` (Python `liberty/`, frontend `frontend/`, `CLAUDE.md`) | `liberty/RELEASE.md`, `liberty/RELEASE.fr.md` | `docs/liberty/` (framework, installation, monitoring, technical, references, `nomaflow/`) | same under `i18n/fr/.../current/liberty/` |
-| **Nomasx-1**, **Nomajde** (Liberty apps) | `/Users/franckblettner/Documents/Tools/Liberty/liberty-apps` (TOML `config/screens.toml`, `connectors.toml`, `menus.toml`, `dictionary.toml`…; Python `liberty_apps/`, `plugins/`) | `liberty_apps/RELEASE.md`, `liberty_apps/RELEASE.fr.md` | `docs/liberty/nomasx1/`, `docs/liberty/nomajde/` | same under FR |
+| **NomaUBL** | `/Users/franckblettner/Developer/nomaubl/nomaubl` (Java `src/custom`, `src/nomaubl`; React `src/web-react/src`; i18n `src/web-react/src/i18n/locales/{en,fr}.json`; list views `src/config/list-views`; plans `docs/plans`) | `RELEASE.md`, `RELEASE.fr.md` (root) | `docs/nomaubl/` | `i18n/fr/.../current/nomaubl/` |
+| **Liberty Next** (framework, Nomaflow) | `/Users/franckblettner/Developer/liberty/liberty-next` (Python `liberty/`, frontend `frontend/`, `CLAUDE.md`) | `liberty/RELEASE.md`, `liberty/RELEASE.fr.md` | `docs/liberty/` (framework, installation, monitoring, technical, references, `nomaflow/`) | same under `i18n/fr/.../current/liberty/` |
+| **Nomasx-1**, **Nomajde** (Liberty apps) | `/Users/franckblettner/Developer/liberty/liberty-apps` (TOML `config/screens.toml`, `connectors.toml`, `menus.toml`, `dictionary.toml`…; Python `liberty_apps/`, `plugins/`) | `liberty_apps/RELEASE.md`, `liberty_apps/RELEASE.fr.md` | `docs/liberty/nomasx1/`, `docs/liberty/nomajde/` | same under FR |
 | **JDE / BIP APIs** | `/Users/franckblettner/Documents/Tools/JavaProjects/nomabc`, `nomabip`, `nomajde` | — | `docs/api/` | — |
 
 If the user names a product not listed here, ask for its repo and add a row.

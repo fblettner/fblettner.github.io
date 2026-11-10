@@ -309,15 +309,53 @@ Both require the *Mark reviewed* action (`invoice.review`) on the [Roles](../con
 
 ### Bulk resend \{#bulk-resend\}
 
-Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
+Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). A row whose document type is set to *Do not send* can be ticked only for a reprocess or a review, and the per-invoice **Resend** action is hidden on it. Each invoice of the batch goes through the [resend rules](#resend-reprocess-rules): an invoice the platform already holds is refused and counted as failed.
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the source archived at first processing (the source XML of an XML-source document, the XML produced by the conversion of a PDF-source document), into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a document with **Allow reprocess** enabled (an XML- or PDF-source document — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 The selection also covers **validation failures**: an invoice in *Validation failed* (`9905`) on a template with **Allow full reprocess** enabled is **reprocessed in full** — enrichment queried again, UBL regenerated, validated and sent to the PA when the template and document type say so; the history is kept and a new cycle starts. The confirmation states which invoices are reprinted and which are reprocessed in full. The invoice window offers the same full reprocess through a **Reprocess** button on a `9905`.
 
 Several invoices are reprocessed as **one batch per template**, in the background with its live log: their sources are staged in a working folder, the *Max threads* global setting bounds the parallelism and an invoice is never processed twice. A single invoice still runs on its own.
+
+### Resend and reprocess rules \{#resend-reprocess-rules\}
+
+The server checks these rules on every resend and every reprocess, whatever starts it: the invoice window, the list selection, the [IT dashboard](tech-dashboard.md#send-failed) cards, an [Auto-retry](../sync/scheduled-jobs/auto-retry.md) job, the command line or the [API](/nomaubl/api-reference).
+
+#### Resend — the stored UBL sent to the PA again
+
+| Condition | Rule |
+|---|---|
+| **Status** | Accepted for any internal `99xx` status except `9911` and `9913`: `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refused for every standard platform status — any numeric code that does not start with `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — and for `9911` / `9913`, stages the platform has already accepted. |
+| **Reason code** | Not checked. |
+| **Document type** | Refused when the send flag of the [document type](../configuration/system/document-types.md) is *Do not send* (`FEEV10` = `2`). |
+| **Stored UBL** | Refused when the invoice has no UBL stored in its header. |
+| **User** | The *Resend to PA* action (`invoice.resend`) on the [Roles](../configuration/security/roles.md) page, and the invoice must be visible to the user. |
+
+The invoice window hides **Resend to PA** only for a user without the permission and for a *Do not send* document type. On a protected status the button stays visible, and the resend ends with *Already processed by the PA (status …) — resend refused*.
+
+A bulk resend — **Resend selected**, **Resend all N** on the dashboard, an Auto-retry job — selects the invoices by status (`9904` by default for Auto-retry, or a list such as `9904,9905,9907`), then applies the same rules to each invoice.
+
+The only opening in the protection is the [Fix buyer](#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option.
+
+#### Reprocess — two kinds, chosen from the status
+
+| Kind | Status | Reason code | Document setting | Repeatable |
+|---|---|---|---|---|
+| **Reprint** — PDF and XML regenerated, nothing written to the database, no send | `200` | `NON_TRANSMISE` (exactly) | *Allow reprocess* = `Y` | No — once only: the `9912` marker left by the first reprint blocks a second one. |
+| **Full reprocess** — regenerated with the enrichment queried again, validated, then sent when the settings say so | `9905` | Not checked | *Allow full reprocess* = `Y` | Yes |
+
+Both kinds also require:
+
+- the document recorded on the invoice (`UHTMPL`) still exists;
+- that document has an **XML** or **PDF** source — a document with a UBL source cannot be reprocessed.
+
+The send flag of the document type plays no part in the eligibility: a reprocess never sends by itself.
+
+:::info[Any other status]
+An invoice outside these rules — a `9904` for a reprint, a standard platform status for a resend — can only be moved on with **Set Status**.
+:::
 
 ### Export
 
@@ -832,7 +870,7 @@ A **fullscreen toggle** in the header swaps between windowed and full-screen edi
 
 ### Resend confirmation
 
-The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
+The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée, within the [resend rules](#resend-reprocess-rules) — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
 
 ---
 

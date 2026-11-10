@@ -11,7 +11,7 @@ on every build (or run `npm run gen:release-toc`). Prints what it changed.
 import os, re
 
 SITE = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
-SRC = "/Users/franckblettner/Documents/Tools/JavaProjects/nomaubl/"
+SRC = "/Users/franckblettner/Developer/nomaubl/nomaubl/"
 CLIENT_NAMES = [("vrc_pro", "invoices"), ("vrc_man", "invoices"), ("isc_facture", "credit_notes"), ("cdn_facture", "credit_notes"),
                 ("KRYS", "ACME"), ("RECREACLUB", "ACME")]
 

@@ -2334,8 +2334,8 @@ Les applications sous licence (Nomasx-1, Nomajde) et les tâches Nomaflow livré
 Sur un hôte Linux équipé de Docker et du plugin Compose :
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ./liberty install full          # ou : ./liberty install light
 ```
 
@@ -2528,9 +2528,11 @@ Le contenu des deux installations est décrit sur [Architecture](./architecture.
 Récupérer le dossier `release/` :
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
+git clone --depth 1 --filter=blob:none --sparse https://github.com/fblettner/liberty-next.git
+cd liberty-next && git sparse-checkout set release && cd release
 ```
+
+Seul le dossier `release/` est récupéré (quelques centaines de Ko, sans l'historique du projet). Un `git pull` dans ce dossier apporte les scripts de la version suivante — `main` ne reçoit que les versions publiées ; ajouter `--branch v<version>` au clone pour en figer une. Ce que l'installation y écrit (`.env`, `apps/`, `backups/`) est ignoré par git : un pull n'y touche jamais. Un hôte qui a cloné tout le projet continue de fonctionner tel quel.
 
 Toutes les commandes de cette page et des suivantes se lancent depuis ce dossier `release/`.
 
@@ -4454,16 +4456,19 @@ Le pool se choisit à l'exécution :
 
 L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
 
+Un connecteur API appelé depuis ces écrans — AIS, pour JD Edwards — peut suivre les mêmes environnements : voir [Un serveur par environnement](#api-environments).
+
 ---
 
 ## Connecteur API \{#api\}
 
-Un connecteur API appelle une API web. Son éditeur comporte cinq onglets :
+Un connecteur API appelle une API web. Son éditeur comporte six onglets :
 
 | Onglet | Contenu |
 |---|---|
 | **Connection** | **Base URL** (`https://api.example.com`, `${VARIABLE}` accepté), **Default headers**, **Timeout**, **Vérification SSL** (*true*, *false*, ou une variable comme `${JDE_AIS_VERIFY_SSL:-true}`, conservée telle quelle), **Show in switcher**, **Home**. |
 | **Authentication** | **Auth type** : *None*, *Basic* (utilisateur et mot de passe), *Bearer* (jeton fixe), *API Key* (nom de l'en-tête et clé), *OAuth2 / JWT* (endpoint de jeton, corps et en-têtes de la demande, champ du jeton, durée de vie). Les secrets sont chiffrés à l'enregistrement. |
+| **Environnements** | Un serveur par environnement, pour un connecteur utilisé avec plusieurs environnements JDE — voir [Un serveur par environnement](#api-environments). |
 | **Endpoints** | Les endpoints nommés — voir ci-dessous. |
 | **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |
 | **Test** | **Tester la connexion** vérifie l'authentification ; **Run** appelle un endpoint avec des valeurs de paramètres et affiche la réponse. Rien n'est enregistré. |
@@ -4481,6 +4486,31 @@ Un endpoint comporte :
 | **Label**, **Description** | Affichés dans les listes de choix et à l'assistant IA. |
 
 Les endpoints sont appelés par les actions d'écran (`call_api`), les entrées de menu (type `endpoint`), les règles de notification (canal `action`), les plugins (`connectors.api(…).call(…)`) et — s'il y est autorisé — l'assistant IA. Une étape Nomaflow `http` appelle directement une URL, sans connecteur.
+
+### Un serveur par environnement \{#api-environments\}
+
+Quand les écrans s'appuient sur un [connecteur multi-pools](#multi-pool) — plusieurs environnements JD Edwards — chaque environnement a en général son propre serveur AIS. L'onglet **Environnements** donne au connecteur API un serveur par environnement ; les endpoints restent définis une seule fois.
+
+| Champ | Effet |
+|---|---|
+| **Environnement (pool)** | L'environnement (pool) du serveur du connecteur — sa **Base URL** et ses identifiants. Obligatoire dès qu'il y a un autre environnement. |
+| **Autres environnements** | Une entrée par autre pool : **Base URL**, **Username**, **Password**, **Token**, **Vérification SSL**. Un champ vide reprend la valeur du connecteur. Mots de passe et jetons sont chiffrés à l'enregistrement. |
+
+Personne ne choisit le serveur. Un appel suit l'environnement de l'écran — le **Pool** choisi dans la barre latérale, ou celui par défaut — et le `pool` d'une étape de tâche (tout type d'étape). Cela couvre les actions d'écran (`call_api`), les plugins, `/api/http` et l'assistant IA.
+
+Un appel fait pour un des environnements du connecteur sans serveur est **refusé** (« no target for pool … ») ; il n'est jamais envoyé au serveur du connecteur, qui est un autre environnement — souvent la production. Les environnements sont le pool du connecteur plus tous les pools des connecteurs SQL qui s'appuient dessus : un environnement JDE ajouté côté SQL et oublié ici est refusé lui aussi. L'onglet liste ces environnements sans serveur, *Paramètres → Intégrité* aussi.
+
+```toml
+[connectors.ais_connection]
+base_url = "${JDE_AIS_URL}"
+pool = "jdedwards"                          # l'environnement de base_url
+
+[connectors.ais_connection.targets.jdedwards_dev]
+base_url = "https://ais-dev.example.com:7077/jderest/v2"
+auth_password = "ENC:…"                     # seulement ce qui diffère
+```
+
+Pour nommer l'environnement avant un appel sensible, utilisez `#POOL#` dans le message d'un `confirm` : `Reset the password of {INPUT.user} on #POOL#?`. Une mise à jour des applications sous licence conserve le `pool` et les `targets` d'une installation.
 
 ---
 
@@ -5296,6 +5326,7 @@ Ces sources sont lues dans le navigateur au moment de l'appel :
 | `#LOGIN_USER#` (ou `#LOGIN#`, `#USER#`) | Le nom de l'utilisateur connecté. |
 | `#LOGIN_EMAIL#` (ou `#EMAIL#`) | L'adresse e-mail de l'utilisateur. |
 | `#LANGUAGE#` (ou `#LANG#`) | La langue de l'interface. |
+| `#POOL#` (ou `#ENVIRONMENT#`) | Le **Pool** choisi dans la barre latérale. Dans le message d'un `confirm` / `notify` : l'environnement de l'écran — ce choix quand le connecteur de l'écran l'a, sinon le pool du connecteur. |
 | `#SYSDATE#` (ou `#CURRENT_DATE#`, `#TODAY#`) | La date du jour, `YYYY-MM-DD`. |
 | `#NOW#` (ou `#CURRENT_TIMESTAMP#`) | La date et l'heure courantes. |
 | `#CURRENT_TIME#` | L'heure courante, `HH:MM:SS`. |
@@ -6751,8 +6782,8 @@ Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'
 | **`navigate`** | Ouvre une autre vue : un écran (`screen`) ou une requête (`to`), les `param_binds` lui étant transmis comme paramètres. | `connector`, `screen` ou `to`, `param_binds` |
 | **`open_url`** | Ouvre une adresse externe — une autre application sur la fiche de la ligne. | `url`, `new_tab` |
 | **`set_field`** | Écrit une valeur dans un champ du formulaire. | `target`, `value` ou `source` |
-| **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. | `message`, `confirm_label`, `cancel_label` |
-| **`notify`** | Affiche un message. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
+| **`confirm`** | Demande une confirmation ; **Annuler** arrête la chaîne. Le message se remplit comme un modèle `open_url` (`{COLONNE}`, `{INPUT.x}`, sources intégrées), sans encodage : `Reset the password of {INPUT.user} on #POOL#?`. | `message`, `confirm_label`, `cancel_label` |
+| **`notify`** | Affiche un message, rempli de la même façon. | `message`, `tone` (`info` / `ok` / `warn` / `error`) |
 | **`send_notification`** | Déclenche une règle de notification de type *action* (e-mail, cloche…). | `rule`, `param_binds` |
 | **`refresh`** | Recharge la grille. | — |
 
@@ -11133,8 +11164,9 @@ Cliquer sur **＋ Ajouter un utilisateur**. L'éditeur d'utilisateur s'ouvre ave
 |---|---|---|
 | **Nom d'utilisateur** | oui | Lettres, chiffres, soulignés, points et tirets. Sert d'identifiant de connexion, de sujet JWT et d'identité d'audit. **Immuable** après création. |
 | **Nom complet** | non | Le nom d'affichage montré dans les en-têtes et les colonnes d'audit. |
-| **Courriel** | non | Adresse destinataire pour les invitations, la réinitialisation de mot de passe (quand implémentée) et les routes de notification. |
+| **Courriel** | non | Où un lien *Mot de passe oublié ?* est envoyé (voir [plus bas](#forgot)), et l'adresse des notifications. |
 | **Mot de passe** | oui (pour les nouveaux utilisateurs) | Au moins 8 caractères. Enregistré sous forme de hachage Argon2id, jamais relisible. Laisser vide en modification pour conserver le mot de passe actuel. |
+| **Demander un nouveau mot de passe à la prochaine connexion** | coché par défaut pour un nouvel utilisateur | Le mot de passe saisi ici est temporaire : l'utilisateur choisit le sien à la première connexion (voir [plus bas](#first-sign-in)). Comptes locaux uniquement. |
 | **Rôles** | non | Sélecteur de pastilles — taper ou choisir dans la liste. La liste contient chaque rôle configuré sous l'onglet Rôles. |
 | **Actif** | oui (activé par défaut) | Désactivé, l'utilisateur ne peut pas se connecter ; les sessions existantes s'arrêtent au prochain rafraîchissement de jeton. |
 | **Superutilisateur** | non | Activé, passe outre chaque vérification de permission et chaque périmètre de données. À utiliser avec parcimonie. |
@@ -11175,6 +11207,14 @@ Les changements n'interrompent pas la session courante. Les nouveaux rôles / le
 :::
 
 ---
+
+## Un nouveau mot de passe à la première connexion \{#first-sign-in\}
+
+Un compte créé — ou réinitialisé par un administrateur — avec **Demander un nouveau mot de passe à la prochaine connexion** s'ouvre sur *Choisissez votre mot de passe* : le mot de passe temporaire, le nouveau (8 caractères ou plus) et sa confirmation. Tant que ce n'est pas fait, le serveur refuse tout appel sauf le changement lui-même (HTTP 403 *password change required*) : le mot de passe temporaire ne sert à rien d'autre, ni par la page ni par l'API. Le nouveau mot de passe prend effet aussitôt — sans nouvelle connexion. En ligne de commande : `liberty-admin create-user … --must-change`, `liberty-admin set-password … --must-change`. Un compte OIDC n'est jamais concerné (son mot de passe est celui du fournisseur d'identité).
+
+## Mot de passe oublié \{#forgot\}
+
+Quand le SMTP est configuré (*Liberty Next → Administrer → App*, notifications), la page de connexion affiche **Mot de passe oublié ?**. L'utilisateur indique **son identifiant et l'e-mail du compte** ; quand les deux correspondent à un compte local actif, un lien est envoyé à cette adresse. Le lien sert **une seule fois et pendant une heure** — il est lié au mot de passe pour lequel il a été émis : tout changement de mot de passe, la réinitialisation comprise, l'annule. La page répond la même chose que les deux correspondent ou non : elle ne révèle jamais qui a un compte ; les demandes sont limitées par adresse. Le lien pointe vers **Adresse publique** (*App*, `[app] public_url`) — à renseigner quand les utilisateurs passent par un proxy inverse ou un autre nom ; vide, l'adresse du navigateur est utilisée.
 
 ## Attributs de périmètre de données \{#attributes\}
 
@@ -11226,7 +11266,7 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 3. Attribuer les rôles selon son équipe (`analyst`, `reporter`, …).
 4. Enregistrer.
 5. Lui transmettre les identifiants temporaires par le canal habituel de l'entreprise.
-6. Elle se connecte, atteint l'assistant IA ou le flux de changement de mot de passe pour définir le sien.
+6. Elle se connecte avec et arrive sur *Choisissez votre mot de passe* — avec **Demander un nouveau mot de passe à la prochaine connexion** coché (par défaut), rien d'autre ne s'ouvre tant qu'elle n'a pas défini le sien.
 
 ### Onboarder une recrue OIDC
 
@@ -11238,9 +11278,11 @@ Les utilisateurs ne se suppriment pas : pour écarter quelqu'un, passer **Actif*
 ### Changer le mot de passe d'un utilisateur (en tant qu'administrateur)
 
 1. *Liberty Next → Administrer → Accès → Utilisateurs*, cliquer sur l'utilisateur.
-2. Saisir le nouveau mot de passe dans le champ **Mot de passe** (8 caractères ou +).
+2. Saisir le nouveau mot de passe dans le champ **Mot de passe** (8 caractères ou +) ; cocher **Demander un nouveau mot de passe à la prochaine connexion** pour qu'il soit temporaire.
 3. Enregistrer.
-4. Le prévenir. Il se connecte avec le nouveau mot de passe ; sa session existante continue de fonctionner jusqu'à expiration du jeton d'accès.
+4. Le prévenir. Il se connecte avec le nouveau mot de passe (et, s'il est temporaire, choisit le sien) ; sa session existante continue de fonctionner jusqu'à expiration du jeton d'accès.
+
+Avec le SMTP configuré, les utilisateurs peuvent aussi le réinitialiser eux-mêmes — [Mot de passe oublié ?](#forgot).
 
 ### Révoquer un compte immédiatement
 
@@ -13588,6 +13630,9 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 | `type` | — | L'un des dix types. |
 | `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Exécuter avec des paramètres**. |
 | `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
+| `continue_on_failure` | `false` | `true` : quand l'étape échoue (après ses tentatives), les suivantes s'exécutent quand même et l'exécution finit en échec en la nommant — pour une tâche qui enchaîne des traitements indépendants. Une case à cocher dans l'éditeur d'étape ; pour toutes les étapes d'une tâche, `[jobs.step_defaults]`. |
+
+**Désactiver une étape pour une installation.** Une étape dont l'installation n'a pas besoin — la collecte LDAP sans LDAP — se liste dans `disabled_steps = ["SECURITY_LDAP"]` de la tâche (la case *Désactivée pour cette installation* de l'éditeur d'étape). Elle ne s'exécute jamais, même quand une exécution ou un préréglage sélectionne toutes les étapes : la fenêtre **Exécuter avec des paramètres** la montre désactivée et non sélectionnable, l'exécution l'enregistre comme *skipped: turned off for this install*. Contrairement à `enabled` — la valeur par défaut qu'une exécution peut remplacer — c'est le dernier mot de l'exploitant, et l'installateur des applications sous licence la conserve d'une mise à jour à l'autre.
 
 Quand une étape échoue sur une erreur de base de données, le détail de l'exécution affiche la phrase de la base elle-même — *invalid input for query argument $1: 2025 (expected str, got int)* — et l'instruction part dans le journal du serveur.
 
@@ -22517,14 +22562,14 @@ Quatre cartes comptent les factures qui attendent une action de l'informatique, 
 
 ### Échec d'envoi (9904) \{#send-failed\}
 
-Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
+Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi mène **4 envois en parallèle, avec 100 ms entre deux appels de chacun**, pour que la PA reste dans sa limite de débit, et chaque facture passe par les [règles de renvoi](invoices.md#resend-reprocess-rules).
 
 | Élément | Comportement |
 |---|---|
 | Compteur | Total en direct — rafraîchi par le bouton *Actualiser* de la page et à chaque montage du tableau de bord. Affiché en rouge quand il n'est pas à zéro. |
 | Bouton **Tout renvoyer (N)** | Désactivé quand le compteur est à zéro. Un clic rejoue chaque facture au statut `9904` ; la fenêtre de progression s'ouvre. |
 | Fenêtre de progression | Compteurs en direct (*traitées* / *réussies* / *échecs*), bouton *Annuler* et bouton *Continuer en arrière-plan* — même composant que pour chaque traitement long de la plateforme. |
-| Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../sync/scheduled-jobs/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
+| Limitation de débit | 4 envois en parallèle, 100 ms entre deux appels de chacun — valeurs fixes, non paramétrables ici. La planification [Reprise auto](../sync/scheduled-jobs/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
 
 Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../sync/scheduled-jobs/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
 
@@ -22534,7 +22579,7 @@ Une carte en grand chiffre qui compte les factures **retenues avant envoi** — 
 
 ### À retraiter \{#to-reprocess\}
 
-Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir les [règles de retraitement](invoices.md#resend-reprocess-rules), [Documents → Allow reprocess](../management/documents.md) pour le réglage par document et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 ### À retraiter en totalité \{#to-reprocess-full\}
 
@@ -23010,15 +23055,53 @@ Les deux demandent l'action *Marquer comme traitée* (`invoice.review`) dans la 
 
 ### Renvoi groupé \{#bulk-resend\}
 
-Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
+Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Une ligne dont le type de document est réglé sur *Ne pas envoyer* ne peut être cochée que pour un retraitement ou un marquage, et l'action **Renvoyer** unitaire y est masquée. Chaque facture du lot passe par les [règles de renvoi](#resend-reprocess-rules) : une facture déjà prise en charge par la plateforme est refusée et comptée en échec.
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir du XML JDE archivé lors du premier dépôt, dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir de la source archivée lors du premier traitement (le XML source d'un document à source XML, le XML issu de la conversion d'un document à source PDF), dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un document avec **Allow reprocess** activé (un document à source XML ou PDF — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 La sélection couvre aussi les **échecs de validation** : une facture en *Échec de validation* (`9905`) sur un modèle où **Allow full reprocess** est activé est **retraitée en totalité** — enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document ; l'historique est conservé et un nouveau cycle démarre. La confirmation précise quelles factures sont réimprimées et lesquelles sont retraitées en totalité. La fenêtre facture propose le même retraitement complet via un bouton **Retraiter** sur une `9905`.
 
 Plusieurs factures sont retraitées en **un lot par modèle**, en arrière-plan avec son journal en direct : leurs sources sont déposées dans un dossier de travail, le réglage global *Max threads* limite le parallélisme et une facture n'est jamais traitée deux fois. Une facture seule est toujours traitée à part.
+
+### Règles de renvoi et de retraitement \{#resend-reprocess-rules\}
+
+Le serveur applique ces règles à chaque renvoi et à chaque retraitement, quel qu'en soit le point de départ : fenêtre facture, sélection dans la liste, cartes du [Tableau de bord IT](tech-dashboard.md#send-failed), tâche de [relance automatique](../sync/scheduled-jobs/auto-retry.md), ligne de commande ou [API](/nomaubl/api-reference).
+
+#### Renvoi — l'UBL enregistré redéposé sur la PA
+
+| Condition | Règle |
+|---|---|
+| **Statut** | Accepté pour tout statut interne `99xx` sauf `9911` et `9913` : `9900`, `9901`, `9902`, `9903`, `9904`, `9905`, `9906`, `9907`, `9912`… Refusé pour tout statut standard de la plateforme — tout code numérique qui ne commence pas par `99` (`1`, `8`, `10`, `43`, `45`, `48`, `200`, `213`…) — ainsi que pour `9911` / `9913`, étapes déjà acceptées par la plateforme. |
+| **Motif** | Non contrôlé. |
+| **Type de document** | Refusé quand l'indicateur d'envoi du [type de document](../configuration/system/document-types.md) est *Ne pas envoyer* (`FEEV10` = `2`). |
+| **UBL enregistré** | Refusé quand l'en-tête de la facture ne contient aucun UBL. |
+| **Utilisateur** | Action *Renvoyer à la PA* (`invoice.resend`) sur la page [Rôles](../configuration/security/roles.md), et facture visible par l'utilisateur. |
+
+La fenêtre facture ne masque **Renvoyer à la PA** que pour un utilisateur sans cette permission et pour un type de document *Ne pas envoyer*. Sur un statut protégé, le bouton reste affiché et le renvoi se termine par le message *Already processed by the PA (status …) — resend refused*.
+
+Un renvoi groupé — **Renvoyer la sélection**, **Tout renvoyer (N)** du tableau de bord, une tâche de relance automatique — sélectionne les factures par statut (`9904` par défaut pour la relance automatique, ou une liste comme `9904,9905,9907`), puis applique les mêmes règles à chaque facture.
+
+La seule exception à cette protection est la réparation [Corriger destinataire](#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA.
+
+#### Retraitement — deux variantes, choisies d'après le statut
+
+| Variante | Statut | Motif | Réglage du document | Renouvelable |
+|---|---|---|---|---|
+| **Réimpression** — PDF et XML régénérés, rien d'écrit en base, aucun envoi | `200` | `NON_TRANSMISE` (exactement) | *Allow reprocess* = `Y` | Non — une seule fois : le marqueur `9912` laissé par la première réimpression bloque la suivante. |
+| **Retraitement complet** — régénération avec un nouvel appel à l'enrichissement, validation, puis envoi si les réglages le prévoient | `9905` | Non contrôlé | *Allow full reprocess* = `Y` | Oui |
+
+Les deux variantes demandent aussi :
+
+- que le document enregistré sur la facture (`UHTMPL`) existe toujours ;
+- que ce document ait une source **XML** ou **PDF** — un document à source UBL ne se retraite pas.
+
+L'indicateur d'envoi du type de document n'entre pas en compte : un retraitement n'envoie jamais rien de lui-même.
+
+:::info[Tout autre statut]
+Une facture hors de ces règles — une `9904` pour une réimpression, un statut standard de la plateforme pour un renvoi — ne peut évoluer que par **Définir statut**.
+:::
 
 ### Export
 
@@ -23513,7 +23596,7 @@ Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écr
 
 ### Confirmation de redépôt
 
-Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
+Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée, dans le respect des [règles de renvoi](#resend-reprocess-rules) — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
 
 ---
 
@@ -26064,137 +26147,84 @@ L'exécution *Envoyer maintenant* met aussi à jour le badge *dernier envoi*, ce
 ## NomaUBL — Reprise auto
 Source: https://docs.nomana-it.fr/fr/nomaubl/sync/scheduled-jobs/auto-retry/
 
-Tâches planifiées → Reprise auto planifie un passage quotidien qui renvoie chaque facture dans un statut d'erreur technique choisi (par défaut 9904 à 3 h) vers la Plateforme Agréée. Sélecteur multi-statuts, fenêtre d'analyse optionnelle, cadencement par ligne, partagé avec la carte Échec d'envoi du Tableau de bord technique. Le ramassage nocturne pour les lots bloqués côté PA.
+NomaUBL Tâches planifiées → Reprise auto renvoie à la Plateforme Agréée, une fois par jour, toutes les factures dans les statuts d'erreur technique choisis (9904 par défaut à 3 h), avec une fenêtre sur la date de facture, une attente entre appels et des envois en parallèle ; chaque facture passe par les règles de renvoi.
 
 :::info[Où le trouver]
-Ce formulaire s'ouvre depuis la page [Tâches planifiées](./overview.md) : cliquer sur une tâche de type *Reprise auto* pour la modifier, ou **Nouvelle tâche → Reprise auto** pour en créer une. **Enregistrer et appliquer** recharge immédiatement la planification, sans redémarrage du serveur. L'ancienne page *Reprise automatique* a quitté le menu.
+Ce formulaire s'ouvre depuis la page [Tâches planifiées](./overview.md) : cliquer sur une tâche de type *Reprise auto* pour la modifier, ou **Nouvelle tâche → Reprise auto** pour en créer une. **Enregistrer et appliquer** recharge immédiatement la planification, sans redémarrage du serveur.
 :::
 
-L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le garde-fou du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
+Une tâche **Reprise auto** renvoie à la Plateforme Agréée (PA), une fois par jour, toutes les factures qui se trouvent dans les statuts choisis. La tâche habituelle renvoie à 3 h les factures en *Échec d'envoi* (`9904`), pour que ce qui a échoué dans la journée — indisponibilité de la plateforme, délai dépassé — reparte avant le matin.
 
-Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
-
-La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure. Le renvoi lit `F564231` pour sélectionner les factures concernées et appelle l'api-connector PA configuré pour chacune ; le format source est transparent.
+Plusieurs tâches peuvent coexister, chacune avec son heure et ses statuts. La tâche emprunte le même renvoi que le bouton **Tout renvoyer (N)** de la [carte Échec d'envoi du Tableau de bord IT](../../application/tech-dashboard.md#send-failed), et chaque facture passe par les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules). Le fonctionnement est identique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure : c'est l'UBL enregistré pour chaque facture qui est renvoyé.
 
 ---
 
-## Ouvrir l'éditeur
-
-- Barre latérale → **Configuration → Système → Reprise auto**.
-- Ou depuis le [Tableau de bord technique](../../application/tech-dashboard.md) → carte *Échec d'envoi* → lien *Planifier une reprise…* (raccourci entre le bouton manuel et le catalogue).
+## Vue d'ensemble
 
 ---
 
-## En un coup d'œil
+## Champs
 
----
-
-## Champs d'une reprise
-
-Chaque ligne est une entrée du catalogue. Le panneau d'édition comporte quatre sections.
-
-### 1. Identification
-
-| Champ | Obligatoire | Description |
-|---|---|---|
-| **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et sur la carte Planificateur du Tableau de bord technique. Exemple : *Reprise nocturne des Échec d'envoi*. |
-| **Description** | non | Légende d'une ligne pour aider les collègues à comprendre l'objet de la reprise. |
-| **Activé** | oui (par défaut : `oui`) | Quand `non`, la ligne reste dans le catalogue mais le planificateur l'ignore. Utile pour mettre en pause pendant une fenêtre de maintenance ou un arrêt PA volontaire. |
-
-### 2. Planification
-
-| Champ | Obligatoire | Description |
-|---|---|---|
-| **Heure** | oui (par défaut : `03`) | Heure de la journée au format 24 h. La reprise se déclenche pile à cette heure. |
-| **Minute** | non (par défaut : `00`) | Minute de l'heure. À utiliser pour répartir plusieurs reprises sur une heure et éviter qu'elles ne démarrent toutes à la même seconde. |
-| **Fuseau horaire** | oui (par défaut : fuseau du serveur) | Fuseau IANA (ex. `Europe/Paris`). Chaque reprise s'exécute dans son propre fuseau, ce qui permet à une installation multi-régions d'échelonner les passages par région. |
-| **Cadence** | oui (par défaut : `quotidienne`) | `quotidienne`, `horaire` ou `toutes les N heures`. Horaire + décalage de 50 minutes donne un passage à `00:50`, `01:50`, … — une installation chargée tire parti de la cadence plus élevée ; le défaut quotidien à 03:00 suffit dans la plupart des cas. |
-
-### 3. Filtre de statuts
-
-Le sélecteur multi-statuts ne liste que les statuts étiquetés **Erreur – technique** dans le [Catalogue des statuts](../../configuration/system/statuses.md) :
-
-| Code | Libellé | Quand il s'applique |
-|---|---|---|
-| `9904` | *Échec d'envoi* | Soumission PA rejetée au niveau HTTP (timeout, 4xx, 5xx). La cible de la reprise par défaut. |
-| `9905` | *Échec en mode mock* | Identique à 9904 mais en mode mock. Visible en général uniquement durant les tests. |
-| `9907` | *Échec de récupération de statut* | La soumission PA est arrivée mais l'interrogation du cycle de vie continue de tomber en erreur. |
-| `213` | *Rejet technique PA* | Le côté PA a signalé un rejet technique après acceptation. |
-
-Sélectionnez-en un ou plusieurs. Une seule ligne peut traiter tous les seaux d'erreur technique d'un coup — utile pour un unique passage nocturne qui couvre l'ensemble.
-
-Les statuts d'erreur métier (`206`, `207`, `208`, …) ne sont **délibérément pas sélectionnables** ici — ils demandent une action de l'opérateur en amont, pas un renvoi aveugle. Le sélecteur impose cette contrainte.
-
-### 4. Options de renvoi
+### Général
 
 | Champ | Défaut | Description |
 |---|---|---|
-| **Fenêtre d'analyse** | `0` *(aucun filtre temporel)* | Quand elle est définie, restreint la reprise aux factures dont le statut a été mis à jour pour la dernière fois dans la fenêtre (en heures ou en jours). `7 jours` est le réglage type pour *rattraper la dernière semaine* ; `0` signifie *toute facture dans le statut correspondant, quelle que soit son ancienneté*. |
-| **Cadencement** | `100` ms | Délai entre deux appels PA. Aligné sur le bouton manuel *Tout renvoyer* du tableau de bord. À monter (250 ms, 500 ms) pour les installations où la PA limite agressivement le débit ; à baisser (50 ms) pour un vidage ponctuel après un incident PA. |
-| **Nombre max de factures par exécution** | illimité | Plafonne la reprise à N factures pour borner la durée d'exécution sur les gros lots. La reprise prend d'abord les factures correspondantes les plus anciennes et s'arrête à N ; le reste est traité au passage planifié suivant. |
+| **Nom** | — | Saisi à la création (**Nouvelle tâche**) ; il identifie la tâche sur la page Tâches planifiées. |
+| **Description** | vide | Texte libre : ce que couvre la tâche. |
+| **Activé** | coché | Décoché, la tâche est conservée mais n'est plus lancée selon sa planification. |
 
----
+### Planification
 
-## Ce qui se passe à l'heure planifiée
-
-Le planificateur est un démon interne à NomaUBL qui se réveille chaque minute et vérifie pour chaque ligne activée l'heure de *prochain déclenchement*. La requête est peu coûteuse ; le catalogue est petit.
-
-| Étape | Description |
-|---|---|
-| **1. Sélection des factures** | `SELECT * FROM F564231 WHERE current_status IN (<status_list>)`, avec `last_update >= NOW() - <lookback>` en option et `LIMIT <max>` quand il est défini. Les plus anciennes d'abord. |
-| **2. Renvoi unitaire** | Pour chaque facture, appel de la tâche `submit` de l'api-connector PA — même chemin de code que l'action *Envoyer* d'origine. La ligne de cycle de vie est mise à jour avec le nouveau statut. |
-| **3. Cadencement** | Attente de `<throttle>` ms entre deux appels. |
-| **4. Respect du Cancel** | La reprise contrôle un signal d'annulation entre deux factures — les opérateurs peuvent annuler depuis la carte Planificateur du tableau de bord sans attendre la fin de l'exécution. |
-| **5. Journalisation du passage** | Écriture d'une ligne dans `F564237` avec le nom de la reprise, l'horodatage début / fin, le nombre traité / réussi / en échec. Visible dans le widget *Événements de processus en direct* du Tableau de bord technique. |
-
-La progression du passage est aussi visible dans la [fenêtre de progression partagée](../../application/tech-dashboard.md#shared-progress-window) — même composant que le bouton manuel *Tout renvoyer*. Cliquez sur n'importe quelle reprise active dans la carte Planificateur pour l'ouvrir.
-
-Quand le planificateur est hors ligne (serveur arrêté, JVM tombée) au moment où une ligne devait se déclencher, le passage est **passé silencieusement** — il n'y a pas de rejeu des passages manqués. La prochaine heure planifiée se déclenche normalement. Pour rattraper le travail manqué, lancez le *Tout renvoyer* manuel sur le tableau de bord ou déclenchez la ligne depuis le catalogue avec *Exécuter maintenant*.
-
-### Bouton Exécuter maintenant
-
-Chaque ligne du catalogue dispose d'un bouton *Exécuter maintenant* qui déclenche la reprise immédiatement, en utilisant la configuration actuelle de la ligne. Utile pour :
-
-- Vérifier une nouvelle reprise avant de la laisser tourner sur sa planification.
-- Rattraper un passage manqué après un redémarrage du serveur.
-- Rattrapage ponctuel après un incident PA — activer une ligne *Vidage après incident PA* désactivée, *Exécuter maintenant*, puis la désactiver une fois terminé.
-
-L'exécution déclenchée par *Exécuter maintenant* respecte le même cadencement, la même fenêtre d'analyse et la même liste de statuts qu'un passage planifié. Elle ne **fait pas** avancer la cadence du passage planifié — la prochaine heure planifiée se déclenche tout de même.
-
----
-
-## Astuces et bonnes pratiques
-
-- **Gardez seule la reprise par défaut à 03:00.** Elle couvre le cas le plus courant (lots nocturnes bloqués côté PA). Ajouter une ligne n'a de sens que pour une cadence différente ou un jeu de statuts différent.
-- **Échelonnez les reprises avec un décalage de minute.** Deux reprises qui se déclenchent à `:00` se disputent les emplacements du pool de connexions. Étalez-les à `:00`, `:15`, `:30` pour lisser la charge.
-- **Augmentez le cadencement quand la PA limite le débit.** Un `429 Too Many Requests` après quelques minutes de reprise est un indice pour pousser le cadencement à 250 ms ou 500 ms. Alignez-le sur le budget par seconde documenté par la PA.
-- **Désactivez plutôt que supprimer pendant un arrêt connu.** Une ligne marquée *DÉSACTIVÉ* est intentionnelle et visible ; une ligne supprimée est invisible et facile à oublier une fois l'arrêt terminé.
-- **Ne renvoyez pas les erreurs métier.** Le sélecteur le bloque. Si une facture est en `207` (*Contestée par le destinataire*), aucun renvoi n'y changera quoi que ce soit — seule une action de l'opérateur en amont le peut.
-- **Utilisez le tableau de bord pour les coups uniques, la Reprise auto pour les habitudes.** Les deux chemins partagent le code ; ce qui diffère, c'est qui les déclenche. Un vidage ponctuel après un incident est un clic ; le garde-fou quotidien est une ligne.
-
----
-
-## Dépannage
-
-| Symptôme | Cause probable | Correctif |
+| Champ | Défaut | Description |
 |---|---|---|
-| La ligne planifiée ne se déclenche pas. | La ligne est *DÉSACTIVÉE*. | Ouvrez la ligne, basculez *Activé* sur oui, enregistrez. |
-| La ligne se déclenche mais traite zéro facture. | La liste de statuts et la fenêtre d'analyse combinées donnent zéro correspondance. | Inspectez la page [E-Invoicing](../../application/invoices.md) avec le même filtre de statuts ; élargissez la fenêtre ou assouplissez la liste de statuts. |
-| La reprise se termine mais le décompte est très inférieur au nombre de la [carte Échec d'envoi](../../application/tech-dashboard.md#send-failed). | Le tableau de bord compte chaque `9904` sans tenir compte de l'âge ; une ligne avec une fenêtre de 7 jours ignore tout ce qui est plus ancien. | Soit retirez la fenêtre (`0` = aucun filtre), soit planifiez une seconde ligne avec une fenêtre plus large pour le stock ancien. |
-| Erreurs `429 Too Many Requests` dans le journal d'exécution. | Limite de débit PA atteinte. | Augmentez le cadencement (par ex. 100 ms → 250 ms) sur la ligne et relancez. |
-| Deux lignes ont toutes deux démarré à `03:00` et l'une a bloqué l'autre. | Aucun décalage de minute — elles ont sollicité le pool de connexions en même temps. | Échelonnez les lignes (`:00`, `:15`, `:30`). |
-| Le bouton *Exécuter maintenant* est grisé. | La reprise est déjà en cours (un passage planifié ou un *Exécuter maintenant* précédent). | Ouvrez la carte Planificateur du tableau de bord → cliquez sur la ligne active → utilisez *Annuler* dans la fenêtre modale si besoin, ou attendez. |
-| Le badge du dernier passage reste à *jamais* sur une nouvelle ligne. | L'heure de la ligne est dans le futur — elle ne s'est pas encore déclenchée — et aucun *Exécuter maintenant* n'a été cliqué. | Cliquez sur *Exécuter maintenant* pour vérifier la configuration ; le prochain passage planifié se déroulera normalement. |
+| **Heure** | `3` | Heure de l'exécution quotidienne (0–23), à l'heure du serveur. |
+| **Minute** | `0` | Minute de l'exécution (0–59). Décaler la minute évite que deux tâches démarrent ensemble. |
+
+### Cible
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Statuts à reprendre** | `9904` | Un ou plusieurs codes, choisis parmi les statuts du groupe *Erreur – technique* du [Catalogue des statuts](../../configuration/system/statuses.md). Plusieurs codes se combinent en OU. Sans statut choisi, rien ne s'exécute. |
+| **Ne reprendre que les factures des N derniers jours** | `0` | Ne garde que les factures dont la **date de facture** tombe dans les N derniers jours. `0` garde toutes les factures des statuts choisis. |
+
+Le sélecteur propose tous les codes du groupe *Erreur – technique*, mais un renvoi n'accepte que les statuts internes `99xx` autres que `9911` et `9913` (voir les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules)) :
+
+| Code | Libellé | Renvoyée ? |
+|---|---|---|
+| `9904` | *Échec d'envoi à la PA* | Oui — la cible habituelle. |
+| `9907` | *Échec d'import par la PA* | Oui. |
+| `9909` | *Échec d'export par la PA* | Oui. |
+| `9905` | *Échec de validation* | Oui, mais l'UBL enregistré part tel quel : corriger d'abord les données et préférer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
+| `213` | *Rejetée* | Non — statut de la plateforme : chaque facture est refusée et comptée en échec. |
+
+### Cadencement
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Attente entre appels à la PA (ms)** | `100` | Pause entre deux envois. À augmenter quand la plateforme limite le débit ; `0` envoie sans pause. |
+| **Parallel workers** | `4` | Nombre d'envois menés en même temps (1 à 8). L'attente s'applique à chacun, si bien que le débit vers la plateforme vaut environ *envois en parallèle ÷ attente*. `1` envoie les factures l'une après l'autre. |
+
+Les [limites de requêtes](../../configuration/api-connectors.md) du connecteur s'ajoutent à ces réglages.
 
 ---
 
-## Pour aller plus loin
+## Déroulement à l'heure prévue
 
-- [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
-- [Fenêtre de progression partagée](../../application/tech-dashboard.md#shared-progress-window) — la fenêtre modale qu'ouvre chaque opération longue.
-- [E-Invoicing](../../configuration/system/einvoicing.md) — l'api-connector PA que le renvoi appelle ; ajustez-y les délais d'attente et les nombres de tentatives.
-- [Statuts](../../configuration/system/statuses.md) — le catalogue des codes de statut, dont l'étiquette *Erreur – technique* qui filtre le sélecteur multi-statuts de cette page.
-- [Digest quotidien](./daily-digest.md) — planifiez un e-mail quotidien qui résume les erreurs d'intégration ; complément utile à la Reprise auto pour que l'équipe d'astreinte voie ce que le passage n'a pas pu corriger.
+1. La tâche sélectionne les factures dont le statut fait partie des codes choisis, restreintes aux N derniers jours de date de facture si ce réglage est renseigné — jusqu'à 100 000 factures par exécution.
+2. Chaque facture est renvoyée selon les [règles de renvoi](../../application/invoices.md#resend-reprocess-rules) : type de document *Ne pas envoyer*, UBL absent ou statut de la plateforme → échec, sans appel à la plateforme.
+3. L'exécution se termine par un résumé `ok=… fail=… of …`, affiché dans la colonne *Résultat* de la page Tâches planifiées et dans son historique.
+
+**Lancer maintenant**, sur la page Tâches planifiées, déclenche la tâche immédiatement avec ses réglages en cours ; la prochaine exécution planifiée reste inchangée. Une exécution manquée pendant un arrêt du serveur n'est pas rattrapée : la suivante part à son heure habituelle.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Une tâche sur 9904 suffit le plus souvent.** N'en ajouter une que pour une autre heure ou d'autres statuts.
+- **Laisser `213` et `9905` de côté.** Une `213` est toujours refusée ; une `9905` demande une correction puis un retraitement complet plutôt qu'un renvoi.
+- **Décaler les minutes.** Deux tâches à la même minute se disputent les connexions à la base et la plateforme.
+- **Augmenter l'attente en cas de `429`.** Une réponse *Too Many Requests* de la plateforme signale un débit trop élevé : augmenter l'attente ou réduire les envois en parallèle.
+- **Désactiver plutôt que supprimer** pendant une indisponibilité connue de la plateforme : la tâche reste visible et se réactive facilement.
 
 ---
 
@@ -26300,7 +26330,7 @@ La première décision d'un document est sa **Source**. Elle se définit dans **
 |---|---|---|
 | **XML** | Spool XML provenant de tout ERP qui demande une transformation vers UBL. Sortie BIP JDE, XML dérivé d'IDoc SAP, XML issu d'une saved-search NetSuite, exports d'ERP personnalisés. | Transformation XSL → UBL 2.1 → XSD + Schematron → BDD → dépôt PA optionnel. La page propose le sélecteur *Mode* (AUTO / SINGLE / BURST / UBL) et le sélecteur *Send to PA*. |
 | **UBL** | Le fichier est déjà une facture UBL 2.1 (l'ERP émet de l'UBL nativement, ou le fichier provient d'une PA en aval au format UBL). | Lecture de la facture, extraction de `(doc, dct, kco)` depuis `cbc:ID`, validation, enregistrement, dépôt optionnel. La page propose un mode *Validate only* et un sélecteur *Send to PA*. |
-| **PDF** | Un PDF texte issu de n'importe quel système, sans export XML ni UBL disponible. | Le PDF est converti en XML à plat selon les réglages d'[extraction PDF](../management/documents.md#extraction-pdf) du modèle, puis suit le pipeline XML. La page propose le même sélecteur *Mode* et les mêmes options *Send to PA* que pour le XML ; le sélecteur de fichier accepte les `.pdf`. |
+| **PDF** | Un PDF texte issu de n'importe quel système, sans export XML ni UBL disponible. | Le PDF est converti en XML à plat selon les réglages d'[extraction PDF](../management/documents.md#extraction-pdf) du modèle, puis suit le pipeline XML. La page propose le même sélecteur *Mode* et les mêmes options *Send to PA* que pour le XML ; le sélecteur de fichier accepte les `.pdf`. Sur un document à source **XML**, un PDF JD Edwards balisé est aussi accepté : il est converti avec la *JDE invoice key* du document et le manifeste de son [dossier surveillé](../management/watched-folders.md) — voir [PDF vers XML](./pdf-to-xml.md#jde-pdf). |
 
 Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la valeur résolue, et le reste du formulaire se reconfigure automatiquement.
 
@@ -26620,6 +26650,100 @@ La section de résultat affiche :
 
 ---
 
+## NomaUBL — PDF vers XML
+Source: https://docs.nomana-it.fr/fr/nomaubl/processing/pdf-to-xml/
+
+NomaUBL Traitement → PDF vers XML : convertir un PDF texte ou un PDF JD Edwards balisé, lire le XML produit, régler le tableau, le récapitulatif TVA, le numéro de facture, le découpage en factures et la recherche de société d'un document en cliquant sur les lignes, puis les enregistrer dans le document.
+
+La page **PDF vers XML** affiche le XML produit par un PDF, pour démarrer ou ajuster le mapping d'un [document à source PDF](../management/documents.md#extraction-pdf). Elle convertit un **PDF texte** issu de n'importe quel système — JD Edwards, SAP, NetSuite, ERP sur mesure ou outil de facturation — ou un **PDF JD Edwards balisé**, avec ou sans les réglages d'un document, et enregistre dans le document les réglages essayés sur la page. Une conversion n'enregistre rien : la page est un outil de mise au point.
+
+Accès : **Traitement → PDF vers XML**.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Conversion d'un PDF
+
+| Commande | Description |
+|---|---|
+| **Choisir un PDF** | Sélectionne le PDF sur le poste et le convertit aussitôt. |
+| Convertisseur | **PDF texte** (PDF dont le texte est sélectionnable, quel que soit l'outil qui l'a produit) ou **PDF JD Edwards** (impression BI Publisher / JD Edwards portant ses balises de sections et de champs). |
+| Document | **Réglages par défaut**, ou un document dont les réglages sont chargés et essayés. Le choix d'un document fixe aussi le convertisseur : *PDF texte* pour une source PDF, *PDF JD Edwards* sinon, avec le manifeste du [dossier surveillé](../management/watched-folders.md) qui utilise le document. |
+| **Nouveau document** | Crée un document pour le convertisseur en cours — **Nom** (lettres, chiffres, `-` et `_`) et **Description**. Son UBL XSLT pointe vers `<nom>.xsl`, à créer dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md) si besoin ; les réglages essayés sur la page restent en attente, prêts pour **Enregistrer dans le document**. |
+| **Convertir** | Convertit de nouveau avec les réglages présents sur la page, enregistrés ou non. |
+| **Télécharger le XML** | Enregistre le XML sous `<nom du pdf>.xml`. |
+
+Le XML s'affiche à droite, en lecture seule. Un PDF numérisé (images sans texte) est refusé avec le message *no text found … (scanned or empty PDF?)*.
+
+---
+
+## PDF texte \{#text-pdf\}
+
+### Lignes de facture
+
+**Début du tableau**, **Lignes d'en-tête** et **Fin du tableau** délimitent le tableau des lignes. Le plus simple est de cliquer sur les lignes du volet de gauche, **Lignes de facture** sélectionné :
+
+1. *Cliquez sur la première ligne de l'en-tête du tableau* ;
+2. *Cliquez sur la dernière ligne de l'en-tête du tableau* ;
+3. *Cliquez sur la première ligne après les lignes de facture*.
+
+La page écrit les trois réglages et relance la conversion : les lignes d'en-tête sont encadrées en indigo, les lignes de facture en vert, la ligne de fin en rouge, et le compteur affiche *N ligne(s) trouvée(s)*. **Recommencer** efface les clics.
+
+### Récapitulatif TVA
+
+**Récapitulatif TVA** sélectionné, les mêmes clics renseignent **Début du récap. TVA**, **Colonnes** et **Fin du récap. TVA** : *Cliquez sur la ligne d'en-tête du récapitulatif TVA*, *Cliquez sur sa dernière colonne* (un bouton par cellule d'en-tête — utile quand un autre bloc est imprimé à côté du récapitulatif), *Cliquez sur la première ligne après les taux*. Les taux deviennent `<Recap_TVA>/<Ligne_TVA>`, et le compteur affiche *N taux de TVA trouvé(s)*.
+
+### Clé du document
+
+| Commande | Description |
+|---|---|
+| **Numéro de facture** | L'élément qui porte le numéro de facture. Un numéro tel que `36834.FU` (chiffres puis lettres) ou `FU-36834` est séparé en **Numéro** et **Type**, tous deux lus à partir du libellé imprimé avant la valeur. |
+| **Type de document** | Affiché quand le numéro ne se sépare pas : le type de document fixe (par ex. `RI`). |
+| **Plusieurs factures** | Pour un PDF qui contient plusieurs factures : la règle qui donne un document par numéro de facture (*Une facture par PDF* si vide). **Découper sur ce numéro** la construit à partir du libellé du numéro de facture ; le compteur affiche alors *N facture(s)*. |
+| **Trouver la société par** | *Pas de recherche*, *N° de TVA*, *SIRET* ou *SIREN*, puis l'élément qui porte l'identifiant : la page affiche la société trouvée parmi les [sociétés fournisseur](../ubl-tools/ubl-defaults/suppliers-companies.md) (`→ 00001`), ou la raison de l'absence de correspondance. |
+| **Société** | Code société fixe, quand la société n'est pas recherchée. |
+
+### Enregistrer dans le document
+
+**Enregistrer dans le document** écrit les réglages dans le document choisi : début, lignes d'en-tête et fin du tableau, récapitulatif TVA, découpage en factures, règles d'extraction du numéro et du type, société (ou sa recherche). Un document sans clé de découpage reçoit `Document`, une par facture. Les mêmes réglages se modifient ensuite dans le groupe [PDF extraction](../management/documents.md#extraction-pdf) du document.
+
+---
+
+## PDF JD Edwards \{#jde-pdf\}
+
+| Commande | Description |
+|---|---|
+| **Manifeste** | Chemin sur le serveur du manifeste qui nomme les balises ; vide = noms du dictionnaire de données. Le bouton dossier parcourt le serveur. |
+| **Manifeste de départ** | Télécharge un manifeste construit à partir du PDF, à compléter. |
+| **Clé de facture** | Pour un état qui ne suit pas la présentation standard de la facture : la `section:champ` qui porte le numéro de facture, affichée avec le nombre de valeurs distinctes. Donne un `<Invoice>` par valeur (clé de découpage `Invoice`). *Aucune (sections standard)* garde la présentation standard. |
+| **Clé de découpage**, **N° de document**, **Type de document**, **Société** | Choisis parmi les éléments du XML ; **Trouver la société par** remplace la société fixe comme pour un PDF texte. Le compteur affiche *N facture(s)*. |
+| **Enregistrer dans le document** | Écrit dans le document la clé de facture, la clé de découpage, le n° de document, le type et la société (ou sa recherche). |
+
+Un PDF sans balises JD Edwards affiche *Aucune balise JD Edwards dans ce PDF : la compression PDF doit être désactivée dans l'INI JDE.*
+
+Un PDF JD Edwards se traite aussi directement depuis [Traitement de document](./document.md) sur un document à source XML : il est converti avec la clé de facture du document et le manifeste de son dossier surveillé.
+
+---
+
+## Accès
+
+La page suit le droit d'accès à la page **Process Document** sur la page [Rôles](../configuration/security/roles.md) : un utilisateur qui peut traiter des documents la voit.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Partir d'un vrai PDF de chaque présentation.** Un exemple par présentation suffit pour régler le tableau, le récapitulatif TVA et la clé.
+- **Cliquer plutôt que saisir les ancres.** La page écrit la règle la plus courte qui trouve la ligne, chiffres remplacés par `\d+`, si bien que le PDF suivant de même présentation correspond aussi.
+- **Vérifier les compteurs avant d'enregistrer.** *Lignes trouvées*, *taux de TVA trouvés* et *factures* doivent correspondre au PDF ; un compteur rouge signale une ancre erronée.
+- **Rechercher la société quand une même présentation sert plusieurs sociétés.** La recherche par SIRET, SIREN ou numéro de TVA évite un document par société ; un identifiant absent des sociétés fournisseur arrête la facture.
+- **Confier au mapping automatique IA les valeurs fusionnées par le convertisseur.** Ses [règles d'extraction](../ubl-tools/xsl-editor.md#ai-auto-map) sont enregistrées sur le document et apparaissent ici à la conversion suivante.
+
+---
+
 ## NomaUBL — Validation
 Source: https://docs.nomana-it.fr/fr/nomaubl/ubl-tools/validate/
 
@@ -26766,7 +26890,7 @@ L'en-tête de page comporte une barre d'outils fixe :
 
 L'éditeur propose deux onglets qui travaillent sur le même fichier XSLT. L'onglet de gauche est le formulaire de mapping visuel ; celui de droite est la source XSLT brute.
 
-### Variable Mapping (par défaut)
+### Variable Mapping (par défaut) \{#variable-mapping\}
 
 Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuelle.
 
@@ -26805,7 +26929,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Références de documents justificatifs — une référence (BT-122) avec une description facultative (BT-123), et éventuellement un fichier intégré (BT-125) encodé en base64 dans le spool source. Jusqu'à quatre par facture. Voir [Documents justificatifs](#supporting-documents) plus bas. |
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Jusqu'à quatre identifiants de l'objet auquel se rapporte la facture (abonnement, compteur, actif…), chacun avec un schéma issu de la liste *document-reference-codes*. Voir [Identifiants d'objet facturé](#invoiced-object-identifiers) plus bas. |
-| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. La variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) donne au document ses propres mentions légales, prioritaires sur le texte de la société saisi dans [Sociétés fournisseur](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
@@ -26814,6 +26938,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
 | **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise ; un spool portant net + brut sans montant de remise — le cas courant d'un spool JDE — reçoit une remise sur prix (BT-147) déduite comme brut − net, le brut servant de base (aucune remise quand le brut n'excède pas le net). Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. Les numéros de ligne (BT-126) se suivent d'un groupe de livraison à l'autre et restent donc uniques dans la facture. L'**avis d'expédition** de la ligne (EXT-FR-FE-BG-07, `cac:DespatchLineReference`) se mappe avec `TAG_LINE_DESPATCH_REF` (EXT-FR-FE-140), `TAG_LINE_DESPATCH_DATE` (EXT-FR-FE-201) et `TAG_LINE_DESPATCH_LINE_ID` — le numéro de ligne de l'avis, à défaut le numéro de ligne de la facture. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
+| **Document Allowances/Charges** *(BG-20 / BG-21)* | BT-92 à BT-98, BT-99 à BT-105 | Remises et frais au niveau du document. *Repeating AC element within invoice* désigne l'élément source répété (vide ou `.` : une seule remise ou un seul frais lu sur la facture elle-même) ; viennent ensuite l'*indicateur de frais* (`true` / `1` / `Y` = frais, non mappé = remise), le *code motif* et le *motif*, le *montant* (valeur absolue), le *montant de base*, le *pourcentage*, le *taux de TVA* et la *catégorie de TVA* (vides : ceux du document). Avec un pourcentage compris entre 0 et 100, un montant absent est calculé à partir de la base, ou une base absente à partir du montant ; un montant nul n'écrit rien. Codes et motifs suivent les valeurs par défaut [Remises / charges](./ubl-defaults/allowances-charges.md). Les totaux suivent : total des remises (BT-107), total des frais (BT-108) et somme des lignes (BT-106 = BT-109 + remises − frais). |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et trois références de commande dans le même groupe `cac:OrderLineReference` (EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1) : `TAG_LINE_ORDER_REF` → *Customer Order Reference*, numéro de commande de l'acheteur (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`), qui sert au regroupement des lignes sur le PDF ; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, numéro de commande du vendeur (EXT-FR-FE-144, `cbc:SalesOrderID`) ; `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, numéro de la ligne dans la commande de l'acheteur (BT-132, `cbc:LineID`). Si seul le numéro de commande du vendeur est mappé, l'identifiant de commande obligatoire reprend la commande d'achat de l'en-tête (BT-13). |
 | **Line Preceding Invoice** *(EXT-FR-FE-136)* | `cac:BillingReference` par ligne | Référence à une facture antérieure au niveau ligne — utile pour un avoir en ligne. Écrit `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (avec une date d'émission facultative) à l'intérieur de la ligne, à la bonne position dans le schéma. |
@@ -26942,7 +27067,19 @@ La modale AI Auto-Map est un raccourci pour construire un mapping à partir de z
 | **Invoice root element** | Élément XML englobant une facture (par ex. `Invoices`). Pré-rempli depuis la racine du XML chargé, modifiable. |
 | **XML content** | Corps du spool XML. Renseigné automatiquement par le téléversement, modifiable manuellement. |
 
-Cliquer sur **Auto-Map** transmet le XML (et le PDF s'il est fourni) à l'IA, avec la liste des variables `TAG_*` et de leur contexte BT/BG. L'IA renvoie un mapping JSON qui respecte les règles de scoping (chemins relatifs à `TAG_ROOT`, chemins relatifs à la ligne dans `TAG_LINE_ITEM`, etc.). Le mapping est fusionné dans le formulaire ; après revue, cliquer sur **Save Mappings** pour valider.
+Cliquer sur **Mapper automatiquement** transmet à l'IA le XML (et le PDF s'il est fourni), la liste des variables `TAG_*` avec leur contexte BT/BG, les valeurs de l'exemple et les indications de format. Rien n'est appliqué directement : les propositions s'ouvrent dans **Vérifier le mapping proposé**.
+
+| Colonne | Contenu |
+|---|---|
+| **Variable**, **BT** | La variable et son terme métier. |
+| **Proposé** | Le chemin proposé par l'IA. |
+| **Valeur dans l'exemple** | Ce que contient ce chemin dans le XML chargé. |
+| **Actuel** | La valeur mappée aujourd'hui. |
+| **Contrôle** | *Nouveau* (trouvé dans l'exemple, coché), *Remplace l'actuel* (la valeur actuelle trouve déjà un élément — non coché), *Absent de l'exemple* (chemin introuvable — non coché), *Non contrôlé* (expression contenant `\|` ou `{`). |
+
+Sous le tableau, **Champs obligatoires encore vides** liste les termes métier obligatoires qui restent vides une fois les propositions cochées appliquées, et **Remarques** reprend les observations de l'IA. **Appliquer la sélection (N)** reporte les lignes cochées dans le formulaire ; cliquer ensuite sur **Save Mappings** pour valider.
+
+Pour un document à **source PDF**, l'IA peut aussi proposer des **Valeurs à extraire du PDF** — valeurs fusionnées ou absentes dans le XML converti — avec la valeur extraite, la règle (expression régulière) et la raison. Choisir le document (prérempli avec le document à source PDF qui utilise ce XSL) puis **Ajouter les règles et relancer** : les règles sont enregistrées sur le document comme champs d'extraction, le PDF est reconverti et le mapping relancé. La page [PDF vers XML](../processing/pdf-to-xml.md) montre le résultat de ces règles.
 
 L'IA reste prudente — elle omet toute variable dont elle n'est pas certaine plutôt que de proposer une supposition. Une revue manuelle reste nécessaire ; l'éditeur accélère le travail, il ne remplace pas l'expertise.
 
@@ -27976,50 +28113,52 @@ Les deux résolutions se font au moment de la sauvegarde, donc un libellé pays 
 ## NomaUBL — Remises / charges
 Source: https://docs.nomana-it.fr/fr/nomaubl/ubl-tools/ubl-defaults/allowances-charges/
 
-Valeurs par défaut UBL — onglet Remises / charges. Texte et code de motif par défaut, par direction (BR-42 pour les remises, BR-43 pour les charges) ; `ChargeIndicator` choisit la paire au moment de l'émission.
+NomaUBL Valeurs par défaut UBL — onglet Remises / charges : code motif par défaut choisi dans les listes UNTDID 5189 (remises) et 7161 (frais), motif par défaut et correspondance des codes source vers les codes UBL, pour les remises et frais du document et des lignes.
 
-L'onglet **Remises / charges** porte le **texte de motif** et le **code motif** de repli qui viennent compléter `BR-42` (remises) et `BR-43` (charges) quand le modèle par facture ou par ligne renvoie vide pour ce champ. `ChargeIndicator` choisit la direction au moment de l'émission, donc une seule configuration couvre les deux cas.
+L'onglet **Remises / charges** règle la façon dont NomaUBL renseigne le **code motif** et le **motif** des remises et des frais, au niveau du document (BG-20 / BG-21) comme au niveau des lignes (BG-27 / BG-28) : codes source convertis en codes UNTDID 5189 / 7161, code par défaut si la source n'en donne pas, et libellé de la liste si la source ne donne pas de motif. Le fonctionnement est identique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure.
 
-Le mécanisme d'override est décrit dans la [vue d'ensemble](./overview.md).
+Le mécanisme de remplacement (valeurs partagées, ou remplacement pour un document) est décrit dans la [Vue d'ensemble](./overview.md).
 
 ---
 
-## Motifs de repli
+## Deux blocs
 
-Deux paires de champs — une pour les remises (montant en moins), une pour les charges (montant en plus).
-
-| Champ | Direction | Effet |
+| Bloc | Sens | Code / motif |
 |---|---|---|
-| **Motif de remise** | Remise (`ChargeIndicator = false`) | Texte libre émis comme motif de remise quand la valeur mappée est vide (BR-42). |
-| **Code motif remise** | Remise | Code motif correspondant (UNCL 5189). |
-| **Motif de charge** | Charge (`ChargeIndicator = true`) | Texte libre émis comme motif de charge quand la valeur mappée est vide (BR-43). |
-| **Code motif charge** | Charge | Code motif correspondant (UNCL 7161). |
+| **Remise (ChargeIndicator = false)** | Montant déduit | BT-98 / BT-140 (code), BT-97 / BT-139 (motif) |
+| **Frais (ChargeIndicator = true)** | Montant ajouté | BT-105 / BT-145 (code), BT-104 / BT-144 (motif) |
 
-Le moteur choisit la paire en regardant le `ChargeIndicator` émis — `true` prend la paire charge, `false` prend la paire remise. Le modèle n'a pas besoin de brancher.
+Chaque bloc comporte les mêmes champs :
 
----
+| Champ | Description |
+|---|---|
+| **Code motif** | Code par défaut, choisi dans la liste — motifs de remise (UNTDID 5189) ou motifs de frais (UNTDID 7161), affichés avec leur libellé. Utilisé quand la source ne donne pas de code. Le choix d'un code renseigne **Motif** avec son libellé, sauf si un texte a déjà été saisi. |
+| **Motif** | Motif par défaut, utilisé avec le code par défaut (ou en l'absence de tout code). |
+| **Correspondance des codes source** | Tableau **Code externe** → **Code UBL** : convertit un code du système source en code de la liste. Un code source absent du tableau est repris tel quel. |
 
-## Quand chaque repli s'applique
-
-Les remises / charges **au niveau document** comme **au niveau ligne** cherchent leur repli ici :
-
-```
-chemin de motif par ligne ou par facture
-    │
-    ├─ renvoie une valeur ? ────► cette valeur est émise
-    │
-    └─ vide ?               ────► ChargeIndicator choisit la paire de repli ci-dessus
-```
-
-Pour le cas ligne, ce paramétrage se combine avec la section *Line Allowances / Charges* de l'[éditeur XSL](../xsl-editor.md) — y compris les modes remise dérivée d'un pourcentage et remise sans groupe qui y sont documentés.
+Les deux listes sont livrées avec NomaUBL, en français et en anglais (*list-allowance-reasons*, *list-charge-reasons*), et figurent dans la zone *Custom data* des Paramètres.
 
 ---
 
-## Conseils et bonnes pratiques
+## Choix du code et du motif
 
-- **Renseigner les deux paires même si une seule direction sert.** Le `ChargeIndicator` prend la paire qui correspond ; laisser une direction vide fait disparaître le repli sur cette direction et la ligne reste sans motif.
-- **Faire correspondre le code motif au texte.** Une règle schematron vérifie que le code appartient à la bonne liste — piocher dans UNCL 5189 pour les remises et UNCL 7161 pour les charges.
-- **Une surcharge par document est rarement nécessaire.** Les valeurs par défaut couvrent le cas courant où un partenaire attend la même formulation pour toutes les remises et charges ; réserver une surcharge par document à un modèle qui utilise vraiment un texte différent.
+Pour chaque remise ou frais, au niveau du document ou de la ligne :
+
+| | Règle |
+|---|---|
+| **Code** | Pas de code dans la source → le code par défaut. Sinon le code source, converti par la correspondance s'il y figure. |
+| **Motif** | 1. Le motif de la source. 2. À défaut, le motif par défaut, si le code est le code par défaut ou s'il n'y a pas de code. 3. À défaut, le libellé du code dans la liste (libellé français). |
+
+Le sens vient de l'*indicateur de frais* du mapping : le bloc Frais s'applique aux frais, le bloc Remise aux remises. Le mapping des remises et frais eux-mêmes — section *Document Allowances/Charges* au niveau du document et *Line Allowances/Charges* au niveau des lignes — est décrit sur la page [Éditeur XSL](../xsl-editor.md#variable-mapping).
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Convertir les codes source plutôt que les motifs.** Un système source porte en général ses propres codes de remise ou de frais : une ligne de correspondance par code donne un code UNTDID valide et, par la liste, un motif lisible.
+- **Renseigner un code par défaut pour chaque sens utilisé.** Sans code ni motif, une remise ou des frais ne respectent pas les règles EN 16931 sur les motifs.
+- **Garder le motif par défaut cohérent avec le code par défaut.** Ce motif n'accompagne que ce code ; pour tout autre code, c'est le libellé de la liste qui s'applique.
+- **Un remplacement par document est rarement utile.** Le réserver à un document dont la source utilise ses propres codes.
 
 ---
 
@@ -28064,7 +28203,19 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **GLN** | BT-29 | Global Location Number GS1. |
 | **NAF (APE)** | — | Code activité APE / NAF français (`00.00X`). Porté en tant qu'identifiant supplémentaire dans le document UBL. |
 | **VAT** | BT-31 | Identifiant à la TVA (par ex. `FR00000000000`). |
-| **Capital** | BT-33 | Texte du capital social (par ex. `Capital de 100 000 €`). |
+| **Capital (si mentions légales vides)** | BT-33 | Capital social, utilisé seulement quand **BT-33 – Mentions légales** est vide (voir ci-dessous). |
+| **BT-33 – Mentions légales** | BT-33 | Texte légal complet du vendeur, repris tel quel dans la facture : forme juridique, capital, RCS, numéro d'immatriculation… (par ex. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+
+### Mentions légales (BT-33) \{#legal-information\}
+
+Les informations juridiques complémentaires du vendeur (BT-33) sont retenues dans cet ordre :
+
+1. le texte propre au document, mappé sur la variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`) dans l'[Éditeur XSL](../xsl-editor.md#variable-mapping) ;
+2. à défaut, les **BT-33 – Mentions légales** de la société ;
+3. à défaut, quand un capital est renseigné (celui du document ou de la société) : `Capital <capital> Euros`, suivi de ` - APE <code>` si un code APE / NAF est renseigné ;
+4. sinon, aucun BT-33 n'est écrit.
+
+Les autres environnements appliquent ce fonctionnement après `nomaubl.sh upgrade <env>` (voir [Mise à jour](../../installation/upgrade.md)).
 
 ### Adresse
 
@@ -28120,7 +28271,7 @@ L'annuaire est uniquement une couche de **valeurs par défaut** : tout champ por
 
 - **Une carte par entité juridique.** Même quand plusieurs codes société internes partagent un même SIREN, des cartes distinctes facilitent le suivi de l'établissement (SIRET) et de l'adresse rattachés à chaque code.
 - **Le code pays alimente le repli pays.** Quand la source omet le pays d'une adresse postale, NomaUBL retombe sur le `country` de cette carte plutôt que sur le défaut global de l'onglet [Header](./ubl-header-defaults.md). Renseigner `FR` pour les vendeurs français ; ne pas laisser vide.
-- **Le texte du capital apparaît tel quel.** Le champ `Capital` est rendu textuellement dans le document UBL (BT-33), donc inclure la marque de devise et les mentions attendues par l'autorité réglementaire (par ex. `SAS au capital de 50 000 €`).
+- **Privilégier les mentions légales.** **BT-33 – Mentions légales** est repris tel quel : y placer la formulation complète (forme juridique, capital avec sa devise, RCS). Les champs Capital et APE ne servent que de repli.
 - **Surcharger par template uniquement quand le template porte un vendeur différent.** Une filiale qui émet ses factures sous son propre SIREN est un cas légitime de surcharge ; une facture ponctuelle de l'entité principale, non.
 - **Le sélecteur de défaut désigne la société émettrice la plus fréquente.** Quand la majorité des factures provient d'une seule entité juridique, la définir comme défaut — seuls les enregistrements exceptionnels demandent alors un code de correspondance dans le XML source.
 
@@ -28161,6 +28312,26 @@ L'icône corbeille supprime la note ; le bouton **Add** en bas ajoute une note v
 | `TXD` | Avis fiscal (mentions complémentaires liées à la TVA). |
 
 La liste complète des préfixes est gérée dans la liste de référence *note-types* (*Configuration → Reference Lists*). Ajouter un préfixe à cette liste pour qu'il apparaisse dans la déroulante.
+
+---
+
+## Notes par société \{#per-company\}
+
+Un sélecteur au-dessus des notes choisit les notes affichées :
+
+- **Toutes les sociétés** — les notes générales, utilisées par toute société sans jeu propre.
+- Une entrée par [société fournisseur](./suppliers-companies.md) ; une société qui a son propre jeu apparaît sous la forme *code (notes propres)*.
+
+Une société sélectionnée, l'onglet indique si elle **utilise ces notes à la place des notes générales** ou si elle **utilise les notes générales affichées ci-dessous** (alors grisées et non modifiables).
+
+| Bouton | Effet |
+|---|---|
+| **Définir les notes de cette société** | Copie les notes générales dans un jeu propre à la société, à modifier. |
+| **Revenir aux notes générales** | Supprime le jeu de la société, qui reprend les notes générales. |
+
+Le jeu d'une société **remplace** en bloc les notes générales pour ses factures ; toutes les autres sociétés gardent les notes générales. Le même sélecteur fonctionne dans le remplacement d'un document (**Remplacer pour ce fichier** d'abord) : un document peut alors porter ses propres notes générales et ses propres jeux par société.
+
+Les autres environnements disposent des notes par société après `nomaubl.sh upgrade <env>` ; une feuille de style de document non mise à jour conserve les notes générales.
 
 ---
 
@@ -28448,6 +28619,8 @@ Le groupe **Document key (doc / dct / kco)** détermine comment un document UBL 
 | **From cbc:ID (regex pattern)** *(défaut)* | La clé est extraite du `cbc:ID` de la facture par une regex — voir plus bas. |
 | **Sequence (NomaUBL numbers the document)** | NomaUBL attribue lui-même le numéro de document, sous un type de document et une société fixes. |
 
+**Find company by** — *As configured below* (défaut) / *VAT number* / *SIRET* / *SIREN* / *VAT, then SIREN, then SIRET* : recherche dans les [sociétés fournisseur](../ubl-tools/ubl-defaults/suppliers-companies.md) l'identifiant du vendeur présent dans l'UBL (celui de l'acheteur quand le sens est `R`) pour fixer la société. Sans correspondance, le document est arrêté.
+
 #### Mode séquence
 
 Prévu pour les **factures reçues**, dont le `cbc:ID` suit le format propre à chaque fournisseur ; utilisable aussi pour de l'UBL émis quand le format de numérotation n'est pas connu.
@@ -28544,6 +28717,7 @@ L'exécution d'un document à source connecteur est décrite sur [Traitement →
 | Champ | Description |
 |---|---|
 | **Burst Key** | Nom de balise XML utilisé pour découper le spool en documents individuels. Cet élément marque la **racine d'un document** — chaque occurrence dans le spool produit un document de sortie. |
+| **JDE invoice key** | PDF JD Edwards dont les sections diffèrent de l'impression de facture standard : `section:champ` du numéro de facture (par ex. `11:3`). Donne un `<Invoice>` par valeur, avec la clé de découpage `Invoice`. Se règle depuis la page [PDF vers XML](../processing/pdf-to-xml.md). |
 
 ### Identification du document *(quand Source = XML)*
 
@@ -28570,6 +28744,8 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 | **Routing Code** | Code utilisé pour router le document vers le bon **canal de distribution** : archivage, envoi par e-mail, envoi par courrier, transmission vers une Plateforme Agréée, etc. |
 | **Office** | Balise XML du spool contenant le code **bureau / unité opérationnelle**. |
 | **Processing Type** | Balise XML portant le code de type de traitement (B2B, B2BINT…). Laisser vide pour utiliser la **valeur par défaut définie dans Types de documents**. |
+| **Find company by** | *Company (JDE) above* (défaut) / *VAT number* / *SIRET* / *SIREN* — sources XML et PDF. Recherche dans les [sociétés fournisseur](../ubl-tools/ubl-defaults/suppliers-companies.md) l'identifiant lu dans **Identifier element**, et ajoute la société trouvée en `<CompanyCode>` (mapper `TAG_COMPANY_CODE` sur `CompanyCode`). Un SIRET sans correspondance se rabat sur son SIREN. **Sans correspondance, la facture est arrêtée**, avec le motif dans le journal de traitement (*… not found in the supplier companies*, *… is on several supplier companies*). |
+| **Identifier element** | Élément qui porte l'identifiant recherché (par ex. `TaxId2_ID7`). Affiché une fois *Find company by* renseigné. |
 
 > 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
@@ -28611,10 +28787,17 @@ Le groupe **PDF extraction** règle la conversion :
 | Champ | Description |
 |---|---|
 | **Table start** | Regex testée sur chaque ligne : les cellules de la ligne trouvée nomment les colonnes du tableau (par ex. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Header rows** | Nombre de lignes d'un en-tête de tableau imprimé sur plusieurs lignes, la ligne *Table start* étant la première (défaut `1`). L'en-tête est fusionné par colonne et les cellules empilées sur une ligne sont placées dans leur propre colonne. Au-delà d'une ligne, le tableau s'arrête à la première ancre de fin. |
 | **Table end** | Regex testée sur la première ligne qui suit le tableau — cette ligne n'en fait pas partie. |
+| **Invoice split** | Regex dont le premier groupe est le numéro de facture, pour un PDF qui contient plusieurs factures (par ex. `N° de facture :\s*(\S+)`) : un `<Document>` par numéro, chacun avec ses propres pages. Vide = une facture par PDF. |
+| **VAT table start** | Regex sur la ligne d'en-tête du récapitulatif TVA : ses lignes deviennent `<Recap_TVA>/<Ligne_TVA>`, une par taux. Vide = aucun récapitulatif TVA lu. |
+| **VAT columns** | Cellules d'en-tête conservées à partir de la gauche, quand un autre bloc est imprimé à côté du récapitulatif. Vide = toutes. |
+| **VAT table end** | Regex sur la première ligne après les taux ; vide = la première ligne sans valeur. |
 | **Layout match** | Regex facultative que le texte de la page doit contenir ; un fichier qui ne correspond pas est refusé — utile quand un dossier mélange plusieurs mises en page. |
 | **Page match** | Regex facultative : seules les pages dont le texte correspond sont converties — une impression qui contient un relevé et la facture ne garde que les pages de la facture. |
 | **Field 1** … **Field 5** | `Nom\|regex` appliquée au texte de la page ; le premier groupe (à défaut la correspondance entière) devient `<Nom>`. Ajouter `=>texte` pour réécrire la correspondance, `$1` admis — `Type_JDE\|^FACTURE=>F9`. Deux champs peuvent porter le même nom si un seul des deux peut correspondre. |
+
+Le tableau, le récapitulatif TVA, le numéro de facture et la société se règlent plus simplement sur la page [PDF vers XML](../processing/pdf-to-xml.md), en cliquant sur les lignes d'un PDF d'exemple.
 
 Un échantillon converti se présente ainsi :
 
@@ -28672,8 +28855,8 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **Post-transform** | chemin | Feuille appliquée à l'UBL validé pour écrire une autre syntaxe à côté de lui — par exemple la feuille livrée `ubl-to-cii.xsl` (UBL vers CII D16B). Vide = aucune. Voir [Post-transformation](../ubl-tools/post-transform.md). |
 | **Post-transform output** | suffixe, défaut `-cii.xml` | Remplace le `.xml` du nom du fichier UBL ; le téléchargement depuis les fenêtres de la facture et du document reprend ce nom. |
 | **Post-transform name** | texte | Nom court de la syntaxe produite sur les boutons de téléchargement (`CII` → *Télécharger CII*). Le connecteur de la plateforme peut envoyer le fichier converti avec `{{derivedContent}}` / `{{derivedFilePath}}`. |
-| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
-| **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
+| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. Pour une source PDF, `source` joint le PDF d'entrée lui-même en **PJA** — avec *Invoice split*, seulement les pages de la facture. |
+| **LISIBLE** | `Y` / `N` / `source` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. Pour une source PDF, `source` incorpore le PDF d'entrée comme copie LISIBLE au lieu d'un PDF généré — avec *Invoice split*, seulement les pages de la facture. Le PDF d'entrée n'est pas conservé après traitement : un retraitement complet ne peut donc pas l'incorporer de nouveau. |
 | **Invert sign** | `N – No` (défaut) / `Credit notes only` / `All documents` | Inverse le signe des montants lus dans la source : montants nets de ligne, totaux du document, montants payés d'avance et d'arrondi, TVA totale et chaque ligne du récapitulatif TVA. Le prix unitaire est toujours émis en positif, les remises et charges sont lues en valeur absolue, et la quantité prend le signe du montant de sa ligne. *Credit notes only* s'applique aux documents résolus en `381`, `396`, `261`, `262`, `502` ou `503`. Un spool qui imprime un avoir avec des montants négatifs donne ainsi l'avoir (CreditNote) positif attendu par la norme, sans modifier la XSL du document. |
 
 ### Règles de traitement \{#regles-de-traitement\}
@@ -28746,7 +28929,7 @@ Un modèle en *Source = UBL* embarque les mêmes PDF que le flux XML — après 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
-| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Les sources XML et PDF sont concernées. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir de la source archivée lors du premier traitement (XML source, ou XML issu d'une source PDF) — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Les sources XML et PDF sont concernées. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande ; l'ensemble des conditions figure dans les [règles de retraitement](../application/invoices.md#resend-reprocess-rules). |
 | **Allow full reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, une facture en *Échec de validation* (`9905`) peut être **retraitée en totalité** depuis sa source archivée, une fois les données corrigées dans le système source : l'enrichissement est interrogé de nouveau, l'UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle. Sources XML et PDF. Se déclenche depuis la fenêtre facture (bouton *Retraiter* sur une `9905`), la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess-full), l'API (`kind: "full"`) ou `-reprocess --full`. |
 
 ---
@@ -28921,8 +29104,8 @@ Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les pré
 Liste complète des bascules par section prédéfinie :
 
 - **Header** — neuf bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / avis d'expédition (BT-16) / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
-- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
-- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), une bascule *Order line reference (BT-132)* qui imprime le n° de ligne client sous chaque ligne — et, sans regroupement par commande, les deux numéros de commande en lignes de détail, des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et dix bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **avis d'expédition de la ligne** (EXT-FR-FE-BG-07), **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
+- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client ; son identifiant est libellé d'après son schéma (SIRET, GLN…), *Identifiant* quand le schéma est inconnu.
+- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), deux options par ligne, actives par défaut — *Order line number* imprime le numéro de ligne client (*N° ligne client*) sous chaque ligne, *Customer Order Reference* imprime la référence de commande client avec la commande de vente sous chaque ligne quand *Group by order* est désactivé (sinon le bandeau de commande la porte ; un modèle enregistré avant cette option la considère comme active), des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et dix bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **avis d'expédition de la ligne** (EXT-FR-FE-BG-07), **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -29975,12 +30158,40 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 | `nomaubl.sh extract <env> <jobNumber> [options]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [options]` |
 | `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
+| `nomaubl.sh reprocess <env> [--full] [--verbose]` | `java -jar nomaubl.jar -reprocess <env>/config/config.json [--full] [--verbose]` — voir [`-reprocess`](#reprocess). |
+| `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]` | `-watch-folders` — voir [`watch-folders`](#watch-folders). |
+| `nomaubl.sh fetch-received <env>` | `-fetch-received` — récupère les factures reçues des fournisseurs via la PA. |
+| `nomaubl.sh send-waiting <env> [--delay <ms>] [--parallel <n>]` | `-send-waiting` — envoie à la PA toutes les factures retenues pour vérification. |
+| `nomaubl.sh status-integrity <env> [--lookback <days>] [--since <ISO>] [--until <ISO>] [--company <kco>] [--apply] [--notify]` | `-status-integrity` — compare les événements de la plateforme au cycle de vie enregistré ; `--apply` ajoute ceux qui manquent. |
+| `nomaubl.sh status-order-check <env> [--apply]` | `-status-order-check` — détecte les événements du cycle de vie dans le désordre ; `--apply` les remet en séquence. |
+| `nomaubl.sh purge <env> [--dry-run]` | `-purge` — purge de rétention (journal de traitement, exécutions de tâches, erreurs, notifications). |
+| `nomaubl.sh audit <env> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--format md\|pdf] [--out <file>]` | `-audit` — [rapport d'audit](../application/reports/audit-report.md) d'une période (par défaut le mois précédent). |
+| `nomaubl.sh report <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-report` — [rapport de mise en œuvre](../application/reports/implementation-report.md) de l'instance. |
+| `nomaubl.sh techreport <env> [--lang fr\|en] [--format md\|pdf] [--out <file>]` | `-techreport` — [rapport technique](../application/reports/technical-report.md) de la version. |
+| `nomaubl.sh validate-ddl <env>` | `-validate-ddl` — compare le DDL livré au schéma en place. |
+| `nomaubl.sh demo <env> [--invoices N] [--months N] [--seed N] [--reset]` | `-demo` — [corpus de démonstration](../installation/demo-corpus.md), instances de démonstration uniquement. |
+| `nomaubl.sh pdf-manifest <input.pdf> <output.manifest.xml>` | `-pdf-manifest` — manifeste de départ construit à partir d'un PDF JD Edwards. |
 
 Le reste de la page détaille chacun des modes directs du JAR.
 
+### `nomaubl.conf` — réglages du serveur à côté du wrapper \{#nomaubl-conf\}
+
+`nomaubl.sh` lit un fichier **`nomaubl.conf`** facultatif placé dans le même dossier. Il porte les réglages propres au serveur : `nomaubl.sh` n'est ainsi jamais modifié et peut être remplacé lors d'une mise à jour (la mise à jour ne remplace pas le script : copier le nouveau `nomaubl.sh` à côté du jar).
+
+| Variable | Défaut | Usage |
+|---|---|---|
+| `JAVA_OPTS` | vide | Options JVM transmises à chaque appel Java (mémoire, emplacement de la clé maître…). |
+| `JAVA_COMMAND` | `java` | Exécutable Java à lancer. |
+| `DEFAULT_PORT` | `8090` | Port de `start` / `restart` quand aucun n'est indiqué. |
+
+```bash title="nomaubl.conf"
+JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+DEFAULT_PORT=8090
+```
+
 ### `JAVA_OPTS` — passer des options JVM via le wrapper
 
-Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) déclarent une variable **`JAVA_OPTS`** en haut du fichier. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
+Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) lisent une variable **`JAVA_OPTS`** — pour `nomaubl.sh`, la renseigner dans [`nomaubl.conf`](#nomaubl-conf) plutôt que dans le script. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
 
 ```bash title="nomaubl.sh (en-tête du fichier)"
 # Options JVM transmises à chaque invocation java. Défaut : vide.
@@ -30257,10 +30468,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 ## `-reprocess` — retraiter les factures concernées \{#reprocess\}
 
 ```bash
-java -jar nomaubl.jar -reprocess <configFile> [--full]
+java -jar nomaubl.jar -reprocess <configFile> [--full] [--verbose]
 ```
 
-Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle.
+Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle et les [règles de retraitement](../application/invoices.md#resend-reprocess-rules).
+
+La sortie affiche le début (`REPROCESS ** START : N invoice(s), B batch(es), R not eligible`), chaque lot (`STAGE`, puis `DONE : X OK, Y failed`) et le résultat (`END`, `ALL`), ainsi que les seules erreurs et alertes du traitement. **`--verbose`** affiche toutes les lignes du traitement. La commande se termine avec le code `0` si aucune facture n'a échoué, `1` sinon. L'écran Retraitement de l'interface affiche toujours le journal complet en direct.
 
 ---
 
@@ -30915,7 +31128,9 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 | **Watermark advance** | `Now` *(défaut)* | Mode recherche uniquement. *Now* place le curseur à l'heure d'interrogation. *Last event* le place sur le `updatedAt` source de l'élément le plus récent récupéré — pour les PA qui plafonnent leur recherche sans pagination (Yooz : 200 flux), une rafale est ainsi vidée sur plusieurs interrogations au lieu d'en perdre la fin. Demande le mappage connecteur `event.updatedAt` (par ex. `item.updatedAt`) et des éléments renvoyés du plus ancien au plus récent. |
 | **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière récupération (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
 | **Import parallel** | *(défaut `4`, max `8`)* | Nombre de factures en attente (statut 9906) que le contrôle de statut d'import interroge **en même temps**. À augmenter pour résorber plus vite un gros arriéré ; mettre `1` pour l'ancien comportement séquentiel. |
+| **Import group size** | *(défaut `1`, max `100`)* | Mode d'import `per-invoice` uniquement. Nombre de factures par requête, pour une plateforme qui accepte une liste d'identifiants (TX2 : `10`) : le corps du point d'accès contient alors `{{uuids}}` dans son tableau JSON — les identifiants entre guillemets doubles, séparés par des virgules ; `{{uuid}}` reste le premier identifiant. Les factures sont regroupées par société et par flux, et une facture sans identifiant de la plateforme est interrogée seule. Une facture absente de la réponse, ou sans statut dans celle-ci, reste en attente. `1` = une requête par facture. |
 | **Poll parallel** | *(défaut `4`)* | Même réglage pour l'interrogation du cycle de vie par facture — nombre de factures dont le statut est récupéré simultanément. |
+| **Poll group size** | *(défaut `1`, max `100`)* | Même regroupement pour le relevé du cycle de vie facture par facture, pour une plateforme qui accepte une liste d'identifiants de documents (TX2 : `10`), avec `{{uuids}}` dans le corps du point d'accès. `1` = une requête par facture (`{{uuid}}`). |
 | **Min invoice date** | *(vide = pas de seuil)* | Un **seuil d'ingestion** : une facture du pipeline XML datée avant cette date est écartée d'emblée — pas d'écriture en base, pas de génération, pas d'envoi PA. Il protège les relances d'anciens jobs BIP et les archives héritées (un document avec une ligne d'archive mais sans en-tête paraîtrait sinon « jamais envoyé » et serait renvoyé). Les dates de facture vides ou illisibles ne sont jamais bloquées. |
 | **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
@@ -32444,8 +32659,24 @@ L'éditeur comporte **cinq onglets** :
 |---|---|
 | **Base URL** | URL racine de l'API cible (par ex. `https://api.example.com:9300`). Tous les chemins d'endpoint y sont ajoutés. |
 | **Timeout (ms)** | Délai d'expiration des requêtes HTTP en millisecondes. Valeur par défaut `30000` (30 s). |
+| **Min. interval between requests (ms)** | Écart minimal entre deux requêtes vers l'**hôte** du connecteur. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
+| **Error limit (per 120 s)** | Retient les requêtes vers l'hôte tant que ce nombre de réponses en erreur figure dans les 120 dernières secondes. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
 | **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur est tracé dans le journal du service — l'URL et le code HTTP, les **en-têtes** de requête et de réponse (l'autorisation et les autres en-têtes sensibles étant masqués), et les **corps** complets de requête et de réponse, chacun tronqué à la longueur `debugBodyLimit` pour qu'un gros contenu ne noie pas le journal. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête, les en-têtes et les corps exacts échangés ; à désactiver une fois le connecteur stable. |
+
+### Limites de requêtes \{#request-limits\}
+
+Certaines plateformes plafonnent le débit et refusent l'excédent par `429 Too Many Requests`, ou bloquent un client après trop d'erreurs. Les deux limites ci-dessus protègent l'**hôte** de la plateforme (le nom d'hôte de l'URL appelée) :
+
+- **Min. interval between requests** espace chaque requête vers l'hôte d'au moins ce nombre de millisecondes.
+- **Error limit (per 120 s)** compte les réponses `400`, `403`, `404`, `405`, `429` et `444` des 120 dernières secondes ; une fois la limite atteinte, les requêtes attendent que les erreurs les plus anciennes sortent de la fenêtre.
+- **Après un `429`**, l'hôte est mis en pause pendant la durée indiquée par l'en-tête `Retry-After` de la plateforme (300 s au plus, 30 s en son absence), puis la requête refusée repart une fois — un envoi retenu par la limite n'est pas compté en échec.
+
+Les requêtes patientent ; aucune n'est refusée. Les limites sont communes à tout ce qui appelle l'hôte depuis la machine du serveur : envois, relevés de statuts, tâches planifiées et traitements lancés en ligne de commande sont comptés ensemble. Renseigner les mêmes valeurs **sur chaque connecteur qui appelle la plateforme** (envoi, statut d'import, cycle de vie…). Quand des requêtes sont retenues, le journal du service affiche `** WARN ** API ** LIMIT : <host> — requests held for N s (…)`.
+
+:::tip[Valeurs conseillées pour TX2]
+`300` ms et `20`, sur chaque connecteur qui l'appelle.
+:::
 
 ### Default Headers
 
@@ -34303,17 +34534,24 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
   
     Versions
-    2026.10.25.1 · 2026-10-25
-    2026.10.24.1 · 2026-10-24
-    2026.10.23.1 · 2026-10-23
-    2026.10.22.1 · 2026-10-22
-    2026.10.21.1 · 2026-10-21
-    2026.10.20.1 · 2026-10-20
+    2026.11.08.1 · 2026-11-08
+    2026.11.06.1 · 2026-11-06
+    2026.11.05.1 · 2026-11-05
+    2026.11.04.1 · 2026-11-04
+    2026.10.30.1 · 2026-10-30
+    2026.10.29.1 · 2026-10-29
   
   
-    Toutes les versions (119)
+    Toutes les versions (126)
     
       2026-10
+      2026.10.27.1 · 2026-10-27
+      2026.10.25.1 · 2026-10-25
+      2026.10.24.1 · 2026-10-24
+      2026.10.23.1 · 2026-10-23
+      2026.10.22.1 · 2026-10-22
+      2026.10.21.1 · 2026-10-21
+      2026.10.20.1 · 2026-10-20
       2026.10.19.1 · 2026-10-19
       2026.10.18.1 · 2026-10-18
       2026.10.16.1 · 2026-10-16
@@ -34452,6 +34690,110 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.08.1 — 2026-11-08 \{#v2026-11-08-1\}
+
+### Améliorations
+- **Mentions légales du vendeur (BT-33) en texte libre.** Dans Valeurs par défaut UBL › Fournisseurs, chaque société dispose d'un champ « Mentions légales » repris tel quel dans la facture (forme juridique, capital, RCS, n° de déclaration…). Un document peut fixer le sien grâce à une nouvelle variable de l'éditeur XSL. Sans texte, la mention capital et APE reste inchangée. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>`.
+- **N° de ligne et référence de commande client affichés séparément.** Dans le tableau des lignes d'un modèle PDF, chacun a désormais son option.
+- **Options des modèles PDF en clair.** Les libellés des options n'affichent plus de codes de champ.
+
+### Corrections
+- **Fin du « Capital Euros » sans montant.** Une société sans mentions légales ni capital n'a plus cette mention.
+- **Référence de contrat longue.** Une facture dont la référence de contrat dépassait 20 caractères n'apparaissait pas dans la liste des factures ; elle y figure désormais, avec la référence raccourcie dans la liste seulement (la facture la conserve en entier).
+- **PDF texte : valeur voisine d'une autre colonne.** Une valeur n'embarque plus le texte imprimé plus à droite sur la même ligne, comme l'adresse d'une seconde colonne ; cette adresse forme désormais son propre bloc.
+- **PDF texte : valeur sur plusieurs lignes.** Une valeur qui se poursuit sur les lignes suivantes (un intitulé de formation, par exemple) est lue en entier.
+- **Identifiant de livraison nommé selon son type.** Dans le bloc livraison du PDF, l'identifiant affiche son type (SIRET, GLN…) au lieu de « ID ».
+- **Référence de commande prise sur une ligne.** Quand seules les lignes portent une référence de commande, elle n'apparaît plus comme celle de la facture dans le PDF, la fenêtre de la facture et la base.
+
+---
+
+## 2026.11.06.1 — 2026-11-06 \{#v2026-11-06-1\}
+
+### Améliorations
+- **Page PDF vers XML (menu Traitement).** Choisissez un PDF texte et consultez le XML obtenu, avec ou sans les réglages d'un document, puis téléchargez-le.
+- **Réglage du tableau d'un PDF en cliquant sur ses lignes.** Sur cette page, cliquez sur la première et la dernière ligne d'en-tête, puis sur la première ligne après le tableau : les réglages sont déduits, essayés aussitôt et enregistrés dans le document à la demande.
+- **En-têtes de tableau sur plusieurs lignes.** Le nouveau réglage « Header rows » (document, PDF extraction) fusionne l'en-tête par colonne et range dans leur colonne les cellules empilées sur une ligne. Les documents qui ne le renseignent pas sont convertis comme avant.
+- **Mapping automatique par IA : vérification avant application.** Chaque proposition affiche le chemin, sa valeur dans l'exemple et votre valeur actuelle, contrôlés sur le fichier. Les nouveaux chemins sont cochés, contrairement aux changements de valeur existante et aux chemins absents de l'exemple.
+- **Mapping automatique par IA : propositions plus justes.** L'IA lit désormais les valeurs de l'exemple et les formats attendus : elle retient l'élément qui contient exactement la donnée, et les champs obligatoires restés vides sont listés.
+- **Mapping automatique par IA : règles d'extraction pour les PDF.** Pour une valeur fusionnée ou absente du XML, l'IA propose une règle avec le résultat obtenu. Les règles s'enregistrent sur le document, puis le PDF est reconverti et le mapping relancé.
+- **Clé du document depuis la page PDF vers XML.** Choisissez l'élément du numéro de facture : un numéro comme 36834.FU est séparé en numéro et type, et l'enregistrement les renseigne sur le document, avec la société et la clé de découpage si elle est vide.
+- **Récapitulatif TVA d'un PDF.** Un second tableau peut être lu en groupe répété, une ligne par taux, même si un autre bloc est imprimé à côté. Il se règle en cliquant sur ses lignes dans la page PDF vers XML.
+- **PDF d'origine joint à la facture.** Sur un document de source PDF, LISIBLE et Attachment proposent le nouveau choix « source » : le PDF reçu en entrée est joint tel quel, en LISIBLE ou en PJA, à la place d'un PDF généré.
+- **Mentions légales par société.** Dans Valeurs par défaut UBL › Notes, comme dans la surcharge d'un document, une société peut avoir ses propres notes à la place des notes générales ; une société sans notes propres affiche les notes générales. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>` pour en bénéficier.
+- **PDF JD Edwards dans la page PDF vers XML.** Un PDF balisé JD Edwards s'y convertit aussi, avec un manifeste ou un manifeste de départ, et sa clé de découpage, son numéro, son type et sa société s'enregistrent sur le document.
+- **Nouveau document depuis la page PDF vers XML.** Crée un document adapté au convertisseur utilisé, prêt à recevoir les réglages essayés sur la page.
+- **États JD Edwards aux sections différentes.** Une clé de facture (réglage du document, ou choix sur la page) écrit une facture par numéro de document, avec les sections telles qu'imprimées, pour les états hors disposition standard. Les documents sans cette clé sont convertis comme avant.
+- **Société retrouvée depuis la facture.** Un document peut retrouver sa société par son n° de TVA, son SIRET ou son SIREN dans les sociétés fournisseurs : depuis un élément pour les sources PDF et XML, depuis le vendeur ou l'acheteur pour l'UBL. Sans correspondance, la facture s'arrête. La page PDF vers XML affiche la société trouvée.
+- **Plusieurs factures dans un PDF texte.** Un nouveau réglage produit un document par numéro de facture, et le PDF d'origine joint ne contient que les pages de cette facture.
+- **PDF JD Edwards dans Traiter un document.** Les documents de source XML y acceptent un PDF, converti avec la clé de facture du document et le manifeste du dossier surveillé.
+
+### Corrections
+- **Pièces jointes PDF et noms de fichier avec espaces.** Toute pièce jointe échouait si le nom du fichier d'entrée contenait un espace ; c'est corrigé.
+- **Valeurs imprimées à la suite dans un PDF texte.** Une valeur suivie de parties libellées (SIRET - TVA - NAF) et un IBAN suivi de son BIC donnent aussi des éléments séparés. Le premier élément ne garde que sa propre valeur.
+- **La récupération des statuts ne relit plus le dernier événement.** Avec le filigrane réglé sur « Last event », l'événement le plus récent revenait à chaque passage tant qu'aucun autre n'arrivait. Un passage sans nouveauté ne ramène désormais rien.
+- **Erreurs du mapping automatique par IA.** La véritable erreur s'affiche à la place de « no JSON », et une réponse ne peut plus être altérée pendant sa réception.
+- **Totaux PDF imprimés plus grands que leur libellé.** Une valeur imprimée légèrement plus bas que son libellé, comme le Total TTC, lui est désormais associée.
+
+---
+
+## 2026.11.05.1 — 2026-11-05 \{#v2026-11-05-1\}
+
+### Améliorations
+- **Statut d'import de plusieurs factures en une requête.** Le nouveau paramètre « Import group size » (Paramètres › E-invoicing › Statuts) regroupe les factures interrogées dans une même requête, pour les plateformes qui acceptent une liste d'identifiants (TX2 : 10, avec `{{uuids}}` dans le corps du point d'accès). Une facture absente de la réponse reste en attente. À 1, la valeur par défaut, rien ne change.
+- **Limites de requêtes par plateforme.** Deux nouveaux paramètres de connecteur, inactifs par défaut : un délai minimal entre deux requêtes et un plafond d'erreurs sur 120 secondes. Ils valent pour tout ce qui appelle la plateforme depuis le serveur : envois, relevés de statuts et traitements. Après un code 429, les requêtes patientent et celle qui a été refusée repart une fois. Valeurs conseillées pour TX2 : 300 ms et 20, sur chaque connecteur concerné.
+
+### Corrections
+- **Une erreur de syntaxe dans le corps d'un connecteur n'empêche plus le serveur de démarrer.** Un corps qui n'est pas du JSON valide (guillemet mal placé, accolade en trop dans un point d'accès enregistré depuis les paramètres) est conservé tel que saisi et la configuration reste lisible. Auparavant, des sections entières de la configuration pouvaient disparaître et bloquer le démarrage suivant.
+- **Crochets et accolades dans les valeurs de configuration.** Une valeur contenant `[`, `]`, `{` ou `}` est désormais lue correctement.
+- **Message clair si le fichier de configuration est endommagé.** Un fichier modifié à la main et comportant une erreur de syntaxe est refusé au démarrage comme à la mise à jour, avec le fichier, la ligne et la colonne, au lieu de tourner sur une configuration partielle. L'instance concernée ne redémarre qu'une fois l'erreur corrigée.
+
+---
+
+## 2026.11.04.1 — 2026-11-04 \{#v2026-11-04-1\}
+
+### Améliorations
+- **Remises et frais au niveau du document (BG-20 / BG-21).** Le mappage des variables d'un document s'enrichit d'une section « Remises / frais du document » : élément répété, indicateur remise ou frais, code et libellé du motif, montant, base, pourcentage, taux et catégorie de TVA. Chaque occurrence devient une remise ou des frais sur la facture, et les totaux (somme des lignes, total des remises, total des frais) suivent. Les modèles existants reçoivent ces champs à la mise à jour, vides : rien ne change tant qu'ils ne sont pas renseignés.
+- **Codes motifs des remises et des frais.** Deux nouvelles listes : motifs de remise (UNTDID 5189) et motifs de frais (UNTDID 7161), en français et en anglais. Dans les valeurs par défaut UBL, le code par défaut se choisit dans la liste et renseigne le libellé du motif ; un code source peut être associé à un code de la liste, globalement ou par document. Sans libellé dans la source, celui du code est repris.
+
+### Corrections
+- **La validation UBL conserve le fichier.** Valider une source XML ne supprime plus le fichier du dossier d'entrée, qu'il ait été téléversé ou choisi sur le serveur.
+- **Traiter un document : fichier choisi dans le dossier d'entrée.** Un fichier pris dans le dossier d'entrée du modèle était vidé avant le traitement ; il est désormais traité tel quel.
+- **Total des frais du document.** Un total des frais renseigné seul, sans lignes de frais, est maintenant pris en compte dans la somme des lignes, comme l'exige la règle de cohérence des totaux EN 16931.
+
+---
+
+## 2026.10.30.1 — 2026-10-30 \{#v2026-10-30-1\}
+
+### Améliorations
+- **Réglages du serveur hors du script de pilotage.** `nomaubl.sh` lit un fichier facultatif `nomaubl.conf` placé à côté de lui pour les réglages propres au serveur : options Java (mémoire, emplacement de la clé maîtresse), port par défaut. Le script n'a plus à être modifié, et son remplacement lors d'une mise à jour conserve ces réglages.
+
+### Corrections
+- **Modèles PDF : le choix du modèle par défaut n'efface plus les paramètres globaux.** Définir un modèle PDF par défaut, ou revenir au modèle d'origine, vidait tous les autres paramètres globaux : connexion à la base, schéma, chemins, traitements planifiés. Seul le modèle par défaut est désormais modifié. Sur une instance touchée, restaurer `config.properties` depuis son historique de versions (instantané pris juste avant la modification).
+
+---
+
+## 2026.10.29.1 — 2026-10-29 \{#v2026-10-29-1\}
+
+### Corrections
+- **Inversion du signe : remise sur prix conservée sur les avoirs.** Sur un avoir dont le spool porte des prix négatifs, le prix brut et la remise sur prix (BT-148, BT-147) disparaissaient quand ils devaient être déduits du prix net, ce que la validation française peut rejeter. Les prix sont désormais lus en valeur absolue et les deux sont émis. Un prix brut ou une remise saisis avec une virgule décimale sont également pris en compte.
+- **Inversion du signe « All documents » : lignes de remise sur les factures.** Sur une facture dont le spool imprime tous les montants en négatif, les lignes normales devenaient des remises de pied et les lignes de remise restaient des lignes de facture. Le signe est désormais lu après inversion : seules les lignes de remise deviennent des remises de pied. « Credit notes only » et « No » sont inchangés.
+
+---
+
+## 2026.10.27.1 — 2026-10-27 \{#v2026-10-27-1\}
+
+### Améliorations
+- **Retraitement en ligne de commande : sortie allégée.** `reprocess` n'affiche plus que le début, chaque lot et le résultat, ainsi que les erreurs et avertissements du traitement ; `--verbose` rétablit le détail complet. L'écran Retraiter de l'interface conserve le journal complet en direct. `nomaubl.sh reprocess <env>` accepte désormais `--full` et `--verbose`.
+- **Script de commandes complet.** `nomaubl.sh` propose désormais `fetch-received`, `send-waiting`, `status-integrity`, `status-order-check`, `purge`, `audit`, `report`, `techreport`, `validate-ddl` et `demo`, avec leurs options ; l'aide les présente, ainsi que `watch-folders`. La mise à jour ne remplace pas le script : copier le nouveau `nomaubl.sh` à côté du jar.
+
+### Corrections
+- **Réimpression : un UBL non régénérable ne la fait plus échouer.** La réimpression produit le PDF et le XML lisibles et garde l'UBL archivé comme référence. Si l'UBL ne peut plus être régénéré depuis la source, un avertissement est émis, la facture est comptée comme réimprimée et reçoit son marqueur de retraitement. Auparavant elle était comptée en échec et restait éligible : le passage suivant renvoyait son PDF et son XML.
+- **Bilan de traitement fidèle aux factures en erreur.** Quand une facture d'un fichier tombe en erreur sans que le fichier échoue, la fin du traitement indique le nombre de factures en erreur au lieu de « terminé avec succès », et le bilan du lot compte le fichier « avec factures en erreur » et non plus OK.
+- **Oracle : « character set mismatch » avec Exclure les erreurs traitées.** Sur les bases dont les colonnes de facture utilisent le jeu de caractères national, les tableaux de bord, les Statistiques et la liste des factures échouaient en ORA-12704 depuis la mise à jour précédente dès qu'Exclure les erreurs traitées était activé ; ils s'affichent de nouveau, avec le même résultat.
+- **Séparateurs lisibles dans la sortie console.** Les lignes de traitement, de lot et de retraitement utilisent des tirets et flèches simples, qui ne se transforment plus en caractères parasites dans les mails cron et les visionneuses de journaux.
+
+---
+
 ## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
 
 ### Améliorations
@@ -34511,7 +34853,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Promotion : les fichiers d'un document seuls.** Chaque fichier utilisé par un document (transformation, XSL, RTF, feuille UBL, Schematron client, mise en page PDF) figure parmi les fichiers, avec les documents qui l'utilisent, et se promeut seul : une feuille de style partagée par plusieurs documents ne demande plus de promouvoir un document.
 - **Journal des traitements : traitements et tâches planifiées séparés.** Un sélecteur Traitements / Tâches planifiées / Tout s'ajoute à Groupé / Détaillé ; le journal s'ouvre sur Traitements, et les exécutions des récupérations de statuts et d'imports (toutes les quelques minutes) ne noient plus les traitements de fichiers. Une exécution ouverte depuis Anomalies arrive sur Tâches planifiées. Leur rétention est déjà distincte : Paramètres › Valeurs par défaut des tâches › Rétention, « Job runs (days) ».
 - **Page d'accueil.** Paramètres › Navigation et listes choisit la page affichée après la connexion (la Synthèse par défaut) : un tableau de bord, Factures, E-Documents, E-reporting, Déclaration de TVA, Diagnostic, Rapports ou l'Explorateur. Un utilisateur dont le rôle ne l'autorise pas arrive sur la Synthèse, sinon sur la première page que son rôle autorise.
-- **Tableaux de bord : chiffres en cache.** La Synthèse, les Statistiques et le tableau de bord Exploitation conservent les chiffres chargés : y revenir ou changer de page ne relance plus les requêtes ; un tableau de bord resté ouvert se recharge seul au terme du délai, et Actualiser recharge aussitôt. Sur le tableau de bord IT, seuls les documents traités par jour sont conservés, côté serveur et pour tous les utilisateurs. Chacun indique l'heure de chargement. Délai dans Paramètres › Navigation et listes (60 minutes par défaut, 0 = toujours recharger).
+- **Tableaux de bord : chiffres en cache.** La Synthèse, les Statistiques et le tableau de bord Exploitation conservent les chiffres chargés : y revenir ou changer de page ne relance plus les requêtes ; un tableau de bord resté ouvert se recharge seul au terme du délai, et Actualiser recharge aussitôt. Sur le tableau de bord IT, seuls les documents traités par jour sont conservés, côté serveur et pour tous les utilisateurs. Chacun indique l'heure de chargement ; la déconnexion ou une session expirée vide le cache. Délai dans Paramètres › Navigation et listes (60 minutes par défaut, 0 = toujours recharger).
 - **Erreurs traitées exclues par défaut.** Le tableau de bord Exploitation et la liste des factures s'ouvrent avec « Exclure les erreurs traitées » activé, comme la Synthèse et les Statistiques ; un lien depuis un tableau de bord garde son propre choix.
 - **Synthèse : taux de transmission sur les factures à transmettre.** Le taux de transmission, sa répartition émises / non émises et la part transmise par société ne portent plus que sur les factures destinées à la plateforme (envoyées ou en attente de revue) ; les types de document non transmis ne le font plus baisser. Le taux « Parvenues à la plateforme » du tableau de bord Statistiques suit la même règle, tout comme le récapitulatif quotidien.
 - **Notifications du portail sans destinataire : pour tout le monde.** Avec l'authentification activée, une règle sur le canal portail sans utilisateur ni rôle n'enregistrait rien ; elle crée désormais une notification visible dans toutes les boîtes, comme sans authentification. L'éditeur de règles nomme ce choix « Tout le monde ».

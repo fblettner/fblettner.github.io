@@ -552,11 +552,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Processing',
-      link: {type: 'generated-index', slug: '/nomaubl/processing', description: 'Single document-processing entry point (XML or UBL, selected by the template), the chained Extract and Process flow, and the API connector tester.'},
+      link: {type: 'generated-index', slug: '/nomaubl/processing', description: 'Single document-processing entry point (XML or UBL, selected by the template), the chained Extract and Process flow, the API connector tester and the PDF to XML conversion tool.'},
       items: [
         'nomaubl/processing/document',
         'nomaubl/processing/extract-and-process',
         'nomaubl/processing/process-api',
+        'nomaubl/processing/pdf-to-xml',
       ],
     },
     {

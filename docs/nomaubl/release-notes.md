@@ -17,17 +17,24 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
-    <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
-    <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
-    <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
-    <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
-    <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
+    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
+    <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
+    <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
+    <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
+    <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
+    <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (119)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (126)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-27</span></a>
+      <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
+      <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
+      <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
+      <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
+      <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
+      <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
       <a href="#v2026-10-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-19</span></a>
       <a href="#v2026-10-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-18</span></a>
       <a href="#v2026-10-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-16</span></a>
@@ -166,6 +173,110 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.11.08.1 — 2026-11-08 \{#v2026-11-08-1\}
+
+### Improvements
+- **Seller legal information (BT-33) as free text.** In UBL Defaults › Suppliers, each company has a "Legal information" field written as is in the invoice (legal form, capital, RCS, registration number…). A document can set its own through a new XSL Editor variable. Without text, the capital and APE wording stays as before. Other environments need `nomaubl.sh upgrade <env>`.
+- **Order line number and customer order reference shown separately.** In a PDF template's line table, each has its own option.
+- **PDF template options in plain words.** Option labels no longer carry field codes.
+
+### Fixes
+- **No more "Capital Euros" without an amount.** A company with neither legal text nor capital no longer gets this mention.
+- **Long contract reference.** An invoice whose contract reference exceeds 20 characters was missing from the invoice list; it is now listed, with the reference shortened in the list only (the invoice keeps it in full).
+- **Text PDF: values next to another column.** A value no longer includes the text printed further right on the same line, such as an address in a second column; that address now gives its own address block.
+- **Text PDF: values over several lines.** A value that wraps onto the next lines (a training title, for example) is read in full.
+- **Delivery identifier labelled after its type.** In the PDF delivery block, the identifier now shows its type (SIRET, GLN…) instead of "ID".
+- **Order reference taken from a line.** When only the lines carry an order reference, it no longer appears as the invoice's order reference in the PDF, the invoice window and the database.
+
+---
+
+## 2026.11.06.1 — 2026-11-06 \{#v2026-11-06-1\}
+
+### Improvements
+- **PDF to XML page (Processing menu).** Choose a text PDF and read the XML it produces, with or without a document's settings, then download it.
+- **Set a PDF's table by clicking its rows.** On that page, click the first and last header rows, then the first row after the lines: the settings are worked out, tried at once and saved to the document on request.
+- **Table headers printed on several rows.** A new "Header rows" setting (document, PDF extraction) merges the header per column and places cells stacked on a line in their own column. Documents that don't set it convert as before.
+- **AI Auto-Map: review before applying.** Each proposal shows its path, the value it holds in the sample and your current value, checked against the file. New paths are ticked; changes to existing values and paths not in the sample are not.
+- **AI Auto-Map: better proposals.** It now reads sample values and format hints, so it picks the element holding exactly the expected data, and lists required fields still empty.
+- **AI Auto-Map: extraction rules for PDF sources.** For values merged or missing in the XML, it proposes rules showing what they extract; they can be saved on the document, then the PDF is converted and mapped again.
+- **Document key from the PDF to XML page.** Pick the invoice number element: a number such as 36834.FU is split into number and type, and saving sets these on the document with the company and a blank burst key.
+- **VAT summary of a PDF.** A second table can be read into a repeating group, one line per rate, even with another block printed beside it; set it by clicking its rows on the PDF to XML page.
+- **Input PDF embedded in the invoice.** On a PDF-source document, LISIBLE and Attachment have a new "source" choice that embeds the input PDF itself, as LISIBLE or PJA, instead of a rendered one.
+- **Legal notes per company.** In UBL Defaults › Notes, and in a document's override, a company can have its own set of notes in place of the general ones; a company without its own shows the general notes. Other environments need `nomaubl.sh upgrade <env>` for this to apply.
+- **JD Edwards PDFs on the PDF to XML page.** A JD Edwards tagged PDF can be converted there too, with a manifest or a starter one, and its burst key, document ID, type and company saved on the document.
+- **New document from the PDF to XML page.** Creates a document for the converter in use, ready to receive the settings tried on the page.
+- **JD Edwards reports with other sections.** A new invoice key (document setting, or picked on the page) writes one invoice per document number with the sections as printed, for reports that don't follow the standard layout. Documents without it convert as before.
+- **Find the company from the invoice.** A document can find its company by VAT number, SIRET or SIREN in the supplier companies: from an element for PDF and XML sources, from the seller or buyer for UBL. No match stops the invoice. The PDF to XML page shows the company found.
+- **Several invoices in one text PDF.** A new setting gives one document per invoice number, and the embedded source PDF holds only that invoice's pages.
+- **JD Edwards PDFs on Process Document.** XML-source documents accept a PDF there, converted with the document's invoice key and the watched folder's manifest.
+
+### Fixes
+- **PDF attachments on file names with spaces.** Any attachment failed when the input file name held a space; it now works.
+- **Values printed together in a text PDF.** A value followed by labelled parts (SIRET - VAT - NAF) and an IBAN followed by its BIC now also give separate elements. The first element keeps only its own value.
+- **Status polling no longer fetches the last event again.** With the watermark set to "Last event", the newest event came back on every run until a newer one existed. A poll with nothing new now returns nothing.
+- **AI Auto-Map errors.** The real error is shown instead of "no JSON", and an answer can no longer be damaged in transit.
+- **PDF totals printed larger than their label.** A value printed slightly lower than its label, such as Total TTC, is now paired with it.
+
+---
+
+## 2026.11.05.1 — 2026-11-05 \{#v2026-11-05-1\}
+
+### Improvements
+- **Import status for several invoices in one request.** A new "Import group size" setting (Settings › E-invoicing › Status) sends up to that many invoices per request, for platforms that accept a list of ids (TX2: 10, with `{{uuids}}` in the endpoint body). An invoice absent from the response stays pending. At 1, the default, nothing changes.
+- **Request limits per platform.** Two new connector settings, off by default: a minimum interval between requests and an error limit over 120 seconds. They apply to everything calling that platform from the server, sends, status polls and processing runs included. After a 429, requests wait and the refused one is retried once. Suggested for TX2: 300 ms and 20, on every connector calling it.
+
+### Fixes
+- **A connector body with a syntax error no longer stops the server.** A body that is not valid JSON, such as a misplaced quote or a stray bracket in an endpoint saved from Settings, is now kept as typed and the configuration stays readable. Before, it could make whole sections of the configuration disappear and prevent the next start.
+- **Brackets in configuration values.** A value containing `[`, `]`, `{` or `}` is read correctly.
+- **Clear error on a damaged configuration file.** A file edited by hand with a syntax error is refused at startup and during an upgrade, with the file, line and column, instead of running on a partial configuration. An instance whose file has such an error must have it corrected to start.
+
+---
+
+## 2026.11.04.1 — 2026-11-04 \{#v2026-11-04-1\}
+
+### Improvements
+- **Document-level allowances and charges (BG-20 / BG-21).** The variable mapping of a document gains a "Document Allowances/Charges" section: repeating element, allowance or charge indicator, reason code and text, amount, base, percentage, VAT rate and category. Each occurrence becomes an allowance or a charge on the invoice, and the totals (sum of lines, total allowances, total charges) follow. Templates in place get the new fields on upgrade, empty: nothing changes until they are mapped.
+- **Allowance and charge reason codes.** Two new lists: allowance reasons (UNTDID 5189) and charge reasons (UNTDID 7161), in French and English. In the UBL defaults, the default code is picked from the list and fills the reason text; a source code can be mapped to a code of the list, globally or per document. When the source gives no reason text, the label of the code is used.
+
+### Fixes
+- **UBL validation keeps the file.** Validating an XML source no longer deletes the file from the input folder, whether it was uploaded or picked from the server.
+- **Process document: file picked from the input folder.** A file chosen in the template's own input folder was emptied before processing; it is now processed as is.
+- **Document charges total.** A charges total mapped alone (without charge lines) is now taken into account in the sum of lines, as the EN 16931 totals rule requires.
+
+---
+
+## 2026.10.30.1 — 2026-10-30 \{#v2026-10-30-1\}
+
+### Improvements
+- **Server settings outside the control script.** `nomaubl.sh` reads an optional `nomaubl.conf` placed next to it, for the settings proper to a server (Java options such as the memory or the master key location, the default port). The script itself no longer needs to be edited, so replacing it on an update keeps these settings.
+
+### Fixes
+- **PDF templates: setting the default no longer erases the global settings.** Choosing a default PDF template (or going back to the factory default) cleared every other global setting — database connection, schema, paths, scheduled batches. Only the default template is now changed. On an instance where it happened, restore `config.properties` from its version history (snapshot taken just before the change).
+
+---
+
+## 2026.10.29.1 — 2026-10-29 \{#v2026-10-29-1\}
+
+### Fixes
+- **Invert sign: price discount kept on credit notes.** On a credit note printed with negative prices, the gross price and the price discount (BT-148, BT-147) were dropped when they had to be derived from the net price, which French validation can reject; prices are now read as absolute values and both are emitted. A gross price or discount written with a decimal comma is read as well.
+- **Invert sign "All documents": discount lines on invoices.** On an invoice whose spool prints every amount negative, the normal lines were turned into document discounts and the discount lines kept as invoice lines; the sign is now read after inversion, so only the discount lines become document discounts. "Credit notes only" and "No" are unchanged.
+
+---
+
+## 2026.10.27.1 — 2026-10-27 \{#v2026-10-27-1\}
+
+### Improvements
+- **Reprocess from the command line: shorter output.** `reprocess` now prints the start, each batch and the result, plus only the errors and warnings of the processing; `--verbose` prints every line as before. The web Reprocess screen still shows the full live log. `nomaubl.sh reprocess <env>` now accepts `--full` and `--verbose`.
+- **Command-line script: every command available.** `nomaubl.sh` gains `fetch-received`, `send-waiting`, `status-integrity`, `status-order-check`, `purge`, `audit`, `report`, `techreport`, `validate-ddl` and `demo`, with their options; its help lists them, and `watch-folders`. The upgrade does not replace the script: copy the new `nomaubl.sh` next to the jar.
+
+### Fixes
+- **Reprint no longer fails on a UBL that cannot be rebuilt.** A reprint delivers the readable PDF and XML and keeps the archived UBL as the reference; when the UBL can no longer be regenerated from the source, this is now a warning, the invoice counts as reprinted and gets its reprocess marker. Before, it was counted as failed and stayed eligible, so the next run delivered its PDF and XML again.
+- **Processing summary reflects invoices in error.** When an invoice of a file hits an error while the file itself goes through, the end of the run says how many invoices are in error instead of "completed successfully", and the batch summary counts the file "with invoice errors" instead of OK.
+- **Oracle: "character set mismatch" with Exclude reviewed errors.** On databases whose invoice columns use the national character set, the dashboards, Statistics and the invoice list failed with ORA-12704 since the previous update whenever Exclude reviewed errors was on; they load again, with the same result.
+- **Readable separators in command-line output.** The run, batch and reprocess lines use plain dashes and arrows, which no longer turn into odd characters in cron mails and log viewers.
+
+---
+
 ## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
 
 ### Improvements
@@ -225,7 +336,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Promotion: a document's files on their own.** Each file a document uses (transform, XSL, RTF, UBL stylesheet, customer Schematron, PDF layout) is listed among the files, with the documents using it, and can be promoted alone — a stylesheet shared by several documents no longer requires promoting a document.
 - **Processing log: processing and scheduled jobs apart.** A switch Processing / Scheduled jobs / All sits next to Grouped / Flat; the log opens on Processing, so the runs of the status and import polls (every few minutes) no longer bury the file processing. A job run opened from Failures lands on Scheduled jobs. Their retention is already separate: Settings › Job defaults › Retention, "Job runs (days)".
 - **Start page.** Settings › Navigation & lists chooses the page shown after sign-in (Billing overview unless set): a dashboard, Invoices, E-Documents, E-reporting, VAT declaration, Diagnostics, Reports or the Explorer. A user whose role does not grant it opens the Billing overview, else the first page the role grants.
-- **Dashboards: cached figures.** The Billing overview, Statistics and Operations dashboards keep the figures they loaded, so coming back to them or changing page no longer queries again; an open dashboard reloads on its own after the delay, and Refresh reloads at once. On the IT dashboard, only documents processed per day is kept, on the server for every user. Each shows when its figures were loaded. Delay in Settings › Navigation & lists (60 minutes unless set, 0 = always reload).
+- **Dashboards: cached figures.** The Billing overview, Statistics and Operations dashboards keep the figures they loaded, so coming back to them or changing page no longer queries again; an open dashboard reloads on its own after the delay, and Refresh reloads at once. On the IT dashboard, only documents processed per day is kept, on the server for every user. Each shows when its figures were loaded; signing out or an expired session empties the cache. Delay in Settings › Navigation & lists (60 minutes unless set, 0 = always reload).
 - **Reviewed errors left out by default.** The Operations dashboard and the invoice list open with "Exclude reviewed errors" on, like the Billing overview and Statistics; a link from a dashboard keeps its own choice.
 - **Billing overview: transmission rate over the invoices to send.** The transmission rate, its issued / not issued split and the per-company share count only the invoices meant for the platform (sent, or held for review); invoices of document types not sent to the platform no longer lower it. The "Reached the platform" rate of the Statistics dashboard follows the same rule, and so does the daily digest.
 - **Portal notifications without a recipient go to everyone.** With sign-in enabled, a rule on the portal channel with no user or role recorded nothing; it now writes one entry visible in every inbox, as without sign-in. The rule editor names this choice "Everyone".

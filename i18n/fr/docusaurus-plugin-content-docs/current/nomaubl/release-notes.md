@@ -17,17 +17,24 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
-    <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
-    <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
-    <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
-    <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
-    <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
+    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
+    <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
+    <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
+    <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
+    <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
+    <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (119)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (126)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-27</span></a>
+      <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
+      <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
+      <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
+      <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
+      <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
+      <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
       <a href="#v2026-10-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-19</span></a>
       <a href="#v2026-10-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-18</span></a>
       <a href="#v2026-10-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-16</span></a>
@@ -166,6 +173,110 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.08.1 — 2026-11-08 \{#v2026-11-08-1\}
+
+### Améliorations
+- **Mentions légales du vendeur (BT-33) en texte libre.** Dans Valeurs par défaut UBL › Fournisseurs, chaque société dispose d'un champ « Mentions légales » repris tel quel dans la facture (forme juridique, capital, RCS, n° de déclaration…). Un document peut fixer le sien grâce à une nouvelle variable de l'éditeur XSL. Sans texte, la mention capital et APE reste inchangée. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>`.
+- **N° de ligne et référence de commande client affichés séparément.** Dans le tableau des lignes d'un modèle PDF, chacun a désormais son option.
+- **Options des modèles PDF en clair.** Les libellés des options n'affichent plus de codes de champ.
+
+### Corrections
+- **Fin du « Capital Euros » sans montant.** Une société sans mentions légales ni capital n'a plus cette mention.
+- **Référence de contrat longue.** Une facture dont la référence de contrat dépassait 20 caractères n'apparaissait pas dans la liste des factures ; elle y figure désormais, avec la référence raccourcie dans la liste seulement (la facture la conserve en entier).
+- **PDF texte : valeur voisine d'une autre colonne.** Une valeur n'embarque plus le texte imprimé plus à droite sur la même ligne, comme l'adresse d'une seconde colonne ; cette adresse forme désormais son propre bloc.
+- **PDF texte : valeur sur plusieurs lignes.** Une valeur qui se poursuit sur les lignes suivantes (un intitulé de formation, par exemple) est lue en entier.
+- **Identifiant de livraison nommé selon son type.** Dans le bloc livraison du PDF, l'identifiant affiche son type (SIRET, GLN…) au lieu de « ID ».
+- **Référence de commande prise sur une ligne.** Quand seules les lignes portent une référence de commande, elle n'apparaît plus comme celle de la facture dans le PDF, la fenêtre de la facture et la base.
+
+---
+
+## 2026.11.06.1 — 2026-11-06 \{#v2026-11-06-1\}
+
+### Améliorations
+- **Page PDF vers XML (menu Traitement).** Choisissez un PDF texte et consultez le XML obtenu, avec ou sans les réglages d'un document, puis téléchargez-le.
+- **Réglage du tableau d'un PDF en cliquant sur ses lignes.** Sur cette page, cliquez sur la première et la dernière ligne d'en-tête, puis sur la première ligne après le tableau : les réglages sont déduits, essayés aussitôt et enregistrés dans le document à la demande.
+- **En-têtes de tableau sur plusieurs lignes.** Le nouveau réglage « Header rows » (document, PDF extraction) fusionne l'en-tête par colonne et range dans leur colonne les cellules empilées sur une ligne. Les documents qui ne le renseignent pas sont convertis comme avant.
+- **Mapping automatique par IA : vérification avant application.** Chaque proposition affiche le chemin, sa valeur dans l'exemple et votre valeur actuelle, contrôlés sur le fichier. Les nouveaux chemins sont cochés, contrairement aux changements de valeur existante et aux chemins absents de l'exemple.
+- **Mapping automatique par IA : propositions plus justes.** L'IA lit désormais les valeurs de l'exemple et les formats attendus : elle retient l'élément qui contient exactement la donnée, et les champs obligatoires restés vides sont listés.
+- **Mapping automatique par IA : règles d'extraction pour les PDF.** Pour une valeur fusionnée ou absente du XML, l'IA propose une règle avec le résultat obtenu. Les règles s'enregistrent sur le document, puis le PDF est reconverti et le mapping relancé.
+- **Clé du document depuis la page PDF vers XML.** Choisissez l'élément du numéro de facture : un numéro comme 36834.FU est séparé en numéro et type, et l'enregistrement les renseigne sur le document, avec la société et la clé de découpage si elle est vide.
+- **Récapitulatif TVA d'un PDF.** Un second tableau peut être lu en groupe répété, une ligne par taux, même si un autre bloc est imprimé à côté. Il se règle en cliquant sur ses lignes dans la page PDF vers XML.
+- **PDF d'origine joint à la facture.** Sur un document de source PDF, LISIBLE et Attachment proposent le nouveau choix « source » : le PDF reçu en entrée est joint tel quel, en LISIBLE ou en PJA, à la place d'un PDF généré.
+- **Mentions légales par société.** Dans Valeurs par défaut UBL › Notes, comme dans la surcharge d'un document, une société peut avoir ses propres notes à la place des notes générales ; une société sans notes propres affiche les notes générales. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>` pour en bénéficier.
+- **PDF JD Edwards dans la page PDF vers XML.** Un PDF balisé JD Edwards s'y convertit aussi, avec un manifeste ou un manifeste de départ, et sa clé de découpage, son numéro, son type et sa société s'enregistrent sur le document.
+- **Nouveau document depuis la page PDF vers XML.** Crée un document adapté au convertisseur utilisé, prêt à recevoir les réglages essayés sur la page.
+- **États JD Edwards aux sections différentes.** Une clé de facture (réglage du document, ou choix sur la page) écrit une facture par numéro de document, avec les sections telles qu'imprimées, pour les états hors disposition standard. Les documents sans cette clé sont convertis comme avant.
+- **Société retrouvée depuis la facture.** Un document peut retrouver sa société par son n° de TVA, son SIRET ou son SIREN dans les sociétés fournisseurs : depuis un élément pour les sources PDF et XML, depuis le vendeur ou l'acheteur pour l'UBL. Sans correspondance, la facture s'arrête. La page PDF vers XML affiche la société trouvée.
+- **Plusieurs factures dans un PDF texte.** Un nouveau réglage produit un document par numéro de facture, et le PDF d'origine joint ne contient que les pages de cette facture.
+- **PDF JD Edwards dans Traiter un document.** Les documents de source XML y acceptent un PDF, converti avec la clé de facture du document et le manifeste du dossier surveillé.
+
+### Corrections
+- **Pièces jointes PDF et noms de fichier avec espaces.** Toute pièce jointe échouait si le nom du fichier d'entrée contenait un espace ; c'est corrigé.
+- **Valeurs imprimées à la suite dans un PDF texte.** Une valeur suivie de parties libellées (SIRET - TVA - NAF) et un IBAN suivi de son BIC donnent aussi des éléments séparés. Le premier élément ne garde que sa propre valeur.
+- **La récupération des statuts ne relit plus le dernier événement.** Avec le filigrane réglé sur « Last event », l'événement le plus récent revenait à chaque passage tant qu'aucun autre n'arrivait. Un passage sans nouveauté ne ramène désormais rien.
+- **Erreurs du mapping automatique par IA.** La véritable erreur s'affiche à la place de « no JSON », et une réponse ne peut plus être altérée pendant sa réception.
+- **Totaux PDF imprimés plus grands que leur libellé.** Une valeur imprimée légèrement plus bas que son libellé, comme le Total TTC, lui est désormais associée.
+
+---
+
+## 2026.11.05.1 — 2026-11-05 \{#v2026-11-05-1\}
+
+### Améliorations
+- **Statut d'import de plusieurs factures en une requête.** Le nouveau paramètre « Import group size » (Paramètres › E-invoicing › Statuts) regroupe les factures interrogées dans une même requête, pour les plateformes qui acceptent une liste d'identifiants (TX2 : 10, avec `{{uuids}}` dans le corps du point d'accès). Une facture absente de la réponse reste en attente. À 1, la valeur par défaut, rien ne change.
+- **Limites de requêtes par plateforme.** Deux nouveaux paramètres de connecteur, inactifs par défaut : un délai minimal entre deux requêtes et un plafond d'erreurs sur 120 secondes. Ils valent pour tout ce qui appelle la plateforme depuis le serveur : envois, relevés de statuts et traitements. Après un code 429, les requêtes patientent et celle qui a été refusée repart une fois. Valeurs conseillées pour TX2 : 300 ms et 20, sur chaque connecteur concerné.
+
+### Corrections
+- **Une erreur de syntaxe dans le corps d'un connecteur n'empêche plus le serveur de démarrer.** Un corps qui n'est pas du JSON valide (guillemet mal placé, accolade en trop dans un point d'accès enregistré depuis les paramètres) est conservé tel que saisi et la configuration reste lisible. Auparavant, des sections entières de la configuration pouvaient disparaître et bloquer le démarrage suivant.
+- **Crochets et accolades dans les valeurs de configuration.** Une valeur contenant `[`, `]`, `{` ou `}` est désormais lue correctement.
+- **Message clair si le fichier de configuration est endommagé.** Un fichier modifié à la main et comportant une erreur de syntaxe est refusé au démarrage comme à la mise à jour, avec le fichier, la ligne et la colonne, au lieu de tourner sur une configuration partielle. L'instance concernée ne redémarre qu'une fois l'erreur corrigée.
+
+---
+
+## 2026.11.04.1 — 2026-11-04 \{#v2026-11-04-1\}
+
+### Améliorations
+- **Remises et frais au niveau du document (BG-20 / BG-21).** Le mappage des variables d'un document s'enrichit d'une section « Remises / frais du document » : élément répété, indicateur remise ou frais, code et libellé du motif, montant, base, pourcentage, taux et catégorie de TVA. Chaque occurrence devient une remise ou des frais sur la facture, et les totaux (somme des lignes, total des remises, total des frais) suivent. Les modèles existants reçoivent ces champs à la mise à jour, vides : rien ne change tant qu'ils ne sont pas renseignés.
+- **Codes motifs des remises et des frais.** Deux nouvelles listes : motifs de remise (UNTDID 5189) et motifs de frais (UNTDID 7161), en français et en anglais. Dans les valeurs par défaut UBL, le code par défaut se choisit dans la liste et renseigne le libellé du motif ; un code source peut être associé à un code de la liste, globalement ou par document. Sans libellé dans la source, celui du code est repris.
+
+### Corrections
+- **La validation UBL conserve le fichier.** Valider une source XML ne supprime plus le fichier du dossier d'entrée, qu'il ait été téléversé ou choisi sur le serveur.
+- **Traiter un document : fichier choisi dans le dossier d'entrée.** Un fichier pris dans le dossier d'entrée du modèle était vidé avant le traitement ; il est désormais traité tel quel.
+- **Total des frais du document.** Un total des frais renseigné seul, sans lignes de frais, est maintenant pris en compte dans la somme des lignes, comme l'exige la règle de cohérence des totaux EN 16931.
+
+---
+
+## 2026.10.30.1 — 2026-10-30 \{#v2026-10-30-1\}
+
+### Améliorations
+- **Réglages du serveur hors du script de pilotage.** `nomaubl.sh` lit un fichier facultatif `nomaubl.conf` placé à côté de lui pour les réglages propres au serveur : options Java (mémoire, emplacement de la clé maîtresse), port par défaut. Le script n'a plus à être modifié, et son remplacement lors d'une mise à jour conserve ces réglages.
+
+### Corrections
+- **Modèles PDF : le choix du modèle par défaut n'efface plus les paramètres globaux.** Définir un modèle PDF par défaut, ou revenir au modèle d'origine, vidait tous les autres paramètres globaux : connexion à la base, schéma, chemins, traitements planifiés. Seul le modèle par défaut est désormais modifié. Sur une instance touchée, restaurer `config.properties` depuis son historique de versions (instantané pris juste avant la modification).
+
+---
+
+## 2026.10.29.1 — 2026-10-29 \{#v2026-10-29-1\}
+
+### Corrections
+- **Inversion du signe : remise sur prix conservée sur les avoirs.** Sur un avoir dont le spool porte des prix négatifs, le prix brut et la remise sur prix (BT-148, BT-147) disparaissaient quand ils devaient être déduits du prix net, ce que la validation française peut rejeter. Les prix sont désormais lus en valeur absolue et les deux sont émis. Un prix brut ou une remise saisis avec une virgule décimale sont également pris en compte.
+- **Inversion du signe « All documents » : lignes de remise sur les factures.** Sur une facture dont le spool imprime tous les montants en négatif, les lignes normales devenaient des remises de pied et les lignes de remise restaient des lignes de facture. Le signe est désormais lu après inversion : seules les lignes de remise deviennent des remises de pied. « Credit notes only » et « No » sont inchangés.
+
+---
+
+## 2026.10.27.1 — 2026-10-27 \{#v2026-10-27-1\}
+
+### Améliorations
+- **Retraitement en ligne de commande : sortie allégée.** `reprocess` n'affiche plus que le début, chaque lot et le résultat, ainsi que les erreurs et avertissements du traitement ; `--verbose` rétablit le détail complet. L'écran Retraiter de l'interface conserve le journal complet en direct. `nomaubl.sh reprocess <env>` accepte désormais `--full` et `--verbose`.
+- **Script de commandes complet.** `nomaubl.sh` propose désormais `fetch-received`, `send-waiting`, `status-integrity`, `status-order-check`, `purge`, `audit`, `report`, `techreport`, `validate-ddl` et `demo`, avec leurs options ; l'aide les présente, ainsi que `watch-folders`. La mise à jour ne remplace pas le script : copier le nouveau `nomaubl.sh` à côté du jar.
+
+### Corrections
+- **Réimpression : un UBL non régénérable ne la fait plus échouer.** La réimpression produit le PDF et le XML lisibles et garde l'UBL archivé comme référence. Si l'UBL ne peut plus être régénéré depuis la source, un avertissement est émis, la facture est comptée comme réimprimée et reçoit son marqueur de retraitement. Auparavant elle était comptée en échec et restait éligible : le passage suivant renvoyait son PDF et son XML.
+- **Bilan de traitement fidèle aux factures en erreur.** Quand une facture d'un fichier tombe en erreur sans que le fichier échoue, la fin du traitement indique le nombre de factures en erreur au lieu de « terminé avec succès », et le bilan du lot compte le fichier « avec factures en erreur » et non plus OK.
+- **Oracle : « character set mismatch » avec Exclure les erreurs traitées.** Sur les bases dont les colonnes de facture utilisent le jeu de caractères national, les tableaux de bord, les Statistiques et la liste des factures échouaient en ORA-12704 depuis la mise à jour précédente dès qu'Exclure les erreurs traitées était activé ; ils s'affichent de nouveau, avec le même résultat.
+- **Séparateurs lisibles dans la sortie console.** Les lignes de traitement, de lot et de retraitement utilisent des tirets et flèches simples, qui ne se transforment plus en caractères parasites dans les mails cron et les visionneuses de journaux.
+
+---
+
 ## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
 
 ### Améliorations
@@ -225,7 +336,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Promotion : les fichiers d'un document seuls.** Chaque fichier utilisé par un document (transformation, XSL, RTF, feuille UBL, Schematron client, mise en page PDF) figure parmi les fichiers, avec les documents qui l'utilisent, et se promeut seul : une feuille de style partagée par plusieurs documents ne demande plus de promouvoir un document.
 - **Journal des traitements : traitements et tâches planifiées séparés.** Un sélecteur Traitements / Tâches planifiées / Tout s'ajoute à Groupé / Détaillé ; le journal s'ouvre sur Traitements, et les exécutions des récupérations de statuts et d'imports (toutes les quelques minutes) ne noient plus les traitements de fichiers. Une exécution ouverte depuis Anomalies arrive sur Tâches planifiées. Leur rétention est déjà distincte : Paramètres › Valeurs par défaut des tâches › Rétention, « Job runs (days) ».
 - **Page d'accueil.** Paramètres › Navigation et listes choisit la page affichée après la connexion (la Synthèse par défaut) : un tableau de bord, Factures, E-Documents, E-reporting, Déclaration de TVA, Diagnostic, Rapports ou l'Explorateur. Un utilisateur dont le rôle ne l'autorise pas arrive sur la Synthèse, sinon sur la première page que son rôle autorise.
-- **Tableaux de bord : chiffres en cache.** La Synthèse, les Statistiques et le tableau de bord Exploitation conservent les chiffres chargés : y revenir ou changer de page ne relance plus les requêtes ; un tableau de bord resté ouvert se recharge seul au terme du délai, et Actualiser recharge aussitôt. Sur le tableau de bord IT, seuls les documents traités par jour sont conservés, côté serveur et pour tous les utilisateurs. Chacun indique l'heure de chargement. Délai dans Paramètres › Navigation et listes (60 minutes par défaut, 0 = toujours recharger).
+- **Tableaux de bord : chiffres en cache.** La Synthèse, les Statistiques et le tableau de bord Exploitation conservent les chiffres chargés : y revenir ou changer de page ne relance plus les requêtes ; un tableau de bord resté ouvert se recharge seul au terme du délai, et Actualiser recharge aussitôt. Sur le tableau de bord IT, seuls les documents traités par jour sont conservés, côté serveur et pour tous les utilisateurs. Chacun indique l'heure de chargement ; la déconnexion ou une session expirée vide le cache. Délai dans Paramètres › Navigation et listes (60 minutes par défaut, 0 = toujours recharger).
 - **Erreurs traitées exclues par défaut.** Le tableau de bord Exploitation et la liste des factures s'ouvrent avec « Exclure les erreurs traitées » activé, comme la Synthèse et les Statistiques ; un lien depuis un tableau de bord garde son propre choix.
 - **Synthèse : taux de transmission sur les factures à transmettre.** Le taux de transmission, sa répartition émises / non émises et la part transmise par société ne portent plus que sur les factures destinées à la plateforme (envoyées ou en attente de revue) ; les types de document non transmis ne le font plus baisser. Le taux « Parvenues à la plateforme » du tableau de bord Statistiques suit la même règle, tout comme le récapitulatif quotidien.
 - **Notifications du portail sans destinataire : pour tout le monde.** Avec l'authentification activée, une règle sur le canal portail sans utilisateur ni rôle n'enregistrait rien ; elle crée désormais une notification visible dans toutes les boîtes, comme sans authentification. L'éditeur de règles nomme ce choix « Tout le monde ».
