@@ -313,6 +313,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 | **Factures** | Actions prédéfinies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
 | **Factures** | Actions personnalisées | `invoice.custom-action` | Utilise les boutons personnalisés définis par l'admin dans la rangée *actions personnalisées*. |
 | **Factures** | Envoyer le PDF par e-mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
+| **Listes** | Partager des vues | `listview.share` | Partager ses [vues enregistrées](../../application/saved-views.md) avec tous les utilisateurs. Enregistrer des vues personnelles ne demande aucun droit. |
 | **E-reporting** | Générer une déclaration | `ereporting.generate` | Produit une nouvelle déclaration e-reporting depuis la fenêtre *Générer*. |
 | **E-reporting** | Renvoyer une déclaration | `ereporting.resend` | Renvoie à la plateforme une déclaration e-reporting existante. |
 | **Traitements d'intégration** | Lancer les traitements | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
@@ -320,6 +321,12 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 :::info
 La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger l'UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
 :::
+
+---
+
+### Formulaires de saisie des factures \{#entry-forms\}
+
+Sous les cartes d'actions, dès qu'un [formulaire de saisie](../entry-forms.md) existe : **Formulaires de saisie des factures** *(aucun coché = l'éditeur complet)*. Cocher *Complet* et les formulaires que le rôle peut utiliser ; à partir de deux, **S'ouvre sur** choisit le formulaire d'ouverture de l'éditeur de facture. Un rôle sans formulaire garde l'éditeur complet.
 
 ---
 

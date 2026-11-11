@@ -1778,6 +1778,102 @@
         }
       }
     },
+    "/api/list-views/{list}/user-views": {
+      "get": {
+        "tags": ["Config"],
+        "summary": "Saved views of a list",
+        "description": "The layouts the caller saved for one list from the grid's view picker (visible columns, order, widths, grouping, sort, page size), then the views other users shared.\n\nStored in the database (F564256), so a view follows its owner on every server of the environment. layout is the grid's own JSON; isDefault marks the view the list opens on for the caller.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "list", "in": "path", "schema": { "type": "string" }, "description": "Grid id of the list (e.g. invoices)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "views": [ { "id": "0b7c…", "name": "Disputes", "owner": "JDOE", "mine": true, "shared": false, "isDefault": true, "layout": { "order": ["ublNumber"], "visibility": {}, "grouping": [], "sorting": [] } } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Config"],
+        "x-permission": "any signed-in user",
+        "summary": "Save a view",
+        "description": "Creates a view of the caller, or replaces one: with id, that view is renamed and its layout replaced; without, the caller's view of the same name is replaced or a new one created.\n\nA user writes only their own views.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "list", "in": "path", "schema": { "type": "string" }, "description": "Grid id of the list", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "name": "Disputes", "layout": { "order": ["ublNumber"], "visibility": {}, "grouping": [], "sorting": [] } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "id": "0b7c…" } } } }
+          }
+        }
+      }
+    },
+    "/api/list-views/{list}/user-views/default": {
+      "post": {
+        "tags": ["Config"],
+        "x-permission": "any signed-in user",
+        "summary": "Set the caller's default view",
+        "description": "The view the list opens on for the caller. A blank id returns to the standard layout.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "list", "in": "path", "schema": { "type": "string" }, "description": "Grid id of the list", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "id": "0b7c…" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true } } } }
+          }
+        }
+      }
+    },
+    "/api/list-views/{list}/user-views/{id}": {
+      "delete": {
+        "tags": ["Config"],
+        "x-permission": "any signed-in user",
+        "summary": "Delete a view",
+        "description": "Removes one of the caller's saved views.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "list", "in": "path", "schema": { "type": "string" }, "description": "Grid id of the list", "required": true },
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "View id", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true } } } }
+          }
+        }
+      }
+    },
+    "/api/list-views/{list}/user-views/{id}/share": {
+      "post": {
+        "tags": ["Config"],
+        "x-permission": "listview.share",
+        "summary": "Share a view",
+        "description": "Shows one of the caller's saved views to every user of the list (shared true), or takes it back (false).\n\nOther users can pick a shared view, not change it. Requires the listview.share action grant.\n\n**Access:** listview.share.",
+        "parameters": [
+          { "name": "list", "in": "path", "schema": { "type": "string" }, "description": "Grid id of the list", "required": true },
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "View id", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "shared": true } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true } } } }
+          }
+        }
+      }
+    },
     "/api/list-views/values/{field}": {
       "get": {
         "tags": ["Config"],
@@ -2140,6 +2236,19 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "contentType": "application/pdf" } } } }
+          }
+        }
+      }
+    },
+    "/api/entry-forms": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Entry forms of the invoice editor",
+        "description": "The entry forms the caller's role may use in the invoice editor and the one it opens on.\n\nA form (config resource entry-form-<name>, Settings › Views & UI) shows, locks or hides sections and fields of the editor; the built-in form 'complete' is the whole editor. A role without form grants has 'complete' only. definition is a JSON string: { sections: { <key>: { hidden, collapsed } }, fields: { <key>: { state: shown|readonly|hidden, required, defaultValue } } }. A convenience, not a restriction: the save does not check hidden fields.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "default": "simple", "forms": [ { "name": "simple", "labelEn": "Simple invoice", "labelFr": "Facture simple", "definition": "{…}" }, { "name": "complete", "complete": true, "labelEn": "Complete", "labelFr": "Complet" } ] } } } }
           }
         }
       }

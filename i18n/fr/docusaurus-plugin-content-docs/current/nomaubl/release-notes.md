@@ -17,17 +17,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
+    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
     <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
     <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
     <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
     <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
-    <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (127)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (128)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
       <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
       <a href="#v2026-10-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-27</span></a>
       <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
@@ -174,7 +175,33 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
+
+### Améliorations
+- **Vues enregistrées sur toutes les listes.** Un sélecteur de vue, dans la barre d'outils de la liste, enregistre l'affichage courant sous un nom et le rappelle d'un clic : colonnes visibles et leur ordre, regroupement, tri, nombre de lignes par page, filtres de colonnes et, sur les listes qui en disposent, filtres avancés et période (avec sa date de référence). « Standard » reste la présentation définie dans Paramètres › Vues de liste.
+- **Vue d'ouverture.** Chaque utilisateur peut désigner l'une de ses vues comme celle sur laquelle la liste s'ouvre.
+- **Périodes relatives.** Une vue enregistrée sur « Ce mois-ci » ou « Mois dernier » suit le calendrier ; seule une plage personnalisée conserve ses dates.
+- **Des vues qui suivent l'utilisateur.** Elles sont conservées en base de données : on les retrouve depuis n'importe quel navigateur et sur tous les serveurs d'un même environnement.
+- **Vues partagées.** Un utilisateur dont le rôle dispose de la nouvelle action « Partager des vues » peut partager l'une de ses vues avec tous les utilisateurs, puis cesser de la partager. Les autres la retrouvent sous « Vues partagées », avec le nom de son propriétaire, et peuvent en enregistrer une copie ; seul le propriétaire la modifie. Un rôle dont la liste d'actions est restreinte n'a pas cette action tant qu'elle n'est pas cochée dans l'éditeur de rôles.
+- **Largeur des colonnes sur les listes.** Faites glisser le bord droit d'un en-tête de colonne pour l'élargir ou la réduire. Les largeurs sont enregistrées avec la vue ; « Largeurs par défaut », dans le menu Colonnes, rétablit celles définies dans les Paramètres. Dès qu'une largeur est modifiée, la liste défile horizontalement si ses colonnes dépassent l'écran.
+- **Formulaires de saisie pour l'éditeur de facture.** Dans les Paramètres, le bouton « Add entry form » définit un éditeur allégé (rangé sous Views & UI) : chaque section et chaque champ est affiché, en lecture seule ou masqué, avec une valeur par défaut et une case « obligatoire » facultatives ; le bouton Preview ouvre l'éditeur sur le formulaire. Un champ masqué conserve sa valeur : un formulaire simple ne fait jamais perdre les données d'une facture complète.
+- **Alerte sur un formulaire qui ne peut pas produire une facture valide.** L'éditeur de formulaire signale les champs exigés par le jeu de règles par défaut que le formulaire masque ou verrouille sans leur donner de valeur.
+- **Formulaires par rôle.** Dans l'éditeur de rôles (onglet Actions), cochez les formulaires qu'un rôle peut utiliser et celui sur lequel l'éditeur s'ouvre. Avec plusieurs formulaires, un sélecteur apparaît dans l'en-tête de l'éditeur. Un rôle sans formulaire garde l'éditeur complet : rien ne change tant qu'aucun formulaire n'est accordé.
+- **Promotion des formulaires.** Les formulaires de saisie sont un nouveau type d'élément de la page Promotion.
+- **Mise à niveau.** Les vues s'appuient sur une nouvelle table, F564256 : lancez `nomaubl.sh upgrade <env>`. D'ici là, les listes fonctionnent comme avant, sans le sélecteur.
+
+### Corrections
+- **Éditeur de facture : « + Prix » et « + Livraison » sur une ligne.** Les deux boutons ouvrent désormais leur bloc ; « + Livraison » restait sans effet, de même que « + Prix » sur une ligne sans prix unitaire.
+- **Éditeur de facture : libellés sans code de champ.** Les libellés du prix, de la facture antérieure, des identifiants de l'acheteur et de l'avis d'expédition n'affichent plus leur code BT / BG.
+
+---
+
 ## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Améliorations
+- **Agent de l'acheteur complet.** Dans l'éditeur XSL, l'agent de l'acheteur dispose désormais de sa raison sociale, de son SIREN, de son numéro de TVA, de son adresse électronique, de son code de rôle, de ses identifiants, de l'adresse complète et du contact. La raison sociale, obligatoire dans ce bloc, reprend le nom commercial si elle est vide : les documents existants n'ont rien à modifier. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>`.
+- **Schéma de l'adresse électronique automatique pour l'agent et le payeur.** Comme pour le vendeur et l'acheteur, il prend le schéma par défaut (0225) ; le champ de schéma du payeur disparaît de l'éditeur XSL.
+- **Contact du client dans le PDF.** Le bloc client affiche désormais le nom, le téléphone et l'e-mail du contact quand la facture les porte, chacun avec son option dans le modèle PDF. Sur une autofacture, c'est là qu'apparaît le contact de la société émettrice.
 
 ### Corrections
 - **Plus de renvoi d'une facture en échec de validation.** Une facture en « Échec de validation » n'est plus envoyée à la plateforme : le bouton Renvoyer disparaît, « Renvoyer la sélection » ne compte que les factures réellement envoyables et la reprise automatique les ignore. Corrigez d'abord la facture ou relancez un retraitement complet.

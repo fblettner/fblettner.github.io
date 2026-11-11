@@ -10,6 +10,10 @@ L'éditeur **Vues de liste** est la page de configuration des grilles construite
 
 Un second concept vit à côté de la spec : le **catalogue de colonnes**. Chaque vue livre un catalogue de toutes les colonnes que les tables sous-jacentes peuvent produire — le catalogue est la source de vérité de ce qui est adressable, la spec en sélectionne un sous-ensemble et le présente. Le picker `+ Ajouter une colonne` est juste une vue filtrée du catalogue.
 
+:::info[Standard et vues enregistrées]
+La spécification d'une vue est la présentation **Standard** du sélecteur de vues de la liste. Par-dessus, chaque utilisateur enregistre ses propres [vues](../application/saved-views.md) — ordre, visibilité et largeur des colonnes, tri, filtres, période — parmi les colonnes que la spécification propose. La **Width** définie ici est la largeur par défaut de la colonne, celle que rétablit **Largeurs par défaut**.
+:::
+
 ---
 
 ## Vue d'ensemble

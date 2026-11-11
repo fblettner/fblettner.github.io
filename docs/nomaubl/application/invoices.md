@@ -217,7 +217,7 @@ RefList columns (Status, eReporting Status, custom lists) get a **multi-select p
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)).
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)). The **view picker** saves and brings back the display of the list — columns, widths, sort, filters, period: see [Saved views](saved-views.md).
 
 ---
 
@@ -772,6 +772,8 @@ While the e-mail is sending, an overlay covers the modal until the SMTP server c
 ### Create / Edit invoice modal \{#create-invoice\}
 
 Opens from **+ New Invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+
+The sections and fields shown depend on the user's role: a role granted [entry forms](../configuration/entry-forms.md) opens the editor on its default form — some fields read-only or hidden, defaults filled in, required fields checked on save — and a picker in the header switches between its forms. Without any form, the role keeps the complete editor. On a line, **+ Price** opens the price details (gross price, price discount, net price) and **+ Delivery** the line delivery block; the bin closes them.
 
 Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 

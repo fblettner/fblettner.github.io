@@ -129,6 +129,7 @@ Open it from **Management → Promotion**. The page has three views: **Export** 
 |---|---|---|
 | **Document template** | A [document](./documents.md). | Its files — pre-processing XSL, indexation XSL, RTF, UBL XSLT and its PDF companion (`.pdf.json`), custom Schematron — and the [PDF template](./pdf-templates.md) it names. |
 | **PDF template** | A PDF template. | — |
+| **Entry form** | An [entry form](../configuration/entry-forms.md) of the invoice editor. | — (role grants stay with each environment's roles) |
 | **List** | A [reference list](../configuration/reference-lists.md) or a [custom list](../configuration/custom-lists.md). | — |
 | **Notification rule** | A [notification rule](./notification-rules.md). | — |
 | **Explorer analysis** · **Explorer dashboard** | A saved [Explorer](../application/explorer.md) analysis or dashboard. | A dashboard brings the analyses of its tiles. |

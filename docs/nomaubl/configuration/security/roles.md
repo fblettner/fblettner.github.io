@@ -313,6 +313,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 | **Invoices** | Preset actions | `invoice.preset-action` | Use the per-status preset buttons (Resend on 9904, …) in the seller actions row. |
 | **Invoices** | Custom actions | `invoice.custom-action` | Use the admin-defined custom buttons in the custom actions row. |
 | **Invoices** | Email PDF | `invoice.email` | Send the rendered PDF via the configured SMTP relay. |
+| **Lists** | Share views | `listview.share` | Share one's [saved views](../../application/saved-views.md) with every user. Saving private views needs no grant. |
 | **E-Reporting** | Generate batch | `ereporting.generate` | Build a new e-reporting batch from the *Generate* dialog. |
 | **E-Reporting** | Resend batch | `ereporting.resend` | Re-submit an existing e-reporting batch to the PA. |
 | **Integration ops** | Run batch jobs | `integration.run` | Trigger *Import statuses* / *Fetch received* / *Retrieve statuses* from the toolbar. |
@@ -320,6 +321,12 @@ Grouped by the page where the button lives — the same key can power buttons on
 :::info
 The detail modal renders Parties, Invoice Lines, TVA recap and Notes from the UBL XML endpoint, which is **read-open** (still subject to row filters and page visibility). Only the explicit *Download UBL* button is gated by `invoice.download` — view-only roles can therefore inspect the invoice content without the right to extract the raw XML.
 :::
+
+---
+
+### Invoice entry forms \{#entry-forms\}
+
+Below the action cards, when at least one [entry form](../entry-forms.md) exists: **Invoice entry forms** *(none ticked = the complete editor)*. Tick *Complete* and the forms the role may use; with two or more, **Opens on** picks the form the invoice editor opens on. A role without any form keeps the complete editor.
 
 ---
 

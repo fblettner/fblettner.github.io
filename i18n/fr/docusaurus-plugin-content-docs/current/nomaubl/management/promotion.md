@@ -129,6 +129,7 @@ Accès : **Gestion → Promotion**. La page compte trois vues : **Export** (pré
 |---|---|---|
 | **Document** | Un [document](./documents.md). | Ses fichiers — XSL de pré-traitement, XSL d'indexation, RTF, XSLT UBL et son complément PDF (`.pdf.json`), Schematron spécifique — et le [modèle PDF](./pdf-templates.md) qu'il désigne. |
 | **Modèle PDF** | Un modèle PDF. | — |
+| **Formulaire de saisie** | Un [formulaire de saisie](../configuration/entry-forms.md) de l'éditeur de facture. | — (les droits des rôles restent propres à chaque environnement) |
 | **Liste** | Une [liste de référence](../configuration/reference-lists.md) ou une [liste personnalisée](../configuration/custom-lists.md). | — |
 | **Règle de notification** | Une [règle de notification](./notification-rules.md). | — |
 | **Analyse de l'Explorateur** · **Tableau de bord de l'Explorateur** | Une analyse ou un tableau de bord enregistré de l'[Explorateur](../application/explorer.md). | Un tableau de bord emporte les analyses de ses tuiles. |

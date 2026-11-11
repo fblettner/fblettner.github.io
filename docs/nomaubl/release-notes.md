@@ -17,17 +17,18 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
+    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
     <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
     <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
     <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
     <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
-    <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (127)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (128)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
       <a href="#v2026-10-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-29</span></a>
       <a href="#v2026-10-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-27</span></a>
       <a href="#v2026-10-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-25</span></a>
@@ -174,7 +175,33 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
+
+### Improvements
+- **Saved views on every list.** A view picker in the list toolbar saves the current display under a name and brings it back in one click: visible columns and their order, grouping, sort, rows per page, column filters and, on the lists that have them, the Advanced Filters and the period (with its date basis). "Standard" remains the layout set in Settings › List views.
+- **A view to open the list on.** Each user can choose one of their views as the one a list opens on.
+- **Relative periods in a view.** A view saved on "This month" or "Last month" follows the calendar; only a custom range keeps its dates.
+- **Views follow the user.** They are kept in the database, so the same views are available from any browser and on every server of an environment.
+- **Shared views.** A user whose role has the new "Share views" action can share one of their views with every user, and stop sharing it. The others find it under "Shared views" with its owner's name and can save their own copy; only the owner changes it. A role with a restricted action list does not have the action until it is ticked in the role editor.
+- **Column widths on the lists.** Drag the right border of a column header to widen or narrow it. Widths are saved with the view; "Reset widths", in the Columns menu, returns to the widths set in Settings. Once a width is changed, the list scrolls sideways when its columns are wider than the screen.
+- **Entry forms for the invoice editor.** In Settings, "Add entry form" defines a simpler editor (listed under Views & UI): for each section and field, shown, read-only or hidden, with an optional default value and a "required" tick; a Preview button opens the editor on the form. A hidden field keeps its value, so a simple form never loses data from a rich invoice.
+- **Warning on a form that cannot produce a valid invoice.** The form editor lists the fields the default rule set requires that the form hides or locks without giving them a value.
+- **Forms per role.** In the role editor (Actions tab), tick the forms a role may use and the one the editor opens on. With several forms, a picker appears in the editor's header. A role without any form keeps the complete editor: nothing changes until a form is granted.
+- **Forms move by promotion.** Entry forms are a new kind on the Promotion page.
+- **Upgrade.** Views need a new table, F564256: run `nomaubl.sh upgrade <env>`. Until then the lists work as before, without the picker.
+
+### Fixes
+- **Invoice editor: "+ Price" and "+ Delivery" on a line.** The two buttons now open their block; "+ Delivery" did nothing, and "+ Price" did nothing on a line without a unit price.
+- **Invoice editor: labels without field codes.** The price, preceding invoice, buyer identifier and despatch advice labels no longer carry their BT / BG code.
+
+---
+
 ## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Improvements
+- **Buyer agent: every field.** In the XSL Editor, the buyer agent now has its legal name, SIREN, VAT number, electronic address, role code, identifiers, full address and contact. The legal name, required in this block, takes the trading name when left empty, so existing documents need no change. Other environments need `nomaubl.sh upgrade <env>`.
+- **Electronic address scheme set automatically for the agent and the payer.** As for the seller and the buyer, it takes the default scheme (0225); the payer's scheme field is removed from the XSL Editor.
+- **Customer contact in the PDF.** The customer box now shows the contact name, phone and email when the invoice carries them, each with its own option in the PDF template. On a self-billing invoice, this is where the issuing company's contact appears.
 
 ### Fixes
 - **No resend after a failed validation.** An invoice in "Validation failed" is no longer sent to the platform: the Resend button is hidden, "Resend selected" counts only the invoices that can be sent, and an automatic retry leaves those invoices aside. Correct the invoice or reprocess it in full first.

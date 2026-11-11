@@ -10,6 +10,10 @@ The **List Views** editor is the configuration page of the grids built on the sh
 
 A second concept lives next to the spec: the **column catalog**. Each view ships a catalog of every column the underlying tables can produce — the catalog is the source of truth for what is addressable, the spec picks a subset and presents it. The `+ Add column` picker is just a filtered view of the catalog.
 
+:::info[Standard and saved views]
+The spec of a view is the **Standard** layout of the list's view picker. On top of it, each user saves their own [views](../application/saved-views.md) — order, visibility and width of the columns, sort, filters, period — within the columns the spec offers. The **Width** set here is the column's default width, the one **Reset widths** returns to.
+:::
+
 ---
 
 ## At a glance

@@ -22965,7 +22965,7 @@ Les colonnes adossées à une liste de référence (Statut, statut e-reporting, 
 
 ### Barre d'outils de la grille
 
-À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)).
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)). Le **sélecteur de vues** enregistre et rappelle l'affichage de la liste — colonnes, largeurs, tri, filtres, période : voir [Vues enregistrées](saved-views.md).
 
 ---
 
@@ -23500,6 +23500,8 @@ Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmatio
 ### Modale de création / édition de facture \{#create-invoice\}
 
 Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
+
+Les sections et champs affichés dépendent du rôle de l'utilisateur : un rôle qui dispose de [formulaires de saisie](../configuration/entry-forms.md) ouvre l'éditeur sur son formulaire par défaut — certains champs en lecture seule ou masqués, valeurs par défaut renseignées, champs obligatoires contrôlés à l'enregistrement — et un sélecteur dans l'en-tête passe d'un formulaire à l'autre. Sans formulaire, le rôle garde l'éditeur complet. Sur une ligne, **+ Prix** ouvre le détail du prix (PU brut, remise, PU net) et **+ Delivery** le bloc de livraison de la ligne ; la corbeille les referme.
 
 Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 
@@ -25489,6 +25491,83 @@ La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Lin
 
 ---
 
+## NomaUBL — Vues enregistrées
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/saved-views/
+
+Vues enregistrées NomaUBL : enregistrer l'affichage d'une liste (colonnes, ordre, regroupement, tri, lignes par page, filtres de colonne, filtres avancés, période) sous un nom, ouvrir une liste sur sa propre vue, partager des vues avec tous les utilisateurs et redimensionner les colonnes.
+
+Chaque liste de NomaUBL — factures, documents, e-reporting, erreurs d'intégration, journal de traitement, tâches planifiées, promotion, journal du serveur et les autres grilles — porte un **sélecteur de vues** dans sa barre d'outils. Il enregistre l'affichage en cours de la liste sous un nom et le rappelle en un clic. Chaque utilisateur a ses propres vues, conservées en base : les mêmes vues apparaissent depuis n'importe quel navigateur et sur chaque serveur de l'environnement.
+
+**Standard** est la présentation définie par l'administrateur dans [Paramètres › List views](../configuration/list-views.md) ; elle figure toujours en tête.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Contenu d'une vue \{#content\}
+
+| Enregistré dans la vue | Non enregistré |
+|---|---|
+| Colonnes visibles et leur ordre, largeurs de colonne | Sens, onglets de statut, zone de recherche |
+| Regroupement, tri, lignes par page | Libellés, formats et listes de valeurs — définis dans [List views](../configuration/list-views.md) |
+| Filtres de colonne (la ligne de filtres s'ouvre quand la vue en contient) | |
+| Filtres avancés — factures, documents, erreurs d'intégration, journal de traitement, e-reporting | |
+| Période et base de date — factures, documents, erreurs d'intégration, journal de traitement | |
+
+Une période enregistrée en *Aujourd'hui*, *Hier*, *Ce mois-ci*, *Mois dernier*, *Ce trimestre*, *Cette année* ou *12 derniers mois* suit le calendrier : elle est recalculée le jour où la vue s'ouvre. Seule une période *Personnalisé* garde ses dates. Une vue enregistrée sans période laisse la période en cours inchangée.
+
+Une liste ouverte depuis une autre page avec des filtres ou une période donnés — tuile d'un tableau de bord, journal de traitement atteint depuis un fichier — les conserve, quelle que soit la vue d'ouverture.
+
+---
+
+## Menu des vues \{#menu\}
+
+| Élément | Effet |
+|---|---|
+| **Standard** | Revient à la présentation des Paramètres. |
+| **Mes vues** | Les vues de l'utilisateur. ★ signale la vue d'ouverture de la liste, l'icône utilisateurs une vue partagée avec tous. |
+| **Vues partagées** | Les vues partagées par les autres utilisateurs, avec le nom de leur propriétaire. |
+| **Enregistrer** | Enregistre les modifications dans la vue active (vues personnelles uniquement). Un point orange sur le sélecteur signale une vue modifiée et non enregistrée ; les modifications sont conservées jusqu'à la fermeture de l'onglet. |
+| **Enregistrer sous…** | Enregistre l'affichage comme nouvelle vue (nom de 60 caractères au plus). Sur une vue partagée, c'est ainsi qu'un utilisateur en garde sa propre copie. Reprendre le nom d'une de ses vues la remplace. |
+| **Renommer…** · **Supprimer** | Vues personnelles uniquement. Après une suppression, la liste revient à Standard. |
+| **Ouvrir la liste sur cette vue** / **Ouvrir la liste sur Standard** | Choisit la vue d'ouverture de la liste, parmi ses propres vues. |
+| **Partager avec tous les utilisateurs** / **Ne plus partager** | Vues personnelles uniquement, avec l'action *Partager des vues* (voir [Accès](#access)). |
+
+La liste s'ouvre sur la vue choisie auparavant dans la même session du navigateur, à défaut sur la vue marquée ★ de l'utilisateur, à défaut sur Standard. Une vue partagée ne peut pas servir de vue d'ouverture : en enregistrer une copie avec **Enregistrer sous…** et marquer la copie. Seul son propriétaire modifie une vue partagée ; quand il cesse de la partager, les autres reviennent à Standard.
+
+---
+
+## Largeur des colonnes \{#column-widths\}
+
+Faire glisser le bord droit d'un en-tête de colonne élargit ou rétrécit la colonne (60 px au minimum). Dès qu'une largeur a été modifiée, la liste a exactement la largeur de ses colonnes : elle défile horizontalement quand elles dépassent l'écran. **Largeurs par défaut**, en tête du menu **Colonnes**, revient aux largeurs définies dans [List views](../configuration/list-views.md).
+
+Les largeurs sont enregistrées avec la vue. Sous Standard, l'ordre, la visibilité et la largeur des colonnes restent dans le navigateur, comme la présentation d'avant les vues : **Enregistrer sous…** les transforme en vue.
+
+Les résultats de l'Explorateur, les tuiles des tableaux de bord, les fenêtres de détail et le rapport d'intégrité n'ont pas de sélecteur de vues.
+
+---
+
+## Accès \{#access\}
+
+- Enregistrer, renommer et supprimer ses propres vues ne demande aucun droit : tout utilisateur connecté le peut.
+- Le partage demande l'action **Partager des vues** (groupe *Listes*) sur la page [Rôles](../configuration/security/roles.md). Un rôle sans liste d'actions la possède ; un rôle à liste d'actions restreinte ne la possède qu'une fois cochée ; un rôle en lecture seule ne la possède jamais.
+- Une vue n'élargit jamais ce que voit l'utilisateur : les droits par société et par ligne s'appliquent comme d'habitude.
+
+Les vues sont enregistrées dans la table `F564256`, créée par `nomaubl.sh upgrade <env>` (voir [Mise à jour](../installation/upgrade.md)). Avant la mise à jour, les listes fonctionnent sans le sélecteur.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Une vue par tâche récurrente.** *Clôture mensuelle*, *À corriger*, *Service client* : chacune rappelle ses colonnes, ses filtres et sa période en un clic.
+- **Enregistrer des périodes relatives.** Une vue sur *Ce mois-ci* reste juste chaque mois ; une période personnalisée sert à une analyse ponctuelle.
+- **Partager les vues d'une équipe plutôt que les décrire.** Une personne construit la vue et la partage, chaque collègue en garde une copie à ajuster.
+- **Garder Standard simple.** C'est la présentation commune ; les besoins personnels vont dans les vues.
+
+---
+
 ## NomaUBL — Récupération des entrées
 Source: https://docs.nomana-it.fr/fr/nomaubl/sync/fetch-input/
 
@@ -26931,7 +27010,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Jusqu'à quatre identifiants de l'objet auquel se rapporte la facture (abonnement, compteur, actif…), chacun avec un schéma issu de la liste *document-reference-codes*. Voir [Identifiants d'objet facturé](#invoiced-object-identifiers) plus bas. |
 | **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. La variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) donne au document ses propres mentions légales, prioritaires sur le texte de la société saisi dans [Sociétés fournisseur](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
-| **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
+| **Buyer agent** *(EXT-FR-FE-BG-01)* | EXT-FR-FE-03 à EXT-FR-FE-25 | Tiers qui agit pour le compte de l'acheteur : nom commercial et raison sociale (une raison sociale vide reprend le nom commercial), SIREN, numéro de TVA, adresse électronique (schéma `0225` par défaut, comme pour le vendeur et l'acheteur), code de rôle, adresse complète et contact ; jusqu'à quatre identifiants supplémentaires avec leur schéma dans *Agent identifiers (0..n)*. Le bloc est écrit dès qu'un nom, un SIREN, un numéro de TVA, une adresse électronique ou un identifiant est renseigné. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
@@ -29104,7 +29183,7 @@ Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les pré
 Liste complète des bascules par section prédéfinie :
 
 - **Header** — neuf bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / avis d'expédition (BT-16) / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
-- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client ; son identifiant est libellé d'après son schéma (SIRET, GLN…), *Identifiant* quand le schéma est inconnu.
+- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client ; son identifiant est libellé d'après son schéma (SIRET, GLN…), *Identifiant* quand le schéma est inconnu. La boîte Client imprime aussi le contact de l'acheteur — *Contact name*, *Phone*, *Email*, chacun avec son option, actives par défaut — quand la facture le porte ; sur une facture d'autofacturation, c'est là qu'apparaît le contact de la société émettrice.
 - **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), deux options par ligne, actives par défaut — *Order line number* imprime le numéro de ligne client (*N° ligne client*) sous chaque ligne, *Customer Order Reference* imprime la référence de commande client avec la commande de vente sous chaque ligne quand *Group by order* est désactivé (sinon le bandeau de commande la porte ; un modèle enregistré avant cette option la considère comme active), des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et dix bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **avis d'expédition de la ligne** (EXT-FR-FE-BG-07), **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
@@ -29962,6 +30041,7 @@ Accès : **Gestion → Promotion**. La page compte trois vues : **Export** (pré
 |---|---|---|
 | **Document** | Un [document](./documents.md). | Ses fichiers — XSL de pré-traitement, XSL d'indexation, RTF, XSLT UBL et son complément PDF (`.pdf.json`), Schematron spécifique — et le [modèle PDF](./pdf-templates.md) qu'il désigne. |
 | **Modèle PDF** | Un modèle PDF. | — |
+| **Formulaire de saisie** | Un [formulaire de saisie](../configuration/entry-forms.md) de l'éditeur de facture. | — (les droits des rôles restent propres à chaque environnement) |
 | **Liste** | Une [liste de référence](../configuration/reference-lists.md) ou une [liste personnalisée](../configuration/custom-lists.md). | — |
 | **Règle de notification** | Une [règle de notification](./notification-rules.md). | — |
 | **Analyse de l'Explorateur** · **Tableau de bord de l'Explorateur** | Une analyse ou un tableau de bord enregistré de l'[Explorateur](../application/explorer.md). | Un tableau de bord emporte les analyses de ses tuiles. |
@@ -32350,6 +32430,10 @@ L'éditeur **Vues de liste** est la page de configuration des grilles construite
 
 Un second concept vit à côté de la spec : le **catalogue de colonnes**. Chaque vue livre un catalogue de toutes les colonnes que les tables sous-jacentes peuvent produire — le catalogue est la source de vérité de ce qui est adressable, la spec en sélectionne un sous-ensemble et le présente. Le picker `+ Ajouter une colonne` est juste une vue filtrée du catalogue.
 
+:::info[Standard et vues enregistrées]
+La spécification d'une vue est la présentation **Standard** du sélecteur de vues de la liste. Par-dessus, chaque utilisateur enregistre ses propres [vues](../application/saved-views.md) — ordre, visibilité et largeur des colonnes, tri, filtres, période — parmi les colonnes que la spécification propose. La **Width** définie ici est la largeur par défaut de la colonne, celle que rétablit **Largeurs par défaut**.
+:::
+
 ---
 
 ## Vue d'ensemble
@@ -32514,6 +32598,76 @@ Le `name` se joint à l'entrée de catalogue qui a la clé correspondante ; tout
 - **Garder la liste blanche de filtres courte.** Marquer toutes les colonnes `filter: true` encombre le panneau Filtres avancés — limiter la liste aux colonnes que les opérateurs interrogent réellement.
 - **Définir une largeur pour les colonnes qui en ont besoin.** Les badges de statut, les dates, les codes ont des largeurs naturelles ; les longues chaînes restent sans largeur pour prendre l'espace restant. `width` est aussi le `min-width` CSS de la colonne — une valeur trop grande écrase le reste de la grille.
 - **Caché ≠ retiré.** Mettre `Visible = désactivé` garde la colonne interrogeable par le panneau Filtres avancés. À utiliser pour les champs techniques que l'opérateur filtre sans avoir besoin de les lire.
+
+---
+
+## NomaUBL — Formulaires de saisie
+Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/entry-forms/
+
+Formulaires de saisie NomaUBL : éditeurs de facture simplifiés définis dans les Paramètres — champ par champ affiché, en lecture seule ou masqué, valeurs par défaut, champs obligatoires, alerte du jeu de règles — accordés par rôle, avec un sélecteur dans l'éditeur de facture.
+
+Un **formulaire de saisie** est une version simplifiée de l'[éditeur de facture](../application/invoices.md#create-invoice) : pour chaque section et chaque champ, il décide si le champ est affiché, en lecture seule ou masqué, lui donne une valeur par défaut et peut le rendre obligatoire. Les formulaires s'accordent par rôle : un service client saisit ses factures sur un formulaire court tandis que la comptabilité garde l'éditeur complet.
+
+Accès : **Paramètres → Add entry form** ; les formulaires figurent sous **Views & UI** en *Entry form: nom*. L'éditeur reste en anglais, à l'exception des noms de sections et de champs, qui suivent la langue de l'éditeur de facture.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Création d'un formulaire
+
+**Add entry form** demande un nom et une description ; le formulaire est enregistré sous `entry-form-<nom>`. Un nouveau formulaire reprend l'éditeur entier — toutes les sections et tous les champs affichés — et **Copy** duplique un formulaire existant.
+
+| Champ | Description |
+|---|---|
+| **Label (English)** · **Label (French)** | Nom affiché dans le sélecteur de l'éditeur, dans la langue de l'utilisateur (anglais à défaut de libellé français). |
+| **Preview** | Ouvre l'éditeur de facture sur le formulaire en l'état, avec l'enregistrement désactivé. |
+
+---
+
+## Sections et champs \{#fields\}
+
+Une carte par section de l'éditeur de facture : en-tête, client, livraison, paiement, lignes… Chaque carte indique *champs affichés/total*, une case **Shown** pour masquer toute la section, **Folded when the editor opens**, et **Show all** / **Hide all**. *Clés du Document* et *Lignes de Facture* sont **Always shown** ; *Récapitulatif TVA* et *Totaux* sont calculés.
+
+| Colonne | Description |
+|---|---|
+| **In the form** | **Shown** (affiché), **Read-only** (grisé, sans saisie) ou **Hidden** (masqué). Un champ masqué garde sa valeur et s'enregistre avec la facture : un formulaire simple ne fait jamais perdre les données d'une facture riche. |
+| **Required** | L'enregistrement est refusé tant que le champ est vide — *Obligatoire : …* — pour les champs à valeur unique ; un champ de ligne est obligatoire sur chaque ligne. |
+| **Default value** | Valeur d'une nouvelle facture (et de chaque nouvelle ligne pour les champs de ligne). Un champ de liste prend une valeur de sa liste ; une date accepte `today`, `today+N`, `today-N` ou une date. |
+
+Une section ou un champ ajouté à l'éditeur après l'enregistrement du formulaire porte l'étiquette **new** ; tant que le formulaire n'est pas enregistré de nouveau, il est considéré comme masqué.
+
+### Alertes \{#warnings\}
+
+- Sous un champ : *Required, but the user cannot fill it and it has no default.* — obligatoire, non affiché, sans valeur par défaut.
+- En haut : *Required by the rule set …, but not editable in this form and without a value: Section › Champ, … Show the field or give it a default, or the invoice fails validation.* Le contrôle s'appuie sur le [jeu de règles](../ubl-tools/xsl-editor.md) par défaut : chaque terme métier qu'il exige doit être affiché ou avoir une valeur.
+
+---
+
+## Dans l'éditeur de facture \{#in-the-editor\}
+
+- L'éditeur s'ouvre sur le formulaire par défaut du rôle. Avec plusieurs formulaires accordés, un sélecteur dans son en-tête change de formulaire ; la saisie en cours est conservée et seuls les champs vides prennent les valeurs par défaut du nouveau formulaire.
+- Les valeurs par défaut s'appliquent à une nouvelle facture et à chaque nouvelle ligne. L'ouverture d'une facture existante (modification, copie) conserve ses valeurs.
+- Le contrôle des champs obligatoires s'ajoute à la validation XSD et Schematron, sans la remplacer. Un formulaire est une commodité de l'éditeur, pas une règle de sécurité : le serveur enregistre les champs masqués comme les autres.
+
+---
+
+## Accès \{#access\}
+
+Dans l'[éditeur de rôles](./security/roles.md), onglet **Actions**, le bloc **Formulaires de saisie des factures** liste *Complet* (l'éditeur entier) et chaque formulaire. Cocher les formulaires que le rôle peut utiliser ; s'il y en a plusieurs, **S'ouvre sur** choisit celui sur lequel l'éditeur s'ouvre. Un rôle sans formulaire coché garde l'éditeur complet.
+
+Les formulaires passent d'un environnement à l'autre par [promotion](../management/promotion.md) (type *Formulaire de saisie*) ; les droits des rôles restent propres à chaque environnement.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Partir des champs que l'équipe saisit réellement.** Masquer le reste plutôt que le supprimer : les valeurs masquées restent sur la facture.
+- **Donner une valeur par défaut aux valeurs constantes et les verrouiller.** Une devise, un moyen de paiement ou un profil en lecture seule avec une valeur par défaut évite les erreurs de saisie.
+- **Lever chaque alerte du jeu de règles avant d'accorder le formulaire.** Un terme obligatoire que l'utilisateur ne peut pas renseigner produit des factures en échec de validation.
+- **Passer par Preview après chaque modification.** L'aperçu montre l'éditeur tel que le rôle le verra.
 
 ---
 
@@ -33760,6 +33914,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 | **Factures** | Actions prédéfinies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
 | **Factures** | Actions personnalisées | `invoice.custom-action` | Utilise les boutons personnalisés définis par l'admin dans la rangée *actions personnalisées*. |
 | **Factures** | Envoyer le PDF par e-mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
+| **Listes** | Partager des vues | `listview.share` | Partager ses [vues enregistrées](../../application/saved-views.md) avec tous les utilisateurs. Enregistrer des vues personnelles ne demande aucun droit. |
 | **E-reporting** | Générer une déclaration | `ereporting.generate` | Produit une nouvelle déclaration e-reporting depuis la fenêtre *Générer*. |
 | **E-reporting** | Renvoyer une déclaration | `ereporting.resend` | Renvoie à la plateforme une déclaration e-reporting existante. |
 | **Traitements d'intégration** | Lancer les traitements | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
@@ -33767,6 +33922,12 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 :::info
 La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger l'UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
 :::
+
+---
+
+### Formulaires de saisie des factures \{#entry-forms\}
+
+Sous les cartes d'actions, dès qu'un [formulaire de saisie](../entry-forms.md) existe : **Formulaires de saisie des factures** *(aucun coché = l'éditeur complet)*. Cocher *Complet* et les formulaires que le rôle peut utiliser ; à partir de deux, **S'ouvre sur** choisit le formulaire d'ouverture de l'éditeur de facture. Un rôle sans formulaire garde l'éditeur complet.
 
 ---
 
@@ -34534,17 +34695,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
   
     Versions
+    2026.11.10.1 · 2026-11-10
     2026.11.08.1 · 2026-11-08
     2026.11.06.1 · 2026-11-06
     2026.11.05.1 · 2026-11-05
     2026.11.04.1 · 2026-11-04
     2026.10.30.1 · 2026-10-30
-    2026.10.29.1 · 2026-10-29
   
   
-    Toutes les versions (126)
+    Toutes les versions (127)
     
       2026-10
+      2026.10.29.1 · 2026-10-29
       2026.10.27.1 · 2026-10-27
       2026.10.25.1 · 2026-10-25
       2026.10.24.1 · 2026-10-24
@@ -34690,7 +34852,33 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
+
+### Améliorations
+- **Vues enregistrées sur toutes les listes.** Un sélecteur de vue, dans la barre d'outils de la liste, enregistre l'affichage courant sous un nom et le rappelle d'un clic : colonnes visibles et leur ordre, regroupement, tri, nombre de lignes par page, filtres de colonnes et, sur les listes qui en disposent, filtres avancés et période (avec sa date de référence). « Standard » reste la présentation définie dans Paramètres › Vues de liste.
+- **Vue d'ouverture.** Chaque utilisateur peut désigner l'une de ses vues comme celle sur laquelle la liste s'ouvre.
+- **Périodes relatives.** Une vue enregistrée sur « Ce mois-ci » ou « Mois dernier » suit le calendrier ; seule une plage personnalisée conserve ses dates.
+- **Des vues qui suivent l'utilisateur.** Elles sont conservées en base de données : on les retrouve depuis n'importe quel navigateur et sur tous les serveurs d'un même environnement.
+- **Vues partagées.** Un utilisateur dont le rôle dispose de la nouvelle action « Partager des vues » peut partager l'une de ses vues avec tous les utilisateurs, puis cesser de la partager. Les autres la retrouvent sous « Vues partagées », avec le nom de son propriétaire, et peuvent en enregistrer une copie ; seul le propriétaire la modifie. Un rôle dont la liste d'actions est restreinte n'a pas cette action tant qu'elle n'est pas cochée dans l'éditeur de rôles.
+- **Largeur des colonnes sur les listes.** Faites glisser le bord droit d'un en-tête de colonne pour l'élargir ou la réduire. Les largeurs sont enregistrées avec la vue ; « Largeurs par défaut », dans le menu Colonnes, rétablit celles définies dans les Paramètres. Dès qu'une largeur est modifiée, la liste défile horizontalement si ses colonnes dépassent l'écran.
+- **Formulaires de saisie pour l'éditeur de facture.** Dans les Paramètres, le bouton « Add entry form » définit un éditeur allégé (rangé sous Views & UI) : chaque section et chaque champ est affiché, en lecture seule ou masqué, avec une valeur par défaut et une case « obligatoire » facultatives ; le bouton Preview ouvre l'éditeur sur le formulaire. Un champ masqué conserve sa valeur : un formulaire simple ne fait jamais perdre les données d'une facture complète.
+- **Alerte sur un formulaire qui ne peut pas produire une facture valide.** L'éditeur de formulaire signale les champs exigés par le jeu de règles par défaut que le formulaire masque ou verrouille sans leur donner de valeur.
+- **Formulaires par rôle.** Dans l'éditeur de rôles (onglet Actions), cochez les formulaires qu'un rôle peut utiliser et celui sur lequel l'éditeur s'ouvre. Avec plusieurs formulaires, un sélecteur apparaît dans l'en-tête de l'éditeur. Un rôle sans formulaire garde l'éditeur complet : rien ne change tant qu'aucun formulaire n'est accordé.
+- **Promotion des formulaires.** Les formulaires de saisie sont un nouveau type d'élément de la page Promotion.
+- **Mise à niveau.** Les vues s'appuient sur une nouvelle table, F564256 : lancez `nomaubl.sh upgrade <env>`. D'ici là, les listes fonctionnent comme avant, sans le sélecteur.
+
+### Corrections
+- **Éditeur de facture : « + Prix » et « + Livraison » sur une ligne.** Les deux boutons ouvrent désormais leur bloc ; « + Livraison » restait sans effet, de même que « + Prix » sur une ligne sans prix unitaire.
+- **Éditeur de facture : libellés sans code de champ.** Les libellés du prix, de la facture antérieure, des identifiants de l'acheteur et de l'avis d'expédition n'affichent plus leur code BT / BG.
+
+---
+
 ## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Améliorations
+- **Agent de l'acheteur complet.** Dans l'éditeur XSL, l'agent de l'acheteur dispose désormais de sa raison sociale, de son SIREN, de son numéro de TVA, de son adresse électronique, de son code de rôle, de ses identifiants, de l'adresse complète et du contact. La raison sociale, obligatoire dans ce bloc, reprend le nom commercial si elle est vide : les documents existants n'ont rien à modifier. Sur les autres environnements, lancez `nomaubl.sh upgrade <env>`.
+- **Schéma de l'adresse électronique automatique pour l'agent et le payeur.** Comme pour le vendeur et l'acheteur, il prend le schéma par défaut (0225) ; le champ de schéma du payeur disparaît de l'éditeur XSL.
+- **Contact du client dans le PDF.** Le bloc client affiche désormais le nom, le téléphone et l'e-mail du contact quand la facture les porte, chacun avec son option dans le modèle PDF. Sur une autofacture, c'est là qu'apparaît le contact de la société émettrice.
 
 ### Corrections
 - **Plus de renvoi d'une facture en échec de validation.** Une facture en « Échec de validation » n'est plus envoyée à la plateforme : le bouton Renvoyer disparaît, « Renvoyer la sélection » ne compte que les factures réellement envoyables et la reprise automatique les ignore. Corrigez d'abord la facture ou relancez un retraitement complet.

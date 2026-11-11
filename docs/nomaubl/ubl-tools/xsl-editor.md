@@ -228,7 +228,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
 | **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. The variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) gives the document its own legal information, ahead of the company's text set in [Supplier Companies](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
-| **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
+| **Buyer agent** *(EXT-FR-FE-BG-01)* | EXT-FR-FE-03 to EXT-FR-FE-25 | Party acting for the buyer: trading and legal name (an empty legal name takes the trading name), SIREN, VAT number, electronic address (scheme `0225` by default, as for the seller and buyer), role code, full address and contact; up to four more identifiers with their scheme in *Agent identifiers (0..n)*. The block is written as soon as a name, SIREN, VAT number, electronic address or identifier resolves. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
@@ -380,7 +380,7 @@ The *Invoiced Object Identifiers* section records what the invoice **relates to*
 
 #### Payer / direct-debit mandate \{#payer-mandate\}
 
-For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address and role — plus the two mandate fields:
+For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address (scheme `0225` by default, as for the seller and buyer) and role — plus the two mandate fields:
 
 | Field | Effect |
 |---|---|

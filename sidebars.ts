@@ -527,6 +527,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'nomaubl/application/ai-capabilities',
+        'nomaubl/application/saved-views',
       ],
     },
     {
@@ -643,6 +644,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/configuration/reference-lists',
         'nomaubl/configuration/custom-lists',
         'nomaubl/configuration/list-views',
+        'nomaubl/configuration/entry-forms',
         'nomaubl/configuration/default-periods',
         'nomaubl/configuration/api-connectors',
         'nomaubl/configuration/sql-connectors',

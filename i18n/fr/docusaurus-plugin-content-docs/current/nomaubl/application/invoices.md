@@ -217,7 +217,7 @@ Les colonnes adossées à une liste de référence (Statut, statut e-reporting, 
 
 ### Barre d'outils de la grille
 
-À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)).
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)). Le **sélecteur de vues** enregistre et rappelle l'affichage de la liste — colonnes, largeurs, tri, filtres, période : voir [Vues enregistrées](saved-views.md).
 
 ---
 
@@ -772,6 +772,8 @@ Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmatio
 ### Modale de création / édition de facture \{#create-invoice\}
 
 Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
+
+Les sections et champs affichés dépendent du rôle de l'utilisateur : un rôle qui dispose de [formulaires de saisie](../configuration/entry-forms.md) ouvre l'éditeur sur son formulaire par défaut — certains champs en lecture seule ou masqués, valeurs par défaut renseignées, champs obligatoires contrôlés à l'enregistrement — et un sélecteur dans l'en-tête passe d'un formulaire à l'autre. Sans formulaire, le rôle garde l'éditeur complet. Sur une ligne, **+ Prix** ouvre le détail du prix (PU brut, remise, PU net) et **+ Delivery** le bloc de livraison de la ligne ; la corbeille les referme.
 
 Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 

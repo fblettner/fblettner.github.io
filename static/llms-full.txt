@@ -23067,7 +23067,7 @@ RefList columns (Status, eReporting Status, custom lists) get a **multi-select p
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)).
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)). The **view picker** saves and brings back the display of the list — columns, widths, sort, filters, period: see [Saved views](saved-views.md).
 
 ---
 
@@ -23602,6 +23602,8 @@ While the e-mail is sending, an overlay covers the modal until the SMTP server c
 ### Create / Edit invoice modal \{#create-invoice\}
 
 Opens from **+ New Invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+
+The sections and fields shown depend on the user's role: a role granted [entry forms](../configuration/entry-forms.md) opens the editor on its default form — some fields read-only or hidden, defaults filled in, required fields checked on save — and a picker in the header switches between its forms. Without any form, the role keeps the complete editor. On a line, **+ Price** opens the price details (gross price, price discount, net price) and **+ Delivery** the line delivery block; the bin closes them.
 
 Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
@@ -25591,6 +25593,83 @@ The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — o
 
 ---
 
+## NomaUBL — Saved views
+Source: https://docs.nomana-it.fr/nomaubl/application/saved-views/
+
+NomaUBL saved views: save the display of a list (columns, order, grouping, sort, rows per page, column filters, Advanced Filters, period) under a name, open a list on one's own view, share views with every user, and resize columns.
+
+Every list of NomaUBL — invoices, documents, e-reporting, integration errors, processing log, scheduled jobs, promotion, server log and the other grids — has a **view picker** in its toolbar. It saves the current display of the list under a name and brings it back in one click. Each user has their own views, kept in the database: the same views appear from any browser and on every server of the environment.
+
+**Standard** is the layout set by the administrator in [Settings › List views](../configuration/list-views.md); it is always listed first.
+
+---
+
+## At a glance
+
+---
+
+## What a view holds \{#content\}
+
+| Held by the view | Not held |
+|---|---|
+| Visible columns and their order, column widths | Direction, status tabs, search box |
+| Grouping, sort, rows per page | Labels, formats and value lists — set in [List views](../configuration/list-views.md) |
+| Column filters (the filter row opens when the view has some) | |
+| Advanced Filters — invoices, documents, integration errors, processing log, e-reporting | |
+| Period and date basis — invoices, documents, integration errors, processing log | |
+
+A period saved as *Today*, *Yesterday*, *This month*, *Last month*, *This quarter*, *This year* or *Last 12 months* follows the calendar: it is computed again the day the view opens. Only a *Custom* range keeps its dates. A view saved without a period leaves the current one unchanged.
+
+A list opened from another page on given filters or a given period — a dashboard tile, the processing log reached from a file — keeps them over the view it opens on.
+
+---
+
+## The view menu \{#menu\}
+
+| Item | Effect |
+|---|---|
+| **Standard** | Returns to the Settings layout. |
+| **My views** | The user's views. ★ marks the view the list opens on, the users icon a view shared with everyone. |
+| **Shared views** | The views other users share, with the owner's name. |
+| **Save** | Saves the changes into the active view (own views only). An orange dot on the picker means the active view has changed and is not saved; the changes stay until the browser tab is closed. |
+| **Save as…** | Saves the display as a new view (name, 60 characters at most). On a shared view, this is how a user keeps a copy of their own. Reusing the name of one of one's views replaces it. |
+| **Rename…** · **Delete** | Own views only. After a delete, the list returns to Standard. |
+| **Open the list on this view** / **Open the list on Standard** | Chooses the view the list opens on, among one's own views. |
+| **Share with every user** / **Stop sharing** | Own views only, with the *Share views* action (see [Access](#access)). |
+
+The list opens on the view picked earlier in the same browser session, else on the user's view marked ★, else on Standard. A shared view cannot be the one a list opens on: save a copy with **Save as…** and mark the copy. Only its owner changes a shared view; when its owner stops sharing it, the others go back to Standard.
+
+---
+
+## Column widths \{#column-widths\}
+
+Drag the right border of a column header to widen or narrow the column (60 px at least). Once a width is changed, the list is exactly as wide as its columns: it scrolls sideways when they exceed the screen. **Reset widths**, in the header of the **Columns** menu, returns to the widths set in [List views](../configuration/list-views.md).
+
+Widths are saved with the view. Under Standard, the order, visibility and widths of the columns stay in the browser, as the layout before views existed: **Save as…** turns them into a view.
+
+The Explorer results, dashboard tiles, drill windows and the integrity report have no view picker.
+
+---
+
+## Access \{#access\}
+
+- Saving, renaming and deleting one's own views needs no grant: every signed-in user can.
+- Sharing needs the **Share views** action (group *Lists*) on the [Roles](../configuration/security/roles.md) page. A role without an action list has it; a role with a restricted action list has it only once ticked; a read-only role never has it.
+- A view never widens what the user sees: company and row grants apply as usual.
+
+Views are stored in table `F564256`, created by `nomaubl.sh upgrade <env>` (see [Upgrade](../installation/upgrade.md)). Until the upgrade, the lists work without the picker.
+
+---
+
+## Tips & best practices
+
+- **One view per recurring task.** *Month-end*, *To correct*, *Customer service*: each brings back its columns, filters and period in one click.
+- **Save relative periods.** A view on *This month* stays right every month; a custom range is for a one-off analysis.
+- **Share the views of a team rather than describing them.** One person builds the view, shares it, and each colleague keeps a copy to adjust.
+- **Keep Standard simple.** It is the common layout; personal needs go into views.
+
+---
+
 ## NomaUBL — Fetch Input
 Source: https://docs.nomana-it.fr/nomaubl/sync/fetch-input/
 
@@ -27029,7 +27108,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
 | **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. The variable *Seller additional legal information (full text)* (`TAG_SUPPLIER_LEGAL_FORM`, BT-33) gives the document its own legal information, ahead of the company's text set in [Supplier Companies](./ubl-defaults/suppliers-companies.md#legal-information). |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
-| **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
+| **Buyer agent** *(EXT-FR-FE-BG-01)* | EXT-FR-FE-03 to EXT-FR-FE-25 | Party acting for the buyer: trading and legal name (an empty legal name takes the trading name), SIREN, VAT number, electronic address (scheme `0225` by default, as for the seller and buyer), role code, full address and contact; up to four more identifiers with their scheme in *Agent identifiers (0..n)*. The block is written as soon as a name, SIREN, VAT number, electronic address or identifier resolves. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
@@ -27132,7 +27211,7 @@ The *Invoiced Object Identifiers* section records what the invoice **relates to*
 
 #### Payer / direct-debit mandate \{#payer-mandate\}
 
-For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address and role — plus the two mandate fields:
+For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address (scheme `0225` by default, as for the seller and buyer) and role — plus the two mandate fields:
 
 | Field | Effect |
 |---|---|
@@ -29202,7 +29281,7 @@ The drawer groups toggles by **`Category · Name`** prefix and arranges them in 
 The full list of toggles per preset section:
 
 - **Header** — nine `META · …` toggles (invoice number, issue date, due date, contract / despatch advice (BT-16) / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
-- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box; its identifier is labelled after its scheme (SIRET, GLN…), *ID* when the scheme is unknown.
+- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box; its identifier is labelled after its scheme (SIRET, GLN…), *ID* when the scheme is unknown. The Customer box also prints the buyer contact — *Contact name*, *Phone*, *Email*, each with its own option, on by default — when the invoice carries it; on a self-billed invoice, this is where the issuing company's contact appears.
 - **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), two per-line options, on by default — *Order line number* prints the customer line number (*Customer line no.*) under each line, *Customer Order Reference* prints the customer order reference with the sales order under each line when *Group by order* is off (the order band carries it otherwise; a template saved before this option counts it as on), column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries ten sub-detail toggles for line metadata (BT-127, BT-134/135, **line despatch advice** (EXT-FR-FE-BG-07), **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
@@ -30058,6 +30137,7 @@ Open it from **Management → Promotion**. The page has three views: **Export** 
 |---|---|---|
 | **Document template** | A [document](./documents.md). | Its files — pre-processing XSL, indexation XSL, RTF, UBL XSLT and its PDF companion (`.pdf.json`), custom Schematron — and the [PDF template](./pdf-templates.md) it names. |
 | **PDF template** | A PDF template. | — |
+| **Entry form** | An [entry form](../configuration/entry-forms.md) of the invoice editor. | — (role grants stay with each environment's roles) |
 | **List** | A [reference list](../configuration/reference-lists.md) or a [custom list](../configuration/custom-lists.md). | — |
 | **Notification rule** | A [notification rule](./notification-rules.md). | — |
 | **Explorer analysis** · **Explorer dashboard** | A saved [Explorer](../application/explorer.md) analysis or dashboard. | A dashboard brings the analyses of its tiles. |
@@ -32440,6 +32520,10 @@ The **List Views** editor is the configuration page of the grids built on the sh
 
 A second concept lives next to the spec: the **column catalog**. Each view ships a catalog of every column the underlying tables can produce — the catalog is the source of truth for what is addressable, the spec picks a subset and presents it. The `+ Add column` picker is just a filtered view of the catalog.
 
+:::info[Standard and saved views]
+The spec of a view is the **Standard** layout of the list's view picker. On top of it, each user saves their own [views](../application/saved-views.md) — order, visibility and width of the columns, sort, filters, period — within the columns the spec offers. The **Width** set here is the column's default width, the one **Reset widths** returns to.
+:::
+
 ---
 
 ## At a glance
@@ -32604,6 +32688,76 @@ The `name` joins with the catalog entry that has a matching key; everything else
 - **Keep the filter allow-list small.** Marking every column `filter: true` clutters the Advanced Filters panel — limit the allow-list to the columns operators actually query.
 - **Set widths on the columns that benefit from them.** Status badges, dates, codes have natural widths; long strings should be left without a width so they take whatever room is left. `width` is also the column's CSS `min-width` — a too-large value cramps the rest of the grid.
 - **Hidden ≠ removed.** Setting `Visible = off` keeps the column queryable by the Advanced Filters panel. Use it for technical fields the operator filters on but does not need to read.
+
+---
+
+## NomaUBL — Entry forms
+Source: https://docs.nomana-it.fr/nomaubl/configuration/entry-forms/
+
+NomaUBL entry forms: simpler invoice editors defined in Settings — per section and field shown, read-only or hidden, default values, required fields, rule-set warning — granted per role, with a picker in the invoice editor.
+
+An **entry form** is a simpler version of the [invoice editor](../application/invoices.md#create-invoice): for each section and field, it decides whether the field is shown, read-only or hidden, gives a default value and makes a field required. Forms are granted per role, so a customer-service team can enter invoices on a short form while accountants keep the complete editor.
+
+Access: **Settings → Add entry form**; forms are listed under **Views & UI** as *Entry form: name*. The editor stays in English, except the section and field names, which follow the invoice editor's language.
+
+---
+
+## At a glance
+
+---
+
+## Creating a form
+
+**Add entry form** asks for a name and a description; the form is stored as `entry-form-<name>`. A new form starts as the whole editor — every section and field shown — and **Copy** duplicates an existing form.
+
+| Field | Description |
+|---|---|
+| **Label (English)** · **Label (French)** | Name shown in the editor's picker, in the user's language (English when no French label). |
+| **Preview** | Opens the invoice editor on the form as it stands, with Save disabled. |
+
+---
+
+## Sections and fields \{#fields\}
+
+One card per section of the invoice editor: header, customer, delivery, payment, lines… Each card shows *shown/total fields*, a **Shown** box to hide the whole section, **Folded when the editor opens**, and **Show all** / **Hide all**. *Document Keys* and *Invoice Lines* are **Always shown**; *VAT Summary* and *Totals* are computed.
+
+| Column | Description |
+|---|---|
+| **In the form** | **Shown**, **Read-only** (greyed, no input) or **Hidden**. A hidden field keeps its value and is saved with the invoice, so a simple form never loses data from a rich invoice. |
+| **Required** | The save is refused while the field is empty — *Required: …* — on single-value fields; a line field is required on every line. |
+| **Default value** | Value of a new invoice (and of each new line for line fields). A list field takes a value of its list; a date takes `today`, `today+N`, `today-N` or a date. |
+
+A section or field added to the editor after the form was saved shows a **new** tag; until the form is saved again, it counts as hidden.
+
+### Warnings \{#warnings\}
+
+- Under a field: *Required, but the user cannot fill it and it has no default.* — required, not shown, without default.
+- At the top: *Required by the rule set …, but not editable in this form and without a value: Section › Field, … Show the field or give it a default, or the invoice fails validation.* The check uses the default [rule set](../ubl-tools/xsl-editor.md): every business term it requires must be shown, or have a value.
+
+---
+
+## In the invoice editor \{#in-the-editor\}
+
+- The editor opens on the role's default form. With several forms granted, a picker in its header switches form; what was typed is kept, and only empty fields take the new form's defaults.
+- Defaults apply to a new invoice and to each new line. Opening an existing invoice (edit, copy) keeps its values.
+- The required check adds to the XSD and Schematron validation; it does not replace it. A form is a convenience of the editor, not a security rule: the server stores the hidden fields like any other.
+
+---
+
+## Access \{#access\}
+
+In the [role editor](./security/roles.md), tab **Actions**, the block **Invoice entry forms** lists *Complete* (the whole editor) and every form. Tick the forms the role may use; with several, **Opens on** picks the one the editor opens on. A role without any form ticked keeps the complete editor.
+
+Forms move between environments by [promotion](../management/promotion.md) (kind *Entry form*); the role grants stay with the roles of each environment.
+
+---
+
+## Tips & best practices
+
+- **Start from the fields the team actually types.** Hide the rest rather than removing it: hidden values stay on the invoice.
+- **Give constant values a default and lock them.** A currency, a payment means or a profile shown read-only with a default avoids typing errors.
+- **Clear every rule-set warning before granting the form.** A required term the user cannot fill produces invoices that fail validation.
+- **Use Preview after each change.** It shows the editor exactly as the role will see it.
 
 ---
 
@@ -33850,6 +34004,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 | **Invoices** | Preset actions | `invoice.preset-action` | Use the per-status preset buttons (Resend on 9904, …) in the seller actions row. |
 | **Invoices** | Custom actions | `invoice.custom-action` | Use the admin-defined custom buttons in the custom actions row. |
 | **Invoices** | Email PDF | `invoice.email` | Send the rendered PDF via the configured SMTP relay. |
+| **Lists** | Share views | `listview.share` | Share one's [saved views](../../application/saved-views.md) with every user. Saving private views needs no grant. |
 | **E-Reporting** | Generate batch | `ereporting.generate` | Build a new e-reporting batch from the *Generate* dialog. |
 | **E-Reporting** | Resend batch | `ereporting.resend` | Re-submit an existing e-reporting batch to the PA. |
 | **Integration ops** | Run batch jobs | `integration.run` | Trigger *Import statuses* / *Fetch received* / *Retrieve statuses* from the toolbar. |
@@ -33857,6 +34012,12 @@ Grouped by the page where the button lives — the same key can power buttons on
 :::info
 The detail modal renders Parties, Invoice Lines, TVA recap and Notes from the UBL XML endpoint, which is **read-open** (still subject to row filters and page visibility). Only the explicit *Download UBL* button is gated by `invoice.download` — view-only roles can therefore inspect the invoice content without the right to extract the raw XML.
 :::
+
+---
+
+### Invoice entry forms \{#entry-forms\}
+
+Below the action cards, when at least one [entry form](../entry-forms.md) exists: **Invoice entry forms** *(none ticked = the complete editor)*. Tick *Complete* and the forms the role may use; with two or more, **Opens on** picks the form the invoice editor opens on. A role without any form keeps the complete editor.
 
 ---
 
@@ -34624,17 +34785,18 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
   
     Versions
+    2026.11.10.1 · 2026-11-10
     2026.11.08.1 · 2026-11-08
     2026.11.06.1 · 2026-11-06
     2026.11.05.1 · 2026-11-05
     2026.11.04.1 · 2026-11-04
     2026.10.30.1 · 2026-10-30
-    2026.10.29.1 · 2026-10-29
   
   
-    All versions (126)
+    All versions (127)
     
       2026-10
+      2026.10.29.1 · 2026-10-29
       2026.10.27.1 · 2026-10-27
       2026.10.25.1 · 2026-10-25
       2026.10.24.1 · 2026-10-24
@@ -34780,7 +34942,33 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
+
+### Improvements
+- **Saved views on every list.** A view picker in the list toolbar saves the current display under a name and brings it back in one click: visible columns and their order, grouping, sort, rows per page, column filters and, on the lists that have them, the Advanced Filters and the period (with its date basis). "Standard" remains the layout set in Settings › List views.
+- **A view to open the list on.** Each user can choose one of their views as the one a list opens on.
+- **Relative periods in a view.** A view saved on "This month" or "Last month" follows the calendar; only a custom range keeps its dates.
+- **Views follow the user.** They are kept in the database, so the same views are available from any browser and on every server of an environment.
+- **Shared views.** A user whose role has the new "Share views" action can share one of their views with every user, and stop sharing it. The others find it under "Shared views" with its owner's name and can save their own copy; only the owner changes it. A role with a restricted action list does not have the action until it is ticked in the role editor.
+- **Column widths on the lists.** Drag the right border of a column header to widen or narrow it. Widths are saved with the view; "Reset widths", in the Columns menu, returns to the widths set in Settings. Once a width is changed, the list scrolls sideways when its columns are wider than the screen.
+- **Entry forms for the invoice editor.** In Settings, "Add entry form" defines a simpler editor (listed under Views & UI): for each section and field, shown, read-only or hidden, with an optional default value and a "required" tick; a Preview button opens the editor on the form. A hidden field keeps its value, so a simple form never loses data from a rich invoice.
+- **Warning on a form that cannot produce a valid invoice.** The form editor lists the fields the default rule set requires that the form hides or locks without giving them a value.
+- **Forms per role.** In the role editor (Actions tab), tick the forms a role may use and the one the editor opens on. With several forms, a picker appears in the editor's header. A role without any form keeps the complete editor: nothing changes until a form is granted.
+- **Forms move by promotion.** Entry forms are a new kind on the Promotion page.
+- **Upgrade.** Views need a new table, F564256: run `nomaubl.sh upgrade <env>`. Until then the lists work as before, without the picker.
+
+### Fixes
+- **Invoice editor: "+ Price" and "+ Delivery" on a line.** The two buttons now open their block; "+ Delivery" did nothing, and "+ Price" did nothing on a line without a unit price.
+- **Invoice editor: labels without field codes.** The price, preceding invoice, buyer identifier and despatch advice labels no longer carry their BT / BG code.
+
+---
+
 ## 2026.11.10.1 — 2026-11-10 \{#v2026-11-10-1\}
+
+### Improvements
+- **Buyer agent: every field.** In the XSL Editor, the buyer agent now has its legal name, SIREN, VAT number, electronic address, role code, identifiers, full address and contact. The legal name, required in this block, takes the trading name when left empty, so existing documents need no change. Other environments need `nomaubl.sh upgrade <env>`.
+- **Electronic address scheme set automatically for the agent and the payer.** As for the seller and the buyer, it takes the default scheme (0225); the payer's scheme field is removed from the XSL Editor.
+- **Customer contact in the PDF.** The customer box now shows the contact name, phone and email when the invoice carries them, each with its own option in the PDF template. On a self-billing invoice, this is where the issuing company's contact appears.
 
 ### Fixes
 - **No resend after a failed validation.** An invoice in "Validation failed" is no longer sent to the platform: the Resend button is hidden, "Resend selected" counts only the invoices that can be sent, and an automatic retry leaves those invoices aside. Correct the invoice or reprocess it in full first.
