@@ -172,6 +172,8 @@ Le XML s'affiche à droite, en lecture seule. Un PDF numérisé (images sans tex
 
 La page écrit les trois réglages et relance la conversion : les lignes d'en-tête sont encadrées en indigo, les lignes de facture en vert, la ligne de fin en rouge, et le compteur affiche *N ligne(s) trouvée(s)*. **Recommencer** efface les clics.
 
+Un tableau imprimé en plusieurs sections, chacune fermée par un sous-total, demande un réglage de plus : **Lignes ignorées**, une regex saisie à la main (par ex. `^Sous total`) qui désigne les lignes du tableau qui ne sont pas des lignes de facture. Le tableau est alors lu jusqu'au bout : placer **Fin du tableau** sur la ligne qui suit la dernière section. Les valeurs imprimées sur une ligne ignorée restent disponibles comme champs du document. Quand l'en-tête occupe plusieurs lignes (**Lignes d'en-tête** à 2 ou plus), chaque ligne de facture porte aussi le titre de sa section, dans `<Section>`. Laissé vide, le réglage ne change rien ; il s'essaie sur la page avant l'enregistrement.
+
 ### Récapitulatif TVA
 
 **Récapitulatif TVA** sélectionné, les mêmes clics renseignent **Début du récap. TVA**, **Colonnes** et **Fin du récap. TVA** : *Cliquez sur la ligne d'en-tête du récapitulatif TVA*, *Cliquez sur sa dernière colonne* (un bouton par cellule d'en-tête — utile quand un autre bloc est imprimé à côté du récapitulatif), *Cliquez sur la première ligne après les taux*. Les taux deviennent `<Recap_TVA>/<Ligne_TVA>`, et le compteur affiche *N taux de TVA trouvé(s)*.
@@ -188,7 +190,7 @@ La page écrit les trois réglages et relance la conversion : les lignes d'en-t�
 
 ### Enregistrer dans le document
 
-**Enregistrer dans le document** écrit les réglages dans le document choisi : début, lignes d'en-tête et fin du tableau, récapitulatif TVA, découpage en factures, règles d'extraction du numéro et du type, société (ou sa recherche). Un document sans clé de découpage reçoit `Document`, une par facture. Les mêmes réglages se modifient ensuite dans le groupe [PDF extraction](../management/documents.md#extraction-pdf) du document.
+**Enregistrer dans le document** écrit les réglages dans le document choisi : début, lignes d'en-tête, fin du tableau et lignes ignorées, récapitulatif TVA, découpage en factures, règles d'extraction du numéro et du type, société (ou sa recherche). Un document sans clé de découpage reçoit `Document`, une par facture. Les mêmes réglages se modifient ensuite dans le groupe [PDF extraction](../management/documents.md#extraction-pdf) du document.
 
 ---
 

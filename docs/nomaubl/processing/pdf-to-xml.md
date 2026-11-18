@@ -172,6 +172,8 @@ The XML appears on the right, read-only. A scanned PDF (images without text) is 
 
 The page writes the three settings and converts again: the header rows are framed in indigo, the lines in green, the end row in red, and the count shows *N line(s) found*. **Start over** clears the clicks.
 
+A table printed in several sections, each closed by a subtotal, needs one more setting: **Rows ignored**, a regex typed by hand (e.g. `^Sous total`) naming the rows inside the table that are not invoice lines. The table is then read to its end: set **Table end** on the row after the last section. The values printed on an ignored row stay available as fields of the document. When the header spans several rows (**Header rows** of 2 or more), each line also carries the title of its section, in `<Section>`. Left blank, the setting changes nothing; it can be tried on the page before saving.
+
 ### VAT summary
 
 With **VAT summary** selected, the same clicks set **VAT table start**, **Columns** and **VAT table end**: *Click the header row of the VAT summary*, *Click its last column* (one button per header cell — useful when another block is printed beside the summary), *Click the first row after the rates*. The rates become `<Recap_TVA>/<Ligne_TVA>`, and the count shows *N VAT rate(s) found*.
@@ -188,7 +190,7 @@ With **VAT summary** selected, the same clicks set **VAT table start**, **Column
 
 ### Save to document
 
-**Save to document** writes the settings to the document picked: table start, header rows and table end, VAT summary, invoice split, the number and type extraction rules, the company (or its lookup). A document without a burst key gets `Document`, one per invoice. The same settings can be edited afterwards in the [PDF extraction](../management/documents.md#pdf-extraction) group of the document.
+**Save to document** writes the settings to the document picked: table start, header rows, table end and rows ignored, VAT summary, invoice split, the number and type extraction rules, the company (or its lookup). A document without a burst key gets `Document`, one per invoice. The same settings can be edited afterwards in the [PDF extraction](../management/documents.md#pdf-extraction) group of the document.
 
 ---
 

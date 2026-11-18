@@ -188,7 +188,7 @@ A role's [data scope](./roles-and-permissions.md#data-scope) can take its values
 
 In the user form, **Data-scope attributes** holds one row per attribute: a key (`company`) and a value (`00001, 00050` — a comma makes a list). **Add an attribute…** suggests the keys the roles already use. A user who lacks the attribute a rule needs sees no row through that rule.
 
-The users list shows the attributes on each card (`company=00001,00050`), and the user sees them, with their data scope in words, in their **Profile** window. From the command line: `liberty-admin set-attributes alice company=00001,00050`.
+The users list shows the attributes on each card (`company=00001,00050`), and the user sees them, with their data scope in words, in their **Profile** window. A user holding `mcp:use` also finds an **Access tokens** tab there — see [Connect Claude (MCP)](../../mcp.md#token). From the command line: `liberty-admin set-attributes alice company=00001,00050`.
 
 ---
 

@@ -114,7 +114,7 @@ Action effectuée par NomaUBL sur l'**enregistrement de définition de report** 
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = l'enregistrement reste en place ; `REMOVE` = suppression de l'enregistrement dans `F9563110` ; `UPDATE` = réécriture du PDF généré dans la colonne BLOB (PDF uniquement). |
+| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = l'enregistrement reste en place ; `REMOVE` = suppression de l'enregistrement dans `F9563110` ; `UPDATE` = réécriture du PDF généré dans la colonne BLOB (PDF uniquement). L'action porte sur l'entrée de la file d'impression qui vient d'être traitée : pour un état exécuté en sous-système, les autres déclenchements du même numéro de job restent en l'état. |
 
 Choisir `NO` pendant la validation d'une intégration, passer à `REMOVE` une fois la chaîne fiabilisée (la file reste propre), et n'utiliser `UPDATE` que quand des consommateurs JDE en aval attendent de retrouver le PDF généré dans le BLOB.
 

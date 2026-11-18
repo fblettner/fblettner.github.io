@@ -148,7 +148,7 @@ Une exécution interrompue par un redémarrage du serveur est clôturée en éch
 
 ## La page Détail de l'exécution \{#detail\}
 
-La page se rafraîchit toutes les deux secondes tant que l'exécution est en cours (*en direct*).
+La page se rafraîchit toutes les deux secondes tant que l'exécution est en cours (*en direct*). **Retour**, dans sa barre d'outils, ramène à la page d'où l'exécution a été ouverte — la liste des tâches, la liste des exécutions ou une exécution parente ; ouverte par un lien, elle ramène à la liste des tâches.
 
 | Partie | Contenu |
 |---|---|

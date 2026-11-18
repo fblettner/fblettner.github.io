@@ -166,23 +166,24 @@ curl http://localhost:8090/api/license
 Sample responses:
 
 ```json
-{ "mode": "full", "customer": "ACME Corp", "expiresAt": "2026-12-31" }
+{ "mode": "full", "plan": "standard", "customer": "ACME", "maxUsers": 25, "expiresAt": "2027-12-31", "daysLeft": 414 }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "License expired on 2026-04-30" }
+{ "mode": "restricted", "expiresAt": "2026-04-30", "error": "License key expired" }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "No license configured" }
+{ "mode": "restricted", "error": "No license key configured" }
 ```
 
 | Field | What it tells you |
 |---|---|
 | `mode` | `full` (everything works) or `restricted` (limited functionality without a license). |
-| `customer` | Subject of the license (only when `mode = full`). |
-| `expiresAt` | License expiry date. |
-| `reason` | Why the license isn't loaded (only when `mode = restricted`). |
+| `plan`, `customer` | Plan and subject of the license (only when `mode = full`). |
+| `maxUsers` | User limit of the license — the maximum number of enabled accounts; absent = unlimited. |
+| `expiresAt`, `daysLeft` | License expiry date and days left; absent = the license never expires. |
+| `error` | Why the license is refused (only when `mode = restricted`). |
 
 Useful for:
 

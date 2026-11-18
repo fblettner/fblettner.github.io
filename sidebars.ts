@@ -120,6 +120,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'liberty/framework/ai-assistant',
+        'liberty/framework/mcp',
         {
           type: 'category',
           label: 'Plugins',
@@ -161,11 +162,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Operate',
-      link: {type: 'generated-index', slug: '/liberty/monitoring', description: 'Liberty Next → Operate: the Monitoring page — live view, server log, retention — and the health endpoints. The jobs are in the Nomaflow documentation.'},
+      link: {type: 'generated-index', slug: '/liberty/monitoring', description: 'Liberty Next → Operate: the Monitoring page — live view, server log, AI usage, retention — and the health endpoints. The jobs are in the Nomaflow documentation.'},
       items: [
         'liberty/monitoring/overview',
         'liberty/monitoring/dashboard',
         'liberty/monitoring/server-log',
+        'liberty/monitoring/ai-usage',
         'liberty/monitoring/retention',
         'liberty/monitoring/health-endpoints',
       ],

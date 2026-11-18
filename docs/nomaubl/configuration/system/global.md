@@ -285,6 +285,8 @@ Before setting a value, the **Count only** button of the Retention purge job (or
 | **BIP job hosts** | One high-water mark **per JDE execution host** (`RJRPDEXHST`). The mark tracks each host by **job completion time**, not by job number — a job number is assigned at submission, so a long-running job that finishes after a shorter, higher-numbered one could otherwise fall below the mark and never be fetched. The completion date is shown next to the job number for each host, and is **editable**. Add each host with its starting number (the first batch after an upgrade fills the date automatically), or click *Retrieve last job # per host* to seed them all from the current maximum; from then on they advance after each job, so an interrupted batch resumes exactly where it stopped. **Only listed hosts are scanned.** *(BIP / JDE-specific.)* |
 | **BIP Lookback (days)** | Date floor on the BIP scan. `0` = no floor — every job after the watermark is eligible. `N > 0` = only jobs updated in the last N days. Handy on a first install or after a long gap, to skip years of history rather than walking the whole queue. Applies to the manual scan, the scheduled batch and the `nomaubl -fetch-all` command. *(BIP / JDE-specific.)* |
 
+**Reports running in subsystem.** A report running in subsystem keeps the same job number until it is restarted, and each trigger adds an entry to the print queue under that number. The scheduled batch picks up every trigger, each as its own batch: the first batch of a job number is named `report_version_job`, the following ones `report_version_job-entry`, the entry being the report definition job number (`RJRPDJBNBR`). The host must be scanned by completion date, which is the case once its first scheduled batch has run. *(BIP / JDE-specific.)*
+
 ---
 
 ## Tab 8 — License
@@ -294,6 +296,14 @@ Before setting a value, the **Count only** button of the Retention purge job (or
 | Field | Description |
 |---|---|
 | **License Key** | Full NomaUBL license key. **Without a valid key, the *Navigation*, *Synchronisation* and *UBL* menus are disabled** — only Configuration remains accessible. |
+
+Under the field, a line shows what the **saved** key gives — *Saved key: customer · plan · expires on … (n days left) · n users*, with *no expiry* or *unlimited users* when the licence sets none — or *Restricted:* followed by the reason the key is refused (no key, invalid format or signature, expired key).
+
+| Topic | Behaviour |
+|---|---|
+| **Expiry** | From 30 days before the expiry, a banner reminds the users who have the Settings access: *The licence expires on … (n days left). Renew it to keep the full application.* |
+| **User limit** | A licence may set a maximum number of enabled accounts. Once it is reached, creating a user, enabling a disabled one and the automatic creation of an account at a first SSO sign-in are refused; the accounts already enabled keep working. The [users list](../security/users.md) shows the enabled accounts against the limit. |
+| **Usage report** | Once a day the server sends the licence tool, with the licence key, the number of invoices per month, the number of enabled accounts, the environment name and the version — no invoice content, no user name. It is the *Licence usage report* job of the [Scheduled jobs](../../sync/scheduled-jobs/overview.md#usage-report) page. |
 
 ---
 

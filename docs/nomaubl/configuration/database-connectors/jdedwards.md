@@ -114,7 +114,7 @@ What NomaUBL does with the BIP **report-definition record** after a successful e
 
 | Field | Values | Description |
 |---|---|---|
-| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = leave the record untouched; `REMOVE` = delete the record from `F9563110`; `UPDATE` = write the rendered PDF back into the BLOB column (PDF only). |
+| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = leave the record untouched; `REMOVE` = delete the record from `F9563110`; `UPDATE` = write the rendered PDF back into the BLOB column (PDF only). The action applies to the print queue entry just processed: for a report running in subsystem, the other triggers of the same job number are left as they are. |
 
 Pick `NO` while validating an integration, switch to `REMOVE` once you trust the pipeline (keeps the queue clean), and use `UPDATE` only when downstream JDE consumers expect to find the rendered PDF in the BLOB.
 

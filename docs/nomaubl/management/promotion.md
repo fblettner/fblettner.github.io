@@ -225,6 +225,7 @@ The targets are defined once in **Settings → Promotion targets** (Platform are
 | **Name** | Shown in the target list of the Promotion page. |
 | **URL** | Root of the target instance, with its path prefix when it has one (e.g. `https://test.example/nomaubl`). |
 | **Username** / **Password** | Account on the target, which must hold the *Settings access* feature there; leave blank when the target runs without sign-in. The password is stored encoded and decoded on the server only for the call. |
+| **Check the server certificate** | Ticked by default. When a promotion fails with *The target's certificate is not trusted*, the target has a self-signed or internal certificate: untick the option. |
 
 The account is never sent to the browser and never travels in a package. This editor is in English in the application.
 

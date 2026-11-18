@@ -17,15 +17,22 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
+    <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
+    <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
+    <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
+    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
     <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
-    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
-    <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
-    <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
-    <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (128)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (132)</summary>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
+      <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
+      <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
+      <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
+    </div>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
       <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
@@ -175,6 +182,48 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.11.18.1 — 2026-11-18 \{#v2026-11-18-1\}
+
+### Improvements
+- **JD Edwards print queue: reports running in subsystem.** A report running in subsystem keeps the same job number until it is restarted, and each trigger adds an entry to the print queue under that number. The scheduled fetch now picks up every trigger, each as its own batch, instead of the first one only. The first batch of a job number keeps its usual name (`report_version_job`); the following ones add the entry's number (`report_version_job-entry`). The "after generation" action (remove or update the JD Edwards entry) applies to the entry just processed, not to the whole job number. Fetching by job number alone (manual extraction, command line) takes every entry of that number; `job-entry` takes one. The host must be scanned by completion date, which is the case after its first scheduled batch. The command-line batch scan still goes by job number and does not see later triggers. Nothing changes for a report that does not run in subsystem.
+
+---
+
+## 2026.11.16.1 — 2026-11-16 \{#v2026-11-16-1\}
+
+### Improvements
+- **PDF to XML: tables in several sections.** A new setting of a PDF document, "Rows ignored", names the rows inside the table that are not invoice lines, such as the subtotal closing each section. The table is then read to its end, each line carrying the title of its section, with "Table end" set on the row after the last section. The setting is in the document editor (PDF extraction) and on the PDF to XML page, where it can be tried before saving. Left blank, nothing changes.
+- **Processing rules: "Treat as document type" also sets the invoice's transaction type.** An invoice matched by such a rule now carries the rule's type in its UBL, instead of the type read from the source: the transaction type column of the lists, the statistics, the type and the archive-only flag given to the platform, the public-sector checks and e-reporting all follow the rule. Until now the rule only changed the send, validation and output settings applied. Invoices already processed keep their type until they are reprocessed; a rule that moves B2C or international B2B invoices to another type takes them out of the e-reporting declaration.
+
+---
+
+## 2026.11.13.1 — 2026-11-13 \{#v2026-11-13-1\}
+
+### Improvements
+- **Menu that follows the window width.** On a small laptop or a tablet (window of 1100 px or less) the menu folds to its icons by itself and its bottom button opens it over the page, which keeps its full width. On a phone-width window the menu is hidden and opens from a button at the top left; choosing a page closes it. On a wide window nothing changes.
+- **Top bar that no longer overlaps.** The language, theme, notifications, account and AI buttons sit at the right of the title row: on a narrow window the title shortens and the subtitle is hidden, and the buttons no longer cover it.
+- **Lists on a small screen: the grid always stays visible.** On the invoice, document, e-reporting, integration error and processing log lists, the Advanced Filters panel now scrolls inside itself when the window is short, and the page scrolls if needed, so open filters no longer push the grid out of the screen. The period and quick filters go to a second line when they do not fit.
+- **Dashboards on a narrow window.** Tiles and charts of the Synthèse, Statistics, Operations and Technical dashboards go down to one column without a horizontal scroll bar, with smaller margins.
+- **Lists shown as cards on a phone-width screen.** Each row of a list becomes a card with one line per visible column, its title on the left and its value on the right; no more sideways scrolling. Columns, saved views, search and filters work as before; sorting by a column header remains a wide-window gesture.
+- **Windows on a phone-width screen.** The invoice, document and e-reporting windows take the whole screen, with the title on one line and values that wrap between words; the other windows take the full width.
+- **AI assistant and notifications on a narrow window.** The assistant opens over the page when there is no room beside it, and the notifications panel stays inside the window.
+- **Upgrade: a database error no longer stops it.** A statement the database refuses (missing rights, a rule of the DBA) is now a warning: the configuration, the files and the stylesheets are upgraded all the same and the service starts. The console, the report and the Upgrade history page list each refused statement with the database's message, and a script `upgrade-<date>-schema-pending.sql`, in `upgrade-reports`, holds the statements to run with an account that has the rights. The next upgrade tries them again and skips what is already in place. Until then, the feature these statements serve is missing.
+- **Upgrade: the service is started again in every case.** When the upgrade itself fails, `nomaubl.sh upgrade` now restarts the service that was running, shows the failure and still ends with the error code.
+- **Database scripts without table and column comments.** The `COMMENT ON` statements are removed from the installation script and from the 2026.11.11 migration: they brought nothing to the application and could be refused on a JD Edwards database. An upgrade that stopped on them goes through on the next run.
+
+---
+
+## 2026.11.12.1 — 2026-11-12 \{#v2026-11-12-1\}
+
+### Improvements
+- **Launch script: environments in another folder.** `ENV_HOME` in `nomaubl.conf` names the folder that holds the environments, with their PID and log files; a relative path is taken from the script's folder. Unset, they stay next to the script, as before.
+- **Launch script: one master key per environment.** In `JAVA_OPTS`, `%ENV%` stands for the environment given on the command line and `%ENV_HOME%` for the environments folder, e.g. `-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key`. A `JAVA_OPTS` without them behaves as before.
+- **Licence expiry shown and announced.** Settings › Global › License shows what the saved key gives: customer, plan, expiry date and user limit, or why the key is refused. From 30 days before the expiry, a banner reminds the users who have the Settings page.
+- **User limit of the licence.** A licence may set a maximum number of enabled accounts. Once it is reached, creating a user, enabling a disabled one and the automatic creation of an account at a first SSO sign-in are refused; accounts already enabled keep working. The users list shows the enabled accounts against the limit. A licence without a limit changes nothing.
+- **Licence usage report as a scheduled job.** Once a day, the server sends the licence tool the number of invoices per month (issued and received), the number of enabled accounts, the environment name and the version, with the licence key; no invoice content and no user name. The send is the "Licence usage report" job of the Scheduled jobs page (kind System): its run history shows what each send carried and the answer received, a send that fails is shown as the run's error, and "Show data sent", in the job's window, displays the exact data. Run now and Pause work as for the other jobs. Without a licence key the job is off.
+
+---
+
 ## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
 
 ### Improvements
@@ -193,6 +242,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 ### Fixes
 - **Invoice editor: "+ Price" and "+ Delivery" on a line.** The two buttons now open their block; "+ Delivery" did nothing, and "+ Price" did nothing on a line without a unit price.
 - **Invoice editor: labels without field codes.** The price, preceding invoice, buyer identifier and despatch advice labels no longer carry their BT / BG code.
+- **Promotion to a target with a self-signed or internal certificate.** A promotion target has a new "Check the server certificate" option (Settings › Promotion targets), ticked by default; untick it when the push fails on the certificate. The error now says so.
 
 ---
 

@@ -100,6 +100,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | Champ | Remarques |
 |---|---|
 | **Nom de l'application** | Le nom de l'application. |
+| **Environnement** | La nature de l'installation — `production`, `test`… Il est nommé dans le [rapport d'usage de la licence](./secure/license-key.md#usage-report). |
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
 | **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent — voir [Publication sous un sous-chemin](../../installation/traefik.md#sub-path). **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
@@ -185,6 +186,8 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 
 **Clé de licence** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
 
+**Adresse du rapport d'usage (vide = rien n'est envoyé)** : la destination du rapport quotidien d'une installation sous licence — son environnement, sa version et son nombre de comptes actifs. Voir [Rapport d'usage](./secure/license-key.md#usage-report).
+
 ---
 
 ## Assistant IA \{#ai\}
@@ -199,11 +202,17 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Invite système** | Vide : les consignes intégrées. |
 | **Outils de l'Explorateur de données** | Activé par défaut : l'assistant calcule totaux, classements et tendances sur les modèles de l'[explorateur de données](../explorer/overview.md), et enregistre analyses et tableaux de bord. |
 | **Outils connecteurs** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
+| **Lignes par requête, au plus (plafond propre à l'assistant, pas celui du pool)** | 200 par défaut (de 1 à 10 000). Au-delà, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner ses lignes. |
 | **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
 | **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
 | **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
 | **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
 | **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
+| **Les outils des applications** | Activé par défaut : les outils livrés par chaque application sous [Liberty Next → Construire → IA](../ai-assistant.md#settings-ai). Désactivé : aucun n'est proposé. |
+| **Fichier joint à une question : mégaoctets au plus** | 10 par défaut (de 0 à 30) ; `0` retire le trombone du panneau — voir [Joindre un fichier](../ai-assistant.md#attach). |
+| **Enregistrement d'usage conservé (jours ; 0 = sans limite)** | 90 par défaut — voir [Usage de l'IA](../../monitoring/ai-usage.md#retention). |
+| **Point d'accès MCP (/mcp)** | Désactivé par défaut : les mêmes outils pour un client externe — Claude Desktop, claude.ai, Claude Code —, chaque utilisateur avec un jeton d'accès personnel. Appliqué sans redémarrage. Voir [Connecter Claude (MCP)](../mcp.md). |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 par défaut. |
 | **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
 | **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Construire → IA](../ai-assistant.md#settings-ai)). |
 

@@ -160,7 +160,7 @@ Open it from **Synchronization → Scheduled jobs**. The *Scheduler* card of the
 | **Digest** | [Daily digests](./daily-digest.md) — e-mail of errors or archived invoices. | The digest form. |
 | **Auto-retry** | [Auto-retries](./auto-retry.md) — daily resend of invoices in an error status. | The auto-retry form. |
 | **Lifecycle check** | [Lifecycle checks](./lifecycle-checks.md) — daily integrity and ordering check of the statuses. | The check form. |
-| **System** | *Retention purge* — the daily sweep of the database stores (see [Retention purge](#retention)). | The job's editor; days per store. |
+| **System** | *Retention purge* — the daily sweep of the database stores (see [Retention purge](#retention)) — and *Licence usage report* (see [Licence usage report](#usage-report)). | The job's editor; days per store. |
 
 Disabled jobs are listed too, as **Off**, so they can be enabled from the page.
 
@@ -243,6 +243,12 @@ The daily retention purge bounds the stores that nothing else bounds. It runs ev
 | **Notifications (days)** | `90` | Inbox notifications (`F564253`). Empty = 90 days; `0` = keep forever. |
 
 Empty or `0` keeps a store forever. The purge is therefore **off by default except for the notifications**, which keep their 90 days: an upgrade deletes nothing by itself. **Count only** reports what each store would lose with the days **saved on the server** — save first, then count. The same values are in [Job defaults → Retention](../../configuration/system/global.md#retention); the command line offers `java -jar nomaubl.jar -purge <configFile> [--dry-run]`.
+
+### Licence usage report \{#usage-report\}
+
+Once a day — the first time ten minutes after the server starts — the server sends the licence tool, with the licence key: the number of invoices per month (issued and received), the number of enabled accounts, the environment name, the version and a fingerprint that tells two installations apart. No invoice content, no user name.
+
+The job's window has nothing to set: **Show data sent** displays the exact data. The run history shows what each send carried and the answer received; a send that fails is the run's error. **Run now** and **Pause** work as for the other jobs. Without a licence key the job is **Off**.
 
 ---
 

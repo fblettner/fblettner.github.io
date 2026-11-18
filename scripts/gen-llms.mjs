@@ -69,7 +69,7 @@ const SECTIONS = [
   },
   {
     en: 'AI assistants', fr: 'Assistants IA',
-    match: ['liberty/framework/ai-assistant', 'liberty/framework/cookbook/expose-to-ai', 'nomaubl/application/ai-capabilities'],
+    match: ['liberty/framework/ai-assistant', 'liberty/framework/mcp', 'liberty/monitoring/ai-usage', 'liberty/framework/cookbook/expose-to-ai', 'nomaubl/application/ai-capabilities'],
     exact: true,
   },
   {en: 'Liberty Next — framework', fr: 'Liberty Next — framework',

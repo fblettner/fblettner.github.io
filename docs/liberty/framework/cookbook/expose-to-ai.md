@@ -16,7 +16,7 @@ The [AI assistant](../ai-assistant.md) answers questions by running the connecto
 |---|---|---|
 | **Who** | The `ai:chat` permission, through a role. | Without it, the user has no assistant. |
 | **Which connectors** | **Allowed connectors**, Liberty Next → Administer → App → AI Assistant. | Empty: every connector; otherwise only those listed. |
-| **Which queries** | Read queries only. | Write queries are always refused; the assistant never writes SQL of its own. |
+| **Which queries** | Read queries the user holds the `sql:` permission of. | The assistant runs a query only for a user who could open it from a screen. Write queries are always refused; the assistant never writes SQL of its own. |
 | **Which rows** | The user's rights and [data scope](../build/secure/roles-and-permissions.md#data-scope). | A query run by the assistant is checked like a screen's: the user sees the same rows. |
 | **Which query to pick** | The queries' **label** and **description**. | The assistant reads them to choose. |
 

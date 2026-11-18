@@ -78,8 +78,8 @@ Every leaf is gated by the permission of its target:
 |---|---|
 | `screen`, `query` | `sql:<connector>:<target>` (the query's permission). |
 | `endpoint` | `api:<connector>:<target>` (the endpoint's permission). |
-| `dashboard` | None at this layer — hidden only by a `dashboard:` or `menu:` deny. |
-| `page` | None at this layer — the page's own access rules apply. |
+| `dashboard` | The permission of at least one of its data widgets, or `dashboard:<id>` — see [below](#gating). |
+| `page` | The page's own: `explorer:<app>:<model>` for the Data Explorer, `nomaflow:view` for the Nomaflow pages, none for the others. |
 
 An explicit `menu:<app>:<id>` allow in a role also shows the leaf, even without the target's permission; a `menu:` deny always hides it. The role editor writes these strings when an entry is allowed or denied on its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md).
 
@@ -252,20 +252,24 @@ The pruning is **per-request** — it picks up permission changes the moment the
 
 ---
 
-## Dashboards and pages — different gating
+## Dashboards, pages and links \{#gating\}
 
-Dashboards and routes don't inherit a `sql:` / `api:` permission. They have their own access rules:
+An entry is shown for what the user may open through it:
 
-| Leaf type | Default visibility |
+| Leaf type | Shown when |
 |---|---|
-| `screen`, `query` | Hidden unless `sql:<connector>:<target>` or `menu:<app>:<id>` is granted. |
-| `endpoint` | Hidden unless `api:<connector>:<target>` is granted. |
-| `dashboard` | Visible to everyone by default. Use `roles` to gate. |
-| `page` | Visible to everyone by default. Use `roles` to gate. |
+| `screen` | The user holds the `sql:` permission of the screen's read query. |
+| `query`, `endpoint` | The user holds `sql:<connector>:<target>` / `api:<connector>:<target>`. |
+| `dashboard` | The user can read at least one of its data widgets, or holds `dashboard:<id>`. A dashboard of texts and links only is shown to everyone. |
+| `page` | Data Explorer: the user may use a model of the application (`explorer:<app>:<model>`). Nomaflow pages: `nomaflow:view`. Any other page: everyone. |
+| `job` | The user holds `job:<id>`. |
+| `url` | Everyone. |
 
-For dashboards, the underlying chart queries still need their `sql:` permissions — a user without permission opens the dashboard and sees empty charts. For pages, the React component handles its own auth.
+On every type, an explicit `menu:<app>:<id>` allow shows the entry, a deny hides it, and the `roles` filter applies first.
 
-The right pattern for both: **always set `roles`** on dashboard and page leaves you want to scope. Liberty's default-visible behaviour is deliberate (most dashboards / pages are general-audience), but it means you must opt into restriction.
+**Which applications a user sees.** An application that has a menu and is shown in the switcher is listed for a user only when at least one of its entries is theirs through a permission. The entries open to everyone — an external address, an open page, a dashboard of texts — do not list an application by themselves. A superuser, or a role holding `*`, sees every application.
+
+To check a role, open it in **Liberty Next → Administer → Access**: the eye of each entry and the count of each application (`sales · 4 of 6 shown`) follow this rule. The AI assistant names the applications by the same rule.
 
 ---
 
@@ -277,7 +281,8 @@ The right pattern for both: **always set `roles`** on dashboard and page leaves 
 | Granting `sql:crm:*` to a role but the screen still doesn't appear. | The user's session was issued before the grant. | Sign out / sign back in to refresh the JWT. |
 | `roles = []` (explicit empty list). | Equivalent to leaving the field blank — implicit permission alone. | If you meant "only admins", use `roles = ["admin"]`. |
 | Folder visible despite all leaves being hidden. | The pruning ran on stale data (rare race condition during a hot reload). | Refresh the page. |
-| Dashboard visible to everyone but its charts empty. | The user has dashboard visibility but no underlying `sql:` permissions. | Either grant the `sql:` permissions OR add a `roles` filter to hide the dashboard from those users. |
+| A user does not see a dashboard entry. | The role reads none of the dashboard's data widgets. | Grant the `sql:` permission of its widgets' queries, or `dashboard:<id>`. |
+| A user does not see an application in the switcher. | Its only entries open to that user need no permission (links, open pages). | Grant a permission on one of its screens, dashboards or Data Explorer models. |
 | Menu shows nothing for a brand-new user. | The user's role grants no `sql:` / `api:` permissions on this app. | Verify the role has at least one matching permission. |
 
 ---

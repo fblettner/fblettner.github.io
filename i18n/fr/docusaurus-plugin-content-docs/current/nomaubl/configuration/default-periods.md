@@ -225,6 +225,15 @@ Une page des Paramètres — **Paramètres → Views & UI → Navigation & lists
 |---|---|---|
 | **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover** : le menu se replie en une colonne d'icônes et les pages gagnent la largeur ; le survol des icônes ouvre le menu par-dessus la page, et le choix d'une page le replie. Le bouton de repli manuel est alors masqué. |
 
+Le menu et les pages s'adaptent aussi à la largeur de la fenêtre :
+
+| Fenêtre | Menu | Pages |
+|---|---|---|
+| 1100 px ou moins — petit portable, tablette | Replié sur ses icônes ; le bouton du bas l'ouvre par-dessus la page, qui garde toute sa largeur. | Le titre se raccourcit et son sous-titre est masqué ; l'assistant IA s'ouvre par-dessus la page. |
+| 768 px ou moins — téléphone | Masqué ; un bouton en haut à gauche l'ouvre, et le choix d'une page le referme. | Chaque ligne d'une liste devient une carte, avec une ligne par colonne visible — son titre à gauche, sa valeur à droite ; colonnes, vues enregistrées, recherche et filtres fonctionnent comme sur une fenêtre large, pas le tri par un clic sur l'en-tête. Les fenêtres de facture, de document et d'e-reporting occupent tout l'écran. |
+
+Sur une fenêtre peu haute, le panneau des filtres avancés d'une liste défile sur lui-même, et la grille reste visible. Les tableaux de bord passent sur une colonne.
+
 ### Cache des tableaux de bord \{#dashboard-cache\}
 
 | Champ | Par défaut | Description |

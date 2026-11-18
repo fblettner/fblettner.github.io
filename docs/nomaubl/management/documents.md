@@ -371,6 +371,7 @@ The **PDF extraction** group sets the conversion:
 | **Table start** | Regex matched on a row: that row's cells name the table columns (e.g. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
 | **Header rows** | Number of rows of a table header printed on several rows, the *Table start* row being the first (default `1`). The header is merged per column and cells stacked on a line are placed in their own column. With more than one row, the table stops at the first end anchor. |
 | **Table end** | Regex matched on the first row after the table — the row itself is not part of it. |
+| **Rows ignored** | Regex matched on the rows inside the table that are not lines, such as the subtotal closing a section (e.g. `^Sous total`): the table goes on after them, and their labelled values stay fields of the document. Case is ignored. With it, **Table end** is the row after the last section. Empty = no row ignored. |
 | **Invoice split** | Regex whose first group is the invoice number, for a PDF holding several invoices (e.g. `N° de facture :\s*(\S+)`): one `<Document>` per number, each with its own pages. Empty = one invoice per PDF. |
 | **VAT table start** | Regex on the header row of the VAT summary: its rows become `<Recap_TVA>/<Ligne_TVA>`, one per rate. Empty = no VAT summary read. |
 | **VAT columns** | Header cells kept from the left, when another block is printed beside the summary. Empty = all. |
@@ -481,7 +482,7 @@ The **Processing rules** group routes the documents of the XML pipeline **before
 
 | Outcome | Effect |
 |---|---|
-| **Treat as document type** | The document continues as the chosen [document type](../configuration/system/document-types.md), with that type's send / validate / mode / keep settings — e.g. a zero-amount gratuity routed to `ARCHIVEONLY`. |
+| **Treat as document type** | The document continues as the chosen [document type](../configuration/system/document-types.md), with that type's send / validate / mode / keep settings — e.g. a zero-amount gratuity routed to `ARCHIVEONLY`. The document also carries that type as its transaction type in the UBL (the `#BAR#` / `#ADN#` routing note): the **Doc. Type** column of the lists, the statistics, the type and the archive-only flag given to the platform, the public-sector checks and [e-reporting](../application/ereporting.md) follow the rule. A rule that moves B2C or international B2B invoices to another type takes them out of the e-reporting declaration. |
 | **Exclude (record only)** | The document is only recorded: its source is archived and its header stored, with the status **Excluded by rule** (`9914`, the message being the rule name) and a lifecycle event. It is visible in the invoice list and counted by the integrity checks, but never validated, output nor sent. |
 
 **Conditions** — every condition of a rule must match (*if … and …*). Fields: JDE document type, resolved document type, processing type (raw spool value), invoice amount, company, activity code, type piece, customer number, document number, or **XPath on the document…** (any XPath or spool tag, e.g. `Code_Nature_ID12`). Operators: in list / not in list (`RM, RX`), `=`, `≠`, is zero / empty, is not zero, `<`, `>`, is empty, is not empty, matches regex. **↑** / **↓** reorder the rules; the rule name shows in the log and in the status message.

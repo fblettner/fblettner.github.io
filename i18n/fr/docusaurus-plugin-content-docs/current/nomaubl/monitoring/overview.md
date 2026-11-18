@@ -33,7 +33,7 @@ Les pages de l'interface web forment la vue **opérateur** ; le fichier de log e
 | « La JVM s'est-elle arrêtée brutalement ? » | **Fichier de log du service** + `./nomaubl.sh status` (Linux / macOS) ou `nomaubl.cmd status` (Windows). |
 | « La base est-elle joignable ? » | **Fichier de log du service** — chercher `Connected to db-nomaubl` au démarrage. |
 | « La PA est-elle joignable ? » | **Diagnostic → Journal serveur** (module `PA`) ou le fichier journal — chercher les lignes `pa-default API call`. |
-| « La licence est-elle encore valide ? » | `curl /api/license` — renvoie `valid` / `expired` / `restricted`. |
+| « La licence est-elle encore valide ? » | `curl /api/license` — renvoie `mode` (`full` ou `restricted`) avec la date d'expiration et les jours restants. |
 | « Quelle version est en service ? » | `curl /api/build-info` — renvoie la version et l'horodatage de build. |
 | « Un redémarrage de processus a-t-il eu lieu cette nuit ? » | `./nomaubl.sh status` / `nomaubl.cmd status` montre le PID courant ; le fichier de log montre la bannière de démarrage. |
 
@@ -129,7 +129,7 @@ Une posture de supervision minimale prête pour la production sur une installati
 1. **Démarrage automatique via systemd** avec `Restart=on-failure` — voir [Service et systemd](../installation/service-and-systemd.md).
 2. **Rotation des journaux** — intégrée au serveur : au-delà du *Log size cap* (100 Mo par défaut), le journal est copié en `.1` puis tronqué, et cinq copies sont conservées ([`global → Logs`](../configuration/system/global.md)). Logrotate n'est utile que si le serveur est lancé par un autre lanceur.
 3. **Sonde de vivacité** depuis le load balancer / l'outil de monitoring d'uptime qui interroge `/api/build-info` toutes les 30 secondes.
-4. **Alerte de licence** — un petit script qui interroge `/api/license` chaque jour et lève une alerte si `valid: false`.
+4. **Alerte de licence** — un petit script qui interroge `/api/license` chaque jour et lève une alerte quand `mode` vaut `restricted` ou que `daysLeft` passe sous 30.
 5. **Transfert de logs** — rediriger `nomaubl-<env>.log` vers le stockage central de logs (Loki, ELK, Datadog Logs). Le framework écrit en stderr/stdout standard — tout shipper de logs ligne par ligne le capte.
 6. **Supervision base de données** — l'outillage natif du moteur (Oracle : `V$SESSION`, AWR ; PostgreSQL : `pg_stat_activity`, `pg_stat_statements` ; ou les tableaux de bord déjà en place chez le DBA).
 

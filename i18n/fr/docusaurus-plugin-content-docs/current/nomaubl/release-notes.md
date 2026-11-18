@@ -17,15 +17,22 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
+    <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
+    <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
+    <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
+    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
     <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
-    <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
-    <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
-    <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
-    <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (128)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (132)</summary>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
+      <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
+      <a href="#v2026-11-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-05</span></a>
+      <a href="#v2026-11-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-04</span></a>
+    </div>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
       <a href="#v2026-10-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-30</span></a>
@@ -175,6 +182,48 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.18.1 — 2026-11-18 \{#v2026-11-18-1\}
+
+### Améliorations
+- **File d'impression JD Edwards : états exécutés en sous-système.** Un état lancé en sous-système garde le même numéro de travail jusqu'à son redémarrage, et chaque déclenchement ajoute une entrée à la file d'impression sous ce numéro. La récupération planifiée prend désormais chaque déclenchement, traité comme un lot à part, et non plus le premier seulement. Le premier lot d'un numéro de travail conserve son nom habituel (`état_version_travail`) ; les suivants y ajoutent le numéro de l'entrée (`état_version_travail-entrée`). L'action « après génération » (suppression ou mise à jour de l'entrée JD Edwards) porte sur l'entrée qui vient d'être traitée, et non sur tout le numéro de travail. Une récupération par numéro de travail seul (extraction manuelle, ligne de commande) prend toutes les entrées de ce numéro ; `travail-entrée` n'en prend qu'une. Le serveur d'exécution doit être suivi par date de fin, ce qui est le cas dès son premier lot planifié. Le balayage par lot en ligne de commande reste fondé sur le numéro de travail et ne voit pas les déclenchements suivants. Rien ne change pour un état qui ne tourne pas en sous-système.
+
+---
+
+## 2026.11.16.1 — 2026-11-16 \{#v2026-11-16-1\}
+
+### Améliorations
+- **PDF vers XML : tableaux en plusieurs sections.** Un nouveau réglage des documents PDF, « Lignes ignorées », désigne les lignes du tableau qui ne sont pas des lignes de facture, comme le sous-total qui clôt chaque section. Le tableau est alors lu jusqu'au bout, chaque ligne portant le titre de sa section ; « Fin du tableau » se place sur la ligne qui suit la dernière section. Le réglage figure dans l'éditeur de document (extraction PDF) et sur la page PDF vers XML, où il peut être essayé avant l'enregistrement. Laissé vide, rien ne change.
+- **Règles de traitement : « Traiter comme le type de document » fixe aussi le type de transaction de la facture.** Une facture retenue par une telle règle porte désormais, dans son UBL, le type de la règle et non plus celui lu dans la source : la colonne du type de transaction dans les listes, les statistiques, le type et l'indicateur d'archivage seul transmis à la plateforme, les contrôles du secteur public et l'e-reporting suivent la règle. Jusqu'ici, la règle ne modifiait que les réglages d'envoi, de validation et de sortie. Les factures déjà traitées conservent leur type tant qu'elles ne sont pas retraitées ; une règle qui fait passer des factures B2C ou B2B international vers un autre type les retire de la déclaration d'e-reporting.
+
+---
+
+## 2026.11.13.1 — 2026-11-13 \{#v2026-11-13-1\}
+
+### Améliorations
+- **Un menu qui s'adapte à la largeur de la fenêtre.** Sur un petit portable ou une tablette (fenêtre de 1100 px ou moins), le menu se réduit de lui-même à ses icônes ; son bouton du bas l'ouvre par-dessus la page, qui garde toute sa largeur. Sur une fenêtre de la largeur d'un téléphone, le menu est masqué et s'ouvre par un bouton en haut à gauche ; il se referme dès qu'une page est choisie. Rien ne change sur une fenêtre large.
+- **Barre du haut sans chevauchement.** Les boutons de langue, de thème, de notifications, de compte et d'assistant IA sont placés à droite de la ligne de titre : sur une fenêtre étroite, le titre se raccourcit, le sous-titre disparaît et les boutons ne le recouvrent plus.
+- **Listes sur petit écran : la grille reste toujours visible.** Dans les listes de factures, de documents, d'e-reporting, d'erreurs d'intégration et le journal de traitement, le panneau des filtres avancés défile sur lui-même quand la fenêtre est peu haute, et la page défile si nécessaire : des filtres ouverts ne chassent plus la grille hors de l'écran. La période et les filtres rapides passent sur une seconde ligne quand la place manque.
+- **Tableaux de bord sur fenêtre étroite.** Les tuiles et les graphiques de la Synthèse, des Statistiques, de l'Exploitation et du tableau de bord technique se rangent sur une colonne, sans barre de défilement horizontale et avec des marges réduites.
+- **Listes présentées en fiches sur un écran de la largeur d'un téléphone.** Chaque ligne d'une liste devient une fiche, avec une ligne par colonne visible : le titre à gauche, la valeur à droite ; plus de défilement horizontal. Les colonnes, les vues enregistrées, la recherche et les filtres fonctionnent comme avant ; le tri par clic sur un en-tête reste réservé aux fenêtres larges.
+- **Fenêtres sur un écran de la largeur d'un téléphone.** Les fenêtres de facture, de document et d'e-reporting occupent tout l'écran, avec le titre sur une ligne et des valeurs coupées entre les mots ; les autres fenêtres prennent toute la largeur.
+- **Assistant IA et notifications sur fenêtre étroite.** L'assistant s'ouvre par-dessus la page quand la place manque à côté, et le panneau des notifications reste dans la fenêtre.
+- **Mise à niveau : une erreur de base de données ne l'interrompt plus.** Une instruction refusée par la base (droits insuffisants, règle du DBA) devient un avertissement : la configuration, les fichiers et les feuilles de style sont mis à niveau malgré tout, et le service démarre. La console, le rapport et la page Historique des mises à niveau détaillent chaque instruction refusée avec le message de la base ; un script `upgrade-<date>-schema-pending.sql`, déposé dans `upgrade-reports`, regroupe les instructions à faire exécuter par un compte qui en a les droits. La mise à niveau suivante les rejoue et ignore ce qui est déjà en place. D'ici là, la fonctionnalité concernée reste indisponible.
+- **Mise à niveau : le service redémarre dans tous les cas.** Si la mise à niveau elle-même échoue, `nomaubl.sh upgrade` relance désormais le service qui tournait, affiche l'échec et se termine toujours avec le code d'erreur.
+- **Scripts de base de données sans commentaires de tables et de colonnes.** Les instructions `COMMENT ON` sont retirées du script d'installation et de la migration 2026.11.11 : sans utilité pour l'application, elles pouvaient être refusées sur une base JD Edwards. Une mise à niveau qui s'était arrêtée sur elles passe à la prochaine exécution.
+
+---
+
+## 2026.11.12.1 — 2026-11-12 \{#v2026-11-12-1\}
+
+### Améliorations
+- **Script de lancement : environnements dans un autre dossier.** `ENV_HOME`, dans `nomaubl.conf`, désigne le dossier qui contient les environnements, avec leurs fichiers PID et leurs journaux ; un chemin relatif part du dossier du script. Sans ce réglage, ils restent à côté du script, comme avant.
+- **Script de lancement : une clé maîtresse par environnement.** Dans `JAVA_OPTS`, `%ENV%` représente l'environnement passé sur la ligne de commande et `%ENV_HOME%` le dossier des environnements, par exemple `-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key`. Un `JAVA_OPTS` qui ne les utilise pas se comporte comme avant.
+- **Échéance de la licence affichée et annoncée.** Paramètres › Global › License indique ce que donne la clé enregistrée : client, formule, date d'échéance et nombre d'utilisateurs autorisés, ou la raison du refus de la clé. À partir de 30 jours avant l'échéance, un bandeau le rappelle aux utilisateurs qui ont accès aux Paramètres.
+- **Nombre d'utilisateurs de la licence.** Une licence peut fixer un nombre maximal de comptes actifs. Une fois ce nombre atteint, la création d'un utilisateur, la réactivation d'un compte et la création automatique d'un compte à la première connexion SSO sont refusées ; les comptes déjà actifs continuent de fonctionner. La liste des utilisateurs affiche le nombre de comptes actifs au regard de la limite. Une licence sans limite ne change rien.
+- **Rapport d'utilisation de la licence parmi les tâches planifiées.** Une fois par jour, le serveur transmet à l'outil de gestion des licences le nombre de factures par mois (émises et reçues), le nombre de comptes actifs, le nom de l'environnement et la version, accompagnés de la clé de licence ; aucun contenu de facture, aucun nom d'utilisateur. Cet envoi est la tâche « Rapport d'utilisation de la licence » de la page Tâches planifiées (type Système) : l'historique des exécutions indique ce que chaque envoi contenait et la réponse reçue, un envoi en échec apparaît comme l'erreur de l'exécution, et « Voir les données envoyées », dans la fenêtre de la tâche, affiche les données exactes. Lancer maintenant et la mise en pause fonctionnent comme pour les autres tâches. Sans clé de licence, la tâche est inactive.
+
+---
+
 ## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
 
 ### Améliorations
@@ -193,6 +242,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Corrections
 - **Éditeur de facture : « + Prix » et « + Livraison » sur une ligne.** Les deux boutons ouvrent désormais leur bloc ; « + Livraison » restait sans effet, de même que « + Prix » sur une ligne sans prix unitaire.
 - **Éditeur de facture : libellés sans code de champ.** Les libellés du prix, de la facture antérieure, des identifiants de l'acheteur et de l'avis d'expédition n'affichent plus leur code BT / BG.
+- **Promotion vers une cible au certificat auto-signé ou interne.** Chaque cible de promotion dispose d'une nouvelle option « Check the server certificate » (Paramètres › Promotion targets), cochée par défaut ; décochez-la quand l'envoi échoue sur le certificat. Le message d'erreur l'indique désormais.
 
 ---
 

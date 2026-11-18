@@ -96,7 +96,7 @@ The screen is split into two sections: **Parameters** and **Output**.
 | Field | Description |
 |---|---|
 | **Template** | Document (e.g. `invoices`, `credit_notes`). Used only to resolve the `%TEMPLATE%` placeholder of the default output directory inherited from `global.dirInput`. |
-| **Job Number** | JDE BIP job number (`RJJOBNBR` in `F9563110` / `XDJOBNBR` in `F95630`). Required. |
+| **Job Number** | JDE BIP job number (`RJJOBNBR` in `F9563110` / `XDJOBNBR` in `F95630`). Required. For a report running in subsystem, the number takes every entry the print queue holds under it; one entry alone is extracted from the [command line](../management/command-line.md) with `<job>-<entry>`. |
 | **Language** | Optional BIP language code filter (e.g. `FR`). When set, only the outputs matching this language are extracted. |
 | **Extract Mode** | What to extract from the job — `Extract Input (XML)`, `Extract Output`, or `Extract Both`. See below. |
 

@@ -125,11 +125,21 @@ The remainder of the page describes each direct JAR mode in detail.
 | `JAVA_OPTS` | empty | JVM options forwarded to every Java call (memory, master key location…). |
 | `JAVA_COMMAND` | `java` | Java executable to run. |
 | `DEFAULT_PORT` | `8090` | Port of `start` / `restart` when none is given. |
+| `ENV_HOME` | the script's folder | Folder holding the environments, with their PID and log files. A relative path is taken from the script's folder. |
 
 ```bash title="nomaubl.conf"
 JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
 DEFAULT_PORT=8090
 ```
+
+In `JAVA_OPTS`, `%ENV%` stands for the environment given on the command line and `%ENV_HOME%` for the environments folder — one master key per environment in a single line:
+
+```bash title="nomaubl.conf"
+ENV_HOME="/srv/nomaubl-envs"
+JAVA_OPTS="-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key"
+```
+
+A command without environment (`pdf2xml`, `install`…) leaves out an option that names `%ENV%`. `nomaubl.conf`, `ENV_HOME` and the two placeholders belong to `nomaubl.sh` (Linux / macOS).
 
 ### `JAVA_OPTS` — passing JVM flags through the wrapper
 
@@ -681,7 +691,7 @@ Equivalent of the *Application → Extract and Process* page. Extracts a single 
 |---|---|---|
 | **`archive <doc> <dct> <kco>`** | Document number, document type, company code. | Pull the source from the JDE archive directory. |
 | **`ftp <report> <version> <language> <job>`** | Report code, version, language, JDE job number. | Download via FTP / SFTP. |
-| **`bip <jobNumber>`** | JDE BIP job number. | Read from the BIP Print Queue (`F95630` / `F95631`). |
+| **`bip <jobNumber>`** or **`bip <jobNumber>-<entry>`** | JDE BIP job number, alone or followed by the report definition job number (`RJRPDJBNBR`) of one trigger of a report running in subsystem. The number alone takes every entry it has. | Read from the BIP Print Queue (`F95630` / `F95631`). |
 
 **Optional flags**
 
@@ -717,7 +727,7 @@ Equivalent of the *Application → Fetch Input* page. Extract **every** matching
 |---|---|
 | **`source`** | `directory` — scan `dirInput` (XML template) or `dirInput/ubl` (UBL template) for ready-to-process files. <br/>`bip` — pull every new BIP job whose number is greater than `lastBipJobNumber` (persisted in the *global* template after each successful run). |
 
-For each `bip` job the wrapper resolves the **per-job template** from the BIP report filters when one is defined; otherwise it falls back to the `template` CLI argument. After a successful run, `lastBipJobNumber` in `config.json` is updated to the highest job number processed, so the next sweep only picks up new jobs.
+For each `bip` job the wrapper resolves the **per-job template** from the BIP report filters when one is defined; otherwise it falls back to the `template` CLI argument. After a successful run, `lastBipJobNumber` in `config.json` is updated to the highest job number processed, so the next sweep only picks up new jobs. A report running in subsystem keeps one job number: its later triggers are picked up by the scheduled batch, not by this command.
 
 The `bip` sweep also honours the **BIP Lookback (days)** floor from *Settings → Global → Batch Processing*: with a non-zero value, only jobs updated in the last N days are eligible, on top of the `lastBipJobNumber` watermark — handy on a first install or after a long gap to avoid walking years of history.
 
@@ -745,7 +755,7 @@ Low-level extraction from the JD Edwards BIP Print Queue (`F9563110` header, `F9
 
 | Argument | Description |
 |---|---|
-| **`jobNumber`** | JDE job number (`RJJOBNBR`). |
+| **`jobNumber`** | JDE job number (`RJJOBNBR`), or `<job>-<entry>` — the report definition job number (`RJRPDJBNBR`) — for one trigger of a report running in subsystem; the number alone extracts every entry it has. |
 | **`--input`** *(default)* | Extract the input XML only. |
 | **`--output`** | Extract the generated output files only. |
 | **`--both`** | Extract input + output. |

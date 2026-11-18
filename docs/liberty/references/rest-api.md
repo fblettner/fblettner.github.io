@@ -42,6 +42,7 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 | `GET` | `/auth/me` | The token's identity: roles, permissions, attributes, data scope. |
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
+| `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
 See [Sign-in](../framework/build/secure/sign-in.md).
@@ -96,6 +97,8 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 |---|---|---|
 | `GET` | `/ai/tools` | The assistant's tool catalogue. |
 | `POST` | `/ai/chat` | Send the conversation (`{messages, model?}`); the answer streams back. Requires `ai:chat`. |
+| — | `/mcp` | The MCP endpoint: the assistant's tools for an external client, with `Authorization: Bearer <personal access token>`. See [Connect Claude (MCP)](../framework/mcp.md). |
+| `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
 
 ---
 

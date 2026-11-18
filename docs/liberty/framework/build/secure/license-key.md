@@ -79,6 +79,25 @@ Before pasting it, the key can be checked from the server: `liberty-license veri
 
 ---
 
+## Usage report \{#usage-report\}
+
+A licensed installation reports once a day to the licence management tool:
+
+| Sent | Content |
+|---|---|
+| Environment | The **Environment** of Liberty Next → Administer → App → Server (`production`, `test`…). |
+| Version | The framework's and, when the applications are installed, theirs — one report each. |
+| Enabled accounts | Their number. |
+| Installation fingerprint | A short hash that tells two installations apart; it carries no address and no name. |
+
+No figure of the applications, no user name, no data.
+
+The report is sent by a Nomaflow job, `liberty-usage-report`, listed under **Nomaflow → Jobs** and scheduled every day at 04:17. Each run shows what was sent and what the tool answered; a refused or unreachable send is the run's error. The job is run, paused or rescheduled like any other.
+
+The job exists while a licence key is installed and **Usage report address** (Liberty Next → Administer → App → License) is filled; blank the address and nothing is sent.
+
+---
+
 ## Without a valid key \{#restricted\}
 
 Without a key, or with an expired or invalid one, the server runs in **restricted mode**: the framework and the applications built on it work, the licensed applications do not load. The server log says why with a line starting `license: not loading licensed connector(s)`.

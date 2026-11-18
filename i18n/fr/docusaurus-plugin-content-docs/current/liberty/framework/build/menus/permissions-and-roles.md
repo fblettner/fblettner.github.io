@@ -78,8 +78,8 @@ Chaque feuille est conditionnée par la permission de sa cible :
 |---|---|
 | `screen`, `query` | `sql:<connector>:<target>` (la permission de la requête). |
 | `endpoint` | `api:<connector>:<target>` (la permission de l'endpoint). |
-| `dashboard` | Aucune à ce niveau — masqué seulement par un refus `dashboard:` ou `menu:`. |
-| `page` | Aucune à ce niveau — les règles d'accès propres à la page s'appliquent. |
+| `dashboard` | La permission d'au moins un de ses widgets de données, ou `dashboard:<id>` — voir [plus bas](#gating). |
+| `page` | Celle de la page : `explorer:<app>:<modèle>` pour l'explorateur de données, `nomaflow:view` pour les pages Nomaflow, aucune pour les autres. |
 
 Une autorisation explicite `menu:<app>:<id>` dans un rôle affiche aussi la feuille, même sans la permission de la cible ; un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes quand une entrée est autorisée ou refusée sur son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md).
 
@@ -259,20 +259,24 @@ L'élagage est **par requête** — il prend en compte les changements de permis
 
 ---
 
-## Tableaux de bord et pages — conditionnement différent
+## Tableaux de bord, pages et liens \{#gating\}
 
-Les tableaux de bord et les routes n'héritent pas d'une permission `sql:` / `api:`. Ils ont leurs propres règles d'accès :
+Une entrée est affichée d'après ce que l'utilisateur peut ouvrir par elle :
 
-| Type de feuille | Visibilité par défaut |
+| Type de feuille | Affichée quand |
 |---|---|
-| `screen`, `query` | Masquée sauf si `sql:<connector>:<target>` ou `menu:<app>:<id>` est accordée. |
-| `endpoint` | Masquée sauf si `api:<connector>:<target>` est accordée. |
-| `dashboard` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
-| `page` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
+| `screen` | L'utilisateur détient la permission `sql:` de la requête de lecture de l'écran. |
+| `query`, `endpoint` | L'utilisateur détient `sql:<connector>:<target>` / `api:<connector>:<target>`. |
+| `dashboard` | L'utilisateur peut lire au moins un de ses widgets de données, ou détient `dashboard:<id>`. Un tableau de bord fait uniquement de textes et de liens est affiché à tous. |
+| `page` | Explorateur de données : l'utilisateur peut utiliser un modèle de l'application (`explorer:<app>:<modèle>`). Pages Nomaflow : `nomaflow:view`. Toute autre page : tout le monde. |
+| `job` | L'utilisateur détient `job:<id>`. |
+| `url` | Tout le monde. |
 
-Pour les tableaux de bord, les requêtes sous-jacentes des graphiques ont toujours besoin de leurs permissions `sql:` — un utilisateur sans permission ouvre le tableau de bord et voit des graphiques vides. Pour les pages, le composant React gère sa propre authentification.
+Pour tous les types, une autorisation explicite `menu:<app>:<id>` affiche l'entrée, un refus la masque, et le filtre `roles` s'applique en premier.
 
-Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de tableau de bord et de page à restreindre. Le comportement par défaut visible de Liberty est délibéré (la plupart des tableaux de bord et pages s'adressent au grand public), mais cela signifie qu'il faut opter explicitement pour la restriction.
+**Les applications visibles par un utilisateur.** Une application qui a un menu et figure dans le sélecteur n'est listée pour un utilisateur que si au moins une de ses entrées lui revient par une permission. Les entrées ouvertes à tous — une adresse externe, une page libre, un tableau de bord de textes — ne suffisent pas à lister une application. Un superutilisateur, ou un rôle qui détient `*`, voit toutes les applications.
+
+Pour vérifier un rôle, l'ouvrir dans **Liberty Next → Administrer → Accès** : l'œil de chaque entrée et le compteur de chaque application (`sales · 4 visibles sur 6`) suivent cette règle. L'assistant IA cite les applications selon la même règle.
 
 ---
 
@@ -284,7 +288,8 @@ Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de
 | Accorder `sql:crm:*` à un rôle mais l'écran n'apparaît toujours pas. | La session de l'utilisateur a été émise avant l'attribution. | Se déconnecter / se reconnecter pour rafraîchir le JWT. |
 | `roles = []` (liste vide explicite). | Équivaut à laisser le champ vide — permission implicite seule. | Pour signifier « uniquement les admins », utiliser `roles = ["admin"]`. |
 | Dossier visible alors que toutes ses feuilles sont masquées. | L'élagage s'est exécuté sur des données périmées (rare condition de course pendant un rechargement à chaud). | Rafraîchir la page. |
-| Tableau de bord visible pour tous mais ses graphiques vides. | L'utilisateur a la visibilité sur le tableau de bord mais aucune permission `sql:` sous-jacente. | Soit accorder les permissions `sql:`, soit ajouter un filtre `roles` pour masquer le tableau de bord à ces utilisateurs. |
+| Un utilisateur ne voit pas l'entrée d'un tableau de bord. | Le rôle ne lit aucun des widgets de données du tableau de bord. | Accorder la permission `sql:` des requêtes de ses widgets, ou `dashboard:<id>`. |
+| Un utilisateur ne voit pas une application dans le sélecteur. | Ses seules entrées ouvertes à cet utilisateur ne demandent aucune permission (liens, pages libres). | Accorder une permission sur un de ses écrans, tableaux de bord ou modèles de l'explorateur de données. |
 | Le menu n'affiche rien pour un nouvel utilisateur. | Le rôle de l'utilisateur n'accorde aucune permission `sql:` / `api:` sur cette application. | Vérifier que le rôle possède au moins une permission correspondante. |
 
 ---

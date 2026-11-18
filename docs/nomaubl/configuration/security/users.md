@@ -101,7 +101,7 @@ User accounts are application-wide and source-agnostic — they apply equally wh
 
 ## Users list
 
-The table at the bottom of the page lists every user account.
+The table at the bottom of the page lists every user account. When the licence sets a user limit, the title of the list shows the enabled accounts against it — *3 / 10 enabled (licence)* —, in orange once the limit is reached: creating a user or enabling a disabled one is then refused (*User limit of the licence reached…*) until an account is disabled or the licence is extended.
 
 | Column | Description |
 |---|---|

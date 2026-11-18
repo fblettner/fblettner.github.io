@@ -1,7 +1,7 @@
 ---
 title: AI assistant
-description: "The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings."
-keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, api_call, scaffold, data scope]
+description: "The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, files attached to a question, saved conversations and notes, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, search the catalogue, describe the installation, follow playbooks, call the applications' tools, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, the permissions of each tool, allowed connectors, read-only queries, data scope), and its settings."
+keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, search_catalog, api_call, scaffold, data scope, attach a file, conversations, notes, application tools, MCP]
 ---
 
 # AI assistant
@@ -43,7 +43,9 @@ keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context,
   <text x="252" y="290" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Delta Ltd</text>
   <rect x="420" y="24" width="360" height="470" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="434" y="46" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">✦ AI Assistant</text>
-  <rect x="590" y="32" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="590" y="32" width="92" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="690" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="701.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↺</text>
   <text x="600" y="46.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sonnet 5.5 ▾</text>
   <rect x="718" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="729.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
@@ -83,10 +85,12 @@ keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context,
   <text x="550.0" y="414.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Which business unit sold the most last month?</text>
   <rect x="434" y="432" width="332" height="48" rx="8" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="444" y="452" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Type a message…</text>
+  <rect x="736" y="452" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <path d="M743,466 l6,-6 a2.6,2.6 0 0 1 3.7,3.7 l-6.6,6.6 a1.5,1.5 0 0 1 -2.1,-2.1 l5.6,-5.6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
   <rect x="1000" y="12" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="27" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Model picker</text>
   <text x="1010" y="40" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">when several are allowed</text>
-  <line x1="1000" y1="29.0" x2="650" y2="32" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <line x1="1000" y1="29.0" x2="686" y2="38" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
   <rect x="1000" y="66" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Page context</text>
   <text x="1010" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">× stops sending it</text>
@@ -103,6 +107,14 @@ keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context,
   <text x="1010" y="399" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Starter questions</text>
   <text x="1010" y="412" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">by heading, per app or screen</text>
   <line x1="1000" y1="401.0" x2="550" y2="387" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Conversations and notes</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">resume, delete, kept per user</text>
+  <line x1="1000" y1="137.0" x2="706" y2="55" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <rect x="1000" y="446" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="461" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Attach a file</text>
+  <text x="1010" y="474" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">image, PDF, sheet, text</text>
+  <line x1="1000" y1="463.0" x2="762" y2="463" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
   <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The clicked row</text>
   <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">travels with the question</text>
@@ -118,12 +130,41 @@ Type a question and press Enter (Shift+Enter for a new line), or click one of th
 - **Tool calls** are folded into one muted line — *3 tool call(s)* — that opens to show them; a failed call keeps its message visible.
 - A table in an answer scrolls sideways, each figure on one line.
 - Each answer ends with two or three **follow-up questions** as chips; a click sends one.
-- The conversation stays when the drawer is closed and after a reload: the last 40 messages, on this device. **+** (*new conversation*) clears it.
+- The conversation stays when the drawer is closed and after a reload, and it is saved for the user — see [Conversations and notes](#history). **+** (*new conversation*) starts another one.
+- The **paperclip** in the message box gives the assistant a file to read — see [Attach a file](#attach).
 - When several models are allowed, a **Model** picker in the drawer's header chooses the one that answers. The choice is kept on this device.
 
 The assistant knows today's date: *last month* or *this quarter* need no explanation.
 
 Examples: *How many open orders per company this month?* — *Which users have not signed in since June?* — *Where do I close a period?*
+
+---
+
+## Attach a file \{#attach\}
+
+The paperclip (*attach a file for the assistant to read*) adds a file to the question: a screenshot of an error, a procedure in PDF, a list to compare with what the installation holds, a log.
+
+| File | Sent to the assistant |
+|---|---|
+| Image — `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` | As it is; 5 MB at most. |
+| PDF | As it is. |
+| Spreadsheet — `.xlsx`, `.xlsm` | As text: the first sheet. |
+| Delimited file — `.csv`, `.tsv` | As text, the delimiter detected. |
+| Text — `.txt`, `.log`, `.md`, `.json`, `.xml`, `.sql`, `.toml`, `.yaml`, `.ini`, `.html`… | As text. |
+
+A sheet or a text longer than 60,000 characters is cut: the file's chip then ends with `*`, and its tooltip says what was attached. The assistant only reads the file: nothing is loaded into a table, nothing is stored on the server. The file stays with the conversation while it is open; a saved conversation keeps its name only, and the assistant is told the file is gone when the conversation is resumed.
+
+The largest file is set by **File attached to a question: megabytes at most** in Liberty Next → Administer → App → AI Assistant — 10 by default, `0` removes the paperclip. A file counts as input tokens at every question of its conversation.
+
+---
+
+## Conversations and notes \{#history\}
+
+The history button of the drawer's header (*conversations and notes*) opens a panel with two lists.
+
+**Conversations** — each conversation is saved on the server for the user and follows them from one device to another. A click on a row (*Resume this conversation*) reopens it; the bin deletes it. What is kept is what the user saw — the questions and the answers; a resumed conversation reads its data again. The 30 latest conversations are kept.
+
+**Notes — what the assistant remembers for you** — ask the assistant to remember something for later conversations: a convention, a preference, how a figure is defined. It proposes the note on a card: **Apply** saves it, **Skip** drops it, and nothing is saved without that click. A note is 300 characters at most; it belongs to the application of the page, or to *every application*, and then travels with the user's questions. Notes are private to the user; the bin deletes one.
 
 ---
 
@@ -152,18 +193,21 @@ Questions come from two sources:
 
 | Tool | Does | Setting |
 |---|---|---|
-| `list_connectors` | Lists the connectors, their queries and endpoints (descriptions, no SQL, no credentials). | **Connector tools** (on by default). |
-| `sql_query` | Runs a **read** query of a SQL connector. Write queries are always refused. | **Connector tools**. |
+| `list_connectors` | Lists the connectors with the **read** queries and the endpoints the user may run (descriptions, no SQL, no credentials). On a large installation it answers with an overview, then narrows to one connector or to keywords. | **Connector tools** (on by default). |
+| `sql_query` | Runs a **read** query of a SQL connector the way its screen does: column labels and formats, the screen's filters, the environment of the page. It filters by column — a value or a range — and a filter that matches no column is refused. Write queries are always refused. | **Connector tools**; **Rows per query, at most** (200). |
 | `explorer_models`, `explorer_fields`, `explorer_query` | List the [Data Explorer](./explorer/overview.md) models and their fields, then compute a total, a ranking, a trend or a comparison on a model — rows, measures, filters, period, sort, Top N (100 rows by default, 10,000 at most) — under the user's data scope. | On by default. |
 | `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | List the user's saved analyses and dashboards, and save what the user asks for: an analysis is run once before it is stored, so a wrong field is refused; a dashboard gathers saved analyses as tiles. Both are **private** unless the user asks to share them. | On by default. |
-| `describe_instance` | Summarises what the installation holds: applications, menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
+| `describe_instance` | Summarises what the installation holds, or one application: menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
+| `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
+| Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
+| `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
-| `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default). |
+| `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
-| Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default). |
+| Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default); superusers only. |
 | Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
-The assistant only uses existing named queries: it does not write SQL against the database. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call.
+The assistant only uses existing named queries: it does not write SQL against the database. Beyond **Rows per query, at most**, a result is marked as truncated and the assistant is told not to count or add up the rows it received: it narrows its filters, or computes the figure with the Data Explorer tools. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call.
 
 The **Operations tools** let the assistant read the running server rather than guess when a job failed, is late or is missing. They are meant for installations whose chat users are administrators: the server log can hold anything the server wrote.
 
@@ -184,6 +228,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 | **Starter questions anywhere in** *app* | The questions offered everywhere in the application. |
 | **Starter questions per screen** | **+ a screen…** adds a screen and its own questions. |
 | **Playbooks** | **Add playbook**: an **Id** (letters, digits, `_` and `-`, unique in the application), a **Title** — what the procedure achieves, the assistant picks a playbook by it —, **When it applies** (one line, optional) and **The procedure** in Markdown. |
+| **Tools** | **Add tool**: an **Id** (lowercase letters, digits and `_`, unique in the application — the assistant sees the tool as `<app>_<id>`), the **Function (module:function)** — one of the entry points of the application's [plugins](./build/plugins/overview.md), whose parameters become the tool's arguments —, the **Description** (what it answers and when to use it: the assistant picks a tool by it) and the **Permission the user needs** (blank: the function's own). A tool must not change anything. Tools belong to an application: none on the `*` scope. |
 
 **Save** writes and reloads at once. This material travels with the application: it is installed and upgraded with it, versioned like the rest of the configuration. The questions set under **Liberty Next → Administer → App → AI Assistant** win over the application's, place by place.
 
@@ -192,15 +237,34 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 ## Who can use it, and on what \{#access\}
 
 - The user needs the `ai:chat` permission (a role's *AI assistant* rule, in **Beyond the menus**).
+- `ai:chat` opens the drawer; each tool then checks what the screens check, for the signed-in user:
+
+  | Tool | The user needs |
+  |---|---|
+  | `sql_query` | `sql:<connector>:<query>`. |
+  | `api_call` | `api:<connector>:<endpoint>`. |
+  | Data Explorer tools | `explorer:<app>:<model>`. |
+  | `list_connectors`, `describe_instance`, `search_catalog`, playbooks | Nothing more, and they show only what the user can open: a screen by its read query, a menu entry by the [menu's rule](./build/menus/permissions-and-roles.md#gating), a job by `job:<id>`. An application with nothing for the user is not named. |
+  | Application tools | The tool's permission. |
+  | Operations and scaffold tools | Superuser. |
+
+  A user holding `ai:chat` without the `sql:` or `explorer:` permissions of an application gets no figure from it: grant them, as for the screens. A refusal reads the same for a query that exists and for one that does not.
 - **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
 - Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
 - **Model** in the drawer only offers the models allowed in the settings; the server refuses any other.
 
 ---
 
+## From Claude, and what is recorded \{#beyond\}
+
+- The same tools answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's MCP endpoint, each user with a personal access token and their own rights. See [Connect Claude (MCP)](./mcp.md).
+- Every question is recorded: who asked, the model, the tokens, the tools called — never the question, the answer or a row. Superusers read it in [Monitoring → AI usage](../monitoring/ai-usage.md).
+
+---
+
 ## Settings \{#settings\}
 
-In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
+In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, **Rows per query, at most**, **File attached to a question**, **Usage record kept**, the **MCP endpoint**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 

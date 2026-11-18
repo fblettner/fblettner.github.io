@@ -96,7 +96,7 @@ L'écran se divise en deux sections : **Parameters** et **Output**.
 | Champ | Description |
 |---|---|
 | **Template** | Template du document (par ex. `invoices`, `credit_notes`). Sert uniquement à résoudre le placeholder `%TEMPLATE%` du répertoire de sortie par défaut hérité de `global.dirInput`. |
-| **Job Number** | Numéro de job BIP JDE (`RJJOBNBR` dans `F9563110` / `XDJOBNBR` dans `F95630`). Obligatoire. |
+| **Job Number** | Numéro de job BIP JDE (`RJJOBNBR` dans `F9563110` / `XDJOBNBR` dans `F95630`). Obligatoire. Pour un état exécuté en sous-système, le numéro reprend toutes les entrées que la file d'impression contient sous ce numéro ; une seule entrée s'extrait en [ligne de commande](../management/command-line.md) avec `<job>-<entrée>`. |
 | **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). Quand renseigné, seules les sorties correspondant à cette langue sont extraites. |
 | **Extract Mode** | Détermine ce qui est extrait du job — `Extract Input (XML)`, `Extract Output` ou `Extract Both`. Voir ci-dessous. |
 

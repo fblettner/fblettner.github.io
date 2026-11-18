@@ -100,6 +100,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | Field | Notes |
 |---|---|
 | **App name** | The application's name. |
+| **Environment** | What the installation is — `production`, `test`… It is named in the [licence usage report](./secure/license-key.md#usage-report). |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
 | **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it — see [Serving under a sub-path](../../installation/traefik.md#sub-path). **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
@@ -185,6 +186,8 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 
 **License key**: paste the key delivered by Nomana-IT. The licensed connectors load at once, without a restart. See [Licence key](./secure/license-key.md).
 
+**Usage report address (blank = nothing is sent)**: where a licensed installation reports once a day — its environment, its version and its number of enabled accounts. See [Usage report](./secure/license-key.md#usage-report).
+
 ---
 
 ## AI Assistant \{#ai\}
@@ -198,12 +201,18 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Request timeout (s)** | Default 120. |
 | **System prompt** | Empty: the built-in instructions. |
 | **Connector tools** | The assistant may list connectors and run their **read** queries. |
+| **Rows per query, at most (the assistant's own cap, not the pool's)** | 200 by default (1 to 10,000). Beyond it, a result is marked as truncated and the assistant is told not to count or add up its rows. |
 | **Data Explorer tools** | On by default: the assistant computes totals, rankings and trends on the [Data Explorer](../explorer/overview.md) models, and saves analyses and dashboards. |
 | **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 | **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
+| **The applications' tools** | On by default: the tools each application ships under [Liberty Next → Build → AI](../ai-assistant.md#settings-ai). Off: none is offered. |
+| **File attached to a question: megabytes at most** | 10 by default (0 to 30); `0` removes the paperclip of the drawer — see [Attach a file](../ai-assistant.md#attach). |
+| **Usage record kept (days; 0 = without limit)** | 90 by default — see [AI usage](../../monitoring/ai-usage.md#retention). |
+| **MCP endpoint (/mcp)** | Off by default: the same tools for an external client — Claude Desktop, claude.ai, Claude Code —, each user with a personal access token. Applied without a restart. See [Connect Claude (MCP)](../mcp.md). |
+| **Personal access token: longest life (days)** | 366 by default. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
 | **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
 

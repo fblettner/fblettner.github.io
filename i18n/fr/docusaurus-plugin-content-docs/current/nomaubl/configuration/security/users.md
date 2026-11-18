@@ -101,7 +101,7 @@ Les comptes utilisateurs sont applicatifs et indépendants de la source — ils 
 
 ## Liste des utilisateurs
 
-Le tableau en bas de la page liste l'ensemble des comptes utilisateurs.
+Le tableau en bas de la page liste l'ensemble des comptes utilisateurs. Quand la licence fixe un nombre maximal d'utilisateurs, le titre de la liste affiche les comptes actifs en regard de cette limite — *3 / 10 enabled (licence)* —, en orange une fois la limite atteinte : la création d'un utilisateur ou la réactivation d'un compte est alors refusée (*User limit of the licence reached…*) tant qu'aucun compte n'est désactivé et que la licence n'est pas étendue.
 
 | Colonne | Description |
 |---|---|

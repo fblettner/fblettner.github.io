@@ -9,7 +9,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, connected users, recor
 | Surface | Shows | For |
 |---|---|---|
 | **The Monitoring page** | What happens now: connected users, record locks, database pools, runtime, the live log. | Superusers, from **Liberty Next → Operate → Monitoring**. See [The Monitoring page](./dashboard.md). |
-| **Server log** and **Retention** | Every line the server wrote, searchable; what the server keeps and how much it takes. | Superusers, the other two tabs of the Monitoring page. See [Server log](./server-log.md) and [Retention](./retention.md). |
+| **Server log**, **AI usage** and **Retention** | Every line the server wrote, searchable; who uses the AI assistant, with its tokens and tool calls; what the server keeps and how much it takes. | Superusers, the other three views of the Monitoring page. See [Server log](./server-log.md), [AI usage](./ai-usage.md) and [Retention](./retention.md). |
 | **Health endpoints** | `/health` (the process is up), `/ready` (the framework database answers), `/info` (version and counts). | Load balancers, container healthchecks, external probes. See [Health endpoints](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, health, pending migrations, configuration problems. | Administrators on the server. See [Operations](../installation/operations.md). |
 
@@ -25,6 +25,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, connected users, recor
 | A record cannot be saved | **Record locks**: someone else may have it open. |
 | The server seems stuck | `/ready`, then `./liberty status`. |
 | A scheduled job did not run | The Nomaflow [run history](../nomaflow/runs/history.md) — a **MISSED** run records it. |
+| The AI assistant costs more than expected, or answers badly | [AI usage](./ai-usage.md): the tokens by user and by model, the tools that fail. |
 
 ---
 

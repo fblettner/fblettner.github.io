@@ -42,6 +42,7 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 | `GET` | `/auth/me` | L'identité du jeton : rôles, permissions, attributs, périmètre de données. |
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
+| `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
 Voir [Se connecter](../framework/build/secure/sign-in.md).
@@ -96,6 +97,8 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 |---|---|---|
 | `GET` | `/ai/tools` | Le catalogue d'outils de l'assistant. |
 | `POST` | `/ai/chat` | Envoie la conversation (`{messages, model?}`) ; la réponse revient en flux. Demande `ai:chat`. |
+| — | `/mcp` | Le point d'accès MCP : les outils de l'assistant pour un client externe, avec `Authorization: Bearer <jeton d'accès personnel>`. Voir [Connecter Claude (MCP)](../framework/mcp.md). |
+| `GET` | `/admin/ai-usage` | L'usage de l'assistant sur une période (`days`, `username`, `limit`). Superutilisateurs. Voir [Usage de l'IA](../monitoring/ai-usage.md). |
 
 ---
 

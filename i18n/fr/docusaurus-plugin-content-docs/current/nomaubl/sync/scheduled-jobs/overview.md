@@ -162,7 +162,7 @@ Les résultats d'exécution s'affichent tels que le serveur les écrit, en angla
 | **Rapport** | [Rapports quotidiens](./daily-digest.md) — e-mail des erreurs ou des factures archivées. | Le formulaire du rapport. |
 | **Reprise auto** | [Reprises automatiques](./auto-retry.md) — renvoi quotidien des factures en statut d'erreur. | Le formulaire de reprise. |
 | **Contrôle cycle de vie** | [Contrôles du cycle de vie](./lifecycle-checks.md) — contrôle quotidien d'intégrité et d'ordre des statuts. | Le formulaire du contrôle. |
-| **Système** | *Purge de rétention* — le nettoyage quotidien des tables (voir [Purge de rétention](#retention)). | L'éditeur de la tâche ; durée de conservation par table. |
+| **Système** | *Purge de rétention* — le nettoyage quotidien des tables (voir [Purge de rétention](#retention)) — et *Rapport d'utilisation de la licence* (voir [Rapport d'utilisation de la licence](#usage-report)). | L'éditeur de la tâche ; durée de conservation par table. |
 
 Les tâches désactivées figurent aussi dans la liste, à l'état **Inactif**, pour être activées depuis la page.
 
@@ -247,6 +247,12 @@ La purge de rétention quotidienne borne les tables que rien d'autre ne limite. 
 | **Notifications (days)** | `90` | Notifications de la boîte de réception (`F564253`). Vide = 90 jours ; `0` = conservation illimitée. |
 
 Vide ou `0` conserve une table sans limite. La purge est donc **désactivée par défaut, sauf pour les notifications**, qui gardent leurs 90 jours : une mise à jour ne supprime rien d'elle-même. **Compter seulement** indique ce que chaque table perdrait avec les durées **enregistrées sur le serveur** — enregistrer d'abord, puis compter. Les mêmes valeurs figurent dans [Job defaults → Retention](../../configuration/system/global.md#retention) ; la ligne de commande propose `java -jar nomaubl.jar -purge <configFile> [--dry-run]`.
+
+### Rapport d'utilisation de la licence \{#usage-report\}
+
+Une fois par jour — la première fois dix minutes après le démarrage du serveur — le serveur envoie à l'outil de gestion des licences, avec la clé de licence : le nombre de factures par mois (émises et reçues), le nombre de comptes actifs, le nom de l'environnement, la version et une empreinte qui distingue deux installations. Aucun contenu de facture, aucun nom d'utilisateur.
+
+La fenêtre de la tâche n'a aucun réglage : **Voir les données envoyées** affiche les données exactes. L'historique des exécutions montre ce que chaque envoi contenait et la réponse reçue ; un envoi en échec est l'erreur de l'exécution. **Lancer maintenant** et **Suspendre** fonctionnent comme pour les autres tâches. Sans clé de licence, la tâche est **Inactif**.
 
 ---
 

@@ -148,7 +148,7 @@ A run interrupted by a server restart is closed as failed with *abandoned: proce
 
 ## The Run detail page \{#detail\}
 
-The page refreshes itself every two seconds while the run is in progress (*live*).
+The page refreshes itself every two seconds while the run is in progress (*live*). **Back**, in its toolbar, returns to the page the run was opened from — the jobs list, the runs list or a parent run; opened from a link, it goes to the jobs list.
 
 | Part | Content |
 |---|---|

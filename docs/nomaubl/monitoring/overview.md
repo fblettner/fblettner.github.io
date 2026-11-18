@@ -33,7 +33,7 @@ The web UI pages are the **operator's** view; the log file + endpoints are the *
 | "Did the JVM crash?" | **Service log file** + `./nomaubl.sh status` (Linux / macOS) or `nomaubl.cmd status` (Windows). |
 | "Is the database reachable?" | **Service log file** — look for `Connected to db-nomaubl` on start. |
 | "Is the PA reachable?" | **Diagnostics → Server log** (module `PA`) or the log file — look for `pa-default API call` lines. |
-| "Is the license still valid?" | `curl /api/license` — returns `valid` / `expired` / `restricted`. |
+| "Is the license still valid?" | `curl /api/license` — returns `mode` (`full` or `restricted`) with the expiry date and the days left. |
 | "What version is running?" | `curl /api/build-info` — returns version + build timestamp. |
 | "Did a process restart happen overnight?" | `./nomaubl.sh status` / `nomaubl.cmd status` shows current PID; the log file shows the startup banner. |
 
@@ -129,7 +129,7 @@ A minimal "production-ready" monitoring posture for a single host install:
 1. **Auto-start via systemd** with `Restart=on-failure` — see [Service and systemd](../installation/service-and-systemd.md).
 2. **Log rotation** — built into the server: above the *Log size cap* (100 MB by default) the log is copied to `.1` and truncated, five copies being kept ([`global → Logs`](../configuration/system/global.md)). Logrotate is only needed when the server runs under another launcher.
 3. **Liveness probe** from your load balancer / uptime monitor hitting `/api/build-info` every 30 seconds.
-4. **License alert** — a small script that hits `/api/license` daily and pages if `valid: false`.
+4. **License alert** — a small script that hits `/api/license` daily and pages when `mode` is `restricted` or `daysLeft` goes under 30.
 5. **Log forwarding** — pipe `nomaubl-<env>.log` to your central log store (Loki, ELK, Datadog Logs). The framework writes plain stderr/stdout — every line-based log shipper picks it up.
 6. **Database monitoring** — the engine's own tooling (Oracle: `V$SESSION`, AWR; PostgreSQL: `pg_stat_activity`, `pg_stat_statements`; or whatever dashboards your DBA already runs).
 

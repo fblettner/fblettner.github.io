@@ -1,7 +1,7 @@
 ---
 title: Assistant IA
-description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
-keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, api_call, scaffold, périmètre de données]
+description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les fichiers joints à une question, les conversations conservées et les notes, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, chercher dans le catalogue, décrire l'installation, suivre des procédures, appeler les outils des applications, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, les permissions de chaque outil, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
+keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, search_catalog, api_call, scaffold, périmètre de données, fichier joint, conversations, notes, outils des applications, MCP]
 ---
 
 # Assistant IA
@@ -43,7 +43,9 @@ keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de p
   <text x="252" y="290" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Delta Ltd</text>
   <rect x="420" y="24" width="360" height="470" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="434" y="46" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">✦ Assistant IA</text>
-  <rect x="590" y="32" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="590" y="32" width="92" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="690" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="701.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↺</text>
   <text x="600" y="46.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sonnet 5.5 ▾</text>
   <rect x="718" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="729.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
@@ -83,10 +85,12 @@ keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de p
   <text x="545.0" y="414.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Quelle BU a le plus vendu le mois dernier ?</text>
   <rect x="434" y="432" width="332" height="48" rx="8" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="444" y="452" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Tapez un message…</text>
+  <rect x="736" y="452" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <path d="M743,466 l6,-6 a2.6,2.6 0 0 1 3.7,3.7 l-6.6,6.6 a1.5,1.5 0 0 1 -2.1,-2.1 l5.6,-5.6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
   <rect x="1000" y="12" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="27" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choix du modèle</text>
   <text x="1010" y="40" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">quand plusieurs sont permis</text>
-  <line x1="1000" y1="29.0" x2="650" y2="32" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <line x1="1000" y1="29.0" x2="686" y2="38" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
   <rect x="1000" y="66" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contexte de page</text>
   <text x="1010" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">× arrête l'envoi</text>
@@ -103,6 +107,14 @@ keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de p
   <text x="1010" y="399" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Questions de départ</text>
   <text x="1010" y="412" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par rubrique, app ou écran</text>
   <line x1="1000" y1="401.0" x2="550" y2="387" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Conversations et notes</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reprendre, supprimer</text>
+  <line x1="1000" y1="137.0" x2="706" y2="55" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <rect x="1000" y="446" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="461" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Joindre un fichier</text>
+  <text x="1010" y="474" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">image, PDF, tableur, texte</text>
+  <line x1="1000" y1="463.0" x2="762" y2="463" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
   <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La ligne cliquée</text>
   <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">part avec la question</text>
@@ -118,12 +130,41 @@ Saisir une question et appuyer sur Entrée (Maj+Entrée pour un saut de ligne), 
 - Les **appels d'outil** sont repliés sur une ligne discrète — *3 appel(s) d'outil* — qui se déplie pour les montrer ; un appel en échec garde son message visible.
 - Un tableau dans une réponse défile horizontalement, chaque chiffre sur une seule ligne.
 - Chaque réponse se termine par deux ou trois **questions de relance** sous forme de pastilles ; un clic en envoie une.
-- La conversation est conservée à la fermeture du panneau et après un rechargement : les 40 derniers messages, sur ce poste. **+** (*nouvelle conversation*) l'efface.
+- La conversation est conservée à la fermeture du panneau et après un rechargement, et elle est enregistrée pour l'utilisateur — voir [Conversations et notes](#history). **+** (*nouvelle conversation*) en ouvre une autre.
+- Le **trombone** de la zone de saisie donne un fichier à lire à l'assistant — voir [Joindre un fichier](#attach).
 - Quand plusieurs modèles sont autorisés, un sélecteur **Modèle** dans l'en-tête du panneau choisit celui qui répond. Le choix est conservé sur ce poste.
 
 L'assistant connaît la date du jour : *le mois dernier* ou *ce trimestre* se passent d'explication.
 
 Exemples : *Combien de commandes ouvertes par société ce mois-ci ?* — *Quels utilisateurs ne se sont pas connectés depuis juin ?* — *Où clôturer une période ?*
+
+---
+
+## Joindre un fichier \{#attach\}
+
+Le trombone (*joindre un fichier que l'assistant lira*) ajoute un fichier à la question : la capture d'écran d'une erreur, une procédure en PDF, une liste à comparer avec le contenu de l'installation, un journal.
+
+| Fichier | Transmis à l'assistant |
+|---|---|
+| Image — `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` | Tel quel ; 5 Mo au plus. |
+| PDF | Tel quel. |
+| Classeur — `.xlsx`, `.xlsm` | En texte : la première feuille. |
+| Fichier délimité — `.csv`, `.tsv` | En texte, le séparateur étant détecté. |
+| Texte — `.txt`, `.log`, `.md`, `.json`, `.xml`, `.sql`, `.toml`, `.yaml`, `.ini`, `.html`… | En texte. |
+
+Une feuille ou un texte de plus de 60 000 caractères est coupé : la pastille du fichier se termine alors par `*`, et son infobulle indique ce qui a été joint. L'assistant se contente de lire le fichier : rien n'est chargé dans une table, rien n'est stocké sur le serveur. Le fichier reste attaché à la conversation tant qu'elle est ouverte ; une conversation enregistrée n'en garde que le nom, et l'assistant est prévenu de l'absence du fichier à la reprise de la conversation.
+
+La taille maximale se règle avec **Fichier joint à une question : mégaoctets au plus** dans Liberty Next → Administrer → App → Assistant IA — 10 par défaut, `0` retire le trombone. Un fichier compte en jetons d'entrée à chaque question de sa conversation.
+
+---
+
+## Conversations et notes \{#history\}
+
+Le bouton d'historique de l'en-tête du panneau (*conversations et notes*) ouvre un volet à deux listes.
+
+**Conversations** — chaque conversation est enregistrée sur le serveur pour l'utilisateur et le suit d'un poste à l'autre. Un clic sur une ligne (*Reprendre cette conversation*) la rouvre ; la corbeille la supprime. Est conservé ce que l'utilisateur a vu — les questions et les réponses ; une conversation reprise relit ses données. Les 30 dernières conversations sont gardées.
+
+**Notes — ce que l'assistant retient pour vous** — il suffit de demander à l'assistant de retenir quelque chose pour les conversations suivantes : une convention, une préférence, la définition d'un chiffre. Il propose la note sur une carte : **Appliquer** l'enregistre, **Ignorer** l'abandonne, et rien n'est enregistré sans ce clic. Une note fait 300 caractères au plus ; elle vaut pour l'application de la page ou pour *toutes les applications*, puis accompagne les questions de l'utilisateur. Les notes sont privées ; la corbeille en supprime une.
 
 ---
 
@@ -152,18 +193,21 @@ Les questions ont deux origines :
 
 | Outil | Rôle | Réglage |
 |---|---|---|
-| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Outils connecteurs** (activé par défaut). |
-| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs**. |
+| `list_connectors` | Liste les connecteurs avec les requêtes **de lecture** et les endpoints que l'utilisateur peut lancer (descriptions, sans SQL ni identifiants). Sur une grande installation, il répond par une vue d'ensemble, puis se limite à un connecteur ou à des mots-clés. | **Outils connecteurs** (activé par défaut). |
+| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL comme le fait son écran : libellés et formats des colonnes, filtres de l'écran, environnement de la page. Il filtre par colonne — une valeur ou un intervalle — et un filtre qui ne correspond à aucune colonne est refusé. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs** ; **Lignes par requête, au plus** (200). |
 | `explorer_models`, `explorer_fields`, `explorer_query` | Listent les modèles de l'[explorateur de données](./explorer/overview.md) et leurs champs, puis calculent un total, un classement, une tendance ou une comparaison sur un modèle — lignes, mesures, filtres, période, tri, N premiers (100 lignes par défaut, 10 000 au plus) — dans le périmètre de données de l'utilisateur. | Activés par défaut. |
 | `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | Listent les analyses et tableaux de bord enregistrés de l'utilisateur, et enregistrent ce qu'il demande : une analyse est exécutée une fois avant d'être stockée, ce qui écarte un champ erroné ; un tableau de bord réunit des analyses enregistrées sous forme de tuiles. Les deux restent **privés**, sauf demande de partage. | Activés par défaut. |
-| `describe_instance` | Résume le contenu de l'installation : applications, menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
+| `describe_instance` | Résume le contenu de l'installation, ou d'une seule application : menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
+| `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
+| Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
+| `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
-| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut). |
+| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
-| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut). |
+| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut) ; superutilisateurs uniquement. |
 | Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
-L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
+L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
 
 Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
 
@@ -184,6 +228,7 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 | **Questions de départ partout dans** *application* | Les questions proposées dans toute l'application. |
 | **Questions de départ par écran** | **+ un écran…** ajoute un écran et ses propres questions. |
 | **Procédures** | **Ajouter une procédure** : un **Id** (lettres, chiffres, `_` et `-`, unique dans l'application), un **titre** — ce que la procédure permet de faire, l'assistant choisit une procédure d'après lui —, **quand elle s'applique** (une ligne, facultatif) et **la procédure** en Markdown. |
+| **Outils** | **Ajouter un outil** : un **Identifiant** (minuscules, chiffres et `_`, unique dans l'application — l'assistant voit l'outil sous le nom `<app>_<id>`), la **Fonction (module:fonction)** — un des points d'entrée des [plugins](./build/plugins/overview.md) de l'application, dont les paramètres deviennent les arguments de l'outil —, la **Description** (à quoi il répond et quand l'utiliser : l'assistant choisit un outil d'après elle) et la **Permission requise pour l'utilisateur** (vide : celle de la fonction). Un outil ne doit rien modifier. Les outils appartiennent à une application : aucun sur la portée `*`. |
 
 L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Liberty Next → Administrer → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
 
@@ -191,16 +236,35 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
-- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Au-delà des menus**).
+- L'utilisateur a besoin de la permission `ai:chat` (règle *Assistant IA* d'un rôle, dans **Au-delà des menus**).
+- `ai:chat` ouvre le panneau ; chaque outil vérifie ensuite ce que vérifient les écrans, pour l'utilisateur connecté :
+
+  | Outil | Permission de l'utilisateur |
+  |---|---|
+  | `sql_query` | `sql:<connecteur>:<requête>`. |
+  | `api_call` | `api:<connecteur>:<endpoint>`. |
+  | Outils de l'explorateur de données | `explorer:<app>:<modèle>`. |
+  | `list_connectors`, `describe_instance`, `search_catalog`, procédures | Aucune autre, et ils ne montrent que ce que l'utilisateur peut ouvrir : un écran d'après sa requête de lecture, une entrée de menu d'après la [règle du menu](./build/menus/permissions-and-roles.md#gating), une tâche d'après `job:<id>`. Une application qui n'a rien pour l'utilisateur n'est pas citée. |
+  | Outils des applications | La permission de l'outil. |
+  | Outils d'exploitation et de construction | Superutilisateur. |
+
+  Un utilisateur qui détient `ai:chat` sans les permissions `sql:` ou `explorer:` d'une application n'en obtient aucun chiffre : les accorder, comme pour les écrans. Le refus est formulé de la même façon pour une requête qui existe et pour une requête qui n'existe pas.
 - **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 
 ---
 
+## Depuis Claude, et ce qui est enregistré \{#beyond\}
+
+- Les mêmes outils répondent à un client externe — Claude Desktop, claude.ai, Claude Code — par le point d'accès MCP du serveur, chaque utilisateur avec un jeton d'accès personnel et ses propres droits. Voir [Connecter Claude (MCP)](./mcp.md).
+- Chaque question est enregistrée : qui l'a posée, le modèle, les jetons, les outils appelés — jamais la question, la réponse ni une ligne de données. Les superutilisateurs le consultent dans [Surveillance → Usage de l'IA](../monitoring/ai-usage.md).
+
+---
+
 ## Réglages \{#settings\}
 
-Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 

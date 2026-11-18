@@ -188,7 +188,7 @@ Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle p
 
 Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle.
  En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
-La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
+La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**. Un utilisateur qui détient `mcp:use` y trouve aussi un onglet **Jetons d'accès** — voir [Connecter Claude (MCP)](../../mcp.md#token).
 
 ---
 

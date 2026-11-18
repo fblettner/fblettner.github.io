@@ -225,6 +225,15 @@ One page of the Settings — **Settings → Views & UI → Navigation & lists**,
 |---|---|---|
 | **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover**: the menu folds to a rail of icons and the pages get the width; hovering the icons opens the menu over the page, and picking a page folds it back. The manual collapse button is then hidden. |
 
+The menu and the pages also follow the width of the window:
+
+| Window | Menu | Pages |
+|---|---|---|
+| 1100 px or less — small laptop, tablet | Folds to its icons; the button at its bottom opens it over the page, which keeps its full width. | The title shortens and its subtitle is hidden; the AI assistant opens over the page. |
+| 768 px or less — phone | Hidden; a button at the top left opens it, and choosing a page closes it. | Each row of a list becomes a card, with one line per visible column — its title on the left, its value on the right; columns, saved views, search and filters work as on a wide window, sorting by a column header does not. The invoice, document and e-reporting windows take the whole screen. |
+
+On a short window, the Advanced Filters panel of a list scrolls inside itself, so the grid stays visible. Dashboards go down to one column.
+
 ### Dashboard cache \{#dashboard-cache\}
 
 | Field | Default | Description |

@@ -166,23 +166,24 @@ curl http://localhost:8090/api/license
 Réponses d'exemple :
 
 ```json
-{ "mode": "full", "customer": "ACME Corp", "expiresAt": "2026-12-31" }
+{ "mode": "full", "plan": "standard", "customer": "ACME", "maxUsers": 25, "expiresAt": "2027-12-31", "daysLeft": 414 }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "License expired on 2026-04-30" }
+{ "mode": "restricted", "expiresAt": "2026-04-30", "error": "License key expired" }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "No license configured" }
+{ "mode": "restricted", "error": "No license key configured" }
 ```
 
 | Champ | Ce qu'il indique |
 |---|---|
 | `mode` | `full` (tout fonctionne) ou `restricted` (fonctionnalités limitées sans licence). |
-| `customer` | Sujet de la licence (uniquement quand `mode = full`). |
-| `expiresAt` | Date d'expiration de la licence. |
-| `reason` | Pourquoi la licence n'est pas chargée (uniquement quand `mode = restricted`). |
+| `plan`, `customer` | Offre et sujet de la licence (uniquement quand `mode = full`). |
+| `maxUsers` | Nombre maximal d'utilisateurs de la licence — les comptes actifs ; absent = illimité. |
+| `expiresAt`, `daysLeft` | Date d'expiration de la licence et jours restants ; absents = la licence n'expire jamais. |
+| `error` | Motif de refus de la licence (uniquement quand `mode = restricted`). |
 
 Utile pour :
 

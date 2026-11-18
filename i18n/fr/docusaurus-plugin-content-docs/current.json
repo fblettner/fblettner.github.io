@@ -624,7 +624,7 @@
     "description": "The label for category Operate in sidebar libertySidebar"
   },
   "sidebar.libertySidebar.category.Operate.link.generated-index.description": {
-    "message": "Liberty Next → Exploiter : la page Surveillance — vue en direct, journal du serveur, rétention — et les points de santé. Les tâches sont décrites dans la documentation de Nomaflow.",
+    "message": "Liberty Next → Exploiter : la page Surveillance — vue en direct, journal du serveur, usage de l'IA, rétention — et les points de santé. Les tâches sont décrites dans la documentation de Nomaflow.",
     "description": "The generated-index page description for category Operate in sidebar libertySidebar"
   },
   "sidebar.libertySidebar.category.Deploy": {

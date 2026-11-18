@@ -287,6 +287,8 @@ Avant de saisir une valeur, le bouton **Compter seulement** de la tâche Purge d
 | **Hôtes des jobs BIP** | Un repère haut **par hôte d'exécution JDE** (`RJRPDEXHST`). Le repère suit chaque hôte par **date de fin du job**, et non par numéro — un numéro est attribué à la soumission, si bien qu'un job long qui se termine après un job plus récent au numéro supérieur pourrait sinon passer sous le repère et n'être jamais récupéré. La date de fin s'affiche à côté du numéro de job pour chaque hôte, et reste **modifiable**. Ajoutez chaque hôte avec son numéro de départ (le premier lot après mise à niveau renseigne la date automatiquement), ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant ; ils avancent ensuite après chaque job, un lot interrompu reprenant exactement où il s'était arrêté. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
 | **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
 
+**États exécutés en sous-système.** Un état exécuté en sous-système garde le même numéro de job jusqu'à son redémarrage, et chaque déclenchement ajoute une entrée à la file d'impression sous ce numéro. Le lot planifié récupère chaque déclenchement, chacun formant son propre lot : le premier lot d'un numéro de job se nomme `report_version_job`, les suivants `report_version_job-entrée`, l'entrée étant le numéro de job de la définition d'état (`RJRPDJBNBR`). L'hôte doit pour cela être analysé par date de fin, ce qui est le cas dès que son premier lot planifié s'est exécuté. *(Spécifique BIP / JDE.)*
+
 ---
 
 ## Onglet 8 — License
@@ -296,6 +298,14 @@ Avant de saisir une valeur, le bouton **Compter seulement** de la tâche Purge d
 | Champ | Description |
 |---|---|
 | **License Key** | Clé de licence NomaUBL complète. **Sans clé valide, les menus *Navigation*, *Synchronisation* et *UBL* sont désactivés** — seule la Configuration reste accessible. |
+
+Sous le champ, une ligne indique ce que donne la clé **enregistrée** — *Saved key: client · offre · expires on … (n days left) · n users*, avec *no expiry* ou *unlimited users* quand la licence n'en fixe pas — ou *Restricted:* suivi du motif de refus de la clé (clé absente, format ou signature invalide, clé expirée).
+
+| Sujet | Comportement |
+|---|---|
+| **Expiration** | À partir de 30 jours avant l'échéance, un bandeau le rappelle aux utilisateurs qui ont accès aux paramètres : *La licence expire le … (dans n jours). Renouvelez-la pour conserver l'application complète.* |
+| **Nombre d'utilisateurs** | Une licence peut fixer un nombre maximal de comptes actifs. Une fois ce nombre atteint, la création d'un utilisateur, la réactivation d'un compte désactivé et la création automatique d'un compte à la première connexion SSO sont refusées ; les comptes déjà actifs continuent de fonctionner. La [liste des utilisateurs](../security/users.md) affiche les comptes actifs en regard de la limite. |
+| **Rapport d'utilisation** | Une fois par jour, le serveur envoie à l'outil de gestion des licences, avec la clé de licence, le nombre de factures par mois, le nombre de comptes actifs, le nom de l'environnement et la version — aucun contenu de facture, aucun nom d'utilisateur. C'est la tâche *Rapport d'utilisation de la licence* de la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md#usage-report). |
 
 ---
 

@@ -125,11 +125,21 @@ Le reste de la page détaille chacun des modes directs du JAR.
 | `JAVA_OPTS` | vide | Options JVM transmises à chaque appel Java (mémoire, emplacement de la clé maître…). |
 | `JAVA_COMMAND` | `java` | Exécutable Java à lancer. |
 | `DEFAULT_PORT` | `8090` | Port de `start` / `restart` quand aucun n'est indiqué. |
+| `ENV_HOME` | le dossier du script | Dossier qui contient les environnements, avec leurs fichiers PID et leurs journaux. Un chemin relatif part du dossier du script. |
 
 ```bash title="nomaubl.conf"
 JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
 DEFAULT_PORT=8090
 ```
+
+Dans `JAVA_OPTS`, `%ENV%` désigne l'environnement indiqué sur la ligne de commande et `%ENV_HOME%` le dossier des environnements — une clé maître par environnement en une seule ligne :
+
+```bash title="nomaubl.conf"
+ENV_HOME="/srv/nomaubl-envs"
+JAVA_OPTS="-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key"
+```
+
+Une commande sans environnement (`pdf2xml`, `install`…) écarte l'option qui cite `%ENV%`. `nomaubl.conf`, `ENV_HOME` et ces deux variables sont propres à `nomaubl.sh` (Linux / macOS).
 
 ### `JAVA_OPTS` — passer des options JVM via le wrapper
 
@@ -681,7 +691,7 @@ Chaque table affiche une ligne avec son nombre de lignes, puis une ligne de synt
 |---|---|---|
 | **`archive <doc> <dct> <kco>`** | Numéro de document, type de document, code société. | Récupère depuis le répertoire d'archive JDE. |
 | **`ftp <report> <version> <language> <job>`** | Code rapport, version, langue, numéro de job JDE. | Téléchargement par FTP / SFTP. |
-| **`bip <jobNumber>`** | Numéro de job JDE BIP. | Lecture depuis la BIP Print Queue (`F95630` / `F95631`). |
+| **`bip <jobNumber>`** ou **`bip <jobNumber>-<entrée>`** | Numéro de job JDE BIP, seul ou suivi du numéro de job de la définition d'état (`RJRPDJBNBR`) d'un déclenchement d'un état exécuté en sous-système. Le numéro seul reprend toutes ses entrées. | Lecture depuis la BIP Print Queue (`F95630` / `F95631`). |
 
 **Options**
 
@@ -717,7 +727,7 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 |---|---|
 | **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) pour rechercher les fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (enregistré dans le template *global* après chaque exécution réussie). |
 
-Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` prend le plus grand numéro traité — au passage suivant, seuls les nouveaux jobs sont repris.
+Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` prend le plus grand numéro traité — au passage suivant, seuls les nouveaux jobs sont repris. Un état exécuté en sous-système garde un seul numéro de job : ses déclenchements suivants sont récupérés par le lot planifié, pas par cette commande.
 
 En mode `bip`, `-fetch-all` tient aussi compte du champ **Fenêtre BIP (jours)** (*Paramètres → Global → Traitement par lot*). Quand vous y indiquez un nombre de jours, seuls les jobs modifiés sur cette période sont repris, en plus du suivi par `lastBipJobNumber` ; c'est utile à la première installation ou après une longue interruption, pour ne pas reparcourir tout l'historique.
 
@@ -745,7 +755,7 @@ Extraction bas niveau depuis la BIP Print Queue de JD Edwards (`F9563110` en-tê
 
 | Argument | Description |
 |---|---|
-| **`jobNumber`** | Numéro de job JDE (`RJJOBNBR`). |
+| **`jobNumber`** | Numéro de job JDE (`RJJOBNBR`), ou `<job>-<entrée>` — le numéro de job de la définition d'état (`RJRPDJBNBR`) — pour un seul déclenchement d'un état exécuté en sous-système ; le numéro seul extrait toutes ses entrées. |
 | **`--input`** *(défaut)* | Extrait uniquement le XML d'entrée. |
 | **`--output`** | Extrait uniquement les fichiers de sortie générés. |
 | **`--both`** | Extrait l'entrée + la sortie. |

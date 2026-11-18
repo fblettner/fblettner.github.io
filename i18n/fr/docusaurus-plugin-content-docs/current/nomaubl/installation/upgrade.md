@@ -186,14 +186,28 @@ La promotion suit l'ordre dicté par le processus de livraison (typiquement demo
 
 ---
 
+## Instructions refusées par la base \{#schema-pending\}
+
+Une instruction refusée par la base — droits manquants, règle du DBA — n'arrête pas la mise à niveau : c'est un avertissement. La configuration, les fichiers et les feuilles de style sont mis à niveau malgré tout et le service démarre ; tant que les instructions ne sont pas passées, la fonctionnalité qu'elles servent manque.
+
+| Où | Ce qui s'affiche |
+|---|---|
+| La console | ` ** WARN ** UPGRADE : …` pour chaque instruction refusée, avec le message de la base, puis le chemin du script à passer à la main. |
+| Le rapport de mise à niveau | *Database schema not fully upgraded*, les instructions refusées et le chemin du script ; le résultat indique *OK with warnings*. |
+| **Paramètres → Historique des mises à niveau** | La même section, sur l'entrée de la mise à niveau. |
+| `${appHome}/upgrade-reports/upgrade-<timestamp>-schema-pending.sql` | Les instructions à passer avec un compte qui a les droits. |
+
+Passer le script avec un compte qui a les droits — ou accorder les droits — puis relancer la mise à niveau : elle retente les instructions et saute ce qui est déjà en place.
+
+---
+
 ## En cas d'échec
 
-Le wrapper se termine avec un code non nul et **laisse le service arrêté**. Le message affiché est le suivant :
+Le wrapper se termine avec un code non nul. Sous Linux / macOS, `nomaubl.sh upgrade` redémarre le service qui fonctionnait et affiche l'échec ; sous Windows, `nomaubl.cmd upgrade` laisse le service arrêté.
 
 ```text
-[upgrade] ⚠ FAILED — service left stopped.
-[upgrade] Inspect the report under ${appHome}/upgrade-reports/ and
-[upgrade] roll back from ${appHome}/backup/<latest>/ if needed.
+[upgrade] ⚠ FAILED — the upgrade did not complete.
+[upgrade] starting service again...
 ```
 
 Les deux fichiers à consulter :
@@ -246,7 +260,7 @@ C'est la piste d'audit destinée à l'exploitant — utile pour confirmer « oui
 | Exécution d'`upgrade` sur le mauvais environnement. | Le mauvais environnement tombe pendant une minute. | Lire la ligne `[upgrade] env: <env>` au démarrage ; annuler avec Ctrl+C si ce n'est pas celui prévu. |
 | Le nouveau JAR est absent ou corrompu. | `[upgrade] new JAR not found: <path>` ou `Error: Unable to access jarfile`. | Vérifier que le fichier existe et a la taille attendue ; le retélécharger si besoin. |
 | Le service a été démarré à la main, en dehors du wrapper. | Le wrapper ne voit aucun fichier PID → considère que le service n'est pas en cours → la mise à niveau se poursuit sans arrêter la JVM. Deux processus se disputent brièvement la base de données. | Toujours utiliser le wrapper pour démarrer ou arrêter le service. |
-| Un delta de schéma échoue parce que l'utilisateur de la base a perdu ses droits DDL. | Le rapport consigne `ORA-01031: insufficient privileges` (Oracle) ou `permission denied for schema` (PostgreSQL). | Réaccorder `CREATE TABLE`, `CREATE INDEX`, `CREATE SEQUENCE`, `CREATE VIEW` ; relancer la mise à niveau. |
+| L'utilisateur de la base n'a pas les droits DDL. | La mise à niveau se termine par *OK with warnings* ; le rapport liste les instructions refusées (`ORA-01031: insufficient privileges` sous Oracle, `permission denied for schema` sous PostgreSQL). | Passer le script `…-schema-pending.sql` avec un compte qui a les droits, ou les accorder et relancer la mise à niveau — voir [plus haut](#schema-pending). |
 | Les XSL personnalisées contiennent des TAG obsolètes signalés. | Le rapport liste, par modèle, des entrées sous *« removed TAGs »*. | Ouvrir le `.xsl` du modèle et retirer les lignes `<!-- removed in <version> -->` une fois l'adaptation effectuée. |
 | Disque saturé sur la partition de l'environnement. | L'étape de sauvegarde échoue. | Libérer de l'espace ; relancer. Le répertoire `backup/` grossit au fil des instantanés conservés — il convient d'élaguer les anciens pour maîtriser l'occupation disque. |
 

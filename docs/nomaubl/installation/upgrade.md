@@ -186,14 +186,28 @@ Promote in the order your release process dictates (typically demo → uat → p
 
 ---
 
+## Database statements the upgrade could not run \{#schema-pending\}
+
+A statement the database refuses — missing rights, a rule of the DBA — does not stop the upgrade: it is a warning. The configuration, the files and the stylesheets are upgraded all the same and the service starts; until the statements are run, the feature they serve is missing.
+
+| Where | What it shows |
+|---|---|
+| The console | ` ** WARN ** UPGRADE : …` for each refused statement, with the database's message, then the path of the script to run by hand. |
+| The upgrade report | *Database schema not fully upgraded*, the refused statements and the path of the script; the result reads *OK with warnings*. |
+| **Settings → Upgrade History** | The same section, on the entry of the upgrade. |
+| `${appHome}/upgrade-reports/upgrade-<timestamp>-schema-pending.sql` | The statements to run with an account that has the rights. |
+
+Run the script with an account that has the rights — or grant the rights — then run the upgrade again: it tries the statements again and skips what is already in place.
+
+---
+
 ## If something fails
 
-The wrapper exits non-zero and **leaves the service stopped**. You'll see:
+The wrapper exits non-zero. On Linux / macOS, `nomaubl.sh upgrade` starts the service that was running again and shows the failure; on Windows, `nomaubl.cmd upgrade` leaves the service stopped.
 
 ```text
-[upgrade] ⚠ FAILED — service left stopped.
-[upgrade] Inspect the report under ${appHome}/upgrade-reports/ and
-[upgrade] roll back from ${appHome}/backup/<latest>/ if needed.
+[upgrade] ⚠ FAILED — the upgrade did not complete.
+[upgrade] starting service again...
 ```
 
 The two files to look at:
@@ -246,7 +260,7 @@ This is the operator-facing audit trail — useful for confirming "yes, we ran 2
 | Running `upgrade` against the wrong env. | Wrong environment goes down for a minute. | Read the `[upgrade] env: <env>` line at the start; cancel with Ctrl+C if it's not the intended one. |
 | The new JAR is missing or corrupt. | `[upgrade] new JAR not found: <path>` or `Error: Unable to access jarfile`. | Verify the file exists and has the expected size; re-download if needed. |
 | The service was started by hand outside the wrapper. | Wrapper sees no PID file → thinks the service isn't running → upgrade proceeds without stopping the JVM. Two processes briefly contend for the database. | Always use the wrapper to start/stop the service. |
-| Schema delta fails because the DB user lost DDL rights. | The report logs `ORA-01031: insufficient privileges` (Oracle) or `permission denied for schema` (PostgreSQL). | Re-grant `CREATE TABLE`, `CREATE INDEX`, `CREATE SEQUENCE`, `CREATE VIEW`; re-run the upgrade. |
+| The database user lacks DDL rights. | The upgrade ends *OK with warnings*; the report lists the refused statements (`ORA-01031: insufficient privileges` on Oracle, `permission denied for schema` on PostgreSQL). | Run the `…-schema-pending.sql` script with an account that has the rights, or grant them and run the upgrade again — see [above](#schema-pending). |
 | The custom XSL has stale TAGs flagged. | The report lists per-template entries under *"removed TAGs"*. | Open the template's `.xsl` and remove the `<!-- removed in <version> -->` lines once you've adapted to the change. |
 | Disk full on the env partition. | Backup step fails. | Free space; re-run. The `backup/` directory grows with retained snapshots — prune old ones to keep disk usage bounded. |
 

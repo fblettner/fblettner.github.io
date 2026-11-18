@@ -1551,7 +1551,7 @@ Différentes équipes utilisent la plateforme pour des raisons différentes. Nom
 ## Liberty Next — Assistant IA
 Source: https://docs.nomana-it.fr/fr/liberty/framework/ai-assistant/
 
-L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, décrire l'installation, suivre des procédures, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages.
+L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les fichiers joints à une question, les conversations conservées et les notes, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, chercher dans le catalogue, décrire l'installation, suivre des procédures, appeler les outils des applications, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, les permissions de chaque outil, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages.
 
 **Assistant**, à droite de la barre du haut (et en bas du menu latéral), ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
 
@@ -1568,12 +1568,41 @@ Saisir une question et appuyer sur Entrée (Maj+Entrée pour un saut de ligne), 
 - Les **appels d'outil** sont repliés sur une ligne discrète — *3 appel(s) d'outil* — qui se déplie pour les montrer ; un appel en échec garde son message visible.
 - Un tableau dans une réponse défile horizontalement, chaque chiffre sur une seule ligne.
 - Chaque réponse se termine par deux ou trois **questions de relance** sous forme de pastilles ; un clic en envoie une.
-- La conversation est conservée à la fermeture du panneau et après un rechargement : les 40 derniers messages, sur ce poste. **+** (*nouvelle conversation*) l'efface.
+- La conversation est conservée à la fermeture du panneau et après un rechargement, et elle est enregistrée pour l'utilisateur — voir [Conversations et notes](#history). **+** (*nouvelle conversation*) en ouvre une autre.
+- Le **trombone** de la zone de saisie donne un fichier à lire à l'assistant — voir [Joindre un fichier](#attach).
 - Quand plusieurs modèles sont autorisés, un sélecteur **Modèle** dans l'en-tête du panneau choisit celui qui répond. Le choix est conservé sur ce poste.
 
 L'assistant connaît la date du jour : *le mois dernier* ou *ce trimestre* se passent d'explication.
 
 Exemples : *Combien de commandes ouvertes par société ce mois-ci ?* — *Quels utilisateurs ne se sont pas connectés depuis juin ?* — *Où clôturer une période ?*
+
+---
+
+## Joindre un fichier \{#attach\}
+
+Le trombone (*joindre un fichier que l'assistant lira*) ajoute un fichier à la question : la capture d'écran d'une erreur, une procédure en PDF, une liste à comparer avec le contenu de l'installation, un journal.
+
+| Fichier | Transmis à l'assistant |
+|---|---|
+| Image — `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` | Tel quel ; 5 Mo au plus. |
+| PDF | Tel quel. |
+| Classeur — `.xlsx`, `.xlsm` | En texte : la première feuille. |
+| Fichier délimité — `.csv`, `.tsv` | En texte, le séparateur étant détecté. |
+| Texte — `.txt`, `.log`, `.md`, `.json`, `.xml`, `.sql`, `.toml`, `.yaml`, `.ini`, `.html`… | En texte. |
+
+Une feuille ou un texte de plus de 60 000 caractères est coupé : la pastille du fichier se termine alors par `*`, et son infobulle indique ce qui a été joint. L'assistant se contente de lire le fichier : rien n'est chargé dans une table, rien n'est stocké sur le serveur. Le fichier reste attaché à la conversation tant qu'elle est ouverte ; une conversation enregistrée n'en garde que le nom, et l'assistant est prévenu de l'absence du fichier à la reprise de la conversation.
+
+La taille maximale se règle avec **Fichier joint à une question : mégaoctets au plus** dans Liberty Next → Administrer → App → Assistant IA — 10 par défaut, `0` retire le trombone. Un fichier compte en jetons d'entrée à chaque question de sa conversation.
+
+---
+
+## Conversations et notes \{#history\}
+
+Le bouton d'historique de l'en-tête du panneau (*conversations et notes*) ouvre un volet à deux listes.
+
+**Conversations** — chaque conversation est enregistrée sur le serveur pour l'utilisateur et le suit d'un poste à l'autre. Un clic sur une ligne (*Reprendre cette conversation*) la rouvre ; la corbeille la supprime. Est conservé ce que l'utilisateur a vu — les questions et les réponses ; une conversation reprise relit ses données. Les 30 dernières conversations sont gardées.
+
+**Notes — ce que l'assistant retient pour vous** — il suffit de demander à l'assistant de retenir quelque chose pour les conversations suivantes : une convention, une préférence, la définition d'un chiffre. Il propose la note sur une carte : **Appliquer** l'enregistre, **Ignorer** l'abandonne, et rien n'est enregistré sans ce clic. Une note fait 300 caractères au plus ; elle vaut pour l'application de la page ou pour *toutes les applications*, puis accompagne les questions de l'utilisateur. Les notes sont privées ; la corbeille en supprime une.
 
 ---
 
@@ -1602,18 +1631,21 @@ Les questions ont deux origines :
 
 | Outil | Rôle | Réglage |
 |---|---|---|
-| `list_connectors` | Liste les connecteurs, leurs requêtes et leurs endpoints (descriptions, sans SQL ni identifiants). | **Outils connecteurs** (activé par défaut). |
-| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs**. |
+| `list_connectors` | Liste les connecteurs avec les requêtes **de lecture** et les endpoints que l'utilisateur peut lancer (descriptions, sans SQL ni identifiants). Sur une grande installation, il répond par une vue d'ensemble, puis se limite à un connecteur ou à des mots-clés. | **Outils connecteurs** (activé par défaut). |
+| `sql_query` | Lance une requête **de lecture** d'un connecteur SQL comme le fait son écran : libellés et formats des colonnes, filtres de l'écran, environnement de la page. Il filtre par colonne — une valeur ou un intervalle — et un filtre qui ne correspond à aucune colonne est refusé. Les requêtes d'écriture sont toujours refusées. | **Outils connecteurs** ; **Lignes par requête, au plus** (200). |
 | `explorer_models`, `explorer_fields`, `explorer_query` | Listent les modèles de l'[explorateur de données](./explorer/overview.md) et leurs champs, puis calculent un total, un classement, une tendance ou une comparaison sur un modèle — lignes, mesures, filtres, période, tri, N premiers (100 lignes par défaut, 10 000 au plus) — dans le périmètre de données de l'utilisateur. | Activés par défaut. |
 | `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | Listent les analyses et tableaux de bord enregistrés de l'utilisateur, et enregistrent ce qu'il demande : une analyse est exécutée une fois avant d'être stockée, ce qui écarte un champ erroné ; un tableau de bord réunit des analyses enregistrées sous forme de tuiles. Les deux restent **privés**, sauf demande de partage. | Activés par défaut. |
-| `describe_instance` | Résume le contenu de l'installation : applications, menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
+| `describe_instance` | Résume le contenu de l'installation, ou d'une seule application : menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
+| `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
+| Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
+| `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
-| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut). |
+| `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
-| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut). |
+| Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut) ; superutilisateurs uniquement. |
 | Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
-L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
+L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
 
 Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
 
@@ -1634,6 +1666,7 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 | **Questions de départ partout dans** *application* | Les questions proposées dans toute l'application. |
 | **Questions de départ par écran** | **+ un écran…** ajoute un écran et ses propres questions. |
 | **Procédures** | **Ajouter une procédure** : un **Id** (lettres, chiffres, `_` et `-`, unique dans l'application), un **titre** — ce que la procédure permet de faire, l'assistant choisit une procédure d'après lui —, **quand elle s'applique** (une ligne, facultatif) et **la procédure** en Markdown. |
+| **Outils** | **Ajouter un outil** : un **Identifiant** (minuscules, chiffres et `_`, unique dans l'application — l'assistant voit l'outil sous le nom `<app>_<id>`), la **Fonction (module:fonction)** — un des points d'entrée des [plugins](./build/plugins/overview.md) de l'application, dont les paramètres deviennent les arguments de l'outil —, la **Description** (à quoi il répond et quand l'utiliser : l'assistant choisit un outil d'après elle) et la **Permission requise pour l'utilisateur** (vide : celle de la fonction). Un outil ne doit rien modifier. Les outils appartiennent à une application : aucun sur la portée `*`. |
 
 L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'application : il s'installe et se met à jour avec elle, et il est historisé comme le reste de la configuration. Les questions définies dans **Liberty Next → Administrer → App → Assistant IA** l'emportent sur celles de l'application, emplacement par emplacement.
 
@@ -1641,16 +1674,35 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 
 ## Qui peut l'utiliser, et sur quoi \{#access\}
 
-- L'utilisateur a besoin de la permission `ai:chat` (règle *AI assistant* d'un rôle, dans **Au-delà des menus**).
+- L'utilisateur a besoin de la permission `ai:chat` (règle *Assistant IA* d'un rôle, dans **Au-delà des menus**).
+- `ai:chat` ouvre le panneau ; chaque outil vérifie ensuite ce que vérifient les écrans, pour l'utilisateur connecté :
+
+  | Outil | Permission de l'utilisateur |
+  |---|---|
+  | `sql_query` | `sql:<connecteur>:<requête>`. |
+  | `api_call` | `api:<connecteur>:<endpoint>`. |
+  | Outils de l'explorateur de données | `explorer:<app>:<modèle>`. |
+  | `list_connectors`, `describe_instance`, `search_catalog`, procédures | Aucune autre, et ils ne montrent que ce que l'utilisateur peut ouvrir : un écran d'après sa requête de lecture, une entrée de menu d'après la [règle du menu](./build/menus/permissions-and-roles.md#gating), une tâche d'après `job:<id>`. Une application qui n'a rien pour l'utilisateur n'est pas citée. |
+  | Outils des applications | La permission de l'outil. |
+  | Outils d'exploitation et de construction | Superutilisateur. |
+
+  Un utilisateur qui détient `ai:chat` sans les permissions `sql:` ou `explorer:` d'une application n'en obtient aucun chiffre : les accorder, comme pour les écrans. Le refus est formulé de la même façon pour une requête qui existe et pour une requête qui n'existe pas.
 - **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 
 ---
 
+## Depuis Claude, et ce qui est enregistré \{#beyond\}
+
+- Les mêmes outils répondent à un client externe — Claude Desktop, claude.ai, Claude Code — par le point d'accès MCP du serveur, chaque utilisateur avec un jeton d'accès personnel et ses propres droits. Voir [Connecter Claude (MCP)](./mcp.md).
+- Chaque question est enregistrée : qui l'a posée, le modèle, les jetons, les outils appelés — jamais la question, la réponse ni une ligne de données. Les superutilisateurs le consultent dans [Surveillance → Usage de l'IA](../monitoring/ai-usage.md).
+
+---
+
 ## Réglages \{#settings\}
 
-Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 
@@ -1660,6 +1712,173 @@ Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **
 - Écrire des requêtes de lecture dédiées aux questions fréquentes (totaux par société, par mois), plutôt que d'attendre de l'assistant qu'il agrège des milliers de lignes.
 - Écrire une procédure pour chaque démarche demandée plus d'une fois : la réponse suit alors la procédure de l'application, sans approximation.
 - Laisser l'**Outil API** et les **Outils d'exploitation** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.
+
+---
+
+## Liberty Next — Connecter Claude (MCP)
+Source: https://docs.nomana-it.fr/fr/liberty/framework/mcp/
+
+Utiliser les outils de l'assistant Liberty Next depuis Claude Desktop, claude.ai ou Claude Code : le point d'accès MCP du serveur, la permission mcp:use, les jetons d'accès personnels créés dans le profil de l'utilisateur, le connecteur personnalisé à déclarer, ce que le client peut faire et la fin de validité d'un jeton.
+
+Les outils de l'[assistant IA](./ai-assistant.md) peuvent répondre à un client externe — Claude Desktop, claude.ai, Claude Code — par le **point d'accès MCP** du serveur, `/mcp`. Le client agit au nom d'un utilisateur de Liberty Next : il reçoit les outils proposés à cet utilisateur dans le panneau de l'assistant, chaque appel passe par les mêmes contrôles de permission et le même périmètre de données, et chaque appel est enregistré.
+
+Trois conditions : le point d'accès activé, la permission `mcp:use`, et un **jeton d'accès personnel** que l'utilisateur crée dans son profil.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Activer le point d'accès \{#enable\}
+
+Dans **Liberty Next → Administrer → App → Assistant IA** :
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Point d'accès MCP (/mcp)** | Désactivé | Le serveur répond sur `/mcp`. Appliqué à l'enregistrement, sans redémarrage. |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 | La plus longue validité qu'un utilisateur peut demander. |
+
+Le point d'accès demande le complément `mcp` du paquet (`pip install "liberty-next[mcp]"`) ; `liberty-next[all]` et l'image Docker le contiennent.
+
+---
+
+## Accorder la permission \{#permission\}
+
+Dans **Liberty Next → Administrer → Accès**, donner au rôle la règle **Assistant IA → Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`), dans **Au-delà des menus**. L'utilisateur voit alors l'onglet **Jetons d'accès** de son profil ; un superutilisateur le voit toujours.
+
+`mcp:use` ne fait qu'ouvrir le point d'accès : ce que le client atteint dépend toujours des autres permissions de l'utilisateur — voir [Qui peut l'utiliser, et sur quoi](./ai-assistant.md#access).
+
+---
+
+## Créer un jeton \{#token\}
+
+L'utilisateur ouvre son profil — son nom dans la barre du haut — puis **Jetons d'accès** :
+
+1. **Valable (jours)** : 90 par défaut. Une durée supérieure au maximum du serveur est ramenée à ce maximum ; la date d'expiration affichée avec le jeton est celle qui s'applique.
+2. **Créer un jeton**.
+3. Copier le jeton (**Copier**) : *il n'est affiché qu'une fois et n'est pas conservé*.
+
+L'onglet donne aussi l'**URL du connecteur**, l'adresse du serveur suivie de `/mcp`.
+
+---
+
+## Déclarer le connecteur dans Claude \{#connect\}
+
+Dans le client, ajouter un connecteur personnalisé avec :
+
+| Réglage | Valeur |
+|---|---|
+| URL | L'**URL du connecteur** de l'onglet — `https://<serveur>/mcp`. |
+| En-tête de requête | `Authorization: Bearer <jeton>` |
+
+| Réponse | Signification |
+|---|---|
+| `404` | Le point d'accès est désactivé. |
+| `401` | Pas de jeton, ou un jeton invalide ou arrivé à son terme. |
+
+---
+
+## Ce que le client peut faire \{#tools\}
+
+- Le client reçoit les outils proposés à l'utilisateur dans le panneau de l'assistant, avec les mêmes descriptions ; un outil que l'utilisateur ne peut pas utiliser n'est pas listé.
+- Chaque appel vérifie les permissions de l'utilisateur et applique son [périmètre de données](./build/secure/roles-and-permissions.md#data-scope), comme dans le panneau.
+- Les outils dont le résultat est une carte du panneau ne sont pas proposés : les propositions de construction et les notes.
+- Un outil qui enregistre quelque chose — une analyse ou un tableau de bord de l'explorateur de données — le signale au client, qui peut alors demander une confirmation.
+- Un jeton d'accès personnel n'ouvre que le point d'accès MCP : le reste de l'API le refuse.
+
+---
+
+## Fin de validité d'un jeton \{#end\}
+
+Le compte est relu à chaque appel : un jeton porte les droits de l'utilisateur à cet instant, jamais davantage. Il prend fin :
+
+- à sa date d'expiration ;
+- quand le compte est désactivé, ou perd `mcp:use` ;
+- quand le mot de passe du compte change.
+
+Il n'y a ni liste des jetons ni bouton de révocation : **changer le mot de passe met fin à tous les jetons du compte**. C'est la marche à suivre quand un jeton a fuité.
+
+---
+
+## Ce qui est enregistré \{#usage\}
+
+Chaque appel figure dans l'enregistrement d'usage, avec le modèle `mcp` : l'utilisateur, l'outil, ce sur quoi il a été appelé, son échec éventuel, sa taille et sa durée — jamais une ligne renvoyée. Voir [Surveillance → Usage de l'IA](../monitoring/ai-usage.md).
+
+---
+
+## Conseils \{#tips\}
+
+- Choisir une validité courte pour un premier essai, et créer un nouveau jeton plutôt que d'en partager un : un jeton est l'accès personnel de l'utilisateur.
+- Accorder `mcp:use` aux rôles qui utilisent déjà l'assistant dans l'application ; les réponses dépendent des mêmes permissions `sql:` et `explorer:`.
+- Servir le point d'accès en HTTPS uniquement : le jeton circule dans un en-tête de requête.
+
+---
+
+## Liberty Next — Usage de l'IA
+Source: https://docs.nomana-it.fr/fr/liberty/monitoring/ai-usage/
+
+Surveillance → Usage de l'IA dans Liberty Next : qui utilise l'assistant IA, les jetons avec la part lue depuis le cache, les outils appelés et leurs échecs, la durée moyenne — par utilisateur, par jour, par modèle et par outil — et les dernières questions avec leurs appels d'outils. Ce qui est enregistré, ce qui ne l'est jamais, et la durée de conservation.
+
+**Surveillance → Usage de l'IA** montre l'utilisation de l'[assistant IA](../framework/ai-assistant.md) : qui pose des questions, combien de jetons elles coûtent, quels outils sont appelés et lesquels échouent. La vue est réservée aux superutilisateurs. Accès : **Liberty Next → Exploiter → Surveillance**.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Ce qui est enregistré \{#record\}
+
+Chaque question posée à l'assistant laisse un enregistrement : qui l'a posée, depuis la page de quelle application, le modèle, les jetons (entrée, sortie, lus depuis le cache et écrits dans le cache), la durée et l'issue. Chaque appel d'outil de la question est conservé avec son nom, ce sur quoi il a porté (le connecteur et la requête, le modèle, les mots-clés), son échec éventuel et sa cause, sa taille et sa durée.
+
+**La question, la réponse et les lignes renvoyées par un outil ne sont jamais enregistrées.** Une question abandonnée en cours de route est enregistrée avec ce qui s'était passé jusque-là. Un appel venu d'un client externe est enregistré de la même façon, avec le modèle `mcp` — voir [Connecter Claude (MCP)](../framework/mcp.md).
+
+---
+
+## La période en chiffres \{#figures\}
+
+La période est **7 derniers jours**, **30 derniers jours** (par défaut) ou **90 derniers jours**.
+
+| Tuile | Contenu |
+|---|---|
+| **Questions** | Les questions posées sur la période. |
+| **Utilisateurs** | Les utilisateurs qui en ont posé au moins une. |
+| **Jetons en entrée** | Les jetons d'entrée, avec la part lue depuis le cache (*71 % depuis le cache*) : la partie d'une conversation renvoyée à chaque appel d'outil est lue depuis le cache, à un tarif réduit. |
+| **Jetons en sortie** | Les jetons de sortie. |
+| **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
+| **Durée moyenne par question** | De la question à la fin de la réponse. |
+
+---
+
+## Répartitions \{#breakdowns\}
+
+| Tableau | Colonnes |
+|---|---|
+| **Par utilisateur**, **Par jour**, **Par modèle** | Questions, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils. |
+| **Par outil** | Appels, Échecs, Durée moyenne, Taille moyenne. |
+
+Un clic sur un utilisateur limite les questions du bas aux siennes (*Questions de …*).
+
+---
+
+## Dernières questions \{#recent\}
+
+Une ligne par question : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue** — *Répondu*, *Échec* ou *Abandonné*. Une ligne se déplie sur ses appels d'outils, chacun avec sa taille en caractères et sa durée.
+
+---
+
+## Durée de conservation \{#retention\}
+
+**Enregistrement d'usage conservé (jours ; 0 = sans limite)**, dans Liberty Next → Administrer → App → Assistant IA, vaut 90 par défaut. Les questions plus anciennes sont supprimées avec le nettoyage des notifications, et le stockage figure sous **Usage de l'IA** dans la vue [Rétention](./retention.md), avec son nombre de questions, **Aperçu** et **Purger**.
+
+---
+
+## Conseils \{#tips\}
+
+- Un outil souvent en échec signale une permission manquante ou une requête dont la description égare l'assistant : déplier les appels d'outils de la question pour en lire la cause.
+- Un utilisateur avec beaucoup de questions et peu d'appels d'outils demande sans doute ce que l'assistant ne peut pas atteindre : vérifier les permissions `sql:` et `explorer:` du rôle.
+- Les mêmes chiffres sont servis par `GET /admin/ai-usage` pour un rapport externe.
 
 ---
 
@@ -1678,7 +1897,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 |---|---|---|
 | **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
 | **Quels connecteurs** | **Connecteurs autorisés**, Liberty Next → Administrer → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
-| **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
+| **Quelles requêtes** | Les requêtes de lecture dont l'utilisateur détient la permission `sql:`. | L'assistant ne lance une requête que pour un utilisateur qui pourrait l'ouvrir depuis un écran. Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
 | **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
 | **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
 
@@ -8182,8 +8401,8 @@ Chaque feuille est conditionnée par la permission de sa cible :
 |---|---|
 | `screen`, `query` | `sql:<connector>:<target>` (la permission de la requête). |
 | `endpoint` | `api:<connector>:<target>` (la permission de l'endpoint). |
-| `dashboard` | Aucune à ce niveau — masqué seulement par un refus `dashboard:` ou `menu:`. |
-| `page` | Aucune à ce niveau — les règles d'accès propres à la page s'appliquent. |
+| `dashboard` | La permission d'au moins un de ses widgets de données, ou `dashboard:<id>` — voir [plus bas](#gating). |
+| `page` | Celle de la page : `explorer:<app>:<modèle>` pour l'explorateur de données, `nomaflow:view` pour les pages Nomaflow, aucune pour les autres. |
 
 Une autorisation explicite `menu:<app>:<id>` dans un rôle affiche aussi la feuille, même sans la permission de la cible ; un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes quand une entrée est autorisée ou refusée sur son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md).
 
@@ -8363,20 +8582,24 @@ L'élagage est **par requête** — il prend en compte les changements de permis
 
 ---
 
-## Tableaux de bord et pages — conditionnement différent
+## Tableaux de bord, pages et liens \{#gating\}
 
-Les tableaux de bord et les routes n'héritent pas d'une permission `sql:` / `api:`. Ils ont leurs propres règles d'accès :
+Une entrée est affichée d'après ce que l'utilisateur peut ouvrir par elle :
 
-| Type de feuille | Visibilité par défaut |
+| Type de feuille | Affichée quand |
 |---|---|
-| `screen`, `query` | Masquée sauf si `sql:<connector>:<target>` ou `menu:<app>:<id>` est accordée. |
-| `endpoint` | Masquée sauf si `api:<connector>:<target>` est accordée. |
-| `dashboard` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
-| `page` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
+| `screen` | L'utilisateur détient la permission `sql:` de la requête de lecture de l'écran. |
+| `query`, `endpoint` | L'utilisateur détient `sql:<connector>:<target>` / `api:<connector>:<target>`. |
+| `dashboard` | L'utilisateur peut lire au moins un de ses widgets de données, ou détient `dashboard:<id>`. Un tableau de bord fait uniquement de textes et de liens est affiché à tous. |
+| `page` | Explorateur de données : l'utilisateur peut utiliser un modèle de l'application (`explorer:<app>:<modèle>`). Pages Nomaflow : `nomaflow:view`. Toute autre page : tout le monde. |
+| `job` | L'utilisateur détient `job:<id>`. |
+| `url` | Tout le monde. |
 
-Pour les tableaux de bord, les requêtes sous-jacentes des graphiques ont toujours besoin de leurs permissions `sql:` — un utilisateur sans permission ouvre le tableau de bord et voit des graphiques vides. Pour les pages, le composant React gère sa propre authentification.
+Pour tous les types, une autorisation explicite `menu:<app>:<id>` affiche l'entrée, un refus la masque, et le filtre `roles` s'applique en premier.
 
-Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de tableau de bord et de page à restreindre. Le comportement par défaut visible de Liberty est délibéré (la plupart des tableaux de bord et pages s'adressent au grand public), mais cela signifie qu'il faut opter explicitement pour la restriction.
+**Les applications visibles par un utilisateur.** Une application qui a un menu et figure dans le sélecteur n'est listée pour un utilisateur que si au moins une de ses entrées lui revient par une permission. Les entrées ouvertes à tous — une adresse externe, une page libre, un tableau de bord de textes — ne suffisent pas à lister une application. Un superutilisateur, ou un rôle qui détient `*`, voit toutes les applications.
+
+Pour vérifier un rôle, l'ouvrir dans **Liberty Next → Administrer → Accès** : l'œil de chaque entrée et le compteur de chaque application (`sales · 4 visibles sur 6`) suivent cette règle. L'assistant IA cite les applications selon la même règle.
 
 ---
 
@@ -8388,7 +8611,8 @@ Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de
 | Accorder `sql:crm:*` à un rôle mais l'écran n'apparaît toujours pas. | La session de l'utilisateur a été émise avant l'attribution. | Se déconnecter / se reconnecter pour rafraîchir le JWT. |
 | `roles = []` (liste vide explicite). | Équivaut à laisser le champ vide — permission implicite seule. | Pour signifier « uniquement les admins », utiliser `roles = ["admin"]`. |
 | Dossier visible alors que toutes ses feuilles sont masquées. | L'élagage s'est exécuté sur des données périmées (rare condition de course pendant un rechargement à chaud). | Rafraîchir la page. |
-| Tableau de bord visible pour tous mais ses graphiques vides. | L'utilisateur a la visibilité sur le tableau de bord mais aucune permission `sql:` sous-jacente. | Soit accorder les permissions `sql:`, soit ajouter un filtre `roles` pour masquer le tableau de bord à ces utilisateurs. |
+| Un utilisateur ne voit pas l'entrée d'un tableau de bord. | Le rôle ne lit aucun des widgets de données du tableau de bord. | Accorder la permission `sql:` des requêtes de ses widgets, ou `dashboard:<id>`. |
+| Un utilisateur ne voit pas une application dans le sélecteur. | Ses seules entrées ouvertes à cet utilisateur ne demandent aucune permission (liens, pages libres). | Accorder une permission sur un de ses écrans, tableaux de bord ou modèles de l'explorateur de données. |
 | Le menu n'affiche rien pour un nouvel utilisateur. | Le rôle de l'utilisateur n'accorde aucune permission `sql:` / `api:` sur cette application. | Vérifier que le rôle possède au moins une permission correspondante. |
 
 ---
@@ -10595,6 +10819,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | Champ | Remarques |
 |---|---|
 | **Nom de l'application** | Le nom de l'application. |
+| **Environnement** | La nature de l'installation — `production`, `test`… Il est nommé dans le [rapport d'usage de la licence](./secure/license-key.md#usage-report). |
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
 | **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent — voir [Publication sous un sous-chemin](../../installation/traefik.md#sub-path). **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
@@ -10680,6 +10905,8 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 
 **Clé de licence** : coller la clé fournie par Nomana-IT. Les connecteurs sous licence se chargent aussitôt, sans redémarrage. Voir [Clé de licence](./secure/license-key.md).
 
+**Adresse du rapport d'usage (vide = rien n'est envoyé)** : la destination du rapport quotidien d'une installation sous licence — son environnement, sa version et son nombre de comptes actifs. Voir [Rapport d'usage](./secure/license-key.md#usage-report).
+
 ---
 
 ## Assistant IA \{#ai\}
@@ -10694,11 +10921,17 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Invite système** | Vide : les consignes intégrées. |
 | **Outils de l'Explorateur de données** | Activé par défaut : l'assistant calcule totaux, classements et tendances sur les modèles de l'[explorateur de données](../explorer/overview.md), et enregistre analyses et tableaux de bord. |
 | **Outils connecteurs** | L'assistant peut lister les connecteurs et lancer leurs requêtes **de lecture**. |
+| **Lignes par requête, au plus (plafond propre à l'assistant, pas celui du pool)** | 200 par défaut (de 1 à 10 000). Au-delà, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner ses lignes. |
 | **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
 | **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
 | **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
 | **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
 | **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
+| **Les outils des applications** | Activé par défaut : les outils livrés par chaque application sous [Liberty Next → Construire → IA](../ai-assistant.md#settings-ai). Désactivé : aucun n'est proposé. |
+| **Fichier joint à une question : mégaoctets au plus** | 10 par défaut (de 0 à 30) ; `0` retire le trombone du panneau — voir [Joindre un fichier](../ai-assistant.md#attach). |
+| **Enregistrement d'usage conservé (jours ; 0 = sans limite)** | 90 par défaut — voir [Usage de l'IA](../../monitoring/ai-usage.md#retention). |
+| **Point d'accès MCP (/mcp)** | Désactivé par défaut : les mêmes outils pour un client externe — Claude Desktop, claude.ai, Claude Code —, chaque utilisateur avec un jeton d'accès personnel. Appliqué sans redémarrage. Voir [Connecter Claude (MCP)](../mcp.md). |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 par défaut. |
 | **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
 | **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Construire → IA](../ai-assistant.md#settings-ai)). |
 
@@ -11046,7 +11279,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà d
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
 | nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
 | Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
-| AI assistant | L'assistant. |
+| Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
 **Save** enregistre le rôle ; **Cancel** abandonne les modifications. Le nom d'un rôle ne peut plus changer après sa création.
@@ -11222,7 +11455,7 @@ Le [périmètre de données](./roles-and-permissions.md#data-scope) d'un rôle p
 
 Dans le formulaire de l'utilisateur, **Data-scope attributes** contient une ligne par attribut : une clé (`company`) et une valeur (`00001, 00050` — une virgule forme une liste). **Add an attribute…** propose les clés déjà utilisées par les rôles. Un utilisateur qui n'a pas l'attribut qu'une règle demande ne voit aucune ligne au travers de cette règle.
  En ligne de commande : `liberty-admin set-attributes alice company=00001,00050`.
-La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**.
+La liste des utilisateurs affiche les attributs sur chaque carte (`company=00001,00050`), et l'utilisateur les retrouve, avec son périmètre de données en clair, dans sa fenêtre **Profil**. Un utilisateur qui détient `mcp:use` y trouve aussi un onglet **Jetons d'accès** — voir [Connecter Claude (MCP)](../../mcp.md#token).
 
 ---
 
@@ -11364,6 +11597,25 @@ Avant de la coller, la clé peut être vérifiée sur le serveur : `liberty-lice
 | `liberty-license status` | Validité, produits couverts, date d'expiration de la clé configurée. |
 | `GET /api/license` | `{mode, customer, plan, apps, expires_at, error}`. |
 | `GET /info` | `license.mode` : `full` ou `restricted`. |
+
+---
+
+## Rapport d'usage \{#usage-report\}
+
+Une installation sous licence envoie une fois par jour un rapport à l'outil de gestion des licences :
+
+| Envoyé | Contenu |
+|---|---|
+| Environnement | L'**Environnement** de Liberty Next → Administrer → App → Serveur (`production`, `test`…). |
+| Version | Celle du framework et, quand les applications sont installées, la leur — un rapport pour chacune. |
+| Comptes actifs | Leur nombre. |
+| Empreinte de l'installation | Un condensat court qui distingue deux installations ; il ne contient ni adresse ni nom. |
+
+Aucun chiffre des applications, aucun nom d'utilisateur, aucune donnée.
+
+Le rapport est envoyé par une tâche Nomaflow, `liberty-usage-report`, listée sous **Nomaflow → Tâches** et planifiée chaque jour à 04:17. Chaque exécution montre ce qui a été envoyé et la réponse de l'outil ; un envoi refusé ou sans réponse est l'erreur de l'exécution. La tâche se lance, se suspend et se replanifie comme les autres.
+
+La tâche existe tant qu'une clé de licence est installée et que l'**Adresse du rapport d'usage** (Liberty Next → Administrer → App → Licence) est renseignée ; une adresse vide, et rien n'est envoyé.
 
 ---
 
@@ -11582,7 +11834,7 @@ Surveiller un serveur Liberty Next en fonctionnement : la page Surveillance pour
 | Outil | Affiche | Pour |
 |---|---|---|
 | **La page Surveillance** | Ce qui se passe maintenant : utilisateurs connectés, verrous d'enregistrement, pools de base, runtime, journal en direct. | Les superutilisateurs, depuis **Liberty Next → Exploiter → Surveillance**. Voir [La page Surveillance](./dashboard.md). |
-| **Journal du serveur** et **Rétention** | Toutes les lignes écrites par le serveur, avec recherche ; ce que le serveur conserve et la place occupée. | Les superutilisateurs, dans les deux autres onglets de la page Surveillance. Voir [Journal du serveur](./server-log.md) et [Rétention](./retention.md). |
+| **Journal du serveur**, **Usage de l'IA** et **Rétention** | Toutes les lignes écrites par le serveur, avec recherche ; qui utilise l'assistant IA, avec ses jetons et ses appels d'outils ; ce que le serveur conserve et la place occupée. | Les superutilisateurs, dans les trois autres vues de la page Surveillance. Voir [Journal du serveur](./server-log.md), [Usage de l'IA](./ai-usage.md) et [Rétention](./retention.md). |
 | **Points de santé** | `/health` (le processus fonctionne), `/ready` (la base du framework répond), `/info` (version et compteurs). | Répartiteurs de charge, contrôles de santé des conteneurs, sondes externes. Voir [Points de santé](./health-endpoints.md). |
 | **`./liberty status` / `doctor`** | Versions, santé, migrations en attente, problèmes de configuration. | Les administrateurs sur le serveur. Voir [Exploitation](../installation/operations.md). |
 
@@ -11598,6 +11850,7 @@ Surveiller un serveur Liberty Next en fonctionnement : la page Surveillance pour
 | Un enregistrement ne peut pas être sauvegardé | **Record locks** : quelqu'un d'autre l'a peut-être ouvert. |
 | Le serveur semble bloqué | `/ready`, puis `./liberty status`. |
 | Une tâche planifiée ne s'est pas exécutée | L'[historique des exécutions](../nomaflow/runs/history.md) Nomaflow — une exécution **MISSED** l'enregistre. |
+| L'assistant IA coûte plus que prévu, ou répond mal | L'[usage de l'IA](./ai-usage.md) : les jetons par utilisateur et par modèle, les outils en échec. |
 
 ---
 
@@ -11744,6 +11997,7 @@ Surveillance → Rétention dans Liberty Next : chaque stockage qui grossit sur 
 | **Exécutions des tâches** | Les exécutions terminées avec leurs étapes et journaux, au-delà des jours conservés ou du plafond par tâche. | Nomaflow — [Rétention de l'historique](../nomaflow/administration.md#retention). |
 | **Fichiers des tâches** | Fichiers envoyés, rapports de rejets, rapports, exports, archives des dossiers surveillés. | Nomaflow — **Fichiers conservés (jours)** dans le même panneau. |
 | **Notifications** | Les notifications lues, au-delà des jours fixés. | Liberty Next → Administrer → App → Notifications — [Conserver les notifications lues](../nomaflow/notifications.md#smtp). |
+| **Usage de l'IA** | L'enregistrement d'usage de l'assistant — qui, modèle, jetons, outils — au-delà des jours fixés. | Liberty Next → Administrer → App → Assistant IA — [Enregistrement d'usage conservé](./ai-usage.md#retention), 90 jours par défaut. |
 | **Versions de configuration** | Les instantanés de configuration au-delà du nombre gardé par fichier, ou trop anciens ; le plus récent de chaque fichier reste toujours. | La [tâche `config-versions-purge`](../nomaflow/bundled-jobs.md), sinon 20 par fichier et 90 jours. |
 | **Paquets de modifications** | Les paquets exportés ou promus et les journaux d'import plus anciens que les jours fixés. Les brouillons ne sont jamais touchés. | Conservés par défaut. |
 | **Vues enregistrées** | Les vues et analyses des utilisateurs. | Jamais purgées — affichées pour leur taille. |
@@ -12462,6 +12716,7 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 | `GET` | `/auth/me` | L'identité du jeton : rôles, permissions, attributs, périmètre de données. |
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
+| `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
 Voir [Se connecter](../framework/build/secure/sign-in.md).
@@ -12516,6 +12771,8 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 |---|---|---|
 | `GET` | `/ai/tools` | Le catalogue d'outils de l'assistant. |
 | `POST` | `/ai/chat` | Envoie la conversation (`{messages, model?}`) ; la réponse revient en flux. Demande `ai:chat`. |
+| — | `/mcp` | Le point d'accès MCP : les outils de l'assistant pour un client externe, avec `Authorization: Bearer <jeton d'accès personnel>`. Voir [Connecter Claude (MCP)](../framework/mcp.md). |
+| `GET` | `/admin/ai-usage` | L'usage de l'assistant sur une période (`days`, `username`, `limit`). Superutilisateurs. Voir [Usage de l'IA](../monitoring/ai-usage.md). |
 
 ---
 
@@ -14132,7 +14389,7 @@ Une exécution interrompue par un redémarrage du serveur est clôturée en éch
 
 ## La page Détail de l'exécution \{#detail\}
 
-La page se rafraîchit toutes les deux secondes tant que l'exécution est en cours (*en direct*).
+La page se rafraîchit toutes les deux secondes tant que l'exécution est en cours (*en direct*). **Retour**, dans sa barre d'outils, ramène à la page d'où l'exécution a été ouverte — la liste des tâches, la liste des exécutions ou une exécution parente ; ouverte par un lien, elle ramène à la liste des tâches.
 
 | Partie | Contenu |
 |---|---|
@@ -21679,14 +21936,28 @@ La promotion suit l'ordre dicté par le processus de livraison (typiquement demo
 
 ---
 
+## Instructions refusées par la base \{#schema-pending\}
+
+Une instruction refusée par la base — droits manquants, règle du DBA — n'arrête pas la mise à niveau : c'est un avertissement. La configuration, les fichiers et les feuilles de style sont mis à niveau malgré tout et le service démarre ; tant que les instructions ne sont pas passées, la fonctionnalité qu'elles servent manque.
+
+| Où | Ce qui s'affiche |
+|---|---|
+| La console | ` ** WARN ** UPGRADE : …` pour chaque instruction refusée, avec le message de la base, puis le chemin du script à passer à la main. |
+| Le rapport de mise à niveau | *Database schema not fully upgraded*, les instructions refusées et le chemin du script ; le résultat indique *OK with warnings*. |
+| **Paramètres → Historique des mises à niveau** | La même section, sur l'entrée de la mise à niveau. |
+| `${appHome}/upgrade-reports/upgrade-<timestamp>-schema-pending.sql` | Les instructions à passer avec un compte qui a les droits. |
+
+Passer le script avec un compte qui a les droits — ou accorder les droits — puis relancer la mise à niveau : elle retente les instructions et saute ce qui est déjà en place.
+
+---
+
 ## En cas d'échec
 
-Le wrapper se termine avec un code non nul et **laisse le service arrêté**. Le message affiché est le suivant :
+Le wrapper se termine avec un code non nul. Sous Linux / macOS, `nomaubl.sh upgrade` redémarre le service qui fonctionnait et affiche l'échec ; sous Windows, `nomaubl.cmd upgrade` laisse le service arrêté.
 
 ```text
-[upgrade] ⚠ FAILED — service left stopped.
-[upgrade] Inspect the report under ${appHome}/upgrade-reports/ and
-[upgrade] roll back from ${appHome}/backup/<latest>/ if needed.
+[upgrade] ⚠ FAILED — the upgrade did not complete.
+[upgrade] starting service again...
 ```
 
 Les deux fichiers à consulter :
@@ -21739,7 +22010,7 @@ C'est la piste d'audit destinée à l'exploitant — utile pour confirmer « oui
 | Exécution d'`upgrade` sur le mauvais environnement. | Le mauvais environnement tombe pendant une minute. | Lire la ligne `[upgrade] env: <env>` au démarrage ; annuler avec Ctrl+C si ce n'est pas celui prévu. |
 | Le nouveau JAR est absent ou corrompu. | `[upgrade] new JAR not found: <path>` ou `Error: Unable to access jarfile`. | Vérifier que le fichier existe et a la taille attendue ; le retélécharger si besoin. |
 | Le service a été démarré à la main, en dehors du wrapper. | Le wrapper ne voit aucun fichier PID → considère que le service n'est pas en cours → la mise à niveau se poursuit sans arrêter la JVM. Deux processus se disputent brièvement la base de données. | Toujours utiliser le wrapper pour démarrer ou arrêter le service. |
-| Un delta de schéma échoue parce que l'utilisateur de la base a perdu ses droits DDL. | Le rapport consigne `ORA-01031: insufficient privileges` (Oracle) ou `permission denied for schema` (PostgreSQL). | Réaccorder `CREATE TABLE`, `CREATE INDEX`, `CREATE SEQUENCE`, `CREATE VIEW` ; relancer la mise à niveau. |
+| L'utilisateur de la base n'a pas les droits DDL. | La mise à niveau se termine par *OK with warnings* ; le rapport liste les instructions refusées (`ORA-01031: insufficient privileges` sous Oracle, `permission denied for schema` sous PostgreSQL). | Passer le script `…-schema-pending.sql` avec un compte qui a les droits, ou les accorder et relancer la mise à niveau — voir [plus haut](#schema-pending). |
 | Les XSL personnalisées contiennent des TAG obsolètes signalés. | Le rapport liste, par modèle, des entrées sous *« removed TAGs »*. | Ouvrir le `.xsl` du modèle et retirer les lignes `<!-- removed in <version> -->` une fois l'adaptation effectuée. |
 | Disque saturé sur la partition de l'environnement. | L'étape de sauvegarde échoue. | Libérer de l'espace ; relancer. Le répertoire `backup/` grossit au fil des instantanés conservés — il convient d'élaguer les anciens pour maîtriser l'occupation disque. |
 
@@ -21910,7 +22181,7 @@ Les pages de l'interface web forment la vue **opérateur** ; le fichier de log e
 | « La JVM s'est-elle arrêtée brutalement ? » | **Fichier de log du service** + `./nomaubl.sh status` (Linux / macOS) ou `nomaubl.cmd status` (Windows). |
 | « La base est-elle joignable ? » | **Fichier de log du service** — chercher `Connected to db-nomaubl` au démarrage. |
 | « La PA est-elle joignable ? » | **Diagnostic → Journal serveur** (module `PA`) ou le fichier journal — chercher les lignes `pa-default API call`. |
-| « La licence est-elle encore valide ? » | `curl /api/license` — renvoie `valid` / `expired` / `restricted`. |
+| « La licence est-elle encore valide ? » | `curl /api/license` — renvoie `mode` (`full` ou `restricted`) avec la date d'expiration et les jours restants. |
 | « Quelle version est en service ? » | `curl /api/build-info` — renvoie la version et l'horodatage de build. |
 | « Un redémarrage de processus a-t-il eu lieu cette nuit ? » | `./nomaubl.sh status` / `nomaubl.cmd status` montre le PID courant ; le fichier de log montre la bannière de démarrage. |
 
@@ -21960,7 +22231,7 @@ Une posture de supervision minimale prête pour la production sur une installati
 1. **Démarrage automatique via systemd** avec `Restart=on-failure` — voir [Service et systemd](../installation/service-and-systemd.md).
 2. **Rotation des journaux** — intégrée au serveur : au-delà du *Log size cap* (100 Mo par défaut), le journal est copié en `.1` puis tronqué, et cinq copies sont conservées ([`global → Logs`](../configuration/system/global.md)). Logrotate n'est utile que si le serveur est lancé par un autre lanceur.
 3. **Sonde de vivacité** depuis le load balancer / l'outil de monitoring d'uptime qui interroge `/api/build-info` toutes les 30 secondes.
-4. **Alerte de licence** — un petit script qui interroge `/api/license` chaque jour et lève une alerte si `valid: false`.
+4. **Alerte de licence** — un petit script qui interroge `/api/license` chaque jour et lève une alerte quand `mode` vaut `restricted` ou que `daysLeft` passe sous 30.
 5. **Transfert de logs** — rediriger `nomaubl-<env>.log` vers le stockage central de logs (Loki, ELK, Datadog Logs). Le framework écrit en stderr/stdout standard — tout shipper de logs ligne par ligne le capte.
 6. **Supervision base de données** — l'outillage natif du moteur (Oracle : `V$SESSION`, AWR ; PostgreSQL : `pg_stat_activity`, `pg_stat_statements` ; ou les tableaux de bord déjà en place chez le DBA).
 
@@ -22152,23 +22423,24 @@ curl http://localhost:8090/api/license
 Réponses d'exemple :
 
 ```json
-{ "mode": "full", "customer": "ACME Corp", "expiresAt": "2026-12-31" }
+{ "mode": "full", "plan": "standard", "customer": "ACME", "maxUsers": 25, "expiresAt": "2027-12-31", "daysLeft": 414 }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "License expired on 2026-04-30" }
+{ "mode": "restricted", "expiresAt": "2026-04-30", "error": "License key expired" }
 ```
 
 ```json
-{ "mode": "restricted", "reason": "No license configured" }
+{ "mode": "restricted", "error": "No license key configured" }
 ```
 
 | Champ | Ce qu'il indique |
 |---|---|
 | `mode` | `full` (tout fonctionne) ou `restricted` (fonctionnalités limitées sans licence). |
-| `customer` | Sujet de la licence (uniquement quand `mode = full`). |
-| `expiresAt` | Date d'expiration de la licence. |
-| `reason` | Pourquoi la licence n'est pas chargée (uniquement quand `mode = restricted`). |
+| `plan`, `customer` | Offre et sujet de la licence (uniquement quand `mode = full`). |
+| `maxUsers` | Nombre maximal d'utilisateurs de la licence — les comptes actifs ; absent = illimité. |
+| `expiresAt`, `daysLeft` | Date d'expiration de la licence et jours restants ; absents = la licence n'expire jamais. |
+| `error` | Motif de refus de la licence (uniquement quand `mode = restricted`). |
 
 Utile pour :
 
@@ -25929,7 +26201,7 @@ Les résultats d'exécution s'affichent tels que le serveur les écrit, en angla
 | **Rapport** | [Rapports quotidiens](./daily-digest.md) — e-mail des erreurs ou des factures archivées. | Le formulaire du rapport. |
 | **Reprise auto** | [Reprises automatiques](./auto-retry.md) — renvoi quotidien des factures en statut d'erreur. | Le formulaire de reprise. |
 | **Contrôle cycle de vie** | [Contrôles du cycle de vie](./lifecycle-checks.md) — contrôle quotidien d'intégrité et d'ordre des statuts. | Le formulaire du contrôle. |
-| **Système** | *Purge de rétention* — le nettoyage quotidien des tables (voir [Purge de rétention](#retention)). | L'éditeur de la tâche ; durée de conservation par table. |
+| **Système** | *Purge de rétention* — le nettoyage quotidien des tables (voir [Purge de rétention](#retention)) — et *Rapport d'utilisation de la licence* (voir [Rapport d'utilisation de la licence](#usage-report)). | L'éditeur de la tâche ; durée de conservation par table. |
 
 Les tâches désactivées figurent aussi dans la liste, à l'état **Inactif**, pour être activées depuis la page.
 
@@ -26014,6 +26286,12 @@ La purge de rétention quotidienne borne les tables que rien d'autre ne limite. 
 | **Notifications (days)** | `90` | Notifications de la boîte de réception (`F564253`). Vide = 90 jours ; `0` = conservation illimitée. |
 
 Vide ou `0` conserve une table sans limite. La purge est donc **désactivée par défaut, sauf pour les notifications**, qui gardent leurs 90 jours : une mise à jour ne supprime rien d'elle-même. **Compter seulement** indique ce que chaque table perdrait avec les durées **enregistrées sur le serveur** — enregistrer d'abord, puis compter. Les mêmes valeurs figurent dans [Job defaults → Retention](../../configuration/system/global.md#retention) ; la ligne de commande propose `java -jar nomaubl.jar -purge <configFile> [--dry-run]`.
+
+### Rapport d'utilisation de la licence \{#usage-report\}
+
+Une fois par jour — la première fois dix minutes après le démarrage du serveur — le serveur envoie à l'outil de gestion des licences, avec la clé de licence : le nombre de factures par mois (émises et reçues), le nombre de comptes actifs, le nom de l'environnement, la version et une empreinte qui distingue deux installations. Aucun contenu de facture, aucun nom d'utilisateur.
+
+La fenêtre de la tâche n'a aucun réglage : **Voir les données envoyées** affiche les données exactes. L'historique des exécutions montre ce que chaque envoi contenait et la réponse reçue ; un envoi en échec est l'erreur de l'exécution. **Lancer maintenant** et **Suspendre** fonctionnent comme pour les autres tâches. Sans clé de licence, la tâche est **Inactif**.
 
 ---
 
@@ -26771,6 +27049,8 @@ Le XML s'affiche à droite, en lecture seule. Un PDF numérisé (images sans tex
 
 La page écrit les trois réglages et relance la conversion : les lignes d'en-tête sont encadrées en indigo, les lignes de facture en vert, la ligne de fin en rouge, et le compteur affiche *N ligne(s) trouvée(s)*. **Recommencer** efface les clics.
 
+Un tableau imprimé en plusieurs sections, chacune fermée par un sous-total, demande un réglage de plus : **Lignes ignorées**, une regex saisie à la main (par ex. `^Sous total`) qui désigne les lignes du tableau qui ne sont pas des lignes de facture. Le tableau est alors lu jusqu'au bout : placer **Fin du tableau** sur la ligne qui suit la dernière section. Les valeurs imprimées sur une ligne ignorée restent disponibles comme champs du document. Quand l'en-tête occupe plusieurs lignes (**Lignes d'en-tête** à 2 ou plus), chaque ligne de facture porte aussi le titre de sa section, dans `<Section>`. Laissé vide, le réglage ne change rien ; il s'essaie sur la page avant l'enregistrement.
+
 ### Récapitulatif TVA
 
 **Récapitulatif TVA** sélectionné, les mêmes clics renseignent **Début du récap. TVA**, **Colonnes** et **Fin du récap. TVA** : *Cliquez sur la ligne d'en-tête du récapitulatif TVA*, *Cliquez sur sa dernière colonne* (un bouton par cellule d'en-tête — utile quand un autre bloc est imprimé à côté du récapitulatif), *Cliquez sur la première ligne après les taux*. Les taux deviennent `<Recap_TVA>/<Ligne_TVA>`, et le compteur affiche *N taux de TVA trouvé(s)*.
@@ -26787,7 +27067,7 @@ La page écrit les trois réglages et relance la conversion : les lignes d'en-t�
 
 ### Enregistrer dans le document
 
-**Enregistrer dans le document** écrit les réglages dans le document choisi : début, lignes d'en-tête et fin du tableau, récapitulatif TVA, découpage en factures, règles d'extraction du numéro et du type, société (ou sa recherche). Un document sans clé de découpage reçoit `Document`, une par facture. Les mêmes réglages se modifient ensuite dans le groupe [PDF extraction](../management/documents.md#extraction-pdf) du document.
+**Enregistrer dans le document** écrit les réglages dans le document choisi : début, lignes d'en-tête, fin du tableau et lignes ignorées, récapitulatif TVA, découpage en factures, règles d'extraction du numéro et du type, société (ou sa recherche). Un document sans clé de découpage reçoit `Document`, une par facture. Les mêmes réglages se modifient ensuite dans le groupe [PDF extraction](../management/documents.md#extraction-pdf) du document.
 
 ---
 
@@ -28585,7 +28865,7 @@ L'écran se divise en deux sections : **Parameters** et **Output**.
 | Champ | Description |
 |---|---|
 | **Template** | Template du document (par ex. `invoices`, `credit_notes`). Sert uniquement à résoudre le placeholder `%TEMPLATE%` du répertoire de sortie par défaut hérité de `global.dirInput`. |
-| **Job Number** | Numéro de job BIP JDE (`RJJOBNBR` dans `F9563110` / `XDJOBNBR` dans `F95630`). Obligatoire. |
+| **Job Number** | Numéro de job BIP JDE (`RJJOBNBR` dans `F9563110` / `XDJOBNBR` dans `F95630`). Obligatoire. Pour un état exécuté en sous-système, le numéro reprend toutes les entrées que la file d'impression contient sous ce numéro ; une seule entrée s'extrait en [ligne de commande](../management/command-line.md) avec `<job>-<entrée>`. |
 | **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). Quand renseigné, seules les sorties correspondant à cette langue sont extraites. |
 | **Extract Mode** | Détermine ce qui est extrait du job — `Extract Input (XML)`, `Extract Output` ou `Extract Both`. Voir ci-dessous. |
 
@@ -28868,6 +29148,7 @@ Le groupe **PDF extraction** règle la conversion :
 | **Table start** | Regex testée sur chaque ligne : les cellules de la ligne trouvée nomment les colonnes du tableau (par ex. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
 | **Header rows** | Nombre de lignes d'un en-tête de tableau imprimé sur plusieurs lignes, la ligne *Table start* étant la première (défaut `1`). L'en-tête est fusionné par colonne et les cellules empilées sur une ligne sont placées dans leur propre colonne. Au-delà d'une ligne, le tableau s'arrête à la première ancre de fin. |
 | **Table end** | Regex testée sur la première ligne qui suit le tableau — cette ligne n'en fait pas partie. |
+| **Rows ignored** | Regex testée sur les lignes du tableau qui ne sont pas des lignes de facture, comme le sous-total qui ferme une section (par ex. `^Sous total`) : le tableau se poursuit après elles, et leurs valeurs libellées restent des champs du document. La casse est ignorée. Avec ce réglage, **Table end** désigne la ligne qui suit la dernière section. Vide = aucune ligne ignorée. |
 | **Invoice split** | Regex dont le premier groupe est le numéro de facture, pour un PDF qui contient plusieurs factures (par ex. `N° de facture :\s*(\S+)`) : un `<Document>` par numéro, chacun avec ses propres pages. Vide = une facture par PDF. |
 | **VAT table start** | Regex sur la ligne d'en-tête du récapitulatif TVA : ses lignes deviennent `<Recap_TVA>/<Ligne_TVA>`, une par taux. Vide = aucun récapitulatif TVA lu. |
 | **VAT columns** | Cellules d'en-tête conservées à partir de la gauche, quand un autre bloc est imprimé à côté du récapitulatif. Vide = toutes. |
@@ -28976,7 +29257,7 @@ Le groupe **Processing rules** oriente les documents du flux XML **avant toute g
 
 | Résultat | Effet |
 |---|---|
-| **Treat as document type** | Le document poursuit son traitement sous le [type de document](../configuration/system/document-types.md) choisi, avec les réglages d'envoi / validation / mode / conservation de ce type — par exemple une gratuité à montant nul orientée vers `ARCHIVEONLY`. |
+| **Treat as document type** | Le document poursuit son traitement sous le [type de document](../configuration/system/document-types.md) choisi, avec les réglages d'envoi / validation / mode / conservation de ce type — par exemple une gratuité à montant nul orientée vers `ARCHIVEONLY`. Le document porte aussi ce type comme type de transaction dans l'UBL (la note de routage `#BAR#` / `#ADN#`) : la colonne **Type doc.** des listes, les statistiques, le type et l'indicateur d'archivage seul transmis à la plateforme, les contrôles du secteur public et l'[e-reporting](../application/ereporting.md) suivent la règle. Une règle qui fait passer des factures B2C ou B2B international sous un autre type les sort de la déclaration d'e-reporting. |
 | **Exclude (record only)** | Le document est seulement enregistré : sa source est archivée et son en-tête conservé, avec le statut **Exclue par règle** (`9914`, le message reprenant le nom de la règle) et un événement de cycle de vie. Il apparaît dans la liste des factures et est compté par les contrôles d'intégrité, mais il n'est jamais validé, produit ni envoyé. |
 
 **Conditions** — toutes les conditions d'une règle doivent être remplies (*if … and …*). Champs : type de document JDE, type de document déterminé, type de traitement (valeur brute du spool), montant de la facture, société, code activité, type pièce, numéro client, numéro de document, ou **XPath on the document…** (tout XPath ou balise du spool, par ex. `Code_Nature_ID12`). Opérateurs : dans la liste / hors de la liste (`RM, RX`), `=`, `≠`, nul ou vide, non nul, `<`, `>`, vide, non vide, correspond à une regex. **↑** / **↓** changent l'ordre des règles ; le nom de la règle apparaît dans le journal et dans le message de statut.
@@ -30135,6 +30416,7 @@ Les cibles se définissent une fois dans **Paramètres → Promotion targets** (
 | **Name** | Affiché dans la liste des cibles de la page Promotion. |
 | **URL** | Racine de l'instance cible, avec son préfixe de chemin s'il y en a un (par exemple `https://test.example/nomaubl`). |
 | **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Accès aux paramètres* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
+| **Check the server certificate** | Cochée par défaut. Quand une promotion échoue avec *The target's certificate is not trusted*, la cible a un certificat auto-signé ou interne : décocher l'option. |
 
 Le compte n'est jamais transmis au navigateur et ne voyage jamais dans un paquet. Cet éditeur reste en anglais dans l'application.
 
@@ -30263,11 +30545,21 @@ Le reste de la page détaille chacun des modes directs du JAR.
 | `JAVA_OPTS` | vide | Options JVM transmises à chaque appel Java (mémoire, emplacement de la clé maître…). |
 | `JAVA_COMMAND` | `java` | Exécutable Java à lancer. |
 | `DEFAULT_PORT` | `8090` | Port de `start` / `restart` quand aucun n'est indiqué. |
+| `ENV_HOME` | le dossier du script | Dossier qui contient les environnements, avec leurs fichiers PID et leurs journaux. Un chemin relatif part du dossier du script. |
 
 ```bash title="nomaubl.conf"
 JAVA_OPTS="-Xmx4g -Dnomaubl.master.key.file=/etc/nomaubl/master.key"
 DEFAULT_PORT=8090
 ```
+
+Dans `JAVA_OPTS`, `%ENV%` désigne l'environnement indiqué sur la ligne de commande et `%ENV_HOME%` le dossier des environnements — une clé maître par environnement en une seule ligne :
+
+```bash title="nomaubl.conf"
+ENV_HOME="/srv/nomaubl-envs"
+JAVA_OPTS="-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key"
+```
+
+Une commande sans environnement (`pdf2xml`, `install`…) écarte l'option qui cite `%ENV%`. `nomaubl.conf`, `ENV_HOME` et ces deux variables sont propres à `nomaubl.sh` (Linux / macOS).
 
 ### `JAVA_OPTS` — passer des options JVM via le wrapper
 
@@ -30771,7 +31063,7 @@ Chaque table affiche une ligne avec son nombre de lignes, puis une ligne de synt
 |---|---|---|
 | **`archive <doc> <dct> <kco>`** | Numéro de document, type de document, code société. | Récupère depuis le répertoire d'archive JDE. |
 | **`ftp <report> <version> <language> <job>`** | Code rapport, version, langue, numéro de job JDE. | Téléchargement par FTP / SFTP. |
-| **`bip <jobNumber>`** | Numéro de job JDE BIP. | Lecture depuis la BIP Print Queue (`F95630` / `F95631`). |
+| **`bip <jobNumber>`** ou **`bip <jobNumber>-<entrée>`** | Numéro de job JDE BIP, seul ou suivi du numéro de job de la définition d'état (`RJRPDJBNBR`) d'un déclenchement d'un état exécuté en sous-système. Le numéro seul reprend toutes ses entrées. | Lecture depuis la BIP Print Queue (`F95630` / `F95631`). |
 
 **Options**
 
@@ -30807,7 +31099,7 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 |---|---|
 | **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) pour rechercher les fichiers prêts à traiter. `bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (enregistré dans le template *global* après chaque exécution réussie). |
 
-Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` prend le plus grand numéro traité — au passage suivant, seuls les nouveaux jobs sont repris.
+Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` prend le plus grand numéro traité — au passage suivant, seuls les nouveaux jobs sont repris. Un état exécuté en sous-système garde un seul numéro de job : ses déclenchements suivants sont récupérés par le lot planifié, pas par cette commande.
 
 En mode `bip`, `-fetch-all` tient aussi compte du champ **Fenêtre BIP (jours)** (*Paramètres → Global → Traitement par lot*). Quand vous y indiquez un nombre de jours, seuls les jobs modifiés sur cette période sont repris, en plus du suivi par `lastBipJobNumber` ; c'est utile à la première installation ou après une longue interruption, pour ne pas reparcourir tout l'historique.
 
@@ -30835,7 +31127,7 @@ Extraction bas niveau depuis la BIP Print Queue de JD Edwards (`F9563110` en-tê
 
 | Argument | Description |
 |---|---|
-| **`jobNumber`** | Numéro de job JDE (`RJJOBNBR`). |
+| **`jobNumber`** | Numéro de job JDE (`RJJOBNBR`), ou `<job>-<entrée>` — le numéro de job de la définition d'état (`RJRPDJBNBR`) — pour un seul déclenchement d'un état exécuté en sous-système ; le numéro seul extrait toutes ses entrées. |
 | **`--input`** *(défaut)* | Extrait uniquement le XML d'entrée. |
 | **`--output`** | Extrait uniquement les fichiers de sortie générés. |
 | **`--both`** | Extrait l'entrée + la sortie. |
@@ -31835,6 +32127,8 @@ Avant de saisir une valeur, le bouton **Compter seulement** de la tâche Purge d
 | **Hôtes des jobs BIP** | Un repère haut **par hôte d'exécution JDE** (`RJRPDEXHST`). Le repère suit chaque hôte par **date de fin du job**, et non par numéro — un numéro est attribué à la soumission, si bien qu'un job long qui se termine après un job plus récent au numéro supérieur pourrait sinon passer sous le repère et n'être jamais récupéré. La date de fin s'affiche à côté du numéro de job pour chaque hôte, et reste **modifiable**. Ajoutez chaque hôte avec son numéro de départ (le premier lot après mise à niveau renseigne la date automatiquement), ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant ; ils avancent ensuite après chaque job, un lot interrompu reprenant exactement où il s'était arrêté. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
 | **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
 
+**États exécutés en sous-système.** Un état exécuté en sous-système garde le même numéro de job jusqu'à son redémarrage, et chaque déclenchement ajoute une entrée à la file d'impression sous ce numéro. Le lot planifié récupère chaque déclenchement, chacun formant son propre lot : le premier lot d'un numéro de job se nomme `report_version_job`, les suivants `report_version_job-entrée`, l'entrée étant le numéro de job de la définition d'état (`RJRPDJBNBR`). L'hôte doit pour cela être analysé par date de fin, ce qui est le cas dès que son premier lot planifié s'est exécuté. *(Spécifique BIP / JDE.)*
+
 ---
 
 ## Onglet 8 — License
@@ -31844,6 +32138,14 @@ Avant de saisir une valeur, le bouton **Compter seulement** de la tâche Purge d
 | Champ | Description |
 |---|---|
 | **License Key** | Clé de licence NomaUBL complète. **Sans clé valide, les menus *Navigation*, *Synchronisation* et *UBL* sont désactivés** — seule la Configuration reste accessible. |
+
+Sous le champ, une ligne indique ce que donne la clé **enregistrée** — *Saved key: client · offre · expires on … (n days left) · n users*, avec *no expiry* ou *unlimited users* quand la licence n'en fixe pas — ou *Restricted:* suivi du motif de refus de la clé (clé absente, format ou signature invalide, clé expirée).
+
+| Sujet | Comportement |
+|---|---|
+| **Expiration** | À partir de 30 jours avant l'échéance, un bandeau le rappelle aux utilisateurs qui ont accès aux paramètres : *La licence expire le … (dans n jours). Renouvelez-la pour conserver l'application complète.* |
+| **Nombre d'utilisateurs** | Une licence peut fixer un nombre maximal de comptes actifs. Une fois ce nombre atteint, la création d'un utilisateur, la réactivation d'un compte désactivé et la création automatique d'un compte à la première connexion SSO sont refusées ; les comptes déjà actifs continuent de fonctionner. La [liste des utilisateurs](../security/users.md) affiche les comptes actifs en regard de la limite. |
+| **Rapport d'utilisation** | Une fois par jour, le serveur envoie à l'outil de gestion des licences, avec la clé de licence, le nombre de factures par mois, le nombre de comptes actifs, le nom de l'environnement et la version — aucun contenu de facture, aucun nom d'utilisateur. C'est la tâche *Rapport d'utilisation de la licence* de la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md#usage-report). |
 
 ---
 
@@ -32728,6 +33030,15 @@ Une page des Paramètres — **Paramètres → Views & UI → Navigation & lists
 |---|---|---|
 | **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover** : le menu se replie en une colonne d'icônes et les pages gagnent la largeur ; le survol des icônes ouvre le menu par-dessus la page, et le choix d'une page le replie. Le bouton de repli manuel est alors masqué. |
 
+Le menu et les pages s'adaptent aussi à la largeur de la fenêtre :
+
+| Fenêtre | Menu | Pages |
+|---|---|---|
+| 1100 px ou moins — petit portable, tablette | Replié sur ses icônes ; le bouton du bas l'ouvre par-dessus la page, qui garde toute sa largeur. | Le titre se raccourcit et son sous-titre est masqué ; l'assistant IA s'ouvre par-dessus la page. |
+| 768 px ou moins — téléphone | Masqué ; un bouton en haut à gauche l'ouvre, et le choix d'une page le referme. | Chaque ligne d'une liste devient une carte, avec une ligne par colonne visible — son titre à gauche, sa valeur à droite ; colonnes, vues enregistrées, recherche et filtres fonctionnent comme sur une fenêtre large, pas le tri par un clic sur l'en-tête. Les fenêtres de facture, de document et d'e-reporting occupent tout l'écran. |
+
+Sur une fenêtre peu haute, le panneau des filtres avancés d'une liste défile sur lui-même, et la grille reste visible. Les tableaux de bord passent sur une colonne.
+
 ### Cache des tableaux de bord \{#dashboard-cache\}
 
 | Champ | Par défaut | Description |
@@ -33570,7 +33881,7 @@ Action effectuée par NomaUBL sur l'**enregistrement de définition de report** 
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = l'enregistrement reste en place ; `REMOVE` = suppression de l'enregistrement dans `F9563110` ; `UPDATE` = réécriture du PDF généré dans la colonne BLOB (PDF uniquement). |
+| **Remove RD** | `NO` / `REMOVE` / `UPDATE` | `NO` = l'enregistrement reste en place ; `REMOVE` = suppression de l'enregistrement dans `F9563110` ; `UPDATE` = réécriture du PDF généré dans la colonne BLOB (PDF uniquement). L'action porte sur l'entrée de la file d'impression qui vient d'être traitée : pour un état exécuté en sous-système, les autres déclenchements du même numéro de job restent en l'état. |
 
 Choisir `NO` pendant la validation d'une intégration, passer à `REMOVE` une fois la chaîne fiabilisée (la file reste propre), et n'utiliser `UPDATE` que quand des consommateurs JDE en aval attendent de retrouver le PDF généré dans le BLOB.
 
@@ -33663,7 +33974,7 @@ Les comptes utilisateurs sont applicatifs et indépendants de la source — ils 
 
 ## Liste des utilisateurs
 
-Le tableau en bas de la page liste l'ensemble des comptes utilisateurs.
+Le tableau en bas de la page liste l'ensemble des comptes utilisateurs. Quand la licence fixe un nombre maximal d'utilisateurs, le titre de la liste affiche les comptes actifs en regard de cette limite — *3 / 10 enabled (licence)* —, en orange une fois la limite atteinte : la création d'un utilisateur ou la réactivation d'un compte est alors refusée (*User limit of the licence reached…*) tant qu'aucun compte n'est désactivé et que la licence n'est pas étendue.
 
 | Colonne | Description |
 |---|---|
@@ -34695,17 +35006,25 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
   
     Versions
+    2026.11.18.1 · 2026-11-18
+    2026.11.16.1 · 2026-11-16
+    2026.11.13.1 · 2026-11-13
+    2026.11.12.1 · 2026-11-12
+    2026.11.11.1 · 2026-11-11
     2026.11.10.1 · 2026-11-10
-    2026.11.08.1 · 2026-11-08
-    2026.11.06.1 · 2026-11-06
-    2026.11.05.1 · 2026-11-05
-    2026.11.04.1 · 2026-11-04
-    2026.10.30.1 · 2026-10-30
   
   
-    Toutes les versions (127)
+    Toutes les versions (132)
+    
+      2026-11
+      2026.11.08.1 · 2026-11-08
+      2026.11.06.1 · 2026-11-06
+      2026.11.05.1 · 2026-11-05
+      2026.11.04.1 · 2026-11-04
+    
     
       2026-10
+      2026.10.30.1 · 2026-10-30
       2026.10.29.1 · 2026-10-29
       2026.10.27.1 · 2026-10-27
       2026.10.25.1 · 2026-10-25
@@ -34852,6 +35171,48 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.11.18.1 — 2026-11-18 \{#v2026-11-18-1\}
+
+### Améliorations
+- **File d'impression JD Edwards : états exécutés en sous-système.** Un état lancé en sous-système garde le même numéro de travail jusqu'à son redémarrage, et chaque déclenchement ajoute une entrée à la file d'impression sous ce numéro. La récupération planifiée prend désormais chaque déclenchement, traité comme un lot à part, et non plus le premier seulement. Le premier lot d'un numéro de travail conserve son nom habituel (`état_version_travail`) ; les suivants y ajoutent le numéro de l'entrée (`état_version_travail-entrée`). L'action « après génération » (suppression ou mise à jour de l'entrée JD Edwards) porte sur l'entrée qui vient d'être traitée, et non sur tout le numéro de travail. Une récupération par numéro de travail seul (extraction manuelle, ligne de commande) prend toutes les entrées de ce numéro ; `travail-entrée` n'en prend qu'une. Le serveur d'exécution doit être suivi par date de fin, ce qui est le cas dès son premier lot planifié. Le balayage par lot en ligne de commande reste fondé sur le numéro de travail et ne voit pas les déclenchements suivants. Rien ne change pour un état qui ne tourne pas en sous-système.
+
+---
+
+## 2026.11.16.1 — 2026-11-16 \{#v2026-11-16-1\}
+
+### Améliorations
+- **PDF vers XML : tableaux en plusieurs sections.** Un nouveau réglage des documents PDF, « Lignes ignorées », désigne les lignes du tableau qui ne sont pas des lignes de facture, comme le sous-total qui clôt chaque section. Le tableau est alors lu jusqu'au bout, chaque ligne portant le titre de sa section ; « Fin du tableau » se place sur la ligne qui suit la dernière section. Le réglage figure dans l'éditeur de document (extraction PDF) et sur la page PDF vers XML, où il peut être essayé avant l'enregistrement. Laissé vide, rien ne change.
+- **Règles de traitement : « Traiter comme le type de document » fixe aussi le type de transaction de la facture.** Une facture retenue par une telle règle porte désormais, dans son UBL, le type de la règle et non plus celui lu dans la source : la colonne du type de transaction dans les listes, les statistiques, le type et l'indicateur d'archivage seul transmis à la plateforme, les contrôles du secteur public et l'e-reporting suivent la règle. Jusqu'ici, la règle ne modifiait que les réglages d'envoi, de validation et de sortie. Les factures déjà traitées conservent leur type tant qu'elles ne sont pas retraitées ; une règle qui fait passer des factures B2C ou B2B international vers un autre type les retire de la déclaration d'e-reporting.
+
+---
+
+## 2026.11.13.1 — 2026-11-13 \{#v2026-11-13-1\}
+
+### Améliorations
+- **Un menu qui s'adapte à la largeur de la fenêtre.** Sur un petit portable ou une tablette (fenêtre de 1100 px ou moins), le menu se réduit de lui-même à ses icônes ; son bouton du bas l'ouvre par-dessus la page, qui garde toute sa largeur. Sur une fenêtre de la largeur d'un téléphone, le menu est masqué et s'ouvre par un bouton en haut à gauche ; il se referme dès qu'une page est choisie. Rien ne change sur une fenêtre large.
+- **Barre du haut sans chevauchement.** Les boutons de langue, de thème, de notifications, de compte et d'assistant IA sont placés à droite de la ligne de titre : sur une fenêtre étroite, le titre se raccourcit, le sous-titre disparaît et les boutons ne le recouvrent plus.
+- **Listes sur petit écran : la grille reste toujours visible.** Dans les listes de factures, de documents, d'e-reporting, d'erreurs d'intégration et le journal de traitement, le panneau des filtres avancés défile sur lui-même quand la fenêtre est peu haute, et la page défile si nécessaire : des filtres ouverts ne chassent plus la grille hors de l'écran. La période et les filtres rapides passent sur une seconde ligne quand la place manque.
+- **Tableaux de bord sur fenêtre étroite.** Les tuiles et les graphiques de la Synthèse, des Statistiques, de l'Exploitation et du tableau de bord technique se rangent sur une colonne, sans barre de défilement horizontale et avec des marges réduites.
+- **Listes présentées en fiches sur un écran de la largeur d'un téléphone.** Chaque ligne d'une liste devient une fiche, avec une ligne par colonne visible : le titre à gauche, la valeur à droite ; plus de défilement horizontal. Les colonnes, les vues enregistrées, la recherche et les filtres fonctionnent comme avant ; le tri par clic sur un en-tête reste réservé aux fenêtres larges.
+- **Fenêtres sur un écran de la largeur d'un téléphone.** Les fenêtres de facture, de document et d'e-reporting occupent tout l'écran, avec le titre sur une ligne et des valeurs coupées entre les mots ; les autres fenêtres prennent toute la largeur.
+- **Assistant IA et notifications sur fenêtre étroite.** L'assistant s'ouvre par-dessus la page quand la place manque à côté, et le panneau des notifications reste dans la fenêtre.
+- **Mise à niveau : une erreur de base de données ne l'interrompt plus.** Une instruction refusée par la base (droits insuffisants, règle du DBA) devient un avertissement : la configuration, les fichiers et les feuilles de style sont mis à niveau malgré tout, et le service démarre. La console, le rapport et la page Historique des mises à niveau détaillent chaque instruction refusée avec le message de la base ; un script `upgrade-<date>-schema-pending.sql`, déposé dans `upgrade-reports`, regroupe les instructions à faire exécuter par un compte qui en a les droits. La mise à niveau suivante les rejoue et ignore ce qui est déjà en place. D'ici là, la fonctionnalité concernée reste indisponible.
+- **Mise à niveau : le service redémarre dans tous les cas.** Si la mise à niveau elle-même échoue, `nomaubl.sh upgrade` relance désormais le service qui tournait, affiche l'échec et se termine toujours avec le code d'erreur.
+- **Scripts de base de données sans commentaires de tables et de colonnes.** Les instructions `COMMENT ON` sont retirées du script d'installation et de la migration 2026.11.11 : sans utilité pour l'application, elles pouvaient être refusées sur une base JD Edwards. Une mise à niveau qui s'était arrêtée sur elles passe à la prochaine exécution.
+
+---
+
+## 2026.11.12.1 — 2026-11-12 \{#v2026-11-12-1\}
+
+### Améliorations
+- **Script de lancement : environnements dans un autre dossier.** `ENV_HOME`, dans `nomaubl.conf`, désigne le dossier qui contient les environnements, avec leurs fichiers PID et leurs journaux ; un chemin relatif part du dossier du script. Sans ce réglage, ils restent à côté du script, comme avant.
+- **Script de lancement : une clé maîtresse par environnement.** Dans `JAVA_OPTS`, `%ENV%` représente l'environnement passé sur la ligne de commande et `%ENV_HOME%` le dossier des environnements, par exemple `-Dnomaubl.master.key.file=%ENV_HOME%/%ENV%/.nomaubl/master.key`. Un `JAVA_OPTS` qui ne les utilise pas se comporte comme avant.
+- **Échéance de la licence affichée et annoncée.** Paramètres › Global › License indique ce que donne la clé enregistrée : client, formule, date d'échéance et nombre d'utilisateurs autorisés, ou la raison du refus de la clé. À partir de 30 jours avant l'échéance, un bandeau le rappelle aux utilisateurs qui ont accès aux Paramètres.
+- **Nombre d'utilisateurs de la licence.** Une licence peut fixer un nombre maximal de comptes actifs. Une fois ce nombre atteint, la création d'un utilisateur, la réactivation d'un compte et la création automatique d'un compte à la première connexion SSO sont refusées ; les comptes déjà actifs continuent de fonctionner. La liste des utilisateurs affiche le nombre de comptes actifs au regard de la limite. Une licence sans limite ne change rien.
+- **Rapport d'utilisation de la licence parmi les tâches planifiées.** Une fois par jour, le serveur transmet à l'outil de gestion des licences le nombre de factures par mois (émises et reçues), le nombre de comptes actifs, le nom de l'environnement et la version, accompagnés de la clé de licence ; aucun contenu de facture, aucun nom d'utilisateur. Cet envoi est la tâche « Rapport d'utilisation de la licence » de la page Tâches planifiées (type Système) : l'historique des exécutions indique ce que chaque envoi contenait et la réponse reçue, un envoi en échec apparaît comme l'erreur de l'exécution, et « Voir les données envoyées », dans la fenêtre de la tâche, affiche les données exactes. Lancer maintenant et la mise en pause fonctionnent comme pour les autres tâches. Sans clé de licence, la tâche est inactive.
+
+---
+
 ## 2026.11.11.1 — 2026-11-11 \{#v2026-11-11-1\}
 
 ### Améliorations
@@ -34870,6 +35231,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Corrections
 - **Éditeur de facture : « + Prix » et « + Livraison » sur une ligne.** Les deux boutons ouvrent désormais leur bloc ; « + Livraison » restait sans effet, de même que « + Prix » sur une ligne sans prix unitaire.
 - **Éditeur de facture : libellés sans code de champ.** Les libellés du prix, de la facture antérieure, des identifiants de l'acheteur et de l'avis d'expédition n'affichent plus leur code BT / BG.
+- **Promotion vers une cible au certificat auto-signé ou interne.** Chaque cible de promotion dispose d'une nouvelle option « Check the server certificate » (Paramètres › Promotion targets), cochée par défaut ; décochez-la quand l'envoi échoue sur le certificat. Le message d'erreur l'indique désormais.
 
 ---
 

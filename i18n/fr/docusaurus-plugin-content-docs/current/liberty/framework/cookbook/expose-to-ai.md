@@ -16,7 +16,7 @@ L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les req
 |---|---|---|
 | **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
 | **Quels connecteurs** | **Connecteurs autorisés**, Liberty Next → Administrer → App → Assistant IA. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
-| **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
+| **Quelles requêtes** | Les requêtes de lecture dont l'utilisateur détient la permission `sql:`. | L'assistant ne lance une requête que pour un utilisateur qui pourrait l'ouvrir depuis un écran. Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
 | **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
 | **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
 

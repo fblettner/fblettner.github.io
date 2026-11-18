@@ -79,6 +79,25 @@ Avant de la coller, la clé peut être vérifiée sur le serveur : `liberty-lice
 
 ---
 
+## Rapport d'usage \{#usage-report\}
+
+Une installation sous licence envoie une fois par jour un rapport à l'outil de gestion des licences :
+
+| Envoyé | Contenu |
+|---|---|
+| Environnement | L'**Environnement** de Liberty Next → Administrer → App → Serveur (`production`, `test`…). |
+| Version | Celle du framework et, quand les applications sont installées, la leur — un rapport pour chacune. |
+| Comptes actifs | Leur nombre. |
+| Empreinte de l'installation | Un condensat court qui distingue deux installations ; il ne contient ni adresse ni nom. |
+
+Aucun chiffre des applications, aucun nom d'utilisateur, aucune donnée.
+
+Le rapport est envoyé par une tâche Nomaflow, `liberty-usage-report`, listée sous **Nomaflow → Tâches** et planifiée chaque jour à 04:17. Chaque exécution montre ce qui a été envoyé et la réponse de l'outil ; un envoi refusé ou sans réponse est l'erreur de l'exécution. La tâche se lance, se suspend et se replanifie comme les autres.
+
+La tâche existe tant qu'une clé de licence est installée et que l'**Adresse du rapport d'usage** (Liberty Next → Administrer → App → Licence) est renseignée ; une adresse vide, et rien n'est envoyé.
+
+---
+
 ## Sans clé valide \{#restricted\}
 
 Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mode restreint** : le framework et les applications construites avec lui fonctionnent, les applications sous licence ne se chargent pas. Le journal du serveur en donne la raison par une ligne commençant par `license: not loading licensed connector(s)`.
