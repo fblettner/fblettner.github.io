@@ -111,7 +111,7 @@ L'origine de l'appel dépend du client :
 | Claude Desktop avec l'extension, Claude Code | Le poste de l'utilisateur : une adresse interne ou un VPN suffit. |
 | Un connecteur claude.ai | Les serveurs d'Anthropic : l'instance doit être accessible depuis Internet. |
 
-L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateur. Il ne lit qu'un dossier — le **Samples folder** choisi dans ses réglages — et n'envoie à NomaUBL un fichier de ce dossier que si l'utilisateur demande à Claude de travailler dessus.
+L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateur. Il ne lit qu'un dossier — le **Dossier d'exemples** choisi dans ses réglages — et n'envoie à NomaUBL un fichier de ce dossier que si l'utilisateur demande à Claude de travailler dessus.
 
 ---
 
@@ -146,14 +146,17 @@ L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateu
 | **Custom Tools** | Paramètres → Global → AI | `N` : l'assistant répond à partir de la documentation, sans lire les données de l'instance. |
 | **MCP endpoint** | Paramètres → Global → AI → MCP server | `N` (défaut) : aucun client Claude ne peut se connecter. |
 | **Allow changes over MCP** | Même groupe | `N` (défaut) : lecture seule. |
-| **MCP access** | [Rôles](../configuration/security/roles.md) → Accès → Fonctionnalités | Les utilisateurs qui peuvent connecter Claude ; aucun rôle par défaut. |
+| **Accès MCP** | [Rôles](../configuration/security/roles.md) → Accès → Fonctionnalités | Les utilisateurs qui peuvent connecter Claude ; aucun rôle par défaut. |
 | Page **Explorateur**, **Accès aux paramètres** | Rôles | Les groupes d'outils accessibles au Claude d'un utilisateur. |
+| Pages **Journal serveur** et **Tableau de bord IT**, **Accès aux paramètres** | Rôles | Les utilisateurs pour qui le journal du serveur, le tableau de bord technique et le rapport d'implémentation peuvent être lus, dans l'assistant comme depuis Claude. |
+| Sociétés et filtres de lignes | Rôles → Périmètre des données | Les factures et les envois d'e-reporting qu'une question peut atteindre. |
 
 ---
 
 ## À savoir avant d'ouvrir largement \{#limits\}
 
 - **Les outils lisent ce que les écrans affichent.** Un nom de client, un montant, une adresse e-mail de la liste des utilisateurs du rapport d'implémentation partent vers le modèle quand un outil les lit.
-- **Le journal du serveur, le tableau de bord technique et le rapport d'implémentation sont ceux de toute l'instance.** Accorder l'assistant et *MCP access* aux utilisateurs qui peuvent les lire.
+- **Les factures et les envois d'e-reporting suivent le rôle.** L'assistant et Claude lisent ceux des sociétés et des filtres de lignes de l'utilisateur, comme les listes de l'application.
+- **Le journal du serveur, le tableau de bord technique et le rapport d'implémentation sont ceux de toute l'instance.** Un outil ne les donne qu'à un rôle qui a la page correspondante — *Journal serveur*, *Tableau de bord IT* — ou, pour le rapport d'implémentation, l'*Accès aux paramètres*.
 - **L'utilisateur reste responsable de ce qu'il saisit ou joint.** Un fichier joint dans l'assistant est transmis tel quel.
 - **L'usage qu'Anthropic fait de ce qu'il reçoit** dépend du contrat de la clé d'API de l'instance pour l'assistant, et de l'abonnement Claude de l'utilisateur pour MCP.

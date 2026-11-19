@@ -102,6 +102,97 @@
         }
       }
     },
+    "/api/auth/tokens": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "List own personal access tokens",
+        "description": "The personal access tokens of the signed-in user, used by Claude on the MCP endpoint (/mcp): identifier, creation and expiry dates, and the client an access opened by sign-in was allowed for.\n\nThe token text is never returned. `enabled` says whether the MCP endpoint is on, `allowed` whether the user's role has MCP access.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "enabled": true, "allowed": true, "tokens": [ { "id": "3fa9c1d2", "client": "", "created": 1795000000000, "expires": 1802776000000 } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Auth"],
+        "x-permission": "any signed-in user",
+        "summary": "Create a personal access token",
+        "description": "Creates a token for the signed-in user, valid `days` days (1 to 366, default 90).\n\nIts text is returned once and is not stored. Requires the MCP endpoint to be enabled and the user's role to have MCP access. A password change, a reset by an administrator or a deactivation of the account ends the token.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "days": 90 } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "token": "nmu_3fa9c1d2_…" } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/tokens/{id}": {
+      "delete": {
+        "tags": ["Auth"],
+        "x-permission": "any signed-in user",
+        "summary": "Revoke a personal access token",
+        "description": "Revokes one of the signed-in user's own tokens, by its identifier. Any signed-in user may revoke their own tokens.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Token identifier (8 hexadecimal characters) as listed", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/mcp/samples": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "List own sample files",
+        "description": "The sample files of the signed-in user: XML or PDF working copies the assistant and Claude read (structure, PDF to XML, mapping tests).\n\nThey are never processed or sent, and are removed after `keepDays` days.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "keepDays": 7, "samples": [ { "name": "invoice.xml", "type": "xml", "size": 18234, "modified": 1795000000000 } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Auth"],
+        "x-permission": "any signed-in user",
+        "summary": "Add a sample file",
+        "description": "Keeps a file as a sample of the signed-in user, replacing one of the same name.\n\nThe body is the raw file (application/octet-stream). Only .xml and .pdf, 20 MB per file, 50 files per user. Any signed-in user may add their own samples.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "filename", "in": "query", "schema": { "type": "string" }, "description": "File name, with its .xml or .pdf extension", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "saved": "invoice.xml", "keepDays": 7, "samples": [] } } } }
+          }
+        }
+      }
+    },
+    "/api/mcp/samples/{name}": {
+      "delete": {
+        "tags": ["Auth"],
+        "x-permission": "any signed-in user",
+        "summary": "Delete a sample file",
+        "description": "Deletes one of the signed-in user's own sample files, by its name. Any signed-in user may delete their own samples.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "name", "in": "path", "schema": { "type": "string" }, "description": "File name as listed", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "keepDays": 7, "samples": [] } } } }
+          }
+        }
+      }
+    },
     "/api/auth/forgot-password": {
       "post": {
         "tags": ["Auth"],

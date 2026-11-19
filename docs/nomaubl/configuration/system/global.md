@@ -239,14 +239,13 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 |---|---|
 | **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
-| **Custom Tools** | Read-only tools on this instance's data offered to the assistant (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. |
+| **Custom Tools** | Read-only tools of the in-app assistant on this instance's data (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. Claude over MCP has its own switch, *MCP endpoint*, below. |
 
 ### MCP server
 
 | Field | Description |
 |---|---|
 | **MCP endpoint** | `N` by default. `Y`: Claude Desktop, Claude Code and a claude.ai connector use this instance's tools at `/mcp`, as a user whose role has *MCP access* — see [Claude (MCP)](../../application/claude-mcp.md). |
-| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`), for Claude's sign-in. Blank = the address of the request. |
 | **Allow changes over MCP** | `N` by default: read only. `Y`: Claude may save analyses, mappings and documents when the user asks — see [Changes](../../application/claude-mcp.md#changes). |
 
 What these settings let out of the instance is described on [Data sent to Anthropic](../../application/ai-data-sent.md).
@@ -325,6 +324,7 @@ Under the field, a line shows what the **saved** key gives — *Saved key: custo
 |---|---|
 | **Enable Authentication** | `Y` / `N` — turn on password-based user login. When `N`, NomaUBL runs without a login wall (typically dev / on-prem behind a corporate VPN). |
 | **Auth Mode** | `internal` / `oidc` / `both` — drives the login screen. `internal` *(default)* keeps the local username + password form. `oidc` switches to a single-sign-on button only. `both` shows the SSO button above the local form, so operators with a database account can still sign in if the IdP is unavailable. Pair with the [OIDC template](./oidc.md) to configure the SSO side. |
+| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`): the password reset links and [Claude's sign-in](../../application/claude-mcp.md#connect) use it. Blank = the address of the request. Set it behind a reverse proxy. |
 | **Session Timeout (minutes)** | How long an authenticated user session remains valid. Default `480` (8 hours). |
 
 :::info[Self-service password reset]

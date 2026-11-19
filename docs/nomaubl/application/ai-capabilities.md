@@ -20,7 +20,7 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 
 - Click **✦ AI Assistant** at the right end of the top bar. The panel opens as a drawer beside the page; it stays usable while an invoice window is open.
 - Press **Enter** to send, **Shift+Enter** for a new line, **■** to stop a reply in progress.
-- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days.
+- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days: it is listed, and deleted, in the **Sample files** tab of the profile window.
 - **The conversation is kept** when the panel is closed or the page reloaded (the last 40 messages, in the browser). **+ New chat** starts a fresh one.
 - **Opening another invoice starts a new conversation**: the previous exchange was about another invoice and would mislead the model.
 
@@ -249,7 +249,7 @@ At most **10 tool calls** are chained for one question. When a tool fails, the a
 ## What the assistant cannot do
 
 - **Change anything.** It only reads. Asked to resend, reprocess or change a setting, it says where in the application to do it.
-- **Go beyond your rights.** The data tools apply the company visibility of your role, and the settings require the *Settings access* feature.
+- **Go beyond your rights.** Invoices and e-reporting runs are those of the companies and row filters of your role; the server log and the IT dashboard need their page; the implementation report and the settings need the *Settings access* feature.
 - **Read a file other than XML or PDF.** The paperclip takes `.xml` and `.pdf` files: a PDF up to 10 MB, the first 150,000 characters of an XML.
 
 The administrator sets the API key, the default model, the documentation source, the custom playbooks, the system prompt and the tools from the *AI* tab of the [global settings](../configuration/system/global.md).

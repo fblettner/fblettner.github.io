@@ -20,7 +20,7 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 
 - Cliquer sur **✦ AI Assistant**, à droite de la barre supérieure. Le panneau s'ouvre en tiroir à côté de la page et reste utilisable quand une fenêtre de facture est ouverte.
 - **Entrée** envoie la question, **Maj+Entrée** insère un saut de ligne, **■** interrompt la réponse en cours.
-- Le **trombone** (*Joindre un fichier XML ou PDF*) joint un ou plusieurs fichiers à la question : l'assistant les lit avec le message. Un fichier est conservé avec les [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur pendant 7 jours.
+- Le **trombone** (*Joindre un fichier XML ou PDF*) joint un ou plusieurs fichiers à la question : l'assistant les lit avec le message. Un fichier est conservé avec les [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur pendant 7 jours : il se retrouve, et se supprime, dans l'onglet **Fichiers d'exemple** de la fenêtre de profil.
 - **La conversation est conservée** à la fermeture du panneau ou au rechargement de la page (les 40 derniers messages, dans le navigateur). **+ Nouvelle conversation** repart de zéro.
 - **Ouvrir une autre facture démarre une nouvelle conversation** : l'échange précédent portait sur une autre facture et induirait le modèle en erreur.
 
@@ -249,7 +249,7 @@ Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil é
 ## Limites de l'assistant
 
 - **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
-- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Accès aux paramètres*.
+- **Pas d'accès au-delà des droits.** Les factures et les envois d'e-reporting sont ceux des sociétés et des filtres de lignes du rôle ; le journal serveur et le tableau de bord IT demandent leur page ; le rapport d'implémentation et les réglages demandent la fonctionnalité *Accès aux paramètres*.
 - **Pas d'autre fichier que XML ou PDF.** Le trombone accepte les fichiers `.xml` et `.pdf` : un PDF jusqu'à 10 Mo, les 150 000 premiers caractères d'un XML.
 
 L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).

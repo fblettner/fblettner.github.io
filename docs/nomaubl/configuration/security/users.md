@@ -142,7 +142,7 @@ Click **✏️** on any row to open the edit form for that user. The form is the
 | **Username** | Hidden — usernames are immutable. |
 | **Password** | Hidden — use **Reset Password** below instead. |
 | **Active** | `Yes` / `No` — toggles whether the account can log in. Disabling preserves the user's history without granting access. |
-| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. |
+| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. A new password, like a deactivation of the account, removes the user's [Claude tokens](../../application/claude-mcp.md#tokens). |
 
 Click **Save** to persist or **Cancel** to discard.
 

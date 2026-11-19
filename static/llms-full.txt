@@ -2175,7 +2175,7 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 
 - Click **✦ AI Assistant** at the right end of the top bar. The panel opens as a drawer beside the page; it stays usable while an invoice window is open.
 - Press **Enter** to send, **Shift+Enter** for a new line, **■** to stop a reply in progress.
-- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days.
+- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days: it is listed, and deleted, in the **Sample files** tab of the profile window.
 - **The conversation is kept** when the panel is closed or the page reloaded (the last 40 messages, in the browser). **+ New chat** starts a fresh one.
 - **Opening another invoice starts a new conversation**: the previous exchange was about another invoice and would mislead the model.
 
@@ -2331,7 +2331,7 @@ At most **10 tool calls** are chained for one question. When a tool fails, the a
 ## What the assistant cannot do
 
 - **Change anything.** It only reads. Asked to resend, reprocess or change a setting, it says where in the application to do it.
-- **Go beyond your rights.** The data tools apply the company visibility of your role, and the settings require the *Settings access* feature.
+- **Go beyond your rights.** Invoices and e-reporting runs are those of the companies and row filters of your role; the server log and the IT dashboard need their page; the implementation report and the settings need the *Settings access* feature.
 - **Read a file other than XML or PDF.** The paperclip takes `.xml` and `.pdf` files: a PDF up to 10 MB, the first 150,000 characters of an XML.
 
 The administrator sets the API key, the default model, the documentation source, the custom playbooks, the system prompt and the tools from the *AI* tab of the [global settings](../configuration/system/global.md).
@@ -2357,7 +2357,7 @@ Source: https://docs.nomana-it.fr/nomaubl/application/claude-mcp/
 
 NomaUBL in Claude Desktop, Claude Code and claude.ai through the MCP endpoint of the instance: turning it on, the MCP access role feature, the Claude Desktop extension, the sign-in from the client, personal tokens, what Claude can read, sample files, mapping work, changes when allowed, and the usage per user. For JD Edwards, SAP, NetSuite or a custom ERP alike.
 
-The **MCP endpoint** lets a user question their NomaUBL instance from **Claude Desktop**, **Claude Code** or a **claude.ai connector**, under their own account: invoices and their history, validation errors, e-reporting, dashboards and period figures, the server log, the settings, the documentation. It is read-only unless the instance allows changes, off by default, and it needs a valid licence.
+The **MCP endpoint** lets a user question their NomaUBL instance from **Claude Desktop**, **Claude Code** or a **claude.ai connector**, under their own account: invoices and their history, validation errors, e-reporting, dashboards and period figures, the server log, the settings, the documentation. Invoices and e-reporting runs are those of the user's companies and data scope, as in the lists of the application. It is read-only unless the instance allows changes, off by default, and it needs a valid licence.
 
 What goes to Anthropic in that case, and what does not, is described on [Data sent to Anthropic](./ai-data-sent.md).
 
@@ -2374,10 +2374,11 @@ In **Settings → Global → AI**, group **MCP server** (this editor is in Engli
 | Field | Default | Description |
 |---|---|---|
 | **MCP endpoint** | `N` | The instance answers at `/mcp`, for the users whose role has *MCP access*. |
-| **Public address** | blank | Address the users reach the instance at (`https://nomaubl.example.com`), used by the sign-in from Claude. Blank = the address of the request. Set it behind a reverse proxy. |
 | **Allow changes over MCP** | `N` | Claude may save analyses, mappings and documents when the user asks — see [Changes](#changes). Off: read only. |
 
 Sign-in must be enabled on the instance: Claude always acts as a named user.
+
+Behind a reverse proxy, fill in **Public address** in **Settings → Global → Authentication**: the sign-in from Claude uses it, as the password reset links do.
 
 ---
 
@@ -2387,24 +2388,30 @@ Only the roles that have the **MCP access** feature ([Roles](../configuration/se
 
 | Tools | The role needs |
 |---|---|
-| Invoices, errors, lifecycle, e-reporting, dashboards, period figures, server log, documentation | *MCP access*. |
+| Invoices, errors, lifecycle, e-reporting, dashboards, period figures, documentation | *MCP access*. Invoices and e-reporting runs are limited to the companies and the row filters of the role. |
+| Server log | The **Server log** page. |
+| IT dashboard | The **IT dashboard** page. |
 | Data Explorer — model, fields, aggregations, saved analyses | The **Explorer** page. |
-| Setup review — configuration objects, configuration check, scheduled jobs, rule sets, licence state, system — and mapping work | **Settings access**. |
-| Sample files | *MCP access*. |
+| PDF to XML conversion of a sample | The **Process Document** page, or **Settings access**. |
+| Implementation report; setup review — configuration objects, configuration check, scheduled jobs, rule sets, licence state, system —; mapping work | **Settings access**. |
+
+A role without a list of allowed pages reaches every page. An invoice outside the user's scope is answered as not found.
 
 ---
 
 ## Connect Claude \{#connect\}
 
-Everything is in the **Claude (MCP)** tab of the profile window (the user button of the top bar).
+The server address, the tokens and the extension are in the **Claude (MCP)** tab of the profile window (the user button of the top bar).
 
 | Way | For | Steps |
 |---|---|---|
-| **Claude Desktop extension** | Claude Desktop, including for an instance that is not reachable from the internet. | **Extension** downloads `nomaubl.mcpb`. Open it with Claude Desktop: the server address is already filled in, and the extension asks for the personal token. Nothing else to install. |
+| **Claude Desktop extension** | Claude Desktop, including for an instance that is not reachable from the internet. | **Extension** downloads a `.mcpb` file. Open it with Claude Desktop: the server address is already filled in, and the extension asks for the personal token. Nothing else to install. |
 | **Sign-in from the client** | Claude Code; a claude.ai connector when the instance is reachable from the internet. | Give the client the **Server address** only. The browser opens NomaUBL: sign in as usual (password or SSO), then on *Connect Claude to NomaUBL* choose 30, 90 or 365 days and click **Allow** (or **Refuse**). |
 | **Pasted token** | Claude Code, a script. | **Create a token**, copy it — *shown once, copy it now* — and give it to the client as the request header `Authorization: Bearer <token>`. |
 
-The extension has four settings in Claude Desktop: **NomaUBL address**, **Personal token**, **Samples folder** (optional — the only folder Claude may send files from) and **Accept an internal certificate** (for a self-signed or company certificate).
+The extension has four settings in Claude Desktop: **NomaUBL address**, **Personal token**, **Samples folder** (optional — the only folder Claude may send files from) and **Accept an internal certificate** (for a self-signed or company certificate). They are in the language of the interface the extension was downloaded from.
+
+The extension carries the environment and the address of its instance in its name — *NomaUBL – prod · nomaubl.example.com* — so the extensions of several instances install side by side, each with its own token. Claude is told which instance it is talking to and says which one an answer concerns.
 
 | Answer of the endpoint | Meaning |
 |---|---|
@@ -2416,7 +2423,9 @@ The extension has four settings in Claude Desktop: **NomaUBL address**, **Person
 
 ## Tokens \{#tokens\}
 
-**Your tokens** lists the user's tokens and the accesses opened by a sign-in from Claude, each with its creation and expiry dates; **Revoke** ends one at once. A token is valid 30, 90 or 365 days. It also stops working when the user changes their password, when the account is disabled, and when the role loses *MCP access*.
+**Your tokens** lists the user's tokens and the accesses opened by a sign-in from Claude. Each line gives its origin — the name of the client the access was allowed for, or *created here* for a token created in this tab — and its creation and expiry dates; **Revoke** ends one at once. A token is valid 30, 90 or 365 days.
+
+A password change — by the user or by an administrator — and the deactivation of the account remove the user's tokens: an account enabled again starts without any. A token also stops working when the role loses *MCP access*.
 
 The server keeps a fingerprint of the token, never the token itself.
 
@@ -2442,10 +2451,12 @@ A result longer than 60,000 characters is cut, and Claude is asked to narrow its
 
 A customer's XML or PDF can be given to Claude to work on:
 
-- from the profile window: **Sample files → Add**;
+- from the profile window: **Sample files** tab, button **Add**;
 - from Claude Desktop, which sends a file of the **Samples folder** chosen in the extension's settings, and of no other folder, when the user asks it to work on one.
 
-Samples are `.xml` or `.pdf` files of 20 MB at most, 50 per user, kept 7 days. They are working copies of one user: they are never processed as invoices nor sent to the platform.
+Samples are `.xml` or `.pdf` files of 20 MB at most, 50 per user, kept 7 days and then removed by the server. They are working copies of one user: they are never processed as invoices nor sent to the platform.
+
+The **Sample files** tab is shown to every user, with or without *MCP access*: a file attached in the [AI assistant](./ai-capabilities.md) is listed there too, and deleted there.
 
 With a sample, Claude reads the structure of an XML, or converts a PDF with a document's settings and tries table anchors without saving. With **Settings access** it also does the mapping work of the [XSL editor](../ubl-tools/xsl-editor.md): it proposes the mapping of a sample (and, for a text PDF, the extraction rules), reads a document's saved mapping and the variables its rule set requires, checks a mapping on a sample and shows the UBL it gives. The sample follows the steps of a real run: a PDF converted as a text PDF or a JD Edwards PDF according to the document, the pre-processing stylesheet, the split into invoices, the sign inversion. Nothing is saved: Claude gives the values to enter in the mapping editor.
 
@@ -2577,13 +2588,16 @@ The Claude Desktop extension runs a small relay on the user's computer. It reads
 | **Allow changes over MCP** | Same group | `N` (default): read only. |
 | **MCP access** | [Roles](../configuration/security/roles.md) → Access → Features | Which users may connect Claude; no role by default. |
 | **Explorer** page, **Settings access** | Roles | Which tool groups a user's Claude reaches. |
+| **Server log** and **IT dashboard** pages, **Settings access** | Roles | Who may have the server log, the IT dashboard and the implementation report read, in the assistant and from Claude. |
+| Companies and row filters | Roles → Data scope | The invoices and e-reporting runs a question can reach. |
 
 ---
 
 ## To know before opening it widely \{#limits\}
 
 - **The tools read what the screens show.** A customer name, an amount, an e-mail address of the users list in the implementation report go to the model when a tool reads them.
-- **The server log, the IT dashboard and the implementation report are those of the whole instance.** Grant the assistant and *MCP access* to users who may read them.
+- **Invoices and e-reporting runs follow the role.** The assistant and Claude read those of the user's companies and row filters, as the lists of the application do.
+- **The server log, the IT dashboard and the implementation report are those of the whole instance.** A tool gives them only to a role that has the matching page — *Server log*, *IT dashboard* — or, for the implementation report, *Settings access*.
 - **What the user types or attaches is theirs to check.** A file attached in the assistant is sent as it is.
 - **The use Anthropic makes of what it receives** depends on the contract of the instance's API key for the assistant, and on the user's Claude plan for MCP.
 
@@ -32627,14 +32641,13 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 |---|---|
 | **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
-| **Custom Tools** | Read-only tools on this instance's data offered to the assistant (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. |
+| **Custom Tools** | Read-only tools of the in-app assistant on this instance's data (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. Claude over MCP has its own switch, *MCP endpoint*, below. |
 
 ### MCP server
 
 | Field | Description |
 |---|---|
 | **MCP endpoint** | `N` by default. `Y`: Claude Desktop, Claude Code and a claude.ai connector use this instance's tools at `/mcp`, as a user whose role has *MCP access* — see [Claude (MCP)](../../application/claude-mcp.md). |
-| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`), for Claude's sign-in. Blank = the address of the request. |
 | **Allow changes over MCP** | `N` by default: read only. `Y`: Claude may save analyses, mappings and documents when the user asks — see [Changes](../../application/claude-mcp.md#changes). |
 
 What these settings let out of the instance is described on [Data sent to Anthropic](../../application/ai-data-sent.md).
@@ -32713,6 +32726,7 @@ Under the field, a line shows what the **saved** key gives — *Saved key: custo
 |---|---|
 | **Enable Authentication** | `Y` / `N` — turn on password-based user login. When `N`, NomaUBL runs without a login wall (typically dev / on-prem behind a corporate VPN). |
 | **Auth Mode** | `internal` / `oidc` / `both` — drives the login screen. `internal` *(default)* keeps the local username + password form. `oidc` switches to a single-sign-on button only. `both` shows the SSO button above the local form, so operators with a database account can still sign in if the IdP is unavailable. Pair with the [OIDC template](./oidc.md) to configure the SSO side. |
+| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`): the password reset links and [Claude's sign-in](../../application/claude-mcp.md#connect) use it. Blank = the address of the request. Set it behind a reverse proxy. |
 | **Session Timeout (minutes)** | How long an authenticated user session remains valid. Default `480` (8 hours). |
 
 :::info[Self-service password reset]
@@ -34571,7 +34585,7 @@ Click **✏️** on any row to open the edit form for that user. The form is the
 | **Username** | Hidden — usernames are immutable. |
 | **Password** | Hidden — use **Reset Password** below instead. |
 | **Active** | `Yes` / `No` — toggles whether the account can log in. Disabling preserves the user's history without granting access. |
-| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. |
+| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. A new password, like a deactivation of the account, removes the user's [Claude tokens](../../application/claude-mcp.md#tokens). |
 
 Click **Save** to persist or **Cancel** to discard.
 
@@ -34670,7 +34684,7 @@ A short list of binary feature flags. Each row carries a checkbox plus a one-lin
 |---|---|---|
 | **Settings access** | *Can open the Settings page (template / connector editing).* | Opens the entire Configuration menu. The role is then displayed with the `Admin` badge in the list. |
 | **Read-only mode** | *No edit / delete / resend actions, even on permitted pages.* | Members can browse the application but every write action is disabled — overrides the *Actions* tab entirely. |
-| **MCP access** | *Can connect Claude Desktop or Claude Code to this instance with a personal token* | Shows the **Claude (MCP)** tab in the profile window and lets the user's Claude client call the instance — see [Claude (MCP)](../../application/claude-mcp.md). No role has it by default. |
+| **MCP access** | *Can connect Claude (Desktop, Code) to this instance under their account* | Shows the **Claude (MCP)** tab in the profile window and lets the user's Claude client call the instance — see [Claude (MCP)](../../application/claude-mcp.md). No role has it by default. |
 
 ### Allowed Pages
 
@@ -35734,15 +35748,23 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 ### New
 - **NomaUBL in Claude Desktop and Claude Code (MCP).** Claude can question the instance under the user's own account: invoices and their history, validation errors, e-reporting, dashboards and period figures, server log, settings, documentation. Read-only; the user's companies and data scope apply. Off by default: Settings › Global › AI › MCP server. Requires a valid licence.
 - **Data Explorer and setup review from Claude.** Claude can also run any Explorer aggregation (grouping, measures, filters, period, Top N) and the saved analyses, and review the setup: configuration objects, configuration check, scheduled jobs, rule sets, licence state. The Explorer tools need the Explorer page, the setup tools the Settings access; secrets are never shown.
-- **Sample files for Claude.** A customer's XML or PDF can be given to Claude to work on: added in Profile › Claude (MCP) › Sample files, or sent from Claude Desktop, which reads only the samples folder chosen in the extension settings. Claude then reads the structure of an XML or converts a PDF with a document's settings, trying table anchors without saving. Samples are working copies, never processed or sent, removed after 7 days.
+- **Sample files for Claude.** A customer's XML or PDF can be given to Claude to work on: added in Profile › Sample files, or sent from Claude Desktop, which reads only the samples folder chosen in the extension settings. Claude then reads the structure of an XML or converts a PDF with a document's settings, trying table anchors without saving. Samples are working copies, never processed or sent, removed after 7 days.
 - **Attach a file in the assistant.** The paperclip of the AI assistant attaches an XML or a PDF to a question; the assistant reads it with the message, and can convert a PDF with a document's settings or check a document's mapping on it, as Claude Desktop does. The file is kept with the user's sample files for 7 days.
 - **Mapping work from Claude.** Auto-mapping from a sample, as in the mapping editor: send an XML or a PDF of an invoice, Claude proposes the mapping (and, for a text PDF, the extraction rules), checks it and reports what is missing. Claude also reads a document's saved mapping and the variables its rule set requires, then checks a mapping on a sample and shows the UBL it gives, with other values tried on top of the saved ones. The sample follows the steps of a real run: a PDF converted as a text PDF or a JD Edwards PDF according to the document, the pre-processing stylesheet, the burst into invoices, the sign inversion. Nothing is saved: Claude gives the values to enter in the mapping editor. Requires Settings access.
 - **Changes from Claude, when allowed.** A new setting, Settings › Global › AI › MCP server › Allow changes over MCP (off by default), lets Claude, when the user asks, save an Explorer analysis, save mapping values in a document's stylesheet, save a document's PDF to XML settings, and create a document (by source: XML, PDF, UBL or connector, with its own blank stylesheet, or from an existing one) or update its settings. Each source keeps its own rules: text PDF settings are refused on a JD Edwards document and the reverse, and a UBL document has no mapping. Apart from the analysis, these need Settings access; passwords, tokens and keys cannot be set this way. The previous version stays in the file or configuration history, and every change is written to the server log with the user's name.
 - **Claude (MCP) usage.** The technical dashboard shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something, with the time of the last one. Counts only, never the questions asked; kept 90 days.
-- **Sign-in from Claude without a token.** A client given only the address of the MCP endpoint (Claude Code, a claude.ai connector when the instance is reachable from the internet) opens the browser on NomaUBL: the user signs in as usual, password or SSO, and allows the client for 30, 90 or 365 days. The access appears with the user's tokens in the profile window and is revoked there. Behind a proxy, set Settings › Global › AI › MCP server › Public address. The pasted token and the Claude Desktop extension keep working.
+- **Sign-in from Claude without a token.** A client given only the address of the MCP endpoint (Claude Code, a claude.ai connector when the instance is reachable from the internet) opens the browser on NomaUBL: the user signs in as usual, password or SSO, and allows the client for 30, 90 or 365 days. The access appears with the user's tokens in the profile window and is revoked there. Behind a proxy, set Settings › Global › Authentication › Public address, the address also used by password reset links. In the list of tokens, such an access shows the name of the client it was allowed for. The pasted token and the Claude Desktop extension keep working.
+- **Several instances in Claude Desktop.** The extension downloaded from an instance now carries its environment and address in its name (NomaUBL – prod · host), so the extensions of several instances install side by side instead of replacing one another, each with its own token. An extension installed before under the plain name NomaUBL is to be removed and installed again.
 - **Role feature "MCP access".** Only the roles that have it can connect Claude; no role has it by default.
 - **Personal tokens.** Profile › Claude (MCP): create a token (30, 90 or 365 days, shown once), list and revoke them. A password change or a disabled account ends them.
 - **Claude Desktop extension.** Profile › Claude (MCP) › Extension downloads a file to open in Claude Desktop: the server address is already filled in, only the token is asked. Nothing else to install.
+
+### Improvements
+
+- **Assistant and Claude: companies and data scope.** The invoice list, the e-reporting list and the invoice file given by the AI assistant now keep to the user's companies and data scope, as the lists of the application do. The server log, the technical dashboard and the implementation report are given only to a role that has the matching page or Settings access; PDF to XML follows the processing page.
+- **Tokens ended by an administrator.** A password set by an administrator, or the deactivation of an account, removes the user's Claude tokens, as the user's own password change already did.
+- **Sample files tab.** The profile window lists the user's sample files in their own tab, for every user: a file attached in the assistant is found and deleted there. Old samples are removed every day, whether the user comes back or not.
+- **Settings wording.** The System Prompt help says it replaces the built-in prompt; Custom Tools says it concerns the in-app assistant only. The MCP access role feature and the Claude Desktop extension's settings are in French for a French interface.
 
 ---
 

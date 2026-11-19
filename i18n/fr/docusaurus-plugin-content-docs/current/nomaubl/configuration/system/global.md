@@ -241,14 +241,13 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 |---|---|
 | **System Prompt** | Consigne facultative utilisée à la place de la consigne NomaUBL intégrée. Vide = la consigne intégrée. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
-| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés à l'assistant (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. |
+| **Custom Tools** | Outils en lecture seule de l'assistant de l'application sur les données de l'instance (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. Claude en MCP a son propre réglage, *MCP endpoint*, plus bas. |
 
 ### MCP server
 
 | Champ | Description |
 |---|---|
-| **MCP endpoint** | `N` par défaut. `Y` : Claude Desktop, Claude Code et un connecteur claude.ai utilisent les outils de cette instance sur `/mcp`, au nom d'un utilisateur dont le rôle a *MCP access* — voir [Claude (MCP)](../../application/claude-mcp.md). |
-| **Public address** | Adresse à laquelle les utilisateurs joignent cette instance (`https://nomaubl.example.com`), pour la connexion depuis Claude. Vide = l'adresse de la requête. |
+| **MCP endpoint** | `N` par défaut. `Y` : Claude Desktop, Claude Code et un connecteur claude.ai utilisent les outils de cette instance sur `/mcp`, au nom d'un utilisateur dont le rôle a *Accès MCP* — voir [Claude (MCP)](../../application/claude-mcp.md). |
 | **Allow changes over MCP** | `N` par défaut : lecture seule. `Y` : Claude peut enregistrer des analyses, des mappings et des documents à la demande de l'utilisateur — voir [Modifications](../../application/claude-mcp.md#changes). |
 
 Ce que ces réglages laissent sortir de l'instance est décrit dans [Données transmises à Anthropic](../../application/ai-data-sent.md).
@@ -327,6 +326,7 @@ Sous le champ, une ligne indique ce que donne la clé **enregistrée** — *Save
 |---|---|
 | **Enable Authentication** | `Y` / `N` — active la connexion utilisateur par mot de passe. À `N`, NomaUBL s'exécute sans contrôle d'authentification préalable (typiquement en environnement de développement ou en installation interne derrière un VPN d'entreprise). |
 | **Auth Mode** | `internal` / `oidc` / `both` — pilote l'écran de connexion. `internal` *(défaut)* conserve le formulaire local nom d'utilisateur + mot de passe. `oidc` bascule sur un bouton de connexion unique (SSO). `both` affiche le bouton SSO au-dessus du formulaire local, ce qui laisse une porte de secours pour un administrateur disposant d'un compte en base si le fournisseur d'identité est indisponible. À coupler avec le [template OIDC](./oidc.md) pour configurer le SSO côté NomaUBL. |
+| **Public address** | Adresse à laquelle les utilisateurs joignent cette instance (`https://nomaubl.example.com`) : les liens de réinitialisation de mot de passe et la [connexion depuis Claude](../../application/claude-mcp.md#connect) s'appuient dessus. Vide = l'adresse de la requête. À renseigner derrière un proxy inverse. |
 | **Session Timeout (minutes)** | Durée de validité d'une session utilisateur authentifiée, exprimée en minutes. Valeur par défaut `480` (8 heures). |
 
 :::info[Réinitialisation de mot de passe en self-service]

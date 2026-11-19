@@ -148,12 +148,15 @@ The Claude Desktop extension runs a small relay on the user's computer. It reads
 | **Allow changes over MCP** | Same group | `N` (default): read only. |
 | **MCP access** | [Roles](../configuration/security/roles.md) → Access → Features | Which users may connect Claude; no role by default. |
 | **Explorer** page, **Settings access** | Roles | Which tool groups a user's Claude reaches. |
+| **Server log** and **IT dashboard** pages, **Settings access** | Roles | Who may have the server log, the IT dashboard and the implementation report read, in the assistant and from Claude. |
+| Companies and row filters | Roles → Data scope | The invoices and e-reporting runs a question can reach. |
 
 ---
 
 ## To know before opening it widely \{#limits\}
 
 - **The tools read what the screens show.** A customer name, an amount, an e-mail address of the users list in the implementation report go to the model when a tool reads them.
-- **The server log, the IT dashboard and the implementation report are those of the whole instance.** Grant the assistant and *MCP access* to users who may read them.
+- **Invoices and e-reporting runs follow the role.** The assistant and Claude read those of the user's companies and row filters, as the lists of the application do.
+- **The server log, the IT dashboard and the implementation report are those of the whole instance.** A tool gives them only to a role that has the matching page — *Server log*, *IT dashboard* — or, for the implementation report, *Settings access*.
 - **What the user types or attaches is theirs to check.** A file attached in the assistant is sent as it is.
 - **The use Anthropic makes of what it receives** depends on the contract of the instance's API key for the assistant, and on the user's Claude plan for MCP.

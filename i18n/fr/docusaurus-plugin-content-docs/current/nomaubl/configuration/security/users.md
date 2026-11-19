@@ -142,7 +142,7 @@ Cliquer sur **✏️** sur une ligne ouvre le formulaire d'édition. Le formulai
 | **Username** | Masqué — les identifiants sont immuables. |
 | **Password** | Masqué — utiliser **Reset Password** ci-dessous à la place. |
 | **Active** | `Yes` / `No` — autorise ou non la connexion. La désactivation préserve l'historique de l'utilisateur sans lui accorder d'accès. |
-| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser — la case *Require a new password at the first local login* apparaît alors, comme à la création. |
+| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser — la case *Require a new password at the first local login* apparaît alors, comme à la création. Un nouveau mot de passe, comme la désactivation du compte, supprime les [jetons Claude](../../application/claude-mcp.md#tokens) de l'utilisateur. |
 
 Cliquer sur **Enregistrer** pour enregistrer ou sur **Annuler** pour annuler.
 
