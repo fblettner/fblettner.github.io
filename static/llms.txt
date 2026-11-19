@@ -207,7 +207,6 @@ Company: https://nomana-it.fr/ · AI services: https://nomana-it.fr/ai/ · Full 
 - [Nomasx-1 — Components](https://docs.nomana-it.fr/liberty/nomasx1/settings/pricing/components/): Master catalog of licence components — price list, category, friendly name.
 - [Nomasx-1 — Metrics](https://docs.nomana-it.fr/liberty/nomasx1/settings/pricing/metrics/): Catalog of licensing metrics — Application User, Named User Plus, Processor, Employee, etc.
 - [Nomasx-1 — Pricing](https://docs.nomana-it.fr/liberty/nomasx1/settings/pricing/pricing/): Unit list price and support fee per component × metric — the price book the financial report uses to compute the cost of non-compliance.
-- [Nomasx-1 — global-settings](https://docs.nomana-it.fr/liberty/nomasx1/admin/global-settings/): Click on add or edit to set a new datasource or modify an existing datasource and follow the wizard
 
 ## Nomajde — JD Edwards companion
 
