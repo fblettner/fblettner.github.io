@@ -2683,6 +2683,86 @@ The Claude Desktop extension runs a small relay on the user's computer. It reads
 
 ---
 
+## NomaUBL — AI usage
+Source: https://docs.nomana-it.fr/nomaubl/application/diagnostics/ai-usage/
+
+The AI usage view of NomaUBL Diagnostics shows what the in-app assistant, the mapping auto-map and Claude (MCP) were used for: turns, users, tokens with the share read from the cache, tool calls and failures — by user, day, channel, model and tool — and each turn with its tools. What is kept, what never is, and for how long.
+
+The **AI usage** view of [Diagnostics](./overview.md) shows what the AI was used for on the instance, by whom, and what it cost in tokens. It covers the three ways the AI is reached: the [in-app assistant](../ai-capabilities.md), the auto-map of the [mapping editor](../../ubl-tools/xsl-editor.md) and [Claude connected through MCP](../claude-mcp.md).
+
+Open it from **Diagnostics → AI usage**. The view is granted per role, as **AI usage view** ([Roles](../../configuration/security/roles.md)).
+
+---
+
+## At a glance
+
+---
+
+## What is kept \{#record\}
+
+Each turn leaves one record: who, when, the channel, the page the question was asked from, the model, the tokens (read, written, read from and written to the cache), the time it took and how it ended. Each tool called during the turn is kept with its name, a summary of its input, its time, the size of its answer, whether it failed and why, and whether it saved a change.
+
+**The question, the answer and what a tool returned are never kept.**
+
+| Channel | One turn is |
+|---|---|
+| **In-app assistant** | A question asked in the assistant of the application. |
+| **Mapping auto-map** | An auto-map run from the mapping editor. |
+| **Claude (MCP)** | A tool called by a user's Claude client. No model and no tokens: they are those of the user's Claude plan. |
+
+---
+
+## The period in figures \{#figures\}
+
+The period is **7 days**, **30 days** (default) or **90 days**.
+
+| Tile | Shows |
+|---|---|
+| **Turns** | Turns over the period. |
+| **Users** | Users with at least one turn. |
+| **Tokens in** | Everything the model read, with the share read from the cache (*68 % cached*), billed at a fraction of the price. |
+| **Tokens out** | What the model wrote. |
+| **Tool calls** | Tools called, with the number that failed. |
+| **Average turn** | Average time of a turn. |
+
+Below the tiles, a bar chart gives the turns per day.
+
+---
+
+## Breakdowns \{#breakdowns\}
+
+**Breakdown** switches the list:
+
+| Choice | Rows and columns |
+|---|---|
+| **Turns** | The latest turns: When, User, Channel, Page, Model, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Time (s), Outcome, Tools. |
+| **By user**, **By day**, **By channel**, **By model** | Turns, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Failed turns. |
+| **By tool** | Calls, Failed, Changes, Average time (ms), Average answer (characters). |
+
+The list sorts, filters and exports like the other lists of the application.
+
+---
+
+## One turn \{#turn\}
+
+A click on a turn opens it: its outcome — *Answered*, *Failed*, *Stopped by the user* or *Cut short* (the answer reached its length limit) —, its time, its model and tokens, the page it was asked from, then one line per tool with the summary of its input, its time and the size of its answer. A tool that saved something is marked *saved a change*; a failed one shows its reason in red.
+
+---
+
+## How long it is kept \{#retention\}
+
+90 days by default. **AI usage kept (days)**, in **Settings → Global → AI**, sets another duration.
+
+---
+
+## Tips & best practices
+
+- **Read *By tool* after opening MCP.** The **Changes** column says which tools saved something, and **Failed** points at a missing grant or a question the tools cannot answer.
+- **A low cached share on long conversations** means a prompt that changes at every turn: check the *System Prompt* and the custom playbooks.
+- **Grant the view to those who follow the cost**, not only to administrators: it shows no question and no data of the instance.
+
+---
+
 ---
 
 # === Liberty Next — framework ===
@@ -26403,86 +26483,6 @@ The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — o
 - **Start from `ERROR` and `WARN`.** Untick `INFO` to keep only what needs a look, then widen with the module list.
 - **Follow a run with auto-refresh.** Launch a batch or a scan, tick *Auto-refresh* and watch the lines come in.
 - **Raise the tail for an older event.** The default 512 KB covers recent activity; switch to 2 MB or 8 MB to go further back.
-
----
-
-## NomaUBL — AI usage
-Source: https://docs.nomana-it.fr/nomaubl/application/diagnostics/ai-usage/
-
-The AI usage view of NomaUBL Diagnostics shows what the in-app assistant, the mapping auto-map and Claude (MCP) were used for: turns, users, tokens with the share read from the cache, tool calls and failures — by user, day, channel, model and tool — and each turn with its tools. What is kept, what never is, and for how long.
-
-The **AI usage** view of [Diagnostics](./overview.md) shows what the AI was used for on the instance, by whom, and what it cost in tokens. It covers the three ways the AI is reached: the [in-app assistant](../ai-capabilities.md), the auto-map of the [mapping editor](../../ubl-tools/xsl-editor.md) and [Claude connected through MCP](../claude-mcp.md).
-
-Open it from **Diagnostics → AI usage**. The view is granted per role, as **AI usage view** ([Roles](../../configuration/security/roles.md)).
-
----
-
-## At a glance
-
----
-
-## What is kept \{#record\}
-
-Each turn leaves one record: who, when, the channel, the page the question was asked from, the model, the tokens (read, written, read from and written to the cache), the time it took and how it ended. Each tool called during the turn is kept with its name, a summary of its input, its time, the size of its answer, whether it failed and why, and whether it saved a change.
-
-**The question, the answer and what a tool returned are never kept.**
-
-| Channel | One turn is |
-|---|---|
-| **In-app assistant** | A question asked in the assistant of the application. |
-| **Mapping auto-map** | An auto-map run from the mapping editor. |
-| **Claude (MCP)** | A tool called by a user's Claude client. No model and no tokens: they are those of the user's Claude plan. |
-
----
-
-## The period in figures \{#figures\}
-
-The period is **7 days**, **30 days** (default) or **90 days**.
-
-| Tile | Shows |
-|---|---|
-| **Turns** | Turns over the period. |
-| **Users** | Users with at least one turn. |
-| **Tokens in** | Everything the model read, with the share read from the cache (*68 % cached*), billed at a fraction of the price. |
-| **Tokens out** | What the model wrote. |
-| **Tool calls** | Tools called, with the number that failed. |
-| **Average turn** | Average time of a turn. |
-
-Below the tiles, a bar chart gives the turns per day.
-
----
-
-## Breakdowns \{#breakdowns\}
-
-**Breakdown** switches the list:
-
-| Choice | Rows and columns |
-|---|---|
-| **Turns** | The latest turns: When, User, Channel, Page, Model, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Time (s), Outcome, Tools. |
-| **By user**, **By day**, **By channel**, **By model** | Turns, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Failed turns. |
-| **By tool** | Calls, Failed, Changes, Average time (ms), Average answer (characters). |
-
-The list sorts, filters and exports like the other lists of the application.
-
----
-
-## One turn \{#turn\}
-
-A click on a turn opens it: its outcome — *Answered*, *Failed*, *Stopped by the user* or *Cut short* (the answer reached its length limit) —, its time, its model and tokens, the page it was asked from, then one line per tool with the summary of its input, its time and the size of its answer. A tool that saved something is marked *saved a change*; a failed one shows its reason in red.
-
----
-
-## How long it is kept \{#retention\}
-
-90 days by default. **AI usage kept (days)**, in **Settings → Global → AI**, sets another duration.
-
----
-
-## Tips & best practices
-
-- **Read *By tool* after opening MCP.** The **Changes** column says which tools saved something, and **Failed** points at a missing grant or a question the tools cannot answer.
-- **A low cached share on long conversations** means a prompt that changes at every turn: check the *System Prompt* and the custom playbooks.
-- **Grant the view to those who follow the cost**, not only to administrators: it shows no question and no data of the instance.
 
 ---
 

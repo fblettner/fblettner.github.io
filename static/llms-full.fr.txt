@@ -2654,6 +2654,86 @@ L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateu
 
 ---
 
+## NomaUBL — Utilisation de l'IA
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/diagnostics/ai-usage/
+
+La vue Utilisation de l'IA du Diagnostic de NomaUBL montre à quoi ont servi l'assistant intégré, le mapping automatique et Claude (MCP) : tours, utilisateurs, jetons avec la part lue depuis le cache, appels d'outils et échecs — par utilisateur, jour, canal, modèle et outil — et chaque tour avec ses outils. Ce qui est conservé, ce qui ne l'est jamais, et pendant combien de temps.
+
+La vue **Utilisation de l'IA** du [Diagnostic](./overview.md) montre à quoi l'IA a servi sur l'instance, pour qui, et pour quel coût en jetons. Elle couvre les trois accès à l'IA : l'[assistant intégré](../ai-capabilities.md), le mapping automatique de l'[éditeur de mapping](../../ubl-tools/xsl-editor.md) et [Claude connecté en MCP](../claude-mcp.md).
+
+Accès : **Diagnostic → Utilisation de l'IA**. La vue s'accorde par rôle, sous le nom **Vue Utilisation de l'IA** ([Rôles](../../configuration/security/roles.md)).
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Ce qui est conservé \{#record\}
+
+Chaque tour laisse un enregistrement : l'utilisateur, la date, le canal, la page d'où la question a été posée, le modèle, les jetons (lus, écrits, lus depuis le cache et écrits dans le cache), la durée et l'issue. Chaque outil appelé pendant le tour est conservé avec son nom, un résumé de son entrée, sa durée, la taille de sa réponse, son échec éventuel avec sa cause, et l'indication d'une modification enregistrée.
+
+**La question, la réponse et ce qu'un outil a renvoyé ne sont jamais conservés.**
+
+| Canal | Un tour correspond à |
+|---|---|
+| **Assistant intégré** | Une question posée dans l'assistant de l'application. |
+| **Mapping automatique** | Un mapping automatique lancé depuis l'éditeur de mapping. |
+| **Claude (MCP)** | Un outil appelé par le client Claude d'un utilisateur. Ni modèle ni jetons : ils dépendent de l'abonnement Claude de l'utilisateur. |
+
+---
+
+## La période en chiffres \{#figures\}
+
+La période est **7 jours**, **30 jours** (par défaut) ou **90 jours**.
+
+| Tuile | Contenu |
+|---|---|
+| **Tours** | Les tours de la période. |
+| **Utilisateurs** | Les utilisateurs qui ont au moins un tour. |
+| **Jetons lus** | Tout ce que le modèle a lu, avec la part lue depuis le cache (*68 % en cache*), facturée à une fraction du prix. |
+| **Jetons écrits** | Ce que le modèle a écrit. |
+| **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
+| **Durée moyenne d'un tour** | La durée moyenne d'un tour. |
+
+Sous les tuiles, un histogramme donne les tours par jour.
+
+---
+
+## Répartitions \{#breakdowns\}
+
+**Répartition** change la liste affichée :
+
+| Choix | Lignes et colonnes |
+|---|---|
+| **Tours** | Les derniers tours : Quand, Utilisateur, Canal, Page, Modèle, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Durée (s), Issue, Outils. |
+| **Par utilisateur**, **Par jour**, **Par canal**, **Par modèle** | Tours, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Tours en échec. |
+| **Par outil** | Appels, En échec, Modifications, Durée moyenne (ms), Réponse moyenne (caractères). |
+
+La liste se trie, se filtre et s'exporte comme les autres listes de l'application.
+
+---
+
+## Détail d'un tour \{#turn\}
+
+Un clic sur un tour l'ouvre : son issue — *Répondu*, *En échec*, *Arrêté par l'utilisateur* ou *Réponse tronquée* (la réponse a atteint sa longueur maximale) —, sa durée, son modèle et ses jetons, la page d'où il a été lancé, puis une ligne par outil avec le résumé de son entrée, sa durée et la taille de sa réponse. Un outil qui a enregistré quelque chose porte la mention *modification enregistrée* ; un outil en échec affiche sa cause en rouge.
+
+---
+
+## Durée de conservation \{#retention\}
+
+90 jours par défaut. **AI usage kept (days)**, dans **Paramètres → Global → AI**, fixe une autre durée.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Consulter *Par outil* après l'ouverture de MCP.** La colonne **Modifications** indique les outils qui ont enregistré quelque chose, et **En échec** signale un droit manquant ou une question hors de portée des outils.
+- **Une faible part en cache sur de longues conversations** révèle une consigne qui change à chaque tour : vérifier le *System Prompt* et les procédures personnalisées.
+- **Accorder la vue aux personnes qui suivent les coûts**, pas seulement aux administrateurs : elle n'affiche ni question ni donnée de l'instance.
+
+---
+
 ---
 
 # === Liberty Next — framework ===
@@ -26301,86 +26381,6 @@ La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Lin
 - **Commencer par `ERROR` et `WARN`.** Décocher `INFO` pour ne garder que ce qui mérite un coup d'œil, puis élargir avec la liste des modules.
 - **Suivre une exécution avec le rafraîchissement auto.** Lancer un lot ou un parcours, cocher *Rafraîchissement auto* et regarder les lignes arriver.
 - **Augmenter la taille lue pour un événement plus ancien.** Les 512 Ko par défaut couvrent l'activité récente ; passer à 2 ou 8 Mo pour remonter plus loin.
-
----
-
-## NomaUBL — Utilisation de l'IA
-Source: https://docs.nomana-it.fr/fr/nomaubl/application/diagnostics/ai-usage/
-
-La vue Utilisation de l'IA du Diagnostic de NomaUBL montre à quoi ont servi l'assistant intégré, le mapping automatique et Claude (MCP) : tours, utilisateurs, jetons avec la part lue depuis le cache, appels d'outils et échecs — par utilisateur, jour, canal, modèle et outil — et chaque tour avec ses outils. Ce qui est conservé, ce qui ne l'est jamais, et pendant combien de temps.
-
-La vue **Utilisation de l'IA** du [Diagnostic](./overview.md) montre à quoi l'IA a servi sur l'instance, pour qui, et pour quel coût en jetons. Elle couvre les trois accès à l'IA : l'[assistant intégré](../ai-capabilities.md), le mapping automatique de l'[éditeur de mapping](../../ubl-tools/xsl-editor.md) et [Claude connecté en MCP](../claude-mcp.md).
-
-Accès : **Diagnostic → Utilisation de l'IA**. La vue s'accorde par rôle, sous le nom **Vue Utilisation de l'IA** ([Rôles](../../configuration/security/roles.md)).
-
----
-
-## Vue d'ensemble
-
----
-
-## Ce qui est conservé \{#record\}
-
-Chaque tour laisse un enregistrement : l'utilisateur, la date, le canal, la page d'où la question a été posée, le modèle, les jetons (lus, écrits, lus depuis le cache et écrits dans le cache), la durée et l'issue. Chaque outil appelé pendant le tour est conservé avec son nom, un résumé de son entrée, sa durée, la taille de sa réponse, son échec éventuel avec sa cause, et l'indication d'une modification enregistrée.
-
-**La question, la réponse et ce qu'un outil a renvoyé ne sont jamais conservés.**
-
-| Canal | Un tour correspond à |
-|---|---|
-| **Assistant intégré** | Une question posée dans l'assistant de l'application. |
-| **Mapping automatique** | Un mapping automatique lancé depuis l'éditeur de mapping. |
-| **Claude (MCP)** | Un outil appelé par le client Claude d'un utilisateur. Ni modèle ni jetons : ils dépendent de l'abonnement Claude de l'utilisateur. |
-
----
-
-## La période en chiffres \{#figures\}
-
-La période est **7 jours**, **30 jours** (par défaut) ou **90 jours**.
-
-| Tuile | Contenu |
-|---|---|
-| **Tours** | Les tours de la période. |
-| **Utilisateurs** | Les utilisateurs qui ont au moins un tour. |
-| **Jetons lus** | Tout ce que le modèle a lu, avec la part lue depuis le cache (*68 % en cache*), facturée à une fraction du prix. |
-| **Jetons écrits** | Ce que le modèle a écrit. |
-| **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
-| **Durée moyenne d'un tour** | La durée moyenne d'un tour. |
-
-Sous les tuiles, un histogramme donne les tours par jour.
-
----
-
-## Répartitions \{#breakdowns\}
-
-**Répartition** change la liste affichée :
-
-| Choix | Lignes et colonnes |
-|---|---|
-| **Tours** | Les derniers tours : Quand, Utilisateur, Canal, Page, Modèle, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Durée (s), Issue, Outils. |
-| **Par utilisateur**, **Par jour**, **Par canal**, **Par modèle** | Tours, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Tours en échec. |
-| **Par outil** | Appels, En échec, Modifications, Durée moyenne (ms), Réponse moyenne (caractères). |
-
-La liste se trie, se filtre et s'exporte comme les autres listes de l'application.
-
----
-
-## Détail d'un tour \{#turn\}
-
-Un clic sur un tour l'ouvre : son issue — *Répondu*, *En échec*, *Arrêté par l'utilisateur* ou *Réponse tronquée* (la réponse a atteint sa longueur maximale) —, sa durée, son modèle et ses jetons, la page d'où il a été lancé, puis une ligne par outil avec le résumé de son entrée, sa durée et la taille de sa réponse. Un outil qui a enregistré quelque chose porte la mention *modification enregistrée* ; un outil en échec affiche sa cause en rouge.
-
----
-
-## Durée de conservation \{#retention\}
-
-90 jours par défaut. **AI usage kept (days)**, dans **Paramètres → Global → AI**, fixe une autre durée.
-
----
-
-## Conseils & bonnes pratiques
-
-- **Consulter *Par outil* après l'ouverture de MCP.** La colonne **Modifications** indique les outils qui ont enregistré quelque chose, et **En échec** signale un droit manquant ou une question hors de portée des outils.
-- **Une faible part en cache sur de longues conversations** révèle une consigne qui change à chaque tour : vérifier le *System Prompt* et les procédures personnalisées.
-- **Accorder la vue aux personnes qui suivent les coûts**, pas seulement aux administrateurs : elle n'affiche ni question ni donnée de l'instance.
 
 ---
 
