@@ -33,22 +33,26 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
   <rect x="220" y="20" width="760" height="282" rx="14" fill="url(#dgo-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Diagnostic</text>
   <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Erreurs, échecs et journaux de l'instance.</text>
-  <rect x="240.0" y="80" width="172.5" height="40" rx="8" fill="rgba(255,69,58,0.08)" stroke="#f87171" strokeWidth="1.4"/>
-  <rect x="250.0" y="89" width="20" height="20" rx="6" fill="#f87171" fillOpacity="0.18"/>
-  <text x="278.0" y="97" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs d'intégration</text>
-  <text x="278.0" y="111" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">Constats par règle, par événement…</text>
-  <rect x="422.5" y="80" width="172.5" height="40" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="432.5" y="89" width="20" height="20" rx="6" fill="#4a9eff" fillOpacity="0.18"/>
-  <text x="460.5" y="97" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Journal des traitements</text>
-  <text x="460.5" y="111" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">Chaque exécution, fichiers, statut</text>
-  <rect x="605.0" y="80" width="172.5" height="40" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="615.0" y="89" width="20" height="20" rx="6" fill="#fb923c" fillOpacity="0.18"/>
-  <text x="643.0" y="97" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Anomalies</text>
-  <text x="643.0" y="111" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">Tous les échecs non résolus</text>
-  <rect x="787.5" y="80" width="172.5" height="40" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="797.5" y="89" width="20" height="20" rx="6" fill="#8a93b0" fillOpacity="0.18"/>
-  <text x="825.5" y="97" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Journal serveur</text>
-  <text x="825.5" y="111" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">Par sévérité et module</text>
+  <rect x="240.0" y="80" width="139.2" height="40" rx="8" fill="#f87171" fillOpacity="0.1" stroke="#f87171" strokeWidth="1.4"/>
+  <rect x="247.0" y="92" width="16" height="16" rx="5" fill="#f87171" fillOpacity="0.18"/>
+  <text x="269.0" y="97" fill="#e2e8f0" fontSize="8.4" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs d'intégration</text>
+  <text x="269.0" y="111" fill="#94a3b8" fontSize="7.2" fontFamily="system-ui, sans-serif">Constats de validation et …</text>
+  <rect x="385.2" y="80" width="139.2" height="40" rx="8" fill="#ffffff" fillOpacity="0.01" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="392.2" y="92" width="16" height="16" rx="5" fill="#4a9eff" fillOpacity="0.18"/>
+  <text x="414.2" y="97" fill="#e2e8f0" fontSize="8.4" fontWeight="700" fontFamily="system-ui, sans-serif">Journal des traitements</text>
+  <text x="414.2" y="111" fill="#94a3b8" fontSize="7.2" fontFamily="system-ui, sans-serif">Chaque exécution avec ses …</text>
+  <rect x="530.4" y="80" width="139.2" height="40" rx="8" fill="#ffffff" fillOpacity="0.01" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="537.4" y="92" width="16" height="16" rx="5" fill="#fb923c" fillOpacity="0.18"/>
+  <text x="559.4" y="97" fill="#e2e8f0" fontSize="8.4" fontWeight="700" fontFamily="system-ui, sans-serif">Anomalies</text>
+  <text x="559.4" y="111" fill="#94a3b8" fontSize="7.2" fontFamily="system-ui, sans-serif">Tous les échecs non résolu …</text>
+  <rect x="675.6" y="80" width="139.2" height="40" rx="8" fill="#ffffff" fillOpacity="0.01" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="682.6" y="92" width="16" height="16" rx="5" fill="#8a93b0" fillOpacity="0.18"/>
+  <text x="704.6" y="97" fill="#e2e8f0" fontSize="8.4" fontWeight="700" fontFamily="system-ui, sans-serif">Journal serveur</text>
+  <text x="704.6" y="111" fill="#94a3b8" fontSize="7.2" fontFamily="system-ui, sans-serif">Le journal du serveur, par …</text>
+  <rect x="820.8" y="80" width="139.2" height="40" rx="8" fill="#ffffff" fillOpacity="0.01" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="827.8" y="92" width="16" height="16" rx="5" fill="#a78bfa" fillOpacity="0.18"/>
+  <text x="849.8" y="97" fill="#e2e8f0" fontSize="8.4" fontWeight="700" fontFamily="system-ui, sans-serif">Utilisation de l'IA</text>
+  <text x="849.8" y="111" fill="#94a3b8" fontSize="7.2" fontFamily="system-ui, sans-serif">L'assistant et Claude : qu …</text>
   <rect x="240" y="136" width="227" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="241" y="137" width="67" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="274.5" y="150.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Par règle</text>
@@ -86,7 +90,7 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
   <rect x="870" y="267.0" width="46" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
   <text x="893.0" y="278.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Ouvert</text>
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes de vue</text>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cinq cartes de vue</text>
   <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement les vues accordées</text>
   <line x1="200" y1="101.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgo-arrow)"/>
   <rect x="20" y="176" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
