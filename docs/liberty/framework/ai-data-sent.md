@@ -82,7 +82,7 @@ Each question is sent to Anthropic's API with the **Anthropic API key** of **Lib
 | **Notes** | The user's notes for the application, 2,000 characters at most. |
 | **Conversation** | The questions and the answers of the conversation in progress — the last 40 messages. |
 | **Tool results** | What each tool read to answer: the rows of a read query (200 by default), Data Explorer figures, the description of the installation (ids and labels — no data, no SQL), a playbook, the form of a screen, the record before and after a write. With the tools an installation turns on: the jobs, the server log lines and the integrity checks (operations tools, superusers only), the answer of an API endpoint (API tool), what an application's own tool returns. A result is cut at 60,000 characters. |
-| **Attached files** | An image or a PDF as it is; a spreadsheet (its first sheet), a CSV or a text file as text, cut at 60,000 characters. A file stays with its conversation while the page is open, and is sent again with each question of it. |
+| **Attached files** | An image or a PDF as it is; a spreadsheet (its first sheet), a CSV or a text file as text, cut at 60,000 characters. A file stays with its conversation while the page is open, and is sent again with each question of it. A file chosen on the card of a job is not one of them: it goes to the job's own upload, never to the model. |
 
 When domains are listed under **Allowed domains**, Anthropic reads those web pages itself; Liberty sends nothing more.
 
@@ -99,7 +99,7 @@ Within one question, each tool round sends the earlier rounds again; Anthropic r
 | Liberty answers. | The server → the client: the result of that tool, 60,000 characters at most. |
 | Claude writes its answer. | The client → Anthropic: the conversation, with the results it received. |
 
-**Liberty makes no call to Anthropic here, and the API key of the installation is not used.** What a tool returned leaves the server towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan. There is no page context and there are no notes over MCP.
+**Liberty makes no call to Anthropic here, and the API key of the installation is not used.** What a tool returned leaves the server towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan. There is no page context and there are no notes over MCP. A file the Claude Desktop extension sends for a job goes from the user's computer to the server, not to Anthropic.
 
 | Client | The server is called from |
 |---|---|
@@ -115,7 +115,7 @@ An installation decides what is sensitive, and Liberty keeps it from the assista
 | Step | Where | Effect |
 |---|---|---|
 | **Flag an item** | Liberty Next → Build → Dictionary → an entry → *Rule* → **Sensitive** | Covers every column carrying the item, on every screen, query and Data Explorer model. A column is matched by its dictionary item, by its name, or by its name without the connector's prefix (`ABALPH` → `ALPH`) — as the [data scope](./build/secure/roles-and-permissions.md#data-scope) finds its columns. |
-| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Covers a column that carries no item; set to false, it exempts a column whose item is flagged. |
+| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Three choices: *(default)* follows the column's item, *yes* covers a column that carries no item, *no* exempts a column whose item is flagged. |
 | **Turn the hiding on** | Liberty Next → Administer → App → AI Assistant → **Hide sensitive data from the assistant** | Off by default. Applied at the next call, without a restart. |
 
 With the hiding on, the flagged columns are left out of:
@@ -123,9 +123,10 @@ With the hiding on, the flagged columns are left out of:
 | Place | What happens |
 |---|---|
 | **Rows a read query returns** | The flagged columns are removed from the rows. The assistant is told which columns are hidden, so it can say so and point the user to the screen. |
-| **Write and action cards** | The values of the record are shown as *(hidden: sensitive)*: the record before a change, the record of a delete, the screen's confirmation of an action. The value the user asked to write is theirs, and is shown. |
+| **Write and action cards** | The values of the record are shown as *(hidden: sensitive)*: the record before a change, the record of a delete, the screen's confirmation of an action, and the messages of the actions the screen runs after a save. The value the user asked to write is theirs, and is shown. |
 | **Page context** | The flagged columns leave the column list and the clicked row, and a filter typed on one of them is not sent. |
-| **Data Explorer** | A flagged field cannot be a row heading nor be read by a sum, an average, a minimum or a maximum. It can be counted, and filtered on a value the user gives. |
+| **Data Explorer** | A flagged field cannot be a row heading nor be read by a measure other than a count — no sum, average, minimum or maximum. It can be counted, and filtered on a whole value the user gives (*equals*) only: a range, a *contains* or a period on it is refused, as it would let the values be found out count by count. |
+| **Filters of a read query** | The same rule: a flagged column is filtered on a whole value, not on a range. |
 
 The screens themselves do not change: the users who may open them see the values as before.
 
@@ -156,7 +157,8 @@ The screens themselves do not change: the users who may open them see the values
 |---|---|
 | **Conversations** | What the user saw — questions, answers, the names of the attached files — for the 30 latest conversations of each user. |
 | **Notes** | The user's own, until they delete them. |
-| **Usage record** | Who asked, the model, the tokens, the time, and for each tool its name and a short summary of what it was called on — never the question, the answer or a row. 90 days by default; see [AI usage](../monitoring/ai-usage.md). |
+| **Usage record** | Who asked, the model, the tokens, the time, and for each tool its name and a short summary of what it was called on; for a change made through the assistant, the screen, the operation, the key of the record or the job — never the question, the answer, a row, a value written or the text of a note. 90 days by default; see [AI usage](../monitoring/ai-usage.md). |
+| **Clients connected by sign-in** | The client's name, when it connected, its last use and the day its access ends — never a token. An ended access is dropped after 30 days. |
 | **Attached files** | Not stored. |
 
 The [licence usage report](./build/secure/license-key.md#usage-report) goes to the licence management tool, not to Anthropic, and carries nothing of the assistant.
@@ -173,6 +175,7 @@ The [licence usage report](./build/secure/license-key.md#usage-report) goes to t
 | **Hide sensitive data from the assistant** | Same section | Off by default — see [above](#sensitive). |
 | **File attached to a question** | Same section | `0`: no attachment. |
 | **MCP endpoint (/mcp)** | Same section | Off by default: no Claude client can connect. |
+| **Allow changes over MCP** | Same section | Off by default: a Claude client reads only — see [Changes over MCP](./mcp.md#changes). |
 | `ai:chat`, `ai:write`, `mcp:use` | Administer → Access → a role → Beyond the menus | Who uses the assistant, who writes through it, who connects Claude. |
 | `sql:`, `explorer:`, `api:` permissions and the data scope | The role | What the assistant reads for that user. |
 

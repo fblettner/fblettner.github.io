@@ -82,7 +82,7 @@ Chaque question est envoyée à l'API d'Anthropic avec la **Clé API Anthropic**
 | **Notes** | Les notes de l'utilisateur pour l'application, 2 000 caractères au plus. |
 | **Conversation** | Les questions et les réponses de la conversation en cours — les 40 derniers messages. |
 | **Résultats d'outils** | Ce que chaque outil a lu pour répondre : les lignes d'une requête de lecture (200 par défaut), des chiffres de l'explorateur de données, la description de l'installation (identifiants et libellés — ni données ni SQL), une procédure, le formulaire d'un écran, l'enregistrement avant et après une écriture. Avec les outils qu'une installation active : les tâches, les lignes du journal du serveur et les contrôles d'intégrité (outils d'exploitation, superutilisateurs uniquement), la réponse d'un endpoint d'API (outil API), ce que renvoie un outil propre à une application. Un résultat est coupé à 60 000 caractères. |
-| **Fichiers joints** | Une image ou un PDF tels quels ; un classeur (sa première feuille), un CSV ou un fichier texte en texte, coupés à 60 000 caractères. Un fichier reste attaché à sa conversation tant que la page est ouverte, et il est renvoyé avec chacune de ses questions. |
+| **Fichiers joints** | Une image ou un PDF tels quels ; un classeur (sa première feuille), un CSV ou un fichier texte en texte, coupés à 60 000 caractères. Un fichier reste attaché à sa conversation tant que la page est ouverte, et il est renvoyé avec chacune de ses questions. Un fichier choisi sur la carte d'une tâche n'en fait pas partie : il va au dépôt de la tâche, jamais au modèle. |
 
 Quand des domaines figurent dans **Domaines autorisés**, Anthropic lit lui-même ces pages web ; Liberty ne transmet rien de plus.
 
@@ -99,7 +99,7 @@ Au cours d'une même question, chaque appel d'outil renvoie les échanges préc�
 | Liberty répond. | Le serveur → le client : le résultat de cet outil, 60 000 caractères au plus. |
 | Claude rédige sa réponse. | Le client → Anthropic : la conversation, avec les résultats reçus. |
 
-**Liberty n'appelle pas Anthropic dans ce cas, et la clé d'API de l'installation ne sert pas.** Ce qu'un outil a renvoyé quitte le serveur vers le client Claude de l'utilisateur, puis part chez Anthropic aux conditions de l'abonnement Claude de l'utilisateur. En MCP, il n'y a ni contexte de page ni notes.
+**Liberty n'appelle pas Anthropic dans ce cas, et la clé d'API de l'installation ne sert pas.** Ce qu'un outil a renvoyé quitte le serveur vers le client Claude de l'utilisateur, puis part chez Anthropic aux conditions de l'abonnement Claude de l'utilisateur. En MCP, il n'y a ni contexte de page ni notes. Un fichier que l'extension Claude Desktop envoie pour une tâche va du poste de l'utilisateur au serveur, pas chez Anthropic.
 
 | Client | Le serveur est appelé depuis |
 |---|---|
@@ -115,7 +115,7 @@ Une installation décide de ce qui est sensible, et Liberty le tient à l'écart
 | Étape | Où | Effet |
 |---|---|---|
 | **Marquer un élément** | Liberty Next → Construire → Dictionnaire → une entrée → *Rule* → **Sensitive** | Couvre toutes les colonnes qui portent l'élément, sur tous les écrans, requêtes et modèles de l'explorateur de données. Une colonne est reconnue par son élément du dictionnaire, par son nom, ou par son nom sans le préfixe du connecteur (`ABALPH` → `ALPH`) — comme le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) retrouve ses colonnes. |
-| **Marquer une colonne** | Liberty Next → Construire → Écrans → une colonne → *General* → **Sensitive** | Couvre une colonne qui ne porte aucun élément ; à faux, exempte une colonne dont l'élément est marqué. |
+| **Marquer une colonne** | Liberty Next → Construire → Écrans → une colonne → *General* → **Sensitive** | Trois choix : *(default)* suit l'élément de la colonne, *yes* couvre une colonne qui ne porte aucun élément, *no* exempte une colonne dont l'élément est marqué. |
 | **Activer le masquage** | Liberty Next → Administrer → App → Assistant IA → **Masquer les données sensibles à l'assistant** | Désactivé par défaut. Appliqué à l'appel suivant, sans redémarrage. |
 
 Masquage activé, les colonnes marquées sont écartées :
@@ -123,9 +123,10 @@ Masquage activé, les colonnes marquées sont écartées :
 | Endroit | Effet |
 |---|---|
 | **Lignes renvoyées par une requête de lecture** | Les colonnes marquées sont retirées des lignes. L'assistant reçoit la liste des colonnes masquées : il peut le dire et renvoyer l'utilisateur vers l'écran. |
-| **Cartes d'écriture et d'action** | Les valeurs de l'enregistrement s'affichent *(hidden: sensitive)* : l'enregistrement avant une modification, celui d'une suppression, la confirmation d'une action par l'écran. La valeur que l'utilisateur a demandé d'écrire est la sienne, et elle est affichée. |
+| **Cartes d'écriture et d'action** | Les valeurs de l'enregistrement s'affichent *(hidden: sensitive)* : l'enregistrement avant une modification, celui d'une suppression, la confirmation d'une action par l'écran, et les messages des actions que l'écran exécute après un enregistrement. La valeur que l'utilisateur a demandé d'écrire est la sienne, et elle est affichée. |
 | **Contexte de page** | Les colonnes marquées sortent de la liste des colonnes et de la ligne cliquée, et un filtre saisi sur l'une d'elles n'est pas transmis. |
-| **Explorateur de données** | Un champ marqué ne peut être ni un en-tête de ligne, ni lu par une somme, une moyenne, un minimum ou un maximum. Il peut être compté, et filtré sur une valeur donnée par l'utilisateur. |
+| **Explorateur de données** | Un champ marqué ne peut être ni un en-tête de ligne, ni lu par une mesure autre qu'un comptage — ni somme, ni moyenne, ni minimum, ni maximum. Il peut être compté, et filtré uniquement sur une valeur entière donnée par l'utilisateur (*égal à*) : une plage, un *contient* ou une période portant sur lui sont refusés, car ils permettraient de retrouver les valeurs comptage après comptage. |
+| **Filtres d'une requête de lecture** | La même règle : une colonne marquée se filtre sur une valeur entière, pas sur une plage. |
 
 Les écrans eux-mêmes ne changent pas : les utilisateurs qui peuvent les ouvrir y voient les valeurs comme avant.
 
@@ -156,7 +157,8 @@ Les écrans eux-mêmes ne changent pas : les utilisateurs qui peuvent les ouvrir
 |---|---|
 | **Conversations** | Ce que l'utilisateur a vu — questions, réponses, nom des fichiers joints — pour les 30 dernières conversations de chaque utilisateur. |
 | **Notes** | Celles de l'utilisateur, jusqu'à leur suppression. |
-| **Enregistrement d'usage** | Qui a posé la question, le modèle, les jetons, la durée, et pour chaque outil son nom et un court résumé de ce sur quoi il a porté — jamais la question, la réponse ni une ligne de données. 90 jours par défaut ; voir [Usage de l'IA](../monitoring/ai-usage.md). |
+| **Enregistrement d'usage** | Qui a posé la question, le modèle, les jetons, la durée, et pour chaque outil son nom et un court résumé de ce sur quoi il a porté ; pour une modification faite par l'assistant, l'écran, l'opération, la clé de l'enregistrement ou la tâche — jamais la question, la réponse, une ligne de données, une valeur écrite ni le texte d'une note. 90 jours par défaut ; voir [Usage de l'IA](../monitoring/ai-usage.md). |
+| **Clients connectés par authentification** | Le nom du client, la date de sa connexion, son dernier usage et le jour où son accès prend fin — jamais un jeton. Un accès terminé est supprimé au bout de 30 jours. |
 | **Fichiers joints** | Non conservés. |
 
 Le [rapport d'usage de la licence](./build/secure/license-key.md#usage-report) part vers l'outil de gestion des licences, pas vers Anthropic, et ne contient rien de l'assistant.
@@ -173,6 +175,7 @@ Le [rapport d'usage de la licence](./build/secure/license-key.md#usage-report) p
 | **Masquer les données sensibles à l'assistant** | Même section | Désactivé par défaut — voir [plus haut](#sensitive). |
 | **Fichier joint à une question** | Même section | `0` : aucune pièce jointe. |
 | **Point d'accès MCP (/mcp)** | Même section | Désactivé par défaut : aucun client Claude ne peut se connecter. |
+| **Autoriser les modifications en MCP** | Même section | Désactivé par défaut : un client Claude se limite à la lecture — voir [Modifications en MCP](./mcp.md#changes). |
 | `ai:chat`, `ai:write`, `mcp:use` | Administrer → Accès → un rôle → Au-delà des menus | Qui utilise l'assistant, qui écrit par son intermédiaire, qui connecte Claude. |
 | Permissions `sql:`, `explorer:`, `api:` et périmètre de données | Le rôle | Ce que l'assistant lit pour cet utilisateur. |
 

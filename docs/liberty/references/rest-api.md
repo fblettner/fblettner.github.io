@@ -43,8 +43,10 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
 | `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
-| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (`liberty.mcpb`) with the server's address filled in. Requires `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (a `.mcpb` file named after the instance) with the server's address filled in. Requires `mcp:use`. |
 | `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | The sign-in of an MCP client: discovery, client registration, code exchange and renewal. The consent page is `/oauth/authorize`. |
+| `GET` | `/oauth/grants` | The clients the caller connected by sign-in: name, connection, last use, end of the access — never a token. `?everyone=1` for a superuser. |
+| `DELETE` | `/oauth/grants/{id}` | End the access of one client, refused from its next call. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
 See [Sign-in](../framework/build/secure/sign-in.md).
@@ -100,7 +102,8 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `GET` | `/ai/tools` | The assistant's tool catalogue. |
 | `POST` | `/ai/chat` | Send the conversation (`{messages, model?}`); the answer streams back. Requires `ai:chat`. |
 | — | `/mcp` | The MCP endpoint: the assistant's tools for an external client, with `Authorization: Bearer <personal access token>`. See [Connect Claude (MCP)](../framework/mcp.md). |
-| `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
+| `POST` | `/mcp/files?job=<id>&filename=<name>` | A file sent by the Claude Desktop extension for a job that loads one: it lands in the job's upload area, nothing runs. Personal access token; requires `ai:write`, `job:<id>` and **Allow changes over MCP**. |
+| `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `channel`, `failed`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
 
 ---
 

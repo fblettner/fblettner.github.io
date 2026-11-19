@@ -1,7 +1,7 @@
 ---
 title: AI assistant
 description: "The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, files attached to a question, saved conversations and notes, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, search the catalogue, describe the installation, follow playbooks, call the applications' tools, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, the permissions of each tool, allowed connectors, read-only queries, data scope), and its settings."
-keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, search_catalog, screen_write, screen_action, ai:write, sensitive data, api_call, scaffold, data scope, attach a file, conversations, notes, application tools, MCP]
+keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, search_catalog, screen_write, screen_write_many, screen_action, job_run, ai:write, sensitive data, api_call, scaffold, data scope, attach a file, conversations, notes, application tools, MCP]
 ---
 
 # AI assistant
@@ -201,7 +201,7 @@ Questions come from two sources:
 | `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
 | Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
 | `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
-| `screen_form`, `screen_write`, `screen_action` | Read what a screen lets its user do, then add, change or delete **one** record, or run **one** action of the screen, through the screen's own queries and rules — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
+| `screen_form`, `screen_write`, `screen_write_many`, `screen_action`, `job_form`, `job_run` | Read what a screen lets its user do, then add, change or delete a record — or up to 50 records on one card —, or run an action of the screen, through the screen's own queries and rules; read a job as its page shows it, then run it — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
@@ -216,27 +216,36 @@ The **Operations tools** let the assistant read the running server rather than g
 
 ## Write through a screen \{#write\}
 
-With the **Write tools** on, the assistant can do what a user does in a screen — nothing by another path:
+With the **Write tools** on, the assistant can do what a user does in a screen or on a job's page — nothing by another path:
 
 | Tool | Does |
 |---|---|
-| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, and the screen's actions. |
+| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, the columns a picked value fills, and the screen's actions. |
 | `screen_write` | Adds, changes or deletes **one** record. |
+| `screen_write_many` | Adds, changes or deletes **several** records of one screen — the same operation for all, 50 at most — on one card. |
 | `screen_action` | Runs **one** action of the screen — a row menu's *Validate* or *Close*, a button of the toolbar or of a form tab. |
+| `job_form` | Reads a job as its page shows it: what it does, the parameters a user may set with their choices, its presets, whether it is running, its last runs with their state and error. |
+| `job_run` | Runs the job — the page's **Run now** — with its declared parameters and presets only. |
 
-The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission.
+The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission. A value picked in a list fills its sibling columns, as in the form; a sibling the request gives is kept.
 
-**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen.
+**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen — `job:<id>` for a job.
 
-**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md), the client asks its user before calling a tool that changes something.
+**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md#changes), these tools exist only where **Allow changes over MCP** is on, and the client asks its user before calling one.
+
+**Several records.** Every record of the list is checked before the first is written: if the screen refuses one, nothing is written and the answer names each refused record with its reason. One **Apply** then writes them in order, each as `screen_write` writes one. Should a save still fail midway, it stops there: the records before it stay written, and the answer says how many. Beyond 50 records, the grid's Excel import is the way.
+
+**Jobs.** A run is queued and goes on in the background; the assistant follows it with `job_form`, and the user sees it in the Nomaflow [run history](../nomaflow/runs/history.md). A job that is already running is refused. A job that loads a file the user brings asks for it **on the card** — one picker per file step, with the kinds of file the job's upload takes: **Apply** sends the file through the job's own upload and runs the job with it. The file never goes through the model. From Claude Desktop, the file comes from the [extension's folder](./mcp.md#files).
 
 | Refused | Reason given |
 |---|---|
 | A record open in its form | The form holds the record: it cannot be changed or deleted until the form is closed — by another user, or by the user's own open form. |
-| A screen that cannot be written | The screen is read-only, has no query for the operation, or runs actions when its form opens. |
+| A screen that cannot be written | The screen is read-only, has no query for the operation, runs actions when its form opens, or reads its data from a connector left out of **Allowed connectors**. |
 | An action made only of what a browser does | Opening a page or an address is noted, not run. |
 
 As in the screen, a save, its related tables and its hooks are separate statements: when a hook or a step fails, what ran before stays, and the answer says so.
+
+**What is kept.** Each applied card and each saving tool called over MCP is in the usage record — who, the screen, the operation or the action, the key of the record, the job, and the reason of a refusal; never the values. [Monitoring → AI usage](../monitoring/ai-usage.md#changes) lists them, and on a change-tracked screen the change package names these entries *AI assistant*.
 
 ---
 
@@ -273,11 +282,12 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
   | Data Explorer tools | `explorer:<app>:<model>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, playbooks | Nothing more, and they show only what the user can open: a screen by its read query, a menu entry by the [menu's rule](./build/menus/permissions-and-roles.md#gating), a job by `job:<id>`. An application with nothing for the user is not named. |
   | Application tools | The tool's permission. |
-  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
+  | `screen_form`, `screen_write`, `screen_write_many`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
+  | `job_form`, `job_run` | `ai:write` and `job:<id>`. |
   | Operations and scaffold tools | Superuser. |
 
   A user holding `ai:chat` without the `sql:` or `explorer:` permissions of an application gets no figure from it: grant them, as for the screens. A refusal reads the same for a query that exists and for one that does not.
-- **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
+- **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all. The write tools follow it too: a screen whose data is on another connector does not exist for them.
 - Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
 - **Model** in the drawer only offers the models allowed in the settings; the server refuses any other.
 

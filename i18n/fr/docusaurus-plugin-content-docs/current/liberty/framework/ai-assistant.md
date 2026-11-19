@@ -1,7 +1,7 @@
 ---
 title: Assistant IA
 description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les fichiers joints à une question, les conversations conservées et les notes, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, chercher dans le catalogue, décrire l'installation, suivre des procédures, appeler les outils des applications, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, les permissions de chaque outil, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
-keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, search_catalog, screen_write, screen_action, ai:write, données sensibles, api_call, scaffold, périmètre de données, fichier joint, conversations, notes, outils des applications, MCP]
+keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, search_catalog, screen_write, screen_write_many, screen_action, job_run, ai:write, données sensibles, api_call, scaffold, périmètre de données, fichier joint, conversations, notes, outils des applications, MCP]
 ---
 
 # Assistant IA
@@ -201,7 +201,7 @@ Les questions ont deux origines :
 | `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
 | Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
 | `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
-| `screen_form`, `screen_write`, `screen_action` | Lisent ce qu'un écran permet à son utilisateur, puis ajoutent, modifient ou suppriment **un** enregistrement, ou lancent **une** action de l'écran, par les requêtes et les règles de l'écran lui-même — voir [Écrire par un écran](#write). | **Outils d'écriture** (désactivé par défaut), avec la permission `ai:write`. |
+| `screen_form`, `screen_write`, `screen_write_many`, `screen_action`, `job_form`, `job_run` | Lisent ce qu'un écran permet à son utilisateur, puis ajoutent, modifient ou suppriment un enregistrement — ou jusqu'à 50 enregistrements sur une seule carte —, ou lancent une action de l'écran, par les requêtes et les règles de l'écran lui-même ; lisent une tâche telle que sa page la présente, puis l'exécutent — voir [Écrire par un écran](#write). | **Outils d'écriture** (désactivé par défaut), avec la permission `ai:write`. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
 | `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
@@ -216,27 +216,36 @@ Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serve
 
 ## Écrire par un écran \{#write\}
 
-**Outils d'écriture** activés, l'assistant peut faire ce qu'un utilisateur fait dans un écran — rien par un autre chemin :
+**Outils d'écriture** activés, l'assistant peut faire ce qu'un utilisateur fait dans un écran ou sur la page d'une tâche — rien par un autre chemin :
 
 | Outil | Rôle |
 |---|---|
-| `screen_form` | Lit ce que l'écran permet à cet utilisateur d'ajouter, de modifier, de supprimer et de lancer : la clé, chaque colonne avec son libellé, son caractère obligatoire ou verrouillé, sa valeur par défaut et les valeurs acceptées, et les actions de l'écran. |
+| `screen_form` | Lit ce que l'écran permet à cet utilisateur d'ajouter, de modifier, de supprimer et de lancer : la clé, chaque colonne avec son libellé, son caractère obligatoire ou verrouillé, sa valeur par défaut et les valeurs acceptées, les colonnes qu'une valeur choisie renseigne, et les actions de l'écran. |
 | `screen_write` | Ajoute, modifie ou supprime **un** enregistrement. |
+| `screen_write_many` | Ajoute, modifie ou supprime **plusieurs** enregistrements d'un même écran — la même opération pour tous, 50 au plus — sur une seule carte. |
 | `screen_action` | Lance **une** action de l'écran — *Valider* ou *Clôturer* d'un menu de ligne, un bouton de la barre d'outils ou d'un onglet du formulaire. |
+| `job_form` | Lit une tâche telle que sa page la présente : son objet, les paramètres qu'un utilisateur peut renseigner avec leurs choix, ses préréglages, son exécution en cours éventuelle, ses dernières exécutions avec leur état et leur erreur. |
+| `job_run` | Exécute la tâche — le bouton **Exécuter** de sa page — avec ses seuls paramètres déclarés et ses préréglages. |
 
-L'enregistrement est lu par la requête de lecture de l'écran, et les règles du formulaire s'appliquent : une colonne obligatoire absente, une valeur hors de sa liste, une colonne ou un enregistrement que l'écran tient en lecture seule sont refusés avec le motif. L'enregistrement se fait ensuite comme depuis le formulaire — règles du dictionnaire, séquences, tables liées, audit, périmètre de données, paquet de modifications, règles de notification — de même que les actions d'enregistrement de l'écran et les étapes de ses actions, chacune sous sa propre permission.
+L'enregistrement est lu par la requête de lecture de l'écran, et les règles du formulaire s'appliquent : une colonne obligatoire absente, une valeur hors de sa liste, une colonne ou un enregistrement que l'écran tient en lecture seule sont refusés avec le motif. L'enregistrement se fait ensuite comme depuis le formulaire — règles du dictionnaire, séquences, tables liées, audit, périmètre de données, paquet de modifications, règles de notification — de même que les actions d'enregistrement de l'écran et les étapes de ses actions, chacune sous sa propre permission. Une valeur choisie dans une liste renseigne ses colonnes associées, comme dans le formulaire ; une colonne associée fournie dans la demande est conservée.
 
-**Trois verrous, tous nécessaires :** le réglage **Outils d'écriture**, la permission `ai:write` du rôle, et la permission de chaque requête, endpoint ou plugin exécuté, comme dans l'écran.
+**Trois verrous, tous nécessaires :** le réglage **Outils d'écriture**, la permission `ai:write` du rôle, et la permission de chaque requête, endpoint ou plugin exécuté, comme dans l'écran — `job:<id>` pour une tâche.
 
-**Qui confirme.** Dans le panneau, les outils se limitent à proposer : l'utilisateur reçoit une carte — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, ou l'action avec la confirmation de l'écran et ce qu'elle exécute — et rien ne se passe avant **Appliquer** ; **Ignorer** abandonne l'étape. En [MCP](./mcp.md), le client demande l'accord de son utilisateur avant d'appeler un outil qui modifie quelque chose.
+**Qui confirme.** Dans le panneau, les outils se limitent à proposer : l'utilisateur reçoit une carte — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, ou l'action avec la confirmation de l'écran et ce qu'elle exécute — et rien ne se passe avant **Appliquer** ; **Ignorer** abandonne l'étape. En [MCP](./mcp.md#changes), ces outils n'existent que si **Autoriser les modifications en MCP** est activé, et le client demande l'accord de son utilisateur avant d'en appeler un.
+
+**Plusieurs enregistrements.** Tous les enregistrements de la liste sont contrôlés avant la première écriture : si l'écran en refuse un, rien n'est écrit et la réponse nomme chaque enregistrement refusé avec son motif. Un seul **Appliquer** les écrit ensuite dans l'ordre, chacun comme `screen_write` en écrit un. Si un enregistrement échoue malgré tout en cours de route, l'écriture s'arrête là : les précédents restent écrits, et la réponse en donne le nombre. Au-delà de 50 enregistrements, l'import Excel de la grille est le bon outil.
+
+**Tâches.** Une exécution est mise en file et se poursuit en arrière-plan ; l'assistant la suit par `job_form`, et l'utilisateur la retrouve dans l'[historique des exécutions](../nomaflow/runs/history.md) de Nomaflow. Une tâche déjà en cours est refusée. Une tâche qui charge un fichier fourni par l'utilisateur le demande **sur la carte** — un sélecteur par étape de fichier, avec les types acceptés par le dépôt de la tâche : **Appliquer** envoie le fichier par le dépôt de la tâche et l'exécute avec lui. Le fichier ne passe jamais par le modèle. Depuis Claude Desktop, il vient du [dossier de l'extension](./mcp.md#files).
 
 | Refusé | Motif indiqué |
 |---|---|
 | Un enregistrement ouvert dans son formulaire | Le formulaire tient l'enregistrement : il ne peut être ni modifié ni supprimé avant la fermeture du formulaire — celui d'un autre utilisateur, ou celui que l'utilisateur a lui-même ouvert. |
-| Un écran qui ne peut pas être écrit | L'écran est en lecture seule, n'a pas de requête pour l'opération, ou lance des actions à l'ouverture de son formulaire. |
+| Un écran qui ne peut pas être écrit | L'écran est en lecture seule, n'a pas de requête pour l'opération, lance des actions à l'ouverture de son formulaire, ou lit ses données sur un connecteur absent des **Connecteurs autorisés**. |
 | Une action faite uniquement de ce que fait un navigateur | L'ouverture d'une page ou d'une adresse est signalée, pas exécutée. |
 
 Comme dans l'écran, un enregistrement, ses tables liées et ses actions sont des instructions distinctes : quand une action ou une étape échoue, ce qui s'est exécuté avant reste, et la réponse l'indique.
+
+**Ce qui est conservé.** Chaque carte appliquée et chaque outil d'écriture appelé en MCP figure dans l'enregistrement d'usage — l'auteur, l'écran, l'opération ou l'action, la clé de l'enregistrement, la tâche, et le motif d'un refus ; jamais les valeurs. [Surveillance → Usage de l'IA](../monitoring/ai-usage.md#changes) les liste, et sur un écran soumis au suivi des modifications, le paquet désigne ces entrées par *AI assistant*.
 
 ---
 
@@ -273,11 +282,12 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
   | Outils de l'explorateur de données | `explorer:<app>:<modèle>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, procédures | Aucune autre, et ils ne montrent que ce que l'utilisateur peut ouvrir : un écran d'après sa requête de lecture, une entrée de menu d'après la [règle du menu](./build/menus/permissions-and-roles.md#gating), une tâche d'après `job:<id>`. Une application qui n'a rien pour l'utilisateur n'est pas citée. |
   | Outils des applications | La permission de l'outil. |
-  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, et la permission de chaque requête, endpoint ou plugin exécuté par l'écran. |
+  | `screen_form`, `screen_write`, `screen_write_many`, `screen_action` | `ai:write`, et la permission de chaque requête, endpoint ou plugin exécuté par l'écran. |
+  | `job_form`, `job_run` | `ai:write` et `job:<id>`. |
   | Outils d'exploitation et de construction | Superutilisateur. |
 
   Un utilisateur qui détient `ai:chat` sans les permissions `sql:` ou `explorer:` d'une application n'en obtient aucun chiffre : les accorder, comme pour les écrans. Le refus est formulé de la même façon pour une requête qui existe et pour une requête qui n'existe pas.
-- **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous.
+- **Connecteurs autorisés**, dans Liberty Next → Administrer → App, limite les connecteurs accessibles à l'assistant, ainsi que les applications couvertes par `describe_instance` et les procédures ; vide signifie tous. Les outils d'écriture suivent la même limite : un écran dont les données sont sur un autre connecteur n'existe pas pour eux.
 - Chaque requête qu'il lance passe par les mêmes contrôles serveur qu'un écran : le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes.
 - Le sélecteur **Modèle** du panneau ne propose que les modèles autorisés dans les réglages ; le serveur refuse tout autre modèle.
 

@@ -1668,7 +1668,7 @@ Questions come from two sources:
 | `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
 | Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
 | `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
-| `screen_form`, `screen_write`, `screen_action` | Read what a screen lets its user do, then add, change or delete **one** record, or run **one** action of the screen, through the screen's own queries and rules — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
+| `screen_form`, `screen_write`, `screen_write_many`, `screen_action`, `job_form`, `job_run` | Read what a screen lets its user do, then add, change or delete a record — or up to 50 records on one card —, or run an action of the screen, through the screen's own queries and rules; read a job as its page shows it, then run it — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
@@ -1683,27 +1683,36 @@ The **Operations tools** let the assistant read the running server rather than g
 
 ## Write through a screen \{#write\}
 
-With the **Write tools** on, the assistant can do what a user does in a screen — nothing by another path:
+With the **Write tools** on, the assistant can do what a user does in a screen or on a job's page — nothing by another path:
 
 | Tool | Does |
 |---|---|
-| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, and the screen's actions. |
+| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, the columns a picked value fills, and the screen's actions. |
 | `screen_write` | Adds, changes or deletes **one** record. |
+| `screen_write_many` | Adds, changes or deletes **several** records of one screen — the same operation for all, 50 at most — on one card. |
 | `screen_action` | Runs **one** action of the screen — a row menu's *Validate* or *Close*, a button of the toolbar or of a form tab. |
+| `job_form` | Reads a job as its page shows it: what it does, the parameters a user may set with their choices, its presets, whether it is running, its last runs with their state and error. |
+| `job_run` | Runs the job — the page's **Run now** — with its declared parameters and presets only. |
 
-The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission.
+The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission. A value picked in a list fills its sibling columns, as in the form; a sibling the request gives is kept.
 
-**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen.
+**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen — `job:<id>` for a job.
 
-**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md), the client asks its user before calling a tool that changes something.
+**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md#changes), these tools exist only where **Allow changes over MCP** is on, and the client asks its user before calling one.
+
+**Several records.** Every record of the list is checked before the first is written: if the screen refuses one, nothing is written and the answer names each refused record with its reason. One **Apply** then writes them in order, each as `screen_write` writes one. Should a save still fail midway, it stops there: the records before it stay written, and the answer says how many. Beyond 50 records, the grid's Excel import is the way.
+
+**Jobs.** A run is queued and goes on in the background; the assistant follows it with `job_form`, and the user sees it in the Nomaflow [run history](../nomaflow/runs/history.md). A job that is already running is refused. A job that loads a file the user brings asks for it **on the card** — one picker per file step, with the kinds of file the job's upload takes: **Apply** sends the file through the job's own upload and runs the job with it. The file never goes through the model. From Claude Desktop, the file comes from the [extension's folder](./mcp.md#files).
 
 | Refused | Reason given |
 |---|---|
 | A record open in its form | The form holds the record: it cannot be changed or deleted until the form is closed — by another user, or by the user's own open form. |
-| A screen that cannot be written | The screen is read-only, has no query for the operation, or runs actions when its form opens. |
+| A screen that cannot be written | The screen is read-only, has no query for the operation, runs actions when its form opens, or reads its data from a connector left out of **Allowed connectors**. |
 | An action made only of what a browser does | Opening a page or an address is noted, not run. |
 
 As in the screen, a save, its related tables and its hooks are separate statements: when a hook or a step fails, what ran before stays, and the answer says so.
+
+**What is kept.** Each applied card and each saving tool called over MCP is in the usage record — who, the screen, the operation or the action, the key of the record, the job, and the reason of a refusal; never the values. [Monitoring → AI usage](../monitoring/ai-usage.md#changes) lists them, and on a change-tracked screen the change package names these entries *AI assistant*.
 
 ---
 
@@ -1740,11 +1749,12 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
   | Data Explorer tools | `explorer:<app>:<model>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, playbooks | Nothing more, and they show only what the user can open: a screen by its read query, a menu entry by the [menu's rule](./build/menus/permissions-and-roles.md#gating), a job by `job:<id>`. An application with nothing for the user is not named. |
   | Application tools | The tool's permission. |
-  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
+  | `screen_form`, `screen_write`, `screen_write_many`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
+  | `job_form`, `job_run` | `ai:write` and `job:<id>`. |
   | Operations and scaffold tools | Superuser. |
 
   A user holding `ai:chat` without the `sql:` or `explorer:` permissions of an application gets no figure from it: grant them, as for the screens. A refusal reads the same for a query that exists and for one that does not.
-- **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
+- **Allowed connectors** in Liberty Next → Administer → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all. The write tools follow it too: a screen whose data is on another connector does not exist for them.
 - Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
 - **Model** in the drawer only offers the models allowed in the settings; the server refuses any other.
 
@@ -1776,7 +1786,7 @@ In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anth
 ## Liberty Next — Connect Claude (MCP)
 Source: https://docs.nomana-it.fr/liberty/framework/mcp/
 
-Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, the sign-in from the client, the Claude Desktop extension for a server that is not on the internet, personal access tokens, what the client can do and when an access ends.
+Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, the sign-in from the client, the Claude Desktop extension for a server that is not on the internet, personal access tokens, sending a file for a job, changes over MCP behind their own switch, and how an access is ended.
 
 The tools of the [AI assistant](./ai-assistant.md) can answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's **MCP endpoint**, `/mcp`. The client acts as a Liberty Next user: it is offered what that user is offered in the chat drawer, each call goes through the same permission checks and the same data scope, and each call is recorded.
 
@@ -1797,6 +1807,7 @@ In **Liberty Next → Administer → App → AI Assistant**:
 | Field | Default | Description |
 |---|---|---|
 | **MCP endpoint (/mcp)** | Off | The server answers on `/mcp`. Applied on save, without a restart. |
+| **Allow changes over MCP** | Off | Off: an external client reads only. On: the tools that save something are offered to it — see [Changes](#changes). Read at each request. |
 | **Personal access token: longest life (days)** | 366 | The longest validity a user may ask for a token, and how long a sign-in from a client lasts before the user allows it again. |
 
 Behind a reverse proxy, also set **Public address** (same page, *Server*) to the address users reach the server at: the addresses the sign-in publishes are built on it.
@@ -1817,8 +1828,8 @@ In **Liberty Next → Administer → Access**, give the role the rule **AI assis
 
 | Way | For | Steps |
 |---|---|---|
-| **Sign-in from the client** | A custom connector in Claude Desktop or claude.ai. The connector is called from Anthropic's servers: the Liberty server must be reachable from the internet. | Give the connector the address of `/mcp` only. The browser opens Liberty: the user signs in the usual way (password or SSO), then, on the **Allow access** page — *the client asks to use the application as the user* — clicks **Allow** (or **Refuse**). Nothing to create, nothing to paste. |
-| **Claude Desktop extension** | A server that is not on the internet: an internal address, a VPN. | In the profile's **Access tokens** tab, **Claude Desktop extension** downloads `liberty.mcpb`. Open the file with Claude Desktop and paste a token created in the same tab — see [below](#extension). |
+| **Sign-in from the client** | A custom connector in Claude Desktop or claude.ai. The connector is called from Anthropic's servers: the Liberty server must be reachable from the internet. | Give the connector the address of `/mcp` only. The browser opens Liberty: the user signs in the usual way (password or SSO), then, on the **Allow access** page — *the client asks to use the application as the user* — clicks **Allow** (or **Refuse**). The page says whether the server lets the client make changes, and how many days the access lasts. Nothing to create, nothing to paste. |
+| **Claude Desktop extension** | A server that is not on the internet: an internal address, a VPN. | In the profile's **Access tokens** tab, **Claude Desktop extension** downloads a `.mcpb` file named after the server. Open the file with Claude Desktop and paste a token created in the same tab — see [below](#extension). |
 | **Pasted token** | Claude Code, a script. | [Create a token](#token) and give it to the client as the request header `Authorization: Bearer <token>`, with the **Connector URL** of the tab — `https://<server>/mcp`. |
 
 | Answer | Meaning |
@@ -1848,7 +1859,16 @@ The extension runs a small relay on the user's own computer: it passes Claude's 
 |---|---|
 | **Liberty address** | The address of the server, ending with `/mcp` — already filled in. |
 | **Personal access token** | A token created in the profile's **Access tokens** tab. |
+| **Files folder** | Optional. The folder Claude may send a file from, for a job that loads one — see [below](#files). |
 | **Accept an internal certificate** | To turn on only when the server uses a self-signed or company certificate. |
+
+**Several servers in one Claude Desktop.** The extension is named after its instance — the installation's **Environment** (Administer → App → Server) and the host of its address: *Liberty Next – Test · liberty-test.example.com*. The extensions of a production and a test server, or of two customers, install side by side, each with its own token. The server also tells Claude which instance it is, so an answer or a change names the instance it concerns.
+
+### Send a file for a job \{#files\}
+
+With a **Files folder**, the extension offers two tools that run on the user's computer: one lists the spreadsheets and delimited files of that folder — `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv` —, the other sends one of them to Liberty for a job. The file lands in the job's own upload area, as from the job's page, with the same size limit; nothing runs on the upload, and `job_run` then names the file.
+
+Sending a file needs what running the job needs: the **Write tools** and **Allow changes over MCP** settings, `ai:write` and `job:<id>`. A connector by sign-in has no access to the user's disk: the file is then loaded from the job's page.
 
 ---
 
@@ -1857,26 +1877,42 @@ The extension runs a small relay on the user's own computer: it passes Claude's 
 - The client is offered the tools the user is offered in the chat drawer, with the same descriptions; a tool the user cannot use is not listed.
 - Every call checks the user's permissions and applies their [data scope](./build/secure/roles-and-permissions.md#data-scope), as in the drawer; the columns the installation [marks as sensitive](./ai-data-sent.md#sensitive) are left out in the same way.
 - The tools whose result is a card of the chat drawer are not offered: the scaffold proposals and the notes.
-- A tool that changes something — saving a Data Explorer analysis or dashboard, [writing a record or running an action through a screen](./ai-assistant.md#write) — tells the client so, and the client asks its user before calling it.
 - A personal access token opens the MCP endpoint only: the rest of the API refuses it.
+
+---
+
+## Changes over MCP \{#changes\}
+
+In the drawer a change is a card the user applies. Over MCP the only gate is the client's own approval, which its user can set to *always allow*: an administrator therefore decides whether changes are made from an external client at all.
+
+| **Allow changes over MCP** | The client |
+|---|---|
+| Off (default) | Reads only. The tools that save are not listed; called anyway, they answer that changes over MCP are off on this server. |
+| On | Is also offered the tools that save: a Data Explorer analysis or dashboard, [a record, an action or a job through the write tools](./ai-assistant.md#write). Each still needs its own switch and the user's permissions, and tells the client it changes something — the client asks its user before calling it. |
+
+Every change made this way is listed in [Monitoring → AI usage](../monitoring/ai-usage.md#changes).
 
 ---
 
 ## When an access ends \{#end\}
 
-The account is read again at every call, so an access carries the user's rights of the moment, never more. A token or a sign-in ends:
+The account is read again at every call, so an access carries the user's rights of the moment, never more.
 
-- at its expiry date — a sign-in lasts the **longest life** set above, then the user allows the client again;
-- when the account is deactivated, or loses `mcp:use`;
-- when the account's password changes.
+| Access | Ends |
+|---|---|
+| **A sign-in from a client** | When its user ends it: the profile's **Access tokens** tab lists the clients under **Connected by sign-in** — the client's name and its last use — and **End access** stops one from its next call, the others kept. Otherwise after the **longest life** set above; the user then allows the client again. |
+| **A pasted token** | At its expiry date. It is not stored, so it is not listed. |
+| **Both** | When the account is deactivated or loses `mcp:use`, and when the account's password changes. |
 
-Nothing is stored on the server for these accesses, so there is no list and no button to revoke one: **changing the password ends every access of the account**. That is what to do when a token has leaked.
+**Changing the password ends every access of the account** — tokens and sign-ins alike. That is what to do when a token has leaked.
+
+A superuser reads every user's clients with `GET /oauth/grants?everyone=1`.
 
 ---
 
 ## What is recorded \{#usage\}
 
-Each call is in the usage record, with the model `mcp`: the user, the tool, what it was called on, whether it failed, its size and its time — never a row it returned. See [Monitoring → AI usage](../monitoring/ai-usage.md).
+Each call is in the usage record, under the channel *External client (MCP)*: the user, the tool, what it was called on, whether it failed, its size and its time — never a row it returned nor a value it wrote. See [Monitoring → AI usage](../monitoring/ai-usage.md).
 
 ---
 
@@ -1918,7 +1954,7 @@ Each question is sent to Anthropic's API with the **Anthropic API key** of **Lib
 | **Notes** | The user's notes for the application, 2,000 characters at most. |
 | **Conversation** | The questions and the answers of the conversation in progress — the last 40 messages. |
 | **Tool results** | What each tool read to answer: the rows of a read query (200 by default), Data Explorer figures, the description of the installation (ids and labels — no data, no SQL), a playbook, the form of a screen, the record before and after a write. With the tools an installation turns on: the jobs, the server log lines and the integrity checks (operations tools, superusers only), the answer of an API endpoint (API tool), what an application's own tool returns. A result is cut at 60,000 characters. |
-| **Attached files** | An image or a PDF as it is; a spreadsheet (its first sheet), a CSV or a text file as text, cut at 60,000 characters. A file stays with its conversation while the page is open, and is sent again with each question of it. |
+| **Attached files** | An image or a PDF as it is; a spreadsheet (its first sheet), a CSV or a text file as text, cut at 60,000 characters. A file stays with its conversation while the page is open, and is sent again with each question of it. A file chosen on the card of a job is not one of them: it goes to the job's own upload, never to the model. |
 
 When domains are listed under **Allowed domains**, Anthropic reads those web pages itself; Liberty sends nothing more.
 
@@ -1935,7 +1971,7 @@ Within one question, each tool round sends the earlier rounds again; Anthropic r
 | Liberty answers. | The server → the client: the result of that tool, 60,000 characters at most. |
 | Claude writes its answer. | The client → Anthropic: the conversation, with the results it received. |
 
-**Liberty makes no call to Anthropic here, and the API key of the installation is not used.** What a tool returned leaves the server towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan. There is no page context and there are no notes over MCP.
+**Liberty makes no call to Anthropic here, and the API key of the installation is not used.** What a tool returned leaves the server towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan. There is no page context and there are no notes over MCP. A file the Claude Desktop extension sends for a job goes from the user's computer to the server, not to Anthropic.
 
 | Client | The server is called from |
 |---|---|
@@ -1951,7 +1987,7 @@ An installation decides what is sensitive, and Liberty keeps it from the assista
 | Step | Where | Effect |
 |---|---|---|
 | **Flag an item** | Liberty Next → Build → Dictionary → an entry → *Rule* → **Sensitive** | Covers every column carrying the item, on every screen, query and Data Explorer model. A column is matched by its dictionary item, by its name, or by its name without the connector's prefix (`ABALPH` → `ALPH`) — as the [data scope](./build/secure/roles-and-permissions.md#data-scope) finds its columns. |
-| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Covers a column that carries no item; set to false, it exempts a column whose item is flagged. |
+| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Three choices: *(default)* follows the column's item, *yes* covers a column that carries no item, *no* exempts a column whose item is flagged. |
 | **Turn the hiding on** | Liberty Next → Administer → App → AI Assistant → **Hide sensitive data from the assistant** | Off by default. Applied at the next call, without a restart. |
 
 With the hiding on, the flagged columns are left out of:
@@ -1959,9 +1995,10 @@ With the hiding on, the flagged columns are left out of:
 | Place | What happens |
 |---|---|
 | **Rows a read query returns** | The flagged columns are removed from the rows. The assistant is told which columns are hidden, so it can say so and point the user to the screen. |
-| **Write and action cards** | The values of the record are shown as *(hidden: sensitive)*: the record before a change, the record of a delete, the screen's confirmation of an action. The value the user asked to write is theirs, and is shown. |
+| **Write and action cards** | The values of the record are shown as *(hidden: sensitive)*: the record before a change, the record of a delete, the screen's confirmation of an action, and the messages of the actions the screen runs after a save. The value the user asked to write is theirs, and is shown. |
 | **Page context** | The flagged columns leave the column list and the clicked row, and a filter typed on one of them is not sent. |
-| **Data Explorer** | A flagged field cannot be a row heading nor be read by a sum, an average, a minimum or a maximum. It can be counted, and filtered on a value the user gives. |
+| **Data Explorer** | A flagged field cannot be a row heading nor be read by a measure other than a count — no sum, average, minimum or maximum. It can be counted, and filtered on a whole value the user gives (*equals*) only: a range, a *contains* or a period on it is refused, as it would let the values be found out count by count. |
+| **Filters of a read query** | The same rule: a flagged column is filtered on a whole value, not on a range. |
 
 The screens themselves do not change: the users who may open them see the values as before.
 
@@ -1992,7 +2029,8 @@ The screens themselves do not change: the users who may open them see the values
 |---|---|
 | **Conversations** | What the user saw — questions, answers, the names of the attached files — for the 30 latest conversations of each user. |
 | **Notes** | The user's own, until they delete them. |
-| **Usage record** | Who asked, the model, the tokens, the time, and for each tool its name and a short summary of what it was called on — never the question, the answer or a row. 90 days by default; see [AI usage](../monitoring/ai-usage.md). |
+| **Usage record** | Who asked, the model, the tokens, the time, and for each tool its name and a short summary of what it was called on; for a change made through the assistant, the screen, the operation, the key of the record or the job — never the question, the answer, a row, a value written or the text of a note. 90 days by default; see [AI usage](../monitoring/ai-usage.md). |
+| **Clients connected by sign-in** | The client's name, when it connected, its last use and the day its access ends — never a token. An ended access is dropped after 30 days. |
 | **Attached files** | Not stored. |
 
 The [licence usage report](./build/secure/license-key.md#usage-report) goes to the licence management tool, not to Anthropic, and carries nothing of the assistant.
@@ -2009,6 +2047,7 @@ The [licence usage report](./build/secure/license-key.md#usage-report) goes to t
 | **Hide sensitive data from the assistant** | Same section | Off by default — see [above](#sensitive). |
 | **File attached to a question** | Same section | `0`: no attachment. |
 | **MCP endpoint (/mcp)** | Same section | Off by default: no Claude client can connect. |
+| **Allow changes over MCP** | Same section | Off by default: a Claude client reads only — see [Changes over MCP](./mcp.md#changes). |
 | `ai:chat`, `ai:write`, `mcp:use` | Administer → Access → a role → Beyond the menus | Who uses the assistant, who writes through it, who connects Claude. |
 | `sql:`, `explorer:`, `api:` permissions and the data scope | The role | What the assistant reads for that user. |
 
@@ -2026,9 +2065,9 @@ The [licence usage report](./build/secure/license-key.md#usage-report) goes to t
 ## Liberty Next — AI usage
 Source: https://docs.nomana-it.fr/liberty/monitoring/ai-usage/
 
-Monitoring → AI usage in Liberty Next: who uses the AI assistant, the tokens with the share read from the cache, the tools called and their failures, the average time — by user, day, model and tool — and the latest questions with their tool calls. What is recorded, what never is, and how long it is kept.
+Monitoring → AI usage in Liberty Next: who uses the AI assistant, the estimated cost, the tokens with the share read from the cache, the tools called and their failures — by user, day, model, channel and tool —, the changes made through the assistant, and the latest questions with their tool calls. What is recorded, what never is, and how long it is kept.
 
-**Monitoring → AI usage** shows how the [AI assistant](../framework/ai-assistant.md) is used: who asks, how many tokens it costs, which tools it calls and which fail. It is for superusers, from **Liberty Next → Operate → Monitoring**.
+**Monitoring → AI usage** shows how the [AI assistant](../framework/ai-assistant.md) is used: who asks, what it costs, which tools it calls and which fail, and what was changed through it. It is for superusers, from **Liberty Next → Operate → Monitoring**.
 
 ---
 
@@ -2038,9 +2077,17 @@ Monitoring → AI usage in Liberty Next: who uses the AI assistant, the tokens w
 
 ## What is recorded \{#record\}
 
-Each question to the assistant leaves one record: who asked, from which application's page, the model, the tokens (in, out, read from and written to the cache), the time it took and how it ended. Each tool call of the question is kept with its name, what it was called on (the connector and the query, the model, the keywords), whether it failed and why, its size and its time.
+Each question to the assistant leaves one record: who asked, from which application's page, the model, the tokens (in, out, read from and written to the cache), the time it took and how it ended. Each tool call of the question is kept with its name, what it was called on (the connector and the query, the model, the keywords, the screen and the key of the record), whether it failed and why, its size and its time.
 
-**The question, the answer and the rows a tool returned are never recorded.** A question the user abandons half-way is recorded with what had happened until then. A call from an external client is recorded the same way, with the model `mcp` — see [Connect Claude (MCP)](../framework/mcp.md).
+**The question, the answer, the rows a tool returned and the values written are never recorded.** A question the user abandons half-way is recorded with what had happened until then.
+
+Three **channels** feed the record:
+
+| Channel | One entry is |
+|---|---|
+| **Liberty chat** | A question asked in the assistant's drawer, with its model and its tokens. |
+| **External client (MCP)** | A tool called by a Claude client — see [Connect Claude (MCP)](../framework/mcp.md). No model and no tokens: they are the client's. |
+| **Card applied** | A card the user applied in the drawer: a record written, an action or a job run — see [Write through a screen](../framework/ai-assistant.md#write). |
 
 ---
 
@@ -2050,35 +2097,65 @@ The period is **Last 7 days**, **Last 30 days** (default) or **Last 90 days**.
 
 | Tile | Shows |
 |---|---|
-| **Questions** | Questions asked over the period. |
-| **Users** | Users who asked at least one. |
+| **Questions** | Entries over the period. |
+| **Users** | Users with at least one. |
+| **Estimated cost, at list price** | What the tokens of the chat's questions cost at Anthropic's list price, in USD. A model without a listed price is left out and named (*without … (no listed price)*). |
 | **Tokens in** | Input tokens, with the share read from the cache (*71 % from cache*): the part of a conversation sent again at each tool round is read from the cache, at a lower price. |
 | **Tokens out** | Output tokens. |
 | **Tool calls** | Tools called, with the number that failed. |
-| **Average time per question** | From the question to the end of the answer. |
+| **Changes made through the assistant** | Their number over the period — see [below](#changes). |
+
+The cost is an estimate: the prices are the list prices known to the installed release, and the contract of the installation's API key may differ. A call over MCP costs the installation nothing: it has no tokens here.
 
 ---
 
 ## Breakdowns \{#breakdowns\}
 
-| Table | Columns |
-|---|---|
-| **By user**, **By day**, **By model** | Questions, Tokens in, From cache, Tokens out, Tool calls. |
-| **By tool** | Calls, Failed, Average time, Average size. |
+Six panels, two a row:
 
-A click on a user narrows the questions below to theirs (*Questions of …*).
+| Panel | Columns |
+|---|---|
+| **By user**, **By day** | Questions, Tokens in, From cache, Tokens out, Cost. |
+| **By model** — *the questions of the chat* | The same columns, one row per model that answered a question. |
+| **By channel** | Entries, Tool calls, Failed, Cost — the cost for the *Liberty chat* only. |
+| **By tool** | Calls, Failed, Average time, Average size. |
+| **Changes made through the assistant** | When, User, Channel, What. |
+
+A click on a user narrows the questions below to theirs (*Questions of …*); a click on a channel narrows them to that channel.
+
+---
+
+## Changes made through the assistant \{#changes\}
+
+The panel lists what was changed through the assistant over the period, newest first, 200 at most — *cards applied, and saving tools called over MCP*:
+
+| Column | Content |
+|---|---|
+| **When**, **User** | Who made the change, and when. |
+| **Channel** | *Card applied* for a card of the drawer, *External client (MCP)* for a tool a Claude client called. |
+| **What** | The tool, then the screen and the operation or the action with the key of the record, or the job; in red with its reason when the change was refused. |
+
+The values written are not kept. On a screen under [change tracking](../nomaflow/change-packages.md), the change package names these entries *AI assistant*.
 
 ---
 
 ## Latest questions \{#recent\}
 
-One row per question: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome** — *Answered*, *Failed*, *Abandoned* or *Round limit* (the question used all its tool rounds and ended on a closing answer). A row opens on its tool calls, each with its size in characters and its time.
+One row per entry: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome**.
+
+| Entry | Model column | Outcome |
+|---|---|---|
+| A question of the chat | The model. | *Answered*, *Failed*, *Abandoned* or *Round limit* (the question used all its tool rounds and ended on a closing answer). |
+| A card applied | *Card applied*. | *Applied* or *Refused*. |
+| A run of MCP calls | *External client (MCP)*. The calls of one user less than two minutes apart are one row. | *Answered*, or the number of calls that failed. |
+
+A row opens on its tool calls, each with what it was called on, its size in characters and its time. Above the list, **Every channel** narrows it to one channel and **Failures only** to the entries with a failure.
 
 ---
 
 ## How long it is kept \{#retention\}
 
-**Usage record kept (days; 0 = without limit)**, in Liberty Next → Administer → App → AI Assistant, is 90 by default. Older questions are deleted with the notifications' clean-up, and the store appears as **AI usage** on the [Retention](./retention.md) view, with its number of questions, **Preview** and **Run now**.
+**Usage record kept (days; 0 = without limit)**, in Liberty Next → Administer → App → AI Assistant, is 90 by default. Older entries are deleted with the notifications' clean-up, and the store appears as **AI usage** on the [Retention](./retention.md) view, with its number of entries, **Preview** and **Run now**.
 
 ---
 
@@ -2086,6 +2163,7 @@ One row per question: When, User, Application, Model, Tokens in, From cache, Tok
 
 - A tool that fails often points at a missing permission or at a query whose description misleads the assistant: open the question's tool calls to read the reason.
 - A user with many questions and few tool calls is probably asking for what the assistant cannot reach: check the role's `sql:` and `explorer:` permissions.
+- Read the **Changes** panel after turning the write tools on: it says who uses them, on which screens, and what is refused.
 - The same figures are served by `GET /admin/ai-usage` for an external report.
 
 ---
@@ -6975,7 +7053,7 @@ Every column hint carries the same shape. Drilling into a column reveals five gr
 |---|---|
 | **`name`** | The result column this hint applies to. Case-insensitive match against the read query's columns. Normalised to UPPERCASE on save. |
 | **`dd`** | Dictionary entry to inherit `label` / `format` / `rule` from. Blank uses the column `name` as the key. Set to `""` (empty quoted string) to opt out of the dictionary entirely. |
-| **`sensitive`** (*Sensitive*) | Whether the column holds sensitive data, for the AI assistant: hidden from what the assistant is given when the installation hides sensitive data. Blank follows the column's dictionary entry; false exempts the column even when its entry is flagged. See [Sensitive data](../../ai-data-sent.md#sensitive). |
+| **`sensitive`** (*Sensitive*) | Whether the column holds sensitive data, for the AI assistant: hidden from what the assistant is given when the installation hides sensitive data. Three choices in the editor: *(default)* follows the column's dictionary entry, *yes* flags the column, *no* exempts it even when its entry is flagged. See [Sensitive data](../../ai-data-sent.md#sensitive). |
 
 The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary — one entry defines a field's display title, format, rule and lookup once; every screen that has a column with that name inherits it. See [Concepts → Dictionary](../../dictionary.md).
 
@@ -11396,7 +11474,7 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Data Explorer tools** | On by default: the assistant computes totals, rankings and trends on the [Data Explorer](../explorer/overview.md) models, and saves analyses and dashboards. |
 | **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
-| **Write tools** | Off by default. The assistant adds, changes or deletes a record, or runs an action, through its screen — for users holding `ai:write` and the screen's own permissions; applied from a card in the drawer, confirmed by the client over MCP. See [Write through a screen](../ai-assistant.md#write). |
+| **Write tools** | Off by default. The assistant adds, changes or deletes a record — or several on one card —, runs an action through its screen, or runs a job — for users holding `ai:write` and the screen's or the job's own permissions; applied from a card in the drawer. Over MCP they also need **Allow changes over MCP**. See [Write through a screen](../ai-assistant.md#write). |
 | **Hide sensitive data from the assistant** | Off by default. The columns whose dictionary item or screen column is flagged **Sensitive** are not given to the assistant, in the drawer and over MCP. It does not cover what a user types or attaches, an unflagged free-text column, nor what an API endpoint or an application's own tool returns. See [Sensitive data](../ai-data-sent.md#sensitive). |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
@@ -11405,6 +11483,7 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **File attached to a question: megabytes at most** | 10 by default (0 to 30); `0` removes the paperclip of the drawer — see [Attach a file](../ai-assistant.md#attach). |
 | **Usage record kept (days; 0 = without limit)** | 90 by default — see [AI usage](../../monitoring/ai-usage.md#retention). |
 | **MCP endpoint (/mcp)** | Off by default: the same tools for an external client — Claude Desktop, claude.ai, Claude Code —, each user with a personal access token. Applied without a restart. See [Connect Claude (MCP)](../mcp.md). |
+| **Allow changes over MCP** | Off by default: an external client reads only. On: a tool that saves — a record through its screen, an action, a job, a saved analysis or dashboard — is offered to it; in the drawer the user applies a card, here the only gate is the client's own approval. See [Changes over MCP](../mcp.md#changes). |
 | **Personal access token: longest life (days)** | 366 by default: the longest validity of a token, and how long a sign-in from a Claude client lasts before the user allows it again. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
 | **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
@@ -13191,8 +13270,10 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
 | `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
-| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (`liberty.mcpb`) with the server's address filled in. Requires `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (a `.mcpb` file named after the instance) with the server's address filled in. Requires `mcp:use`. |
 | `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | The sign-in of an MCP client: discovery, client registration, code exchange and renewal. The consent page is `/oauth/authorize`. |
+| `GET` | `/oauth/grants` | The clients the caller connected by sign-in: name, connection, last use, end of the access — never a token. `?everyone=1` for a superuser. |
+| `DELETE` | `/oauth/grants/{id}` | End the access of one client, refused from its next call. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
 See [Sign-in](../framework/build/secure/sign-in.md).
@@ -13248,7 +13329,8 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `GET` | `/ai/tools` | The assistant's tool catalogue. |
 | `POST` | `/ai/chat` | Send the conversation (`{messages, model?}`); the answer streams back. Requires `ai:chat`. |
 | — | `/mcp` | The MCP endpoint: the assistant's tools for an external client, with `Authorization: Bearer <personal access token>`. See [Connect Claude (MCP)](../framework/mcp.md). |
-| `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
+| `POST` | `/mcp/files?job=<id>&filename=<name>` | A file sent by the Claude Desktop extension for a job that loads one: it lands in the job's upload area, nothing runs. Personal access token; requires `ai:write`, `job:<id>` and **Allow changes over MCP**. |
+| `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `channel`, `failed`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
 
 ---
 

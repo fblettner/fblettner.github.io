@@ -43,8 +43,10 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
 | `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
-| `GET` | `/auth/mcp/extension` | L'extension Claude Desktop (`liberty.mcpb`) avec l'adresse du serveur déjà renseignée. Demande `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | L'extension Claude Desktop (un fichier `.mcpb` au nom de l'instance) avec l'adresse du serveur déjà renseignée. Demande `mcp:use`. |
 | `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | La connexion d'un client MCP : découverte, enregistrement du client, échange du code et renouvellement. La page d'autorisation est `/oauth/authorize`. |
+| `GET` | `/oauth/grants` | Les clients que l'appelant a connectés par authentification : nom, connexion, dernier usage, fin de l'accès — jamais un jeton. `?everyone=1` pour un superutilisateur. |
+| `DELETE` | `/oauth/grants/{id}` | Met fin à l'accès d'un client, refusé dès son appel suivant. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
 Voir [Se connecter](../framework/build/secure/sign-in.md).
@@ -100,7 +102,8 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | `GET` | `/ai/tools` | Le catalogue d'outils de l'assistant. |
 | `POST` | `/ai/chat` | Envoie la conversation (`{messages, model?}`) ; la réponse revient en flux. Demande `ai:chat`. |
 | — | `/mcp` | Le point d'accès MCP : les outils de l'assistant pour un client externe, avec `Authorization: Bearer <jeton d'accès personnel>`. Voir [Connecter Claude (MCP)](../framework/mcp.md). |
-| `GET` | `/admin/ai-usage` | L'usage de l'assistant sur une période (`days`, `username`, `limit`). Superutilisateurs. Voir [Usage de l'IA](../monitoring/ai-usage.md). |
+| `POST` | `/mcp/files?job=<id>&filename=<nom>` | Un fichier envoyé par l'extension Claude Desktop pour une tâche qui en charge un : il arrive dans la zone de dépôt de la tâche, rien ne s'exécute. Jeton d'accès personnel ; demande `ai:write`, `job:<id>` et **Autoriser les modifications en MCP**. |
+| `GET` | `/admin/ai-usage` | L'usage de l'assistant sur une période (`days`, `username`, `channel`, `failed`, `limit`). Superutilisateurs. Voir [Usage de l'IA](../monitoring/ai-usage.md). |
 
 ---
 
