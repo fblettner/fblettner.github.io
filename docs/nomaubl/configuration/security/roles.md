@@ -200,6 +200,7 @@ A short list of binary feature flags. Each row carries a checkbox plus a one-lin
 |---|---|---|
 | **Settings access** | *Can open the Settings page (template / connector editing).* | Opens the entire Configuration menu. The role is then displayed with the `Admin` badge in the list. |
 | **Read-only mode** | *No edit / delete / resend actions, even on permitted pages.* | Members can browse the application but every write action is disabled — overrides the *Actions* tab entirely. |
+| **MCP access** | *Can connect Claude Desktop or Claude Code to this instance with a personal token* | Shows the **Claude (MCP)** tab in the profile window and lets the user's Claude client call the instance — see [Claude (MCP)](../../application/claude-mcp.md). No role has it by default. |
 
 ### Allowed Pages
 

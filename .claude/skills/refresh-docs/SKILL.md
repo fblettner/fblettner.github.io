@@ -19,7 +19,7 @@ Scripts in `scripts/` (call them with absolute paths; the session scratchpad is 
 | Script | Use |
 |---|---|
 | `sync_release_nomaubl.py` | NomaUBL release notes EN+FR from `RELEASE.md` / `RELEASE.fr.md` (customer names sanitised). |
-| `openapi_nomaubl.sh` | Regenerate `static/openapi/nomaubl.json` from the jar, sanitised; prints lost / new paths. |
+| `openapi_nomaubl.sh` (run with `zsh`, not `bash`) | Regenerate `static/openapi/nomaubl.json` from the jar, sanitised; prints lost / new paths. |
 | `movedoc.py old_id new_id` | Move a page EN+FR with links, sidebar and redirect. One call per page. |
 | `svgkit.py`, `example_page.py` | Build the dark-card SVG mockups with dashed callouts (house style). |
 | `preview.py` | Render an SVG to PNG with headless Chrome to check it before inserting. |
@@ -28,6 +28,7 @@ Scripts in `scripts/` (call them with absolute paths; the session scratchpad is 
 ## Procedure
 
 1. **Find what is new.**
+   - First bring the source repo up to date: `git fetch`, then `git pull --ff-only` when its tree is clean (a local clone behind its remote shows "nothing new"). Say so in the report.
    - Read the product's release file (see products.md) and compare with what the docs already cover: for NomaUBL, the versions and the bullets missing from `docs/nomaubl/release-notes.md` (run `sync_release_nomaubl.py` and read its output plus `git diff` of the release notes); for the other products, the release entries dated after the last docs commit touching that product (`git log -1 --format=%cd -- docs/liberty/<product>`).
    - Read `git log` of the source repo for the same period, and the plans in its `docs/plans/` when they exist — they explain the intent and the phases.
    - The user may add context (reports attached, a feature name, "the explorer replaces the query tool"); fold it in. Attached customer documents are examples only: never copy their data.

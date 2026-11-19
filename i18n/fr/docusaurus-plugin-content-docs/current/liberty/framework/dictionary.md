@@ -213,6 +213,10 @@ L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 
 Les règles appliquées par le serveur (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) valent pour toute écriture passant par la requête — formulaire, saisie dans la grille, API — et pas seulement pour le formulaire. Une requête d'écriture peut aussi horodater explicitement avec des jetons comme `{{LOGIN}}` ou `{{SYSDATE}}` — voir [Liaison des paramètres](./build/queries/parameter-binding.md).
 
+### Données sensibles \{#sensitive\}
+
+**Sensitive**, dans l'onglet *Rule* d'une entrée, indique que l'élément porte une donnée sensible — le nom d'une personne, une adresse e-mail, un identifiant bancaire. Quand l'installation masque les données sensibles à l'assistant IA, toutes les colonnes qui portent l'élément sont écartées de ce que l'assistant reçoit, dans le panneau comme en MCP. Les écrans ne changent pas. Une colonne d'écran a le même indicateur, pour une colonne sans élément. Voir [Données sensibles](./ai-data-sent.md#sensitive).
+
 ### Colonnes d'audit \{#form-layer-defaults\}
 
 Une règle s'applique à toute écriture dont la requête lie la colonne :

@@ -81,6 +81,7 @@ Chaque indication de colonne porte la même structure. Détailler une colonne r�
 |---|---|
 | **`name`** | La colonne du résultat à laquelle s'applique cette indication. Correspondance insensible à la casse contre les colonnes de la requête de lecture. Normalisée en MAJUSCULES à l'enregistrement. |
 | **`dd`** | Entrée de dictionnaire dont hériter `label` / `format` / `rule`. Vide utilise le `name` de la colonne comme clé. Mettre à `""` (chaîne vide entre guillemets) pour se désinscrire totalement du dictionnaire. |
+| **`sensitive`** (*Sensitive*) | Indique si la colonne porte une donnée sensible, pour l'assistant IA : elle est écartée de ce que l'assistant reçoit quand l'installation masque les données sensibles. Vide : la colonne suit son entrée du dictionnaire ; à faux, elle est exemptée même si son entrée est marquée. Voir [Données sensibles](../../ai-data-sent.md#sensitive). |
 
 Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé de Liberty — une entrée définit une fois le titre d'affichage, le format, la règle et la recherche d'un champ ; chaque écran qui a une colonne avec ce nom en hérite. Voir [Concepts → Dictionnaire](../../dictionary.md).
 

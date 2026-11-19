@@ -210,7 +210,7 @@ A click on a user narrows the questions below to theirs (*Questions of …*).
 
 ## Latest questions \{#recent\}
 
-One row per question: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome** — *Answered*, *Failed* or *Abandoned*. A row opens on its tool calls, each with its size in characters and its time.
+One row per question: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome** — *Answered*, *Failed*, *Abandoned* or *Round limit* (the question used all its tool rounds and ended on a closing answer). A row opens on its tool calls, each with its size in characters and its time.
 
 ---
 

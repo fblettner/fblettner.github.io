@@ -81,6 +81,7 @@ Every column hint carries the same shape. Drilling into a column reveals five gr
 |---|---|
 | **`name`** | The result column this hint applies to. Case-insensitive match against the read query's columns. Normalised to UPPERCASE on save. |
 | **`dd`** | Dictionary entry to inherit `label` / `format` / `rule` from. Blank uses the column `name` as the key. Set to `""` (empty quoted string) to opt out of the dictionary entirely. |
+| **`sensitive`** (*Sensitive*) | Whether the column holds sensitive data, for the AI assistant: hidden from what the assistant is given when the installation hides sensitive data. Blank follows the column's dictionary entry; false exempts the column even when its entry is flagged. See [Sensitive data](../../ai-data-sent.md#sensitive). |
 
 The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary — one entry defines a field's display title, format, rule and lookup once; every screen that has a column with that name inherits it. See [Concepts → Dictionary](../../dictionary.md).
 

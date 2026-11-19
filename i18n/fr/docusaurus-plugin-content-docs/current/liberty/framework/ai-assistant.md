@@ -1,7 +1,7 @@
 ---
 title: Assistant IA
 description: "L'assistant IA de Liberty Next : le panneau ouvert par le bouton Assistant, le contexte de page qu'il reçoit, les fichiers joints à une question, les conversations conservées et les notes, les questions de départ et les relances, le choix du modèle, ce qu'il sait faire (lire les requêtes des connecteurs, chercher dans le catalogue, décrire l'installation, suivre des procédures, appeler les outils des applications, lire les tâches et le journal du serveur, appeler des endpoints d'API, proposer de la configuration), comment il est limité (ai:chat, les permissions de chaque outil, connecteurs autorisés, requêtes en lecture seule, périmètre de données), et ses réglages."
-keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, search_catalog, api_call, scaffold, périmètre de données, fichier joint, conversations, notes, outils des applications, MCP]
+keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de page, questions de départ, procédures, outils d'exploitation, choix du modèle, outils, list_connectors, sql_query, search_catalog, screen_write, screen_action, ai:write, données sensibles, api_call, scaffold, périmètre de données, fichier joint, conversations, notes, outils des applications, MCP]
 ---
 
 # Assistant IA
@@ -201,15 +201,42 @@ Les questions ont deux origines :
 | `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
 | Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
 | `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
+| `screen_form`, `screen_write`, `screen_action` | Lisent ce qu'un écran permet à son utilisateur, puis ajoutent, modifient ou suppriment **un** enregistrement, ou lancent **une** action de l'écran, par les requêtes et les règles de l'écran lui-même — voir [Écrire par un écran](#write). | **Outils d'écriture** (désactivé par défaut), avec la permission `ai:write`. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
 | `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
 | Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut) ; superutilisateurs uniquement. |
 | Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
-L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
+L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel. Une question qui épuise ses tours d'outils (**Itérations d'outils maximum**, 15 par défaut) se termine par une réponse de clôture : ce qui a été fait, ce qui a été trouvé, ce qui reste — et l'utilisateur peut demander de poursuivre.
 
 Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
+
+---
+
+## Écrire par un écran \{#write\}
+
+**Outils d'écriture** activés, l'assistant peut faire ce qu'un utilisateur fait dans un écran — rien par un autre chemin :
+
+| Outil | Rôle |
+|---|---|
+| `screen_form` | Lit ce que l'écran permet à cet utilisateur d'ajouter, de modifier, de supprimer et de lancer : la clé, chaque colonne avec son libellé, son caractère obligatoire ou verrouillé, sa valeur par défaut et les valeurs acceptées, et les actions de l'écran. |
+| `screen_write` | Ajoute, modifie ou supprime **un** enregistrement. |
+| `screen_action` | Lance **une** action de l'écran — *Valider* ou *Clôturer* d'un menu de ligne, un bouton de la barre d'outils ou d'un onglet du formulaire. |
+
+L'enregistrement est lu par la requête de lecture de l'écran, et les règles du formulaire s'appliquent : une colonne obligatoire absente, une valeur hors de sa liste, une colonne ou un enregistrement que l'écran tient en lecture seule sont refusés avec le motif. L'enregistrement se fait ensuite comme depuis le formulaire — règles du dictionnaire, séquences, tables liées, audit, périmètre de données, paquet de modifications, règles de notification — de même que les actions d'enregistrement de l'écran et les étapes de ses actions, chacune sous sa propre permission.
+
+**Trois verrous, tous nécessaires :** le réglage **Outils d'écriture**, la permission `ai:write` du rôle, et la permission de chaque requête, endpoint ou plugin exécuté, comme dans l'écran.
+
+**Qui confirme.** Dans le panneau, les outils se limitent à proposer : l'utilisateur reçoit une carte — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, ou l'action avec la confirmation de l'écran et ce qu'elle exécute — et rien ne se passe avant **Appliquer** ; **Ignorer** abandonne l'étape. En [MCP](./mcp.md), le client demande l'accord de son utilisateur avant d'appeler un outil qui modifie quelque chose.
+
+| Refusé | Motif indiqué |
+|---|---|
+| Un enregistrement ouvert dans son formulaire | Le formulaire tient l'enregistrement : il ne peut être ni modifié ni supprimé avant la fermeture du formulaire — celui d'un autre utilisateur, ou celui que l'utilisateur a lui-même ouvert. |
+| Un écran qui ne peut pas être écrit | L'écran est en lecture seule, n'a pas de requête pour l'opération, ou lance des actions à l'ouverture de son formulaire. |
+| Une action faite uniquement de ce que fait un navigateur | L'ouverture d'une page ou d'une adresse est signalée, pas exécutée. |
+
+Comme dans l'écran, un enregistrement, ses tables liées et ses actions sont des instructions distinctes : quand une action ou une étape échoue, ce qui s'est exécuté avant reste, et la réponse l'indique.
 
 ---
 
@@ -246,6 +273,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
   | Outils de l'explorateur de données | `explorer:<app>:<modèle>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, procédures | Aucune autre, et ils ne montrent que ce que l'utilisateur peut ouvrir : un écran d'après sa requête de lecture, une entrée de menu d'après la [règle du menu](./build/menus/permissions-and-roles.md#gating), une tâche d'après `job:<id>`. Une application qui n'a rien pour l'utilisateur n'est pas citée. |
   | Outils des applications | La permission de l'outil. |
+  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, et la permission de chaque requête, endpoint ou plugin exécuté par l'écran. |
   | Outils d'exploitation et de construction | Superutilisateur. |
 
   Un utilisateur qui détient `ai:chat` sans les permissions `sql:` ou `explorer:` d'une application n'en obtient aucun chiffre : les accorder, comme pour les écrans. Le refus est formulé de la même façon pour une requête qui existe et pour une requête qui n'existe pas.
@@ -258,13 +286,14 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 ## Depuis Claude, et ce qui est enregistré \{#beyond\}
 
 - Les mêmes outils répondent à un client externe — Claude Desktop, claude.ai, Claude Code — par le point d'accès MCP du serveur, chaque utilisateur avec un jeton d'accès personnel et ses propres droits. Voir [Connecter Claude (MCP)](./mcp.md).
+- Une installation peut marquer ses colonnes sensibles et les tenir à l'écart de l'assistant ; [Données transmises à Anthropic](./ai-data-sent.md) détaille ce qu'une question transmet et ce qu'elle ne transmet jamais.
 - Chaque question est enregistrée : qui l'a posée, le modèle, les jetons, les outils appelés — jamais la question, la réponse ni une ligne de données. Les superutilisateurs le consultent dans [Surveillance → Usage de l'IA](../monitoring/ai-usage.md).
 
 ---
 
 ## Réglages \{#settings\}
 
-Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (15), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, **Outils d'écriture**, **Masquer les données sensibles à l'assistant**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 

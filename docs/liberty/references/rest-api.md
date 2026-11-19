@@ -43,6 +43,8 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
 | `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (`liberty.mcpb`) with the server's address filled in. Requires `mcp:use`. |
+| `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | The sign-in of an MCP client: discovery, client registration, code exchange and renewal. The consent page is `/oauth/authorize`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
 See [Sign-in](../framework/build/secure/sign-in.md).

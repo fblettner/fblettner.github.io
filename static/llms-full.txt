@@ -1668,15 +1668,42 @@ Questions come from two sources:
 | `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
 | Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
 | `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
+| `screen_form`, `screen_write`, `screen_action` | Read what a screen lets its user do, then add, change or delete **one** record, or run **one** action of the screen, through the screen's own queries and rules — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
 | Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default); superusers only. |
 | Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
-The assistant only uses existing named queries: it does not write SQL against the database. Beyond **Rows per query, at most**, a result is marked as truncated and the assistant is told not to count or add up the rows it received: it narrows its filters, or computes the figure with the Data Explorer tools. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call.
+The assistant only uses existing named queries: it does not write SQL against the database. Beyond **Rows per query, at most**, a result is marked as truncated and the assistant is told not to count or add up the rows it received: it narrows its filters, or computes the figure with the Data Explorer tools. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call. A question that uses all its tool rounds (**Max tool iterations**, 15 by default) ends on a closing answer: what was done, what was found, what is left — and the user can ask to continue.
 
 The **Operations tools** let the assistant read the running server rather than guess when a job failed, is late or is missing. They are meant for installations whose chat users are administrators: the server log can hold anything the server wrote.
+
+---
+
+## Write through a screen \{#write\}
+
+With the **Write tools** on, the assistant can do what a user does in a screen — nothing by another path:
+
+| Tool | Does |
+|---|---|
+| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, and the screen's actions. |
+| `screen_write` | Adds, changes or deletes **one** record. |
+| `screen_action` | Runs **one** action of the screen — a row menu's *Validate* or *Close*, a button of the toolbar or of a form tab. |
+
+The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission.
+
+**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen.
+
+**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md), the client asks its user before calling a tool that changes something.
+
+| Refused | Reason given |
+|---|---|
+| A record open in its form | The form holds the record: it cannot be changed or deleted until the form is closed — by another user, or by the user's own open form. |
+| A screen that cannot be written | The screen is read-only, has no query for the operation, or runs actions when its form opens. |
+| An action made only of what a browser does | Opening a page or an address is noted, not run. |
+
+As in the screen, a save, its related tables and its hooks are separate statements: when a hook or a step fails, what ran before stays, and the answer says so.
 
 ---
 
@@ -1713,6 +1740,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
   | Data Explorer tools | `explorer:<app>:<model>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, playbooks | Nothing more, and they show only what the user can open: a screen by its read query, a menu entry by the [menu's rule](./build/menus/permissions-and-roles.md#gating), a job by `job:<id>`. An application with nothing for the user is not named. |
   | Application tools | The tool's permission. |
+  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
   | Operations and scaffold tools | Superuser. |
 
   A user holding `ai:chat` without the `sql:` or `explorer:` permissions of an application gets no figure from it: grant them, as for the screens. A refusal reads the same for a query that exists and for one that does not.
@@ -1725,13 +1753,14 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 ## From Claude, and what is recorded \{#beyond\}
 
 - The same tools answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's MCP endpoint, each user with a personal access token and their own rights. See [Connect Claude (MCP)](./mcp.md).
+- An installation can flag its sensitive columns and keep them from the assistant, and [Data sent to Anthropic](./ai-data-sent.md) lists what a question sends and what it never does.
 - Every question is recorded: who asked, the model, the tokens, the tools called — never the question, the answer or a row. Superusers read it in [Monitoring → AI usage](../monitoring/ai-usage.md).
 
 ---
 
 ## Settings \{#settings\}
 
-In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, **Rows per query, at most**, **File attached to a question**, **Usage record kept**, the **MCP endpoint**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
+In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (15), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, **Rows per query, at most**, **File attached to a question**, **Usage record kept**, **Write tools**, **Hide sensitive data from the assistant**, the **MCP endpoint**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 
@@ -1747,11 +1776,13 @@ In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anth
 ## Liberty Next — Connect Claude (MCP)
 Source: https://docs.nomana-it.fr/liberty/framework/mcp/
 
-Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, personal access tokens created in the user's profile, the custom connector to declare, what the client can do and when a token ends.
+Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, the sign-in from the client, the Claude Desktop extension for a server that is not on the internet, personal access tokens, what the client can do and when an access ends.
 
 The tools of the [AI assistant](./ai-assistant.md) can answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's **MCP endpoint**, `/mcp`. The client acts as a Liberty Next user: it is offered what that user is offered in the chat drawer, each call goes through the same permission checks and the same data scope, and each call is recorded.
 
-Three things are needed: the endpoint turned on, the `mcp:use` permission, and a **personal access token** the user creates in their profile.
+Three things are needed: the endpoint turned on, the `mcp:use` permission, and a way to connect — a sign-in from the client, the Claude Desktop extension, or a pasted **personal access token**.
+
+What goes to Anthropic in that case, and what does not, is described on [Data sent to Anthropic](./ai-data-sent.md).
 
 ---
 
@@ -1766,7 +1797,9 @@ In **Liberty Next → Administer → App → AI Assistant**:
 | Field | Default | Description |
 |---|---|---|
 | **MCP endpoint (/mcp)** | Off | The server answers on `/mcp`. Applied on save, without a restart. |
-| **Personal access token: longest life (days)** | 366 | The longest validity a user may ask for. |
+| **Personal access token: longest life (days)** | 366 | The longest validity a user may ask for a token, and how long a sign-in from a client lasts before the user allows it again. |
+
+Behind a reverse proxy, also set **Public address** (same page, *Server*) to the address users reach the server at: the addresses the sign-in publishes are built on it.
 
 The endpoint needs the `mcp` extra of the package (`pip install "liberty-next[mcp]"`); `liberty-next[all]` and the Docker image include it.
 
@@ -1777,6 +1810,21 @@ The endpoint needs the `mcp` extra of the package (`pip install "liberty-next[mc
 In **Liberty Next → Administer → Access**, give the role the rule **AI assistant → AI tools from an external client (MCP) — create a personal access token** (`mcp:use`), in **Beyond the menus**. The user then sees the **Access tokens** tab in their profile; a superuser always does.
 
 `mcp:use` only opens the endpoint: what the client reaches still depends on the user's other permissions — see [Who can use it, and on what](./ai-assistant.md#access).
+
+---
+
+## Connect the client \{#connect\}
+
+| Way | For | Steps |
+|---|---|---|
+| **Sign-in from the client** | A custom connector in Claude Desktop or claude.ai. The connector is called from Anthropic's servers: the Liberty server must be reachable from the internet. | Give the connector the address of `/mcp` only. The browser opens Liberty: the user signs in the usual way (password or SSO), then, on the **Allow access** page — *the client asks to use the application as the user* — clicks **Allow** (or **Refuse**). Nothing to create, nothing to paste. |
+| **Claude Desktop extension** | A server that is not on the internet: an internal address, a VPN. | In the profile's **Access tokens** tab, **Claude Desktop extension** downloads `liberty.mcpb`. Open the file with Claude Desktop and paste a token created in the same tab — see [below](#extension). |
+| **Pasted token** | Claude Code, a script. | [Create a token](#token) and give it to the client as the request header `Authorization: Bearer <token>`, with the **Connector URL** of the tab — `https://<server>/mcp`. |
+
+| Answer | Meaning |
+|---|---|
+| `404` | The endpoint is off. |
+| `401` | No token, or a token that is invalid or ended. |
 
 ---
 
@@ -1792,41 +1840,37 @@ The tab also gives the **Connector URL**, the address of the server followed by 
 
 ---
 
-## Declare the connector in Claude \{#connect\}
+## The Claude Desktop extension \{#extension\}
 
-In the client, add a custom connector with:
+The extension runs a small relay on the user's own computer: it passes Claude's messages to `/mcp` with the user's personal access token, so the server only has to be reachable from that computer. The file is built at download with the server's address filled in and carries no secret. Nothing to install: Claude Desktop brings what the relay needs.
 
-| Setting | Value |
+| Setting in Claude Desktop | Content |
 |---|---|
-| URL | The **Connector URL** of the tab — `https://<server>/mcp`. |
-| Request header | `Authorization: Bearer <token>` |
-
-| Answer | Meaning |
-|---|---|
-| `404` | The endpoint is off. |
-| `401` | No token, or a token that is invalid or ended. |
+| **Liberty address** | The address of the server, ending with `/mcp` — already filled in. |
+| **Personal access token** | A token created in the profile's **Access tokens** tab. |
+| **Accept an internal certificate** | To turn on only when the server uses a self-signed or company certificate. |
 
 ---
 
 ## What the client can do \{#tools\}
 
 - The client is offered the tools the user is offered in the chat drawer, with the same descriptions; a tool the user cannot use is not listed.
-- Every call checks the user's permissions and applies their [data scope](./build/secure/roles-and-permissions.md#data-scope), as in the drawer.
+- Every call checks the user's permissions and applies their [data scope](./build/secure/roles-and-permissions.md#data-scope), as in the drawer; the columns the installation [marks as sensitive](./ai-data-sent.md#sensitive) are left out in the same way.
 - The tools whose result is a card of the chat drawer are not offered: the scaffold proposals and the notes.
-- A tool that saves something — a Data Explorer analysis or dashboard — tells the client so, which lets it ask for a confirmation.
+- A tool that changes something — saving a Data Explorer analysis or dashboard, [writing a record or running an action through a screen](./ai-assistant.md#write) — tells the client so, and the client asks its user before calling it.
 - A personal access token opens the MCP endpoint only: the rest of the API refuses it.
 
 ---
 
-## When a token ends \{#end\}
+## When an access ends \{#end\}
 
-The account is read again at every call, so a token carries the user's rights of the moment, never more. It ends:
+The account is read again at every call, so an access carries the user's rights of the moment, never more. A token or a sign-in ends:
 
-- at its expiry date;
+- at its expiry date — a sign-in lasts the **longest life** set above, then the user allows the client again;
 - when the account is deactivated, or loses `mcp:use`;
 - when the account's password changes.
 
-There is no list of tokens and no button to revoke one: **changing the password ends every token of the account**. That is what to do when a token has leaked.
+Nothing is stored on the server for these accesses, so there is no list and no button to revoke one: **changing the password ends every access of the account**. That is what to do when a token has leaked.
 
 ---
 
@@ -1838,9 +1882,144 @@ Each call is in the usage record, with the model `mcp`: the user, the tool, what
 
 ## Tips \{#tips\}
 
-- Keep the validity short for a first trial, and create a new token rather than sharing one: a token is the user's own access.
+- Prefer the sign-in for a server on the internet, the extension for an internal one: neither asks the user to handle a secret by hand more than once.
 - Grant `mcp:use` to the roles that already use the assistant in the application; the answers depend on the same `sql:` and `explorer:` permissions.
 - Serve the endpoint over HTTPS only: the token travels in a request header.
+
+---
+
+## Liberty Next — Data sent to Anthropic
+Source: https://docs.nomana-it.fr/liberty/framework/ai-data-sent/
+
+What Liberty Next sends to Anthropic and what it never sends: the AI assistant (instructions, page context, notes, conversation, tool results, attached files, with the installation's API key) and Claude connected through MCP (Liberty only answers tool calls). The Sensitive flag and the switch that keeps flagged columns from the assistant, what stays on the server, and the settings that decide.
+
+Liberty Next uses Anthropic's models in two ways, and the path of the data is not the same:
+
+- the **[AI assistant](./ai-assistant.md)** — the server calls Anthropic's API with the API key of the installation;
+- **[Claude connected through MCP](./mcp.md)** — Liberty calls nobody: it answers the tool calls of the user's Claude client, and that client talks to Anthropic under the user's own Claude account.
+
+Nothing is sent while nobody asks a question: no background send, no telemetry, no other AI provider. An installation can also name its [sensitive data](#sensitive) and keep it from the assistant.
+
+---
+
+## At a glance
+
+---
+
+## The AI assistant \{#assistant\}
+
+Each question is sent to Anthropic's API with the **Anthropic API key** of **Liberty Next → Administer → App → AI Assistant**. A request holds:
+
+| Sent | Content |
+|---|---|
+| **Instructions** | The built-in instructions, or the installation's **System prompt** in their place, and today's date. |
+| **Tool list** | The name and the description of each tool offered to this user. |
+| **Page context** | What the user is looking at: the application, the screen and its read query, the active filters, the number of rows loaded and their columns, the row last clicked. 4,000 characters at most; the **×** of its chip stops sending it. |
+| **Notes** | The user's notes for the application, 2,000 characters at most. |
+| **Conversation** | The questions and the answers of the conversation in progress — the last 40 messages. |
+| **Tool results** | What each tool read to answer: the rows of a read query (200 by default), Data Explorer figures, the description of the installation (ids and labels — no data, no SQL), a playbook, the form of a screen, the record before and after a write. With the tools an installation turns on: the jobs, the server log lines and the integrity checks (operations tools, superusers only), the answer of an API endpoint (API tool), what an application's own tool returns. A result is cut at 60,000 characters. |
+| **Attached files** | An image or a PDF as it is; a spreadsheet (its first sheet), a CSV or a text file as text, cut at 60,000 characters. A file stays with its conversation while the page is open, and is sent again with each question of it. |
+
+When domains are listed under **Allowed domains**, Anthropic reads those web pages itself; Liberty sends nothing more.
+
+Within one question, each tool round sends the earlier rounds again; Anthropic reads the repeated part from its prompt cache for a few minutes, at a lower price. It is not a storage kept by Liberty.
+
+---
+
+## Claude through MCP \{#mcp\}
+
+| Step | Who talks to whom |
+|---|---|
+| The user asks Claude a question. | The Claude client ↔ Anthropic, under the user's Claude account. |
+| Claude calls a Liberty tool. | The client → the server, with the user's access. |
+| Liberty answers. | The server → the client: the result of that tool, 60,000 characters at most. |
+| Claude writes its answer. | The client → Anthropic: the conversation, with the results it received. |
+
+**Liberty makes no call to Anthropic here, and the API key of the installation is not used.** What a tool returned leaves the server towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan. There is no page context and there are no notes over MCP.
+
+| Client | The server is called from |
+|---|---|
+| A custom connector in Claude Desktop or claude.ai | Anthropic's servers: the server must be reachable from the internet. |
+| The Claude Desktop extension, Claude Code | The user's computer: an internal address or a VPN is enough. |
+
+---
+
+## Sensitive data \{#sensitive\}
+
+An installation decides what is sensitive, and Liberty keeps it from the assistant — in the chat and through MCP alike. Nothing is flagged in what the applications ship: the flags are the installation's to set and to maintain.
+
+| Step | Where | Effect |
+|---|---|---|
+| **Flag an item** | Liberty Next → Build → Dictionary → an entry → *Rule* → **Sensitive** | Covers every column carrying the item, on every screen, query and Data Explorer model. A column is matched by its dictionary item, by its name, or by its name without the connector's prefix (`ABALPH` → `ALPH`) — as the [data scope](./build/secure/roles-and-permissions.md#data-scope) finds its columns. |
+| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Covers a column that carries no item; set to false, it exempts a column whose item is flagged. |
+| **Turn the hiding on** | Liberty Next → Administer → App → AI Assistant → **Hide sensitive data from the assistant** | Off by default. Applied at the next call, without a restart. |
+
+With the hiding on, the flagged columns are left out of:
+
+| Place | What happens |
+|---|---|
+| **Rows a read query returns** | The flagged columns are removed from the rows. The assistant is told which columns are hidden, so it can say so and point the user to the screen. |
+| **Write and action cards** | The values of the record are shown as *(hidden: sensitive)*: the record before a change, the record of a delete, the screen's confirmation of an action. The value the user asked to write is theirs, and is shown. |
+| **Page context** | The flagged columns leave the column list and the clicked row, and a filter typed on one of them is not sent. |
+| **Data Explorer** | A flagged field cannot be a row heading nor be read by a sum, an average, a minimum or a maximum. It can be counted, and filtered on a value the user gives. |
+
+The screens themselves do not change: the users who may open them see the values as before.
+
+**What the hiding does not cover:**
+
+- what a user types in a question, or attaches;
+- a free-text column that is not flagged;
+- what an API endpoint (API tool), an application's own tool or the operations tools return — Liberty does not know their columns;
+- the key of a record on a write card.
+
+---
+
+## What is never sent \{#never\}
+
+| Never sent | How |
+|---|---|
+| Pool passwords, API keys, encrypted secrets | The tools give descriptions only — never credentials. A password field of a form is shown as `••••••`. |
+| The SQL text of a query | The assistant sees the name, the label and the description of a query. |
+| Rows the user may not read | Each tool checks the permission the screens check, and the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows. |
+| Connectors left out of **Allowed connectors** | The assistant is told they are not available. |
+| What a switched-off tool would read | A tool that is off is not offered at all. |
+
+---
+
+## What stays on the server \{#stays\}
+
+| Kept | Content, how long |
+|---|---|
+| **Conversations** | What the user saw — questions, answers, the names of the attached files — for the 30 latest conversations of each user. |
+| **Notes** | The user's own, until they delete them. |
+| **Usage record** | Who asked, the model, the tokens, the time, and for each tool its name and a short summary of what it was called on — never the question, the answer or a row. 90 days by default; see [AI usage](../monitoring/ai-usage.md). |
+| **Attached files** | Not stored. |
+
+The [licence usage report](./build/secure/license-key.md#usage-report) goes to the licence management tool, not to Anthropic, and carries nothing of the assistant.
+
+---
+
+## What decides \{#controls\}
+
+| Setting | Where | Effect |
+|---|---|---|
+| **Enabled**, **Anthropic API key** | Administer → App → AI Assistant | Off, or no key: no assistant, nothing sent. |
+| The tool switches | Same section | **Connector tools**, **Data Explorer tools**, **The applications' tools**: on by default. **API tool**, **Operations tools**, **Scaffold tools**, **Write tools**: off by default. |
+| **Allowed connectors** | Same section | The connectors the assistant may read; empty means all. |
+| **Hide sensitive data from the assistant** | Same section | Off by default — see [above](#sensitive). |
+| **File attached to a question** | Same section | `0`: no attachment. |
+| **MCP endpoint (/mcp)** | Same section | Off by default: no Claude client can connect. |
+| `ai:chat`, `ai:write`, `mcp:use` | Administer → Access → a role → Beyond the menus | Who uses the assistant, who writes through it, who connects Claude. |
+| `sql:`, `explorer:`, `api:` permissions and the data scope | The role | What the assistant reads for that user. |
+
+---
+
+## To know before opening it widely \{#limits\}
+
+- **The tools read what the screens show.** Without the hiding, a name, an e-mail address or an amount goes to the model when a query returns it.
+- **Flag before turning the hiding on.** The switch hides what is flagged, nothing else: review the dictionary entries of the personal and banking data first.
+- **Keep the API tool and the operations tools for installations that need them.** Their answers are not covered by the hiding.
+- **The use Anthropic makes of what it receives** depends on the contract of the installation's API key for the assistant, and on the user's Claude plan for MCP.
 
 ---
 
@@ -1893,7 +2072,7 @@ A click on a user narrows the questions below to theirs (*Questions of …*).
 
 ## Latest questions \{#recent\}
 
-One row per question: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome** — *Answered*, *Failed* or *Abandoned*. A row opens on its tool calls, each with its size in characters and its time.
+One row per question: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome** — *Answered*, *Failed*, *Abandoned* or *Round limit* (the question used all its tool rounds and ended on a closing answer). A row opens on its tool calls, each with its size in characters and its time.
 
 ---
 
@@ -1996,6 +2175,7 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 
 - Click **✦ AI Assistant** at the right end of the top bar. The panel opens as a drawer beside the page; it stays usable while an invoice window is open.
 - Press **Enter** to send, **Shift+Enter** for a new line, **■** to stop a reply in progress.
+- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days.
 - **The conversation is kept** when the panel is closed or the page reloaded (the last 40 messages, in the browser). **+ New chat** starts a fresh one.
 - **Opening another invoice starts a new conversation**: the previous exchange was about another invoice and would mislead the model.
 
@@ -2079,6 +2259,19 @@ The assistant also receives the live **status catalogue**, so *"en litige"*, *"r
 
 The data tools follow the rights of the signed-in user: the company visibility of the role applies to the invoices, figures and backlog the assistant reads.
 
+### Sample files and mapping
+
+With a file attached, or one of the user's [sample files](./claude-mcp.md#samples), the assistant works as the [XSL editor](../ubl-tools/xsl-editor.md) does:
+
+| Tools | Use |
+|---|---|
+| **`samples`**, **`sample_structure`**, **`sample_text`** | The user's samples; the structure of an XML sample; its text, in windows. |
+| **`pdf_to_xml`** | Converts a PDF sample to the XML NomaUBL builds from it, with a document's settings. |
+| **`document_fields`**, **`ubl_variables`**, **`mapping_brief`**, **`read_mapping`** | A document's settings, the variables its rule set requires, the brief of an auto-mapping, the saved mapping. |
+| **`check_mapping`**, **`test_transform`** | Checks a mapping on a sample and shows the UBL it gives. |
+
+Nothing is saved: the assistant gives the values to enter in the mapping editor.
+
 ### Playbooks
 
 For a diagnosis, the assistant first loads the matching **playbook** (🧭 `load_playbook`), then follows its steps. The built-in playbooks are:
@@ -2139,9 +2332,11 @@ At most **10 tool calls** are chained for one question. When a tool fails, the a
 
 - **Change anything.** It only reads. Asked to resend, reprocess or change a setting, it says where in the application to do it.
 - **Go beyond your rights.** The data tools apply the company visibility of your role, and the settings require the *Settings access* feature.
-- **Read files.** The chat is text-only; a short XML pasted in the question is read, a file cannot be attached.
+- **Read a file other than XML or PDF.** The paperclip takes `.xml` and `.pdf` files: a PDF up to 10 MB, the first 150,000 characters of an XML.
 
 The administrator sets the API key, the default model, the documentation source, the custom playbooks, the system prompt and the tools from the *AI* tab of the [global settings](../configuration/system/global.md).
+
+The same tools answer **Claude Desktop** and **Claude Code** when the instance opens its MCP endpoint — see [Claude (MCP)](./claude-mcp.md).
 
 ---
 
@@ -2152,8 +2347,245 @@ The administrator sets the API key, the default model, the documentation source,
 - **Click the follow-ups.** They carry on the diagnosis with the right next check.
 - **Start a new chat for a new subject.** A long thread on another topic weighs on the answers.
 - **Pick a heavier model for a long diagnosis**, the default for everyday questions.
-- **Treat the panel as an external service.** Questions and tool results are sent to the model provider; avoid pasting personal data that the screens do not already show.
+- **Treat the panel as an external service.** Questions, tool results and attached files are sent to Anthropic — [Data sent to Anthropic](./ai-data-sent.md) lists what goes and what never does; avoid pasting personal data that the screens do not already show.
 - **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](reports/overview.md) give the full picture.
+
+---
+
+## NomaUBL — Claude (MCP)
+Source: https://docs.nomana-it.fr/nomaubl/application/claude-mcp/
+
+NomaUBL in Claude Desktop, Claude Code and claude.ai through the MCP endpoint of the instance: turning it on, the MCP access role feature, the Claude Desktop extension, the sign-in from the client, personal tokens, what Claude can read, sample files, mapping work, changes when allowed, and the usage per user. For JD Edwards, SAP, NetSuite or a custom ERP alike.
+
+The **MCP endpoint** lets a user question their NomaUBL instance from **Claude Desktop**, **Claude Code** or a **claude.ai connector**, under their own account: invoices and their history, validation errors, e-reporting, dashboards and period figures, the server log, the settings, the documentation. It is read-only unless the instance allows changes, off by default, and it needs a valid licence.
+
+What goes to Anthropic in that case, and what does not, is described on [Data sent to Anthropic](./ai-data-sent.md).
+
+---
+
+## At a glance
+
+---
+
+## Turn it on \{#enable\}
+
+In **Settings → Global → AI**, group **MCP server** (this editor is in English in the application):
+
+| Field | Default | Description |
+|---|---|---|
+| **MCP endpoint** | `N` | The instance answers at `/mcp`, for the users whose role has *MCP access*. |
+| **Public address** | blank | Address the users reach the instance at (`https://nomaubl.example.com`), used by the sign-in from Claude. Blank = the address of the request. Set it behind a reverse proxy. |
+| **Allow changes over MCP** | `N` | Claude may save analyses, mappings and documents when the user asks — see [Changes](#changes). Off: read only. |
+
+Sign-in must be enabled on the instance: Claude always acts as a named user.
+
+---
+
+## Who may connect \{#access\}
+
+Only the roles that have the **MCP access** feature ([Roles](../configuration/security/roles.md), tab *Access*) can connect Claude; no role has it by default. The other grants of the role then decide what Claude reaches:
+
+| Tools | The role needs |
+|---|---|
+| Invoices, errors, lifecycle, e-reporting, dashboards, period figures, server log, documentation | *MCP access*. |
+| Data Explorer — model, fields, aggregations, saved analyses | The **Explorer** page. |
+| Setup review — configuration objects, configuration check, scheduled jobs, rule sets, licence state, system — and mapping work | **Settings access**. |
+| Sample files | *MCP access*. |
+
+---
+
+## Connect Claude \{#connect\}
+
+Everything is in the **Claude (MCP)** tab of the profile window (the user button of the top bar).
+
+| Way | For | Steps |
+|---|---|---|
+| **Claude Desktop extension** | Claude Desktop, including for an instance that is not reachable from the internet. | **Extension** downloads `nomaubl.mcpb`. Open it with Claude Desktop: the server address is already filled in, and the extension asks for the personal token. Nothing else to install. |
+| **Sign-in from the client** | Claude Code; a claude.ai connector when the instance is reachable from the internet. | Give the client the **Server address** only. The browser opens NomaUBL: sign in as usual (password or SSO), then on *Connect Claude to NomaUBL* choose 30, 90 or 365 days and click **Allow** (or **Refuse**). |
+| **Pasted token** | Claude Code, a script. | **Create a token**, copy it — *shown once, copy it now* — and give it to the client as the request header `Authorization: Bearer <token>`. |
+
+The extension has four settings in Claude Desktop: **NomaUBL address**, **Personal token**, **Samples folder** (optional — the only folder Claude may send files from) and **Accept an internal certificate** (for a self-signed or company certificate).
+
+| Answer of the endpoint | Meaning |
+|---|---|
+| `404` | The MCP endpoint is off. |
+| `401` | No token, or a token that is unknown, expired or revoked. |
+| `403` | The role has no *MCP access*, or the instance has no valid licence. |
+
+---
+
+## Tokens \{#tokens\}
+
+**Your tokens** lists the user's tokens and the accesses opened by a sign-in from Claude, each with its creation and expiry dates; **Revoke** ends one at once. A token is valid 30, 90 or 365 days. It also stops working when the user changes their password, when the account is disabled, and when the role loses *MCP access*.
+
+The server keeps a fingerprint of the token, never the token itself.
+
+---
+
+## What Claude can do \{#tools\}
+
+| Subject | Claude can |
+|---|---|
+| **Invoices** | List invoices, read one in full (header, lines, VAT, validation errors, lifecycle with the platform's reasons), list the e-reporting runs. |
+| **Figures** | Read the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md) and [IT dashboard](./tech-dashboard.md) figures and the summary of a period. |
+| **Data Explorer** | Run any aggregation of the [Explorer](./explorer.md) — grouping, measures, filters, period, Top N — and the saved analyses. |
+| **Diagnosis** | Read the server log, the integrity checks, the status and reason codes, the e-directory, and follow the diagnostic playbooks. |
+| **Setup review** | Read the configuration objects, the configuration check, the scheduled jobs, the rule sets, the licence state and the settings — secrets are never shown. |
+| **Documentation** | Search and read the NomaUBL documentation and the implementation report of the instance. |
+| **Samples and mapping** | Read the structure of an XML sample, convert a PDF sample with a document's settings, propose and check a mapping — see below. |
+
+A result longer than 60,000 characters is cut, and Claude is asked to narrow its request.
+
+---
+
+## Sample files \{#samples\}
+
+A customer's XML or PDF can be given to Claude to work on:
+
+- from the profile window: **Sample files → Add**;
+- from Claude Desktop, which sends a file of the **Samples folder** chosen in the extension's settings, and of no other folder, when the user asks it to work on one.
+
+Samples are `.xml` or `.pdf` files of 20 MB at most, 50 per user, kept 7 days. They are working copies of one user: they are never processed as invoices nor sent to the platform.
+
+With a sample, Claude reads the structure of an XML, or converts a PDF with a document's settings and tries table anchors without saving. With **Settings access** it also does the mapping work of the [XSL editor](../ubl-tools/xsl-editor.md): it proposes the mapping of a sample (and, for a text PDF, the extraction rules), reads a document's saved mapping and the variables its rule set requires, checks a mapping on a sample and shows the UBL it gives. The sample follows the steps of a real run: a PDF converted as a text PDF or a JD Edwards PDF according to the document, the pre-processing stylesheet, the split into invoices, the sign inversion. Nothing is saved: Claude gives the values to enter in the mapping editor.
+
+---
+
+## Changes \{#changes\}
+
+With **Allow changes over MCP**, Claude can, when the user asks:
+
+| Change | The role needs |
+|---|---|
+| Save an Explorer analysis. | The **Explorer** page. |
+| Save mapping values in a document's stylesheet. | **Settings access**. |
+| Save a document's PDF to XML settings. | **Settings access**. |
+| Create a document — by source: XML, PDF, UBL or connector, with its own blank stylesheet or from an existing one — or update its settings. | **Settings access**. |
+
+Each source keeps its own rules: text PDF settings are refused on a JD Edwards document and the reverse, and a UBL document has no mapping. Passwords, tokens and keys cannot be set this way. The previous version stays in the [file history](../management/file-versions.md) or the configuration history, and every change is written to the server log with the user's name. Claude asks the user before a call that changes something.
+
+---
+
+## Usage \{#usage\}
+
+The [IT dashboard](./tech-dashboard.md#mcp-usage) shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something. The [server log](./diagnostics/server-log.md) holds one line per failed call and one per change; a successful read leaves no line.
+
+---
+
+## Tips & best practices
+
+- **Grant *MCP access* to a dedicated role first.** The grants of the role are what Claude reaches: the Explorer page and Settings access open the corresponding tools.
+- **Keep *Allow changes over MCP* off on production** until the mapping work is finished on a test instance; [Promotion](../management/promotion.md) then carries the result.
+- **Prefer the extension for an internal server.** A claude.ai connector is called from the internet; the extension calls the instance from the user's computer.
+- **Revoke rather than wait.** A token no longer used is ended from the profile in one click.
+
+---
+
+## NomaUBL — Data sent to Anthropic
+Source: https://docs.nomana-it.fr/nomaubl/application/ai-data-sent/
+
+What NomaUBL sends to Anthropic and what it never sends: the AI assistant of the application (the question, the page context, the tool results, the attached file, with the API key of the instance) and Claude connected through MCP (NomaUBL only answers tool calls; the user's Claude client talks to Anthropic). What stays on the server, what is never exposed, and the switches that decide.
+
+NomaUBL uses Anthropic's models in two ways, and the path of the data is not the same:
+
+- the **[AI assistant](./ai-capabilities.md)** of the application — the server calls Anthropic's API with the API key of the instance;
+- **[Claude connected through MCP](./claude-mcp.md)** — NomaUBL calls nobody: it answers the tool calls of the user's Claude client, and that client talks to Anthropic under the user's own Claude account.
+
+Nothing is sent while nobody asks a question: no background send, no telemetry, no other AI provider.
+
+---
+
+## At a glance
+
+---
+
+## The AI assistant \{#assistant\}
+
+Each question is sent to `api.anthropic.com` with the **API Key** of **Settings → Global → AI**. A request holds:
+
+| Sent | Content |
+|---|---|
+| **Instructions** | The built-in NomaUBL prompt, or the *System Prompt* of the instance in its place; the status catalogue; the names of the playbooks. |
+| **Page context** | The current page and its filter, the language, and the open invoice: document, type, company, number, status, customer. 4,000 characters at most. |
+| **Conversation** | The questions and the answers of the conversation in progress — the last 40 messages, kept in the user's browser. |
+| **Tool results** | What each tool read to answer, as it read it: invoices (customer name, amounts, VAT, status, messages), lines, lifecycle, validation errors, period figures, dashboards, e-reporting runs, e-directory data, lines of the server log, sections of the implementation report, settings with secrets masked. A result is cut at 60,000 characters; a list holds 50 invoices at most, the server log 300 lines. |
+| **Attached file** | An XML as text, up to 150,000 characters; a PDF as it is, up to 10 MB. The file is sent again with each later question of the same conversation. |
+
+Two other screens call the same API:
+
+| Screen | Sent |
+|---|---|
+| **AI mapping** of the [XSL editor](../ubl-tools/xsl-editor.md) | The paths of the sample with the first value of each (120 characters at most), the text rows of a PDF, the list of variables — and the PDF itself when the sample is one. |
+| Documentation in *Sitemap* mode | Nothing more from NomaUBL: Anthropic fetches the pages of the allowed documentation domains itself. |
+
+Business data is sent as the tools read it: no customer name, amount or e-mail address is replaced or hidden. Only the secrets are masked — see [below](#never).
+
+---
+
+## Claude through MCP \{#mcp\}
+
+| Step | Who talks to whom |
+|---|---|
+| The user asks Claude a question. | The Claude client ↔ Anthropic, under the user's Claude account. |
+| Claude calls a NomaUBL tool. | The client → the instance, with the user's personal token. |
+| NomaUBL answers. | The instance → the client: the result of that tool, 60,000 characters at most. |
+| Claude writes its answer. | The client → Anthropic: the conversation, with the results it received. |
+
+**NomaUBL makes no call to Anthropic here, and the API key of the instance is not used.** What a tool returned leaves the instance towards the user's Claude client, and from there to Anthropic on the terms of the user's Claude plan — not on those of the instance's API key.
+
+Where the call comes from depends on the client:
+
+| Client | The instance is called from |
+|---|---|
+| Claude Desktop with the extension, Claude Code | The user's computer: an internal address or a VPN is enough. |
+| A claude.ai connector | Anthropic's servers: the instance must be reachable from the internet. |
+
+The Claude Desktop extension runs a small relay on the user's computer. It reads one folder only — the **Samples folder** chosen in its settings — and sends NomaUBL a file of that folder only when the user asks Claude to work on it.
+
+---
+
+## What is never sent \{#never\}
+
+| Never sent | How |
+|---|---|
+| Passwords, tokens, API keys, client secrets, the licence key | A setting whose name marks it as a secret is given as `***`; the licence is described by its state, never by its key. |
+| The personal tokens | The server keeps their fingerprint only. |
+| A file nobody attached or asked for | The assistant reads the attached file; over MCP, Claude reads the user's own samples. |
+| Anything a switched-off tool would read | *Custom Tools* at `N`: the assistant keeps the documentation only. *MCP endpoint* at `N`: no client can connect. |
+| Changes | The assistant only reads. Over MCP, a change needs *Allow changes over MCP*, and secrets cannot be set that way. |
+
+---
+
+## What stays on the server \{#stays\}
+
+| Kept | Where, how long |
+|---|---|
+| The conversation of the assistant | In the user's browser (the last 40 messages); not on the server. |
+| Sample files and files attached in the assistant | On the server, per user, 7 days. |
+| MCP usage | Counts per user and per day — calls, failures, changes — for 90 days; never what was asked. |
+| MCP calls in the server log | One line per failed call and one per change, with the user, the tool and the beginning of its arguments and of its result. A successful read leaves no line. |
+
+---
+
+## What decides \{#controls\}
+
+| Switch | Where | Effect |
+|---|---|---|
+| **API Key** | Settings → Global → AI | No key: no assistant, nothing sent. |
+| **Custom Tools** | Settings → Global → AI | `N`: the assistant answers from the documentation, without reading the data of the instance. |
+| **MCP endpoint** | Settings → Global → AI → MCP server | `N` (default): no Claude client can connect. |
+| **Allow changes over MCP** | Same group | `N` (default): read only. |
+| **MCP access** | [Roles](../configuration/security/roles.md) → Access → Features | Which users may connect Claude; no role by default. |
+| **Explorer** page, **Settings access** | Roles | Which tool groups a user's Claude reaches. |
+
+---
+
+## To know before opening it widely \{#limits\}
+
+- **The tools read what the screens show.** A customer name, an amount, an e-mail address of the users list in the implementation report go to the model when a tool reads them.
+- **The server log, the IT dashboard and the implementation report are those of the whole instance.** Grant the assistant and *MCP access* to users who may read them.
+- **What the user types or attaches is theirs to check.** A file attached in the assistant is sent as it is.
+- **The use Anthropic makes of what it receives** depends on the contract of the instance's API key for the assistant, and on the user's Claude plan for MCP.
 
 ---
 
@@ -5988,6 +6420,10 @@ The **Framework** tab can add values to this list.
 
 The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
 
+### Sensitive data \{#sensitive\}
+
+**Sensitive**, in the *Rule* tab of an entry, says the item holds sensitive data — a person's name, an e-mail address, a bank identifier. Where the installation hides sensitive data from the AI assistant, every column carrying the item is left out of what the assistant is given, in the drawer and through MCP. It changes nothing in the screens. A screen column has the same flag, for a column without an item. See [Sensitive data](./ai-data-sent.md#sensitive).
+
 ### Audit columns \{#form-layer-defaults\}
 
 A rule applies to every write whose query binds the column:
@@ -6525,6 +6961,7 @@ Every column hint carries the same shape. Drilling into a column reveals five gr
 |---|---|
 | **`name`** | The result column this hint applies to. Case-insensitive match against the read query's columns. Normalised to UPPERCASE on save. |
 | **`dd`** | Dictionary entry to inherit `label` / `format` / `rule` from. Blank uses the column `name` as the key. Set to `""` (empty quoted string) to opt out of the dictionary entirely. |
+| **`sensitive`** (*Sensitive*) | Whether the column holds sensitive data, for the AI assistant: hidden from what the assistant is given when the installation hides sensitive data. Blank follows the column's dictionary entry; false exempts the column even when its entry is flagged. See [Sensitive data](../../ai-data-sent.md#sensitive). |
 
 The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary — one entry defines a field's display title, format, rule and lookup once; every screen that has a column with that name inherits it. See [Concepts → Dictionary](../../dictionary.md).
 
@@ -10840,6 +11277,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 |---|---|
 | **App name** | The application's name. |
 | **Environment** | What the installation is — `production`, `test`… It is named in the [licence usage report](./secure/license-key.md#usage-report). |
+| **Public address** | The address users reach the server at: what a password-reset mail links to, and what the sign-in of a Claude client ([MCP](../mcp.md#connect)) is published on. Blank = the browser's address. Set it behind a reverse proxy. |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
 | **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it — see [Serving under a sub-path](../../installation/traefik.md#sub-path). **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
@@ -10936,7 +11374,7 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Enabled** | The assistant answers; users need the `ai:chat` permission. |
 | **Anthropic API key** | Without it, the assistant says it is not configured. |
 | **Model**, **Effort**, **Max tokens**, **Adaptive thinking** | The model and how much it reasons and writes. |
-| **Max tool iterations** | Tool calls per answer, at most (default 8). |
+| **Max tool iterations** | Tool rounds one question may use (default 15). A procedure that writes several records through its screens needs more rounds than a question. |
 | **Request timeout (s)** | Default 120. |
 | **System prompt** | Empty: the built-in instructions. |
 | **Connector tools** | The assistant may list connectors and run their **read** queries. |
@@ -10944,6 +11382,8 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Data Explorer tools** | On by default: the assistant computes totals, rankings and trends on the [Data Explorer](../explorer/overview.md) models, and saves analyses and dashboards. |
 | **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
+| **Write tools** | Off by default. The assistant adds, changes or deletes a record, or runs an action, through its screen — for users holding `ai:write` and the screen's own permissions; applied from a card in the drawer, confirmed by the client over MCP. See [Write through a screen](../ai-assistant.md#write). |
+| **Hide sensitive data from the assistant** | Off by default. The columns whose dictionary item or screen column is flagged **Sensitive** are not given to the assistant, in the drawer and over MCP. It does not cover what a user types or attaches, an unflagged free-text column, nor what an API endpoint or an application's own tool returns. See [Sensitive data](../ai-data-sent.md#sensitive). |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 | **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
@@ -10951,11 +11391,11 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **File attached to a question: megabytes at most** | 10 by default (0 to 30); `0` removes the paperclip of the drawer — see [Attach a file](../ai-assistant.md#attach). |
 | **Usage record kept (days; 0 = without limit)** | 90 by default — see [AI usage](../../monitoring/ai-usage.md#retention). |
 | **MCP endpoint (/mcp)** | Off by default: the same tools for an external client — Claude Desktop, claude.ai, Claude Code —, each user with a personal access token. Applied without a restart. See [Connect Claude (MCP)](../mcp.md). |
-| **Personal access token: longest life (days)** | 366 by default. |
+| **Personal access token: longest life (days)** | 366 by default: the longest validity of a token, and how long a sign-in from a Claude client lasts before the user allows it again. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
 | **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
 
-See [AI assistant](../ai-assistant.md).
+See [AI assistant](../ai-assistant.md), and [Data sent to Anthropic](../ai-data-sent.md) for what these settings let out of the installation.
 
 ---
 
@@ -11299,7 +11739,7 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
 | nomaflow | **Follow the jobs** (`nomaflow:view`) — the Jobs, Schedule and Job Runs pages, the runs and their logs; **Create and edit jobs** (`nomaflow:edit`) — create, change, pause and resume jobs; it runs SQL and Python without row scope. See [Nomaflow administration](../../../nomaflow/administration.md#permissions). |
 | Job | One Nomaflow job, or **Every job** (`job:*`): its menu item and its page — files, parameters, run, cancel, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
-| AI assistant | **AI assistant** (`ai:chat`): the assistant's drawer. **AI tools from an external client (MCP) — create a personal access token** (`mcp:use`): see [Connect Claude (MCP)](../../mcp.md). What the assistant then reaches depends on the role's other rules — see [AI assistant](../../ai-assistant.md#access). |
+| AI assistant | **AI assistant** (`ai:chat`): the assistant's drawer. **AI tools from an external client (MCP) — create a personal access token** (`mcp:use`): see [Connect Claude (MCP)](../../mcp.md). **AI assistant — add, change or delete a record through its screen (with the screen's own permissions)** (`ai:write`): see [Write through a screen](../../ai-assistant.md#write). What the assistant then reaches depends on the role's other rules — see [AI assistant](../../ai-assistant.md#access). |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 
 **Save** writes the role; **Cancel** drops the changes. The role name cannot be changed after creation.
@@ -12737,6 +13177,8 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
 | `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | The Claude Desktop extension (`liberty.mcpb`) with the server's address filled in. Requires `mcp:use`. |
+| `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | The sign-in of an MCP client: discovery, client registration, code exchange and renewal. The consent page is `/oauth/authorize`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | OpenID Connect sign-in. |
 
 See [Sign-in](../framework/build/secure/sign-in.md).
@@ -23038,6 +23480,20 @@ Two modes:
 
 Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
 
+### Claude (MCP) usage \{#mcp-usage\}
+
+Shown when the [MCP endpoint](./claude-mcp.md) is on: the calls made from Claude *per user, last 30 days*.
+
+| Column | Content |
+|---|---|
+| *(user)* | The account Claude acted as. |
+| **Today**, **30 days** | Calls of the day and of the last 30 days. |
+| **Failed** | Calls that ended in an error. |
+| **Changes** | Calls that changed something — only with *Allow changes over MCP*. |
+| **Last call** | Time of the latest call. |
+
+Counts only, never what was asked; they are kept 90 days.
+
 ---
 
 ## Recent errors
@@ -32169,9 +32625,19 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 
 | Field | Description |
 |---|---|
-| **System Prompt** | Optional prompt prepended to every chat. Empty = the built-in NomaUBL prompt. |
+| **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
-| **Custom Tools** | Read-only tools on this instance's data offered to the model (invoices, errors, history, dashboards, server log, settings with secrets masked). |
+| **Custom Tools** | Read-only tools on this instance's data offered to the assistant (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. |
+
+### MCP server
+
+| Field | Description |
+|---|---|
+| **MCP endpoint** | `N` by default. `Y`: Claude Desktop, Claude Code and a claude.ai connector use this instance's tools at `/mcp`, as a user whose role has *MCP access* — see [Claude (MCP)](../../application/claude-mcp.md). |
+| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`), for Claude's sign-in. Blank = the address of the request. |
+| **Allow changes over MCP** | `N` by default: read only. `Y`: Claude may save analyses, mappings and documents when the user asks — see [Changes](../../application/claude-mcp.md#changes). |
+
+What these settings let out of the instance is described on [Data sent to Anthropic](../../application/ai-data-sent.md).
 
 The **TLS / corporate proxy** group (custom truststore path and password, *Disable TLS validation* for a short diagnosis only) is folded under *Advanced*.
 
@@ -34204,6 +34670,7 @@ A short list of binary feature flags. Each row carries a checkbox plus a one-lin
 |---|---|---|
 | **Settings access** | *Can open the Settings page (template / connector editing).* | Opens the entire Configuration menu. The role is then displayed with the `Admin` badge in the list. |
 | **Read-only mode** | *No edit / delete / resend actions, even on permitted pages.* | Members can browse the application but every write action is disabled — overrides the *Actions* tab entirely. |
+| **MCP access** | *Can connect Claude Desktop or Claude Code to this instance with a personal token* | Shows the **Claude (MCP)** tab in the profile window and lets the user's Claude client call the instance — see [Claude (MCP)](../../application/claude-mcp.md). No role has it by default. |
 
 ### Allowed Pages
 
@@ -35096,17 +35563,18 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
   
     Versions
+    2026.11.19.1 · 2026-11-19
     2026.11.18.1 · 2026-11-18
     2026.11.16.1 · 2026-11-16
     2026.11.13.1 · 2026-11-13
     2026.11.12.1 · 2026-11-12
     2026.11.11.1 · 2026-11-11
-    2026.11.10.1 · 2026-11-10
   
   
-    All versions (132)
+    All versions (133)
     
       2026-11
+      2026.11.10.1 · 2026-11-10
       2026.11.08.1 · 2026-11-08
       2026.11.06.1 · 2026-11-06
       2026.11.05.1 · 2026-11-05
@@ -35258,6 +35726,23 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   
 
 {/* versions:end */}
+
+---
+
+## 2026.11.19.1 — 2026-11-19 \{#v2026-11-19-1\}
+
+### New
+- **NomaUBL in Claude Desktop and Claude Code (MCP).** Claude can question the instance under the user's own account: invoices and their history, validation errors, e-reporting, dashboards and period figures, server log, settings, documentation. Read-only; the user's companies and data scope apply. Off by default: Settings › Global › AI › MCP server. Requires a valid licence.
+- **Data Explorer and setup review from Claude.** Claude can also run any Explorer aggregation (grouping, measures, filters, period, Top N) and the saved analyses, and review the setup: configuration objects, configuration check, scheduled jobs, rule sets, licence state. The Explorer tools need the Explorer page, the setup tools the Settings access; secrets are never shown.
+- **Sample files for Claude.** A customer's XML or PDF can be given to Claude to work on: added in Profile › Claude (MCP) › Sample files, or sent from Claude Desktop, which reads only the samples folder chosen in the extension settings. Claude then reads the structure of an XML or converts a PDF with a document's settings, trying table anchors without saving. Samples are working copies, never processed or sent, removed after 7 days.
+- **Attach a file in the assistant.** The paperclip of the AI assistant attaches an XML or a PDF to a question; the assistant reads it with the message, and can convert a PDF with a document's settings or check a document's mapping on it, as Claude Desktop does. The file is kept with the user's sample files for 7 days.
+- **Mapping work from Claude.** Auto-mapping from a sample, as in the mapping editor: send an XML or a PDF of an invoice, Claude proposes the mapping (and, for a text PDF, the extraction rules), checks it and reports what is missing. Claude also reads a document's saved mapping and the variables its rule set requires, then checks a mapping on a sample and shows the UBL it gives, with other values tried on top of the saved ones. The sample follows the steps of a real run: a PDF converted as a text PDF or a JD Edwards PDF according to the document, the pre-processing stylesheet, the burst into invoices, the sign inversion. Nothing is saved: Claude gives the values to enter in the mapping editor. Requires Settings access.
+- **Changes from Claude, when allowed.** A new setting, Settings › Global › AI › MCP server › Allow changes over MCP (off by default), lets Claude, when the user asks, save an Explorer analysis, save mapping values in a document's stylesheet, save a document's PDF to XML settings, and create a document (by source: XML, PDF, UBL or connector, with its own blank stylesheet, or from an existing one) or update its settings. Each source keeps its own rules: text PDF settings are refused on a JD Edwards document and the reverse, and a UBL document has no mapping. Apart from the analysis, these need Settings access; passwords, tokens and keys cannot be set this way. The previous version stays in the file or configuration history, and every change is written to the server log with the user's name.
+- **Claude (MCP) usage.** The technical dashboard shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something, with the time of the last one. Counts only, never the questions asked; kept 90 days.
+- **Sign-in from Claude without a token.** A client given only the address of the MCP endpoint (Claude Code, a claude.ai connector when the instance is reachable from the internet) opens the browser on NomaUBL: the user signs in as usual, password or SSO, and allows the client for 30, 90 or 365 days. The access appears with the user's tokens in the profile window and is revoked there. Behind a proxy, set Settings › Global › AI › MCP server › Public address. The pasted token and the Claude Desktop extension keep working.
+- **Role feature "MCP access".** Only the roles that have it can connect Claude; no role has it by default.
+- **Personal tokens.** Profile › Claude (MCP): create a token (30, 90 or 365 days, shown once), list and revoke them. A password change or a disabled account ends them.
+- **Claude Desktop extension.** Profile › Claude (MCP) › Extension downloads a file to open in Claude Desktop: the server address is already filled in, only the token is asked. Nothing else to install.
 
 ---
 

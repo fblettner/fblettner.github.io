@@ -200,6 +200,7 @@ Quelques drapeaux binaires. Chaque ligne combine une case à cocher et un libell
 |---|---|---|
 | **Accès aux paramètres** | *Peut ouvrir la page Paramètres (modèles, connecteurs)* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
 | **Lecture seule** | *Aucune modification, suppression ni renvoi, même sur les pages autorisées* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
+| **MCP access** | *Can connect Claude Desktop or Claude Code to this instance with a personal token* | Affiche l'onglet **Claude (MCP)** dans la fenêtre de profil et autorise le client Claude de l'utilisateur à appeler l'instance — voir [Claude (MCP)](../../application/claude-mcp.md). Aucun rôle ne l'a par défaut. |
 
 ### Pages autorisées
 

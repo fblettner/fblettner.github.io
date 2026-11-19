@@ -1,14 +1,16 @@
 ---
 title: Connect Claude (MCP)
-description: "Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, personal access tokens created in the user's profile, the custom connector to declare, what the client can do and when a token ends."
-keywords: [Liberty Next, MCP, Model Context Protocol, Claude, Claude Desktop, Claude Code, custom connector, personal access token, mcp:use, AI assistant, tools]
+description: "Use the Liberty Next assistant's tools from Claude Desktop, claude.ai or Claude Code: the MCP endpoint of the server, the mcp:use permission, the sign-in from the client, the Claude Desktop extension for a server that is not on the internet, personal access tokens, what the client can do and when an access ends."
+keywords: [Liberty Next, MCP, Model Context Protocol, Claude, Claude Desktop, Claude Code, custom connector, OAuth, sign-in, extension, personal access token, mcp:use, AI assistant, tools]
 ---
 
 # Connect Claude (MCP)
 
 The tools of the [AI assistant](./ai-assistant.md) can answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's **MCP endpoint**, `/mcp`. The client acts as a Liberty Next user: it is offered what that user is offered in the chat drawer, each call goes through the same permission checks and the same data scope, and each call is recorded.
 
-Three things are needed: the endpoint turned on, the `mcp:use` permission, and a **personal access token** the user creates in their profile.
+Three things are needed: the endpoint turned on, the `mcp:use` permission, and a way to connect — a sign-in from the client, the Claude Desktop extension, or a pasted **personal access token**.
+
+What goes to Anthropic in that case, and what does not, is described on [Data sent to Anthropic](./ai-data-sent.md).
 
 ---
 
@@ -48,6 +50,8 @@ Three things are needed: the endpoint turned on, the `mcp:use` permission, and a
   <text x="240" y="278" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">A token also ends when your account is deactivated or loses the permission,</text>
   <text x="240" y="292" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">and when you change your password — do that if a token leaks.</text>
   <line x1="240" y1="310" x2="960" y2="310" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="322" width="156" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="318.0" y="336.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Claude Desktop extension</text>
   <rect x="860" y="322" width="100" height="22" rx="5" fill="url(#mcp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="910.0" y="336.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Create a token</text>
   <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -62,6 +66,10 @@ Three things are needed: the endpoint turned on, the `mcp:use` permission, and a
   <text x="30" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Shown once</text>
   <text x="30" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">never stored on the server</text>
   <line x1="200" y1="257.0" x2="240" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="20" y="316" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="331" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Claude Desktop extension</text>
+  <text x="30" y="344" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">for a server not on the internet</text>
+  <line x1="200" y1="333.0" x2="240" y2="333" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
   <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Validity</text>
   <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">90 days, capped by the server</text>
@@ -85,7 +93,9 @@ In **Liberty Next → Administer → App → AI Assistant**:
 | Field | Default | Description |
 |---|---|---|
 | **MCP endpoint (/mcp)** | Off | The server answers on `/mcp`. Applied on save, without a restart. |
-| **Personal access token: longest life (days)** | 366 | The longest validity a user may ask for. |
+| **Personal access token: longest life (days)** | 366 | The longest validity a user may ask for a token, and how long a sign-in from a client lasts before the user allows it again. |
+
+Behind a reverse proxy, also set **Public address** (same page, *Server*) to the address users reach the server at: the addresses the sign-in publishes are built on it.
 
 The endpoint needs the `mcp` extra of the package (`pip install "liberty-next[mcp]"`); `liberty-next[all]` and the Docker image include it.
 
@@ -96,6 +106,21 @@ The endpoint needs the `mcp` extra of the package (`pip install "liberty-next[mc
 In **Liberty Next → Administer → Access**, give the role the rule **AI assistant → AI tools from an external client (MCP) — create a personal access token** (`mcp:use`), in **Beyond the menus**. The user then sees the **Access tokens** tab in their profile; a superuser always does.
 
 `mcp:use` only opens the endpoint: what the client reaches still depends on the user's other permissions — see [Who can use it, and on what](./ai-assistant.md#access).
+
+---
+
+## Connect the client \{#connect\}
+
+| Way | For | Steps |
+|---|---|---|
+| **Sign-in from the client** | A custom connector in Claude Desktop or claude.ai. The connector is called from Anthropic's servers: the Liberty server must be reachable from the internet. | Give the connector the address of `/mcp` only. The browser opens Liberty: the user signs in the usual way (password or SSO), then, on the **Allow access** page — *the client asks to use the application as the user* — clicks **Allow** (or **Refuse**). Nothing to create, nothing to paste. |
+| **Claude Desktop extension** | A server that is not on the internet: an internal address, a VPN. | In the profile's **Access tokens** tab, **Claude Desktop extension** downloads `liberty.mcpb`. Open the file with Claude Desktop and paste a token created in the same tab — see [below](#extension). |
+| **Pasted token** | Claude Code, a script. | [Create a token](#token) and give it to the client as the request header `Authorization: Bearer <token>`, with the **Connector URL** of the tab — `https://<server>/mcp`. |
+
+| Answer | Meaning |
+|---|---|
+| `404` | The endpoint is off. |
+| `401` | No token, or a token that is invalid or ended. |
 
 ---
 
@@ -111,41 +136,37 @@ The tab also gives the **Connector URL**, the address of the server followed by 
 
 ---
 
-## Declare the connector in Claude \{#connect\}
+## The Claude Desktop extension \{#extension\}
 
-In the client, add a custom connector with:
+The extension runs a small relay on the user's own computer: it passes Claude's messages to `/mcp` with the user's personal access token, so the server only has to be reachable from that computer. The file is built at download with the server's address filled in and carries no secret. Nothing to install: Claude Desktop brings what the relay needs.
 
-| Setting | Value |
+| Setting in Claude Desktop | Content |
 |---|---|
-| URL | The **Connector URL** of the tab — `https://<server>/mcp`. |
-| Request header | `Authorization: Bearer <token>` |
-
-| Answer | Meaning |
-|---|---|
-| `404` | The endpoint is off. |
-| `401` | No token, or a token that is invalid or ended. |
+| **Liberty address** | The address of the server, ending with `/mcp` — already filled in. |
+| **Personal access token** | A token created in the profile's **Access tokens** tab. |
+| **Accept an internal certificate** | To turn on only when the server uses a self-signed or company certificate. |
 
 ---
 
 ## What the client can do \{#tools\}
 
 - The client is offered the tools the user is offered in the chat drawer, with the same descriptions; a tool the user cannot use is not listed.
-- Every call checks the user's permissions and applies their [data scope](./build/secure/roles-and-permissions.md#data-scope), as in the drawer.
+- Every call checks the user's permissions and applies their [data scope](./build/secure/roles-and-permissions.md#data-scope), as in the drawer; the columns the installation [marks as sensitive](./ai-data-sent.md#sensitive) are left out in the same way.
 - The tools whose result is a card of the chat drawer are not offered: the scaffold proposals and the notes.
-- A tool that saves something — a Data Explorer analysis or dashboard — tells the client so, which lets it ask for a confirmation.
+- A tool that changes something — saving a Data Explorer analysis or dashboard, [writing a record or running an action through a screen](./ai-assistant.md#write) — tells the client so, and the client asks its user before calling it.
 - A personal access token opens the MCP endpoint only: the rest of the API refuses it.
 
 ---
 
-## When a token ends \{#end\}
+## When an access ends \{#end\}
 
-The account is read again at every call, so a token carries the user's rights of the moment, never more. It ends:
+The account is read again at every call, so an access carries the user's rights of the moment, never more. A token or a sign-in ends:
 
-- at its expiry date;
+- at its expiry date — a sign-in lasts the **longest life** set above, then the user allows the client again;
 - when the account is deactivated, or loses `mcp:use`;
 - when the account's password changes.
 
-There is no list of tokens and no button to revoke one: **changing the password ends every token of the account**. That is what to do when a token has leaked.
+Nothing is stored on the server for these accesses, so there is no list and no button to revoke one: **changing the password ends every access of the account**. That is what to do when a token has leaked.
 
 ---
 
@@ -157,6 +178,6 @@ Each call is in the usage record, with the model `mcp`: the user, the tool, what
 
 ## Tips \{#tips\}
 
-- Keep the validity short for a first trial, and create a new token rather than sharing one: a token is the user's own access.
+- Prefer the sign-in for a server on the internet, the extension for an internal one: neither asks the user to handle a secret by hand more than once.
 - Grant `mcp:use` to the roles that already use the assistant in the application; the answers depend on the same `sql:` and `explorer:` permissions.
 - Serve the endpoint over HTTPS only: the token travels in a request header.

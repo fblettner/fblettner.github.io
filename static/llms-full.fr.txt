@@ -1639,15 +1639,42 @@ Les questions ont deux origines :
 | `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
 | Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
 | `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
+| `screen_form`, `screen_write`, `screen_action` | Lisent ce qu'un écran permet à son utilisateur, puis ajoutent, modifient ou suppriment **un** enregistrement, ou lancent **une** action de l'écran, par les requêtes et les règles de l'écran lui-même — voir [Écrire par un écran](#write). | **Outils d'écriture** (désactivé par défaut), avec la permission `ai:write`. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
 | `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
 | Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut) ; superutilisateurs uniquement. |
 | Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
-L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel.
+L'assistant n'utilise que des requêtes nommées existantes : il n'écrit pas de SQL sur la base. Au-delà de **Lignes par requête, au plus**, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner les lignes reçues : il resserre ses filtres, ou calcule le chiffre avec les outils de l'explorateur de données. Un résultat d'outil de plus de 60 000 caractères est tronqué, et l'assistant est invité à restreindre son appel. Une question qui épuise ses tours d'outils (**Itérations d'outils maximum**, 15 par défaut) se termine par une réponse de clôture : ce qui a été fait, ce qui a été trouvé, ce qui reste — et l'utilisateur peut demander de poursuivre.
 
 Les **Outils d'exploitation** permettent à l'assistant de lire l'état du serveur plutôt que de supposer, quand une tâche a échoué, est en retard ou manque. Ils sont destinés aux installations dont les utilisateurs du chat sont des administrateurs : le journal du serveur peut contenir tout ce que le serveur a écrit.
+
+---
+
+## Écrire par un écran \{#write\}
+
+**Outils d'écriture** activés, l'assistant peut faire ce qu'un utilisateur fait dans un écran — rien par un autre chemin :
+
+| Outil | Rôle |
+|---|---|
+| `screen_form` | Lit ce que l'écran permet à cet utilisateur d'ajouter, de modifier, de supprimer et de lancer : la clé, chaque colonne avec son libellé, son caractère obligatoire ou verrouillé, sa valeur par défaut et les valeurs acceptées, et les actions de l'écran. |
+| `screen_write` | Ajoute, modifie ou supprime **un** enregistrement. |
+| `screen_action` | Lance **une** action de l'écran — *Valider* ou *Clôturer* d'un menu de ligne, un bouton de la barre d'outils ou d'un onglet du formulaire. |
+
+L'enregistrement est lu par la requête de lecture de l'écran, et les règles du formulaire s'appliquent : une colonne obligatoire absente, une valeur hors de sa liste, une colonne ou un enregistrement que l'écran tient en lecture seule sont refusés avec le motif. L'enregistrement se fait ensuite comme depuis le formulaire — règles du dictionnaire, séquences, tables liées, audit, périmètre de données, paquet de modifications, règles de notification — de même que les actions d'enregistrement de l'écran et les étapes de ses actions, chacune sous sa propre permission.
+
+**Trois verrous, tous nécessaires :** le réglage **Outils d'écriture**, la permission `ai:write` du rôle, et la permission de chaque requête, endpoint ou plugin exécuté, comme dans l'écran.
+
+**Qui confirme.** Dans le panneau, les outils se limitent à proposer : l'utilisateur reçoit une carte — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, ou l'action avec la confirmation de l'écran et ce qu'elle exécute — et rien ne se passe avant **Appliquer** ; **Ignorer** abandonne l'étape. En [MCP](./mcp.md), le client demande l'accord de son utilisateur avant d'appeler un outil qui modifie quelque chose.
+
+| Refusé | Motif indiqué |
+|---|---|
+| Un enregistrement ouvert dans son formulaire | Le formulaire tient l'enregistrement : il ne peut être ni modifié ni supprimé avant la fermeture du formulaire — celui d'un autre utilisateur, ou celui que l'utilisateur a lui-même ouvert. |
+| Un écran qui ne peut pas être écrit | L'écran est en lecture seule, n'a pas de requête pour l'opération, ou lance des actions à l'ouverture de son formulaire. |
+| Une action faite uniquement de ce que fait un navigateur | L'ouverture d'une page ou d'une adresse est signalée, pas exécutée. |
+
+Comme dans l'écran, un enregistrement, ses tables liées et ses actions sont des instructions distinctes : quand une action ou une étape échoue, ce qui s'est exécuté avant reste, et la réponse l'indique.
 
 ---
 
@@ -1684,6 +1711,7 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
   | Outils de l'explorateur de données | `explorer:<app>:<modèle>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, procédures | Aucune autre, et ils ne montrent que ce que l'utilisateur peut ouvrir : un écran d'après sa requête de lecture, une entrée de menu d'après la [règle du menu](./build/menus/permissions-and-roles.md#gating), une tâche d'après `job:<id>`. Une application qui n'a rien pour l'utilisateur n'est pas citée. |
   | Outils des applications | La permission de l'outil. |
+  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, et la permission de chaque requête, endpoint ou plugin exécuté par l'écran. |
   | Outils d'exploitation et de construction | Superutilisateur. |
 
   Un utilisateur qui détient `ai:chat` sans les permissions `sql:` ou `explorer:` d'une application n'en obtient aucun chiffre : les accorder, comme pour les écrans. Le refus est formulé de la même façon pour une requête qui existe et pour une requête qui n'existe pas.
@@ -1696,13 +1724,14 @@ L'enregistrement écrit et recharge aussitôt. Ce contenu accompagne l'applicati
 ## Depuis Claude, et ce qui est enregistré \{#beyond\}
 
 - Les mêmes outils répondent à un client externe — Claude Desktop, claude.ai, Claude Code — par le point d'accès MCP du serveur, chaque utilisateur avec un jeton d'accès personnel et ses propres droits. Voir [Connecter Claude (MCP)](./mcp.md).
+- Une installation peut marquer ses colonnes sensibles et les tenir à l'écart de l'assistant ; [Données transmises à Anthropic](./ai-data-sent.md) détaille ce qu'une question transmet et ce qu'elle ne transmet jamais.
 - Chaque question est enregistrée : qui l'a posée, le modèle, les jetons, les outils appelés — jamais la question, la réponse ni une ligne de données. Les superutilisateurs le consultent dans [Surveillance → Usage de l'IA](../monitoring/ai-usage.md).
 
 ---
 
 ## Réglages \{#settings\}
 
-Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (8), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
+Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **Clé API Anthropic** (chiffrée), **Modèle**, **Effort**, **Jetons maximum**, **Itérations d'outils maximum** (15), **Délai de la requête (s)**, **Réflexion adaptative**, **Invite système**, les outils ci-dessus, **Connecteurs autorisés**, **Lignes par requête, au plus**, **Fichier joint à une question**, **Enregistrement d'usage conservé**, **Outils d'écriture**, **Masquer les données sensibles à l'assistant**, le **Point d'accès MCP**, et pour le volet de chat les **Modèles au choix des utilisateurs** et les **Questions de départ**. Voir [Paramètres de l'application](./build/settings-app.md#ai). Sans clé, le panneau indique que l'assistant n'est pas configuré.
 
 ---
 
@@ -1718,11 +1747,13 @@ Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **
 ## Liberty Next — Connecter Claude (MCP)
 Source: https://docs.nomana-it.fr/fr/liberty/framework/mcp/
 
-Utiliser les outils de l'assistant Liberty Next depuis Claude Desktop, claude.ai ou Claude Code : le point d'accès MCP du serveur, la permission mcp:use, les jetons d'accès personnels créés dans le profil de l'utilisateur, le connecteur personnalisé à déclarer, ce que le client peut faire et la fin de validité d'un jeton.
+Utiliser les outils de l'assistant Liberty Next depuis Claude Desktop, claude.ai ou Claude Code : le point d'accès MCP du serveur, la permission mcp:use, la connexion depuis le client, l'extension Claude Desktop pour un serveur hors d'Internet, les jetons d'accès personnels, ce que le client peut faire et la fin d'un accès.
 
 Les outils de l'[assistant IA](./ai-assistant.md) peuvent répondre à un client externe — Claude Desktop, claude.ai, Claude Code — par le **point d'accès MCP** du serveur, `/mcp`. Le client agit au nom d'un utilisateur de Liberty Next : il reçoit les outils proposés à cet utilisateur dans le panneau de l'assistant, chaque appel passe par les mêmes contrôles de permission et le même périmètre de données, et chaque appel est enregistré.
 
-Trois conditions : le point d'accès activé, la permission `mcp:use`, et un **jeton d'accès personnel** que l'utilisateur crée dans son profil.
+Trois conditions : le point d'accès activé, la permission `mcp:use`, et un moyen de se connecter — une connexion depuis le client, l'extension Claude Desktop, ou un **jeton d'accès personnel** collé.
+
+Ce qui part chez Anthropic dans ce cas, et ce qui n'y part pas, est décrit dans [Données transmises à Anthropic](./ai-data-sent.md).
 
 ---
 
@@ -1737,7 +1768,9 @@ Dans **Liberty Next → Administrer → App → Assistant IA** :
 | Champ | Défaut | Description |
 |---|---|---|
 | **Point d'accès MCP (/mcp)** | Désactivé | Le serveur répond sur `/mcp`. Appliqué à l'enregistrement, sans redémarrage. |
-| **Jeton d'accès personnel : durée maximale (jours)** | 366 | La plus longue validité qu'un utilisateur peut demander. |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 | La plus longue validité qu'un utilisateur peut demander pour un jeton, et la durée d'une connexion depuis un client avant une nouvelle autorisation. |
+
+Derrière un proxy inverse, renseigner aussi **Adresse publique** (même page, *Serveur*) avec l'adresse à laquelle les utilisateurs joignent le serveur : les adresses publiées pour la connexion sont construites à partir d'elle.
 
 Le point d'accès demande le complément `mcp` du paquet (`pip install "liberty-next[mcp]"`) ; `liberty-next[all]` et l'image Docker le contiennent.
 
@@ -1748,6 +1781,21 @@ Le point d'accès demande le complément `mcp` du paquet (`pip install "liberty-
 Dans **Liberty Next → Administrer → Accès**, donner au rôle la règle **Assistant IA → Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`), dans **Au-delà des menus**. L'utilisateur voit alors l'onglet **Jetons d'accès** de son profil ; un superutilisateur le voit toujours.
 
 `mcp:use` ne fait qu'ouvrir le point d'accès : ce que le client atteint dépend toujours des autres permissions de l'utilisateur — voir [Qui peut l'utiliser, et sur quoi](./ai-assistant.md#access).
+
+---
+
+## Connecter le client \{#connect\}
+
+| Moyen | Pour | Étapes |
+|---|---|---|
+| **Connexion depuis le client** | Un connecteur personnalisé dans Claude Desktop ou claude.ai. Le connecteur est appelé depuis les serveurs d'Anthropic : le serveur Liberty doit être accessible depuis Internet. | Donner au connecteur l'adresse de `/mcp` seule. Le navigateur ouvre Liberty : l'utilisateur se connecte comme d'habitude (mot de passe ou SSO), puis, sur la page **Autoriser l'accès** — *le client demande à utiliser l'application en tant que l'utilisateur* — clique sur **Autoriser** (ou **Refuser**). Rien à créer, rien à coller. |
+| **Extension Claude Desktop** | Un serveur qui n'est pas sur Internet : adresse interne, VPN. | Dans l'onglet **Jetons d'accès** du profil, **Extension Claude Desktop** télécharge `liberty.mcpb`. Ouvrir le fichier avec Claude Desktop et y coller un jeton créé dans le même onglet — voir [plus bas](#extension). |
+| **Jeton collé** | Claude Code, un script. | [Créer un jeton](#token) et le donner au client dans l'en-tête de requête `Authorization: Bearer <jeton>`, avec l'**URL du connecteur** de l'onglet — `https://<serveur>/mcp`. |
+
+| Réponse | Signification |
+|---|---|
+| `404` | Le point d'accès est désactivé. |
+| `401` | Pas de jeton, ou un jeton invalide ou arrivé à son terme. |
 
 ---
 
@@ -1763,41 +1811,37 @@ L'onglet donne aussi l'**URL du connecteur**, l'adresse du serveur suivie de `/m
 
 ---
 
-## Déclarer le connecteur dans Claude \{#connect\}
+## L'extension Claude Desktop \{#extension\}
 
-Dans le client, ajouter un connecteur personnalisé avec :
+L'extension exécute un petit relais sur le poste de l'utilisateur : il transmet les messages de Claude à `/mcp` avec le jeton d'accès personnel de l'utilisateur ; il suffit donc que le serveur soit joignable depuis ce poste. Le fichier est construit au téléchargement avec l'adresse du serveur déjà renseignée, et ne contient aucun secret. Rien à installer : Claude Desktop fournit ce dont le relais a besoin.
 
-| Réglage | Valeur |
+| Réglage dans Claude Desktop | Contenu |
 |---|---|
-| URL | L'**URL du connecteur** de l'onglet — `https://<serveur>/mcp`. |
-| En-tête de requête | `Authorization: Bearer <jeton>` |
-
-| Réponse | Signification |
-|---|---|
-| `404` | Le point d'accès est désactivé. |
-| `401` | Pas de jeton, ou un jeton invalide ou arrivé à son terme. |
+| **Liberty address** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
+| **Personal access token** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
+| **Accept an internal certificate** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
 
 ---
 
 ## Ce que le client peut faire \{#tools\}
 
 - Le client reçoit les outils proposés à l'utilisateur dans le panneau de l'assistant, avec les mêmes descriptions ; un outil que l'utilisateur ne peut pas utiliser n'est pas listé.
-- Chaque appel vérifie les permissions de l'utilisateur et applique son [périmètre de données](./build/secure/roles-and-permissions.md#data-scope), comme dans le panneau.
+- Chaque appel vérifie les permissions de l'utilisateur et applique son [périmètre de données](./build/secure/roles-and-permissions.md#data-scope), comme dans le panneau ; les colonnes que l'installation [marque comme sensibles](./ai-data-sent.md#sensitive) sont écartées de la même façon.
 - Les outils dont le résultat est une carte du panneau ne sont pas proposés : les propositions de construction et les notes.
-- Un outil qui enregistre quelque chose — une analyse ou un tableau de bord de l'explorateur de données — le signale au client, qui peut alors demander une confirmation.
+- Un outil qui modifie quelque chose — l'enregistrement d'une analyse ou d'un tableau de bord de l'explorateur de données, [l'écriture d'un enregistrement ou le lancement d'une action par un écran](./ai-assistant.md#write) — le signale au client, qui demande l'accord de son utilisateur avant de l'appeler.
 - Un jeton d'accès personnel n'ouvre que le point d'accès MCP : le reste de l'API le refuse.
 
 ---
 
-## Fin de validité d'un jeton \{#end\}
+## Fin d'un accès \{#end\}
 
-Le compte est relu à chaque appel : un jeton porte les droits de l'utilisateur à cet instant, jamais davantage. Il prend fin :
+Le compte est relu à chaque appel : un accès porte les droits de l'utilisateur à cet instant, jamais davantage. Un jeton ou une connexion prend fin :
 
-- à sa date d'expiration ;
+- à sa date d'expiration — une connexion dure la **durée maximale** réglée plus haut, puis l'utilisateur autorise de nouveau le client ;
 - quand le compte est désactivé, ou perd `mcp:use` ;
 - quand le mot de passe du compte change.
 
-Il n'y a ni liste des jetons ni bouton de révocation : **changer le mot de passe met fin à tous les jetons du compte**. C'est la marche à suivre quand un jeton a fuité.
+Rien n'est conservé sur le serveur pour ces accès : il n'y a donc ni liste ni bouton de révocation. **Changer le mot de passe met fin à tous les accès du compte** ; c'est la marche à suivre quand un jeton a fuité.
 
 ---
 
@@ -1809,9 +1853,144 @@ Chaque appel figure dans l'enregistrement d'usage, avec le modèle `mcp` : l'uti
 
 ## Conseils \{#tips\}
 
-- Choisir une validité courte pour un premier essai, et créer un nouveau jeton plutôt que d'en partager un : un jeton est l'accès personnel de l'utilisateur.
+- Préférer la connexion depuis le client pour un serveur sur Internet, l'extension pour un serveur interne : aucune des deux ne demande de manipuler un secret plus d'une fois.
 - Accorder `mcp:use` aux rôles qui utilisent déjà l'assistant dans l'application ; les réponses dépendent des mêmes permissions `sql:` et `explorer:`.
 - Servir le point d'accès en HTTPS uniquement : le jeton circule dans un en-tête de requête.
+
+---
+
+## Liberty Next — Données transmises à Anthropic
+Source: https://docs.nomana-it.fr/fr/liberty/framework/ai-data-sent/
+
+Ce que Liberty Next transmet à Anthropic et ce qu'il ne transmet jamais : l'assistant IA (consignes, contexte de page, notes, conversation, résultats d'outils, fichiers joints, avec la clé d'API de l'installation) et Claude connecté en MCP (Liberty se limite à répondre aux appels d'outils). L'indicateur Sensitive et le réglage qui écarte les colonnes marquées, ce qui reste sur le serveur, et les réglages qui en décident.
+
+Liberty Next utilise les modèles d'Anthropic de deux façons, et le trajet des données n'est pas le même :
+
+- l'**[assistant IA](./ai-assistant.md)** — le serveur appelle l'API d'Anthropic avec la clé d'API de l'installation ;
+- **[Claude connecté en MCP](./mcp.md)** — Liberty n'appelle personne : il répond aux appels d'outils du client Claude de l'utilisateur, et c'est ce client qui échange avec Anthropic, sous le compte Claude de l'utilisateur.
+
+Rien n'est transmis tant que personne ne pose de question : aucun envoi en arrière-plan, aucune télémétrie, aucun autre fournisseur d'IA. Une installation peut aussi désigner ses [données sensibles](#sensitive) et les tenir à l'écart de l'assistant.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## L'assistant IA \{#assistant\}
+
+Chaque question est envoyée à l'API d'Anthropic avec la **Clé API Anthropic** de **Liberty Next → Administrer → App → Assistant IA**. Une requête contient :
+
+| Transmis | Contenu |
+|---|---|
+| **Consignes** | Les consignes intégrées, ou l'**Invite système** de l'installation à leur place, et la date du jour. |
+| **Liste des outils** | Le nom et la description de chaque outil proposé à cet utilisateur. |
+| **Contexte de page** | Ce que l'utilisateur a sous les yeux : l'application, l'écran et sa requête de lecture, les filtres actifs, le nombre de lignes chargées et leurs colonnes, la dernière ligne cliquée. 4 000 caractères au plus ; le **×** de sa pastille en suspend l'envoi. |
+| **Notes** | Les notes de l'utilisateur pour l'application, 2 000 caractères au plus. |
+| **Conversation** | Les questions et les réponses de la conversation en cours — les 40 derniers messages. |
+| **Résultats d'outils** | Ce que chaque outil a lu pour répondre : les lignes d'une requête de lecture (200 par défaut), des chiffres de l'explorateur de données, la description de l'installation (identifiants et libellés — ni données ni SQL), une procédure, le formulaire d'un écran, l'enregistrement avant et après une écriture. Avec les outils qu'une installation active : les tâches, les lignes du journal du serveur et les contrôles d'intégrité (outils d'exploitation, superutilisateurs uniquement), la réponse d'un endpoint d'API (outil API), ce que renvoie un outil propre à une application. Un résultat est coupé à 60 000 caractères. |
+| **Fichiers joints** | Une image ou un PDF tels quels ; un classeur (sa première feuille), un CSV ou un fichier texte en texte, coupés à 60 000 caractères. Un fichier reste attaché à sa conversation tant que la page est ouverte, et il est renvoyé avec chacune de ses questions. |
+
+Quand des domaines figurent dans **Domaines autorisés**, Anthropic lit lui-même ces pages web ; Liberty ne transmet rien de plus.
+
+Au cours d'une même question, chaque appel d'outil renvoie les échanges précédents ; Anthropic relit la partie répétée depuis son cache pendant quelques minutes, à un tarif réduit. Ce n'est pas un stockage tenu par Liberty.
+
+---
+
+## Claude en MCP \{#mcp\}
+
+| Étape | Qui échange avec qui |
+|---|---|
+| L'utilisateur pose une question à Claude. | Le client Claude ↔ Anthropic, sous le compte Claude de l'utilisateur. |
+| Claude appelle un outil de Liberty. | Le client → le serveur, avec l'accès de l'utilisateur. |
+| Liberty répond. | Le serveur → le client : le résultat de cet outil, 60 000 caractères au plus. |
+| Claude rédige sa réponse. | Le client → Anthropic : la conversation, avec les résultats reçus. |
+
+**Liberty n'appelle pas Anthropic dans ce cas, et la clé d'API de l'installation ne sert pas.** Ce qu'un outil a renvoyé quitte le serveur vers le client Claude de l'utilisateur, puis part chez Anthropic aux conditions de l'abonnement Claude de l'utilisateur. En MCP, il n'y a ni contexte de page ni notes.
+
+| Client | Le serveur est appelé depuis |
+|---|---|
+| Un connecteur personnalisé dans Claude Desktop ou claude.ai | Les serveurs d'Anthropic : le serveur doit être accessible depuis Internet. |
+| L'extension Claude Desktop, Claude Code | Le poste de l'utilisateur : une adresse interne ou un VPN suffit. |
+
+---
+
+## Données sensibles \{#sensitive\}
+
+Une installation décide de ce qui est sensible, et Liberty le tient à l'écart de l'assistant — dans le chat comme en MCP. Rien n'est marqué dans ce que livrent les applications : les indicateurs sont à poser et à tenir à jour par l'installation.
+
+| Étape | Où | Effet |
+|---|---|---|
+| **Marquer un élément** | Liberty Next → Construire → Dictionnaire → une entrée → *Rule* → **Sensitive** | Couvre toutes les colonnes qui portent l'élément, sur tous les écrans, requêtes et modèles de l'explorateur de données. Une colonne est reconnue par son élément du dictionnaire, par son nom, ou par son nom sans le préfixe du connecteur (`ABALPH` → `ALPH`) — comme le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) retrouve ses colonnes. |
+| **Marquer une colonne** | Liberty Next → Construire → Écrans → une colonne → *General* → **Sensitive** | Couvre une colonne qui ne porte aucun élément ; à faux, exempte une colonne dont l'élément est marqué. |
+| **Activer le masquage** | Liberty Next → Administrer → App → Assistant IA → **Masquer les données sensibles à l'assistant** | Désactivé par défaut. Appliqué à l'appel suivant, sans redémarrage. |
+
+Masquage activé, les colonnes marquées sont écartées :
+
+| Endroit | Effet |
+|---|---|
+| **Lignes renvoyées par une requête de lecture** | Les colonnes marquées sont retirées des lignes. L'assistant reçoit la liste des colonnes masquées : il peut le dire et renvoyer l'utilisateur vers l'écran. |
+| **Cartes d'écriture et d'action** | Les valeurs de l'enregistrement s'affichent *(hidden: sensitive)* : l'enregistrement avant une modification, celui d'une suppression, la confirmation d'une action par l'écran. La valeur que l'utilisateur a demandé d'écrire est la sienne, et elle est affichée. |
+| **Contexte de page** | Les colonnes marquées sortent de la liste des colonnes et de la ligne cliquée, et un filtre saisi sur l'une d'elles n'est pas transmis. |
+| **Explorateur de données** | Un champ marqué ne peut être ni un en-tête de ligne, ni lu par une somme, une moyenne, un minimum ou un maximum. Il peut être compté, et filtré sur une valeur donnée par l'utilisateur. |
+
+Les écrans eux-mêmes ne changent pas : les utilisateurs qui peuvent les ouvrir y voient les valeurs comme avant.
+
+**Ce que le masquage ne couvre pas :**
+
+- ce qu'un utilisateur saisit dans une question, ou joint ;
+- une colonne de texte libre qui n'est pas marquée ;
+- ce que renvoient un endpoint d'API (outil API), un outil propre à une application ou les outils d'exploitation — Liberty ne connaît pas leurs colonnes ;
+- la clé d'un enregistrement sur une carte d'écriture.
+
+---
+
+## Ce qui n'est jamais transmis \{#never\}
+
+| Jamais transmis | Comment |
+|---|---|
+| Mots de passe des pools, clés d'API, secrets chiffrés | Les outils ne donnent que des descriptions — jamais d'identifiants. Un champ mot de passe d'un formulaire s'affiche `••••••`. |
+| Le texte SQL d'une requête | L'assistant voit le nom, le libellé et la description d'une requête. |
+| Les lignes que l'utilisateur ne peut pas lire | Chaque outil vérifie la permission que vérifient les écrans, et le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) de l'utilisateur filtre les lignes. |
+| Les connecteurs absents de **Connecteurs autorisés** | L'assistant est informé qu'ils ne sont pas disponibles. |
+| Ce que lirait un outil désactivé | Un outil désactivé n'est pas proposé du tout. |
+
+---
+
+## Ce qui reste sur le serveur \{#stays\}
+
+| Conservé | Contenu, durée |
+|---|---|
+| **Conversations** | Ce que l'utilisateur a vu — questions, réponses, nom des fichiers joints — pour les 30 dernières conversations de chaque utilisateur. |
+| **Notes** | Celles de l'utilisateur, jusqu'à leur suppression. |
+| **Enregistrement d'usage** | Qui a posé la question, le modèle, les jetons, la durée, et pour chaque outil son nom et un court résumé de ce sur quoi il a porté — jamais la question, la réponse ni une ligne de données. 90 jours par défaut ; voir [Usage de l'IA](../monitoring/ai-usage.md). |
+| **Fichiers joints** | Non conservés. |
+
+Le [rapport d'usage de la licence](./build/secure/license-key.md#usage-report) part vers l'outil de gestion des licences, pas vers Anthropic, et ne contient rien de l'assistant.
+
+---
+
+## Les réglages qui en décident \{#controls\}
+
+| Réglage | Où | Effet |
+|---|---|---|
+| **Activé**, **Clé API Anthropic** | Administrer → App → Assistant IA | Désactivé, ou sans clé : pas d'assistant, rien n'est transmis. |
+| Les réglages d'outils | Même section | **Outils connecteurs**, **Outils de l'Explorateur de données**, **Les outils des applications** : activés par défaut. **Outil API**, **Outils d'exploitation**, **Outils de construction**, **Outils d'écriture** : désactivés par défaut. |
+| **Connecteurs autorisés** | Même section | Les connecteurs que l'assistant peut lire ; vide signifie tous. |
+| **Masquer les données sensibles à l'assistant** | Même section | Désactivé par défaut — voir [plus haut](#sensitive). |
+| **Fichier joint à une question** | Même section | `0` : aucune pièce jointe. |
+| **Point d'accès MCP (/mcp)** | Même section | Désactivé par défaut : aucun client Claude ne peut se connecter. |
+| `ai:chat`, `ai:write`, `mcp:use` | Administrer → Accès → un rôle → Au-delà des menus | Qui utilise l'assistant, qui écrit par son intermédiaire, qui connecte Claude. |
+| Permissions `sql:`, `explorer:`, `api:` et périmètre de données | Le rôle | Ce que l'assistant lit pour cet utilisateur. |
+
+---
+
+## À savoir avant d'ouvrir largement \{#limits\}
+
+- **Les outils lisent ce que les écrans affichent.** Sans le masquage, un nom, une adresse e-mail ou un montant part vers le modèle quand une requête le renvoie.
+- **Marquer avant d'activer le masquage.** Le réglage masque ce qui est marqué, rien d'autre : passer d'abord en revue les entrées du dictionnaire qui portent des données personnelles ou bancaires.
+- **Réserver l'outil API et les outils d'exploitation aux installations qui en ont besoin.** Leurs réponses ne sont pas couvertes par le masquage.
+- **L'usage qu'Anthropic fait de ce qu'il reçoit** dépend du contrat de la clé d'API de l'installation pour l'assistant, et de l'abonnement Claude de l'utilisateur pour MCP.
 
 ---
 
@@ -1864,7 +2043,7 @@ Un clic sur un utilisateur limite les questions du bas aux siennes (*Questions d
 
 ## Dernières questions \{#recent\}
 
-Une ligne par question : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue** — *Répondu*, *Échec* ou *Abandonné*. Une ligne se déplie sur ses appels d'outils, chacun avec sa taille en caractères et sa durée.
+Une ligne par question : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue** — *Répondu*, *Échec*, *Abandonné* ou *Limite de tours* (la question a épuisé ses tours d'outils et s'est terminée par une réponse de clôture). Une ligne se déplie sur ses appels d'outils, chacun avec sa taille en caractères et sa durée.
 
 ---
 
@@ -1967,6 +2146,7 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 
 - Cliquer sur **✦ AI Assistant**, à droite de la barre supérieure. Le panneau s'ouvre en tiroir à côté de la page et reste utilisable quand une fenêtre de facture est ouverte.
 - **Entrée** envoie la question, **Maj+Entrée** insère un saut de ligne, **■** interrompt la réponse en cours.
+- Le **trombone** (*Joindre un fichier XML ou PDF*) joint un ou plusieurs fichiers à la question : l'assistant les lit avec le message. Un fichier est conservé avec les [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur pendant 7 jours.
 - **La conversation est conservée** à la fermeture du panneau ou au rechargement de la page (les 40 derniers messages, dans le navigateur). **+ Nouvelle conversation** repart de zéro.
 - **Ouvrir une autre facture démarre une nouvelle conversation** : l'échange précédent portait sur une autre facture et induirait le modèle en erreur.
 
@@ -2050,6 +2230,19 @@ L'assistant reçoit aussi le **catalogue des statuts** à jour : *« en litige �
 
 Les outils de données respectent les droits de l'utilisateur connecté : la visibilité par société du rôle s'applique aux factures, chiffres et reste à traiter consultés par l'assistant.
 
+### Fichiers d'exemple et mapping
+
+Avec un fichier joint, ou l'un des [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur, l'assistant travaille comme l'[éditeur XSL](../ubl-tools/xsl-editor.md) :
+
+| Outils | Usage |
+|---|---|
+| **`samples`**, **`sample_structure`**, **`sample_text`** | Les exemples de l'utilisateur ; la structure d'un XML d'exemple ; son texte, par fenêtres. |
+| **`pdf_to_xml`** | Convertit un PDF d'exemple en XML tel que NomaUBL le construit, avec les réglages d'un document. |
+| **`document_fields`**, **`ubl_variables`**, **`mapping_brief`**, **`read_mapping`** | Les réglages d'un document, les variables exigées par son jeu de règles, le cadrage d'un mapping automatique, le mapping enregistré. |
+| **`check_mapping`**, **`test_transform`** | Contrôlent un mapping sur un exemple et montrent l'UBL obtenu. |
+
+Rien n'est enregistré : l'assistant donne les valeurs à saisir dans l'éditeur de mapping.
+
 ### Procédures de diagnostic
 
 Pour un diagnostic, l'assistant charge d'abord la **procédure** correspondante (🧭 `load_playbook`), puis en suit les étapes. Les procédures fournies sont :
@@ -2110,9 +2303,11 @@ Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil é
 
 - **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
 - **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Accès aux paramètres*.
-- **Pas de fichiers.** La conversation est textuelle : un court XML collé dans la question est lu, un fichier ne peut pas être joint.
+- **Pas d'autre fichier que XML ou PDF.** Le trombone accepte les fichiers `.xml` et `.pdf` : un PDF jusqu'à 10 Mo, les 150 000 premiers caractères d'un XML.
 
 L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).
+
+Les mêmes outils répondent à **Claude Desktop** et à **Claude Code** quand l'instance ouvre son point d'accès MCP — voir [Claude (MCP)](./claude-mcp.md).
 
 ---
 
@@ -2123,8 +2318,245 @@ L'administrateur définit la clé d'API, le modèle par défaut, la source de do
 - **Cliquer sur les relances.** Elles poursuivent le diagnostic avec la vérification suivante.
 - **Ouvrir une nouvelle conversation pour un nouveau sujet.** Un long échange sur un autre thème pèse sur les réponses.
 - **Choisir un modèle plus puissant pour un diagnostic long**, le modèle par défaut pour les questions courantes.
-- **Considérer le panneau comme un service externe.** Les questions et les résultats d'outil sont transmis au fournisseur du modèle ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
+- **Considérer le panneau comme un service externe.** Les questions, les résultats d'outils et les fichiers joints sont transmis à Anthropic — [Données transmises à Anthropic](./ai-data-sent.md) détaille ce qui part et ce qui ne part jamais ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
 - **Pour une liste exhaustive, passer par les pages dédiées.** L'assistant caractérise un problème ; la liste [E-Invoicing](./invoices.md), le [Diagnostic](./diagnostics/overview.md) et les [Rapports](reports/overview.md) donnent la vue complète.
+
+---
+
+## NomaUBL — Claude (MCP)
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/claude-mcp/
+
+NomaUBL dans Claude Desktop, Claude Code et claude.ai par le point d'accès MCP de l'instance : activation, fonctionnalité de rôle MCP access, extension Claude Desktop, connexion depuis le client, jetons personnels, ce que Claude peut lire, fichiers d'exemple, travail de mapping, modifications quand elles sont autorisées, et utilisation par utilisateur. Pour JD Edwards, SAP, NetSuite ou un ERP spécifique.
+
+Le **point d'accès MCP** permet à un utilisateur d'interroger son instance NomaUBL depuis **Claude Desktop**, **Claude Code** ou un **connecteur claude.ai**, sous son propre compte : les factures et leur historique, les erreurs de validation, l'e-reporting, les tableaux de bord et les chiffres d'une période, le journal du serveur, les paramètres, la documentation. Il est en lecture seule tant que l'instance n'autorise pas les modifications, désactivé par défaut, et demande une licence valide.
+
+Ce qui part chez Anthropic dans ce cas, et ce qui n'y part pas, est décrit dans [Données transmises à Anthropic](./ai-data-sent.md).
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Activation \{#enable\}
+
+Dans **Paramètres → Global → AI**, groupe **MCP server** (cet éditeur reste en anglais dans l'application) :
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **MCP endpoint** | `N` | L'instance répond sur `/mcp`, pour les utilisateurs dont le rôle a *MCP access*. |
+| **Public address** | vide | Adresse à laquelle les utilisateurs joignent l'instance (`https://nomaubl.example.com`), utilisée par la connexion depuis Claude. Vide = l'adresse de la requête. À renseigner derrière un proxy inverse. |
+| **Allow changes over MCP** | `N` | Claude peut enregistrer des analyses, des mappings et des documents à la demande de l'utilisateur — voir [Modifications](#changes). Désactivé : lecture seule. |
+
+L'authentification doit être activée sur l'instance : Claude agit toujours au nom d'un utilisateur identifié.
+
+---
+
+## Qui peut se connecter \{#access\}
+
+Seuls les rôles qui ont la fonctionnalité **MCP access** ([Rôles](../configuration/security/roles.md), onglet *Accès*) peuvent connecter Claude ; aucun rôle ne l'a par défaut. Les autres droits du rôle déterminent ensuite ce que Claude atteint :
+
+| Outils | Droit du rôle |
+|---|---|
+| Factures, erreurs, cycle de vie, e-reporting, tableaux de bord, chiffres d'une période, journal du serveur, documentation | *MCP access*. |
+| Explorateur de données — modèle, champs, agrégations, analyses enregistrées | La page **Explorateur**. |
+| Revue du paramétrage — objets de configuration, contrôle de configuration, tâches planifiées, jeux de règles, état de la licence, système — et travail de mapping | **Accès aux paramètres**. |
+| Fichiers d'exemple | *MCP access*. |
+
+---
+
+## Connecter Claude \{#connect\}
+
+Tout se trouve dans l'onglet **Claude (MCP)** de la fenêtre de profil (le bouton utilisateur de la barre supérieure).
+
+| Moyen | Pour | Étapes |
+|---|---|---|
+| **Extension Claude Desktop** | Claude Desktop, y compris pour une instance inaccessible depuis Internet. | **Extension** télécharge `nomaubl.mcpb`. L'ouvrir avec Claude Desktop : l'adresse du serveur est déjà renseignée, et l'extension demande le jeton personnel. Rien d'autre à installer. |
+| **Connexion depuis le client** | Claude Code ; un connecteur claude.ai quand l'instance est accessible depuis Internet. | Donner au client l'**Adresse du serveur** seule. Le navigateur ouvre NomaUBL : se connecter comme d'habitude (mot de passe ou SSO), puis sur *Connecter Claude à NomaUBL* choisir 30, 90 ou 365 jours et cliquer sur **Autoriser** (ou **Refuser**). |
+| **Jeton collé** | Claude Code, un script. | **Créer un jeton**, le copier — *affiché une seule fois, copiez-le maintenant* — et le donner au client dans l'en-tête de requête `Authorization: Bearer <jeton>`. |
+
+L'extension a quatre réglages dans Claude Desktop, en anglais : **NomaUBL address**, **Personal token**, **Samples folder** (facultatif — le seul dossier d'où Claude peut envoyer des fichiers) et **Accept an internal certificate** (pour un certificat auto-signé ou d'entreprise).
+
+| Réponse du point d'accès | Signification |
+|---|---|
+| `404` | Le point d'accès MCP est désactivé. |
+| `401` | Pas de jeton, ou un jeton inconnu, expiré ou révoqué. |
+| `403` | Le rôle n'a pas *MCP access*, ou l'instance n'a pas de licence valide. |
+
+---
+
+## Jetons \{#tokens\}
+
+**Vos jetons** liste les jetons de l'utilisateur et les accès ouverts par une connexion depuis Claude, chacun avec ses dates de création et d'expiration ; **Révoquer** met fin à l'un d'eux aussitôt. Un jeton est valable 30, 90 ou 365 jours. Il cesse aussi de fonctionner quand l'utilisateur change son mot de passe, quand le compte est désactivé, et quand le rôle perd *MCP access*.
+
+Le serveur conserve une empreinte du jeton, jamais le jeton lui-même.
+
+---
+
+## Ce que Claude peut faire \{#tools\}
+
+| Sujet | Claude peut |
+|---|---|
+| **Factures** | Lister des factures, en lire une en entier (en-tête, lignes, TVA, erreurs de validation, cycle de vie avec les motifs de la plateforme), lister les envois d'e-reporting. |
+| **Chiffres** | Lire les chiffres de la [Synthèse](./billing-overview.md), des [Statistiques](./statistics.md), de l'[Exploitation](./dashboard.md) et du [tableau de bord technique](./tech-dashboard.md), et la synthèse d'une période. |
+| **Explorateur de données** | Lancer toute agrégation de l'[Explorateur](./explorer.md) — regroupement, mesures, filtres, période, N premiers — et les analyses enregistrées. |
+| **Diagnostic** | Lire le journal du serveur, les contrôles d'intégrité, les codes de statut et de motif, l'e-annuaire, et suivre les procédures de diagnostic. |
+| **Revue du paramétrage** | Lire les objets de configuration, le contrôle de configuration, les tâches planifiées, les jeux de règles, l'état de la licence et les paramètres — les secrets ne sont jamais affichés. |
+| **Documentation** | Chercher et lire la documentation de NomaUBL et le rapport d'implémentation de l'instance. |
+| **Exemples et mapping** | Lire la structure d'un XML d'exemple, convertir un PDF d'exemple avec les réglages d'un document, proposer et contrôler un mapping — voir plus bas. |
+
+Un résultat de plus de 60 000 caractères est coupé, et Claude est invité à restreindre sa demande.
+
+---
+
+## Fichiers d'exemple \{#samples\}
+
+Un XML ou un PDF du client peut être confié à Claude comme support de travail :
+
+- depuis la fenêtre de profil : **Fichiers d'exemple → Ajouter** ;
+- depuis Claude Desktop, qui envoie un fichier du **Samples folder** choisi dans les réglages de l'extension, et d'aucun autre dossier, quand l'utilisateur lui demande de travailler dessus.
+
+Les exemples sont des fichiers `.xml` ou `.pdf` de 20 Mo au plus, 50 par utilisateur, conservés 7 jours. Ce sont les copies de travail d'un utilisateur : ils ne sont jamais traités comme des factures ni envoyés à la plateforme.
+
+Avec un exemple, Claude lit la structure d'un XML, ou convertit un PDF avec les réglages d'un document et essaie des ancres de tableau sans rien enregistrer. Avec l'**Accès aux paramètres**, il fait aussi le travail de mapping de l'[éditeur XSL](../ubl-tools/xsl-editor.md) : il propose le mapping d'un exemple (et, pour un PDF texte, les règles d'extraction), lit le mapping enregistré d'un document et les variables exigées par son jeu de règles, contrôle un mapping sur un exemple et montre l'UBL obtenu. L'exemple suit les étapes d'un traitement réel : un PDF converti en PDF texte ou en PDF JD Edwards selon le document, la feuille de style de prétraitement, le découpage en factures, l'inversion de signe. Rien n'est enregistré : Claude donne les valeurs à saisir dans l'éditeur de mapping.
+
+---
+
+## Modifications \{#changes\}
+
+Avec **Allow changes over MCP**, Claude peut, à la demande de l'utilisateur :
+
+| Modification | Droit du rôle |
+|---|---|
+| Enregistrer une analyse de l'Explorateur. | La page **Explorateur**. |
+| Enregistrer des valeurs de mapping dans la feuille de style d'un document. | **Accès aux paramètres**. |
+| Enregistrer les réglages PDF vers XML d'un document. | **Accès aux paramètres**. |
+| Créer un document — selon sa source : XML, PDF, UBL ou connecteur, avec sa propre feuille de style vierge ou à partir d'un document existant — ou modifier ses réglages. | **Accès aux paramètres**. |
+
+Chaque source garde ses règles : les réglages d'un PDF texte sont refusés sur un document JD Edwards et inversement, et un document UBL n'a pas de mapping. Mots de passe, jetons et clés ne peuvent pas être définis par ce moyen. La version précédente reste dans l'[historique des fichiers](../management/file-versions.md) ou dans l'historique de configuration, et chaque modification est écrite dans le journal du serveur avec le nom de l'utilisateur. Claude demande l'accord de l'utilisateur avant un appel qui modifie quelque chose.
+
+---
+
+## Utilisation \{#usage\}
+
+Le [tableau de bord technique](./tech-dashboard.md#mcp-usage) montre, par utilisateur sur les 30 derniers jours, les appels faits depuis Claude, ceux en échec et ceux qui ont modifié quelque chose. Le [journal du serveur](./diagnostics/server-log.md) contient une ligne par appel en échec et une par modification ; une lecture réussie ne laisse aucune ligne.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Accorder *MCP access* d'abord à un rôle dédié.** Claude atteint ce que les droits du rôle ouvrent : la page Explorateur et l'accès aux paramètres donnent les outils correspondants.
+- **Laisser *Allow changes over MCP* désactivé en production** tant que le travail de mapping n'est pas terminé sur une instance de test ; la [Promotion](../management/promotion.md) transporte ensuite le résultat.
+- **Préférer l'extension pour un serveur interne.** Un connecteur claude.ai est appelé depuis Internet ; l'extension appelle l'instance depuis le poste de l'utilisateur.
+- **Révoquer sans attendre l'expiration.** Un jeton qui ne sert plus se termine depuis le profil en un clic.
+
+---
+
+## NomaUBL — Données transmises à Anthropic
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/ai-data-sent/
+
+Ce que NomaUBL transmet à Anthropic et ce qu'il ne transmet jamais : l'assistant IA de l'application (la question, le contexte de page, les résultats d'outils, le fichier joint, avec la clé d'API de l'instance) et Claude connecté en MCP (NomaUBL se limite à répondre aux appels d'outils ; c'est le client Claude de l'utilisateur qui échange avec Anthropic). Ce qui reste sur le serveur, ce qui n'est jamais communiqué, et les réglages qui en décident.
+
+NomaUBL utilise les modèles d'Anthropic de deux façons, et le trajet des données n'est pas le même :
+
+- l'**[assistant IA](./ai-capabilities.md)** de l'application — le serveur appelle l'API d'Anthropic avec la clé d'API de l'instance ;
+- **[Claude connecté en MCP](./claude-mcp.md)** — NomaUBL n'appelle personne : il répond aux appels d'outils du client Claude de l'utilisateur, et c'est ce client qui échange avec Anthropic, sous le compte Claude de l'utilisateur.
+
+Rien n'est transmis tant que personne ne pose de question : aucun envoi en arrière-plan, aucune télémétrie, aucun autre fournisseur d'IA.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## L'assistant IA \{#assistant\}
+
+Chaque question est envoyée à `api.anthropic.com` avec l'**API Key** de **Paramètres → Global → AI**. Une requête contient :
+
+| Transmis | Contenu |
+|---|---|
+| **Consignes** | La consigne NomaUBL intégrée, ou le *System Prompt* de l'instance à sa place ; le catalogue des statuts ; le nom des procédures de diagnostic. |
+| **Contexte de page** | La page en cours et son filtre, la langue, et la facture ouverte : document, type, société, numéro, statut, client. 4 000 caractères au plus. |
+| **Conversation** | Les questions et les réponses de la conversation en cours — les 40 derniers messages, conservés dans le navigateur de l'utilisateur. |
+| **Résultats d'outils** | Ce que chaque outil a lu pour répondre, tel qu'il l'a lu : factures (nom du client, montants, TVA, statut, messages), lignes, cycle de vie, erreurs de validation, chiffres d'une période, tableaux de bord, envois d'e-reporting, données de l'e-annuaire, lignes du journal du serveur, sections du rapport d'implémentation, paramètres avec les secrets masqués. Un résultat est coupé à 60 000 caractères ; une liste contient 50 factures au plus, le journal du serveur 300 lignes. |
+| **Fichier joint** | Un XML en texte, jusqu'à 150 000 caractères ; un PDF tel quel, jusqu'à 10 Mo. Le fichier est renvoyé avec chaque question suivante de la même conversation. |
+
+Deux autres écrans appellent la même API :
+
+| Écran | Transmis |
+|---|---|
+| **Mapping IA** de l'[éditeur XSL](../ubl-tools/xsl-editor.md) | Les chemins de l'exemple avec la première valeur de chacun (120 caractères au plus), les lignes de texte d'un PDF, la liste des variables — et le PDF lui-même quand l'exemple en est un. |
+| Documentation en mode *Sitemap* | Rien de plus venant de NomaUBL : Anthropic lit lui-même les pages des domaines de documentation autorisés. |
+
+Les données métier partent telles que les outils les lisent : aucun nom de client, montant ou adresse e-mail n'est remplacé ni masqué. Seuls les secrets le sont — voir [plus bas](#never).
+
+---
+
+## Claude en MCP \{#mcp\}
+
+| Étape | Qui échange avec qui |
+|---|---|
+| L'utilisateur pose une question à Claude. | Le client Claude ↔ Anthropic, sous le compte Claude de l'utilisateur. |
+| Claude appelle un outil de NomaUBL. | Le client → l'instance, avec le jeton personnel de l'utilisateur. |
+| NomaUBL répond. | L'instance → le client : le résultat de cet outil, 60 000 caractères au plus. |
+| Claude rédige sa réponse. | Le client → Anthropic : la conversation, avec les résultats reçus. |
+
+**NomaUBL n'appelle pas Anthropic dans ce cas, et la clé d'API de l'instance ne sert pas.** Ce qu'un outil a renvoyé quitte l'instance vers le client Claude de l'utilisateur, puis part chez Anthropic aux conditions de l'abonnement Claude de l'utilisateur — pas à celles de la clé d'API de l'instance.
+
+L'origine de l'appel dépend du client :
+
+| Client | L'instance est appelée depuis |
+|---|---|
+| Claude Desktop avec l'extension, Claude Code | Le poste de l'utilisateur : une adresse interne ou un VPN suffit. |
+| Un connecteur claude.ai | Les serveurs d'Anthropic : l'instance doit être accessible depuis Internet. |
+
+L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateur. Il ne lit qu'un dossier — le **Samples folder** choisi dans ses réglages — et n'envoie à NomaUBL un fichier de ce dossier que si l'utilisateur demande à Claude de travailler dessus.
+
+---
+
+## Ce qui n'est jamais transmis \{#never\}
+
+| Jamais transmis | Comment |
+|---|---|
+| Mots de passe, jetons, clés d'API, secrets de client, clé de licence | Un paramètre dont le nom désigne un secret est rendu sous la forme `***` ; la licence est décrite par son état, jamais par sa clé. |
+| Les jetons personnels | Le serveur n'en garde que l'empreinte. |
+| Un fichier que personne n'a joint ni demandé | L'assistant lit le fichier joint ; en MCP, Claude lit les exemples de l'utilisateur. |
+| Ce que lirait un outil désactivé | *Custom Tools* à `N` : l'assistant ne garde que la documentation. *MCP endpoint* à `N` : aucun client ne peut se connecter. |
+| Des modifications | L'assistant se limite à la lecture. En MCP, une modification demande *Allow changes over MCP*, et les secrets ne peuvent pas être définis par ce moyen. |
+
+---
+
+## Ce qui reste sur le serveur \{#stays\}
+
+| Conservé | Où, combien de temps |
+|---|---|
+| La conversation de l'assistant | Dans le navigateur de l'utilisateur (les 40 derniers messages) ; pas sur le serveur. |
+| Les fichiers d'exemple et les fichiers joints dans l'assistant | Sur le serveur, par utilisateur, 7 jours. |
+| L'utilisation de MCP | Des compteurs par utilisateur et par jour — appels, échecs, modifications — pendant 90 jours ; jamais ce qui a été demandé. |
+| Les appels MCP dans le journal du serveur | Une ligne par appel en échec et une par modification, avec l'utilisateur, l'outil et le début de ses arguments et de son résultat. Une lecture réussie ne laisse aucune ligne. |
+
+---
+
+## Les réglages qui en décident \{#controls\}
+
+| Réglage | Où | Effet |
+|---|---|---|
+| **API Key** | Paramètres → Global → AI | Sans clé : pas d'assistant, rien n'est transmis. |
+| **Custom Tools** | Paramètres → Global → AI | `N` : l'assistant répond à partir de la documentation, sans lire les données de l'instance. |
+| **MCP endpoint** | Paramètres → Global → AI → MCP server | `N` (défaut) : aucun client Claude ne peut se connecter. |
+| **Allow changes over MCP** | Même groupe | `N` (défaut) : lecture seule. |
+| **MCP access** | [Rôles](../configuration/security/roles.md) → Accès → Fonctionnalités | Les utilisateurs qui peuvent connecter Claude ; aucun rôle par défaut. |
+| Page **Explorateur**, **Accès aux paramètres** | Rôles | Les groupes d'outils accessibles au Claude d'un utilisateur. |
+
+---
+
+## À savoir avant d'ouvrir largement \{#limits\}
+
+- **Les outils lisent ce que les écrans affichent.** Un nom de client, un montant, une adresse e-mail de la liste des utilisateurs du rapport d'implémentation partent vers le modèle quand un outil les lit.
+- **Le journal du serveur, le tableau de bord technique et le rapport d'implémentation sont ceux de toute l'instance.** Accorder l'assistant et *MCP access* aux utilisateurs qui peuvent les lire.
+- **L'utilisateur reste responsable de ce qu'il saisit ou joint.** Un fichier joint dans l'assistant est transmis tel quel.
+- **L'usage qu'Anthropic fait de ce qu'il reçoit** dépend du contrat de la clé d'API de l'instance pour l'assistant, et de l'abonnement Claude de l'utilisateur pour MCP.
 
 ---
 
@@ -5957,6 +6389,10 @@ L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 
 Les règles appliquées par le serveur (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) valent pour toute écriture passant par la requête — formulaire, saisie dans la grille, API — et pas seulement pour le formulaire. Une requête d'écriture peut aussi horodater explicitement avec des jetons comme `{{LOGIN}}` ou `{{SYSDATE}}` — voir [Liaison des paramètres](./build/queries/parameter-binding.md).
 
+### Données sensibles \{#sensitive\}
+
+**Sensitive**, dans l'onglet *Rule* d'une entrée, indique que l'élément porte une donnée sensible — le nom d'une personne, une adresse e-mail, un identifiant bancaire. Quand l'installation masque les données sensibles à l'assistant IA, toutes les colonnes qui portent l'élément sont écartées de ce que l'assistant reçoit, dans le panneau comme en MCP. Les écrans ne changent pas. Une colonne d'écran a le même indicateur, pour une colonne sans élément. Voir [Données sensibles](./ai-data-sent.md#sensitive).
+
 ### Colonnes d'audit \{#form-layer-defaults\}
 
 Une règle s'applique à toute écriture dont la requête lie la colonne :
@@ -6494,6 +6930,7 @@ Chaque indication de colonne porte la même structure. Détailler une colonne r�
 |---|---|
 | **`name`** | La colonne du résultat à laquelle s'applique cette indication. Correspondance insensible à la casse contre les colonnes de la requête de lecture. Normalisée en MAJUSCULES à l'enregistrement. |
 | **`dd`** | Entrée de dictionnaire dont hériter `label` / `format` / `rule`. Vide utilise le `name` de la colonne comme clé. Mettre à `""` (chaîne vide entre guillemets) pour se désinscrire totalement du dictionnaire. |
+| **`sensitive`** (*Sensitive*) | Indique si la colonne porte une donnée sensible, pour l'assistant IA : elle est écartée de ce que l'assistant reçoit quand l'installation masque les données sensibles. Vide : la colonne suit son entrée du dictionnaire ; à faux, elle est exemptée même si son entrée est marquée. Voir [Données sensibles](../../ai-data-sent.md#sensitive). |
 
 Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé de Liberty — une entrée définit une fois le titre d'affichage, le format, la règle et la recherche d'un champ ; chaque écran qui a une colonne avec ce nom en hérite. Voir [Concepts → Dictionnaire](../../dictionary.md).
 
@@ -10820,6 +11257,7 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 |---|---|
 | **Nom de l'application** | Le nom de l'application. |
 | **Environnement** | La nature de l'installation — `production`, `test`… Il est nommé dans le [rapport d'usage de la licence](./secure/license-key.md#usage-report). |
+| **Adresse publique** | L'adresse à laquelle les utilisateurs joignent le serveur : celle du lien d'un mail de réinitialisation, et celle publiée pour la connexion d'un client Claude ([MCP](../mcp.md#connect)). Vide = l'adresse du navigateur. À renseigner derrière un proxy inverse. |
 | **Hôte d'écoute**, **Port** | Adresse et port d'écoute. **Redémarrage nécessaire.** |
 | **Sous-chemin derrière un proxy inverse** | `/liberty` pour servir l'application sous ce chemin derrière un proxy inverse ; vide = la racine du site. La page, l'API, les téléchargements, la connexion en direct et le retour de l'authentification unique le suivent — voir [Publication sous un sous-chemin](../../installation/traefik.md#sub-path). **Redémarrage nécessaire.** |
 | **Niveau de journal** | `debug`, `info`, `warning`, `error`, `critical`. **Redémarrage nécessaire.** |
@@ -10916,7 +11354,7 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Activé** | L'assistant répond ; les utilisateurs ont besoin de la permission `ai:chat`. |
 | **Clé API Anthropic** | Sans elle, l'assistant indique qu'il n'est pas configuré. |
 | **Modèle**, **Effort**, **Jetons maximum**, **Réflexion adaptative** | Le modèle, la profondeur de raisonnement et la longueur des réponses. |
-| **Itérations d'outils maximum** | Nombre maximal d'appels d'outils par réponse (8 par défaut). |
+| **Itérations d'outils maximum** | Nombre de tours d'outils qu'une question peut utiliser (15 par défaut). Une procédure qui écrit plusieurs enregistrements par ses écrans demande plus de tours qu'une question. |
 | **Délai de la requête (s)** | 120 par défaut. |
 | **Invite système** | Vide : les consignes intégrées. |
 | **Outils de l'Explorateur de données** | Activé par défaut : l'assistant calcule totaux, classements et tendances sur les modèles de l'[explorateur de données](../explorer/overview.md), et enregistre analyses et tableaux de bord. |
@@ -10924,6 +11362,8 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Lignes par requête, au plus (plafond propre à l'assistant, pas celui du pool)** | 200 par défaut (de 1 à 10 000). Au-delà, le résultat est signalé comme tronqué et l'assistant reçoit la consigne de ne ni compter ni additionner ses lignes. |
 | **Outil API** | L'assistant peut appeler des endpoints d'API — désactivé par défaut, un endpoint pouvant modifier des données. |
 | **Outils de construction** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
+| **Outils d'écriture** | Désactivé par défaut. L'assistant ajoute, modifie ou supprime un enregistrement, ou lance une action, par son écran — pour les utilisateurs qui ont `ai:write` et les permissions de l'écran ; appliqué depuis une carte du panneau, confirmé par le client en MCP. Voir [Écrire par un écran](../ai-assistant.md#write). |
+| **Masquer les données sensibles à l'assistant** | Désactivé par défaut. Les colonnes dont l'élément du dictionnaire ou la colonne d'écran est marqué **Sensitive** ne sont pas transmises à l'assistant, dans le panneau comme en MCP. Le réglage ne couvre ni ce qu'un utilisateur saisit ou joint, ni une colonne de texte libre non marquée, ni ce que renvoie un endpoint d'API ou un outil propre à une application. Voir [Données sensibles](../ai-data-sent.md#sensitive). |
 | **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
 | **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
 | **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
@@ -10931,11 +11371,11 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Fichier joint à une question : mégaoctets au plus** | 10 par défaut (de 0 à 30) ; `0` retire le trombone du panneau — voir [Joindre un fichier](../ai-assistant.md#attach). |
 | **Enregistrement d'usage conservé (jours ; 0 = sans limite)** | 90 par défaut — voir [Usage de l'IA](../../monitoring/ai-usage.md#retention). |
 | **Point d'accès MCP (/mcp)** | Désactivé par défaut : les mêmes outils pour un client externe — Claude Desktop, claude.ai, Claude Code —, chaque utilisateur avec un jeton d'accès personnel. Appliqué sans redémarrage. Voir [Connecter Claude (MCP)](../mcp.md). |
-| **Jeton d'accès personnel : durée maximale (jours)** | 366 par défaut. |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 par défaut : la plus longue validité d'un jeton, et la durée d'une connexion depuis un client Claude avant une nouvelle autorisation. |
 | **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
 | **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Construire → IA](../ai-assistant.md#settings-ai)). |
 
-Voir [Assistant IA](../ai-assistant.md).
+Voir [Assistant IA](../ai-assistant.md), et [Données transmises à Anthropic](../ai-data-sent.md) pour ce que ces réglages laissent sortir de l'installation.
 
 ---
 
@@ -11279,7 +11719,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà d
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
 | nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
 | Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
-| Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
+| Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). **Assistant IA — ajouter, modifier ou supprimer un enregistrement par son écran (avec les permissions de l'écran)** (`ai:write`) : voir [Écrire par un écran](../../ai-assistant.md#write). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
 **Save** enregistre le rôle ; **Cancel** abandonne les modifications. Le nom d'un rôle ne peut plus changer après sa création.
@@ -12717,6 +13157,8 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
 | `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | L'extension Claude Desktop (`liberty.mcpb`) avec l'adresse du serveur déjà renseignée. Demande `mcp:use`. |
+| `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | La connexion d'un client MCP : découverte, enregistrement du client, échange du code et renouvellement. La page d'autorisation est `/oauth/authorize`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
 Voir [Se connecter](../framework/build/secure/sign-in.md).
@@ -22936,6 +23378,20 @@ Deux modes :
 
 Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernier accès et le compteur de hits.
 
+### Utilisation de Claude (MCP) \{#mcp-usage\}
+
+Affiché quand le [point d'accès MCP](./claude-mcp.md) est activé : les appels faits depuis Claude, *par utilisateur, 30 derniers jours*.
+
+| Colonne | Contenu |
+|---|---|
+| *(utilisateur)* | Le compte au nom duquel Claude a agi. |
+| **Aujourd'hui**, **30 jours** | Les appels du jour et des 30 derniers jours. |
+| **En échec** | Les appels terminés par une erreur. |
+| **Modifications** | Les appels qui ont modifié quelque chose — uniquement avec *Allow changes over MCP*. |
+| **Dernier appel** | L'heure du dernier appel. |
+
+Ce sont des compteurs, jamais ce qui a été demandé ; ils sont conservés 90 jours.
+
 ---
 
 ## Erreurs récentes
@@ -32079,9 +32535,19 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 
 | Champ | Description |
 |---|---|
-| **System Prompt** | Consigne facultative ajoutée en tête de chaque conversation. Vide = la consigne NomaUBL intégrée. |
+| **System Prompt** | Consigne facultative utilisée à la place de la consigne NomaUBL intégrée. Vide = la consigne intégrée. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
-| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés au modèle (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués). |
+| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés à l'assistant (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. |
+
+### MCP server
+
+| Champ | Description |
+|---|---|
+| **MCP endpoint** | `N` par défaut. `Y` : Claude Desktop, Claude Code et un connecteur claude.ai utilisent les outils de cette instance sur `/mcp`, au nom d'un utilisateur dont le rôle a *MCP access* — voir [Claude (MCP)](../../application/claude-mcp.md). |
+| **Public address** | Adresse à laquelle les utilisateurs joignent cette instance (`https://nomaubl.example.com`), pour la connexion depuis Claude. Vide = l'adresse de la requête. |
+| **Allow changes over MCP** | `N` par défaut : lecture seule. `Y` : Claude peut enregistrer des analyses, des mappings et des documents à la demande de l'utilisateur — voir [Modifications](../../application/claude-mcp.md#changes). |
+
+Ce que ces réglages laissent sortir de l'instance est décrit dans [Données transmises à Anthropic](../../application/ai-data-sent.md).
 
 Le groupe **TLS / Corporate Proxy** (chemin et mot de passe d'un magasin de certificats, *Disable TLS validation* réservé à un diagnostic bref) est replié sous *Advanced*.
 
@@ -34114,6 +34580,7 @@ Quelques drapeaux binaires. Chaque ligne combine une case à cocher et un libell
 |---|---|---|
 | **Accès aux paramètres** | *Peut ouvrir la page Paramètres (modèles, connecteurs)* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
 | **Lecture seule** | *Aucune modification, suppression ni renvoi, même sur les pages autorisées* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
+| **MCP access** | *Can connect Claude Desktop or Claude Code to this instance with a personal token* | Affiche l'onglet **Claude (MCP)** dans la fenêtre de profil et autorise le client Claude de l'utilisateur à appeler l'instance — voir [Claude (MCP)](../../application/claude-mcp.md). Aucun rôle ne l'a par défaut. |
 
 ### Pages autorisées
 
@@ -35006,17 +35473,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
   
     Versions
+    2026.11.19.1 · 2026-11-19
     2026.11.18.1 · 2026-11-18
     2026.11.16.1 · 2026-11-16
     2026.11.13.1 · 2026-11-13
     2026.11.12.1 · 2026-11-12
     2026.11.11.1 · 2026-11-11
-    2026.11.10.1 · 2026-11-10
   
   
-    Toutes les versions (132)
+    Toutes les versions (133)
     
       2026-11
+      2026.11.10.1 · 2026-11-10
       2026.11.08.1 · 2026-11-08
       2026.11.06.1 · 2026-11-06
       2026.11.05.1 · 2026-11-05
@@ -35168,6 +35636,23 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   
 
 {/* versions:end */}
+
+---
+
+## 2026.11.19.1 — 2026-11-19 \{#v2026-11-19-1\}
+
+### Nouveautés
+- **NomaUBL dans Claude Desktop et Claude Code (MCP).** Claude interroge l'instance sous le compte de l'utilisateur : factures et leur historique, erreurs de validation, e-reporting, tableaux de bord et chiffres d'une période, journal du serveur, paramétrage, documentation. Lecture seule ; les sociétés et le périmètre de données de l'utilisateur s'appliquent. Désactivé par défaut : Paramètres › Global › AI › MCP server. Une licence valide est requise.
+- **Explorateur de données et revue du paramétrage depuis Claude.** Claude lance aussi toute agrégation de l'Explorateur (regroupements, mesures, filtres, période, Top N) et les analyses enregistrées, et passe en revue le paramétrage : objets de configuration, contrôle de configuration, travaux planifiés, jeux de règles, état de la licence. Les outils de l'Explorateur demandent la page Explorateur, ceux du paramétrage l'accès aux paramètres ; les secrets ne sont jamais affichés.
+- **Fichiers d'exemple pour Claude.** Un XML ou un PDF client peut être confié à Claude : ajouté dans Profil › Claude (MCP) › Fichiers d'exemple, ou envoyé depuis Claude Desktop, qui ne lit que le dossier d'exemples choisi dans les réglages de l'extension. Claude lit alors la structure d'un XML ou convertit un PDF avec les réglages d'un document, en essayant des ancres de tableau sans rien enregistrer. Ces fichiers sont des copies de travail, jamais traitées ni envoyées, supprimées après 7 jours.
+- **Joindre un fichier dans l'assistant.** Le trombone de l'assistant IA joint un XML ou un PDF à une question ; l'assistant le lit avec le message, et peut convertir un PDF avec les réglages d'un document ou contrôler le mapping d'un document dessus, comme depuis Claude Desktop. Le fichier rejoint les fichiers d'exemple de l'utilisateur, conservés 7 jours.
+- **Travail sur le mapping depuis Claude.** Mapping automatique à partir d'un exemple, comme dans l'éditeur de mapping : envoyez le XML ou le PDF d'une facture, Claude propose le mapping (et, pour un PDF texte, les règles d'extraction), le contrôle et signale ce qui manque. Claude lit aussi le mapping enregistré d'un document et les variables exigées par son jeu de règles, puis contrôle un mapping sur un fichier d'exemple et montre l'UBL obtenu, en essayant d'autres valeurs par-dessus celles enregistrées. Le fichier suit les étapes d'un traitement réel : PDF converti comme PDF texte ou PDF JD Edwards selon le document, feuille de pré-traitement, découpage en factures, inversion de signe. Rien n'est enregistré : Claude indique les valeurs à saisir dans l'éditeur de mapping. Nécessite l'accès aux paramètres.
+- **Modifications depuis Claude, sur autorisation.** Un nouveau réglage, Paramètres › Global › AI › MCP server › Allow changes over MCP (désactivé par défaut), permet à Claude, à la demande de l'utilisateur, d'enregistrer une analyse de l'Explorateur, des valeurs de mapping dans la feuille de style d'un document, les réglages PDF vers XML d'un document, et de créer un document (selon sa source : XML, PDF, UBL ou connecteur, avec sa propre feuille de style vierge, ou à partir d'un document existant) ou d'en modifier les réglages. Chaque source garde ses règles : les réglages d'un PDF texte sont refusés sur un document JD Edwards et inversement, et un document UBL n'a pas de mapping. Hormis l'analyse, ces actions nécessitent l'accès aux paramètres ; mots de passe, jetons et clés ne peuvent pas être définis par ce biais. La version précédente reste dans l'historique du fichier ou de la configuration, et chaque modification est tracée dans le journal du serveur avec le nom de l'utilisateur.
+- **Utilisation de Claude (MCP).** Le tableau de bord technique affiche, par utilisateur sur les 30 derniers jours, les appels faits depuis Claude, ceux en échec et ceux qui ont modifié quelque chose, avec l'heure du dernier. Des compteurs uniquement, jamais les questions posées ; conservés 90 jours.
+- **Connexion depuis Claude sans jeton.** Un client qui ne connaît que l'adresse du point d'accès MCP (Claude Code, un connecteur claude.ai quand l'instance est joignable depuis Internet) ouvre le navigateur sur NomaUBL : l'utilisateur s'identifie comme d'habitude, par mot de passe ou SSO, et autorise le client pour 30, 90 ou 365 jours. L'accès apparaît avec les jetons de l'utilisateur dans la fenêtre de profil et s'y révoque. Derrière un proxy, renseignez Paramètres › Global › AI › MCP server › Public address. Le jeton collé et l'extension Claude Desktop continuent de fonctionner.
+- **Fonction de rôle « MCP access ».** Seuls les rôles qui l'ont peuvent connecter Claude ; aucun rôle ne l'a par défaut.
+- **Jetons personnels.** Profil › Claude (MCP) : création d'un jeton (30, 90 ou 365 jours, affiché une seule fois), liste et révocation. Un changement de mot de passe ou la désactivation du compte y met fin.
+- **Extension Claude Desktop.** Profil › Claude (MCP) › Extension télécharge un fichier à ouvrir dans Claude Desktop : l'adresse du serveur est déjà renseignée, seul le jeton est demandé. Rien d'autre à installer.
 
 ---
 

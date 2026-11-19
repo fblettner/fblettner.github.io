@@ -121,6 +121,7 @@ const sidebars: SidebarsConfig = {
         },
         'liberty/framework/ai-assistant',
         'liberty/framework/mcp',
+        'liberty/framework/ai-data-sent',
         {
           type: 'category',
           label: 'Plugins',
@@ -529,6 +530,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'nomaubl/application/ai-capabilities',
+        'nomaubl/application/claude-mcp',
+        'nomaubl/application/ai-data-sent',
         'nomaubl/application/saved-views',
       ],
     },

@@ -239,9 +239,19 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 
 | Champ | Description |
 |---|---|
-| **System Prompt** | Consigne facultative ajoutée en tête de chaque conversation. Vide = la consigne NomaUBL intégrée. |
+| **System Prompt** | Consigne facultative utilisée à la place de la consigne NomaUBL intégrée. Vide = la consigne intégrée. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
-| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés au modèle (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués). |
+| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés à l'assistant (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. |
+
+### MCP server
+
+| Champ | Description |
+|---|---|
+| **MCP endpoint** | `N` par défaut. `Y` : Claude Desktop, Claude Code et un connecteur claude.ai utilisent les outils de cette instance sur `/mcp`, au nom d'un utilisateur dont le rôle a *MCP access* — voir [Claude (MCP)](../../application/claude-mcp.md). |
+| **Public address** | Adresse à laquelle les utilisateurs joignent cette instance (`https://nomaubl.example.com`), pour la connexion depuis Claude. Vide = l'adresse de la requête. |
+| **Allow changes over MCP** | `N` par défaut : lecture seule. `Y` : Claude peut enregistrer des analyses, des mappings et des documents à la demande de l'utilisateur — voir [Modifications](../../application/claude-mcp.md#changes). |
+
+Ce que ces réglages laissent sortir de l'instance est décrit dans [Données transmises à Anthropic](../../application/ai-data-sent.md).
 
 Le groupe **TLS / Corporate Proxy** (chemin et mot de passe d'un magasin de certificats, *Disable TLS validation* réservé à un diagnostic bref) est replié sous *Advanced*.
 

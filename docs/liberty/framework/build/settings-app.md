@@ -101,6 +101,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 |---|---|
 | **App name** | The application's name. |
 | **Environment** | What the installation is — `production`, `test`… It is named in the [licence usage report](./secure/license-key.md#usage-report). |
+| **Public address** | The address users reach the server at: what a password-reset mail links to, and what the sign-in of a Claude client ([MCP](../mcp.md#connect)) is published on. Blank = the browser's address. Set it behind a reverse proxy. |
 | **Bind host**, **Port** | Listening address and port. **Restart needed.** |
 | **Sub-path behind a reverse proxy** | `/liberty` to serve the application under that path behind a reverse proxy; blank = the site root. The page, the API, the downloads, the live connection and the single sign-on callback follow it — see [Serving under a sub-path](../../installation/traefik.md#sub-path). **Restart needed.** |
 | **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
@@ -197,7 +198,7 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Enabled** | The assistant answers; users need the `ai:chat` permission. |
 | **Anthropic API key** | Without it, the assistant says it is not configured. |
 | **Model**, **Effort**, **Max tokens**, **Adaptive thinking** | The model and how much it reasons and writes. |
-| **Max tool iterations** | Tool calls per answer, at most (default 8). |
+| **Max tool iterations** | Tool rounds one question may use (default 15). A procedure that writes several records through its screens needs more rounds than a question. |
 | **Request timeout (s)** | Default 120. |
 | **System prompt** | Empty: the built-in instructions. |
 | **Connector tools** | The assistant may list connectors and run their **read** queries. |
@@ -205,6 +206,8 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Data Explorer tools** | On by default: the assistant computes totals, rankings and trends on the [Data Explorer](../explorer/overview.md) models, and saves analyses and dashboards. |
 | **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
+| **Write tools** | Off by default. The assistant adds, changes or deletes a record, or runs an action, through its screen — for users holding `ai:write` and the screen's own permissions; applied from a card in the drawer, confirmed by the client over MCP. See [Write through a screen](../ai-assistant.md#write). |
+| **Hide sensitive data from the assistant** | Off by default. The columns whose dictionary item or screen column is flagged **Sensitive** are not given to the assistant, in the drawer and over MCP. It does not cover what a user types or attaches, an unflagged free-text column, nor what an API endpoint or an application's own tool returns. See [Sensitive data](../ai-data-sent.md#sensitive). |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 | **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
@@ -212,11 +215,11 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **File attached to a question: megabytes at most** | 10 by default (0 to 30); `0` removes the paperclip of the drawer — see [Attach a file](../ai-assistant.md#attach). |
 | **Usage record kept (days; 0 = without limit)** | 90 by default — see [AI usage](../../monitoring/ai-usage.md#retention). |
 | **MCP endpoint (/mcp)** | Off by default: the same tools for an external client — Claude Desktop, claude.ai, Claude Code —, each user with a personal access token. Applied without a restart. See [Connect Claude (MCP)](../mcp.md). |
-| **Personal access token: longest life (days)** | 366 by default. |
+| **Personal access token: longest life (days)** | 366 by default: the longest validity of a token, and how long a sign-in from a Claude client lasts before the user allows it again. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
 | **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
 
-See [AI assistant](../ai-assistant.md).
+See [AI assistant](../ai-assistant.md), and [Data sent to Anthropic](../ai-data-sent.md) for what these settings let out of the installation.
 
 ---
 

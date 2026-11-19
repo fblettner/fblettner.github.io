@@ -1,7 +1,7 @@
 ---
 title: AI assistant
 description: "The Liberty Next AI assistant: the drawer opened from the Assistant button, the page context it receives, files attached to a question, saved conversations and notes, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, search the catalogue, describe the installation, follow playbooks, call the applications' tools, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, the permissions of each tool, allowed connectors, read-only queries, data scope), and its settings."
-keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, search_catalog, api_call, scaffold, data scope, attach a file, conversations, notes, application tools, MCP]
+keywords: [Liberty Next, AI assistant, Anthropic, Claude, ai:chat, page context, starter questions, playbooks, operations tools, model picker, tools, list_connectors, sql_query, search_catalog, screen_write, screen_action, ai:write, sensitive data, api_call, scaffold, data scope, attach a file, conversations, notes, application tools, MCP]
 ---
 
 # AI assistant
@@ -201,15 +201,42 @@ Questions come from two sources:
 | `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
 | Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
 | `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
+| `screen_form`, `screen_write`, `screen_action` | Read what a screen lets its user do, then add, change or delete **one** record, or run **one** action of the screen, through the screen's own queries and rules — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
 | Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default); superusers only. |
 | Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
-The assistant only uses existing named queries: it does not write SQL against the database. Beyond **Rows per query, at most**, a result is marked as truncated and the assistant is told not to count or add up the rows it received: it narrows its filters, or computes the figure with the Data Explorer tools. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call.
+The assistant only uses existing named queries: it does not write SQL against the database. Beyond **Rows per query, at most**, a result is marked as truncated and the assistant is told not to count or add up the rows it received: it narrows its filters, or computes the figure with the Data Explorer tools. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call. A question that uses all its tool rounds (**Max tool iterations**, 15 by default) ends on a closing answer: what was done, what was found, what is left — and the user can ask to continue.
 
 The **Operations tools** let the assistant read the running server rather than guess when a job failed, is late or is missing. They are meant for installations whose chat users are administrators: the server log can hold anything the server wrote.
+
+---
+
+## Write through a screen \{#write\}
+
+With the **Write tools** on, the assistant can do what a user does in a screen — nothing by another path:
+
+| Tool | Does |
+|---|---|
+| `screen_form` | Reads what the screen lets this user add, change, delete and run: the key, each column with its label, whether it is required or locked, its default and the values it accepts, and the screen's actions. |
+| `screen_write` | Adds, changes or deletes **one** record. |
+| `screen_action` | Runs **one** action of the screen — a row menu's *Validate* or *Close*, a button of the toolbar or of a form tab. |
+
+The record is read through the screen's read query, and the form's rules apply: a missing required column, a value outside its list, a column or a record the screen holds read-only are refused with the reason. The save then runs as from the form — dictionary rules, sequences, related tables, audit, data scope, change package, notification rules — and so do the screen's save hooks and the steps of its actions, each under its own permission.
+
+**Three locks, all needed:** the **Write tools** setting, the `ai:write` permission of the role, and the permission of each query, endpoint or plugin that runs, as in the screen.
+
+**Who confirms.** In the drawer the tools only propose: the user gets a card — *Change sales/orders — … — STATUS: 'OPEN' → 'CLOSED'*, or the action with the screen's confirmation and what it runs — and nothing happens until **Apply**; **Skip** drops the step. Over [MCP](./mcp.md), the client asks its user before calling a tool that changes something.
+
+| Refused | Reason given |
+|---|---|
+| A record open in its form | The form holds the record: it cannot be changed or deleted until the form is closed — by another user, or by the user's own open form. |
+| A screen that cannot be written | The screen is read-only, has no query for the operation, or runs actions when its form opens. |
+| An action made only of what a browser does | Opening a page or an address is noted, not run. |
+
+As in the screen, a save, its related tables and its hooks are separate statements: when a hook or a step fails, what ran before stays, and the answer says so.
 
 ---
 
@@ -246,6 +273,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
   | Data Explorer tools | `explorer:<app>:<model>`. |
   | `list_connectors`, `describe_instance`, `search_catalog`, playbooks | Nothing more, and they show only what the user can open: a screen by its read query, a menu entry by the [menu's rule](./build/menus/permissions-and-roles.md#gating), a job by `job:<id>`. An application with nothing for the user is not named. |
   | Application tools | The tool's permission. |
+  | `screen_form`, `screen_write`, `screen_action` | `ai:write`, and the permission of each query, endpoint or plugin the screen runs. |
   | Operations and scaffold tools | Superuser. |
 
   A user holding `ai:chat` without the `sql:` or `explorer:` permissions of an application gets no figure from it: grant them, as for the screens. A refusal reads the same for a query that exists and for one that does not.
@@ -258,13 +286,14 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 ## From Claude, and what is recorded \{#beyond\}
 
 - The same tools answer an external client — Claude Desktop, claude.ai, Claude Code — through the server's MCP endpoint, each user with a personal access token and their own rights. See [Connect Claude (MCP)](./mcp.md).
+- An installation can flag its sensitive columns and keep them from the assistant, and [Data sent to Anthropic](./ai-data-sent.md) lists what a question sends and what it never does.
 - Every question is recorded: who asked, the model, the tokens, the tools called — never the question, the answer or a row. Superusers read it in [Monitoring → AI usage](../monitoring/ai-usage.md).
 
 ---
 
 ## Settings \{#settings\}
 
-In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, **Rows per query, at most**, **File attached to a question**, **Usage record kept**, the **MCP endpoint**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
+In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (15), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, **Rows per query, at most**, **File attached to a question**, **Usage record kept**, **Write tools**, **Hide sensitive data from the assistant**, the **MCP endpoint**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 

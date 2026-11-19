@@ -20,6 +20,7 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 
 - Click **✦ AI Assistant** at the right end of the top bar. The panel opens as a drawer beside the page; it stays usable while an invoice window is open.
 - Press **Enter** to send, **Shift+Enter** for a new line, **■** to stop a reply in progress.
+- The **paperclip** (*Attach an XML or PDF file*) attaches one or several files to the question: the assistant reads them with the message. A file is kept with the user's [sample files](./claude-mcp.md#samples) for 7 days.
 - **The conversation is kept** when the panel is closed or the page reloaded (the last 40 messages, in the browser). **+ New chat** starts a fresh one.
 - **Opening another invoice starts a new conversation**: the previous exchange was about another invoice and would mislead the model.
 
@@ -176,6 +177,19 @@ The assistant also receives the live **status catalogue**, so *"en litige"*, *"r
 
 The data tools follow the rights of the signed-in user: the company visibility of the role applies to the invoices, figures and backlog the assistant reads.
 
+### Sample files and mapping
+
+With a file attached, or one of the user's [sample files](./claude-mcp.md#samples), the assistant works as the [XSL editor](../ubl-tools/xsl-editor.md) does:
+
+| Tools | Use |
+|---|---|
+| **`samples`**, **`sample_structure`**, **`sample_text`** | The user's samples; the structure of an XML sample; its text, in windows. |
+| **`pdf_to_xml`** | Converts a PDF sample to the XML NomaUBL builds from it, with a document's settings. |
+| **`document_fields`**, **`ubl_variables`**, **`mapping_brief`**, **`read_mapping`** | A document's settings, the variables its rule set requires, the brief of an auto-mapping, the saved mapping. |
+| **`check_mapping`**, **`test_transform`** | Checks a mapping on a sample and shows the UBL it gives. |
+
+Nothing is saved: the assistant gives the values to enter in the mapping editor.
+
 ### Playbooks
 
 For a diagnosis, the assistant first loads the matching **playbook** (🧭 `load_playbook`), then follows its steps. The built-in playbooks are:
@@ -236,9 +250,11 @@ At most **10 tool calls** are chained for one question. When a tool fails, the a
 
 - **Change anything.** It only reads. Asked to resend, reprocess or change a setting, it says where in the application to do it.
 - **Go beyond your rights.** The data tools apply the company visibility of your role, and the settings require the *Settings access* feature.
-- **Read files.** The chat is text-only; a short XML pasted in the question is read, a file cannot be attached.
+- **Read a file other than XML or PDF.** The paperclip takes `.xml` and `.pdf` files: a PDF up to 10 MB, the first 150,000 characters of an XML.
 
 The administrator sets the API key, the default model, the documentation source, the custom playbooks, the system prompt and the tools from the *AI* tab of the [global settings](../configuration/system/global.md).
+
+The same tools answer **Claude Desktop** and **Claude Code** when the instance opens its MCP endpoint — see [Claude (MCP)](./claude-mcp.md).
 
 ---
 
@@ -249,5 +265,5 @@ The administrator sets the API key, the default model, the documentation source,
 - **Click the follow-ups.** They carry on the diagnosis with the right next check.
 - **Start a new chat for a new subject.** A long thread on another topic weighs on the answers.
 - **Pick a heavier model for a long diagnosis**, the default for everyday questions.
-- **Treat the panel as an external service.** Questions and tool results are sent to the model provider; avoid pasting personal data that the screens do not already show.
+- **Treat the panel as an external service.** Questions, tool results and attached files are sent to Anthropic — [Data sent to Anthropic](./ai-data-sent.md) lists what goes and what never does; avoid pasting personal data that the screens do not already show.
 - **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](reports/overview.md) give the full picture.

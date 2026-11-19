@@ -1,14 +1,16 @@
 ---
 title: Connecter Claude (MCP)
-description: "Utiliser les outils de l'assistant Liberty Next depuis Claude Desktop, claude.ai ou Claude Code : le point d'accès MCP du serveur, la permission mcp:use, les jetons d'accès personnels créés dans le profil de l'utilisateur, le connecteur personnalisé à déclarer, ce que le client peut faire et la fin de validité d'un jeton."
-keywords: [Liberty Next, MCP, Model Context Protocol, Claude, Claude Desktop, Claude Code, connecteur personnalisé, jeton d'accès personnel, mcp:use, assistant IA, outils]
+description: "Utiliser les outils de l'assistant Liberty Next depuis Claude Desktop, claude.ai ou Claude Code : le point d'accès MCP du serveur, la permission mcp:use, la connexion depuis le client, l'extension Claude Desktop pour un serveur hors d'Internet, les jetons d'accès personnels, ce que le client peut faire et la fin d'un accès."
+keywords: [Liberty Next, MCP, Model Context Protocol, Claude, Claude Desktop, Claude Code, connecteur personnalisé, OAuth, connexion, extension, jeton d'accès personnel, mcp:use, assistant IA, outils]
 ---
 
 # Connecter Claude (MCP)
 
 Les outils de l'[assistant IA](./ai-assistant.md) peuvent répondre à un client externe — Claude Desktop, claude.ai, Claude Code — par le **point d'accès MCP** du serveur, `/mcp`. Le client agit au nom d'un utilisateur de Liberty Next : il reçoit les outils proposés à cet utilisateur dans le panneau de l'assistant, chaque appel passe par les mêmes contrôles de permission et le même périmètre de données, et chaque appel est enregistré.
 
-Trois conditions : le point d'accès activé, la permission `mcp:use`, et un **jeton d'accès personnel** que l'utilisateur crée dans son profil.
+Trois conditions : le point d'accès activé, la permission `mcp:use`, et un moyen de se connecter — une connexion depuis le client, l'extension Claude Desktop, ou un **jeton d'accès personnel** collé.
+
+Ce qui part chez Anthropic dans ce cas, et ce qui n'y part pas, est décrit dans [Données transmises à Anthropic](./ai-data-sent.md).
 
 ---
 
@@ -48,6 +50,8 @@ Trois conditions : le point d'accès activé, la permission `mcp:use`, et un **j
   <text x="240" y="278" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Un jeton prend aussi fin quand votre compte est désactivé ou perd la permission,</text>
   <text x="240" y="292" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">et quand vous changez de mot de passe — faites-le si un jeton a fuité.</text>
   <line x1="240" y1="310" x2="960" y2="310" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="322" width="156" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="318.0" y="336.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Extension Claude Desktop</text>
   <rect x="860" y="322" width="100" height="22" rx="5" fill="url(#mcp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="910.0" y="336.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Créer un jeton</text>
   <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -62,6 +66,10 @@ Trois conditions : le point d'accès activé, la permission `mcp:use`, et un **j
   <text x="30" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Affiché une seule fois</text>
   <text x="30" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">jamais conservé par le serveur</text>
   <line x1="200" y1="257.0" x2="240" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="20" y="316" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="331" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Extension Claude Desktop</text>
+  <text x="30" y="344" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">serveur hors d'Internet</text>
+  <line x1="200" y1="333.0" x2="240" y2="333" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
   <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Durée de validité</text>
   <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">90 jours, plafonnée par le serveur</text>
@@ -85,7 +93,9 @@ Dans **Liberty Next → Administrer → App → Assistant IA** :
 | Champ | Défaut | Description |
 |---|---|---|
 | **Point d'accès MCP (/mcp)** | Désactivé | Le serveur répond sur `/mcp`. Appliqué à l'enregistrement, sans redémarrage. |
-| **Jeton d'accès personnel : durée maximale (jours)** | 366 | La plus longue validité qu'un utilisateur peut demander. |
+| **Jeton d'accès personnel : durée maximale (jours)** | 366 | La plus longue validité qu'un utilisateur peut demander pour un jeton, et la durée d'une connexion depuis un client avant une nouvelle autorisation. |
+
+Derrière un proxy inverse, renseigner aussi **Adresse publique** (même page, *Serveur*) avec l'adresse à laquelle les utilisateurs joignent le serveur : les adresses publiées pour la connexion sont construites à partir d'elle.
 
 Le point d'accès demande le complément `mcp` du paquet (`pip install "liberty-next[mcp]"`) ; `liberty-next[all]` et l'image Docker le contiennent.
 
@@ -96,6 +106,21 @@ Le point d'accès demande le complément `mcp` du paquet (`pip install "liberty-
 Dans **Liberty Next → Administrer → Accès**, donner au rôle la règle **Assistant IA → Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`), dans **Au-delà des menus**. L'utilisateur voit alors l'onglet **Jetons d'accès** de son profil ; un superutilisateur le voit toujours.
 
 `mcp:use` ne fait qu'ouvrir le point d'accès : ce que le client atteint dépend toujours des autres permissions de l'utilisateur — voir [Qui peut l'utiliser, et sur quoi](./ai-assistant.md#access).
+
+---
+
+## Connecter le client \{#connect\}
+
+| Moyen | Pour | Étapes |
+|---|---|---|
+| **Connexion depuis le client** | Un connecteur personnalisé dans Claude Desktop ou claude.ai. Le connecteur est appelé depuis les serveurs d'Anthropic : le serveur Liberty doit être accessible depuis Internet. | Donner au connecteur l'adresse de `/mcp` seule. Le navigateur ouvre Liberty : l'utilisateur se connecte comme d'habitude (mot de passe ou SSO), puis, sur la page **Autoriser l'accès** — *le client demande à utiliser l'application en tant que l'utilisateur* — clique sur **Autoriser** (ou **Refuser**). Rien à créer, rien à coller. |
+| **Extension Claude Desktop** | Un serveur qui n'est pas sur Internet : adresse interne, VPN. | Dans l'onglet **Jetons d'accès** du profil, **Extension Claude Desktop** télécharge `liberty.mcpb`. Ouvrir le fichier avec Claude Desktop et y coller un jeton créé dans le même onglet — voir [plus bas](#extension). |
+| **Jeton collé** | Claude Code, un script. | [Créer un jeton](#token) et le donner au client dans l'en-tête de requête `Authorization: Bearer <jeton>`, avec l'**URL du connecteur** de l'onglet — `https://<serveur>/mcp`. |
+
+| Réponse | Signification |
+|---|---|
+| `404` | Le point d'accès est désactivé. |
+| `401` | Pas de jeton, ou un jeton invalide ou arrivé à son terme. |
 
 ---
 
@@ -111,41 +136,37 @@ L'onglet donne aussi l'**URL du connecteur**, l'adresse du serveur suivie de `/m
 
 ---
 
-## Déclarer le connecteur dans Claude \{#connect\}
+## L'extension Claude Desktop \{#extension\}
 
-Dans le client, ajouter un connecteur personnalisé avec :
+L'extension exécute un petit relais sur le poste de l'utilisateur : il transmet les messages de Claude à `/mcp` avec le jeton d'accès personnel de l'utilisateur ; il suffit donc que le serveur soit joignable depuis ce poste. Le fichier est construit au téléchargement avec l'adresse du serveur déjà renseignée, et ne contient aucun secret. Rien à installer : Claude Desktop fournit ce dont le relais a besoin.
 
-| Réglage | Valeur |
+| Réglage dans Claude Desktop | Contenu |
 |---|---|
-| URL | L'**URL du connecteur** de l'onglet — `https://<serveur>/mcp`. |
-| En-tête de requête | `Authorization: Bearer <jeton>` |
-
-| Réponse | Signification |
-|---|---|
-| `404` | Le point d'accès est désactivé. |
-| `401` | Pas de jeton, ou un jeton invalide ou arrivé à son terme. |
+| **Liberty address** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
+| **Personal access token** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
+| **Accept an internal certificate** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
 
 ---
 
 ## Ce que le client peut faire \{#tools\}
 
 - Le client reçoit les outils proposés à l'utilisateur dans le panneau de l'assistant, avec les mêmes descriptions ; un outil que l'utilisateur ne peut pas utiliser n'est pas listé.
-- Chaque appel vérifie les permissions de l'utilisateur et applique son [périmètre de données](./build/secure/roles-and-permissions.md#data-scope), comme dans le panneau.
+- Chaque appel vérifie les permissions de l'utilisateur et applique son [périmètre de données](./build/secure/roles-and-permissions.md#data-scope), comme dans le panneau ; les colonnes que l'installation [marque comme sensibles](./ai-data-sent.md#sensitive) sont écartées de la même façon.
 - Les outils dont le résultat est une carte du panneau ne sont pas proposés : les propositions de construction et les notes.
-- Un outil qui enregistre quelque chose — une analyse ou un tableau de bord de l'explorateur de données — le signale au client, qui peut alors demander une confirmation.
+- Un outil qui modifie quelque chose — l'enregistrement d'une analyse ou d'un tableau de bord de l'explorateur de données, [l'écriture d'un enregistrement ou le lancement d'une action par un écran](./ai-assistant.md#write) — le signale au client, qui demande l'accord de son utilisateur avant de l'appeler.
 - Un jeton d'accès personnel n'ouvre que le point d'accès MCP : le reste de l'API le refuse.
 
 ---
 
-## Fin de validité d'un jeton \{#end\}
+## Fin d'un accès \{#end\}
 
-Le compte est relu à chaque appel : un jeton porte les droits de l'utilisateur à cet instant, jamais davantage. Il prend fin :
+Le compte est relu à chaque appel : un accès porte les droits de l'utilisateur à cet instant, jamais davantage. Un jeton ou une connexion prend fin :
 
-- à sa date d'expiration ;
+- à sa date d'expiration — une connexion dure la **durée maximale** réglée plus haut, puis l'utilisateur autorise de nouveau le client ;
 - quand le compte est désactivé, ou perd `mcp:use` ;
 - quand le mot de passe du compte change.
 
-Il n'y a ni liste des jetons ni bouton de révocation : **changer le mot de passe met fin à tous les jetons du compte**. C'est la marche à suivre quand un jeton a fuité.
+Rien n'est conservé sur le serveur pour ces accès : il n'y a donc ni liste ni bouton de révocation. **Changer le mot de passe met fin à tous les accès du compte** ; c'est la marche à suivre quand un jeton a fuité.
 
 ---
 
@@ -157,6 +178,6 @@ Chaque appel figure dans l'enregistrement d'usage, avec le modèle `mcp` : l'uti
 
 ## Conseils \{#tips\}
 
-- Choisir une validité courte pour un premier essai, et créer un nouveau jeton plutôt que d'en partager un : un jeton est l'accès personnel de l'utilisateur.
+- Préférer la connexion depuis le client pour un serveur sur Internet, l'extension pour un serveur interne : aucune des deux ne demande de manipuler un secret plus d'une fois.
 - Accorder `mcp:use` aux rôles qui utilisent déjà l'assistant dans l'application ; les réponses dépendent des mêmes permissions `sql:` et `explorer:`.
 - Servir le point d'accès en HTTPS uniquement : le jeton circule dans un en-tête de requête.

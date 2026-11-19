@@ -20,6 +20,7 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 
 - Cliquer sur **✦ AI Assistant**, à droite de la barre supérieure. Le panneau s'ouvre en tiroir à côté de la page et reste utilisable quand une fenêtre de facture est ouverte.
 - **Entrée** envoie la question, **Maj+Entrée** insère un saut de ligne, **■** interrompt la réponse en cours.
+- Le **trombone** (*Joindre un fichier XML ou PDF*) joint un ou plusieurs fichiers à la question : l'assistant les lit avec le message. Un fichier est conservé avec les [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur pendant 7 jours.
 - **La conversation est conservée** à la fermeture du panneau ou au rechargement de la page (les 40 derniers messages, dans le navigateur). **+ Nouvelle conversation** repart de zéro.
 - **Ouvrir une autre facture démarre une nouvelle conversation** : l'échange précédent portait sur une autre facture et induirait le modèle en erreur.
 
@@ -176,6 +177,19 @@ L'assistant reçoit aussi le **catalogue des statuts** à jour : *« en litige �
 
 Les outils de données respectent les droits de l'utilisateur connecté : la visibilité par société du rôle s'applique aux factures, chiffres et reste à traiter consultés par l'assistant.
 
+### Fichiers d'exemple et mapping
+
+Avec un fichier joint, ou l'un des [fichiers d'exemple](./claude-mcp.md#samples) de l'utilisateur, l'assistant travaille comme l'[éditeur XSL](../ubl-tools/xsl-editor.md) :
+
+| Outils | Usage |
+|---|---|
+| **`samples`**, **`sample_structure`**, **`sample_text`** | Les exemples de l'utilisateur ; la structure d'un XML d'exemple ; son texte, par fenêtres. |
+| **`pdf_to_xml`** | Convertit un PDF d'exemple en XML tel que NomaUBL le construit, avec les réglages d'un document. |
+| **`document_fields`**, **`ubl_variables`**, **`mapping_brief`**, **`read_mapping`** | Les réglages d'un document, les variables exigées par son jeu de règles, le cadrage d'un mapping automatique, le mapping enregistré. |
+| **`check_mapping`**, **`test_transform`** | Contrôlent un mapping sur un exemple et montrent l'UBL obtenu. |
+
+Rien n'est enregistré : l'assistant donne les valeurs à saisir dans l'éditeur de mapping.
+
 ### Procédures de diagnostic
 
 Pour un diagnostic, l'assistant charge d'abord la **procédure** correspondante (🧭 `load_playbook`), puis en suit les étapes. Les procédures fournies sont :
@@ -236,9 +250,11 @@ Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil é
 
 - **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
 - **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Accès aux paramètres*.
-- **Pas de fichiers.** La conversation est textuelle : un court XML collé dans la question est lu, un fichier ne peut pas être joint.
+- **Pas d'autre fichier que XML ou PDF.** Le trombone accepte les fichiers `.xml` et `.pdf` : un PDF jusqu'à 10 Mo, les 150 000 premiers caractères d'un XML.
 
 L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).
+
+Les mêmes outils répondent à **Claude Desktop** et à **Claude Code** quand l'instance ouvre son point d'accès MCP — voir [Claude (MCP)](./claude-mcp.md).
 
 ---
 
@@ -249,5 +265,5 @@ L'administrateur définit la clé d'API, le modèle par défaut, la source de do
 - **Cliquer sur les relances.** Elles poursuivent le diagnostic avec la vérification suivante.
 - **Ouvrir une nouvelle conversation pour un nouveau sujet.** Un long échange sur un autre thème pèse sur les réponses.
 - **Choisir un modèle plus puissant pour un diagnostic long**, le modèle par défaut pour les questions courantes.
-- **Considérer le panneau comme un service externe.** Les questions et les résultats d'outil sont transmis au fournisseur du modèle ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
+- **Considérer le panneau comme un service externe.** Les questions, les résultats d'outils et les fichiers joints sont transmis à Anthropic — [Données transmises à Anthropic](./ai-data-sent.md) détaille ce qui part et ce qui ne part jamais ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
 - **Pour une liste exhaustive, passer par les pages dédiées.** L'assistant caractérise un problème ; la liste [E-Invoicing](./invoices.md), le [Diagnostic](./diagnostics/overview.md) et les [Rapports](reports/overview.md) donnent la vue complète.

@@ -210,7 +210,7 @@ Un clic sur un utilisateur limite les questions du bas aux siennes (*Questions d
 
 ## Dernières questions \{#recent\}
 
-Une ligne par question : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue** — *Répondu*, *Échec* ou *Abandonné*. Une ligne se déplie sur ses appels d'outils, chacun avec sa taille en caractères et sa durée.
+Une ligne par question : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue** — *Répondu*, *Échec*, *Abandonné* ou *Limite de tours* (la question a épuisé ses tours d'outils et s'est terminée par une réponse de clôture). Une ligne se déplie sur ses appels d'outils, chacun avec sa taille en caractères et sa durée.
 
 ---
 

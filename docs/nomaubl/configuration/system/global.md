@@ -237,9 +237,19 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 
 | Field | Description |
 |---|---|
-| **System Prompt** | Optional prompt prepended to every chat. Empty = the built-in NomaUBL prompt. |
+| **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
-| **Custom Tools** | Read-only tools on this instance's data offered to the model (invoices, errors, history, dashboards, server log, settings with secrets masked). |
+| **Custom Tools** | Read-only tools on this instance's data offered to the assistant (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. |
+
+### MCP server
+
+| Field | Description |
+|---|---|
+| **MCP endpoint** | `N` by default. `Y`: Claude Desktop, Claude Code and a claude.ai connector use this instance's tools at `/mcp`, as a user whose role has *MCP access* — see [Claude (MCP)](../../application/claude-mcp.md). |
+| **Public address** | Address the users reach this instance at (`https://nomaubl.example.com`), for Claude's sign-in. Blank = the address of the request. |
+| **Allow changes over MCP** | `N` by default: read only. `Y`: Claude may save analyses, mappings and documents when the user asks — see [Changes](../../application/claude-mcp.md#changes). |
+
+What these settings let out of the instance is described on [Data sent to Anthropic](../../application/ai-data-sent.md).
 
 The **TLS / corporate proxy** group (custom truststore path and password, *Disable TLS validation* for a short diagnosis only) is folded under *Advanced*.
 

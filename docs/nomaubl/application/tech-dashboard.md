@@ -294,6 +294,20 @@ Two modes:
 
 Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
 
+### Claude (MCP) usage \{#mcp-usage\}
+
+Shown when the [MCP endpoint](./claude-mcp.md) is on: the calls made from Claude *per user, last 30 days*.
+
+| Column | Content |
+|---|---|
+| *(user)* | The account Claude acted as. |
+| **Today**, **30 days** | Calls of the day and of the last 30 days. |
+| **Failed** | Calls that ended in an error. |
+| **Changes** | Calls that changed something — only with *Allow changes over MCP*. |
+| **Last call** | Time of the latest call. |
+
+Counts only, never what was asked; they are kept 90 days.
+
 ---
 
 ## Recent errors

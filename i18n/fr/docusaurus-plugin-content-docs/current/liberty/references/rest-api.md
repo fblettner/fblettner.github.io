@@ -43,6 +43,8 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
 | `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
+| `GET` | `/auth/mcp/extension` | L'extension Claude Desktop (`liberty.mcpb`) avec l'adresse du serveur déjà renseignée. Demande `mcp:use`. |
+| `GET` / `POST` | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/oauth/register`, `/oauth/token` | La connexion d'un client MCP : découverte, enregistrement du client, échange du code et renouvellement. La page d'autorisation est `/oauth/authorize`. |
 | `GET` | `/auth/oidc/login`, `/auth/oidc/callback` | Connexion OpenID Connect. |
 
 Voir [Se connecter](../framework/build/secure/sign-in.md).

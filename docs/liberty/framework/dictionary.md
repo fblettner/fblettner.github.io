@@ -213,6 +213,10 @@ The **Framework** tab can add values to this list.
 
 The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
 
+### Sensitive data \{#sensitive\}
+
+**Sensitive**, in the *Rule* tab of an entry, says the item holds sensitive data — a person's name, an e-mail address, a bank identifier. Where the installation hides sensitive data from the AI assistant, every column carrying the item is left out of what the assistant is given, in the drawer and through MCP. It changes nothing in the screens. A screen column has the same flag, for a column without an item. See [Sensitive data](./ai-data-sent.md#sensitive).
+
 ### Audit columns \{#form-layer-defaults\}
 
 A rule applies to every write whose query binds the column:
