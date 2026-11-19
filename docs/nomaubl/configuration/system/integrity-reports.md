@@ -177,7 +177,7 @@ The **Start from** list pre-fills a check — mode, connectors, key columns, SQL
 
 | Template | Check |
 |---|---|
-| **BIP jobs not integrated (F986114 vs F564230)** | The BIP print jobs of the configured reports that never reached NomaUBL, with the *Integrate BIP jobs* action. Uses `{bipFilter}` and `{bipTemplate}`. |
+| **BIP jobs not integrated (F986114 vs F564230)** | The BIP print jobs of the configured reports that never reached NomaUBL — including a job whose run ended on a failed insert, since no invoice was created —, with the *Integrate BIP jobs* action. Uses `{bipFilter}` and `{bipTemplate}`. |
 | **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Customer ledger invoices of the period absent from NomaUBL. |
 | **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Invoices written by sales order update, open and history lines, absent from NomaUBL. |
 | **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Invoices present on both sides whose amounts differ. |
@@ -190,7 +190,7 @@ On a check that already has SQL, the editor asks for confirmation before replaci
 This action extracts JD Edwards BI Publisher jobs. Checks without an action work on any source system.
 :::
 
-When **Action** is set to **Integrate BIP jobs**, the selected rows are integrated exactly like the command `fetch-single <template> bip <job>` (see [Command line](../../management/command-line.md)), through the [Fetch Invoices](./fetch-invoices.md) batch. Five fields map the result columns:
+When **Action** is set to **Integrate BIP jobs**, the selected rows are integrated exactly like the command `fetch-single <template> bip <job>` (see [Command line](../../management/command-line.md)), through the [Fetch Invoices](./fetch-invoices.md) batch. Six fields set it up:
 
 | Field | Description |
 |---|---|
@@ -199,6 +199,7 @@ When **Action** is set to **Integrate BIP jobs**, the selected rows are integrat
 | **Fixed template** | Document used when the template column is empty or missing. |
 | **Host column** | Result column holding the JDE execution host — only on JD Edwards installations with several hosts. Optional. |
 | **Processing type** | `AUTO` *(default)*, `SINGLE`, `BURST`, `UBL` or `BOTH`. |
+| **Extract** | What is fetched for each job, as the scheduled fetch of these jobs does: *Input — the XML fed to BI Publisher* (default), *Output — what BI Publisher produced*, or *Both*. |
 
 ---
 

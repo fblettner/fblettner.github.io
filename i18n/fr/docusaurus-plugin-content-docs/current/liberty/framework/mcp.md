@@ -152,20 +152,20 @@ L'onglet donne aussi l'**URL du connecteur**, l'adresse du serveur suivie de `/m
 
 L'extension exécute un petit relais sur le poste de l'utilisateur : il transmet les messages de Claude à `/mcp` avec le jeton d'accès personnel de l'utilisateur ; il suffit donc que le serveur soit joignable depuis ce poste. Le fichier est construit au téléchargement avec l'adresse du serveur déjà renseignée, et ne contient aucun secret. Rien à installer : Claude Desktop fournit ce dont le relais a besoin.
 
-Les réglages de l'extension sont en anglais dans Claude Desktop :
-
 | Réglage dans Claude Desktop | Contenu |
 |---|---|
-| **Liberty address** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
-| **Personal access token** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
-| **Files folder** | Facultatif. Le dossier d'où Claude peut envoyer un fichier, pour une tâche qui en charge un — voir [plus bas](#files). |
-| **Accept an internal certificate** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
+| **Adresse de Liberty** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
+| **Jeton d'accès personnel** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
+| **Dossier de fichiers** | Facultatif. Le dossier d'où Claude peut envoyer un fichier, pour une tâche qui en charge un — voir [plus bas](#files). |
+| **Accepter un certificat interne** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
+
+Les réglages sont en français quand l'extension est téléchargée depuis une interface en français, en anglais sinon.
 
 **Plusieurs serveurs dans un même Claude Desktop.** Le nom de l'extension porte celui de son instance — l'**Environnement** de l'installation (Administrer → App → Serveur) et l'hôte de son adresse : *Liberty Next – Test · liberty-test.example.com*. Les extensions d'un serveur de production et d'un serveur de test, ou de deux clients, s'installent côte à côte, chacune avec son jeton. Le serveur précise aussi à Claude l'instance qu'il représente : une réponse ou une modification nomme l'instance concernée.
 
 ### Envoyer un fichier pour une tâche \{#files\}
 
-Avec un **Files folder**, l'extension propose deux outils exécutés sur le poste de l'utilisateur : l'un liste les classeurs et les fichiers délimités de ce dossier — `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv` —, l'autre en envoie un à Liberty pour une tâche. Le fichier arrive dans la zone de dépôt de la tâche, comme depuis sa page, avec la même limite de taille ; le dépôt ne lance rien, et `job_run` désigne ensuite le fichier.
+Avec un **Dossier de fichiers**, l'extension propose deux outils exécutés sur le poste de l'utilisateur : l'un liste les classeurs et les fichiers délimités de ce dossier — `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv` —, l'autre en envoie un à Liberty pour une tâche. Le fichier arrive dans la zone de dépôt de la tâche, comme depuis sa page, avec la même limite de taille ; le dépôt ne lance rien, et `job_run` désigne ensuite le fichier.
 
 L'envoi d'un fichier demande ce que demande l'exécution de la tâche : les réglages **Outils d'écriture** et **Autoriser les modifications en MCP**, `ai:write` et `job:<id>`. Un connecteur ouvert par connexion depuis le client n'a pas accès au disque de l'utilisateur : le fichier se charge alors depuis la page de la tâche.
 

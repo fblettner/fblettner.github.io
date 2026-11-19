@@ -133,7 +133,7 @@ L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateu
 |---|---|
 | La conversation de l'assistant | Dans le navigateur de l'utilisateur (les 40 derniers messages) ; pas sur le serveur. |
 | Les fichiers d'exemple et les fichiers joints dans l'assistant | Sur le serveur, par utilisateur, 7 jours. |
-| L'utilisation de MCP | Des compteurs par utilisateur et par jour — appels, échecs, modifications — pendant 90 jours ; jamais ce qui a été demandé. |
+| L'utilisation de l'IA | Pour chaque tour de l'assistant, du mapping automatique et de Claude (MCP) : l'utilisateur, la date, le modèle, les jetons, et pour chaque outil son nom et le résumé de son entrée — pendant 90 jours par défaut ; jamais la question, la réponse ni ce qu'un outil a renvoyé. Voir [Utilisation de l'IA](./diagnostics/ai-usage.md). |
 | Les appels MCP dans le journal du serveur | Une ligne par appel en échec et une par modification, avec l'utilisateur, l'outil et le début de ses arguments et de son résultat. Une lecture réussie ne laisse aucune ligne. |
 
 ---

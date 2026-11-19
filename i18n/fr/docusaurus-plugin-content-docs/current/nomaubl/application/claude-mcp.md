@@ -197,7 +197,7 @@ Chaque source garde ses règles : les réglages d'un PDF texte sont refusés sur
 
 ## Utilisation \{#usage\}
 
-Le [tableau de bord technique](./tech-dashboard.md#mcp-usage) montre, par utilisateur sur les 30 derniers jours, les appels faits depuis Claude, ceux en échec et ceux qui ont modifié quelque chose. Le [journal du serveur](./diagnostics/server-log.md) contient une ligne par appel en échec et une par modification ; une lecture réussie ne laisse aucune ligne.
+La vue [Utilisation de l'IA](./diagnostics/ai-usage.md) du Diagnostic liste les appels faits depuis Claude sous le canal *Claude (MCP)* — par utilisateur, par jour et par outil, avec ceux en échec et ceux qui ont enregistré une modification. Le [journal du serveur](./diagnostics/server-log.md) contient une ligne par appel en échec et une par modification ; une lecture réussie ne laisse aucune ligne.
 
 ---
 

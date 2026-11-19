@@ -133,7 +133,7 @@ The Claude Desktop extension runs a small relay on the user's computer. It reads
 |---|---|
 | The conversation of the assistant | In the user's browser (the last 40 messages); not on the server. |
 | Sample files and files attached in the assistant | On the server, per user, 7 days. |
-| MCP usage | Counts per user and per day — calls, failures, changes — for 90 days; never what was asked. |
+| AI usage | For each turn of the assistant, of the auto-map and of Claude (MCP): who, when, the model, the tokens, and each tool's name and input summary — for 90 days by default; never the question, the answer or what a tool returned. See [AI usage](./diagnostics/ai-usage.md). |
 | MCP calls in the server log | One line per failed call and one per change, with the user, the tool and the beginning of its arguments and of its result. A successful read leaves no line. |
 
 ---

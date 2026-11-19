@@ -294,20 +294,6 @@ Deux modes :
 
 Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernier accès et le compteur de hits.
 
-### Utilisation de Claude (MCP) \{#mcp-usage\}
-
-Affiché quand le [point d'accès MCP](./claude-mcp.md) est activé : les appels faits depuis Claude, *par utilisateur, 30 derniers jours*.
-
-| Colonne | Contenu |
-|---|---|
-| *(utilisateur)* | Le compte au nom duquel Claude a agi. |
-| **Aujourd'hui**, **30 jours** | Les appels du jour et des 30 derniers jours. |
-| **En échec** | Les appels terminés par une erreur. |
-| **Modifications** | Les appels qui ont modifié quelque chose — uniquement avec *Allow changes over MCP*. |
-| **Dernier appel** | L'heure du dernier appel. |
-
-Ce sont des compteurs, jamais ce qui a été demandé ; ils sont conservés 90 jours.
-
 ---
 
 ## Erreurs récentes

@@ -1683,7 +1683,7 @@ L'enregistrement est lu par la requête de lecture de l'écran, et les règles d
 
 Comme dans l'écran, un enregistrement, ses tables liées et ses actions sont des instructions distinctes : quand une action ou une étape échoue, ce qui s'est exécuté avant reste, et la réponse l'indique.
 
-**Ce qui est conservé.** Chaque carte appliquée et chaque outil d'écriture appelé en MCP figure dans l'enregistrement d'usage — l'auteur, l'écran, l'opération ou l'action, la clé de l'enregistrement, la tâche, et le motif d'un refus ; jamais les valeurs. [Surveillance → Usage de l'IA](../monitoring/ai-usage.md#changes) les liste, et sur un écran soumis au suivi des modifications, le paquet désigne ces entrées par *AI assistant*.
+**Ce qui est conservé.** Chaque carte appliquée et chaque outil d'écriture appelé en MCP figure dans l'enregistrement d'usage — l'auteur, l'écran, l'opération ou l'action, la clé de l'enregistrement, la tâche, et le motif d'un refus ; jamais les valeurs. [Surveillance → Usage de l'IA](../monitoring/ai-usage.md#changes) les liste, et sur un écran soumis au suivi des modifications, le paquet désigne ces entrées par *Assistant IA*.
 
 ---
 
@@ -1826,20 +1826,20 @@ L'onglet donne aussi l'**URL du connecteur**, l'adresse du serveur suivie de `/m
 
 L'extension exécute un petit relais sur le poste de l'utilisateur : il transmet les messages de Claude à `/mcp` avec le jeton d'accès personnel de l'utilisateur ; il suffit donc que le serveur soit joignable depuis ce poste. Le fichier est construit au téléchargement avec l'adresse du serveur déjà renseignée, et ne contient aucun secret. Rien à installer : Claude Desktop fournit ce dont le relais a besoin.
 
-Les réglages de l'extension sont en anglais dans Claude Desktop :
-
 | Réglage dans Claude Desktop | Contenu |
 |---|---|
-| **Liberty address** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
-| **Personal access token** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
-| **Files folder** | Facultatif. Le dossier d'où Claude peut envoyer un fichier, pour une tâche qui en charge un — voir [plus bas](#files). |
-| **Accept an internal certificate** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
+| **Adresse de Liberty** | L'adresse du serveur, terminée par `/mcp` — déjà renseignée. |
+| **Jeton d'accès personnel** | Un jeton créé dans l'onglet **Jetons d'accès** du profil. |
+| **Dossier de fichiers** | Facultatif. Le dossier d'où Claude peut envoyer un fichier, pour une tâche qui en charge un — voir [plus bas](#files). |
+| **Accepter un certificat interne** | À activer uniquement quand le serveur utilise un certificat auto-signé ou d'entreprise. |
+
+Les réglages sont en français quand l'extension est téléchargée depuis une interface en français, en anglais sinon.
 
 **Plusieurs serveurs dans un même Claude Desktop.** Le nom de l'extension porte celui de son instance — l'**Environnement** de l'installation (Administrer → App → Serveur) et l'hôte de son adresse : *Liberty Next – Test · liberty-test.example.com*. Les extensions d'un serveur de production et d'un serveur de test, ou de deux clients, s'installent côte à côte, chacune avec son jeton. Le serveur précise aussi à Claude l'instance qu'il représente : une réponse ou une modification nomme l'instance concernée.
 
 ### Envoyer un fichier pour une tâche \{#files\}
 
-Avec un **Files folder**, l'extension propose deux outils exécutés sur le poste de l'utilisateur : l'un liste les classeurs et les fichiers délimités de ce dossier — `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv` —, l'autre en envoie un à Liberty pour une tâche. Le fichier arrive dans la zone de dépôt de la tâche, comme depuis sa page, avec la même limite de taille ; le dépôt ne lance rien, et `job_run` désigne ensuite le fichier.
+Avec un **Dossier de fichiers**, l'extension propose deux outils exécutés sur le poste de l'utilisateur : l'un liste les classeurs et les fichiers délimités de ce dossier — `.xlsx`, `.xlsm`, `.csv`, `.txt`, `.tsv` —, l'autre en envoie un à Liberty pour une tâche. Le fichier arrive dans la zone de dépôt de la tâche, comme depuis sa page, avec la même limite de taille ; le dépôt ne lance rien, et `job_run` désigne ensuite le fichier.
 
 L'envoi d'un fichier demande ce que demande l'exécution de la tâche : les réglages **Outils d'écriture** et **Autoriser les modifications en MCP**, `ai:write` et `job:<id>`. Un connecteur ouvert par connexion depuis le client n'a pas accès au disque de l'utilisateur : le fichier se charge alors depuis la page de la tâche.
 
@@ -2038,7 +2038,7 @@ Le [rapport d'usage de la licence](./build/secure/license-key.md#usage-report) p
 ## Liberty Next — Usage de l'IA
 Source: https://docs.nomana-it.fr/fr/liberty/monitoring/ai-usage/
 
-Surveillance → Usage de l'IA dans Liberty Next : qui utilise l'assistant IA, le coût estimé, les jetons avec la part lue depuis le cache, les outils appelés et leurs échecs — par utilisateur, jour, modèle, canal et outil —, les modifications faites par l'assistant, et les dernières questions avec leurs appels d'outils. Ce qui est enregistré, ce qui ne l'est jamais, et la durée de conservation.
+Surveillance → Usage de l'IA dans Liberty Next : qui utilise l'assistant IA, le coût estimé, les jetons avec la part lue depuis le cache, les outils appelés et leurs échecs — par utilisateur, jour, modèle, canal et outil —, les modifications faites par l'assistant, et la dernière activité avec ses appels d'outils. Ce qui est enregistré, ce qui ne l'est jamais, et la durée de conservation.
 
 **Surveillance → Usage de l'IA** montre l'utilisation de l'[assistant IA](../framework/ai-assistant.md) : qui pose des questions, ce qu'elles coûtent, quels outils sont appelés et lesquels échouent, et ce qui a été modifié par son intermédiaire. La vue est réservée aux superutilisateurs. Accès : **Liberty Next → Exploiter → Surveillance**.
 
@@ -2072,7 +2072,7 @@ La période est **7 derniers jours**, **30 derniers jours** (par défaut) ou **9
 |---|---|
 | **Questions** | Les entrées de la période. |
 | **Utilisateurs** | Les utilisateurs qui en ont au moins une. |
-| **Coût estimé, au prix public** | Le coût des jetons des questions du chat au prix public d'Anthropic, en USD. Un modèle sans prix connu est écarté du calcul et nommé (*hors … (pas de prix connu)*). |
+| **Coût estimé, au prix public** | Le coût des jetons des questions du chat au prix public d'Anthropic, en dollars américains écrits dans la langue du lecteur (*38,20 $*). Un modèle sans prix connu est écarté du calcul et nommé (*hors … (pas de prix connu)*). |
 | **Jetons en entrée** | Les jetons d'entrée, avec la part lue depuis le cache (*71 % depuis le cache*) : la partie d'une conversation renvoyée à chaque appel d'outil est lue depuis le cache, à un tarif réduit. |
 | **Jetons en sortie** | Les jetons de sortie. |
 | **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
@@ -2108,11 +2108,11 @@ Le panneau liste ce qui a été modifié par l'intermédiaire de l'assistant sur
 | **Canal** | *Carte appliquée* pour une carte du panneau, *Client externe (MCP)* pour un outil appelé par un client Claude. |
 | **Quoi** | L'outil, puis l'écran et l'opération ou l'action avec la clé de l'enregistrement, ou la tâche ; en rouge avec son motif quand la modification a été refusée. |
 
-Les valeurs écrites ne sont pas conservées. Sur un écran soumis au [suivi des modifications](../nomaflow/change-packages.md), le paquet de modifications désigne ces entrées par *AI assistant*.
+Les valeurs écrites ne sont pas conservées. Sur un écran soumis au [suivi des modifications](../nomaflow/change-packages.md), le paquet de modifications désigne ces entrées par *Assistant IA*.
 
 ---
 
-## Dernières questions \{#recent\}
+## Dernière activité \{#recent\}
 
 Une ligne par entrée : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue**.
 
@@ -2530,7 +2530,7 @@ Chaque source garde ses règles : les réglages d'un PDF texte sont refusés sur
 
 ## Utilisation \{#usage\}
 
-Le [tableau de bord technique](./tech-dashboard.md#mcp-usage) montre, par utilisateur sur les 30 derniers jours, les appels faits depuis Claude, ceux en échec et ceux qui ont modifié quelque chose. Le [journal du serveur](./diagnostics/server-log.md) contient une ligne par appel en échec et une par modification ; une lecture réussie ne laisse aucune ligne.
+La vue [Utilisation de l'IA](./diagnostics/ai-usage.md) du Diagnostic liste les appels faits depuis Claude sous le canal *Claude (MCP)* — par utilisateur, par jour et par outil, avec ceux en échec et ceux qui ont enregistré une modification. Le [journal du serveur](./diagnostics/server-log.md) contient une ligne par appel en échec et une par modification ; une lecture réussie ne laisse aucune ligne.
 
 ---
 
@@ -2624,7 +2624,7 @@ L'extension Claude Desktop exécute un petit relais sur le poste de l'utilisateu
 |---|---|
 | La conversation de l'assistant | Dans le navigateur de l'utilisateur (les 40 derniers messages) ; pas sur le serveur. |
 | Les fichiers d'exemple et les fichiers joints dans l'assistant | Sur le serveur, par utilisateur, 7 jours. |
-| L'utilisation de MCP | Des compteurs par utilisateur et par jour — appels, échecs, modifications — pendant 90 jours ; jamais ce qui a été demandé. |
+| L'utilisation de l'IA | Pour chaque tour de l'assistant, du mapping automatique et de Claude (MCP) : l'utilisateur, la date, le modèle, les jetons, et pour chaque outil son nom et le résumé de son entrée — pendant 90 jours par défaut ; jamais la question, la réponse ni ce qu'un outil a renvoyé. Voir [Utilisation de l'IA](./diagnostics/ai-usage.md). |
 | Les appels MCP dans le journal du serveur | Une ligne par appel en échec et une par modification, avec l'utilisateur, l'outil et le début de ses arguments et de son résultat. Une lecture réussie ne laisse aucune ligne. |
 
 ---
@@ -11814,7 +11814,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà d
 | Data Explorer | Un modèle de l'explorateur, ou tous les modèles d'une application — voir [Explorateur de données](../../explorer/overview.md#access). |
 | nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
 | Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
-| Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). **Assistant IA — ajouter, modifier ou supprimer un enregistrement par son écran (avec les permissions de l'écran)** (`ai:write`) : voir [Écrire par un écran](../../ai-assistant.md#write). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
+| Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). **Assistant IA — ajouter, modifier ou supprimer un enregistrement par son écran, lancer une de ses actions, lancer une tâche (avec les permissions de l'écran ou de la tâche)** (`ai:write`) : voir [Écrire par un écran](../../ai-assistant.md#write). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
 **Save** enregistre le rôle ; **Cancel** abandonne les modifications. Le nom d'un rôle ne peut plus changer après sa création.
@@ -23476,20 +23476,6 @@ Deux modes :
 
 Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernier accès et le compteur de hits.
 
-### Utilisation de Claude (MCP) \{#mcp-usage\}
-
-Affiché quand le [point d'accès MCP](./claude-mcp.md) est activé : les appels faits depuis Claude, *par utilisateur, 30 derniers jours*.
-
-| Colonne | Contenu |
-|---|---|
-| *(utilisateur)* | Le compte au nom duquel Claude a agi. |
-| **Aujourd'hui**, **30 jours** | Les appels du jour et des 30 derniers jours. |
-| **En échec** | Les appels terminés par une erreur. |
-| **Modifications** | Les appels qui ont modifié quelque chose — uniquement avec *Allow changes over MCP*. |
-| **Dernier appel** | L'heure du dernier appel. |
-
-Ce sont des compteurs, jamais ce qui a été demandé ; ils sont conservés 90 jours.
-
 ---
 
 ## Erreurs récentes
@@ -25699,9 +25685,9 @@ Une purge quotidienne exécutée par `BackgroundScheduler` supprime toute ligne 
 ## NomaUBL — Diagnostic
 Source: https://docs.nomana-it.fr/fr/nomaubl/application/diagnostics/overview/
 
-La page Diagnostic de NomaUBL réunit erreurs et journaux en quatre vues d'une même page — Erreurs d'intégration, Journal des traitements, Anomalies et Journal serveur — chacune accordée séparément par rôle, les liens des tableaux de bord ouvrant directement la bonne vue.
+La page Diagnostic de NomaUBL réunit erreurs, journaux et utilisation de l'IA en cinq vues d'une même page — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur et Utilisation de l'IA — chacune accordée séparément par rôle, les liens des tableaux de bord ouvrant directement la bonne vue.
 
-**Diagnostic** est la page unique pour tout ce qui a échoué et tout ce que le serveur a consigné. Elle regroupe quatre vues, choisies dans une rangée de cartes compactes sous l'en-tête, chacune indiquant ce qu'elle montre (le texte complet au survol) ; seules les vues accordées au rôle s'affichent, et la rangée disparaît quand une seule vue reste :
+**Diagnostic** est la page unique pour tout ce qui a échoué et tout ce que le serveur a consigné. Elle regroupe cinq vues, choisies dans une rangée de cartes compactes sous l'en-tête, chacune indiquant ce qu'elle montre (le texte complet au survol) ; seules les vues accordées au rôle s'affichent, et la rangée disparaît quand une seule vue reste :
 
 | Vue | Question traitée | Page |
 |---|---|---|
@@ -25709,6 +25695,7 @@ La page Diagnostic de NomaUBL réunit erreurs et journaux en quatre vues d'une m
 | **Journal des traitements** | Ce qu'a fait chaque traitement, fichier par fichier, étape par étape. | [Journal des traitements](./processing-log.md) |
 | **Anomalies** | Toutes les anomalies dans une seule liste — validation, rejet PA, envoi et import, traitement, tâche — non résolues par défaut. | [Anomalies](./failures.md) |
 | **Journal serveur** | La fin du fichier journal du serveur, avec filtres par niveau et par module. | [Journal serveur](./server-log.md) |
+| **Utilisation de l'IA** | À quoi l'assistant et Claude ont servi : qui, combien, quels outils. | [Utilisation de l'IA](./ai-usage.md) |
 
 Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
 
@@ -25716,7 +25703,7 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
 
 ## Vue d'ensemble
 
-- **Un droit par vue.** Chaque vue garde le droit de page qu'elle avait avant de rejoindre Diagnostic : *Erreurs d'intégration*, *Journal des traitements*, *Journal serveur*, plus *Anomalies* pour la nouvelle vue. Un rôle ne voit que les vues qui lui sont accordées, et le menu affiche Diagnostic dès que l'une d'elles l'est. Voir [Rôles](../../configuration/security/roles.md).
+- **Un droit par vue.** Chaque vue garde le droit de page qu'elle avait avant de rejoindre Diagnostic : *Erreurs d'intégration*, *Journal des traitements*, *Journal serveur*, plus *Anomalies* et *Utilisation de l'IA* pour les vues plus récentes. Un rôle ne voit que les vues qui lui sont accordées, et le menu affiche Diagnostic dès que l'une d'elles l'est. Voir [Rôles](../../configuration/security/roles.md).
 - **Les liens ouvrent la bonne vue.** Les cartes du [tableau de bord](../dashboard.md) et du [tableau de bord IT](../tech-dashboard.md) ouvrent Diagnostic sur la vue correspondante, avec les mêmes filtres.
 - **Une période par défaut par vue.** Chaque vue datée s'ouvre sur la [période par défaut](../../configuration/default-periods.md#default-periods) qui lui est attribuée (*Diagnostics*, *Integration errors*, *Processing log*), ce mois-ci si rien n'est réglé ; la période se change depuis sa barre.
 - **Les erreurs d'intégration s'ouvrent par règle.** La grille par règle est la première lecture du matin ; la liste des événements s'obtient depuis la vue elle-même.
@@ -26314,6 +26301,86 @@ La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Lin
 - **Commencer par `ERROR` et `WARN`.** Décocher `INFO` pour ne garder que ce qui mérite un coup d'œil, puis élargir avec la liste des modules.
 - **Suivre une exécution avec le rafraîchissement auto.** Lancer un lot ou un parcours, cocher *Rafraîchissement auto* et regarder les lignes arriver.
 - **Augmenter la taille lue pour un événement plus ancien.** Les 512 Ko par défaut couvrent l'activité récente ; passer à 2 ou 8 Mo pour remonter plus loin.
+
+---
+
+## NomaUBL — Utilisation de l'IA
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/diagnostics/ai-usage/
+
+La vue Utilisation de l'IA du Diagnostic de NomaUBL montre à quoi ont servi l'assistant intégré, le mapping automatique et Claude (MCP) : tours, utilisateurs, jetons avec la part lue depuis le cache, appels d'outils et échecs — par utilisateur, jour, canal, modèle et outil — et chaque tour avec ses outils. Ce qui est conservé, ce qui ne l'est jamais, et pendant combien de temps.
+
+La vue **Utilisation de l'IA** du [Diagnostic](./overview.md) montre à quoi l'IA a servi sur l'instance, pour qui, et pour quel coût en jetons. Elle couvre les trois accès à l'IA : l'[assistant intégré](../ai-capabilities.md), le mapping automatique de l'[éditeur de mapping](../../ubl-tools/xsl-editor.md) et [Claude connecté en MCP](../claude-mcp.md).
+
+Accès : **Diagnostic → Utilisation de l'IA**. La vue s'accorde par rôle, sous le nom **Vue Utilisation de l'IA** ([Rôles](../../configuration/security/roles.md)).
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Ce qui est conservé \{#record\}
+
+Chaque tour laisse un enregistrement : l'utilisateur, la date, le canal, la page d'où la question a été posée, le modèle, les jetons (lus, écrits, lus depuis le cache et écrits dans le cache), la durée et l'issue. Chaque outil appelé pendant le tour est conservé avec son nom, un résumé de son entrée, sa durée, la taille de sa réponse, son échec éventuel avec sa cause, et l'indication d'une modification enregistrée.
+
+**La question, la réponse et ce qu'un outil a renvoyé ne sont jamais conservés.**
+
+| Canal | Un tour correspond à |
+|---|---|
+| **Assistant intégré** | Une question posée dans l'assistant de l'application. |
+| **Mapping automatique** | Un mapping automatique lancé depuis l'éditeur de mapping. |
+| **Claude (MCP)** | Un outil appelé par le client Claude d'un utilisateur. Ni modèle ni jetons : ils dépendent de l'abonnement Claude de l'utilisateur. |
+
+---
+
+## La période en chiffres \{#figures\}
+
+La période est **7 jours**, **30 jours** (par défaut) ou **90 jours**.
+
+| Tuile | Contenu |
+|---|---|
+| **Tours** | Les tours de la période. |
+| **Utilisateurs** | Les utilisateurs qui ont au moins un tour. |
+| **Jetons lus** | Tout ce que le modèle a lu, avec la part lue depuis le cache (*68 % en cache*), facturée à une fraction du prix. |
+| **Jetons écrits** | Ce que le modèle a écrit. |
+| **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
+| **Durée moyenne d'un tour** | La durée moyenne d'un tour. |
+
+Sous les tuiles, un histogramme donne les tours par jour.
+
+---
+
+## Répartitions \{#breakdowns\}
+
+**Répartition** change la liste affichée :
+
+| Choix | Lignes et colonnes |
+|---|---|
+| **Tours** | Les derniers tours : Quand, Utilisateur, Canal, Page, Modèle, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Durée (s), Issue, Outils. |
+| **Par utilisateur**, **Par jour**, **Par canal**, **Par modèle** | Tours, Jetons lus, En cache %, Jetons écrits, Appels d'outils, Outils en échec, Tours en échec. |
+| **Par outil** | Appels, En échec, Modifications, Durée moyenne (ms), Réponse moyenne (caractères). |
+
+La liste se trie, se filtre et s'exporte comme les autres listes de l'application.
+
+---
+
+## Détail d'un tour \{#turn\}
+
+Un clic sur un tour l'ouvre : son issue — *Répondu*, *En échec*, *Arrêté par l'utilisateur* ou *Réponse tronquée* (la réponse a atteint sa longueur maximale) —, sa durée, son modèle et ses jetons, la page d'où il a été lancé, puis une ligne par outil avec le résumé de son entrée, sa durée et la taille de sa réponse. Un outil qui a enregistré quelque chose porte la mention *modification enregistrée* ; un outil en échec affiche sa cause en rouge.
+
+---
+
+## Durée de conservation \{#retention\}
+
+90 jours par défaut. **AI usage kept (days)**, dans **Paramètres → Global → AI**, fixe une autre durée.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Consulter *Par outil* après l'ouverture de MCP.** La colonne **Modifications** indique les outils qui ont enregistré quelque chose, et **En échec** signale un droit manquant ou une question hors de portée des outils.
+- **Une faible part en cache sur de longues conversations** révèle une consigne qui change à chaque tour : vérifier le *System Prompt* et les procédures personnalisées.
+- **Accorder la vue aux personnes qui suivent les coûts**, pas seulement aux administrateurs : elle n'affiche ni question ni donnée de l'instance.
 
 ---
 
@@ -32395,7 +32462,7 @@ La liste **Start from** préremplit un contrôle — mode, connecteurs, colonnes
 
 | Modèle | Contrôle |
 |---|---|
-| **BIP jobs not integrated (F986114 vs F564230)** | Les tâches d'impression BIP des états configurés jamais arrivées dans NomaUBL, avec l'action *Integrate BIP jobs*. Utilise `{bipFilter}` et `{bipTemplate}`. |
+| **BIP jobs not integrated (F986114 vs F564230)** | Les tâches d'impression BIP des états configurés jamais arrivées dans NomaUBL — y compris une tâche dont le traitement s'est terminé sur une insertion en échec, puisqu'aucune facture n'a été créée —, avec l'action *Integrate BIP jobs*. Utilise `{bipFilter}` et `{bipTemplate}`. |
 | **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Les factures du compte client de la période absentes de NomaUBL. |
 | **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Les factures produites par la mise à jour des commandes clients, lignes ouvertes et historiques, absentes de NomaUBL. |
 | **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Les factures présentes des deux côtés dont les montants diffèrent. |
@@ -32408,7 +32475,7 @@ Sur un contrôle qui contient déjà du SQL, l'éditeur demande confirmation ava
 Cette action extrait des travaux JD Edwards BI Publisher. Les contrôles sans action fonctionnent avec tout système source.
 :::
 
-Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intégrées exactement comme par la commande `fetch-single <template> bip <job>` (voir [Ligne de commande](../../management/command-line.md)), via le lot [Fetch Invoices](./fetch-invoices.md). Cinq champs indiquent les colonnes du résultat à utiliser :
+Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intégrées exactement comme par la commande `fetch-single <template> bip <job>` (voir [Ligne de commande](../../management/command-line.md)), via le lot [Fetch Invoices](./fetch-invoices.md). Six champs la paramètrent :
 
 | Champ | Description |
 |---|---|
@@ -32417,6 +32484,7 @@ Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intég
 | **Fixed template** | Document utilisé quand la colonne modèle est vide ou absente. |
 | **Host column** | Colonne du résultat qui porte le serveur d'exécution JDE — uniquement sur les installations JD Edwards à plusieurs serveurs. Facultatif. |
 | **Processing type** | `AUTO` *(défaut)*, `SINGLE`, `BURST`, `UBL` ou `BOTH`. |
+| **Extract** | Ce qui est récupéré pour chaque travail, comme dans la récupération planifiée de ces travaux : *Input — the XML fed to BI Publisher* (le XML fourni à BI Publisher, par défaut), *Output — what BI Publisher produced* (ce que BI Publisher a produit), ou *Both* (les deux). |
 
 ---
 
@@ -32636,6 +32704,7 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 | **System Prompt** | Consigne facultative utilisée à la place de la consigne NomaUBL intégrée. Vide = la consigne intégrée. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
 | **Custom Tools** | Outils en lecture seule de l'assistant de l'application sur les données de l'instance (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. Claude en MCP a son propre réglage, *MCP endpoint*, plus bas. |
+| **AI usage kept (days)** | Durée de conservation de l'enregistrement affiché par la vue [Utilisation de l'IA](../../application/diagnostics/ai-usage.md). Vide = 90. |
 
 ### MCP server
 
@@ -34700,12 +34769,13 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
         …
       
       
-        Diagnostic Une page à quatre vues : chaque vue s'accorde séparément ci-dessous.
+        Diagnostic Une page à cinq vues : chaque vue s'accorde séparément ci-dessous.
         
           ✓ Vue Erreurs d'intégration
           ✓ Vue Journal des traitements
           ✓ Vue Anomalies
           Vue Journal serveur
+          Vue Utilisation de l'IA
         
       
     
@@ -34722,7 +34792,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses cinq vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`), Utilisation de l'IA (`aiusage`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
@@ -34732,7 +34802,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 Quelques pastilles portent une aide :
 
-- **Diagnostic** est une page à quatre vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
+- **Diagnostic** est une page à cinq vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
 - **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
 - **Promotion** demande aussi la fonctionnalité *Accès aux paramètres*. Voir [Promotion](../../management/promotion.md).
@@ -35074,6 +35144,8 @@ NomaUBL enregistre chaque artefact du pipeline e-invoicing — la source ERP ori
 Le schéma est **identique sur Oracle et PostgreSQL** — la DDL s'adapte au dialecte (`BLOB` ↔ `BYTEA`, `NUMBER` ↔ `INTEGER`, `VARCHAR2` ↔ `VARCHAR`) mais les noms de colonnes, les clés primaires et la sémantique restent les mêmes. Chaque nom de table est configurable dans le template système `db-nomaubl` et créé par l'action **Initialize Database** de l'écran *Settings → Database Connectors*.
 
 Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les tables suivent la convention de nommage JDE `F564XXX` car la plateforme a d'abord été construite autour de JDE ; les conventions sont fonctionnelles, pas spécifiques à la source.
+
+Un texte plus long que sa colonne — un nom de client, une référence ou un message long — est raccourci à la taille de la colonne au moment de l'écriture, et l'UBL garde la valeur entière. La taille est lue dans la base : une colonne élargie est utilisée à sa taille réelle. Les codes et les clés (type de document, société, statut) ne sont jamais raccourcis, et le journal du serveur signale une fois chaque colonne concernée.
 
 ---
 
@@ -35746,7 +35818,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Joindre un fichier dans l'assistant.** Le trombone de l'assistant IA joint un XML ou un PDF à une question ; l'assistant le lit avec le message, et peut convertir un PDF avec les réglages d'un document ou contrôler le mapping d'un document dessus, comme depuis Claude Desktop. Le fichier rejoint les fichiers d'exemple de l'utilisateur, conservés 7 jours.
 - **Travail sur le mapping depuis Claude.** Mapping automatique à partir d'un exemple, comme dans l'éditeur de mapping : envoyez le XML ou le PDF d'une facture, Claude propose le mapping (et, pour un PDF texte, les règles d'extraction), le contrôle et signale ce qui manque. Claude lit aussi le mapping enregistré d'un document et les variables exigées par son jeu de règles, puis contrôle un mapping sur un fichier d'exemple et montre l'UBL obtenu, en essayant d'autres valeurs par-dessus celles enregistrées. Le fichier suit les étapes d'un traitement réel : PDF converti comme PDF texte ou PDF JD Edwards selon le document, feuille de pré-traitement, découpage en factures, inversion de signe. Rien n'est enregistré : Claude indique les valeurs à saisir dans l'éditeur de mapping. Nécessite l'accès aux paramètres.
 - **Modifications depuis Claude, sur autorisation.** Un nouveau réglage, Paramètres › Global › AI › MCP server › Allow changes over MCP (désactivé par défaut), permet à Claude, à la demande de l'utilisateur, d'enregistrer une analyse de l'Explorateur, des valeurs de mapping dans la feuille de style d'un document, les réglages PDF vers XML d'un document, et de créer un document (selon sa source : XML, PDF, UBL ou connecteur, avec sa propre feuille de style vierge, ou à partir d'un document existant) ou d'en modifier les réglages. Chaque source garde ses règles : les réglages d'un PDF texte sont refusés sur un document JD Edwards et inversement, et un document UBL n'a pas de mapping. Hormis l'analyse, ces actions nécessitent l'accès aux paramètres ; mots de passe, jetons et clés ne peuvent pas être définis par ce biais. La version précédente reste dans l'historique du fichier ou de la configuration, et chaque modification est tracée dans le journal du serveur avec le nom de l'utilisateur.
-- **Utilisation de Claude (MCP).** Le tableau de bord technique affiche, par utilisateur sur les 30 derniers jours, les appels faits depuis Claude, ceux en échec et ceux qui ont modifié quelque chose, avec l'heure du dernier. Des compteurs uniquement, jamais les questions posées ; conservés 90 jours.
+- **Utilisation de l'IA.** Une nouvelle vue de la page Diagnostic montre à quoi ont servi l'assistant intégré, le mapping automatique et Claude (MCP) : tours, utilisateurs, jetons lus et écrits avec la part servie par le cache, appels d'outils et échecs, par utilisateur, jour, canal, modèle et outil, et chaque tour avec ses outils. Sont conservés : qui, quand, le modèle, les compteurs, le nom de chaque outil et le résumé de sa demande ; jamais la question, la réponse ni ce qu'un outil a renvoyé. Accordée par rôle (vue Utilisation de l'IA) ; conservation de 90 jours, modifiable dans Paramètres › Global › AI.
 - **Connexion depuis Claude sans jeton.** Un client qui ne connaît que l'adresse du point d'accès MCP (Claude Code, un connecteur claude.ai quand l'instance est joignable depuis Internet) ouvre le navigateur sur NomaUBL : l'utilisateur s'identifie comme d'habitude, par mot de passe ou SSO, et autorise le client pour 30, 90 ou 365 jours. L'accès apparaît avec les jetons de l'utilisateur dans la fenêtre de profil et s'y révoque. Derrière un proxy, renseignez Paramètres › Global › Authentication › Public address, adresse également utilisée par les liens de réinitialisation de mot de passe. Dans la liste des jetons, un tel accès affiche le nom du client autorisé. Le jeton collé et l'extension Claude Desktop continuent de fonctionner.
 - **Plusieurs instances dans Claude Desktop.** L'extension téléchargée depuis une instance porte désormais son environnement et son adresse dans son nom (NomaUBL – prod · hôte) : les extensions de plusieurs instances s'installent côte à côte au lieu de se remplacer, chacune avec son jeton. Une extension installée auparavant sous le simple nom NomaUBL est à supprimer puis à réinstaller.
 - **Fonction de rôle « MCP access ».** Seuls les rôles qui l'ont peuvent connecter Claude ; aucun rôle ne l'a par défaut.
@@ -35759,6 +35831,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Jetons clos par un administrateur.** Un mot de passe défini par un administrateur, ou la désactivation d'un compte, supprime les jetons Claude de l'utilisateur, comme le faisait déjà son propre changement de mot de passe.
 - **Onglet Fichiers d'exemple.** La fenêtre de profil liste les fichiers d'exemple de l'utilisateur dans un onglet à part, pour tous : un fichier joint dans l'assistant s'y retrouve et s'y supprime. Les exemples anciens sont supprimés chaque jour, que l'utilisateur revienne ou non.
 - **Libellés des paramètres.** L'aide de System Prompt indique qu'il remplace la consigne intégrée ; Custom Tools précise qu'il ne concerne que l'assistant intégré. La fonctionnalité de rôle Accès MCP et les réglages de l'extension Claude Desktop sont en français pour une interface en français.
+- **Une valeur plus longue qu'une colonne n'arrête plus un traitement.** Un texte de la facture plus long que sa colonne dans les tables NomaUBL (un nom de client de plus de 40 caractères, une référence ou un message long) est raccourci à la taille de la colonne lors de l'écriture, au lieu de faire échouer l'insertion ; l'UBL conserve la valeur complète. La taille est celle de la table, lue dans la base : une colonne élargie est utilisée à sa taille réelle. Les codes et les clés (type de document, société, statut) ne sont jamais raccourcis. Le journal du serveur signale une fois chaque colonne concernée.
+- **Rapports d'intégrité : travaux BIP.** Un contrôle qui intègre des travaux BI Publisher dispose d'un nouveau réglage, Extract (input, output ou both) : son action récupère les mêmes fichiers que la récupération planifiée de ces travaux ; jusqu'ici elle prenait toujours l'entrée. Le modèle de requête « BIP jobs not integrated » liste aussi un travail dont le traitement s'est terminé sur un échec d'insertion, puisqu'aucune facture n'a été créée. Les contrôles déjà enregistrés conservent leur requête et extraient l'entrée tant qu'ils ne sont pas modifiés.
 
 ---
 

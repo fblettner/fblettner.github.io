@@ -223,12 +223,13 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
         <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>…</span>
       </div>
       <div style={{marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed rgba(148,163,184,0.3)'}}>
-        <b>Diagnostic</b> <span style={{opacity: 0.6, fontSize: '11px'}}>Une page à quatre vues : chaque vue s'accorde séparément ci-dessous.</span>
+        <b>Diagnostic</b> <span style={{opacity: 0.6, fontSize: '11px'}}>Une page à cinq vues : chaque vue s'accorde séparément ci-dessous.</span>
         <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px'}}>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Erreurs d'intégration</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Journal des traitements</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Anomalies</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Vue Journal serveur</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Vue Utilisation de l'IA</span>
         </div>
       </div>
     </div>
@@ -246,7 +247,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses cinq vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`), Utilisation de l'IA (`aiusage`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
@@ -256,7 +257,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 Quelques pastilles portent une aide :
 
-- **Diagnostic** est une page à quatre vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
+- **Diagnostic** est une page à cinq vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
 - **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
 - **Promotion** demande aussi la fonctionnalité *Accès aux paramètres*. Voir [Promotion](../../management/promotion.md).

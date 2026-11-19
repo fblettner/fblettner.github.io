@@ -12,6 +12,8 @@ The schema is **identical on Oracle and PostgreSQL** — the DDL is dialect-awar
 
 The schema applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Tables follow the JDE `F564XXX` naming convention because the platform was built around JDE first; the conventions are functional, not source-specific.
 
+A text longer than its column — a customer name, a long reference or message — is shortened to the column's size when it is written, and the UBL keeps the whole value. The size is read from the database, so a widened column is used at its real size. Codes and keys (document type, company, status) are never shortened, and the server log reports each column concerned once.
+
 ---
 
 ## Naming conventions

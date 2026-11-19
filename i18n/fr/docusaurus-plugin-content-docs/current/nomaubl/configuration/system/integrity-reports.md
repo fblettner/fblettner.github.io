@@ -177,7 +177,7 @@ La liste **Start from** préremplit un contrôle — mode, connecteurs, colonnes
 
 | Modèle | Contrôle |
 |---|---|
-| **BIP jobs not integrated (F986114 vs F564230)** | Les tâches d'impression BIP des états configurés jamais arrivées dans NomaUBL, avec l'action *Integrate BIP jobs*. Utilise `{bipFilter}` et `{bipTemplate}`. |
+| **BIP jobs not integrated (F986114 vs F564230)** | Les tâches d'impression BIP des états configurés jamais arrivées dans NomaUBL — y compris une tâche dont le traitement s'est terminé sur une insertion en échec, puisqu'aucune facture n'a été créée —, avec l'action *Integrate BIP jobs*. Utilise `{bipFilter}` et `{bipTemplate}`. |
 | **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Les factures du compte client de la période absentes de NomaUBL. |
 | **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Les factures produites par la mise à jour des commandes clients, lignes ouvertes et historiques, absentes de NomaUBL. |
 | **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Les factures présentes des deux côtés dont les montants diffèrent. |
@@ -190,7 +190,7 @@ Sur un contrôle qui contient déjà du SQL, l'éditeur demande confirmation ava
 Cette action extrait des travaux JD Edwards BI Publisher. Les contrôles sans action fonctionnent avec tout système source.
 :::
 
-Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intégrées exactement comme par la commande `fetch-single <template> bip <job>` (voir [Ligne de commande](../../management/command-line.md)), via le lot [Fetch Invoices](./fetch-invoices.md). Cinq champs indiquent les colonnes du résultat à utiliser :
+Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intégrées exactement comme par la commande `fetch-single <template> bip <job>` (voir [Ligne de commande](../../management/command-line.md)), via le lot [Fetch Invoices](./fetch-invoices.md). Six champs la paramètrent :
 
 | Champ | Description |
 |---|---|
@@ -199,6 +199,7 @@ Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intég
 | **Fixed template** | Document utilisé quand la colonne modèle est vide ou absente. |
 | **Host column** | Colonne du résultat qui porte le serveur d'exécution JDE — uniquement sur les installations JD Edwards à plusieurs serveurs. Facultatif. |
 | **Processing type** | `AUTO` *(défaut)*, `SINGLE`, `BURST`, `UBL` ou `BOTH`. |
+| **Extract** | Ce qui est récupéré pour chaque travail, comme dans la récupération planifiée de ces travaux : *Input — the XML fed to BI Publisher* (le XML fourni à BI Publisher, par défaut), *Output — what BI Publisher produced* (ce que BI Publisher a produit), ou *Both* (les deux). |
 
 ---
 

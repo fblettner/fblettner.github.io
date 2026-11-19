@@ -1862,6 +1862,8 @@ The extension runs a small relay on the user's own computer: it passes Claude's 
 | **Files folder** | Optional. The folder Claude may send a file from, for a job that loads one — see [below](#files). |
 | **Accept an internal certificate** | To turn on only when the server uses a self-signed or company certificate. |
 
+The settings are in French when the extension is downloaded from a French interface.
+
 **Several servers in one Claude Desktop.** The extension is named after its instance — the installation's **Environment** (Administer → App → Server) and the host of its address: *Liberty Next – Test · liberty-test.example.com*. The extensions of a production and a test server, or of two customers, install side by side, each with its own token. The server also tells Claude which instance it is, so an answer or a change names the instance it concerns.
 
 ### Send a file for a job \{#files\}
@@ -2065,7 +2067,7 @@ The [licence usage report](./build/secure/license-key.md#usage-report) goes to t
 ## Liberty Next — AI usage
 Source: https://docs.nomana-it.fr/liberty/monitoring/ai-usage/
 
-Monitoring → AI usage in Liberty Next: who uses the AI assistant, the estimated cost, the tokens with the share read from the cache, the tools called and their failures — by user, day, model, channel and tool —, the changes made through the assistant, and the latest questions with their tool calls. What is recorded, what never is, and how long it is kept.
+Monitoring → AI usage in Liberty Next: who uses the AI assistant, the estimated cost, the tokens with the share read from the cache, the tools called and their failures — by user, day, model, channel and tool —, the changes made through the assistant, and the latest activity with its tool calls. What is recorded, what never is, and how long it is kept.
 
 **Monitoring → AI usage** shows how the [AI assistant](../framework/ai-assistant.md) is used: who asks, what it costs, which tools it calls and which fail, and what was changed through it. It is for superusers, from **Liberty Next → Operate → Monitoring**.
 
@@ -2099,7 +2101,7 @@ The period is **Last 7 days**, **Last 30 days** (default) or **Last 90 days**.
 |---|---|
 | **Questions** | Entries over the period. |
 | **Users** | Users with at least one. |
-| **Estimated cost, at list price** | What the tokens of the chat's questions cost at Anthropic's list price, in USD. A model without a listed price is left out and named (*without … (no listed price)*). |
+| **Estimated cost, at list price** | What the tokens of the chat's questions cost at Anthropic's list price, in US dollars written in the reader's language (*$38.20*). A model without a listed price is left out and named (*without … (no listed price)*). |
 | **Tokens in** | Input tokens, with the share read from the cache (*71 % from cache*): the part of a conversation sent again at each tool round is read from the cache, at a lower price. |
 | **Tokens out** | Output tokens. |
 | **Tool calls** | Tools called, with the number that failed. |
@@ -2139,7 +2141,7 @@ The values written are not kept. On a screen under [change tracking](../nomaflow
 
 ---
 
-## Latest questions \{#recent\}
+## Latest activity \{#recent\}
 
 One row per entry: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome**.
 
@@ -2557,7 +2559,7 @@ Each source keeps its own rules: text PDF settings are refused on a JD Edwards d
 
 ## Usage \{#usage\}
 
-The [IT dashboard](./tech-dashboard.md#mcp-usage) shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something. The [server log](./diagnostics/server-log.md) holds one line per failed call and one per change; a successful read leaves no line.
+The [AI usage](./diagnostics/ai-usage.md) view of Diagnostics lists the calls made from Claude under the channel *Claude (MCP)* — by user, by day and by tool, with those that failed and those that saved a change. The [server log](./diagnostics/server-log.md) holds one line per failed call and one per change; a successful read leaves no line.
 
 ---
 
@@ -2651,7 +2653,7 @@ The Claude Desktop extension runs a small relay on the user's computer. It reads
 |---|---|
 | The conversation of the assistant | In the user's browser (the last 40 messages); not on the server. |
 | Sample files and files attached in the assistant | On the server, per user, 7 days. |
-| MCP usage | Counts per user and per day — calls, failures, changes — for 90 days; never what was asked. |
+| AI usage | For each turn of the assistant, of the auto-map and of Claude (MCP): who, when, the model, the tokens, and each tool's name and input summary — for 90 days by default; never the question, the answer or what a tool returned. See [AI usage](./diagnostics/ai-usage.md). |
 | MCP calls in the server log | One line per failed call and one per change, with the user, the tool and the beginning of its arguments and of its result. A successful read leaves no line. |
 
 ---
@@ -11832,7 +11834,7 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 | Data Explorer | One explorer model, or every model of an app — see [Data Explorer](../../explorer/overview.md#access). |
 | nomaflow | **Follow the jobs** (`nomaflow:view`) — the Jobs, Schedule and Job Runs pages, the runs and their logs; **Create and edit jobs** (`nomaflow:edit`) — create, change, pause and resume jobs; it runs SQL and Python without row scope. See [Nomaflow administration](../../../nomaflow/administration.md#permissions). |
 | Job | One Nomaflow job, or **Every job** (`job:*`): its menu item and its page — files, parameters, run, cancel, logs of every run. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md#access). |
-| AI assistant | **AI assistant** (`ai:chat`): the assistant's drawer. **AI tools from an external client (MCP) — create a personal access token** (`mcp:use`): see [Connect Claude (MCP)](../../mcp.md). **AI assistant — add, change or delete a record through its screen (with the screen's own permissions)** (`ai:write`): see [Write through a screen](../../ai-assistant.md#write). What the assistant then reaches depends on the role's other rules — see [AI assistant](../../ai-assistant.md#access). |
+| AI assistant | **AI assistant** (`ai:chat`): the assistant's drawer. **AI tools from an external client (MCP) — create a personal access token** (`mcp:use`): see [Connect Claude (MCP)](../../mcp.md). **AI assistant — add, change or delete a record through its screen, run one of its actions, run a job (with the screen's or the job's own permissions)** (`ai:write`): see [Write through a screen](../../ai-assistant.md#write). What the assistant then reaches depends on the role's other rules — see [AI assistant](../../ai-assistant.md#access). |
 | Pattern (expert) | A permission written by hand, such as `sql:sales:report_*`. |
 
 **Save** writes the role; **Cancel** drops the changes. The role name cannot be changed after creation.
@@ -23576,20 +23578,6 @@ Two modes:
 
 Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
 
-### Claude (MCP) usage \{#mcp-usage\}
-
-Shown when the [MCP endpoint](./claude-mcp.md) is on: the calls made from Claude *per user, last 30 days*.
-
-| Column | Content |
-|---|---|
-| *(user)* | The account Claude acted as. |
-| **Today**, **30 days** | Calls of the day and of the last 30 days. |
-| **Failed** | Calls that ended in an error. |
-| **Changes** | Calls that changed something — only with *Allow changes over MCP*. |
-| **Last call** | Time of the latest call. |
-
-Counts only, never what was asked; they are kept 90 days.
-
 ---
 
 ## Recent errors
@@ -25799,9 +25787,9 @@ A daily retention sweep in `BackgroundScheduler` deletes rows older than `global
 ## NomaUBL — Diagnostics
 Source: https://docs.nomana-it.fr/nomaubl/application/diagnostics/overview/
 
-The NomaUBL Diagnostics page gathers errors and logs in four views of one page — Integration errors, Processing log, Failures and Server log — each granted separately per role, with dashboard links landing on the right view.
+The NomaUBL Diagnostics page gathers errors, logs and the use of the AI in five views of one page — Integration errors, Processing log, Failures, Server log and AI usage — each granted separately per role, with dashboard links landing on the right view.
 
-**Diagnostics** is the single page for everything that went wrong and everything the server wrote down. It hosts four views, picked from a row of compact cards under the header, each saying what it shows (the full text on hover); only the views the role grants are shown, and the row is hidden when a single view is left:
+**Diagnostics** is the single page for everything that went wrong and everything the server wrote down. It hosts five views, picked from a row of compact cards under the header, each saying what it shows (the full text on hover); only the views the role grants are shown, and the row is hidden when a single view is left:
 
 | View | What it answers | Page |
 |---|---|---|
@@ -25809,6 +25797,7 @@ The NomaUBL Diagnostics page gathers errors and logs in four views of one page �
 | **Processing log** | What each processing run did, file by file, step by step. | [Processing log](./processing-log.md) |
 | **Failures** | Every failure in one list — validation, PA rejection, send and import, processing, job — unresolved by default. | [Failures](./failures.md) |
 | **Server log** | The tail of the server log file, with severity and module filters. | [Server log](./server-log.md) |
+| **AI usage** | What the assistant and Claude were used for: who, how much, which tools. | [AI usage](./ai-usage.md) |
 
 Open it from the sidebar — **Diagnostics**, in the Navigation group.
 
@@ -25816,7 +25805,7 @@ Open it from the sidebar — **Diagnostics**, in the Navigation group.
 
 ## At a glance
 
-- **One grant per view.** Each view keeps the page grant it had before it joined Diagnostics: *Integration errors*, *Processing log*, *Server log*, plus *Failures* for the new view. A role sees only the views it is granted, and the sidebar shows Diagnostics as soon as one of them is granted. See [Roles](../../configuration/security/roles.md).
+- **One grant per view.** Each view keeps the page grant it had before it joined Diagnostics: *Integration errors*, *Processing log*, *Server log*, plus *Failures* and *AI usage* for the newer views. A role sees only the views it is granted, and the sidebar shows Diagnostics as soon as one of them is granted. See [Roles](../../configuration/security/roles.md).
 - **Links land on the right view.** The cards of the [Dashboard](../dashboard.md) and the [Tech dashboard](../tech-dashboard.md) open Diagnostics on the matching view, with the same filters.
 - **One default period per view.** Each dated view opens on the [default period](../../configuration/default-periods.md#default-periods) set for it (*Diagnostics*, *Integration errors*, *Processing log*), this month unless set; change the period from its bar.
 - **Integration errors opens by rule.** The by-rule grid is the first read of a morning; switch to the event list from the view itself.
@@ -26414,6 +26403,86 @@ The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — o
 - **Start from `ERROR` and `WARN`.** Untick `INFO` to keep only what needs a look, then widen with the module list.
 - **Follow a run with auto-refresh.** Launch a batch or a scan, tick *Auto-refresh* and watch the lines come in.
 - **Raise the tail for an older event.** The default 512 KB covers recent activity; switch to 2 MB or 8 MB to go further back.
+
+---
+
+## NomaUBL — AI usage
+Source: https://docs.nomana-it.fr/nomaubl/application/diagnostics/ai-usage/
+
+The AI usage view of NomaUBL Diagnostics shows what the in-app assistant, the mapping auto-map and Claude (MCP) were used for: turns, users, tokens with the share read from the cache, tool calls and failures — by user, day, channel, model and tool — and each turn with its tools. What is kept, what never is, and for how long.
+
+The **AI usage** view of [Diagnostics](./overview.md) shows what the AI was used for on the instance, by whom, and what it cost in tokens. It covers the three ways the AI is reached: the [in-app assistant](../ai-capabilities.md), the auto-map of the [mapping editor](../../ubl-tools/xsl-editor.md) and [Claude connected through MCP](../claude-mcp.md).
+
+Open it from **Diagnostics → AI usage**. The view is granted per role, as **AI usage view** ([Roles](../../configuration/security/roles.md)).
+
+---
+
+## At a glance
+
+---
+
+## What is kept \{#record\}
+
+Each turn leaves one record: who, when, the channel, the page the question was asked from, the model, the tokens (read, written, read from and written to the cache), the time it took and how it ended. Each tool called during the turn is kept with its name, a summary of its input, its time, the size of its answer, whether it failed and why, and whether it saved a change.
+
+**The question, the answer and what a tool returned are never kept.**
+
+| Channel | One turn is |
+|---|---|
+| **In-app assistant** | A question asked in the assistant of the application. |
+| **Mapping auto-map** | An auto-map run from the mapping editor. |
+| **Claude (MCP)** | A tool called by a user's Claude client. No model and no tokens: they are those of the user's Claude plan. |
+
+---
+
+## The period in figures \{#figures\}
+
+The period is **7 days**, **30 days** (default) or **90 days**.
+
+| Tile | Shows |
+|---|---|
+| **Turns** | Turns over the period. |
+| **Users** | Users with at least one turn. |
+| **Tokens in** | Everything the model read, with the share read from the cache (*68 % cached*), billed at a fraction of the price. |
+| **Tokens out** | What the model wrote. |
+| **Tool calls** | Tools called, with the number that failed. |
+| **Average turn** | Average time of a turn. |
+
+Below the tiles, a bar chart gives the turns per day.
+
+---
+
+## Breakdowns \{#breakdowns\}
+
+**Breakdown** switches the list:
+
+| Choice | Rows and columns |
+|---|---|
+| **Turns** | The latest turns: When, User, Channel, Page, Model, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Time (s), Outcome, Tools. |
+| **By user**, **By day**, **By channel**, **By model** | Turns, Tokens in, Cached %, Tokens out, Tool calls, Tool failures, Failed turns. |
+| **By tool** | Calls, Failed, Changes, Average time (ms), Average answer (characters). |
+
+The list sorts, filters and exports like the other lists of the application.
+
+---
+
+## One turn \{#turn\}
+
+A click on a turn opens it: its outcome — *Answered*, *Failed*, *Stopped by the user* or *Cut short* (the answer reached its length limit) —, its time, its model and tokens, the page it was asked from, then one line per tool with the summary of its input, its time and the size of its answer. A tool that saved something is marked *saved a change*; a failed one shows its reason in red.
+
+---
+
+## How long it is kept \{#retention\}
+
+90 days by default. **AI usage kept (days)**, in **Settings → Global → AI**, sets another duration.
+
+---
+
+## Tips & best practices
+
+- **Read *By tool* after opening MCP.** The **Changes** column says which tools saved something, and **Failed** points at a missing grant or a question the tools cannot answer.
+- **A low cached share on long conversations** means a prompt that changes at every turn: check the *System Prompt* and the custom playbooks.
+- **Grant the view to those who follow the cost**, not only to administrators: it shows no question and no data of the instance.
 
 ---
 
@@ -32485,7 +32554,7 @@ The **Start from** list pre-fills a check — mode, connectors, key columns, SQL
 
 | Template | Check |
 |---|---|
-| **BIP jobs not integrated (F986114 vs F564230)** | The BIP print jobs of the configured reports that never reached NomaUBL, with the *Integrate BIP jobs* action. Uses `{bipFilter}` and `{bipTemplate}`. |
+| **BIP jobs not integrated (F986114 vs F564230)** | The BIP print jobs of the configured reports that never reached NomaUBL — including a job whose run ended on a failed insert, since no invoice was created —, with the *Integrate BIP jobs* action. Uses `{bipFilter}` and `{bipTemplate}`. |
 | **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Customer ledger invoices of the period absent from NomaUBL. |
 | **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Invoices written by sales order update, open and history lines, absent from NomaUBL. |
 | **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Invoices present on both sides whose amounts differ. |
@@ -32498,7 +32567,7 @@ On a check that already has SQL, the editor asks for confirmation before replaci
 This action extracts JD Edwards BI Publisher jobs. Checks without an action work on any source system.
 :::
 
-When **Action** is set to **Integrate BIP jobs**, the selected rows are integrated exactly like the command `fetch-single <template> bip <job>` (see [Command line](../../management/command-line.md)), through the [Fetch Invoices](./fetch-invoices.md) batch. Five fields map the result columns:
+When **Action** is set to **Integrate BIP jobs**, the selected rows are integrated exactly like the command `fetch-single <template> bip <job>` (see [Command line](../../management/command-line.md)), through the [Fetch Invoices](./fetch-invoices.md) batch. Six fields set it up:
 
 | Field | Description |
 |---|---|
@@ -32507,6 +32576,7 @@ When **Action** is set to **Integrate BIP jobs**, the selected rows are integrat
 | **Fixed template** | Document used when the template column is empty or missing. |
 | **Host column** | Result column holding the JDE execution host — only on JD Edwards installations with several hosts. Optional. |
 | **Processing type** | `AUTO` *(default)*, `SINGLE`, `BURST`, `UBL` or `BOTH`. |
+| **Extract** | What is fetched for each job, as the scheduled fetch of these jobs does: *Input — the XML fed to BI Publisher* (default), *Output — what BI Publisher produced*, or *Both*. |
 
 ---
 
@@ -32724,6 +32794,7 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 | **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
 | **Custom Tools** | Read-only tools of the in-app assistant on this instance's data (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. Claude over MCP has its own switch, *MCP endpoint*, below. |
+| **AI usage kept (days)** | How long the record of the [AI usage](../../application/diagnostics/ai-usage.md) view is kept. Blank = 90. |
 
 ### MCP server
 
@@ -34788,12 +34859,13 @@ The pages are laid out as **one card per group of the side menu** — same group
         …
       
       
-        Diagnostics One page with four views — each view is granted on its own below.
+        Diagnostics One page with five views — each view is granted on its own below.
         
           ✓ Integration errors view
           ✓ Processing log view
           ✓ Failures view
           Server log view
+          AI usage view
         
       
     
@@ -34810,7 +34882,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its five views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`), AI usage (`aiusage`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -34820,7 +34892,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 A few chips carry a hint:
 
-- **Diagnostics** is one page with four views: each view is a grant of its own, and the menu shows *Diagnostics* as soon as one of them is granted. See [Diagnostics](../../application/diagnostics/overview.md).
+- **Diagnostics** is one page with five views: each view is a grant of its own, and the menu shows *Diagnostics* as soon as one of them is granted. See [Diagnostics](../../application/diagnostics/overview.md).
 - **Scheduled Jobs** covers every job — polls, batch jobs, daily digests, auto-retries, lifecycle checks, retention. Running, pausing or saving a job also requires the *Run batch jobs* action (`integration.run`). See [Scheduled jobs](../../sync/scheduled-jobs/overview.md).
 - **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
 - **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).
@@ -35162,6 +35234,8 @@ NomaUBL persists every artefact of the e-invoicing pipeline — the original ERP
 The schema is **identical on Oracle and PostgreSQL** — the DDL is dialect-aware (`BLOB` ↔ `BYTEA`, `NUMBER` ↔ `INTEGER`, `VARCHAR2` ↔ `VARCHAR`) but the column names, primary keys and semantics are the same. Every table name is configurable in the `db-nomaubl` system template and created by the **Initialize Database** action of the *Settings → Database Connectors* screen.
 
 The schema applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Tables follow the JDE `F564XXX` naming convention because the platform was built around JDE first; the conventions are functional, not source-specific.
+
+A text longer than its column — a customer name, a long reference or message — is shortened to the column's size when it is written, and the UBL keeps the whole value. The size is read from the database, so a widened column is used at its real size. Codes and keys (document type, company, status) are never shortened, and the server log reports each column concerned once.
 
 ---
 
@@ -35834,7 +35908,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Attach a file in the assistant.** The paperclip of the AI assistant attaches an XML or a PDF to a question; the assistant reads it with the message, and can convert a PDF with a document's settings or check a document's mapping on it, as Claude Desktop does. The file is kept with the user's sample files for 7 days.
 - **Mapping work from Claude.** Auto-mapping from a sample, as in the mapping editor: send an XML or a PDF of an invoice, Claude proposes the mapping (and, for a text PDF, the extraction rules), checks it and reports what is missing. Claude also reads a document's saved mapping and the variables its rule set requires, then checks a mapping on a sample and shows the UBL it gives, with other values tried on top of the saved ones. The sample follows the steps of a real run: a PDF converted as a text PDF or a JD Edwards PDF according to the document, the pre-processing stylesheet, the burst into invoices, the sign inversion. Nothing is saved: Claude gives the values to enter in the mapping editor. Requires Settings access.
 - **Changes from Claude, when allowed.** A new setting, Settings › Global › AI › MCP server › Allow changes over MCP (off by default), lets Claude, when the user asks, save an Explorer analysis, save mapping values in a document's stylesheet, save a document's PDF to XML settings, and create a document (by source: XML, PDF, UBL or connector, with its own blank stylesheet, or from an existing one) or update its settings. Each source keeps its own rules: text PDF settings are refused on a JD Edwards document and the reverse, and a UBL document has no mapping. Apart from the analysis, these need Settings access; passwords, tokens and keys cannot be set this way. The previous version stays in the file or configuration history, and every change is written to the server log with the user's name.
-- **Claude (MCP) usage.** The technical dashboard shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something, with the time of the last one. Counts only, never the questions asked; kept 90 days.
+- **AI usage.** A new view of the Diagnostics page shows what the in-app assistant, the mapping auto-map and Claude (MCP) were used for: turns, users, tokens read and written with the share served from the cache, tool calls and failures, by user, day, channel, model and tool, and each turn with its tools. Kept: who, when, the model, the counters and each tool's name and input summary; never the question, the answer or what a tool returned. Granted per role as the AI usage view; kept 90 days unless set otherwise in Settings › Global › AI.
 - **Sign-in from Claude without a token.** A client given only the address of the MCP endpoint (Claude Code, a claude.ai connector when the instance is reachable from the internet) opens the browser on NomaUBL: the user signs in as usual, password or SSO, and allows the client for 30, 90 or 365 days. The access appears with the user's tokens in the profile window and is revoked there. Behind a proxy, set Settings › Global › Authentication › Public address, the address also used by password reset links. In the list of tokens, such an access shows the name of the client it was allowed for. The pasted token and the Claude Desktop extension keep working.
 - **Several instances in Claude Desktop.** The extension downloaded from an instance now carries its environment and address in its name (NomaUBL – prod · host), so the extensions of several instances install side by side instead of replacing one another, each with its own token. An extension installed before under the plain name NomaUBL is to be removed and installed again.
 - **Role feature "MCP access".** Only the roles that have it can connect Claude; no role has it by default.
@@ -35847,6 +35921,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Tokens ended by an administrator.** A password set by an administrator, or the deactivation of an account, removes the user's Claude tokens, as the user's own password change already did.
 - **Sample files tab.** The profile window lists the user's sample files in their own tab, for every user: a file attached in the assistant is found and deleted there. Old samples are removed every day, whether the user comes back or not.
 - **Settings wording.** The System Prompt help says it replaces the built-in prompt; Custom Tools says it concerns the in-app assistant only. The MCP access role feature and the Claude Desktop extension's settings are in French for a French interface.
+- **Values longer than a column no longer stop a run.** A text of the invoice longer than its column in the NomaUBL tables (a customer name over 40 characters, a long reference or message) is shortened to the column's size when it is written, instead of failing the insert; the UBL keeps the whole value. The size is the table's own, read from the database, so a column that was widened is used at its real size. Codes and keys (document type, company, status) are never shortened. The server log reports each column concerned once.
+- **Integrity reports: BIP jobs.** A check that integrates BI Publisher jobs has a new setting, Extract (input, output or both), so its action fetches the same files as the scheduled fetch of those jobs; until now it always took the input. The "BIP jobs not integrated" query template also lists a job whose run ended on a failed insert, since no invoice was created. Checks already saved keep their query and extract the input unless changed.
 
 ---
 

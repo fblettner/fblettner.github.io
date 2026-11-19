@@ -12,6 +12,8 @@ Le schéma est **identique sur Oracle et PostgreSQL** — la DDL s'adapte au dia
 
 Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les tables suivent la convention de nommage JDE `F564XXX` car la plateforme a d'abord été construite autour de JDE ; les conventions sont fonctionnelles, pas spécifiques à la source.
 
+Un texte plus long que sa colonne — un nom de client, une référence ou un message long — est raccourci à la taille de la colonne au moment de l'écriture, et l'UBL garde la valeur entière. La taille est lue dans la base : une colonne élargie est utilisée à sa taille réelle. Les codes et les clés (type de document, société, statut) ne sont jamais raccourcis, et le journal du serveur signale une fois chaque colonne concernée.
+
 ---
 
 ## Conventions de nommage

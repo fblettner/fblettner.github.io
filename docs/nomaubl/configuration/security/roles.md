@@ -223,12 +223,13 @@ The pages are laid out as **one card per group of the side menu** — same group
         <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>…</span>
       </div>
       <div style={{marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed rgba(148,163,184,0.3)'}}>
-        <b>Diagnostics</b> <span style={{opacity: 0.6, fontSize: '11px'}}>One page with four views — each view is granted on its own below.</span>
+        <b>Diagnostics</b> <span style={{opacity: 0.6, fontSize: '11px'}}>One page with five views — each view is granted on its own below.</span>
         <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px'}}>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Integration errors view</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Processing log view</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Failures view</span>
           <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Server log view</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>AI usage view</span>
         </div>
       </div>
     </div>
@@ -246,7 +247,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its five views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`), AI usage (`aiusage`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -256,7 +257,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 A few chips carry a hint:
 
-- **Diagnostics** is one page with four views: each view is a grant of its own, and the menu shows *Diagnostics* as soon as one of them is granted. See [Diagnostics](../../application/diagnostics/overview.md).
+- **Diagnostics** is one page with five views: each view is a grant of its own, and the menu shows *Diagnostics* as soon as one of them is granted. See [Diagnostics](../../application/diagnostics/overview.md).
 - **Scheduled Jobs** covers every job — polls, batch jobs, daily digests, auto-retries, lifecycle checks, retention. Running, pausing or saving a job also requires the *Run batch jobs* action (`integration.run`). See [Scheduled jobs](../../sync/scheduled-jobs/overview.md).
 - **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
 - **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).

@@ -159,6 +159,8 @@ The extension runs a small relay on the user's own computer: it passes Claude's 
 | **Files folder** | Optional. The folder Claude may send a file from, for a job that loads one — see [below](#files). |
 | **Accept an internal certificate** | To turn on only when the server uses a self-signed or company certificate. |
 
+The settings are in French when the extension is downloaded from a French interface.
+
 **Several servers in one Claude Desktop.** The extension is named after its instance — the installation's **Environment** (Administer → App → Server) and the host of its address: *Liberty Next – Test · liberty-test.example.com*. The extensions of a production and a test server, or of two customers, install side by side, each with its own token. The server also tells Claude which instance it is, so an answer or a change names the instance it concerns.
 
 ### Send a file for a job \{#files\}

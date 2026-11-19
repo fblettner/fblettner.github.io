@@ -197,7 +197,7 @@ Each source keeps its own rules: text PDF settings are refused on a JD Edwards d
 
 ## Usage \{#usage\}
 
-The [IT dashboard](./tech-dashboard.md#mcp-usage) shows, per user over the last 30 days, the calls made from Claude, those that failed and those that changed something. The [server log](./diagnostics/server-log.md) holds one line per failed call and one per change; a successful read leaves no line.
+The [AI usage](./diagnostics/ai-usage.md) view of Diagnostics lists the calls made from Claude under the channel *Claude (MCP)* — by user, by day and by tool, with those that failed and those that saved a change. The [server log](./diagnostics/server-log.md) holds one line per failed call and one per change; a successful read leaves no line.
 
 ---
 

@@ -193,6 +193,24 @@
         }
       }
     },
+    "/api/ai/usage": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "AI usage over a period",
+        "description": "The audit and usage record of the AI over the last `days` days: totals, then the figures per user, day, channel (chat = the in-app assistant, mapping = the mapping editor's auto-map, mcp = Claude over the MCP endpoint), model and tool, and the latest turns with their tool calls (`user` narrows them).\n\nKept per turn: who, when, the model, the token counters, the duration, how it ended and each tool's name and input summary; never the question, the answer or what a tool returned. Requires the AI usage view of the Diagnostics page.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "days", "in": "query", "schema": { "type": "integer" }, "description": "Period in days, 1 to 366 (default 30)", "required": false },
+          { "name": "user", "in": "query", "schema": { "type": "string" }, "description": "Only this user's turns in `recent`", "required": false },
+          { "name": "limit", "in": "query", "schema": { "type": "integer" }, "description": "Latest turns returned, up to 1000 (default 200)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "days": 30, "retentionDays": 90, "totals": { "turns": 12, "in": 48000, "out": 5200, "cacheRead": 310000, "cacheWrite": 21000, "toolCalls": 31, "toolErrors": 1, "errors": 0, "ms": 184000 }, "byUser": [], "byDay": [], "byChannel": [], "byModel": [], "byTool": [], "recent": [] } } } }
+          }
+        }
+      }
+    },
     "/api/auth/forgot-password": {
       "post": {
         "tags": ["Auth"],

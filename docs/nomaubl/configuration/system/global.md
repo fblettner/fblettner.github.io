@@ -240,6 +240,7 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 | **System Prompt** | Optional prompt used in place of the built-in NomaUBL prompt. Empty = the built-in prompt. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | *Sitemap* mode only: domains the model may fetch, sitemap address (cached 6 hours), prefix of the entries kept. |
 | **Custom Tools** | Read-only tools of the in-app assistant on this instance's data (invoices, errors, history, dashboards, server log, settings with secrets masked, sample files and mapping). `N`: the assistant keeps the documentation only. Claude over MCP has its own switch, *MCP endpoint*, below. |
+| **AI usage kept (days)** | How long the record of the [AI usage](../../application/diagnostics/ai-usage.md) view is kept. Blank = 90. |
 
 ### MCP server
 

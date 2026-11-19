@@ -527,6 +527,7 @@ const sidebars: SidebarsConfig = {
             'nomaubl/application/diagnostics/processing-log',
             'nomaubl/application/diagnostics/failures',
             'nomaubl/application/diagnostics/server-log',
+            'nomaubl/application/diagnostics/ai-usage',
           ],
         },
         'nomaubl/application/ai-capabilities',

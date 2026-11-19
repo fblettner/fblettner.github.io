@@ -245,7 +245,7 @@ L'enregistrement est lu par la requête de lecture de l'écran, et les règles d
 
 Comme dans l'écran, un enregistrement, ses tables liées et ses actions sont des instructions distinctes : quand une action ou une étape échoue, ce qui s'est exécuté avant reste, et la réponse l'indique.
 
-**Ce qui est conservé.** Chaque carte appliquée et chaque outil d'écriture appelé en MCP figure dans l'enregistrement d'usage — l'auteur, l'écran, l'opération ou l'action, la clé de l'enregistrement, la tâche, et le motif d'un refus ; jamais les valeurs. [Surveillance → Usage de l'IA](../monitoring/ai-usage.md#changes) les liste, et sur un écran soumis au suivi des modifications, le paquet désigne ces entrées par *AI assistant*.
+**Ce qui est conservé.** Chaque carte appliquée et chaque outil d'écriture appelé en MCP figure dans l'enregistrement d'usage — l'auteur, l'écran, l'opération ou l'action, la clé de l'enregistrement, la tâche, et le motif d'un refus ; jamais les valeurs. [Surveillance → Usage de l'IA](../monitoring/ai-usage.md#changes) les liste, et sur un écran soumis au suivi des modifications, le paquet désigne ces entrées par *Assistant IA*.
 
 ---
 

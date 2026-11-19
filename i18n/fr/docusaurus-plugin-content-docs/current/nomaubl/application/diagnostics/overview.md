@@ -1,12 +1,12 @@
 ---
 title: Diagnostic
-description: "La page Diagnostic de NomaUBL réunit erreurs et journaux en quatre vues d'une même page — Erreurs d'intégration, Journal des traitements, Anomalies et Journal serveur — chacune accordée séparément par rôle, les liens des tableaux de bord ouvrant directement la bonne vue."
+description: "La page Diagnostic de NomaUBL réunit erreurs, journaux et utilisation de l'IA en cinq vues d'une même page — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur et Utilisation de l'IA — chacune accordée séparément par rôle, les liens des tableaux de bord ouvrant directement la bonne vue."
 keywords: [NomaUBL, diagnostic, erreurs d'intégration, journal des traitements, anomalies, journal serveur, erreurs, journaux, dépannage, rôles, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Diagnostic
 
-**Diagnostic** est la page unique pour tout ce qui a échoué et tout ce que le serveur a consigné. Elle regroupe quatre vues, choisies dans une rangée de cartes compactes sous l'en-tête, chacune indiquant ce qu'elle montre (le texte complet au survol) ; seules les vues accordées au rôle s'affichent, et la rangée disparaît quand une seule vue reste :
+**Diagnostic** est la page unique pour tout ce qui a échoué et tout ce que le serveur a consigné. Elle regroupe cinq vues, choisies dans une rangée de cartes compactes sous l'en-tête, chacune indiquant ce qu'elle montre (le texte complet au survol) ; seules les vues accordées au rôle s'affichent, et la rangée disparaît quand une seule vue reste :
 
 | Vue | Question traitée | Page |
 |---|---|---|
@@ -14,6 +14,7 @@ keywords: [NomaUBL, diagnostic, erreurs d'intégration, journal des traitements,
 | **Journal des traitements** | Ce qu'a fait chaque traitement, fichier par fichier, étape par étape. | [Journal des traitements](./processing-log.md) |
 | **Anomalies** | Toutes les anomalies dans une seule liste — validation, rejet PA, envoi et import, traitement, tâche — non résolues par défaut. | [Anomalies](./failures.md) |
 | **Journal serveur** | La fin du fichier journal du serveur, avec filtres par niveau et par module. | [Journal serveur](./server-log.md) |
+| **Utilisation de l'IA** | À quoi l'assistant et Claude ont servi : qui, combien, quels outils. | [Utilisation de l'IA](./ai-usage.md) |
 
 Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
 
@@ -85,7 +86,7 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
   <rect x="870" y="267.0" width="46" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
   <text x="893.0" y="278.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Ouvert</text>
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Quatre cartes de vues</text>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes de vue</text>
   <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement les vues accordées</text>
   <line x1="200" y1="101.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgo-arrow)"/>
   <rect x="20" y="176" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -106,7 +107,7 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
   <line x1="1000" y1="223.0" x2="950" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgo-arrow)"/>
 </svg>
 
-- **Un droit par vue.** Chaque vue garde le droit de page qu'elle avait avant de rejoindre Diagnostic : *Erreurs d'intégration*, *Journal des traitements*, *Journal serveur*, plus *Anomalies* pour la nouvelle vue. Un rôle ne voit que les vues qui lui sont accordées, et le menu affiche Diagnostic dès que l'une d'elles l'est. Voir [Rôles](../../configuration/security/roles.md).
+- **Un droit par vue.** Chaque vue garde le droit de page qu'elle avait avant de rejoindre Diagnostic : *Erreurs d'intégration*, *Journal des traitements*, *Journal serveur*, plus *Anomalies* et *Utilisation de l'IA* pour les vues plus récentes. Un rôle ne voit que les vues qui lui sont accordées, et le menu affiche Diagnostic dès que l'une d'elles l'est. Voir [Rôles](../../configuration/security/roles.md).
 - **Les liens ouvrent la bonne vue.** Les cartes du [tableau de bord](../dashboard.md) et du [tableau de bord IT](../tech-dashboard.md) ouvrent Diagnostic sur la vue correspondante, avec les mêmes filtres.
 - **Une période par défaut par vue.** Chaque vue datée s'ouvre sur la [période par défaut](../../configuration/default-periods.md#default-periods) qui lui est attribuée (*Diagnostics*, *Integration errors*, *Processing log*), ce mois-ci si rien n'est réglé ; la période se change depuis sa barre.
 - **Les erreurs d'intégration s'ouvrent par règle.** La grille par règle est la première lecture du matin ; la liste des événements s'obtient depuis la vue elle-même.

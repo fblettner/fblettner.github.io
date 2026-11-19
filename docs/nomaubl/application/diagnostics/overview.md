@@ -1,12 +1,12 @@
 ---
 title: Diagnostics
-description: "The NomaUBL Diagnostics page gathers errors and logs in four views of one page — Integration errors, Processing log, Failures and Server log — each granted separately per role, with dashboard links landing on the right view."
+description: "The NomaUBL Diagnostics page gathers errors, logs and the use of the AI in five views of one page — Integration errors, Processing log, Failures, Server log and AI usage — each granted separately per role, with dashboard links landing on the right view."
 keywords: [NomaUBL, diagnostics, integration errors, processing log, failures, server log, errors, logs, troubleshooting, roles, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Diagnostics
 
-**Diagnostics** is the single page for everything that went wrong and everything the server wrote down. It hosts four views, picked from a row of compact cards under the header, each saying what it shows (the full text on hover); only the views the role grants are shown, and the row is hidden when a single view is left:
+**Diagnostics** is the single page for everything that went wrong and everything the server wrote down. It hosts five views, picked from a row of compact cards under the header, each saying what it shows (the full text on hover); only the views the role grants are shown, and the row is hidden when a single view is left:
 
 | View | What it answers | Page |
 |---|---|---|
@@ -14,6 +14,7 @@ keywords: [NomaUBL, diagnostics, integration errors, processing log, failures, s
 | **Processing log** | What each processing run did, file by file, step by step. | [Processing log](./processing-log.md) |
 | **Failures** | Every failure in one list — validation, PA rejection, send and import, processing, job — unresolved by default. | [Failures](./failures.md) |
 | **Server log** | The tail of the server log file, with severity and module filters. | [Server log](./server-log.md) |
+| **AI usage** | What the assistant and Claude were used for: who, how much, which tools. | [AI usage](./ai-usage.md) |
 
 Open it from the sidebar — **Diagnostics**, in the Navigation group.
 
@@ -85,7 +86,7 @@ Open it from the sidebar — **Diagnostics**, in the Navigation group.
   <rect x="870" y="267.0" width="37" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
   <text x="888.5" y="278.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Open</text>
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four view cards</text>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">View cards</text>
   <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">only the granted views</text>
   <line x1="200" y1="101.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgo-arrow)"/>
   <rect x="20" y="176" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -106,7 +107,7 @@ Open it from the sidebar — **Diagnostics**, in the Navigation group.
   <line x1="1000" y1="223.0" x2="950" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgo-arrow)"/>
 </svg>
 
-- **One grant per view.** Each view keeps the page grant it had before it joined Diagnostics: *Integration errors*, *Processing log*, *Server log*, plus *Failures* for the new view. A role sees only the views it is granted, and the sidebar shows Diagnostics as soon as one of them is granted. See [Roles](../../configuration/security/roles.md).
+- **One grant per view.** Each view keeps the page grant it had before it joined Diagnostics: *Integration errors*, *Processing log*, *Server log*, plus *Failures* and *AI usage* for the newer views. A role sees only the views it is granted, and the sidebar shows Diagnostics as soon as one of them is granted. See [Roles](../../configuration/security/roles.md).
 - **Links land on the right view.** The cards of the [Dashboard](../dashboard.md) and the [Tech dashboard](../tech-dashboard.md) open Diagnostics on the matching view, with the same filters.
 - **One default period per view.** Each dated view opens on the [default period](../../configuration/default-periods.md#default-periods) set for it (*Diagnostics*, *Integration errors*, *Processing log*), this month unless set; change the period from its bar.
 - **Integration errors opens by rule.** The by-rule grid is the first read of a morning; switch to the event list from the view itself.

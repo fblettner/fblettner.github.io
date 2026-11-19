@@ -1,6 +1,6 @@
 ---
 title: AI usage
-description: "Monitoring → AI usage in Liberty Next: who uses the AI assistant, the estimated cost, the tokens with the share read from the cache, the tools called and their failures — by user, day, model, channel and tool —, the changes made through the assistant, and the latest questions with their tool calls. What is recorded, what never is, and how long it is kept."
+description: "Monitoring → AI usage in Liberty Next: who uses the AI assistant, the estimated cost, the tokens with the share read from the cache, the tools called and their failures — by user, day, model, channel and tool —, the changes made through the assistant, and the latest activity with its tool calls. What is recorded, what never is, and how long it is kept."
 keywords: [Liberty Next, monitoring, AI usage, AI assistant, tokens, estimated cost, prompt cache, tool calls, channels, changes, audit, usage record, retention, MCP]
 ---
 
@@ -119,7 +119,7 @@ keywords: [Liberty Next, monitoring, AI usage, AI assistant, tokens, estimated c
   <text x="616.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">19/11 09:12</text>
   <text x="692.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">bruno</text>
   <text x="776.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">job_run load_prices</text>
-  <text x="240" y="424" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LATEST QUESTIONS</text>
+  <text x="240" y="424" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LATEST ACTIVITY</text>
   <rect x="866" y="403" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
   <text x="883" y="412" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Failures only</text>
   <rect x="724" y="409" width="130" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -179,7 +179,7 @@ keywords: [Liberty Next, monitoring, AI usage, AI assistant, tokens, estimated c
   <line x1="200" y1="93.0" x2="404" y2="89" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
   <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A click on a user</text>
-  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">narrows the questions below</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">narrows the list below</text>
   <line x1="200" y1="253.0" x2="250" y2="259" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
   <rect x="20" y="506" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="521" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A run of MCP calls</text>
@@ -233,7 +233,7 @@ The period is **Last 7 days**, **Last 30 days** (default) or **Last 90 days**.
 |---|---|
 | **Questions** | Entries over the period. |
 | **Users** | Users with at least one. |
-| **Estimated cost, at list price** | What the tokens of the chat's questions cost at Anthropic's list price, in USD. A model without a listed price is left out and named (*without … (no listed price)*). |
+| **Estimated cost, at list price** | What the tokens of the chat's questions cost at Anthropic's list price, in US dollars written in the reader's language (*$38.20*). A model without a listed price is left out and named (*without … (no listed price)*). |
 | **Tokens in** | Input tokens, with the share read from the cache (*71 % from cache*): the part of a conversation sent again at each tool round is read from the cache, at a lower price. |
 | **Tokens out** | Output tokens. |
 | **Tool calls** | Tools called, with the number that failed. |
@@ -273,7 +273,7 @@ The values written are not kept. On a screen under [change tracking](../nomaflow
 
 ---
 
-## Latest questions \{#recent\}
+## Latest activity \{#recent\}
 
 One row per entry: When, User, Application, Model, Tokens in, From cache, Tokens out, Tool calls, Time and **Outcome**.
 

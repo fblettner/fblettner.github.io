@@ -242,6 +242,7 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 | **System Prompt** | Consigne facultative utilisée à la place de la consigne NomaUBL intégrée. Vide = la consigne intégrée. |
 | **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
 | **Custom Tools** | Outils en lecture seule de l'assistant de l'application sur les données de l'instance (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués, fichiers d'exemple et mapping). `N` : l'assistant ne garde que la documentation. Claude en MCP a son propre réglage, *MCP endpoint*, plus bas. |
+| **AI usage kept (days)** | Durée de conservation de l'enregistrement affiché par la vue [Utilisation de l'IA](../../application/diagnostics/ai-usage.md). Vide = 90. |
 
 ### MCP server
 

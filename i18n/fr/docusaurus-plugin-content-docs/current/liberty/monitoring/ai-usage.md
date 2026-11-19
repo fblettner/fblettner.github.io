@@ -1,6 +1,6 @@
 ---
 title: Usage de l'IA
-description: "Surveillance → Usage de l'IA dans Liberty Next : qui utilise l'assistant IA, le coût estimé, les jetons avec la part lue depuis le cache, les outils appelés et leurs échecs — par utilisateur, jour, modèle, canal et outil —, les modifications faites par l'assistant, et les dernières questions avec leurs appels d'outils. Ce qui est enregistré, ce qui ne l'est jamais, et la durée de conservation."
+description: "Surveillance → Usage de l'IA dans Liberty Next : qui utilise l'assistant IA, le coût estimé, les jetons avec la part lue depuis le cache, les outils appelés et leurs échecs — par utilisateur, jour, modèle, canal et outil —, les modifications faites par l'assistant, et la dernière activité avec ses appels d'outils. Ce qui est enregistré, ce qui ne l'est jamais, et la durée de conservation."
 keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cache, appels d'outils, audit, enregistrement d'usage, rétention, MCP]
 ---
 
@@ -41,7 +41,7 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
   <text x="355.7142857142857" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">18</text>
   <rect x="447.42857142857144" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="459.42857142857144" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COÛT</text>
-  <text x="459.42857142857144" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">$38.20</text>
+  <text x="459.42857142857144" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">38,20 $</text>
   <text x="459.42857142857144" y="176" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">estimé, prix public</text>
   <rect x="551.1428571428571" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="563.1428571428571" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JETONS ENTRÉE</text>
@@ -68,12 +68,12 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
   <text x="250" y="262.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
   <text x="350" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">148</text>
   <text x="422" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3,4 M</text>
-  <text x="492" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">$14.10</text>
+  <text x="492" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">14,10 $</text>
   <rect x="240" y="274" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="288.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">bruno</text>
   <text x="350" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">96</text>
   <text x="422" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,1 M</text>
-  <text x="492" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">$9.85</text>
+  <text x="492" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">9,85 $</text>
   <text x="606.0" y="212" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PAR CANAL</text>
   <rect x="606.0" y="220" width="354.0" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
   <text x="616.0" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CANAL</text>
@@ -84,7 +84,7 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
   <text x="616.0" y="262.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">Chat Liberty</text>
   <text x="752.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">412</text>
   <text x="814.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">5</text>
-  <text x="872.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">$38.20</text>
+  <text x="872.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">38,20 $</text>
   <rect x="606.0" y="274" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="616.0" y="288.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">Client externe (MCP)</text>
   <text x="752.0" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">236</text>
@@ -119,7 +119,7 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
   <text x="616.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">19/11 09:12</text>
   <text x="692.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">bruno</text>
   <text x="776.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">job_run load_prices</text>
-  <text x="240" y="424" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DERNIÈRES QUESTIONS</text>
+  <text x="240" y="424" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DERNIÈRE ACTIVITÉ</text>
   <rect x="849" y="403" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
   <text x="866" y="412" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Échecs seulement</text>
   <rect x="707" y="409" width="130" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -179,7 +179,7 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
   <line x1="200" y1="93.0" x2="476" y2="89" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
   <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un clic sur un utilisateur</text>
-  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtre les questions du bas</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtre la liste du bas</text>
   <line x1="200" y1="253.0" x2="250" y2="259" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
   <rect x="20" y="506" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="521" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une série d'appels MCP</text>
@@ -233,7 +233,7 @@ La période est **7 derniers jours**, **30 derniers jours** (par défaut) ou **9
 |---|---|
 | **Questions** | Les entrées de la période. |
 | **Utilisateurs** | Les utilisateurs qui en ont au moins une. |
-| **Coût estimé, au prix public** | Le coût des jetons des questions du chat au prix public d'Anthropic, en USD. Un modèle sans prix connu est écarté du calcul et nommé (*hors … (pas de prix connu)*). |
+| **Coût estimé, au prix public** | Le coût des jetons des questions du chat au prix public d'Anthropic, en dollars américains écrits dans la langue du lecteur (*38,20 $*). Un modèle sans prix connu est écarté du calcul et nommé (*hors … (pas de prix connu)*). |
 | **Jetons en entrée** | Les jetons d'entrée, avec la part lue depuis le cache (*71 % depuis le cache*) : la partie d'une conversation renvoyée à chaque appel d'outil est lue depuis le cache, à un tarif réduit. |
 | **Jetons en sortie** | Les jetons de sortie. |
 | **Appels d'outils** | Les outils appelés, avec le nombre d'échecs. |
@@ -269,11 +269,11 @@ Le panneau liste ce qui a été modifié par l'intermédiaire de l'assistant sur
 | **Canal** | *Carte appliquée* pour une carte du panneau, *Client externe (MCP)* pour un outil appelé par un client Claude. |
 | **Quoi** | L'outil, puis l'écran et l'opération ou l'action avec la clé de l'enregistrement, ou la tâche ; en rouge avec son motif quand la modification a été refusée. |
 
-Les valeurs écrites ne sont pas conservées. Sur un écran soumis au [suivi des modifications](../nomaflow/change-packages.md), le paquet de modifications désigne ces entrées par *AI assistant*.
+Les valeurs écrites ne sont pas conservées. Sur un écran soumis au [suivi des modifications](../nomaflow/change-packages.md), le paquet de modifications désigne ces entrées par *Assistant IA*.
 
 ---
 
-## Dernières questions \{#recent\}
+## Dernière activité \{#recent\}
 
 Une ligne par entrée : Quand, Utilisateur, Application, Modèle, Jetons en entrée, Depuis le cache, Jetons en sortie, Appels d'outils, Durée et **Issue**.
 
