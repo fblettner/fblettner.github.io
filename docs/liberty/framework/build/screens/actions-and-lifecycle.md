@@ -96,7 +96,7 @@ A screen with row-menu actions shows a small handle at the start of every row, s
 - with several actions, the handle (**⋯**, *Row actions*) opens the same menu as the right-click;
 - with a single `navigate` action, the handle (a return arrow) fires it at once — its tooltip is the action's label.
 
-**Link cells.** A column's **drill** setting (Liberty Next → Build → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
+**Link cells.** A column's **drill** setting (Liberty Next → Screens → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
 
 **Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Liberty Next → Administer → App](../settings-app.md#display), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
 
@@ -133,7 +133,7 @@ The values entered are available as `INPUT.<name>` to the action and to every la
 
 ## Shared actions \{#shared\}
 
-An action used by several screens is defined once in **Liberty Next → Build → Actions**: an id, a label, a description, declared **params**, optional **prompt_fields**, and its **steps** (the same action types). The page lists the shared actions with **Find usages**, **Clone** and **Delete**; a row opens the action designer.
+An action used by several screens is defined once in **Liberty Next → Logic → Services**: an id, a label, a description, declared **params**, optional **prompt_fields**, and its **steps** (the same action types). The page lists the shared actions with **Find usages**, **Clone** and **Delete**; a row opens the action designer.
 
 A screen runs it with `call_action`: `ref` names the shared action, and its `param_binds` fill the action's `INPUT.<param>` values.
 

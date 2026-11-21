@@ -95,6 +95,8 @@ The dictionary system (`dictionary.toml`) is Liberty's centralised vocabulary �
 | **`width`** | Fixed column width in pixels. Blank = auto-size. |
 | **`align`** | Text alignment — `left`, `right`, `center`. Blank auto-picks based on type (numbers right, text left). |
 | **`format`** | How to render the value — `date`, `number`, `boolean`, `currency`, etc. Overrides the dictionary format. Drives both the grid cell and the dialog field. |
+| **Long Text**, **Name = value list** | Two formats worth knowing. *Long Text* is typed in a multi-line box, in the record form and in the grid's edit mode, and keeps its line breaks. *Name = value list* shows a text of `name = value` lines as rows of fields in the record form (add, remove, **As text** / **As fields**); with **Params Of** — the column of the screen that names an endpoint — it becomes that endpoint's own form, one labelled field per parameter. |
+| **Card** | On a phone, where the grid is a list of cards: `title` puts the column in the card's heading, `show` always gives it a line, `hide` never shows it. Blank: the grid decides. See [Phone and tablet](../../mobile.md#card-setting). |
 
 ### Edit rule
 

@@ -45,7 +45,7 @@ Trois sections dans le panneau de gauche :
 | **Tableaux de bord** | Tous les tableaux de bord, par portée. |
 | **Modèles de l'Explorateur** | Les modèles de l'explorateur de données, avec leurs analyses et tableaux de bord livrés. |
 | **Tâches nomaflow** | Les tâches de `jobs.toml`. |
-| **Règles de notification** | Les règles de Liberty Next → Construire → Notifications. |
+| **Règles de notification** | Les règles de Liberty Next → Logique → Notifications. |
 | **Actions partagées** | Les actions réutilisées par plusieurs écrans. |
 | **Assistant (questions, procédures)** | Ce qu'une application livre pour l'assistant IA — une entrée par application. |
 

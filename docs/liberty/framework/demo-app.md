@@ -160,7 +160,7 @@ The model ships ten shared analyses — quantity by business unit, by company, b
 
 The application ships its [starter questions](./ai-assistant.md#starters) under four headings — *Sales*, *Periods*, *Loads*, *Reference data* — with *Which business unit sold the most last month?* or *How do I reload a month that was wrong?*. The *Sales lines* screen has its own, which use the page context: *Sum the quantities of the rows I see, by business unit*.
 
-Three [playbooks](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — let the assistant walk a user through the application's procedures. All of it is visible and editable in **Liberty Next → Build → AI**.
+Three [playbooks](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — let the assistant walk a user through the application's procedures. All of it is visible and editable in **Liberty Next → Logic → AI**.
 
 ---
 

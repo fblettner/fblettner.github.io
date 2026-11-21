@@ -45,7 +45,7 @@ Three sections in the left panel:
 | **Dashboards** | Every dashboard, by scope. |
 | **Explorer models** | The Data Explorer models, with their shipped analyses and dashboards. |
 | **nomaflow jobs** | The jobs of `jobs.toml`. |
-| **Notification rules** | The rules of Liberty Next → Build → Notifications. |
+| **Notification rules** | The rules of Liberty Next → Logic → Notifications. |
 | **Shared actions** | The actions reused by several screens. |
 | **Assistant (starters, playbooks)** | What an application ships for the AI assistant — one entry per application. |
 

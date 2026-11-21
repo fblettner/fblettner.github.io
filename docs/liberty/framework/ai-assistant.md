@@ -184,7 +184,7 @@ On an empty conversation, the drawer offers questions suited to where the user i
 
 Questions come from two sources:
 
-- **Liberty Next → Build → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
+- **Liberty Next → Logic → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
 - **Liberty Next → Administer → App → AI Assistant → Starter questions**: the operator's own, for everywhere, an application or an *application/screen*. They win over the application's questions for the same place.
 
 ---
@@ -199,12 +199,13 @@ Questions come from two sources:
 | `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | List the user's saved analyses and dashboards, and save what the user asks for: an analysis is run once before it is stored, so a wrong field is refused; a dashboard gathers saved analyses as tiles. Both are **private** unless the user asks to share them. | On by default. |
 | `describe_instance` | Summarises what the installation holds, or one application: menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
 | `search_catalog` | Finds a screen, a menu entry, a dashboard, a Data Explorer model, a job or a playbook by keyword, without reading the whole configuration. | Always. |
-| Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Build → AI](#settings-ai). | **The applications' tools** (on by default). |
+| Application tools | Functions an application ships for its own subject, named `<app>_<id>`. Read-only. See [Liberty Next → Logic → AI](#settings-ai). | **The applications' tools** (on by default). |
 | `remember_note` | Proposes a note for later conversations — see [Conversations and notes](#history). | Always. |
 | `screen_form`, `screen_write`, `screen_write_many`, `screen_action`, `job_form`, `job_run` | Read what a screen lets its user do, then add, change or delete a record — or up to 50 records on one card —, or run an action of the screen, through the screen's own queries and rules; read a job as its page shows it, then run it — see [Write through a screen](#write). | **Write tools** (off by default), with the `ai:write` permission. |
 | Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
 | `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default); superusers only. |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
+| `api_run` | Calls an endpoint marked **Changes data** — a report submitted, an orchestration run. `api_call` refuses such an endpoint. In the chat it proposes a card; nothing is sent until the user applies it. See [API endpoints](./build/api-endpoints.md#writable). | **API tool** and **Write tools**, for a user holding `ai:write` and the endpoint's permission; over MCP, **Allow changes over MCP** as well. |
 | Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default); superusers only. |
 | Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
@@ -255,9 +256,9 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ---
 
-## Liberty Next → Build → AI \{#settings-ai\}
+## Liberty Next → Logic → AI \{#settings-ai\}
 
-**Liberty Next → Build → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
+**Liberty Next → Logic → AI** edits what each application ships for the assistant. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
 
 | Part | Content |
 |---|---|
@@ -309,7 +310,7 @@ In **Liberty Next → Administer → App → AI Assistant**: **Enabled**, **Anth
 
 ## Tips \{#tips\}
 
-- Give queries a clear label and description (Liberty Next → Build → Connectors): the assistant chooses its queries from them.
+- Give queries a clear label and description (Liberty Next → Data → Connectors): the assistant chooses its queries from them.
 - Write dedicated read queries for the questions users ask often (totals per company, per month), rather than expecting the assistant to aggregate thousands of rows.
 - Write a playbook for each procedure users ask about more than once: the answer is then the application's procedure, not a guess.
 - Keep **API tool** and **Operations tools** off unless the endpoints are read-only and the chat users are administrators.

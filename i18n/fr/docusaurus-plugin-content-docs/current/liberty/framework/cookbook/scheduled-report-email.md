@@ -56,7 +56,7 @@ Dans Nomaflow, une tâche `crm-daily-pipeline` avec :
 
 ### 4. L'e-mail
 
-**Liberty Next → Construire → Notifications**, une nouvelle règle :
+**Liberty Next → Logique → Notifications**, une nouvelle règle :
 
 | Champ | Valeur |
 |---|---|

@@ -215,8 +215,11 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
 | **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
-| **Supervision** | [Serveurs JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. |
+| **Supervision** | [Contrôle de santé JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. [Server Manager](./monitoring/server-manager.md) : six écrans lus en direct sur la console — instances, utilisateurs connectés, serveurs d'entreprise, processus, fonctions métier, mémoire Java. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
+| **Montée de version** | [Analyse de montée de version](./upgrade/analysis.md) : ce qu'il faut reprendre pour une version, avec quelle complexité et en combien de jours — à partir de la liste d'objets d'Oracle et des objets du client. |
+| **Tests** | [Tests de non-régression](./tests.md) joués par AIS : enregistrer une référence avant un changement, comparer après. |
+| **Services JD Edwards (AIS)** | Le [catalogue de services AIS](./ais/services.md) et [Créer à partir de…](./ais/create-from.md) : un point d'accès ou un écran complet à partir d'une application, d'un formulaire, d'une table, d'un état, d'une fonction métier ou d'une orchestration JD Edwards. |
 
 ---
 
@@ -228,7 +231,10 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | **Opérateur AP / AR** | La grille de transactions — factures ouvertes inter-sociétés et inter-environnements sur une page, avec filtres en masse et drill. |
 | **Référent données maîtres** | Maintenance Address Book, clients, fournisseurs avec contrôles de champs obligatoires ; types et valeurs UDC pour le catalogue. |
 | **Analyste reporting** | Un formulaire unique pour planifier BIP, l'archive des runs passés, la distribution par courriel. |
-| **Ingénieur ops** | [Serveurs JDE](./monitoring/jde-servers.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle. |
+| **Ingénieur ops** | [Contrôle de santé JDE](./monitoring/jde-servers.md) et [Server Manager](./monitoring/server-manager.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle. |
+| **Chef de projet de montée de version** | [Analyse de montée de version](./upgrade/analysis.md) — les objets à reprendre, les jours par type et par personne, le suivi des travaux. |
+| **Testeur fonctionnel** | [Tests de non-régression](./tests.md) — les cas qui doivent continuer de fonctionner, joués avant et après un ESU ou une version d'outils. |
+| **Développeur d'intégration** | [Créer à partir de…](./ais/create-from.md) — un écran Liberty sur un formulaire JD Edwards, sans écrire un appel. |
 
 ---
 

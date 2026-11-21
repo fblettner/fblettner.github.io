@@ -14,7 +14,7 @@ This page walks the editor form field by field.
 
 ## Where it lives
 
-**Liberty Next → Build → Connectors → pick a connector → mode bar: Queries → ＋ Add query**.
+**Liberty Next → Data → Connectors → pick a connector → mode bar: Queries → ＋ Add query**.
 
 The page prompts for a name, creates an empty query and opens its editor.
 

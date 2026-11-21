@@ -95,6 +95,8 @@ Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé d
 | **`width`** | Largeur de colonne fixe en pixels. Vide = ajustement automatique. |
 | **`align`** | Alignement du texte — `left`, `right`, `center`. Vide choisit automatiquement selon le type (nombres à droite, texte à gauche). |
 | **`format`** | Comment afficher la valeur — `date`, `number`, `boolean`, `currency`, etc. Surcharge le format du dictionnaire. Pilote à la fois la cellule de grille et le champ de dialogue. |
+| **Long Text**, **Name = value list** | Deux formats à connaître. *Long Text* se saisit dans une zone multiligne, dans la fiche comme dans le mode édition de la grille, et conserve ses retours à la ligne. *Name = value list* présente un texte de lignes `nom = valeur` sous forme de champs dans la fiche (ajout, retrait, **En texte** / **En champs**) ; avec **Params Of** — la colonne de l'écran qui désigne un point d'accès —, il devient le formulaire de ce point d'accès, un champ libellé par paramètre. |
+| **Card** | Sur un téléphone, où la grille est une liste de cartes : `title` place la colonne dans le titre de la carte, `show` lui donne toujours une ligne, `hide` ne l'affiche jamais. Vide : la grille décide. Voir [Téléphone et tablette](../../mobile.md#card-setting). |
 
 ### Règle d'édition
 

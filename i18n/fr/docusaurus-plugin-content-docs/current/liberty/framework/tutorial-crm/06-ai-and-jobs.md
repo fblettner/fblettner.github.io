@@ -125,7 +125,7 @@ Enregistrer, puis **Exécuter avec des paramètres** pour l'exécuter une fois :
 
 ### La notification
 
-**Liberty Next → Construire → Notifications**, une règle :
+**Liberty Next → Logique → Notifications**, une règle :
 
 | Champ | Valeur |
 |---|---|

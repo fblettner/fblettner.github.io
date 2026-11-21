@@ -6,7 +6,7 @@ keywords: [Nomaflow, create job, job editor, schedule, timezone, presets, retry 
 
 # Create a job
 
-**+ New job** on the Jobs page, or **Edit** on a card, opens the job editor. One **Save** at the top writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page; **Cancel** leaves without saving. An invalid job is refused with a message at the top of the editor.
+**+ New job** on the Jobs page, or **Edit** on a card, opens the job editor. **The job is drawn as its flow** — **Start**, a card per step with its kind, its name and what it does, **End** — and what is picked is edited beside it: the job itself at the start, or a step. One **Save** at the top writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page; **Cancel** leaves without saving. An invalid job is refused with a message at the top of the editor.
 
 Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep their text as it is — comments, `${…}` references, `step_defaults` —, and the saved job gets its `${…}` references back wherever its value still matches.
 
@@ -136,7 +136,7 @@ Name / value pairs merged into the arguments of every `python` step (a step's ow
 
 ### Steps
 
-The **Add step:** bar has one button per type — `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`. Each step is a card: click it to open or fold its form; the arrows move it up or down; the copy icon clones it; the bin removes it. The fields of each type are on [Steps](../steps.md).
+The **+** on a link of the flow inserts a step at that place, among the types `sql_copy`, `sql_query`, `python`, `ldap_sync`, `http`, `call_job`, `file_load`, `file_export`, `report`, `notify`. A click on a step's card opens it beside the flow: its **Step name**, the fields of its type, and its icons — **Up**, **Down**, **Clone step**, **Delete**. A step can be *Turned off for this install*: it never runs, even when a run or a preset selects every step. A long flow continues on the next row, and the zoom (− / % / +) is kept on the device. The fields of each type are on [Steps](../steps.md).
 
 ---
 

@@ -45,15 +45,24 @@ const sidebars: SidebarsConfig = {
       ],
     },
     'liberty/framework/configuration/settings-ui',
+    'liberty/framework/studio',
     {
       type: 'category',
       label: 'Build',
-      link: {type: 'generated-index', slug: '/liberty/build', description: 'Liberty Next → Build: connectors and queries, dictionary, screens, menus, dashboards and charts, the Data Explorer, the AI assistant and plugins.'},
+      link: {type: 'generated-index', slug: '/liberty/build', description: 'Liberty Next → Build: the Studio — the map of an application, edited in place — and the Screen Assistant.'},
+      items: [
+        'liberty/framework/build/screen-assistant',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Data',
+      link: {type: 'generated-index', slug: '/liberty/data', description: 'Liberty Next → Data: connectors, their queries and API endpoints, and the dictionary.'},
       items: [
         {
           type: 'category',
           label: 'Connectors & queries',
-          link: {type: 'generated-index', slug: '/liberty/framework/build/queries', description: 'Build → Connectors: pools, SQL and API connectors, and the queries they hold — generated from a table, written by hand, cloned, sequences and lookups, parameters, per-dialect variants.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/build/queries', description: 'Data → Connectors: pools, SQL and API connectors, and the queries they hold — generated from a table, written by hand, cloned, sequences and lookups, parameters, per-dialect variants.'},
           items: [
             'liberty/framework/connectors',
             'liberty/framework/build/queries/overview',
@@ -65,29 +74,31 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/build/queries/per-dialect-sql',
           ],
         },
+        'liberty/framework/build/api-endpoints',
         'liberty/framework/dictionary',
-        {
-          type: 'category',
-          label: 'Screens',
-          link: {type: 'generated-index', slug: '/liberty/framework/build/screens', description: 'Build → Screens: wire a screen to its queries, set the columns, build the dialog, conditional fields, actions and hooks, nested tabs, saved views.'},
-          items: [
-            'liberty/framework/build/screen-assistant',
-            'liberty/framework/build/screens/overview',
-            'liberty/framework/build/screens/create-from-query',
-            'liberty/framework/build/screens/columns',
-            'liberty/framework/build/screens/dialog-builder',
-            'liberty/framework/build/screens/conditional-fields',
-            'liberty/framework/form-conditions',
-            'liberty/framework/build/screens/actions-and-lifecycle',
-            'liberty/framework/build/screens/nested-tabs',
-            'liberty/framework/saved-views',
-            'liberty/framework/bulk-edit',
-          ],
-        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Screens',
+      link: {type: 'generated-index', slug: '/liberty/framework/build/screens', description: 'Screens → Screens and Menus: wire a screen to its queries or API endpoints, set the columns, build the dialog, conditional fields, actions and hooks, nested tabs, saved views, phone and tablet, and the menus.'},
+      items: [
+        'liberty/framework/build/screens/overview',
+        'liberty/framework/build/screens/create-from-query',
+        'liberty/framework/build/screens/api-screens',
+        'liberty/framework/build/screens/columns',
+        'liberty/framework/build/screens/dialog-builder',
+        'liberty/framework/build/screens/conditional-fields',
+        'liberty/framework/form-conditions',
+        'liberty/framework/build/screens/actions-and-lifecycle',
+        'liberty/framework/build/screens/nested-tabs',
+        'liberty/framework/saved-views',
+        'liberty/framework/bulk-edit',
+        'liberty/framework/mobile',
         {
           type: 'category',
           label: 'Menus & apps',
-          link: {type: 'generated-index', slug: '/liberty/framework/build/menus', description: 'Build → Menus and apps: what an app is, the menu tree, item types, permissions, translations and icons.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/build/menus', description: 'Screens → Menus: what an app is, the menu tree, item types, permissions, translations and icons.'},
           items: [
             'liberty/framework/apps/overview',
             'liberty/framework/build/menus/overview',
@@ -99,10 +110,41 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/apps/i18n',
           ],
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Logic',
+      link: {type: 'generated-index', slug: '/liberty/logic', description: 'Liberty Next → Logic: services drawn as flows, non-regression tests, the AI assistant and plugins.'},
+      items: [
+        'liberty/framework/build/services',
+        'liberty/framework/build/tests',
+        'liberty/framework/ai-assistant',
+        'liberty/framework/mcp',
+        'liberty/framework/ai-data-sent',
+        {
+          type: 'category',
+          label: 'Plugins',
+          link: {type: 'generated-index', slug: '/liberty/framework/build/plugins', description: 'Custom Python called by Nomaflow steps and screen actions — the function contract, ETL primitives, deploy and debug.'},
+          items: [
+            'liberty/framework/build/plugins/overview',
+            'liberty/framework/apps/plugins',
+            'liberty/framework/build/plugins/write-a-callable',
+            'liberty/framework/build/plugins/etl-primitives',
+            'liberty/framework/build/plugins/deploy-and-debug',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Insight',
+      link: {type: 'generated-index', slug: '/liberty/insight', description: 'Liberty Next → Insight: dashboards and charts, and the Data Explorer.'},
+      items: [
         {
           type: 'category',
           label: 'Dashboards & charts',
-          link: {type: 'generated-index', slug: '/liberty/framework/dashboards-and-charts', description: 'Build → Dashboards and Build → Charts: KPIs, charts and tables on a grid, with a period and filters.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/dashboards-and-charts', description: 'Insight → Dashboards and Insight → Charts: KPIs, charts and tables on a grid, with a period and filters.'},
           items: [
             'liberty/framework/dashboards',
             'liberty/framework/charts',
@@ -117,21 +159,6 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/explorer/analysis',
             'liberty/framework/explorer/calculated-fields',
             'liberty/framework/explorer/saved-and-dashboards',
-          ],
-        },
-        'liberty/framework/ai-assistant',
-        'liberty/framework/mcp',
-        'liberty/framework/ai-data-sent',
-        {
-          type: 'category',
-          label: 'Plugins',
-          link: {type: 'generated-index', slug: '/liberty/framework/build/plugins', description: 'Custom Python called by Nomaflow steps and screen actions — the function contract, ETL primitives, deploy and debug.'},
-          items: [
-            'liberty/framework/build/plugins/overview',
-            'liberty/framework/apps/plugins',
-            'liberty/framework/build/plugins/write-a-callable',
-            'liberty/framework/build/plugins/etl-primitives',
-            'liberty/framework/build/plugins/deploy-and-debug',
           ],
         },
       ],
@@ -163,9 +190,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Operate',
-      link: {type: 'generated-index', slug: '/liberty/monitoring', description: 'Liberty Next → Operate: the Monitoring page — live view, server log, AI usage, retention — and the health endpoints. The jobs are in the Nomaflow documentation.'},
+      link: {type: 'generated-index', slug: '/liberty/monitoring', description: 'Liberty Next → Operate: test results, the Monitoring page — live view, server log, AI usage, retention — and the health endpoints. The jobs are in the Nomaflow documentation.'},
       items: [
         'liberty/monitoring/overview',
+        'liberty/monitoring/test-results',
         'liberty/monitoring/dashboard',
         'liberty/monitoring/server-log',
         'liberty/monitoring/ai-usage',
@@ -461,9 +489,20 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Monitoring',
-      items: ['liberty/nomajde/monitoring/jde-servers'],
+      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/server-manager'],
     },
     'liberty/nomajde/jobs',
+    {
+      type: 'category',
+      label: 'Upgrade',
+      items: ['liberty/nomajde/upgrade/analysis'],
+    },
+    'liberty/nomajde/tests',
+    {
+      type: 'category',
+      label: 'JD Edwards services (AIS)',
+      items: ['liberty/nomajde/ais/services', 'liberty/nomajde/ais/create-from'],
+    },
   ],
 
   nomaublSidebar: [

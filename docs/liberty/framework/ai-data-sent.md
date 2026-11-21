@@ -114,8 +114,8 @@ An installation decides what is sensitive, and Liberty keeps it from the assista
 
 | Step | Where | Effect |
 |---|---|---|
-| **Flag an item** | Liberty Next → Build → Dictionary → an entry → *Rule* → **Sensitive** | Covers every column carrying the item, on every screen, query and Data Explorer model. A column is matched by its dictionary item, by its name, or by its name without the connector's prefix (`ABALPH` → `ALPH`) — as the [data scope](./build/secure/roles-and-permissions.md#data-scope) finds its columns. |
-| **Flag a column** | Liberty Next → Build → Screens → a column → *General* → **Sensitive** | Three choices: *(default)* follows the column's item, *yes* covers a column that carries no item, *no* exempts a column whose item is flagged. |
+| **Flag an item** | Liberty Next → Data → Dictionary → an entry → *Rule* → **Sensitive** | Covers every column carrying the item, on every screen, query and Data Explorer model. A column is matched by its dictionary item, by its name, or by its name without the connector's prefix (`ABALPH` → `ALPH`) — as the [data scope](./build/secure/roles-and-permissions.md#data-scope) finds its columns. |
+| **Flag a column** | Liberty Next → Screens → Screens → a column → *General* → **Sensitive** | Three choices: *(default)* follows the column's item, *yes* covers a column that carries no item, *no* exempts a column whose item is flagged. |
 | **Turn the hiding on** | Liberty Next → Administer → App → AI Assistant → **Hide sensitive data from the assistant** | Off by default. Applied at the next call, without a restart. |
 
 With the hiding on, the flagged columns are left out of:

@@ -86,6 +86,14 @@ Click anywhere on the row to **select** the item — the Inspector on the right 
 
 ---
 
+## Drag and drop \{#drag\}
+
+A row is dragged onto another: **above** it, **below** it, or **into** it when it is a folder — with everything under it. A line or a highlight shows where it will land. Dragging is off while the tree is filtered.
+
+Each row carries the icon of what it opens — folder, screen, dashboard, job, query, endpoint, page. The tree and the picked entry are two panels side by side; the entry's own actions — **Clone**, **Find usages**, **Find dependencies** — are on its panel, and **Folder**, **Item**, **Discard** and **Save** are in the page header.
+
+---
+
 ## The per-row actions
 
 The icons that appear on hover, left to right:

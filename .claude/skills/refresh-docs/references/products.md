@@ -24,6 +24,9 @@ If the user names a product not listed here, ask for its repo and add a row.
 ## Liberty Next / Nomaflow specifics
 
 - Docs are **UI-first**: lead with the builder / Settings UI and mockups; TOML only as "saved under the hood", deployment or escape hatch.
+- The Liberty menu (`frontend/src/services/libertyMenu.ts`) is Overview, then **Build** (Studio, Assistant), **Data** (Connectors, Dictionary), **Screens** (Screens, Menus), **Logic** (Services, Tests, Notifications, AI), **Insight** (Dashboards, Charts, Explorer, Report templates), Administer, Operate, Deploy, Document — FR: Construire, Données, Écrans, Logique, Analyse, Administrer, Exploiter, Déployer, Documenter. Write menu paths with these groups; the docs sidebar mirrors them.
+- UI strings: `frontend/src/locales/en.ts` and `fr.ts`. The app's French for *endpoint* is « point d'accès », for *record form* « fiche », for a *service* (shared action) « service »; use them in new FR pages.
+- New-page mockups of this product were generated with svgkit helpers for flows of cards (stage cards, step cards, wires): reuse the pattern for any editor drawn as a flow.
 - Never mention v1 or `ly_*` tables.
 - JDE administration is Nomajde's job — no JDE tutorial in framework docs.
 - App visibility needs both the menu and `show_in_switcher` — always pair them.

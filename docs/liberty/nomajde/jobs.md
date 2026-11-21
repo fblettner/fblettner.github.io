@@ -30,7 +30,13 @@ The log lists, per model, the tables scanned and the entries created.
 
 ## Check the JDE servers \{#jde-health\}
 
-Runs the health check of the JD Edwards servers through Server Manager at once, without waiting for the five-minute schedule, and records the result shown in [Monitoring → JDE Servers](./monitoring/jde-servers.md). The run fails when an instance did not pass. Details: [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+Runs the health check of the JD Edwards servers through Server Manager at once, without waiting for the five-minute schedule, and records the result shown in [Monitoring → JDE Health Check](./monitoring/jde-servers.md). The run fails when an instance did not pass. Details: [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## Upgrade and tests \{#upgrade-tests\}
+
+Three more jobs sit in their own folders of the menu: **Upgrade → Load an object list from Oracle** and **Upgrade → Build the analysis** — see [Upgrade analysis](./upgrade/analysis.md) —, and **Tests → Run the tests** — see [Non-regression tests](./tests.md#job).
 
 ---
 

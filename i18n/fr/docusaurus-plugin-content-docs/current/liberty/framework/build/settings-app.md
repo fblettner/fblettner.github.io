@@ -6,7 +6,7 @@ keywords: [Liberty Next, Paramètres App, licence, assistant IA, notifications, 
 
 # Paramètres de l'application
 
-**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Les sections sont classées par ordre alphabétique, *Déploiement* en lecture seule en dernier ; chacune se replie et son en-tête affiche un résumé (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** valide et applique toute la page d'un coup.
+**Liberty Next → Administrer → App** regroupe tous les réglages de l'installation : rien n'est à modifier dans un fichier. Les sections forment une liste à gauche, en quatre groupes qui suivent l'ordre de mise en place d'une installation — **L'installation** (Serveur, Affichage, Adresses externes, Charte des PDF, Licence), **La connexion** (Connexion, OpenID Connect), **Ce qui est activé** (Assistant IA, Notifications, nomaflow, Paquets de changements), **L'exploitation** (Journal du serveur, et Déploiement en lecture seule). Une seule section est ouverte à la fois, à côté de la liste, ses champs sur une même grille — chaque libellé au-dessus de son champ, l'explication sur une ligne en dessous — et la page mémorise laquelle. Chaque ligne de la liste affiche l'état de la section (*configurée*, *absente — mode restreint*, *aucune clé API*, *désactivé*, *redémarrer après un changement*…). **Enregistrer** et **Abandonner** se trouvent dans l'en-tête de la page, à côté de **Recharger la config** ; Enregistrer valide et applique toute la page d'un coup.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client et secret de session OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
 
@@ -211,14 +211,14 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *En
 | **Connecteurs autorisés** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
 | **Domaines autorisés**, **Lectures maximum par tour** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
 | **Outils d'exploitation** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
-| **Les outils des applications** | Activé par défaut : les outils livrés par chaque application sous [Liberty Next → Construire → IA](../ai-assistant.md#settings-ai). Désactivé : aucun n'est proposé. |
+| **Les outils des applications** | Activé par défaut : les outils livrés par chaque application sous [Liberty Next → Logique → IA](../ai-assistant.md#settings-ai). Désactivé : aucun n'est proposé. |
 | **Fichier joint à une question : mégaoctets au plus** | 10 par défaut (de 0 à 30) ; `0` retire le trombone du panneau — voir [Joindre un fichier](../ai-assistant.md#attach). |
 | **Enregistrement d'usage conservé (jours ; 0 = sans limite)** | 90 par défaut — voir [Usage de l'IA](../../monitoring/ai-usage.md#retention). |
 | **Point d'accès MCP (/mcp)** | Désactivé par défaut : les mêmes outils pour un client externe — Claude Desktop, claude.ai, Claude Code —, chaque utilisateur avec un jeton d'accès personnel. Appliqué sans redémarrage. Voir [Connecter Claude (MCP)](../mcp.md). |
 | **Autoriser les modifications en MCP** | Désactivé par défaut : un client externe se limite à la lecture. Activé : un outil qui enregistre — un enregistrement par son écran, une action, une tâche, une analyse ou un tableau de bord sauvegardé — lui est proposé ; dans le panneau l'utilisateur applique une carte, ici le seul garde-fou est l'approbation du client. Voir [Modifications en MCP](../mcp.md#changes). |
 | **Jeton d'accès personnel : durée maximale (jours)** | 366 par défaut : la plus longue validité d'un jeton, et la durée d'une connexion depuis un client Claude avant une nouvelle autorisation. |
 | **Modèles au choix des utilisateurs** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
-| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Construire → IA](../ai-assistant.md#settings-ai)). |
+| **Questions de départ** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Liberty Next → Logique → IA](../ai-assistant.md#settings-ai)). |
 
 Voir [Assistant IA](../ai-assistant.md), et [Données transmises à Anthropic](../ai-data-sent.md) pour ce que ces réglages laissent sortir de l'installation.
 

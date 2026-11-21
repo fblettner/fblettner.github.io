@@ -17,7 +17,7 @@ Every secret field is encrypted when it is saved from Settings:
 | Where | Field |
 |---|---|
 | Liberty Next → Administer → Pools | The pool's password. |
-| Liberty Next → Build → Connectors (API connectors) | Credentials, tokens, client secrets. |
+| Liberty Next → Data → Connectors (API connectors) | Credentials, tokens, client secrets. |
 | Liberty Next → Administer → App | The licence key, the AI key, the OpenID Connect client secret, the SMTP password. |
 
 The field is a masked input with an eye to show its content. Saving a new value always writes it encrypted; without a master key the save is refused.

@@ -72,6 +72,17 @@ In the detail view, and after a drill, a row of an entity linked to a screen ope
 
 ---
 
+## The page \{#page\}
+
+What an analysis is made of reads as cards, each with its icon and its colour: **View**, **Period**, **Rows** (**Columns** in the Detail view), **Measures**, **Filters** — and **Options** for a pivot or a chart. Fields are still clicked or dragged onto a shelf, and chips reorder by drag. The result is a panel whose head says the view and what the run answered — *N group(s) from N row(s)*, *first N shown*. **Save**, **Save as**, **Delete**, **Excel** and **PDF** are in the page header, beside the analysis picker.
+
+- **Definition**, beside the picker, hides the fields and the shelves: **the result takes the page**, with the view, the period, the Top and **Run** on one line. A saved analysis opens that way, a new one on its definition.
+- **The table is the grid of the data screens**: search, a filter per column, sort on several columns, grouping, the column chooser and its own CSV / Excel export of what is shown. A row still drills; a detail row still opens its record; the detail stays paged by the server.
+- **A coded field shows its label, its code, or both** — the chip of a field read through an enum or a lookup offers **Label**, **Code + label**, **Code**. In the table, *Code + label* gives two columns — `Company (ID)` then `Company` —, each sorted, filtered and exported by itself; a pivot writes `101 · Alpine Foods SA` in its label cell. The choice is saved with the analysis and followed by the dashboard tiles.
+- An export cut by the analysis's own Top says so: *first 20 of 44 groups*.
+
+---
+
 ## Things to know
 
 | Situation | What happens |

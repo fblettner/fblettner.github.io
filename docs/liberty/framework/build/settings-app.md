@@ -6,7 +6,7 @@ keywords: [Liberty Next, Settings App, server log, sign-in, tokens, login thrott
 
 # App settings
 
-**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. The sections are listed in alphabetical order, the read-only *Deployment* last; each folds and its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** validates and applies the whole page at once.
+**Liberty Next → Administer → App** holds every setting of the install: nothing needs to be edited in a file. The sections are a list on the left, in four groups that follow the order an installation is set up — **The installation** (Server, Display, External addresses, PDF branding, License), **Signing in** (Sign-in, OpenID Connect), **What is switched on** (AI Assistant, Notifications, nomaflow, Change packages), **Running it** (Server log, and the read-only Deployment). One section is open at a time, beside the list, with its fields on one grid — each label above its field, the explanation on a line under it — and the page remembers which. Each line of the list shows the section's state (*configured*, *not set — restricted mode*, *no API key*, *disabled*, *restart after a change*…). **Save** and **Discard** are in the page header, beside **Reload config**; Save validates and applies the whole page at once.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret and session secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
@@ -211,14 +211,14 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 | **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
-| **The applications' tools** | On by default: the tools each application ships under [Liberty Next → Build → AI](../ai-assistant.md#settings-ai). Off: none is offered. |
+| **The applications' tools** | On by default: the tools each application ships under [Liberty Next → Logic → AI](../ai-assistant.md#settings-ai). Off: none is offered. |
 | **File attached to a question: megabytes at most** | 10 by default (0 to 30); `0` removes the paperclip of the drawer — see [Attach a file](../ai-assistant.md#attach). |
 | **Usage record kept (days; 0 = without limit)** | 90 by default — see [AI usage](../../monitoring/ai-usage.md#retention). |
 | **MCP endpoint (/mcp)** | Off by default: the same tools for an external client — Claude Desktop, claude.ai, Claude Code —, each user with a personal access token. Applied without a restart. See [Connect Claude (MCP)](../mcp.md). |
 | **Allow changes over MCP** | Off by default: an external client reads only. On: a tool that saves — a record through its screen, an action, a job, a saved analysis or dashboard — is offered to it; in the drawer the user applies a card, here the only gate is the client's own approval. See [Changes over MCP](../mcp.md#changes). |
 | **Personal access token: longest life (days)** | 366 by default: the longest validity of a token, and how long a sign-in from a Claude client lasts before the user allows it again. |
 | **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
-| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Build → AI](../ai-assistant.md#settings-ai)). |
+| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Liberty Next → Logic → AI](../ai-assistant.md#settings-ai)). |
 
 See [AI assistant](../ai-assistant.md), and [Data sent to Anthropic](../ai-data-sent.md) for what these settings let out of the installation.
 

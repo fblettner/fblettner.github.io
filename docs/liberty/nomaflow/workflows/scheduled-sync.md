@@ -72,7 +72,7 @@ query = "daily_totals_refresh"
 
 ## Be warned \{#notify\}
 
-In **Liberty Next → Build → Notifications**, a rule on *A job event*: job `nightly-reporting-sync`, events `failure` and `missed`, channel `email`, recipient `role:ops`, subject `{JOB}: {STATE}`, body `{ERROR}`. See [Notifications](../notifications.md).
+In **Liberty Next → Logic → Notifications**, a rule on *A job event*: job `nightly-reporting-sync`, events `failure` and `missed`, channel `email`, recipient `role:ops`, subject `{JOB}: {STATE}`, body `{ERROR}`. See [Notifications](../notifications.md).
 
 ---
 

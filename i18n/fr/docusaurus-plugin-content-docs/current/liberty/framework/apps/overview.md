@@ -83,12 +83,12 @@ Tout ce qu'affiche une application est rangé sous le nom de son connecteur :
 
 | Élément | Réglage | Rangement |
 |---|---|---|
-| Requêtes (tables, requêtes, séquences, lookups) | Liberty Next → Construire → Connecteurs | Dans le connecteur lui-même. |
-| Entrées, énumérations, lookups et séquences du dictionnaire | Liberty Next → Construire → Dictionnaire, **portée** du connecteur | `[connectors.<app>.*]` — en complément des entrées partagées. |
-| Écrans | Liberty Next → Construire → Écrans, pastille de l'application | `[screens.<app>.<id>]` |
-| Menu | Liberty Next → Construire → Menus, pastille de l'application | `[menus.<app>]` |
-| Graphiques | Liberty Next → Construire → Graphiques, portée du connecteur | `[charts.<app>.<id>]` |
-| Tableaux de bord | Liberty Next → Construire → Tableaux de bord, application | `[dashboards.<app>.<id>]` — une entrée de menu l'ouvre avec la cible `<app>.<id>`. |
+| Requêtes (tables, requêtes, séquences, lookups) | Liberty Next → Données → Connecteurs | Dans le connecteur lui-même. |
+| Entrées, énumérations, lookups et séquences du dictionnaire | Liberty Next → Données → Dictionnaire, **portée** du connecteur | `[connectors.<app>.*]` — en complément des entrées partagées. |
+| Écrans | Liberty Next → Écrans → Écrans, pastille de l'application | `[screens.<app>.<id>]` |
+| Menu | Liberty Next → Écrans → Menus, pastille de l'application | `[menus.<app>]` |
+| Graphiques | Liberty Next → Analyse → Graphiques, portée du connecteur | `[charts.<app>.<id>]` |
+| Tableaux de bord | Liberty Next → Analyse → Tableaux de bord, application | `[dashboards.<app>.<id>]` — une entrée de menu l'ouvre avec la cible `<app>.<id>`. |
 
 Les actions partagées ont un espace de noms unique. Les tâches Nomaflow ne sont rattachées à aucune application.
 
@@ -109,9 +109,9 @@ Les réglages **show_in_switcher** (activé par défaut) et **home** du connecte
 
 ## Créer une application \{#create\}
 
-1. **Liberty Next → Construire → Connecteurs** — créer le connecteur SQL et son pool, puis ses requêtes (l'assistant CRUD les écrit à partir d'une table).
-2. **Liberty Next → Construire → Écrans** — construire les écrans sur ces requêtes.
-3. **Liberty Next → Construire → Menus** — **+ Ajouter une portée**, choisir le connecteur, ajouter les entrées qui ouvrent les écrans.
+1. **Liberty Next → Données → Connecteurs** — créer le connecteur SQL et son pool, puis ses requêtes (l'assistant CRUD les écrit à partir d'une table).
+2. **Liberty Next → Écrans → Écrans** — construire les écrans sur ces requêtes.
+3. **Liberty Next → Écrans → Menus** — **+ Ajouter une portée**, choisir le connecteur, ajouter les entrées qui ouvrent les écrans.
 4. De retour sur le connecteur, vérifier **show_in_switcher** et renseigner éventuellement **home**.
 
 L'[Assistant de création d'écran](../build/screen-assistant.md) enchaîne les étapes 1 à 3 pour une table. Le [tutoriel CRM](../tutorial-crm/01-setup.md) construit une application complète.

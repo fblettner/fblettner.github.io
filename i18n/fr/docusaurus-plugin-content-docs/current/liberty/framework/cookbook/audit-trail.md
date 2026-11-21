@@ -32,7 +32,7 @@ ALTER TABLE customers ADD updated_at TIMESTAMP;
 
 ### 2. Les renseigner dans les requêtes d'écriture
 
-Dans **Liberty Next → Construire → Connecteurs**, modifier les requêtes d'insertion et de mise à jour de la table :
+Dans **Liberty Next → Données → Connecteurs**, modifier les requêtes d'insertion et de mise à jour de la table :
 
 ```sql
 -- customers_post

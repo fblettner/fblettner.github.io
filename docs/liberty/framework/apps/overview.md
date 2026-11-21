@@ -83,12 +83,12 @@ Everything an app shows is filed under its connector's name:
 
 | Element | Where it is set | Stored under |
 |---|---|---|
-| Queries (tables, queries, sequences, lookups) | Liberty Next → Build → Connectors | The connector itself. |
-| Dictionary entries, enums, lookups, sequences | Liberty Next → Build → Dictionary, the connector's **scope** | `[connectors.<app>.*]` — on top of the shared entries. |
-| Screens | Liberty Next → Build → Screens, the app's chip | `[screens.<app>.<id>]` |
-| Menu | Liberty Next → Build → Menus, the app's chip | `[menus.<app>]` |
-| Charts | Liberty Next → Build → Charts, the connector's scope | `[charts.<app>.<id>]` |
-| Dashboards | Liberty Next → Build → Dashboards, the app | `[dashboards.<app>.<id>]` — a menu item opens it with the target `<app>.<id>`. |
+| Queries (tables, queries, sequences, lookups) | Liberty Next → Data → Connectors | The connector itself. |
+| Dictionary entries, enums, lookups, sequences | Liberty Next → Data → Dictionary, the connector's **scope** | `[connectors.<app>.*]` — on top of the shared entries. |
+| Screens | Liberty Next → Screens → Screens, the app's chip | `[screens.<app>.<id>]` |
+| Menu | Liberty Next → Screens → Menus, the app's chip | `[menus.<app>]` |
+| Charts | Liberty Next → Insight → Charts, the connector's scope | `[charts.<app>.<id>]` |
+| Dashboards | Liberty Next → Insight → Dashboards, the app | `[dashboards.<app>.<id>]` — a menu item opens it with the target `<app>.<id>`. |
 
 Shared actions have a single namespace. Nomaflow jobs are not tied to an app.
 
@@ -109,9 +109,9 @@ A connector's **show_in_switcher** (on by default) and **home** settings decide 
 
 ## Creating an app \{#create\}
 
-1. **Liberty Next → Build → Connectors** — create the SQL connector and its pool, then its queries (the CRUD wizard writes them from a table).
-2. **Liberty Next → Build → Screens** — build the screens on these queries.
-3. **Liberty Next → Build → Menus** — **+ Add scope**, pick the connector, add the items that open the screens.
+1. **Liberty Next → Data → Connectors** — create the SQL connector and its pool, then its queries (the CRUD wizard writes them from a table).
+2. **Liberty Next → Screens → Screens** — build the screens on these queries.
+3. **Liberty Next → Screens → Menus** — **+ Add scope**, pick the connector, add the items that open the screens.
 4. Back on the connector, check **show_in_switcher** and, optionally, set **home**.
 
 The [Screen Creation Assistant](../build/screen-assistant.md) chains steps 1 to 3 for one table. The [CRM tutorial](../tutorial-crm/01-setup.md) builds a complete app.

@@ -1,6 +1,6 @@
 ---
 title: Connecteurs
-description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les endpoints nommés d'une API web. Modifiés dans Liberty Next → Construire → Connecteurs ; un connecteur doté d'un menu est une application."
+description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les endpoints nommés d'une API web. Modifiés dans Liberty Next → Données → Connecteurs ; un connecteur doté d'un menu est une application."
 keywords: [Liberty Next, connecteur, SQL, API, pool, requête nommée, endpoint, tables, requêtes, séquences, lookups, permissions, multi-pools, Oracle thick]
 ---
 
@@ -111,7 +111,7 @@ Un connecteur doté d'un menu est une **application** — voir [Applications](./
 
 ---
 
-## Liberty Next → Construire → Connecteurs \{#page\}
+## Liberty Next → Données → Connecteurs \{#page\}
 
 La liste de gauche a deux groupes : **Applications** (connecteurs dotés d'un menu) et **Sources de données** (les autres). **＋ Connecteur** en crée un (nom, type SQL ou API) ; le volet de droite modifie le connecteur sélectionné. **Enregistrer** écrit `connectors.toml` et applique la modification sans redémarrage ; **Abandonner** annule les modifications en attente. Les boutons propres au connecteur — **Cloner** (avec sa portée du dictionnaire, ses écrans, son menu, ses graphiques et tableaux de bord), **Renommer** (toutes les références réécrites), **Supprimer** (avec tout ce qui lui appartient) — se trouvent sur sa vue de réglages.
 
@@ -133,6 +133,20 @@ Un pool est une connexion à une base de données, définie dans **Liberty Next 
 | **Debug sql** | Journalise chaque instruction exécutée sur le pool. |
 
 ---
+
+### Un pool, étape par étape \{#pool-stages\}
+
+Dans **Administrer → Pools**, la ligne d'un pool indique sa cible — `postgresql · host:5432 / database` — et le pool choisi est dessiné en cinq étapes, chaque carte résumant son contenu : **Base de données**, **Compte**, **Schémas**, **Liens de base**, **Réglages fins**.
+
+- **Base de données** — l'adresse se saisit comme une adresse : le **Type de base** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite), l'**Hôte**, le **Port**, et le nom propre au type — **Base**, un **Nom de service** Oracle (un **SID** si l'URL est écrite ainsi), un **Fichier** SQLite. Choisir un autre type y fait passer le pool : son pilote, son port habituel. **Avancé : pilote, options, URL** contient le pilote, les options et l'URL composée à partir des champs, qui reste modifiable. Une URL que la page ne sait pas présenter champ par champ est gardée telle qu'elle est écrite.
+- **Compte** — l'utilisateur et le mot de passe. Un mot de passe écrit dans l'URL est signalé, avec le bouton **Le déplacer dans le champ mot de passe**.
+- **Tester la connexion** ouvre une connexion avec le pool tel qu'il est à l'écran — enregistré ou non — et répond *Connecté en N ms* avec la version du serveur, ou *Connexion impossible* avec les termes du pilote. Rien n'est enregistré et les pools en service ne sont pas touchés.
+
+### Tables et requêtes à côté de leur liste \{#list-beside\}
+
+La ligne d'un connecteur indique ce qu'il contient — `sql · 117 table(s) · 34 requête(s)`, `api · 68 point(s) d'accès` — et ses sections sont des cartes d'étape avec leur compteur : **Réglages**, **Tables**, **Requêtes**, **Séquences**, **Lookups**.
+
+Ouvrir une table garde la liste à côté : la liste se réduit à une colonne et la table s'ouvre à droite, si bien que passer d'une table à la suivante prend un clic ; de même pour une requête, une séquence, un lookup. Une table est dessinée par ses étapes — **Général**, puis **Lecture**, **Mise à jour**, **Insertion**, **Suppression** —, chaque carte indiquant si la requête est *réglée* ou *non réglée*, et en orange *non inscriptible : refusée à l'exécution* quand une requête d'écriture existe sans être autorisée. Les fenêtres **Construire un SELECT / INSERT / UPDATE / DELETE** écrivent la requête à partir des colonnes de la table, avec un aperçu.
 
 ## Connecteur SQL \{#sql\}
 

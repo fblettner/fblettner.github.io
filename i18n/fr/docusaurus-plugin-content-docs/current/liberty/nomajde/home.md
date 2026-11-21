@@ -91,16 +91,18 @@ keywords: [Nomajde, vue d'ensemble, accueil, tableau de bord, JD Edwards, JDE, u
 
 | Partie | Contenu |
 |---|---|
-| Présentation | Ce que fait Nomajde, domaine par domaine : le travail que JD Edwards répartit sur de nombreux écrans, réuni dans quelques grilles avec recherche, écrit directement dans JD Edwards, chaque modification gardant trace de son auteur, de sa date et de l'écran d'origine. |
+| Présentation | Deux lignes sur ce qu'est Nomajde, en bas de page : les chiffres passent en premier — sur un téléphone, ils s'affichent d'abord. |
 | **Utilisateurs** | Les profils utilisateur JD Edwards, avec le nombre de rôles et de relations de rôles. |
 | **Enregistrements de sécurité** | Les enregistrements du Security Workbench (F00950), avec le nombre d'environnements. |
-| **Codes UDC** | Les codes définis par l'utilisateur (F0005), avec le nombre de types UDC. |
-| **Objets** | Les objets de l'Object Librarian (F9860). |
-| **Données de base** | [Types UDC](./master-data/udc-types.md), [Codes UDC](./master-data/udc-codes.md). |
+| **Serveurs JDE en bonne santé** | Le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification. |
+| **Objets à reprendre** | Les objets que l'[analyse de montée de version](./upgrade/analysis.md) marque à reprendre, sur l'ensemble des objets du client, avec les jours et la liste comparée. |
+| **Serveurs JDE** | La liste des instances avec leur état et leur disponibilité sur 24 heures — voir [Contrôle de santé JDE](./monitoring/jde-servers.md#overview). |
+| **Tâches** | Les dernières et prochaines exécutions des tâches principales : contrôle de santé, synchronisation quotidienne, tests, analyse de montée de version, refusion de la sécurité. |
+| **Montée de version** | Deux graphiques en barres : les jours par type d'objet et les objets par complexité. |
+| **Données de base** | [Types UDC](./master-data/udc-types.md), [Codes UDC](./master-data/udc-codes.md), [Carnet d'adresses, Fichier clients, Fichier fournisseurs](./master-data/address-book.md). |
 | **Maintenance de la sécurité** | [Gestion des utilisateurs](./security-maintenance/user-management.md), User Preferences, [Affectations Rôles](./security-maintenance/role-management.md), [Relations de rôles](./security-maintenance/role-relationships.md), [Environnements](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
-| **Développement** | Object Librarian, Data Dictionary, Références croisées — en lecture. |
-| **Analyse et tâches** | L'[explorateur de données](./data-explorer.md), les [tâches](./jobs.md) et la page produit. |
-| **Serveurs JDE** | Le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification, et la liste des instances avec leur état et leur disponibilité sur 24 heures — voir [Serveurs JDE](./monitoring/jde-servers.md#overview). |
+| **Développement et montée de version** | Object Librarian, Data Dictionary, Références croisées, [Objets à reprendre, Hors du path code de référence, Relancer l'analyse](./upgrade/analysis.md). |
+| **Plateforme et analyse** | [Contrôle de santé JDE](./monitoring/jde-servers.md), [Instances JDE, Utilisateurs connectés](./monitoring/server-manager.md), [Lancer les tests](./tests.md), l'[explorateur de données](./data-explorer.md) et la page produit. |
 
 Les chiffres sont lus en direct sur l'instance JD Edwards à chaque ouverture ou actualisation (**↻**) de la page ; les tuiles **Serveurs JDE** reprennent la dernière vérification enregistrée par la tâche `nomajde-jde-health`.
 

@@ -112,7 +112,7 @@ The run is an ordinary Nomaflow run: the operators see it in the [run history](.
 
 ## Putting a job in a menu \{#menu\}
 
-In **Liberty Next → Build → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
+In **Liberty Next → Screens → Menus**, add an item of type **Job (run it, follow its log)** and pick the job in **Target**: the dropdown lists every job with the first line of its description. No connector is set. See [Menu item types](../../framework/build/menus/item-types.md#job).
 
 ---
 

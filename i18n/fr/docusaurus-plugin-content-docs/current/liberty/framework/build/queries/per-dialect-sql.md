@@ -110,7 +110,7 @@ Le validateur impose deux règles sur la map :
 
 ## L'éditeur
 
-Dans l'éditeur de requête (**Liberty Next → Construire → Connecteurs**, vue Tables, Requêtes, Séquences ou Lookups), le champ **sql** est un éditeur SQL unique :
+Dans l'éditeur de requête (**Liberty Next → Données → Connecteurs**, vue Tables, Requêtes, Séquences ou Lookups), le champ **sql** est un éditeur SQL unique :
 
 1. **+ per-dialect variants** le transforme en liste de variantes, en commençant par `default (required)`, qui reprend le SQL en place.
 2. Un nom de dialecte (`oracle`, `postgresql`, `mssql`…) saisi dans le champ **dialect**, suivi d'Entrée, ajoute un éditeur pour cette variante.

@@ -114,8 +114,8 @@ Une installation décide de ce qui est sensible, et Liberty le tient à l'écart
 
 | Étape | Où | Effet |
 |---|---|---|
-| **Marquer un élément** | Liberty Next → Construire → Dictionnaire → une entrée → *Rule* → **Sensitive** | Couvre toutes les colonnes qui portent l'élément, sur tous les écrans, requêtes et modèles de l'explorateur de données. Une colonne est reconnue par son élément du dictionnaire, par son nom, ou par son nom sans le préfixe du connecteur (`ABALPH` → `ALPH`) — comme le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) retrouve ses colonnes. |
-| **Marquer une colonne** | Liberty Next → Construire → Écrans → une colonne → *General* → **Sensitive** | Trois choix : *(default)* suit l'élément de la colonne, *yes* couvre une colonne qui ne porte aucun élément, *no* exempte une colonne dont l'élément est marqué. |
+| **Marquer un élément** | Liberty Next → Données → Dictionnaire → une entrée → *Rule* → **Sensitive** | Couvre toutes les colonnes qui portent l'élément, sur tous les écrans, requêtes et modèles de l'explorateur de données. Une colonne est reconnue par son élément du dictionnaire, par son nom, ou par son nom sans le préfixe du connecteur (`ABALPH` → `ALPH`) — comme le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) retrouve ses colonnes. |
+| **Marquer une colonne** | Liberty Next → Écrans → Écrans → une colonne → *General* → **Sensitive** | Trois choix : *(default)* suit l'élément de la colonne, *yes* couvre une colonne qui ne porte aucun élément, *no* exempte une colonne dont l'élément est marqué. |
 | **Activer le masquage** | Liberty Next → Administrer → App → Assistant IA → **Masquer les données sensibles à l'assistant** | Désactivé par défaut. Appliqué à l'appel suivant, sans redémarrage. |
 
 Masquage activé, les colonnes marquées sont écartées :

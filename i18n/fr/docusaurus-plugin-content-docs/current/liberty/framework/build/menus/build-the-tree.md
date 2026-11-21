@@ -86,6 +86,14 @@ Cliquer n'importe où sur la ligne pour **sélectionner** l'élément — l'Insp
 
 ---
 
+## Glisser-déposer \{#drag\}
+
+Une ligne se fait glisser sur une autre : **au-dessus**, **au-dessous**, ou **à l'intérieur** si c'est un dossier — avec tout ce qu'elle contient. Un trait ou une surbrillance montre l'endroit où elle sera déposée. Le glisser-déposer est désactivé tant que l'arbre est filtré.
+
+Chaque ligne porte l'icône de ce qu'elle ouvre — dossier, écran, tableau de bord, traitement, requête, point d'accès, page. L'arbre et l'entrée choisie forment deux panneaux côte à côte ; les actions de l'entrée — **Cloner**, **Rechercher les usages**, **Rechercher les dépendances** — figurent sur son panneau, et **Dossier**, **Élément**, **Abandonner** et **Enregistrer** dans l'en-tête de la page.
+
+---
+
 ## Les actions par ligne
 
 Les icônes qui apparaissent au survol, de gauche à droite :

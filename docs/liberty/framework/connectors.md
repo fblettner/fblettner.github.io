@@ -1,6 +1,6 @@
 ---
 title: Connectors
-description: "A connector is how Liberty Next reaches a data source: a SQL connector holds the named queries of a database pool, an API connector the named endpoints of a web API. Edited in Liberty Next → Build → Connectors; a connector with a menu is an app."
+description: "A connector is how Liberty Next reaches a data source: a SQL connector holds the named queries of a database pool, an API connector the named endpoints of a web API. Edited in Liberty Next → Data → Connectors; a connector with a menu is an app."
 keywords: [Liberty Next, connector, SQL, API, pool, named query, endpoint, tables, queries, sequences, lookups, permissions, multi-pool, Oracle thick]
 ---
 
@@ -111,7 +111,7 @@ A connector that has a menu is an **app** — see [Apps](./apps/overview.md).
 
 ---
 
-## Liberty Next → Build → Connectors \{#page\}
+## Liberty Next → Data → Connectors \{#page\}
 
 The left list has two groups: **Apps** (connectors with a menu) and **Data sources** (the others). **＋ Connector** creates one (name, type SQL or API); the right pane edits the selected connector. **Save** writes `connectors.toml` and applies the change without a restart; **Discard** drops the pending changes. The connector's own buttons — **Clone** (with its dictionary scope, screens, menu, charts and dashboards), **Rename** (every reference rewritten), **Delete** (with everything that belongs to it) — are on its settings view.
 
@@ -133,6 +133,20 @@ A pool is a database connection, defined in **Liberty Next → Administer → Po
 | **Debug sql** | Logs every statement run on the pool. |
 
 ---
+
+### A pool, stage by stage \{#pool-stages\}
+
+In **Administer → Pools**, a pool's line says what it connects to — `postgresql · host:5432 / database` — and the picked pool is drawn as five stages, each card saying what it holds: **Database**, **Account**, **Schemas**, **Database links**, **Tuning**.
+
+- **Database** — the address is typed as an address: the **Database type** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite), **Host**, **Port**, and the one name the type needs — **Database**, an Oracle **Service name** (a **SID** when the URL is written with one), a SQLite **File**. Picking another type moves the pool to it: its driver, its usual port. **Advanced: driver, options, URL** holds the driver, the options and the URL composed from the fields, which stays editable. A URL the page cannot show field by field is kept exactly as written.
+- **Account** — the user and the password. A password written in the URL is flagged, with **Move it to the password field**.
+- **Test connection** opens one connection with the pool as it is on the page — saved or not — and answers *Connected in N ms* with the server's version, or *Could not connect* with the driver's own words. Nothing is saved and the running pools are not touched.
+
+### Tables and queries beside their list \{#list-beside\}
+
+A connector's line says what it holds — `sql · 117 tables · 34 queries`, `api · 68 endpoints` — and its sections are stage cards with their counts: **Settings**, **Tables**, **Queries**, **Sequences**, **Lookups**.
+
+Opening a table keeps the list beside it: the list narrows to a column and the table opens next to it, so going from one table to the next is one click; the same for a query, a sequence, a lookup. A table is drawn as its stages — **General**, then **Read**, **Update**, **Insert**, **Delete** — each card saying whether the statement is *set* or *not set*, and in orange *not writable: refused at run time* when a write statement is there but not allowed. The **Build a SELECT / INSERT / UPDATE / DELETE** dialogs write the statement from the table's columns, with a preview.
 
 ## SQL connector \{#sql\}
 

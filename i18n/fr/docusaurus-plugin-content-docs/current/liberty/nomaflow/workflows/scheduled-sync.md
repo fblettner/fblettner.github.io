@@ -72,7 +72,7 @@ query = "daily_totals_refresh"
 
 ## Être prévenu \{#notify\}
 
-Dans **Liberty Next → Construire → Notifications**, une règle sur *A job event* : tâche `nightly-reporting-sync`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`, objet `{JOB} : {STATE}`, corps `{ERROR}`. Voir [Notifications](../notifications.md).
+Dans **Liberty Next → Logique → Notifications**, une règle sur *A job event* : tâche `nightly-reporting-sync`, événements `failure` et `missed`, canal `email`, destinataire `role:ops`, objet `{JOB} : {STATE}`, corps `{ERROR}`. Voir [Notifications](../notifications.md).
 
 ---
 

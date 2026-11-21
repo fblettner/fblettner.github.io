@@ -6,7 +6,7 @@ keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fusea
 
 # Créer une tâche
 
-**+ Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur une carte, ouvre l'éditeur de tâche. Un seul **Enregistrer**, en haut, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches ; **Annuler** quitte sans enregistrer. Une tâche invalide est refusée avec un message en haut de l'éditeur.
+**+ Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur une carte, ouvre l'éditeur de tâche. **La tâche est dessinée par son flux** — **Début**, une carte par étape avec son type, son nom et ce qu'elle fait, **Fin** — et l'élément choisi se modifie à côté : la tâche elle-même au début, ou une étape. Un seul **Enregistrer**, en haut, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches ; **Annuler** quitte sans enregistrer. Une tâche invalide est refusée avec un message en haut de l'éditeur.
 
 Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.toml` conservent leur texte à l'identique — commentaires, références `${…}`, `step_defaults` —, et la tâche enregistrée retrouve ses références `${…}` partout où la valeur correspond toujours.
 
@@ -136,7 +136,7 @@ Des paires nom / valeur fusionnées dans les arguments de chaque étape `python`
 
 ### Étapes
 
-La barre **Ajouter une étape :** propose un bouton par type — `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`. Chaque étape est une carte : un clic ouvre ou replie son formulaire ; les flèches la montent ou la descendent ; l'icône de copie la clone ; la corbeille la supprime. Les champs de chaque type sont décrits dans [Étapes](../steps.md).
+Le **+** d'un lien du flux insère une étape à cet endroit, parmi les types `sql_copy`, `sql_query`, `python`, `ldap_sync`, `http`, `call_job`, `file_load`, `file_export`, `report`, `notify`. Un clic sur la carte d'une étape l'ouvre à côté du flux : son **Nom de l'étape**, les champs de son type, et ses icônes — **Monter**, **Descendre**, **Cloner l'étape**, **Supprimer**. Une étape peut être *Désactivée pour cette installation* : elle ne s'exécute jamais, même si une exécution ou un préréglage sélectionne toutes les étapes. Un flux long continue sur la ligne suivante, et le zoom (− / % / +) est mémorisé sur le poste. Les champs de chaque type sont décrits dans [Étapes](../steps.md).
 
 ---
 

@@ -72,6 +72,17 @@ En vue détail comme après une descente, une ligne d'une entité rattachée à 
 
 ---
 
+## La page \{#page\}
+
+Les éléments d'une analyse se lisent en cartes, chacune avec son icône et sa couleur : **Vue**, **Période**, **Lignes** (**Colonnes** dans la vue Détail), **Mesures**, **Filtres** — et **Options** pour un tableau croisé ou un graphique. Les champs se cliquent ou se glissent toujours sur une étagère, et les pastilles se réordonnent par glissement. Le résultat est un panneau dont l'en-tête indique la vue et ce que l'exécution a répondu — *N groupe(s) sur N ligne(s)*, *N premiers affichés*. **Enregistrer**, **Enregistrer sous**, **Supprimer**, **Excel** et **PDF** se trouvent dans l'en-tête de la page, à côté du sélecteur d'analyses.
+
+- **Définition**, à côté du sélecteur, masque les champs et les étagères : **le résultat prend la page**, avec la vue, la période, le Top et **Exécuter** sur une seule ligne. Une analyse enregistrée s'ouvre ainsi, une nouvelle s'ouvre sur sa définition.
+- **Le tableau est la grille des écrans de données** : recherche, filtre par colonne, tri sur plusieurs colonnes, regroupement, choix des colonnes et export CSV / Excel de ce qui est affiché. Une ligne permet toujours la descente ; une ligne de détail ouvre toujours sa fiche ; le détail reste paginé par le serveur.
+- **Un champ codé affiche son libellé, son code, ou les deux** — la pastille d'un champ lu par une énumération ou un lookup propose **Libellé**, **Code + libellé**, **Code**. Dans le tableau, *Code + libellé* donne deux colonnes — `Société (ID)` puis `Société` —, chacune triée, filtrée et exportée séparément ; un tableau croisé écrit `101 · Alpine Foods SA` dans sa cellule de libellé. Le choix est enregistré avec l'analyse et repris par les tuiles des tableaux de bord.
+- Un export limité par le Top de l'analyse le signale : *20 premiers groupes sur 44*.
+
+---
+
 ## Points d'attention
 
 | Situation | Effet |

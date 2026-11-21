@@ -51,7 +51,7 @@ On a Python install, the same steps are three commands — see [Python server](.
 
 The apps read their data from your source system through a pool. Open **Liberty Next → Administer → Pools**, fill in the pool the apps expect (`jdedwards` for JD Edwards EnterpriseOne) with a read-only account, test it, then run **`nomasx1-roles`** to create the auditor and administrator roles, and the collection — `nomasx1-collect-all` — from **Nomaflow** or from *Nomasx-1 → Jobs*. The jobs and their parameters are on [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md).
 
-Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Liberty Next → Build → Connectors**. A value set in Settings is kept on every upgrade.
+Nomajde writes to JD Edwards through its AIS server as well: the address, the user and the certificate check come from the environment variables `JDE_AIS_URL`, `JDE_AIS_USER` and `JDE_AIS_VERIFY_SSL` (in `.env` or `secrets.env`), or are set directly in **Liberty Next → Data → Connectors**. A value set in Settings is kept on every upgrade.
 
 ---
 

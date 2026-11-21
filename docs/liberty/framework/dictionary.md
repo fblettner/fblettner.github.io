@@ -1,6 +1,6 @@
 ---
 title: Dictionary
-description: "The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Liberty Next → Build → Dictionary."
+description: "The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Liberty Next → Data → Dictionary."
 keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels, formats, rules, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, translations, scan a table]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels,
 
 The **dictionary** defines each data item once: its label, its format, its rule (Boolean, list of values, lookup, sequence…), its default value and its translations. A query column that references an entry inherits that definition, so the same item reads the same way on every screen, chart and dashboard.
 
-It is edited from **Liberty Next → Build → Dictionary**, which holds five kinds of records:
+It is edited from **Liberty Next → Data → Dictionary**, which holds five kinds of records:
 
 | Tab | Holds |
 |---|---|
@@ -135,6 +135,12 @@ It is edited from **Liberty Next → Build → Dictionary**, which holds five ki
   <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values for the query's :params</text>
   <line x1="1000" y1="347.0" x2="928" y2="381" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
 </svg>
+
+---
+
+## The list \{#list\}
+
+Each kind has its tab — **Entries**, **Enums**, **Lookups**, **Sequences**, **Framework** — with the number of records of the scope. A record's line says what it is without opening it: an entry shows its format and its rule (the rule's target in the tooltip), an enum its number of values, a lookup or a sequence the other connector it reads from. The filter finds a record by its name, its label or one of those: type `lookup` to see every entry ruled by a lookup. On the picked record, **Find usages** says in how many places it is used. **Scan a table**, **Export**, **Discard** and **Save** are in the page header.
 
 ---
 

@@ -71,7 +71,7 @@ INSERT INTO tasks (id, title, status, due_date) VALUES
 
 ## Step 2 — The connector and its queries \{#connector\}
 
-1. **Liberty Next → Build → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
+1. **Liberty Next → Data → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
 2. With `tasks` selected, choose **Tables** in the mode bar, then **＋ Add queries → Generate from DB**.
 3. In the CRUD wizard, pick the `tasks` table, keep every column, tick **key** on `ID`, and keep the four statements (SELECT, UPDATE, INSERT, DELETE).
 4. Save. The connector now holds `tasks_get`, `tasks_put`, `tasks_post` and `tasks_delete`:
@@ -87,7 +87,7 @@ The columns are read from the database when the query runs; nothing else needs d
 
 ## Step 3 — The screen \{#screen\}
 
-1. **Liberty Next → Build → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
+1. **Liberty Next → Screens → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
 2. **＋ Add screen**, id `tasks`. Click the new card to open the screen editor.
 3. **General** tab: label `Tasks`; check **Editable** for in-grid editing.
 4. **Queries** tab: read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
@@ -100,7 +100,7 @@ The grid columns come from the read query; their labels and formats from the [di
 
 ## Step 4 — The menu entry \{#menu\}
 
-1. **Liberty Next → Build → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
+1. **Liberty Next → Screens → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
 2. **＋ Item**, then in the inspector: label `Tasks`, type `screen`, target `tasks_get` (the screen built on it), icon `table`.
 3. Save.
 

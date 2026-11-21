@@ -378,7 +378,7 @@ Jobs that reach the JD Edwards servers themselves: Server Manager for the health
 
 ### `nomajde-jde-health` \{#nomajde-jde-health\}
 
-**Health check of the JD Edwards servers through Server Manager.** The `nomajde.monitoring:health_check` step asks the `jde_server_manager` API connector for the instances (`instancesinfo`), runs Server Manager's health check (`health`) on every running enterprise, web and REST server, and writes one row per instance to the `jde_health` table of the Nomajde database. The rows feed [Monitoring → JDE Servers](../nomajde/monitoring/jde-servers.md) and the overview tiles.
+**Health check of the JD Edwards servers through Server Manager.** The `nomajde.monitoring:health_check` step asks the `jde_server_manager` API connector for the instances (`instancesinfo`), runs Server Manager's health check (`health`) on every running enterprise, web and REST server, and writes one row per instance to the `jde_health` table of the Nomajde database. The rows feed [Monitoring → JDE Health Check](../nomajde/monitoring/jde-servers.md) and the overview tiles.
 
 | Parameter | Default | What |
 |---|---|---|
@@ -387,7 +387,7 @@ Jobs that reach the JD Edwards servers themselves: Server Manager for the health
 | `auto_stop` | `false` | Stops a running instance that failed (`stopinstance`), and the running instances of a failed enterprise server. |
 | `keep_days` | `30` | Rows older than this are removed at each run. |
 
-**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address and the `jde_admin` password on the `jde_server_manager` connector in **Liberty Next → Build → Connectors**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
+**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address and the `jde_admin` password on the `jde_server_manager` connector in **Liberty Next → Data → Connectors**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
 
 **Alerts** — the run fails when an instance did not pass (`failed`, `down` or `error`), after writing the rows; `on_failure` alerts are on.
 
@@ -646,7 +646,7 @@ The bundled jobs are **enabled = false** out of the box. Set a schedule in the j
 | `nomasx1-import-reference` fails with *"target application not found"*. | Application not created in *Nomasx-1 → Settings → Global → Applications*. | Create the app in the UI first; the precheck refuses to start otherwise. |
 | `deploy-databases` errors with permission denied. | `default` pool can't create DBs / roles. | Temporarily point `default` at a Postgres superuser; revert after the run. |
 | Schedule set but job doesn't fire. | The job is disabled (the bundle ships `enabled = false`). | Switch it on from its line on the Jobs page after setting the schedule. |
-| Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Liberty Next → Build → Connectors → jdedwards* — test the connection from the UI before the next run. |
+| Daily sync runs but Nomajde tables remain empty. | The `jdedwards` connector isn't configured (the sync job silently runs zero rows). | *Liberty Next → Data → Connectors → jdedwards* — test the connection from the UI before the next run. |
 | Audit trail starts producing thousands of rows per minute. | The job started from SCN 0 — replaying the whole archive log. | Run `nomasx1-audit-trail-reset-scn-1` (default `scn = 0` → next run picks current SCN) to start fresh. |
 | Materialised views show stale data after a custom SQL fix. | The collection job's end-of-run REFRESH_VIEWS step didn't run (you bypassed it). | Run `nomasx1-refresh-views` manually. |
 

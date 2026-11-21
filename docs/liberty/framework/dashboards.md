@@ -1,12 +1,12 @@
 ---
 title: Dashboards
-description: "Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Liberty Next → Build → Dashboards and opened from the menu."
+description: "Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Liberty Next → Insight → Dashboards and opened from the menu."
 keywords: [Liberty Next, dashboard, KPI, figure, list, bars, synthesis, export, Excel, PDF, chart, table, widget, period, previous period, compare_previous, PERIOD_FROM, filters, dashboards.toml, cache]
 ---
 
 # Dashboards
 
-A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Liberty Next → Build → Dashboards**.
+A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Liberty Next → Insight → Dashboards**.
 
 ---
 
@@ -116,7 +116,7 @@ Widgets sit on a 12-column grid, in the order they are declared. Each one takes 
 | **Figure** | A figure card read from the query's **first row**, with a line of detail under it. | **Value column**, **Format**, **Unit**, **Sub line**. |
 | **List** | A decision or ranked list: one line per row, with a coloured dot, a title, a subtitle, a figure and a tag. | **Title column** (required), **Subtitle column**, **Value column**, format, unit, **Count column** and **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
 | **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
-| **Chart** | A bar, line, area or pie chart. | A chart saved in **Liberty Next → Build → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
+| **Chart** | A bar, line, area or pie chart. | A chart saved in **Liberty Next → Insight → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 | **Text** | A block of Markdown: what the page is for, how to read it. Headings, lists and links are allowed. | **Text (Markdown)**. |
 | **Jobs** | The Nomaflow jobs with their next run, their schedule in words and their last state, and **Run now** / **Pause** / **Resume**. Superusers only. | **Jobs (ids, in order)** — empty = every scheduled job —, **Only these tags**, **Max rows** (12 when blank). |
@@ -322,14 +322,14 @@ A widget whose query fails becomes an error section; the rest of the export stil
 
 ## Building a dashboard \{#builder\}
 
-In **Liberty Next → Build → Dashboards**, pick the application, then add or open a dashboard. The editor has:
+In **Liberty Next → Insight → Dashboards**, pick the application, then add or open a dashboard. The editor has:
 
 | Part | Content |
 |---|---|
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**. Each widget has a **Subtitle**. A card is moved by **drag and drop** — its grip dragged onto another card, a bar showing on which side it will land — and sized by its **bottom-right corner**, in whole columns and rows, its size written beside the grip (`6 × 2`). The grip takes the keyboard too: arrows move the card, Shift + arrows size it. |
 
 A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
 

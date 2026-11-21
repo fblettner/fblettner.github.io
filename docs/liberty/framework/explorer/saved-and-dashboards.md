@@ -123,7 +123,7 @@ Saving a shared analysis changes it for everyone; the window says so. **Save as*
 In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, each running one saved analysis in its own view — table, pivot, chart, KPI or detail.
 
 - **The period** at the top applies to every tile whose analysis has a period field; the others keep theirs.
-- **Edit layout** shows the tile tools: move left or right, width (1 to 4 columns), height (*s*, *m*, *l*), remove. **Add an analysis…** adds a tile.
+- **Edit layout** lays the tiles out like a dashboard's cards: a tile moves by drag and drop — its grip, a bar showing where it lands — and is sized by its corner, in whole columns (1 to 4) and the closest of the three heights (`2 × M`). The grip takes the keyboard too: arrows move, Shift + arrows size. **Add an analysis…** adds a tile.
 - **The pencil** of a tile opens its analysis in the editor; a drill from a tile does the same, with the clicked values as filters.
 - **Save**, **Save as**, **Delete** work as for analyses. A tile whose analysis was deleted says so.
 

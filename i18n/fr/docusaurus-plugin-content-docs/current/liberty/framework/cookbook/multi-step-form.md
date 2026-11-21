@@ -43,11 +43,11 @@ CREATE TABLE expense_claims (
 
 ### 2. La liste des statuts
 
-**Liberty Next → Construire → Dictionnaire → Énumérations** : une énumération `CLAIM_STATUS` avec les valeurs `DRAFT` (Brouillon), `SUBMITTED` (Soumise), `APPROVED` (Validée), `REJECTED` (Refusée). L'entrée `STATUS` reçoit **Rules** `ENUM` et **Rules values** `CLAIM_STATUS` : la grille affiche les libellés et le dialogue une liste.
+**Liberty Next → Données → Dictionnaire → Énumérations** : une énumération `CLAIM_STATUS` avec les valeurs `DRAFT` (Brouillon), `SUBMITTED` (Soumise), `APPROVED` (Validée), `REJECTED` (Refusée). L'entrée `STATUS` reçoit **Rules** `ENUM` et **Rules values** `CLAIM_STATUS` : la grille affiche les libellés et le dialogue une liste.
 
 ### 3. Une requête par transition
 
-Dans **Liberty Next → Construire → Connecteurs → expenses → Requêtes**, trois requêtes d'écriture :
+Dans **Liberty Next → Données → Connecteurs → expenses → Requêtes**, trois requêtes d'écriture :
 
 ```sql
 -- submit_claim
@@ -109,7 +109,7 @@ Et dans l'onglet **Général**, `editable_when` STATUS = `DRAFT` : une fois soum
 
 ### 7. Les notifications
 
-Dans **Liberty Next → Construire → Notifications**, une règle sur l'événement **update** de l'écran, avec *Only when the written row has* `STATUS = SUBMITTED`, canaux `portal` et `email`, destinataires `role:managers`, objet `Note {ID} de {EMPLOYEE} à valider`. Une seconde règle sur `STATUS = REJECTED` peut prévenir le demandeur. Voir [Notifications](../../nomaflow/notifications.md).
+Dans **Liberty Next → Logique → Notifications**, une règle sur l'événement **update** de l'écran, avec *Only when the written row has* `STATUS = SUBMITTED`, canaux `portal` et `email`, destinataires `role:managers`, objet `Note {ID} de {EMPLOYEE} à valider`. Une seconde règle sur `STATUS = REJECTED` peut prévenir le demandeur. Voir [Notifications](../../nomaflow/notifications.md).
 
 ### 8. Les relances
 

@@ -15,7 +15,7 @@ Une fonction de plugin se désigne par `"package.module:fonction"` depuis deux e
 | Une étape Nomaflow **`python`** | `callable` et `op_kwargs` sur l'étape — voir [Étapes](../../nomaflow/steps.md). |
 | Une action d'écran **`call_plugin`** | `callable` et `param_binds` sur l'action — voir [Actions et cycle de vie](../build/screens/actions-and-lifecycle.md#types). |
 
-Les pages pratiques se trouvent sous [Construire → Plugins](../build/plugins/overview.md) : [Écrire un callable](../build/plugins/write-a-callable.md), [Primitives ETL](../build/plugins/etl-primitives.md), [Déployer et déboguer](../build/plugins/deploy-and-debug.md). Cette page en donne la synthèse.
+Les pages pratiques se trouvent sous [Logique → Plugins](../build/plugins/overview.md) : [Écrire un callable](../build/plugins/write-a-callable.md), [Primitives ETL](../build/plugins/etl-primitives.md), [Déployer et déboguer](../build/plugins/deploy-and-debug.md). Cette page en donne la synthèse.
 
 ---
 
@@ -119,6 +119,6 @@ async def test_dry_run_counts_only():
 
 ## Pour aller plus loin
 
-- [Construire → Plugins](../build/plugins/overview.md) — les pages pas à pas.
+- [Logique → Plugins](../build/plugins/overview.md) — les pages pas à pas.
 - [Étapes](../../nomaflow/steps.md) — l'étape `python`.
 - [Actions et cycle de vie](../build/screens/actions-and-lifecycle.md) — `call_plugin` depuis un écran.

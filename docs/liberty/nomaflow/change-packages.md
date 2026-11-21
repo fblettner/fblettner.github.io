@@ -19,7 +19,7 @@ The **Package** page carries configuration slices (screens, menu items, dashboar
 ## Opening the page
 
 - **Liberty Next → Deploy → Changes**.
-- From the Liberty Next → Build → Connectors page, *Track changes* in the screen card opens the page filtered on the matching application.
+- From the Liberty Next → Data → Connectors page, *Track changes* in the screen card opens the page filtered on the matching application.
 
 ---
 

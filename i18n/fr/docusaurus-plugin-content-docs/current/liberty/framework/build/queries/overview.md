@@ -8,7 +8,7 @@ keywords: [Liberty Framework, requêtes, connecteurs, CRUD, séquences, lookups,
 
 Une **requête** dans Liberty est une instruction SQL nommée rattachée à un **connecteur** (lui-même rattaché à un **pool**, c'est-à-dire à une base de données). Les écrans, tableaux de bord, graphiques, lookups et séquences du dictionnaire, ainsi que l'assistant IA, s'appuient tous sur des requêtes — ajouter une requête est donc la modification la plus fréquente dans les pages de Liberty Next.
 
-La page qui gère les requêtes est **Liberty Next → Construire → Connecteurs**. Cette vue d'ensemble en dresse la carte ; les pages suivantes détaillent chaque chemin d'ajout.
+La page qui gère les requêtes est **Liberty Next → Données → Connecteurs**. Cette vue d'ensemble en dresse la carte ; les pages suivantes détaillent chaque chemin d'ajout.
 
 ---
 

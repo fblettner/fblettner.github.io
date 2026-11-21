@@ -15,7 +15,7 @@ A plugin function is referenced as `"package.module:function"` from two places:
 | A Nomaflow **`python`** step | `callable` and `op_kwargs` on the step — see [Step types](../../nomaflow/steps.md). |
 | A screen action **`call_plugin`** | `callable` and `param_binds` on the action — see [Actions and lifecycle](../build/screens/actions-and-lifecycle.md#types). |
 
-The task pages are under [Build → Plugins](../build/plugins/overview.md): [Write a callable](../build/plugins/write-a-callable.md), [ETL primitives](../build/plugins/etl-primitives.md), [Deploy and debug](../build/plugins/deploy-and-debug.md). This page is the summary.
+The task pages are under [Logic → Plugins](../build/plugins/overview.md): [Write a callable](../build/plugins/write-a-callable.md), [ETL primitives](../build/plugins/etl-primitives.md), [Deploy and debug](../build/plugins/deploy-and-debug.md). This page is the summary.
 
 ---
 
@@ -119,6 +119,6 @@ async def test_dry_run_counts_only():
 
 ## What's next
 
-- [Build → Plugins](../build/plugins/overview.md) — the step-by-step pages.
+- [Logic → Plugins](../build/plugins/overview.md) — the step-by-step pages.
 - [Step types](../../nomaflow/steps.md) — the `python` step.
 - [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) — `call_plugin` from a screen.

@@ -54,7 +54,7 @@ Every secret field of Settings is encrypted when it is saved and written to the 
 | Field | Settings |
 |---|---|
 | Pool password | Liberty Next → Administer → Pools |
-| API connector credentials (password, token, client secret) | Liberty Next → Build → Connectors |
+| API connector credentials (password, token, client secret) | Liberty Next → Data → Connectors |
 | Licence key, Anthropic API key, OIDC client secret, SMTP password | Liberty Next → Administer → App |
 
 A secret field is a masked input with an eye to show its content. There is nothing to switch on: a value saved from Settings is always encrypted, and the save is refused when the server has no master key.

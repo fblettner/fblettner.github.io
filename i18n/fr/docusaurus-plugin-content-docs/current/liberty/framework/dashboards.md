@@ -1,12 +1,12 @@
 ---
 title: Tableaux de bord
-description: "Les tableaux de bord de Liberty Next : indicateurs, chiffres, listes de décisions, barres de proportion, graphiques et tableaux sur des requêtes de connecteurs, dans une grille de 12 colonnes, export Excel et PDF, une période avec préréglages et comparaison avec la période précédente, des filtres du dictionnaire, un cache avec Actualiser — construits dans Liberty Next → Construire → Tableaux de bord et ouverts depuis le menu."
+description: "Les tableaux de bord de Liberty Next : indicateurs, chiffres, listes de décisions, barres de proportion, graphiques et tableaux sur des requêtes de connecteurs, dans une grille de 12 colonnes, export Excel et PDF, une période avec préréglages et comparaison avec la période précédente, des filtres du dictionnaire, un cache avec Actualiser — construits dans Liberty Next → Analyse → Tableaux de bord et ouverts depuis le menu."
 keywords: [Liberty Next, tableau de bord, KPI, indicateur, synthèse, liste, barres, export, Excel, PDF, graphique, table, widget, période, période précédente, compare_previous, PERIOD_FROM, filtres, dashboards.toml, cache]
 ---
 
 # Tableaux de bord
 
-Un tableau de bord place côte à côte plusieurs **widgets** — chiffres clés, listes de décisions, barres de proportion, graphiques, tableaux — alimentés chacun par une requête d'un connecteur. Il s'ouvre depuis le menu comme un écran, et se construit dans **Liberty Next → Construire → Tableaux de bord**.
+Un tableau de bord place côte à côte plusieurs **widgets** — chiffres clés, listes de décisions, barres de proportion, graphiques, tableaux — alimentés chacun par une requête d'un connecteur. Il s'ouvre depuis le menu comme un écran, et se construit dans **Liberty Next → Analyse → Tableaux de bord**.
 
 ---
 
@@ -116,7 +116,7 @@ Les widgets se placent sur une grille de 12 colonnes, dans leur ordre de déclar
 | **Chiffre** | Une carte chiffrée lue sur la **première ligne** de la requête, avec une ligne de détail en dessous. | **Colonne de valeur**, **Format**, **Unité**, **Ligne secondaire**. |
 | **Liste** | Une liste de décisions ou un classement : une ligne par enregistrement, avec une pastille de couleur, un titre, un sous-titre, un chiffre et une étiquette. | **Colonne de titre** (obligatoire), **Colonne de sous-titre**, **Colonne de valeur**, format, unité, **Colonne de compte** et **Libellé du compte**, **Colonne de tonalité**, **Colonne d'étiquette**, **Lignes affichées**. |
 | **Barres** | Un classement avec une barre de proportion sous chaque ligne. | **Colonne de libellé** et **Colonne de valeur** (obligatoires), **Colonne de sous-libellé**, format, unité, **Barre en part de**, **Note sous les barres**, **Lignes affichées**. |
-| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Liberty Next → Construire → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
+| **Graphique** | Un graphique en barres, courbes, aires ou secteurs. | Un graphique enregistré dans **Liberty Next → Analyse → Graphiques**, ou un connecteur, une requête et une définition de graphique écrits dans le widget — voir [Graphiques](./charts.md). |
 | **Table** | Les lignes d'une requête. | Connecteur, requête, colonnes à afficher (toutes si vide), nombre maximal de lignes. |
 | **Texte** | Un bloc de Markdown : à quoi sert la page, comment la lire. Titres, listes et liens sont acceptés. | **Texte (Markdown)**. |
 | **Tâches** | Les tâches Nomaflow avec leur prochaine exécution, leur planification en clair et leur dernier état, et **Exécuter** / **Mettre en pause** / **Reprendre**. Réservé aux superutilisateurs. | **Tâches (ids, dans l'ordre)** — vide = toutes les tâches planifiées —, **Seulement ces étiquettes**, **Lignes maximum** (12 si vide). |
@@ -322,14 +322,14 @@ Un widget dont la requête échoue devient une section d'erreur ; le reste de l'
 
 ## Construire un tableau de bord \{#builder\}
 
-Dans **Liberty Next → Construire → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
+Dans **Liberty Next → Analyse → Tableaux de bord**, choisir l'application, puis ajouter ou ouvrir un tableau de bord. L'éditeur comprend :
 
 | Partie | Contenu |
 |---|---|
 | Général | Titre, description. |
 | Période | **Ajouter une période** : *S'ouvre sur* (un préréglage, ou la valeur de l'application), *Colonne de date* ou *élément du dictionnaire*, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
 | Filtres | **Ajouter un filtre** : les listes déroulantes de la barre. |
-| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches**. Chaque widget a un **Sous-titre**, et des boutons pour le rendre plus étroit ou plus large, plus bas ou plus haut, et l'avancer ou le reculer dans la grille. |
+| Widgets | **Ajouter un widget** : Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches**. Une carte se déplace par **glisser-déposer** — sa poignée glissée sur une autre carte, une barre indiquant le côté où elle sera déposée — et se dimensionne par son **coin inférieur droit**, en colonnes et lignes entières, sa taille s'affichant à côté de la poignée (`6 × 2`). La poignée répond aussi au clavier : les flèches déplacent la carte, Maj + flèches la dimensionnent. |
 
 Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
 

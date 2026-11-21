@@ -218,6 +218,7 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 |---|---|
 | **`type`** | `page`. |
 | **`target`** | Le chemin de la route — `/nomaflow`, `/runs/dashboard`, etc. Les routes doivent être **enregistrées** dans le frontend (le menu ne les crée pas ; il y pointe). |
+| **Pages de tests** | `/liberty/tests` et `/liberty/test-results` placent les pages [Tests](../tests.md) et [Résultats des tests](../../../monitoring/test-results.md) dans le menu d'une application ; les entrées sont visibles des détenteurs de `tests:view`. |
 | **`connector`** | **Ne doit pas être renseigné**. La cible est une route, pas une ressource de connecteur. |
 | **`params`** | Optionnel. Le runtime les ajoute en tant que paramètres de chaîne de requête sur la route. |
 

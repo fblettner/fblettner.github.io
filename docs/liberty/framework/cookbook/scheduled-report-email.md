@@ -56,7 +56,7 @@ In Nomaflow, a job `crm-daily-pipeline` with:
 
 ### 4. The e-mail
 
-**Liberty Next → Build → Notifications**, a new rule:
+**Liberty Next → Logic → Notifications**, a new rule:
 
 | Field | Value |
 |---|---|

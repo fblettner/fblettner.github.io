@@ -328,8 +328,11 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **Master Data** | UDC types and UDC codes — every grid supports filter, sort, inline edit and Excel upload —, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
 | **Development** | Object Librarian, Data Dictionary and Cross Reference, read-only. |
-| **Monitoring** | [JDE Servers](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. |
+| **Monitoring** | [JDE Health Check](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. [Server Manager](./monitoring/server-manager.md): six screens read live from the console — instances, connected users, enterprise servers, processes, business functions, Java memory. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
+| **Upgrade** | [Upgrade analysis](./upgrade/analysis.md): what has to be retrofitted for a release, how complex, for how many days — from Oracle's object list and the customer's own objects. |
+| **Tests** | [Non-regression tests](./tests.md) played through AIS: record a reference before a change, compare after it. |
+| **JD Edwards services (AIS)** | The [catalogue of AIS services](./ais/services.md) and [Create from…](./ais/create-from.md): an endpoint or a whole screen from a JD Edwards application, form, table, report, business function or orchestration. |
 
 ---
 
@@ -340,8 +343,11 @@ The menu follows the work, from the home page to the maintenance jobs.
 | **JDE security administrator** | The five Security Maintenance screens — add a user, attach a role, run Import Security on a clone, walk through the security workbench grid. |
 | **AP / AR operator** | The transaction grid — open invoices across companies and environments on one page, with bulk filters and drill-through. |
 | **Master-data steward** | Address Book, customer and supplier maintenance with required-field checks; UDC types and codes for the catalogue work. |
+| **Upgrade project lead** | [Upgrade analysis](./upgrade/analysis.md) — the objects to retrofit, the days by type and by assignee, the follow-up of the work. |
+| **Functional tester** | [Non-regression tests](./tests.md) — the cases that must keep working, played before and after an ESU or a tools release. |
+| **Integration developer** | [Create from…](./ais/create-from.md) — a Liberty screen on a JD Edwards form, without writing a call. |
 | **Reporting analyst** | One form to schedule BIP, the archive of past runs, e-mail distribution. |
-| **Ops engineer** | [JDE Servers](./monitoring/jde-servers.md) — the health of every enterprise, web and AIS server, its availability over 24 hours, the alerts of the check. |
+| **Ops engineer** | [JDE Health Check](./monitoring/jde-servers.md) and [Server Manager](./monitoring/server-manager.md) — the health of every enterprise, web and AIS server, its availability over 24 hours, the alerts of the check. |
 
 ---
 

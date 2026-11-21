@@ -91,16 +91,18 @@ keywords: [Nomajde, overview, home, dashboard, JD Edwards, JDE, users, roles, se
 
 | Part | Content |
 |---|---|
-| Introduction | What Nomajde does, domain by domain: the work JD Edwards spreads across many forms gathered in a few searchable grids, written straight to JD Edwards, each change recording who, when and from which screen. |
+| Introduction | Two lines on what Nomajde is, at the bottom of the page: the figures come first — on a phone they are the first thing shown. |
 | **Users** | The JD Edwards user profiles, with the number of roles and of role relationships. |
 | **Security records** | The Security Workbench records (F00950), with the number of environments. |
-| **UDC codes** | The user defined codes (F0005), with the number of UDC types. |
-| **Objects** | The Object Librarian objects (F9860). |
-| **Master Data** | [UDC Types](./master-data/udc-types.md), [UDC Code](./master-data/udc-codes.md). |
+| **JDE servers healthy** | The number of healthy instances out of the instances monitored, with the time of the last check. |
+| **Objects to retrofit** | The objects the [upgrade analysis](./upgrade/analysis.md) marks to retrofit, out of the customer's objects, with the days and the list compared with. |
+| **JDE servers** | The list of instances with their status and availability over 24 hours — see [JDE Health Check](./monitoring/jde-servers.md#overview). |
+| **Jobs** | The last and next runs of the main jobs: health check, daily synchronisation, tests, upgrade analysis, security re-merge. |
+| **Upgrade** | Two bar charts: the days by object type and the objects by complexity. |
+| **Master Data** | [UDC Types](./master-data/udc-types.md), [UDC Code](./master-data/udc-codes.md), [Address Book, Customer Master, Supplier Master](./master-data/address-book.md). |
 | **Security Maintenance** | [User Management](./security-maintenance/user-management.md), User Preferences, [Role Management](./security-maintenance/role-management.md), [Role Relationships](./security-maintenance/role-relationships.md), [Environments](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md). |
-| **Development** | Object Librarian, Data Dictionary, Cross Reference — read-only. |
-| **Analysis and jobs** | The [Data Explorer](./data-explorer.md), the [jobs](./jobs.md) and the product page. |
-| **JDE servers** | The number of healthy instances out of the instances monitored, with the time of the last check, and the list of instances with their status and availability over 24 hours — see [JDE Servers](./monitoring/jde-servers.md#overview). |
+| **Development and upgrade** | Object Librarian, Data Dictionary, Cross Reference, [Objects to retrofit, Outside the reference path code, Run the analysis again](./upgrade/analysis.md). |
+| **Platform and analysis** | [JDE Health Check](./monitoring/jde-servers.md), [JDE instances, Connected users](./monitoring/server-manager.md), [Run the tests](./tests.md), the [Data Explorer](./data-explorer.md) and the product page. |
 
 The figures are read live from the JD Edwards instance each time the page is opened or refreshed (**↻**); the **JDE servers** tiles show the last health check recorded by the `nomajde-jde-health` job.
 

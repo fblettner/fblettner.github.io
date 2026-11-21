@@ -380,7 +380,7 @@ Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pou
 
 ### `nomajde-jde-health` \{#nomajde-jde-health\}
 
-**Contrôle de santé des serveurs JD Edwards au travers de Server Manager.** L'étape `nomajde.monitoring:health_check` demande les instances au connecteur API `jde_server_manager` (`instancesinfo`), lance le contrôle de santé de Server Manager (`health`) sur chaque serveur enterprise, web et REST démarré, puis écrit une ligne par instance dans la table `jde_health` de la base Nomajde. Ces lignes alimentent [Supervision → Serveurs JDE](../nomajde/monitoring/jde-servers.md) et les tuiles de la vue d'ensemble.
+**Contrôle de santé des serveurs JD Edwards au travers de Server Manager.** L'étape `nomajde.monitoring:health_check` demande les instances au connecteur API `jde_server_manager` (`instancesinfo`), lance le contrôle de santé de Server Manager (`health`) sur chaque serveur enterprise, web et REST démarré, puis écrit une ligne par instance dans la table `jde_health` de la base Nomajde. Ces lignes alimentent [Supervision → Contrôle de santé JDE](../nomajde/monitoring/jde-servers.md) et les tuiles de la vue d'ensemble.
 
 | Paramètre | Valeur par défaut | Rôle |
 |---|---|---|
@@ -389,7 +389,7 @@ Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pou
 | `auto_stop` | `false` | Arrête une instance démarrée en échec (`stopinstance`), ainsi que les instances démarrées d'un serveur enterprise en échec. |
 | `keep_days` | `30` | Les lignes plus anciennes sont supprimées à chaque exécution. |
 
-**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager et le mot de passe de `jde_admin` sur le connecteur `jde_server_manager` dans **Liberty Next → Construire → Connecteurs**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
+**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager et le mot de passe de `jde_admin` sur le connecteur `jde_server_manager` dans **Liberty Next → Données → Connecteurs**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
 
 **Alertes** — l'exécution échoue dès qu'une instance n'a pas réussi ses contrôles (`failed`, `down` ou `error`), après l'écriture des lignes ; les alertes `on_failure` sont actives.
 
@@ -648,7 +648,7 @@ Les tâches livrées sont **enabled = false** par défaut. Définir une planific
 | `nomasx1-import-reference` échoue avec *« target application not found »*. | Application non créée dans *Nomasx-1 → Paramètres → Global → Applications*. | Créer d'abord l'application dans l'interface ; le pré-contrôle refuse de démarrer sinon. |
 | `deploy-databases` produit une erreur de droits refusés. | Le pool `default` ne peut créer ni bases, ni rôles. | Pointer temporairement `default` sur un superutilisateur Postgres ; revenir en arrière après l'exécution. |
 | Planification définie mais la tâche ne se déclenche pas. | La tâche est désactivée (le bundle livre `enabled = false`). | L'activer depuis sa ligne de la page des Tâches, une fois la planification définie. |
-| La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Liberty Next → Construire → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
+| La synchronisation quotidienne s'exécute mais les tables Nomajde restent vides. | Le connecteur `jdedwards` n'est pas configuré (la tâche s'exécute silencieusement sur zéro ligne). | *Liberty Next → Données → Connecteurs → jdedwards* — tester la connexion depuis l'interface avant la prochaine exécution. |
 | L'audit trail commence à produire des milliers de lignes par minute. | La tâche a démarré au SCN 0 — relecture de l'intégralité du journal d'archive. | Exécuter `nomasx1-audit-trail-reset-scn-1` (valeur par défaut `scn = 0` → la prochaine exécution reprend sur le SCN courant) pour repartir à neuf. |
 | Les vues matérialisées affichent des données obsolètes après une correction SQL manuelle. | L'étape REFRESH_VIEWS de fin de chaîne de la tâche de collecte ne s'est pas exécutée (vous l'avez court-circuitée). | Exécuter `nomasx1-refresh-views` manuellement. |
 

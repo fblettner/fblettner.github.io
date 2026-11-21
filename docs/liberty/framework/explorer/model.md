@@ -1,12 +1,12 @@
 ---
 title: Build a model
-description: "Liberty Next → Build → Explorer in Liberty Next: an explorer model per data mart — the hub, the entities (a query with its cardinality, key, measures, hidden columns and default date), the relations on column pairs, and a model filled from a Screen Assistant preset."
+description: "Liberty Next → Insight → Explorer in Liberty Next: an explorer model per data mart — the hub, the entities (a query with its cardinality, key, measures, hidden columns and default date), the relations on column pairs, and a model filled from a Screen Assistant preset."
 keywords: [Liberty Next, Data Explorer, Settings Explorer, model, hub, entity, cardinality, measure, relation, join, preset, Screen Assistant, data mart]
 ---
 
 # Build a model
 
-A model tells the explorer what a user may analyse and how the tables relate. It is built in **Liberty Next → Build → Explorer** by a superuser, with no SQL: every entity reads an existing query of a connector, and the columns are discovered from that query's result.
+A model tells the explorer what a user may analyse and how the tables relate. It is built in **Liberty Next → Insight → Explorer** by a superuser, with no SQL: every entity reads an existing query of a connector, and the columns are discovered from that query's result.
 
 ---
 
@@ -145,6 +145,20 @@ A model tells the explorer what a user may analyse and how the tables relate. It
 | **Preset (Screen Assistant)** | Fills the model from a preset — see [below](#preset). |
 
 **Save** writes the model and reloads it: the explorer sees it at once. A model without any entity is not saved.
+
+---
+
+## The model as a diagram \{#diagram\}
+
+In **Insight → Explorer**, a model is drawn: the **hub**, the entities it reaches placed by how far they are from it, and each relation as a line carrying the columns it joins on. Set apart in orange: the entities **not linked to the hub** — an analysis cannot use them — and the relations with *no column pair yet*. The layout is computed from the model; nothing is placed by hand, and the canvas zooms.
+
+| Click | The side panel shows |
+|---|---|
+| Nothing | The model's own settings: **Label**, **Hub**, **Description**, **Preset (Screen Assistant)**. |
+| An entity | What it is — its query or table, key, measures, default date — and its relations, with **Edit**, **Make it the hub**, **Delete**. |
+| A line | The relation's column pairs (**Joined on**) and **Delete this relation**. |
+
+An empty model starts **From a prebuilt model** — a preset — or **By hand**. **Add model**, **Delete model** and **Save** are in the page header.
 
 ---
 
@@ -306,9 +320,9 @@ Applying the preset also creates the dictionary entries its tables lack — on a
 
 ### Models shipped by a preset \{#shipped\}
 
-A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Liberty Next → Build → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
+A preset can also give the explorer a model **by itself**: the *full* presets of the JD Edwards catalogs (Address Book, A/P ledger, sales order, work order…) appear in the model picker without anything in Liberty Next → Insight → Explorer. In the model picker, the models are grouped by area — *JDE · Accounts Payable*, *JDE · Sales* —, the others by application. The model is built from the preset when it is first opened; the page header says *shipped by the preset “…”*. In such a preset, a table's label becomes the entity label, and a lookup table joined to a transaction hub has the cardinality *one*.
 
-To change such a model, add a model in Liberty Next → Build → Explorer from the same preset: the declared model replaces the shipped one.
+To change such a model, add a model in Liberty Next → Insight → Explorer from the same preset: the declared model replaces the shipped one.
 
 ---
 
@@ -318,7 +332,7 @@ To change such a model, add a model in Liberty Next → Build → Explorer from 
 |---|---|---|
 | An entity is not linked to the hub. | **Save** is refused and names the entities left out. | Add the missing relation. |
 | The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
-| No column is discovered. | The query failed or returned nothing. | Check the query in Liberty Next → Build → Connectors. |
+| No column is discovered. | The query failed or returned nothing. | Check the query in Liberty Next → Data → Connectors. |
 | A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
 | Fields show their raw column name. | The columns have no dictionary entry. | On the explorer page, a superuser sees *N column(s) have no dictionary entry and show their column name* and **Create the entries from the data dictionary** creates them in one click. |
 

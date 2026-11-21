@@ -32,7 +32,7 @@ In **Liberty Next → Administer → App → AI Assistant**, fill **Allowed conn
 
 ### 3. Describe the queries
 
-In **Liberty Next → Build → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
+In **Liberty Next → Data → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
 
 | Good | Weak |
 |---|---|

@@ -141,13 +141,13 @@ liberty-apps/
 
 | File | Edited by | Notes |
 |---|---|---|
-| `config/connectors.toml` | *Build → Connectors* | Owns the pool registry plus every connector. |
-| `config/dictionary.toml` | *Build → Dictionary* | Per-column metadata reused by screens and charts. |
-| `config/menus.toml` | *Build → Menus* | One root per app, optional folder/leaf hierarchy. |
-| `config/screens.toml` | *Build → Screens* | Grids + dialogs + per-field conditions. |
-| `config/dashboards.toml` | *Build → Dashboards* | KPI, chart and table widgets. |
-| `config/charts.toml` | *Build → Charts* | Chart definitions referenced by dashboards. |
-| `config/actions.toml` | *Build → Actions* | Shared actions called by screens. |
+| `config/connectors.toml` | *Data → Connectors* | Owns the pool registry plus every connector. |
+| `config/dictionary.toml` | *Data → Dictionary* | Per-column metadata reused by screens and charts. |
+| `config/menus.toml` | *Screens → Menus* | One root per app, optional folder/leaf hierarchy. |
+| `config/screens.toml` | *Screens → Screens* | Grids + dialogs + per-field conditions. |
+| `config/dashboards.toml` | *Insight → Dashboards* | KPI, chart and table widgets. |
+| `config/charts.toml` | *Insight → Charts* | Chart definitions referenced by dashboards. |
+| `config/actions.toml` | *Logic → Services* | Shared actions called by screens. |
 | `config/theme.toml` | *Administer → Theme* | Colours and branding. |
 | `plugins/nomaflow/jobs.toml` | Nomaflow → *Jobs* | The job catalogue. |
 | `plugins/*/*.py` | Developer | Custom step callables — exposed to the framework via `sys.path`. |

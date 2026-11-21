@@ -32,7 +32,7 @@ Dans **Liberty Next → Administrer → App → Assistant IA**, renseigner **Con
 
 ### 3. Décrire les requêtes
 
-Dans **Liberty Next → Construire → Connecteurs**, donner à chaque requête utile à l'assistant un **libellé** et une **description** (onglet Advanced). L'assistant liste les connecteurs avec leurs requêtes et leurs descriptions, puis en choisit une :
+Dans **Liberty Next → Données → Connecteurs**, donner à chaque requête utile à l'assistant un **libellé** et une **description** (onglet Advanced). L'assistant liste les connecteurs avec leurs requêtes et leurs descriptions, puis en choisit une :
 
 | Efficace | Insuffisant |
 |---|---|

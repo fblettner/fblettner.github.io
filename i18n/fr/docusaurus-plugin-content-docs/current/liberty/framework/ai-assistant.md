@@ -184,7 +184,7 @@ Sur une conversation vide, le panneau propose des questions adaptées à l'endro
 
 Les questions ont deux origines :
 
-- **Liberty Next → Construire → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
+- **Liberty Next → Logique → IA** : les questions livrées par une application, par application et par écran — voir [plus bas](#settings-ai) ;
 - **Liberty Next → Administrer → App → Assistant IA → Questions de départ** : celles de l'exploitant, pour partout, pour une application ou pour un couple *application/écran*. Elles l'emportent sur celles de l'application pour le même emplacement.
 
 ---
@@ -199,12 +199,13 @@ Les questions ont deux origines :
 | `explorer_saved`, `explorer_save_analysis`, `explorer_save_dashboard` | Listent les analyses et tableaux de bord enregistrés de l'utilisateur, et enregistrent ce qu'il demande : une analyse est exécutée une fois avant d'être stockée, ce qui écarte un champ erroné ; un tableau de bord réunit des analyses enregistrées sous forme de tuiles. Les deux restent **privés**, sauf demande de partage. | Activés par défaut. |
 | `describe_instance` | Résume le contenu de l'installation, ou d'une seule application : menus, écrans avec leur requête de lecture, tableaux de bord, modèles de l'explorateur de données, tâches, procédures. *Où trouver…* reçoit une réponse tirée de la configuration réelle. | Toujours. |
 | `search_catalog` | Retrouve par mot-clé un écran, une entrée de menu, un tableau de bord, un modèle de l'explorateur de données, une tâche ou une procédure, sans lire toute la configuration. | Toujours. |
-| Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Construire → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
+| Outils des applications | Des fonctions livrées par une application pour son propre domaine, nommées `<app>_<id>`. En lecture seule. Voir [Liberty Next → Logique → IA](#settings-ai). | **Les outils des applications** (activé par défaut). |
 | `remember_note` | Propose une note pour les conversations suivantes — voir [Conversations et notes](#history). | Toujours. |
 | `screen_form`, `screen_write`, `screen_write_many`, `screen_action`, `job_form`, `job_run` | Lisent ce qu'un écran permet à son utilisateur, puis ajoutent, modifient ou suppriment un enregistrement — ou jusqu'à 50 enregistrements sur une seule carte —, ou lancent une action de l'écran, par les requêtes et les règles de l'écran lui-même ; lisent une tâche telle que sa page la présente, puis l'exécutent — voir [Écrire par un écran](#write). | **Outils d'écriture** (désactivé par défaut), avec la permission `ai:write`. |
 | Procédures | Liste les procédures des applications et charge celle qui convient — voir [Procédures](#playbooks). | Toujours. |
 | `jobs_status`, `server_log`, `integrity_checks` | Les tâches Nomaflow avec leur planification, leur dernière exécution et leur prochain démarrage, et les exécutions récentes d'une tâche avec l'étape en échec ; les dernières lignes du journal du serveur, par niveau et par texte ; les contrôles croisés de la configuration. | **Outils d'exploitation** (désactivé par défaut) ; superutilisateurs uniquement. |
 | `api_call` | Appelle un endpoint d'un connecteur d'API. | **Outil API** (désactivé par défaut — un endpoint peut modifier des données). |
+| `api_run` | Appelle un endpoint marqué **Modifie des données** — un état soumis, une orchestration lancée. `api_call` refuse un tel endpoint. Dans la conversation, il propose une carte ; rien n'est envoyé tant que l'utilisateur ne l'applique pas. Voir [Points d'accès d'API](./build/api-endpoints.md#writable). | **Outil API** et **Outils d'écriture**, pour un utilisateur détenant `ai:write` et la permission de l'endpoint ; en MCP, **Autoriser les modifications en MCP** également. |
 | Outils de génération | Proposent une requête, une entrée du dictionnaire, un écran ou une entrée de menu ; l'utilisateur relit la proposition puis l'applique. | **Outils de construction** (désactivé par défaut) ; superutilisateurs uniquement. |
 | Lecture web | Lit les pages des domaines autorisés. | **Domaines autorisés** (aucun par défaut). |
 
@@ -255,9 +256,9 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 
 ---
 
-## Liberty Next → Construire → IA \{#settings-ai\}
+## Liberty Next → Logique → IA \{#settings-ai\}
 
-**Liberty Next → Construire → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
+**Liberty Next → Logique → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
 
 | Partie | Contenu |
 |---|---|
@@ -309,7 +310,7 @@ Dans **Liberty Next → Administrer → App → Assistant IA** : **Activé**, **
 
 ## Conseils \{#tips\}
 
-- Donner aux requêtes un libellé et une description clairs (Liberty Next → Construire → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
+- Donner aux requêtes un libellé et une description clairs (Liberty Next → Données → Connecteurs) : l'assistant choisit ses requêtes d'après eux.
 - Écrire des requêtes de lecture dédiées aux questions fréquentes (totaux par société, par mois), plutôt que d'attendre de l'assistant qu'il agrège des milliers de lignes.
 - Écrire une procédure pour chaque démarche demandée plus d'une fois : la réponse suit alors la procédure de l'application, sans approximation.
 - Laisser l'**Outil API** et les **Outils d'exploitation** désactivés, sauf endpoints en lecture seule et utilisateurs du chat administrateurs.

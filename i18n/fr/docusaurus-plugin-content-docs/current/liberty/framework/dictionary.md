@@ -1,6 +1,6 @@
 ---
 title: Dictionnaire
-description: "Le dictionnaire définit une seule fois chaque donnée — libellé, format, règle, valeur par défaut, traductions — et chaque colonne de requête qui y renvoie hérite de cette définition. Entrées, énumérations, lookups, séquences et listes du framework, partagés ou par connecteur, dans Liberty Next → Construire → Dictionnaire."
+description: "Le dictionnaire définit une seule fois chaque donnée — libellé, format, règle, valeur par défaut, traductions — et chaque colonne de requête qui y renvoie hérite de cette définition. Entrées, énumérations, lookups, séquences et listes du framework, partagés ou par connecteur, dans Liberty Next → Données → Dictionnaire."
 keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séquences, libellés, formats, règles, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, traductions]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séque
 
 Le **dictionnaire** définit une seule fois chaque donnée : son libellé, son format, sa règle (booléen, liste de valeurs, lookup, séquence…), sa valeur par défaut et ses traductions. Une colonne de requête qui renvoie à une entrée hérite de cette définition : la même donnée se lit donc de la même façon sur tous les écrans, graphiques et tableaux de bord.
 
-Il se modifie dans **Liberty Next → Construire → Dictionnaire**, qui regroupe cinq types d'éléments :
+Il se modifie dans **Liberty Next → Données → Dictionnaire**, qui regroupe cinq types d'éléments :
 
 | Onglet | Contenu |
 |---|---|
@@ -135,6 +135,12 @@ Il se modifie dans **Liberty Next → Construire → Dictionnaire**, qui regroup
   <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">valeurs des :params</text>
   <line x1="1000" y1="347.0" x2="928" y2="381" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
 </svg>
+
+---
+
+## La liste \{#list\}
+
+Chaque type a son onglet — **Entrées**, **Énumérations**, **Lookups**, **Séquences**, **Framework** — avec le nombre d'enregistrements de la portée. La ligne d'un enregistrement dit ce qu'il est sans l'ouvrir : une entrée affiche son format et sa règle (la cible de la règle en infobulle), une énumération son nombre de valeurs, un lookup ou une séquence l'autre connecteur lu. Le filtre retrouve un enregistrement par son nom, son libellé ou l'un de ces éléments : saisir `lookup` affiche toutes les entrées régies par un lookup. Sur l'enregistrement choisi, **Rechercher les usages** indique le nombre d'endroits où il est utilisé. **Analyser une table**, **Exporter**, **Abandonner** et **Enregistrer** se trouvent dans l'en-tête de la page.
 
 ---
 

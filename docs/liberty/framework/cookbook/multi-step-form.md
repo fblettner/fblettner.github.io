@@ -43,11 +43,11 @@ CREATE TABLE expense_claims (
 
 ### 2. Status list
 
-**Liberty Next → Build → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
+**Liberty Next → Data → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
 
 ### 3. One query per transition
 
-In **Liberty Next → Build → Connectors → expenses → Queries**, three writable queries:
+In **Liberty Next → Data → Connectors → expenses → Queries**, three writable queries:
 
 ```sql
 -- submit_claim
@@ -109,7 +109,7 @@ And on the **General** tab, `editable_when` STATUS = `DRAFT`: once submitted, th
 
 ### 7. Notifications
 
-In **Liberty Next → Build → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
+In **Liberty Next → Logic → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
 
 ### 8. Reminders
 

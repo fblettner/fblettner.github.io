@@ -1,12 +1,12 @@
 ---
-title: Serveurs JDE
-description: "Supervision → Serveurs JDE dans Nomajde : les vérifications des serveurs enterprise, web et REST de JD Edwards suivis par Server Manager — état, santé, contrôles en échec, action menée — sur une période, l'historique d'un serveur, les indicateurs de la vue d'ensemble et la tâche qui les collecte."
+title: Contrôle de santé JDE
+description: "Supervision → Contrôle de santé JDE dans Nomajde : les vérifications des serveurs enterprise, web et REST de JD Edwards suivis par Server Manager — état, santé, contrôles en échec, action menée — sur une période, l'historique d'un serveur, les indicateurs de la vue d'ensemble et la tâche qui les collecte."
 keywords: [Nomajde, JD Edwards, supervision, Server Manager, contrôle de santé, serveur enterprise, serveur web, AIS, disponibilité, nomajde-jde-health]
 ---
 
-# Serveurs JDE
+# Contrôle de santé JDE
 
-**Supervision → Serveurs JDE** liste les vérifications des serveurs JD Edwards, de la plus récente à la plus ancienne : une ligne par instance et par vérification, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
+**Supervision → Contrôle de santé JDE** liste les vérifications des serveurs JD Edwards, de la plus récente à la plus ancienne : une ligne par instance et par vérification, avec son état dans Server Manager, le résultat du contrôle de santé, les contrôles en échec et l'action menée. Les vérifications proviennent de la tâche [`nomajde-jde-health`](#job), qui interroge Server Manager toutes les cinq minutes une fois activée.
 
 ---
 
@@ -171,7 +171,7 @@ La [page d'accueil](../home.md) de Nomajde comporte deux tuiles **Serveurs JDE**
 
 La tâche `nomajde-jde-health` vérifie les serveurs au travers de l'API REST de Server Manager. Elle est livrée **désactivée**, planifiée toutes les cinq minutes (Europe/Paris).
 
-1. Dans **Liberty Next → Construire → Connecteurs**, ouvrir le connecteur `jde_server_manager` et renseigner l'adresse de Server Manager et le mot de passe du compte `jde_admin`.
+1. Dans **Liberty Next → Données → Connecteurs**, ouvrir le connecteur `jde_server_manager` et renseigner l'adresse de Server Manager et le mot de passe du compte `jde_admin`.
 2. Dans **Nomaflow → Tâches**, ajuster au besoin les paramètres de `nomajde-jde-health`, puis l'activer.
 3. **Tâches → Vérifier les serveurs JDE**, dans le menu Nomajde, lance la vérification immédiatement, sans attendre la planification.
 
@@ -192,6 +192,7 @@ Détail de la tâche : [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nom
 
 ## Voir aussi
 
+- [Server Manager](./server-manager.md) — les écrans en direct : instances, utilisateurs connectés, processus, mémoire Java.
 - [Tâches](../jobs.md) — les tâches Nomajde, dont *Vérifier les serveurs JDE*.
 - [Notifications](../../nomaflow/notifications.md) — pour être alerté d'un échec de la vérification.
 - [Vue d'ensemble — la page d'accueil](../home.md).

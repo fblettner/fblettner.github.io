@@ -19,7 +19,7 @@ La page **Paquet** transporte des tranches de configuration (écrans, entrées d
 ## Ouvrir la page
 
 - **Liberty Next → Déployer → Modifications**.
-- Depuis la page Liberty Next → Construire → Connecteurs, *Suivre les modifications* dans la carte de l'écran ouvre la page filtrée sur l'application correspondante.
+- Depuis la page Liberty Next → Données → Connecteurs, *Suivre les modifications* dans la carte de l'écran ouvre la page filtrée sur l'application correspondante.
 
 ---
 

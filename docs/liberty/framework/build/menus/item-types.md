@@ -215,6 +215,7 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 |---|---|
 | **`type`** | `page`. |
 | **`target`** | The route path — `/nomaflow`, `/runs/dashboard`, etc. Routes must be **registered** in the frontend (the menu doesn't create them; it just points at them). |
+| **Tests pages** | `/liberty/tests` and `/liberty/test-results` put the [Tests](../tests.md) and [Test results](../../../monitoring/test-results.md) pages in an application's menu; the entries show to the holders of `tests:view`. |
 | **`connector`** | **Must not be set**. The target is a route, not a connector resource. |
 | **`params`** | Optional. The runtime appends them as query-string parameters on the route. |
 

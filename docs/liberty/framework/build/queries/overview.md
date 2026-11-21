@@ -8,7 +8,7 @@ keywords: [Liberty Framework, queries, connectors, CRUD, sequences, lookups, Con
 
 A **query** in Liberty is a named SQL statement attached to a **connector** (which itself points at a **pool**, i.e. a database). Screens, dashboards, charts, dictionary lookups, dictionary sequences and the AI assistant all consume queries — so adding a query is the most common change you'll make in the Liberty Next pages.
 
-The page that manages queries is **Liberty Next → Build → Connectors**. This overview maps it; the next pages walk through each "add" path.
+The page that manages queries is **Liberty Next → Data → Connectors**. This overview maps it; the next pages walk through each "add" path.
 
 ---
 

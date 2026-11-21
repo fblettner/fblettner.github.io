@@ -125,7 +125,7 @@ Save, then **Run with parameters** to run it once: the run detail shows the rows
 
 ### The notification
 
-**Liberty Next → Build → Notifications**, a rule:
+**Liberty Next → Logic → Notifications**, a rule:
 
 | Field | Value |
 |---|---|

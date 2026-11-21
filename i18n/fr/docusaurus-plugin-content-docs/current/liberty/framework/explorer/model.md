@@ -1,12 +1,12 @@
 ---
 title: Construire un modèle
-description: "Liberty Next → Construire → Explorateur dans Liberty Next : un modèle d'exploration par magasin de données — le pivot, les entités (une requête avec sa cardinalité, sa clé, ses mesures, ses colonnes masquées et sa date par défaut), les relations sur des paires de colonnes, et un modèle rempli depuis un préréglage de l'assistant de création d'écran."
+description: "Liberty Next → Analyse → Explorateur dans Liberty Next : un modèle d'exploration par magasin de données — le pivot, les entités (une requête avec sa cardinalité, sa clé, ses mesures, ses colonnes masquées et sa date par défaut), les relations sur des paires de colonnes, et un modèle rempli depuis un préréglage de l'assistant de création d'écran."
 keywords: [Liberty Next, explorateur de données, Paramètres Explorateur, modèle, pivot, entité, cardinalité, mesure, relation, jointure, préréglage, assistant de création d'écran]
 ---
 
 # Construire un modèle
 
-Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et comment les tables se rejoignent. Un superutilisateur le construit dans **Liberty Next → Construire → Explorateur**, sans SQL : chaque entité lit une requête existante d'un connecteur, et les colonnes se déduisent du résultat de cette requête.
+Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et comment les tables se rejoignent. Un superutilisateur le construit dans **Liberty Next → Analyse → Explorateur**, sans SQL : chaque entité lit une requête existante d'un connecteur, et les colonnes se déduisent du résultat de cette requête.
 
 ---
 
@@ -145,6 +145,20 @@ Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et commen
 | **Préréglage (assistant écran)** | Remplit le modèle depuis un préréglage — voir [plus bas](#preset). |
 
 **Enregistrer** écrit le modèle et le recharge : l'explorateur le voit aussitôt. Un modèle sans entité n'est pas enregistré.
+
+---
+
+## Le modèle en schéma \{#diagram\}
+
+Dans **Analyse → Explorateur**, un modèle est dessiné : le **pivot**, les entités qu'il atteint, placées selon leur distance, et chaque relation sous la forme d'un trait portant les colonnes de jointure. À part, en orange : les entités **non reliées au pivot** — une analyse ne peut pas les utiliser — et les relations qui n'ont *pas encore de paire de colonnes*. La disposition se calcule à partir du modèle ; rien n'est placé à la main, et le schéma se zoome.
+
+| Clic | Le panneau latéral affiche |
+|---|---|
+| Rien | Les réglages du modèle : **Libellé**, **Pivot**, **Description**, **Préréglage (assistant écran)**. |
+| Une entité | Ce qu'elle est — sa requête ou sa table, sa clé, ses mesures, sa date par défaut — et ses relations, avec **Modifier**, **En faire le pivot**, **Supprimer**. |
+| Un trait | Les paires de colonnes de la relation (**Jointe sur**) et **Supprimer cette relation**. |
+
+Un modèle vide se commence **À partir d'un modèle prêt à l'emploi** — un préréglage — ou **À la main**. **Ajouter un modèle**, **Supprimer le modèle** et **Enregistrer** se trouvent dans l'en-tête de la page.
 
 ---
 
@@ -306,9 +320,9 @@ L'application du préréglage crée aussi les entrées de dictionnaire qui manqu
 
 ### Modèles fournis par un préréglage \{#shipped\}
 
-Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Liberty Next → Construire → Explorateur. Dans le sélecteur de modèle, les modèles sont groupés par domaine — *JDE · Accounts Payable*, *JDE · Sales* —, les autres par application. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
+Un préréglage peut aussi fournir **de lui-même** un modèle à l'explorateur : les préréglages *complets* des catalogues JD Edwards (carnet d'adresses, grand livre fournisseurs, commande client, ordre de fabrication…) figurent dans le sélecteur de modèle sans rien déclarer dans Liberty Next → Analyse → Explorateur. Dans le sélecteur de modèle, les modèles sont groupés par domaine — *JDE · Accounts Payable*, *JDE · Sales* —, les autres par application. Le modèle est construit à partir du préréglage à sa première ouverture ; l'en-tête de la page indique *fourni par le préréglage « … »*. Dans un tel préréglage, le libellé d'une table devient celui de l'entité, et une table de référence jointe à un pivot transactionnel a la cardinalité *une ligne*.
 
-Pour modifier un tel modèle, ajouter un modèle dans Liberty Next → Construire → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
+Pour modifier un tel modèle, ajouter un modèle dans Liberty Next → Analyse → Explorateur à partir du même préréglage : le modèle déclaré remplace le modèle fourni.
 
 ---
 
@@ -318,7 +332,7 @@ Pour modifier un tel modèle, ajouter un modèle dans Liberty Next → Construir
 |---|---|---|
 | Une entité n'est pas reliée au pivot. | L'enregistrement est refusé, avec le nom des entités isolées. | Ajouter la relation manquante. |
 | La requête de l'entité attend des paramètres. | L'explorateur l'exécute sans paramètre. | Rattacher l'entité à une requête sans paramètre. |
-| Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Liberty Next → Construire → Connecteurs. |
+| Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Liberty Next → Données → Connecteurs. |
 | Des champs affichent leur nom de colonne brut. | Ces colonnes n'ont pas d'entrée de dictionnaire. | Sur la page de l'explorateur, un superutilisateur voit *N colonne(s) sans entrée de dictionnaire affichent leur nom de colonne* et **Créer les entrées depuis le dictionnaire de données** les crée en un clic. |
 
 ## Pour aller plus loin

@@ -82,7 +82,7 @@ A dashboard puts the pipeline on one page: open amount, won amount over the peri
 
 ## The queries
 
-In **Liberty Next → Build → Connectors → crm → Queries**, **＋ Add query** for each:
+In **Liberty Next → Data → Connectors → crm → Queries**, **＋ Add query** for each:
 
 ```sql
 -- open_deals_get — deals still in progress
@@ -110,7 +110,7 @@ ORDER BY a.HAPPENED_AT DESC
 
 ## The chart
 
-**Liberty Next → Build → Charts**, scope `crm`, **Add chart**:
+**Liberty Next → Insight → Charts**, scope `crm`, **Add chart**:
 
 | Tab | Setting |
 |---|---|
@@ -123,7 +123,7 @@ See [Charts](../charts.md).
 
 ## The dashboard
 
-**Liberty Next → Build → Dashboards**, app `crm`, add a dashboard `pipeline`, title `Sales pipeline`:
+**Liberty Next → Insight → Dashboards**, app `crm`, add a dashboard `pipeline`, title `Sales pipeline`:
 
 - **Period**: **Add a period**, opens on *This month*, date column `CLOSE_DATE`.
 - **Widgets** (**Add widget**), in this order:
@@ -142,7 +142,7 @@ Save. See [Dashboards](../dashboards.md).
 
 ## The menu entry
 
-**Liberty Next → Build → Menus**, app `crm`, at the top of the tree: **＋ Item**, label `Pipeline`, type `dashboard`, target `crm.pipeline`, icon `barchart`. Move it above the *Sales* folder and set it as the connector's **home** (Liberty Next → Build → Connectors → crm) so that the app opens on it.
+**Liberty Next → Screens → Menus**, app `crm`, at the top of the tree: **＋ Item**, label `Pipeline`, type `dashboard`, target `crm.pipeline`, icon `barchart`. Move it above the *Sales* folder and set it as the connector's **home** (Liberty Next → Data → Connectors → crm) so that the app opens on it.
 
 ---
 

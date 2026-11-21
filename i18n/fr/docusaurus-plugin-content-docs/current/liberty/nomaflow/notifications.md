@@ -168,7 +168,7 @@ Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ## Règles \{#rules\}
 
-Les règles se modifient dans **Liberty Next → Construire → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
+Les règles se modifient dans **Liberty Next → Logique → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
 
 ### Déclencheurs
 

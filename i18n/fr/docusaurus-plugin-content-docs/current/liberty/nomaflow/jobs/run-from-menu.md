@@ -112,7 +112,7 @@ L'exécution est une exécution Nomaflow ordinaire : les exploitants la retrouve
 
 ## Placer une tâche dans un menu \{#menu\}
 
-Dans **Liberty Next → Construire → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
+Dans **Liberty Next → Écrans → Menus**, ajouter une entrée de type **Job (run it, follow its log)** et choisir la tâche dans **Target** : la liste présente chaque tâche avec la première ligne de sa description. Aucun connecteur n'est renseigné. Voir [Types d'entrées de menu](../../framework/build/menus/item-types.md#job).
 
 ---
 

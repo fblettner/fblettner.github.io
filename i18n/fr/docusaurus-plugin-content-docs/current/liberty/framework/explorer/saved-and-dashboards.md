@@ -123,7 +123,7 @@ Enregistrer une analyse partagée la modifie pour tout le monde, comme le rappel
 En mode **Tableaux de bord**, un tableau de bord est une grille de **tuiles** sur quatre colonnes, chacune exécutant une analyse enregistrée dans sa propre vue — tableau, croisé, graphique, KPI ou détail.
 
 - **La période** du haut s'applique à chaque tuile dont l'analyse a un champ de période ; les autres conservent la leur.
-- **Modifier la disposition** affiche les outils des tuiles : déplacer à gauche ou à droite, largeur (1 à 4 colonnes), hauteur (*s*, *m*, *l*), retrait. **Ajouter une analyse…** ajoute une tuile.
+- **Modifier la disposition** dispose les tuiles comme les cartes d'un tableau de bord : une tuile se déplace par glisser-déposer — sa poignée, une barre indiquant l'endroit où elle sera déposée — et se dimensionne par son coin, en colonnes entières (1 à 4) et selon la plus proche des trois hauteurs (`2 × M`). La poignée répond aussi au clavier : les flèches déplacent, Maj + flèches dimensionnent. **Ajouter une analyse…** ajoute une tuile.
 - **Le crayon** d'une tuile ouvre son analyse dans l'éditeur ; une descente depuis une tuile fait de même, avec les valeurs cliquées en filtres.
 - **Enregistrer**, **Enregistrer sous** et **Supprimer** fonctionnent comme pour les analyses. Une tuile dont l'analyse a été supprimée le signale.
 

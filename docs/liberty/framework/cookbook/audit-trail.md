@@ -32,7 +32,7 @@ ALTER TABLE customers ADD updated_at TIMESTAMP;
 
 ### 2. Stamp them in the write queries
 
-In **Liberty Next → Build → Connectors**, edit the insert and update queries of the table:
+In **Liberty Next → Data → Connectors**, edit the insert and update queries of the table:
 
 ```sql
 -- customers_post

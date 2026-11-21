@@ -1,12 +1,12 @@
 ---
-title: JDE Servers
-description: "Monitoring → JDE Servers in Nomajde: every health check of the JD Edwards enterprise, web and REST servers seen by Server Manager — state, health, failed checks, action taken — over a period, the history of a server, the overview figures and the job that collects them."
+title: JDE Health Check
+description: "Monitoring → JDE Health Check in Nomajde: every health check of the JD Edwards enterprise, web and REST servers seen by Server Manager — state, health, failed checks, action taken — over a period, the history of a server, the overview figures and the job that collects them."
 keywords: [Nomajde, JD Edwards, monitoring, Server Manager, health check, enterprise server, web server, AIS, availability, nomajde-jde-health]
 ---
 
-# JDE Servers
+# JDE Health Check
 
-**Monitoring → JDE Servers** lists the health checks of the JD Edwards servers, newest first: one row per instance and per check, with its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
+**Monitoring → JDE Health Check** lists the health checks of the JD Edwards servers, newest first: one row per instance and per check, with its state in Server Manager, the health result, the checks that failed and the action taken. The checks come from the [`nomajde-jde-health`](#job) job, which queries Server Manager every five minutes once enabled.
 
 ---
 
@@ -171,7 +171,7 @@ The Nomajde [home page](../home.md) carries two **JDE servers** tiles, based on 
 
 The `nomajde-jde-health` job checks the servers through the Server Manager REST API. It ships **disabled**, scheduled every five minutes (Europe/Paris).
 
-1. In **Liberty Next → Build → Connectors**, open the `jde_server_manager` connector and set the Server Manager address and the password of the `jde_admin` account.
+1. In **Liberty Next → Data → Connectors**, open the `jde_server_manager` connector and set the Server Manager address and the password of the `jde_admin` account.
 2. In **Nomaflow → Jobs**, adjust the parameters of `nomajde-jde-health` if needed, then enable it.
 3. **Jobs → Check the JDE servers** in the Nomajde menu runs the check at once, without waiting for the schedule.
 
@@ -192,6 +192,7 @@ Details of the job: [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nomajd
 
 ## Related
 
+- [Server Manager](./server-manager.md) — the live screens: instances, connected users, processes, Java memory.
 - [Jobs](../jobs.md) — the Nomajde jobs, including *Check the JDE servers*.
 - [Notifications](../../nomaflow/notifications.md) — to be alerted when the check fails.
 - [Overview — the home page](../home.md).

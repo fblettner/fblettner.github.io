@@ -196,7 +196,7 @@ Deux rôles types :
 
 ### Hors menus
 
-Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà des menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Allow** ou **Deny**, le type, l'élément, puis **Add**.
+Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà des menus** les ajoute sous forme de pastilles vertes (autorisation) ou rouges (refus) : choisir **Autoriser** ou **Refuser**, le type, l'élément, puis **Ajouter**.
 
 | Type | Accorde |
 |---|---|
@@ -208,6 +208,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà d
 | nomaflow | **Suivre les tâches** (`nomaflow:view`) — les pages Tâches, Planning et Exécutions, les exécutions et leurs journaux ; **Créer et modifier les tâches** (`nomaflow:edit`) — créer, modifier, suspendre et reprendre des tâches ; exécute SQL et Python sans restriction de lignes. Voir [Administration de Nomaflow](../../../nomaflow/administration.md#permissions). |
 | Tâche | Une tâche Nomaflow, ou **Toutes les tâches** (`job:*`) : son entrée de menu et sa page — fichiers, paramètres, lancement, annulation, journaux de toutes les exécutions. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md#access). |
 | Assistant IA | **Assistant IA** (`ai:chat`) : le panneau de l'assistant. **Outils IA depuis un client externe (MCP) — créer un jeton d'accès personnel** (`mcp:use`) : voir [Connecter Claude (MCP)](../../mcp.md). **Assistant IA — ajouter, modifier ou supprimer un enregistrement par son écran, lancer une de ses actions, lancer une tâche (avec les permissions de l'écran ou de la tâche)** (`ai:write`) : voir [Écrire par un écran](../../ai-assistant.md#write). Ce que l'assistant atteint ensuite dépend des autres règles du rôle — voir [Assistant IA](../../ai-assistant.md#access). |
+| Tests | **Voir les suites de tests et leurs résultats** (`tests:view`), **Jouer les tests (et les voir)** (`tests:run`), **Écrire les tests : suites, cas, étapes (et les jouer)** (`tests:edit`) — chacune inclut la précédente. Voir [Tests](../tests.md#access). |
 | Pattern (expert) | Une permission écrite à la main, comme `sql:sales:report_*`. |
 
 **Save** enregistre le rôle ; **Cancel** abandonne les modifications. Le nom d'un rôle ne peut plus changer après sa création.

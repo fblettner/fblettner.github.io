@@ -110,7 +110,7 @@ The validator enforces two rules on the map:
 
 ## The editor
 
-In the query editor (**Liberty Next → Build → Connectors**, Tables, Queries, Sequences or Lookups view), the **sql** field is a single SQL editor:
+In the query editor (**Liberty Next → Data → Connectors**, Tables, Queries, Sequences or Lookups view), the **sql** field is a single SQL editor:
 
 1. **+ per-dialect variants** turns it into a list of variants, starting with `default (required)` holding the current SQL.
 2. Type a dialect name (`oracle`, `postgresql`, `mssql`…) in the **dialect** field and press Enter: a new editor appears for that variant.

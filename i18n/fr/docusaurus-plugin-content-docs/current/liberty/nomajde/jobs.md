@@ -30,7 +30,13 @@ Le journal liste, par modèle, les tables analysées et les entrées créées.
 
 ## Vérifier les serveurs JDE \{#jde-health\}
 
-Lance immédiatement le contrôle de santé des serveurs JD Edwards au travers de Server Manager, sans attendre la planification toutes les cinq minutes, et enregistre le résultat affiché dans [Supervision → Serveurs JDE](./monitoring/jde-servers.md). L'exécution échoue dès qu'une instance n'a pas réussi ses contrôles. Détails : [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+Lance immédiatement le contrôle de santé des serveurs JD Edwards au travers de Server Manager, sans attendre la planification toutes les cinq minutes, et enregistre le résultat affiché dans [Supervision → Contrôle de santé JDE](./monitoring/jde-servers.md). L'exécution échoue dès qu'une instance n'a pas réussi ses contrôles. Détails : [`nomajde-jde-health`](../nomaflow/bundled-jobs.md#nomajde-jde-health).
+
+---
+
+## Montée de version et tests \{#upgrade-tests\}
+
+Trois autres tâches se trouvent dans leur propre dossier du menu : **Montée de version → Charger une liste d'objets Oracle** et **Montée de version → Construire l'analyse** — voir [Analyse de montée de version](./upgrade/analysis.md) —, et **Tests → Lancer les tests** — voir [Tests de non-régression](./tests.md#job).
 
 ---
 

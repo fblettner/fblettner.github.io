@@ -288,7 +288,7 @@
     "description": "The label for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Screens.link.generated-index.description": {
-    "message": "Construire → Écrans : relier un écran à ses requêtes, régler les colonnes, construire le dialogue, champs conditionnels, actions et hooks, onglets imbriqués, vues enregistrées.",
+    "message": "Écrans → Écrans et Menus : relier un écran à ses requêtes ou à ses points d'accès d'API, régler les colonnes, construire le dialogue, champs conditionnels, actions et hooks, onglets imbriqués, vues enregistrées, téléphone et tablette, et les menus.",
     "description": "The generated-index page description for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus": {
@@ -564,7 +564,7 @@
     "description": "The label for category 'Connectors & queries' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Connectors & queries.link.generated-index.description": {
-    "message": "Construire → Connecteurs : pools, connecteurs SQL et API, et leurs requêtes — générées depuis une table, écrites à la main, clonées, séquences et lookups, paramètres, variantes par dialecte.",
+    "message": "Données → Connecteurs : pools, connecteurs SQL et API, et leurs requêtes — générées depuis une table, écrites à la main, clonées, séquences et lookups, paramètres, variantes par dialecte.",
     "description": "The generated-index page description for category 'Connectors & queries' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus & apps": {
@@ -572,7 +572,7 @@
     "description": "The label for category 'Menus & apps' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus & apps.link.generated-index.description": {
-    "message": "Construire → Menus et applications : ce qu'est une application, l'arborescence du menu, les types d'entrées, les permissions, les traductions et les icônes.",
+    "message": "Écrans → Menus : ce qu'est une application, l'arborescence du menu, les types d'entrées, les permissions, les traductions et les icônes.",
     "description": "The generated-index page description for category 'Menus & apps' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dashboards & charts": {
@@ -596,7 +596,7 @@
     "description": "The generated-index page description for category 'Administration' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dashboards & charts.link.generated-index.description": {
-    "message": "Construire → Tableaux de bord et Construire → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
+    "message": "Analyse → Tableaux de bord et Analyse → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
     "description": "The generated-index page description for category 'Dashboards & charts' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Data Explorer": {
@@ -605,11 +605,11 @@
   },
   "sidebar.libertySidebar.category.Build": {
     "message": "Construire",
-    "description": "The label for category Build in sidebar libertySidebar"
+    "description": "The label for category 'Build' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Build.link.generated-index.description": {
-    "message": "Liberty Next → Construire : connecteurs et requêtes, dictionnaire, écrans, menus, tableaux de bord et graphiques, l'explorateur de données, l'assistant IA et les plugins.",
-    "description": "The generated-index page description for category Build in sidebar libertySidebar"
+    "message": "Liberty Next → Construire : le Studio — la carte d'une application, modifiée sur place — et l'Assistant de création d'écran.",
+    "description": "The generated-index page description for category 'Build' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Administer": {
     "message": "Administrer",
@@ -624,7 +624,7 @@
     "description": "The label for category Operate in sidebar libertySidebar"
   },
   "sidebar.libertySidebar.category.Operate.link.generated-index.description": {
-    "message": "Liberty Next → Exploiter : la page Surveillance — vue en direct, journal du serveur, usage de l'IA, rétention — et les points de santé. Les tâches sont décrites dans la documentation de Nomaflow.",
+    "message": "Liberty Next → Exploiter : les résultats des tests, la page Surveillance — vue en direct, journal du serveur, usage de l'IA, rétention — et les points de santé. Les tâches sont décrites dans la documentation de Nomaflow.",
     "description": "The generated-index page description for category Operate in sidebar libertySidebar"
   },
   "sidebar.libertySidebar.category.Deploy": {
@@ -642,5 +642,37 @@
   "sidebar.libertySidebar.category.Document.link.generated-index.description": {
     "message": "Liberty Next → Documenter : la référence développeur, les rapports de documentation, la ligne de commande et l'API REST.",
     "description": "The generated-index page description for category Document in sidebar libertySidebar"
+  },
+  "sidebar.libertySidebar.category.Data": {
+    "message": "Données",
+    "description": "The label for category 'Data' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Data.link.generated-index.description": {
+    "message": "Liberty Next → Données : les connecteurs, leurs requêtes et leurs points d'accès d'API, et le dictionnaire.",
+    "description": "The generated-index page description for category 'Data' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Logic": {
+    "message": "Logique",
+    "description": "The label for category 'Logic' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Logic.link.generated-index.description": {
+    "message": "Liberty Next → Logique : les services dessinés en flux, les tests de non-régression, l'assistant IA et les plugins.",
+    "description": "The generated-index page description for category 'Logic' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Insight": {
+    "message": "Analyse",
+    "description": "The label for category 'Insight' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Insight.link.generated-index.description": {
+    "message": "Liberty Next → Analyse : tableaux de bord et graphiques, et l'explorateur de données.",
+    "description": "The generated-index page description for category 'Insight' in sidebar 'libertySidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.Upgrade": {
+    "message": "Montée de version",
+    "description": "The label for category 'Upgrade' in sidebar 'nomajdeSidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.JD Edwards services (AIS)": {
+    "message": "Services JD Edwards (AIS)",
+    "description": "The label for category 'JD Edwards services (AIS)' in sidebar 'nomajdeSidebar'"
   }
 }
