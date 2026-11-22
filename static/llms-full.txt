@@ -26290,7 +26290,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Toolbar
 
-Above the grid, two rows: the **period**, the **direction**, **Exclude reviewed errors** and, at the right, **+ New Invoice**; then the **status by stage**. **+ New Invoice** is shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
+Above the grid, two rows: the **period**, the **direction**, **Exclude reviewed errors** and, at the right, **+ New Invoice**; then the **status by stage**. **+ New Invoice** is shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](./invoice-actions.md#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
 ### Period
 
@@ -26455,11 +26455,17 @@ The selection also covers **validation failures**: an invoice in *Validation fai
 
 Several invoices are reprocessed as **one batch per template**, in the background with its live log: their sources are staged in a working folder, the *Max threads* global setting bounds the parallelism and an invoice is never processed twice. A single invoice still runs on its own.
 
-### Resend and reprocess rules \{#resend-reprocess-rules\}
+### Export
+
+A small **Export** button in the toolbar exports the current view (filters applied) as a CSV file named `invoices.csv`.
+
+---
+
+## Resend and reprocess rules \{#resend-reprocess-rules\}
 
 The server checks these rules on every resend and every reprocess, whatever starts it: the invoice window, the list selection, the [IT dashboard](tech-dashboard.md#send-failed) cards, an [Auto-retry](../sync/scheduled-jobs/auto-retry.md) job, the command line or the [API](/nomaubl/api-reference).
 
-#### Resend — the stored UBL sent to the PA again
+### Resend — the stored UBL sent to the PA again
 
 | Condition | Rule |
 |---|---|
@@ -26473,9 +26479,9 @@ The invoice window hides **Resend to PA** whenever the server would refuse it: u
 
 A bulk resend — **Resend selected**, **Resend all N** on the dashboard, an Auto-retry job — selects the invoices (by status for the dashboard and Auto-retry: `9904` by default, or a list such as `9904,9907`), then applies the same rules to each invoice.
 
-The only opening in the protection is the [Fix buyer](#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option — sent only when the revalidation passes.
+The only opening in the protection is the [Fix buyer](./invoice-detail.md#fix-buyer) repair of a *Rejected* (`213`) invoice for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), through its *resend to the PA* option — sent only when the revalidation passes.
 
-#### Reprocess — two kinds, chosen from the status
+### Reprocess — two kinds, chosen from the status
 
 | Kind | Status | Reason code | Document setting | Repeatable |
 |---|---|---|---|---|
@@ -26493,15 +26499,31 @@ The send flag of the document type plays no part in the eligibility: a reprocess
 An invoice outside these rules — a `9904` for a reprint, a standard platform status for a resend — can only be moved on with **Set Status**. A `9905` is corrected, then validated again by the save or the full reprocess.
 :::
 
-### Export
+## Detail and actions
 
-A small **Export** button in the toolbar exports the current view (filters applied) as a CSV file named `invoices.csv`.
+- [Invoice detail](./invoice-detail.md) — the window that opens on a row: Summary (with *Fix buyer*), Parties, Lines, VAT, Notes, History and PDF tabs.
+- [Invoice actions](./invoice-actions.md) — *Set status*, *E-mail*, the invoice editor (create / edit / copy) and the resend confirmation.
 
 ---
 
-## Detail modal
+## Tips & best practices
 
-Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. At the right of the tabs, the **Reviewed** chip sets or clears the [review mark](#mark-reviewed) of an invoice in error. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
+- **Start with the period.** *Yesterday* is the typical morning view, a custom range covers month-end reconciliation; set the opening period once under [Default periods](../configuration/default-periods.md). Filters apply on top of the period.
+- **The stages are the fastest filter.** *To correct* and *Decision needed* with a non-zero count are usually the right place to start when chasing exceptions; the caret narrows the stage to one status.
+- **The lifecycle (History tab) is the source of truth.** It records every status the invoice has been in, with messages, rejection reasons and expected actions — the place to investigate disputes or PA-side decisions.
+- **Use the Seller actions banner.** The actions surfaced for `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` are the platform's recommended next step. They reduce a multi-step workflow (finding the customer, drafting the credit note, etc.) to a single click when the connector is configured.
+- **Set status only when needed.** Manual `Set status → DB` desynchronises the local record from the PA. Reserve it for clean-up after restoring backups or for statuses the lifecycle sweep cannot catch.
+- **Edit UBL, then save** is the canonical correction path — it rewrites the database record with the new UBL and re-submits to the PA. Avoid editing the source XML directly through *UBL Tools → XML Viewer* unless the data on disk is the authoritative one.
+- **Use Copy for recurring billing.** It pre-fills every party / line / VAT field; only the document number, dates, and any specific changes need to be edited.
+
+---
+
+## NomaUBL — Invoice detail
+Source: https://docs.nomana-it.fr/nomaubl/application/invoice-detail/
+
+The NomaUBL invoice detail window — Summary, Parties, Lines, VAT, Notes, History and PDF tabs; fix the buyer of an addressing reject, follow the lifecycle, resend, set a status.
+
+Clicking a row of the [E-Invoicing](./invoices.md) list opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. At the right of the tabs, the **Reviewed** chip sets or clears the [review mark](./invoices.md#mark-reviewed) of an invoice in error. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
 
 **Previous / next arrows** (and the ← → keys) in the header move through the invoices of the list without closing the window — the same order and filters as the table on screen — with a position indicator (e.g. `3 / 50`). Past the last invoice, navigation loops back to the first.
 
@@ -26520,11 +26542,11 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
   
   Tab content — depends on the active tab
 
-### Summary tab *(default)*
+## Summary tab *(default)*
 
 The Summary tab shows a coloured **status badge** at the top — with, under it, the status details and the **Rule set** the invoice was produced under (see [Rule sets](../ubl-tools/rule-sets.md)) — followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../management/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
-#### Fix buyer \{#fix-buyer\}
+### Fix buyer \{#fix-buyer\}
 
 The most frequent PA rejections are about the **buyer's identifiers** — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A **Fix buyer** button opens a compact form pre-filled from the stored UBL, with the [INSEE company search](./edirectory.md) and the PPF electronic-address picker, to correct just those fields without re-editing the whole invoice. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is **revalidated on the spot**, an audit event records the old and new values in the history, and an option **resends to the PA** when validation passes. The button appears only while the invoice is still correctable — before the PA has taken it over, or when it was **Rejected (213) for an addressing reason**: `ADR_ERR`, `REJ_ADR` (the platform's addressing control) or `DEST_INC` (recipient unknown in the directory). In those three cases the invoice never reached the customer, which makes the resend safe; every other PA-processed status stays locked. A repair whose validation raises no error also marks the invoice *Reviewed* in the list. The buyer electronic address (BT-49) keeps the scheme already on the document — `0225` when there is none. The correction is logged as a plain history entry (*Identifiants acheteur corrigés*), without triggering the notification rule of the current status again, and the outcome of the new validation (`9901` / `9902`) is added to the history whenever it differs from the latest event. The keys stored on the row when the document was first processed (alpha key, customer number, business unit, routing code) are kept; the same applies to a save from the edit window. Format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule apply — the same checks as the `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` endpoint in the [API reference](/nomaubl/api-reference).
 
@@ -26561,7 +26583,7 @@ The rest of the Summary tab presents collapsible groups:
 - **Payment** — payment means code, IBAN, account name, BIC, payment ID, payment terms.
 - **Document allowances / charges** — document-level discounts or charges with type, reason, amount, tax category.
 
-### Parties tab
+## Parties tab
 
 Three collapsible groups, populated from the UBL document:
 
@@ -26605,7 +26627,7 @@ A group with no data on the invoice is not displayed.
     
   
 
-### Lines tab
+## Lines tab
 
 A table of the invoice line items, one main row per line plus sub-rows that surface the additional information carried by the UBL.
 
@@ -26648,7 +26670,7 @@ Sub-rows appear under each main row for:
 
 When several lines share the same delivery group, document references (`BT-128`) or customer order number (`EXT-FR-FE-135`), a **delivery header**, a **document-reference header** or a **Customer Order Reference header** appears once at the top of that group rather than repeating on every line.
 
-### VAT tab
+## VAT tab
 
 A table of the VAT subtotals carried by the UBL: category code, rate, taxable base, VAT amount, currency, exemption code + label (when applicable).
 
@@ -26671,7 +26693,7 @@ A table of the VAT subtotals carried by the UBL: category code, rate, taxable ba
     Total6,500.00900.00EUR
   
 
-### Notes tab
+## Notes tab
 
 Document-level notes (`BT-22`). Each note appears as a card with a **prefix badge** (e.g. `PMD`, `PMT`, `REG`) and the free-text body. The prefix label is resolved from the *note-types* reference list; hovering on the badge shows the label.
 
@@ -26688,11 +26710,11 @@ Document-level notes (`BT-22`). Each note appears as a card with a **prefix badg
     Order PO-2026-042 confirmed by the buyer on 2026-04-15.
   
 
-### History tab
+## History tab
 
 Three sections in this tab:
 
-#### Action bar at the top
+### Action bar at the top
 
 | Button | Behaviour |
 |---|---|
@@ -26702,7 +26724,7 @@ Three sections in this tab:
 | **Download UBL** | Saves the archived UBL of the invoice. |
 | **Download CII** | Shown when the document has a [post-transform](../ubl-tools/post-transform.md): the archived UBL converted on demand, named after the post-transform (*Download converted file* when it has no name). |
 
-#### Lifecycle group
+### Lifecycle group
 
 The **lifecycle** is the audit trail of every status the invoice has been in. Each event shows:
 
@@ -26767,11 +26789,11 @@ The three refusal fields — **rejection reason**, **expected action** and **sta
     
   
 
-#### Validation errors group
+### Validation errors group
 
 Lists the validation errors (XSD / Schematron) that were recorded for this invoice. Each row carries the severity, the rule identifier and the human-readable message. Empty when the invoice validates cleanly.
 
-### PDF tab
+## PDF tab
 
 The PDF tab renders a generated PDF of the invoice inline (an `<iframe>` view). The bottom of the tab carries:
 
@@ -26782,9 +26804,16 @@ The PDF tab renders a generated PDF of the invoice inline (an `<iframe>` view). 
 
 ---
 
-## Action modals
+---
 
-### Set Status modal
+## NomaUBL — Invoice actions
+Source: https://docs.nomana-it.fr/nomaubl/application/invoice-actions/
+
+The NomaUBL invoice action windows — set a status, e-mail the PDF to the customer, create or edit an invoice in the editor, confirm a resend to the Plateforme Agréée.
+
+The windows below open from the [E-Invoicing](./invoices.md) list and from the [invoice detail](./invoice-detail.md) window.
+
+## Set Status modal
 
 Opens from the History tab's **Set status** button. Lets the user move an invoice to a chosen status — useful for manual corrections or for triggering a transition the platform itself did not pick up.
 
@@ -26840,7 +26869,7 @@ When **Target = DB** is selected, an orange notice reminds the user that the cha
 
 Click **Submit** to apply. A green banner confirms success; the modal closes after a short delay.
 
-### E-mail modal
+## E-mail modal
 
 Opens from the PDF tab. Lets the user send the invoice PDF to the customer via SMTP using the credentials configured in the *global* template.
 
@@ -26887,7 +26916,7 @@ The PDF currently shown in the PDF tab is automatically attached. If the PDF was
 
 While the e-mail is sending, an overlay covers the modal until the SMTP server confirms the send. A green banner indicates success; the modal closes automatically after ~2 s.
 
-### Create / Edit invoice modal \{#create-invoice\}
+## Create / Edit invoice modal \{#create-invoice\}
 
 Opens from **+ New Invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
 
@@ -26986,21 +27015,9 @@ The **Save** button at the bottom validates the input, writes to the database, g
 
 A **fullscreen toggle** in the header swaps between windowed and full-screen edit, useful for invoices with many lines.
 
-### Resend confirmation
+## Resend confirmation
 
-The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée, within the [resend rules](#resend-reprocess-rules) — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
-
----
-
-## Tips & best practices
-
-- **Start with the period.** *Yesterday* is the typical morning view, a custom range covers month-end reconciliation; set the opening period once under [Default periods](../configuration/default-periods.md). Filters apply on top of the period.
-- **The stages are the fastest filter.** *To correct* and *Decision needed* with a non-zero count are usually the right place to start when chasing exceptions; the caret narrows the stage to one status.
-- **The lifecycle (History tab) is the source of truth.** It records every status the invoice has been in, with messages, rejection reasons and expected actions — the place to investigate disputes or PA-side decisions.
-- **Use the Seller actions banner.** The actions surfaced for `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` are the platform's recommended next step. They reduce a multi-step workflow (finding the customer, drafting the credit note, etc.) to a single click when the connector is configured.
-- **Set status only when needed.** Manual `Set status → DB` desynchronises the local record from the PA. Reserve it for clean-up after restoring backups or for statuses the lifecycle sweep cannot catch.
-- **Edit UBL, then save** is the canonical correction path — it rewrites the database record with the new UBL and re-submits to the PA. Avoid editing the source XML directly through *UBL Tools → XML Viewer* unless the data on disk is the authoritative one.
-- **Use Copy for recurring billing.** It pre-fills every party / line / VAT field; only the document number, dates, and any specific changes need to be edited.
+The **Resend** button (in the History tab, or via Seller actions when status is `9904`/`9907`) opens a confirmation dialog before re-submitting the UBL to the Plateforme Agréée, within the [resend rules](./invoices.md#resend-reprocess-rules) — the document is transmitted immediately and its status moves to *Pending* (`9906`). After confirmation, the invoice is re-submitted; an inline banner reports success or the error returned by the PA. The lifecycle is updated to reflect the new submission.
 
 ---
 
@@ -27482,7 +27499,7 @@ Every E-Directory external call is made **server-side** — from the NomaUBL ser
 
 What matters for the rules:
 
-- **INSEE and `directory.peppol.eu` are fixed hostnames** — easy to whitelist. The INSEE entry also covers the invoice modal's client search and the [Fix buyer](./invoices.md#fix-buyer) search (same API).
+- **INSEE and `directory.peppol.eu` are fixed hostnames** — easy to whitelist. The INSEE entry also covers the invoice modal's client search and the [Fix buyer](./invoice-detail.md#fix-buyer) search (same API).
 - **The SML moved in 2026.** OpenPeppol took over the Service Metadata Locator and participant records now live in the `participant.sml.prod.tech.peppol.org` zone. NomaUBL queries it first and keeps the former `edelivery.tech.ec.europa.eu` zone as fallback. A DNS policy that only allowed the former zone must add the new one — otherwise most participants are no longer found.
 - **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open. Some corporate resolvers drop or mangle NAPTR queries: let the corporate resolver forward NAPTR queries for both zones, or set **Public DNS fallback** to `Y` in the [e-directory settings](../configuration/system/edirectory.md#peppol-lookup) and allow outbound DNS (port 53, UDP and TCP) to `8.8.8.8` and `1.1.1.1`. The fallback is **off by default**. A *no such name* answer from the server's resolver is final — an unregistered identifier is not retried elsewhere — and a failing public resolver is dropped for the rest of the lookup.
 - **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, set **Resolve platform via SMP** to `N`: the lookup stops at the SML answer and the *Plateforme* column shows the SMP host (`smp.pennylane.com`), which already names the provider — only its official name and seat are missing.
@@ -29667,7 +29684,7 @@ A resend accepts only the internal `99xx` statuses other than `9905`, `9911` and
 | `9907` | *PA import failed* | Yes. |
 | `9909` | *PA export failed* | Yes. |
 | `9905` | *Validation failed* | Not offered — a UBL that failed validation is never sent: correct the invoice, or run a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
-| `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoices.md#fix-buyer), which revalidates it and can resend it. |
+| `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoice-detail.md#fix-buyer), which revalidates it and can resend it. |
 
 ### Throttle
 
@@ -36027,7 +36044,7 @@ Source: https://docs.nomana-it.fr/nomaubl/configuration/entry-forms/
 
 NomaUBL entry forms: simpler invoice editors defined in Settings — per section and field shown, read-only or hidden, default values, required fields, rule-set warning — granted per role, with a picker in the invoice editor.
 
-An **entry form** is a simpler version of the [invoice editor](../application/invoices.md#create-invoice): for each section and field, it decides whether the field is shown, read-only or hidden, gives a default value and makes a field required. Forms are granted per role, so a customer-service team can enter invoices on a short form while accountants keep the complete editor.
+An **entry form** is a simpler version of the [invoice editor](../application/invoice-actions.md#create-invoice): for each section and field, it decides whether the field is shown, read-only or hidden, gives a default value and makes a field required. Forms are granted per role, so a customer-service team can enter invoices on a short form while accountants keep the complete editor.
 
 Access: **Settings → Add entry form**; forms are listed under **Views & UI** as *Entry form: name*. The editor stays in English, except the section and field names, which follow the invoice editor's language.
 

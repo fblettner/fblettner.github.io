@@ -26273,7 +26273,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Barre d'outils
 
-Au-dessus de la grille, deux rangées : la **période**, la **direction**, **Exclure les erreurs traitées** et, à droite, **+ Nouvelle facture** ; puis le **statut par étape**. **+ Nouvelle facture** est proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
+Au-dessus de la grille, deux rangées : la **période**, la **direction**, **Exclure les erreurs traitées** et, à droite, **+ Nouvelle facture** ; puis le **statut par étape**. **+ Nouvelle facture** est proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](./invoice-actions.md#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
 
 ### Période
 
@@ -26438,11 +26438,17 @@ La sélection couvre aussi les **échecs de validation** : une facture en *Éche
 
 Plusieurs factures sont retraitées en **un lot par modèle**, en arrière-plan avec son journal en direct : leurs sources sont déposées dans un dossier de travail, le réglage global *Max threads* limite le parallélisme et une facture n'est jamais traitée deux fois. Une facture seule est toujours traitée à part.
 
-### Règles de renvoi et de retraitement \{#resend-reprocess-rules\}
+### Export
+
+Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
+
+---
+
+## Règles de renvoi et de retraitement \{#resend-reprocess-rules\}
 
 Le serveur applique ces règles à chaque renvoi et à chaque retraitement, quel qu'en soit le point de départ : fenêtre facture, sélection dans la liste, cartes du [Tableau de bord IT](tech-dashboard.md#send-failed), tâche de [relance automatique](../sync/scheduled-jobs/auto-retry.md), ligne de commande ou [API](/nomaubl/api-reference).
 
-#### Renvoi — l'UBL enregistré redéposé sur la PA
+### Renvoi — l'UBL enregistré redéposé sur la PA
 
 | Condition | Règle |
 |---|---|
@@ -26456,9 +26462,9 @@ La fenêtre facture masque **Renvoyer à la PA** dans tous les cas que le serveu
 
 Un renvoi groupé — **Renvoyer la sélection**, **Tout renvoyer (N)** du tableau de bord, une tâche de relance automatique — sélectionne les factures (par statut pour le tableau de bord et la reprise auto : `9904` par défaut, ou une liste comme `9904,9907`), puis applique les mêmes règles à chaque facture.
 
-La seule exception à cette protection est la réparation [Corriger destinataire](#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA — envoi seulement si la revalidation réussit.
+La seule exception à cette protection est la réparation [Corriger destinataire](./invoice-detail.md#fix-buyer) d'une facture *Rejetée* (`213`) pour un motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`), avec son option de renvoi à la PA — envoi seulement si la revalidation réussit.
 
-#### Retraitement — deux variantes, choisies d'après le statut
+### Retraitement — deux variantes, choisies d'après le statut
 
 | Variante | Statut | Motif | Réglage du document | Renouvelable |
 |---|---|---|---|---|
@@ -26476,15 +26482,31 @@ L'indicateur d'envoi du type de document n'entre pas en compte : un retraitement
 Une facture hors de ces règles — une `9904` pour une réimpression, un statut standard de la plateforme pour un renvoi — ne peut évoluer que par **Définir statut**. Une `9905` se corrige, puis se valide de nouveau à l'enregistrement ou au retraitement complet.
 :::
 
-### Export
+## Détail et actions
 
-Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
+- [Détail d'une facture](./invoice-detail.md) — la fenêtre ouverte par un clic sur une ligne : onglets Résumé (avec *Corriger destinataire*), Parties, Lignes, TVA, Notes, Historique et PDF.
+- [Actions sur une facture](./invoice-actions.md) — *Définir statut*, *E-mail*, l'éditeur de facture (création, édition, copie) et la confirmation de redépôt.
 
 ---
 
-## Modale de détail
+## Conseils & bonnes pratiques
 
-Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran. À droite des onglets, la pastille **Traité** pose ou retire la [marque de suivi](#mark-reviewed) d'une facture en erreur.
+- **Commencer par la période.** *Hier* convient au contrôle du matin, une plage personnalisée couvre la clôture mensuelle ; la période d'ouverture se règle une fois dans [Périodes par défaut](../configuration/default-periods.md). Les autres filtres s'appliquent en plus.
+- **Les étapes sont le filtre le plus rapide.** *À corriger* et *Décision à prendre* avec un nombre non nul sont en général le bon point de départ pour traiter les exceptions ; la flèche restreint l'étape à un seul statut.
+- **Le cycle de vie (onglet Historique) est la source de vérité.** Il enregistre tous les statuts traversés, avec messages, motifs de rejet et actions attendues — c'est l'endroit pour instruire un litige ou retrouver une décision côté PA.
+- **Utiliser le bandeau Actions vendeur.** Les actions proposées sur `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` sont les étapes recommandées par la plateforme. Elles ramènent un workflow multi-étapes (retrouver le client, rédiger l'avoir, etc.) à un seul clic, à condition que le connecteur soit configuré.
+- **N'utiliser Modifier le statut qu'en cas de besoin.** Un *Modifier le statut → DB* manuel désynchronise le dossier local de la PA. À réserver aux nettoyages après restauration de sauvegarde ou aux statuts non couverts par le job de cycle de vie.
+- **Modifier l'UBL puis Enregistrer** est la méthode standard pour corriger une facture — l'enregistrement réécrit la facture en base et la redépose sur la PA. Éviter d'éditer directement le XML source via *Outils UBL → XML Viewer*, sauf si le fichier sur disque est la source de référence.
+- **Utiliser Copier pour la facturation récurrente.** La modale est pré-remplie avec toutes les parties, les lignes et la TVA ; seuls le numéro, les dates et les éventuels écarts restent à modifier.
+
+---
+
+## NomaUBL — Détail d'une facture
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/invoice-detail/
+
+La fenêtre de détail d'une facture NomaUBL — onglets Résumé, Parties, Lignes, TVA, Notes, Historique et PDF ; correction du destinataire d'un rejet d'adressage, suivi du cycle de vie, renvoi, changement de statut.
+
+Un clic sur une ligne de la liste [E-Invoicing](./invoices.md) ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran. À droite des onglets, la pastille **Traité** pose ou retire la [marque de suivi](./invoices.md#mark-reviewed) d'une facture en erreur.
 
 Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête passent d'une facture à l'autre de la liste sans fermer la fenêtre — même ordre et mêmes filtres que le tableau affiché — avec un indicateur de position (par ex. `3 / 50`). Après la dernière facture, la navigation reboucle sur la première.
 
@@ -26503,11 +26525,11 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
   
   Contenu de l'onglet — varie selon l'onglet actif
 
-### Onglet Résumé *(défaut)*
+## Onglet Résumé *(défaut)*
 
 L'onglet Résumé affiche un **badge de statut** coloré en haut — avec, en dessous, le détail du statut et le **jeu de règles** selon lequel la facture a été produite (voir [Jeux de règles](../ubl-tools/rule-sets.md)) — suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
-#### Corriger destinataire \{#fix-buyer\}
+### Corriger destinataire \{#fix-buyer\}
 
 Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document — `0225` à défaut. La correction est tracée par une simple entrée d'historique (*Identifiants acheteur corrigés*), sans redéclencher la règle de notification du statut courant, et le résultat de la nouvelle validation (`9901` / `9902`) s'ajoute à l'historique dès qu'il diffère du dernier événement. Les clés enregistrées sur la ligne au premier traitement du document (clé alpha, numéro client, unité opérationnelle, code d'acheminement) sont conservées ; il en va de même pour un enregistrement depuis la fenêtre de modification. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
 
@@ -26544,7 +26566,7 @@ Le reste de l'onglet Résumé se présente sous forme de groupes dépliables :
 - **Paiement** — code de moyen de paiement, IBAN, nom du compte, BIC, identifiant de paiement, conditions de paiement.
 - **Remises / charges au niveau document** — remises ou charges au niveau du document avec type, motif, montant, catégorie de TVA.
 
-### Onglet Parties
+## Onglet Parties
 
 Trois groupes dépliables remplis à partir du document UBL :
 
@@ -26588,7 +26610,7 @@ Un groupe sans donnée n'apparaît pas.
     
   
 
-### Onglet Lignes
+## Onglet Lignes
 
 Tableau des lignes de facture : une ligne principale par ligne, plus des sous-lignes qui détaillent les compléments présents dans le document UBL.
 
@@ -26631,7 +26653,7 @@ Des sous-lignes apparaissent sous chaque ligne principale pour :
 
 Quand plusieurs lignes partagent la même livraison, les mêmes références documentaires (`BT-128`) ou le même numéro de commande client (`EXT-FR-FE-135`), un **en-tête de livraison**, un **en-tête de référence documentaire** ou un **en-tête Référence Cde Client** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne.
 
-### Onglet TVA
+## Onglet TVA
 
 Tableau des sous-totaux TVA présents dans le document UBL : code de catégorie, taux, base imposable, montant de TVA, devise, code et libellé d'exonération (le cas échéant).
 
@@ -26654,7 +26676,7 @@ Tableau des sous-totaux TVA présents dans le document UBL : code de catégorie,
     Total6 500,00900,00EUR
   
 
-### Onglet Notes
+## Onglet Notes
 
 Notes au niveau document (`BT-22`). Chaque note s'affiche sous forme de carte avec un **badge de préfixe** (par ex. `PMD`, `PMT`, `REG`) suivi du texte libre. Le libellé du préfixe vient de la liste de référence *note-types* ; survoler le badge l'affiche.
 
@@ -26671,11 +26693,11 @@ Notes au niveau document (`BT-22`). Chaque note s'affiche sous forme de carte av
     Commande PO-2026-042 confirmée par l'acheteur le 2026-04-15.
   
 
-### Onglet Historique
+## Onglet Historique
 
 Trois sections dans cet onglet :
 
-#### Barre d'actions en haut
+### Barre d'actions en haut
 
 | Bouton | Comportement |
 |---|---|
@@ -26685,7 +26707,7 @@ Trois sections dans cet onglet :
 | **Télécharger UBL** | Enregistre l'UBL archivé de la facture. |
 | **Télécharger CII** | Affiché quand le document a une [post-transformation](../ubl-tools/post-transform.md) : l'UBL archivé converti à la demande, au nom de la post-transformation (*Télécharger fichier converti* quand elle n'a pas de nom). |
 
-#### Groupe Cycle de vie
+### Groupe Cycle de vie
 
 Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la facture. Chaque événement affiche :
 
@@ -26750,11 +26772,11 @@ Les trois champs de refus — **motif de rejet**, **action attendue** et **note 
     
   
 
-#### Groupe Erreurs de validation
+### Groupe Erreurs de validation
 
 Liste les erreurs de validation (XSD / Schematron) enregistrées sur cette facture. Chaque ligne donne la sévérité, l'identifiant de la règle et le message correspondant. Vide quand la facture passe sans erreur.
 
-### Onglet PDF
+## Onglet PDF
 
 L'onglet PDF affiche un PDF de la facture généré à la volée (vue `<iframe>`). En bas de l'onglet :
 
@@ -26765,9 +26787,16 @@ L'onglet PDF affiche un PDF de la facture généré à la volée (vue `<iframe>`
 
 ---
 
-## Modales d'action
+---
 
-### Modale de modification de statut
+## NomaUBL — Actions sur une facture
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/invoice-actions/
+
+Les fenêtres d'action sur une facture NomaUBL — modification du statut, envoi du PDF par e-mail au client, création ou édition dans l'éditeur de facture, confirmation du redépôt sur la Plateforme Agréée.
+
+Les fenêtres ci-dessous s'ouvrent depuis la liste [E-Invoicing](./invoices.md) et depuis la fenêtre de [détail d'une facture](./invoice-detail.md).
+
+## Modale de modification de statut
 
 Ouverte depuis le bouton **Modifier le statut** de l'onglet Historique. Permet de placer manuellement la facture sur un statut donné — utile pour corriger une erreur ou pour forcer une transition que la plateforme n'a pas remontée.
 
@@ -26823,7 +26852,7 @@ Quand **Cible = DB** est sélectionné, un encart orange rappelle que la modific
 
 Cliquer sur **Soumettre** pour appliquer. Un bandeau vert confirme le succès et la modale se ferme peu après.
 
-### Modale d'envoi d'e-mail
+## Modale d'envoi d'e-mail
 
 Ouverte depuis l'onglet PDF. Permet d'envoyer le PDF de la facture au client par SMTP, avec les identifiants configurés dans le template *global*.
 
@@ -26870,7 +26899,7 @@ Le PDF affiché dans l'onglet PDF est attaché automatiquement. Si le PDF n'a pa
 
 Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmation du serveur SMTP. Un bandeau vert confirme l'envoi ; la modale se ferme automatiquement après ~2 s.
 
-### Modale de création / édition de facture \{#create-invoice\}
+## Modale de création / édition de facture \{#create-invoice\}
 
 Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
 
@@ -26969,21 +26998,9 @@ Le bouton **Enregistrer** en bas valide la saisie, écrit en base, génère le d
 
 Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écran — pratique pour les factures qui ont beaucoup de lignes.
 
-### Confirmation de redépôt
+## Confirmation de redépôt
 
-Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée, dans le respect des [règles de renvoi](#resend-reprocess-rules) — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
-
----
-
-## Conseils & bonnes pratiques
-
-- **Commencer par la période.** *Hier* convient au contrôle du matin, une plage personnalisée couvre la clôture mensuelle ; la période d'ouverture se règle une fois dans [Périodes par défaut](../configuration/default-periods.md). Les autres filtres s'appliquent en plus.
-- **Les étapes sont le filtre le plus rapide.** *À corriger* et *Décision à prendre* avec un nombre non nul sont en général le bon point de départ pour traiter les exceptions ; la flèche restreint l'étape à un seul statut.
-- **Le cycle de vie (onglet Historique) est la source de vérité.** Il enregistre tous les statuts traversés, avec messages, motifs de rejet et actions attendues — c'est l'endroit pour instruire un litige ou retrouver une décision côté PA.
-- **Utiliser le bandeau Actions vendeur.** Les actions proposées sur `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` sont les étapes recommandées par la plateforme. Elles ramènent un workflow multi-étapes (retrouver le client, rédiger l'avoir, etc.) à un seul clic, à condition que le connecteur soit configuré.
-- **N'utiliser Modifier le statut qu'en cas de besoin.** Un *Modifier le statut → DB* manuel désynchronise le dossier local de la PA. À réserver aux nettoyages après restauration de sauvegarde ou aux statuts non couverts par le job de cycle de vie.
-- **Modifier l'UBL puis Enregistrer** est la méthode standard pour corriger une facture — l'enregistrement réécrit la facture en base et la redépose sur la PA. Éviter d'éditer directement le XML source via *Outils UBL → XML Viewer*, sauf si le fichier sur disque est la source de référence.
-- **Utiliser Copier pour la facturation récurrente.** La modale est pré-remplie avec toutes les parties, les lignes et la TVA ; seuls le numéro, les dates et les éventuels écarts restent à modifier.
+Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée, dans le respect des [règles de renvoi](./invoices.md#resend-reprocess-rules) — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
 
 ---
 
@@ -27465,7 +27482,7 @@ Tous les appels externes de l'E-Directory sont faits **côté serveur** — depu
 
 Ce qui compte pour les règles :
 
-- **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoices.md#fix-buyer) (même API).
+- **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoice-detail.md#fix-buyer) (même API).
 - **Le SML a changé de zone en 2026.** OpenPeppol a repris le Service Metadata Locator, et les enregistrements des participants se trouvent désormais dans la zone `participant.sml.prod.tech.peppol.org`. NomaUBL l'interroge en premier et garde l'ancienne zone `edelivery.tech.ec.europa.eu` en repli. Une politique DNS qui n'autorisait que l'ancienne zone doit ajouter la nouvelle — sinon la plupart des participants ne sont plus trouvés.
 - **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir. Certains résolveurs d'entreprise bloquent ou altèrent les requêtes NAPTR : laisser le résolveur d'entreprise relayer les requêtes NAPTR des deux zones, ou passer **Public DNS fallback** à `Y` dans les [réglages e-directory](../configuration/system/edirectory.md#peppol-lookup) et autoriser le DNS sortant (port 53, UDP et TCP) vers `8.8.8.8` et `1.1.1.1`. Ce repli est **désactivé par défaut**. Une réponse *nom inexistant* du résolveur du serveur est définitive — un identifiant non enregistré n'est pas réessayé ailleurs — et un résolveur public défaillant est écarté pour le reste de la recherche.
 - **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, passer **Resolve platform via SMP** à `N` : la recherche s'arrête à la réponse du SML et la colonne *Plateforme* affiche l'hôte SMP (`smp.pennylane.com`), qui désigne déjà la plateforme — seuls son nom officiel et son identifiant de siège manquent.
@@ -29654,7 +29671,7 @@ Un renvoi n'accepte que les statuts internes `99xx` autres que `9905`, `9911` et
 | `9907` | *Échec d'import par la PA* | Oui. |
 | `9909` | *Échec d'export par la PA* | Oui. |
 | `9905` | *Échec de validation* | Non proposé — un UBL en échec de validation n'est jamais envoyé : corriger la facture, ou lancer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
-| `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoices.md#fix-buyer), qui la revalide et peut la renvoyer. |
+| `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoice-detail.md#fix-buyer), qui la revalide et peut la renvoyer. |
 
 ### Cadencement
 
@@ -36022,7 +36039,7 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/entry-forms/
 
 Formulaires de saisie NomaUBL : éditeurs de facture simplifiés définis dans les Paramètres — champ par champ affiché, en lecture seule ou masqué, valeurs par défaut, champs obligatoires, alerte du jeu de règles — accordés par rôle, avec un sélecteur dans l'éditeur de facture.
 
-Un **formulaire de saisie** est une version simplifiée de l'[éditeur de facture](../application/invoices.md#create-invoice) : pour chaque section et chaque champ, il décide si le champ est affiché, en lecture seule ou masqué, lui donne une valeur par défaut et peut le rendre obligatoire. Les formulaires s'accordent par rôle : un service client saisit ses factures sur un formulaire court tandis que la comptabilité garde l'éditeur complet.
+Un **formulaire de saisie** est une version simplifiée de l'[éditeur de facture](../application/invoice-actions.md#create-invoice) : pour chaque section et chaque champ, il décide si le champ est affiché, en lecture seule ou masqué, lui donne une valeur par défaut et peut le rendre obligatoire. Les formulaires s'accordent par rôle : un service client saisit ses factures sur un formulaire court tandis que la comptabilité garde l'éditeur complet.
 
 Accès : **Paramètres → Add entry form** ; les formulaires figurent sous **Views & UI** en *Entry form: nom*. L'éditeur reste en anglais, à l'exception des noms de sections et de champs, qui suivent la langue de l'éditeur de facture.
 

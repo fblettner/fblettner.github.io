@@ -124,7 +124,7 @@ A resend accepts only the internal `99xx` statuses other than `9905`, `9911` and
 | `9907` | *PA import failed* | Yes. |
 | `9909` | *PA export failed* | Yes. |
 | `9905` | *Validation failed* | Not offered — a UBL that failed validation is never sent: correct the invoice, or run a [full reprocess](../../application/invoices.md#reprocess), which validates it again. |
-| `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoices.md#fix-buyer), which revalidates it and can resend it. |
+| `213` | *Rejected* | No — a platform status, refused by the resend and counted as failed. A `213` for an addressing reason (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) is reopened by [Fix buyer](../../application/invoice-detail.md#fix-buyer), which revalidates it and can resend it. |
 
 ### Throttle
 

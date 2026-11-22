@@ -124,7 +124,7 @@ Un renvoi n'accepte que les statuts internes `99xx` autres que `9905`, `9911` et
 | `9907` | *Échec d'import par la PA* | Oui. |
 | `9909` | *Échec d'export par la PA* | Oui. |
 | `9905` | *Échec de validation* | Non proposé — un UBL en échec de validation n'est jamais envoyé : corriger la facture, ou lancer un [retraitement complet](../../application/invoices.md#reprocess), qui le valide de nouveau. |
-| `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoices.md#fix-buyer), qui la revalide et peut la renvoyer. |
+| `213` | *Rejetée* | Non — statut de la plateforme, refusé par le renvoi et compté en échec. Une `213` pour motif d'adressage (`ADR_ERR`, `REJ_ADR`, `DEST_INC`) se rouvre par [Corriger destinataire](../../application/invoice-detail.md#fix-buyer), qui la revalide et peut la renvoyer. |
 
 ### Cadencement
 

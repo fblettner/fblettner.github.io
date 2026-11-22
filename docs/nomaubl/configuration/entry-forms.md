@@ -6,7 +6,7 @@ keywords: [NomaUBL, entry forms, invoice editor, simple form, required fields, d
 
 # Entry forms
 
-An **entry form** is a simpler version of the [invoice editor](../application/invoices.md#create-invoice): for each section and field, it decides whether the field is shown, read-only or hidden, gives a default value and makes a field required. Forms are granted per role, so a customer-service team can enter invoices on a short form while accountants keep the complete editor.
+An **entry form** is a simpler version of the [invoice editor](../application/invoice-actions.md#create-invoice): for each section and field, it decides whether the field is shown, read-only or hidden, gives a default value and makes a field required. Forms are granted per role, so a customer-service team can enter invoices on a short form while accountants keep the complete editor.
 
 Access: **Settings → Add entry form**; forms are listed under **Views & UI** as *Entry form: name*. The editor stays in English, except the section and field names, which follow the invoice editor's language.
 

@@ -542,7 +542,12 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/dashboard',
         'nomaubl/application/tech-dashboard',
         'nomaubl/application/statistics',
-        'nomaubl/application/invoices',
+        {
+          type: 'category',
+          label: 'E-Invoicing',
+          link: {type: 'doc', id: 'nomaubl/application/invoices'},
+          items: ['nomaubl/application/invoice-detail', 'nomaubl/application/invoice-actions'],
+        },
         'nomaubl/application/edocuments',
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',

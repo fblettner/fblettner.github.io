@@ -6,7 +6,7 @@ keywords: [NomaUBL, formulaires de saisie, éditeur de facture, formulaire simpl
 
 # Formulaires de saisie
 
-Un **formulaire de saisie** est une version simplifiée de l'[éditeur de facture](../application/invoices.md#create-invoice) : pour chaque section et chaque champ, il décide si le champ est affiché, en lecture seule ou masqué, lui donne une valeur par défaut et peut le rendre obligatoire. Les formulaires s'accordent par rôle : un service client saisit ses factures sur un formulaire court tandis que la comptabilité garde l'éditeur complet.
+Un **formulaire de saisie** est une version simplifiée de l'[éditeur de facture](../application/invoice-actions.md#create-invoice) : pour chaque section et chaque champ, il décide si le champ est affiché, en lecture seule ou masqué, lui donne une valeur par défaut et peut le rendre obligatoire. Les formulaires s'accordent par rôle : un service client saisit ses factures sur un formulaire court tandis que la comptabilité garde l'éditeur complet.
 
 Accès : **Paramètres → Add entry form** ; les formulaires figurent sous **Views & UI** en *Entry form: nom*. L'éditeur reste en anglais, à l'exception des noms de sections et de champs, qui suivent la langue de l'éditeur de facture.
 
