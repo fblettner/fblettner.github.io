@@ -26997,6 +26997,8 @@ Editing an existing invoice no longer flips its `cbc:CustomizationID` back to th
     
   
 
+### Sections of the editor
+
 The modal is split into vertical sections:
 
 - **Document** — invoice number, type, profile ID, contract / buyer / order references.
@@ -27010,6 +27012,8 @@ The modal is split into vertical sections:
 - **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`. Three quick-add buttons in the same block fill the **order references** of the line, all carried by `cac:OrderLineReference`: **Customer Order Reference** (the buyer's order number, EXT-FR-FE-135 — the key the PDF groups lines on), **Order number** (the seller's order number, EXT-FR-FE-144) and **Customer line no.** (the line number inside the buyer's order, BT-132). A fourth button, **Despatch advice**, adds the line's despatch advice reference and date (EXT-FR-FE-BG-07).
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
+
+### Saving
 
 The **Save** button at the bottom validates the input, writes to the database, generates the UBL document and submits it to the PA according to the e-invoicing template's settings. The modal closes after a successful save.
 

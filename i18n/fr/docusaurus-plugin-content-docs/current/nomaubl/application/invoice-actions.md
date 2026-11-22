@@ -198,6 +198,8 @@ Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` a
   </div>
 </div>
 
+### Sections de l'éditeur
+
 La modale est divisée en sections verticales :
 
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
@@ -211,6 +213,8 @@ La modale est divisée en sections verticales :
 - **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`. Trois boutons rapides du même bloc renseignent les **références de commande** de la ligne, toutes portées par `cac:OrderLineReference` : **Référence Cde Client** (numéro de commande de l'acheteur, EXT-FR-FE-135 — la clé de regroupement des lignes sur le PDF), **Numéro de commande** (numéro de commande du vendeur, EXT-FR-FE-144) et **N° ligne client** (numéro de la ligne dans la commande de l'acheteur, BT-132). Un quatrième bouton, **Avis d'expédition**, ajoute la référence et la date de l'avis d'expédition de la ligne (EXT-FR-FE-BG-07).
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
+
+### Enregistrement
 
 Le bouton **Enregistrer** en bas valide la saisie, écrit en base, génère le document UBL et le dépose sur la PA selon les paramètres du template *e-invoicing*. La modale se ferme après un enregistrement réussi.
 
