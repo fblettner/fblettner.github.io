@@ -170,7 +170,7 @@ Every screen is read-only and loads when opened. Each one asks the console for i
 | **Instances** | Every instance the console manages. | Instance, Type, State, Tools release, Host, JDE home. |
 | **Connected users** | The web and AIS sessions — and, on request, the enterprise server processes each user is connected to. | User, Session, Instance, Environment, Role, From, Open applications, Signed in at, Idle (seconds), Last active, Process. |
 | **Enterprise servers** | One row per enterprise server. | Instance, Host, Up for, Network jobs, Kernel jobs, Zombie processes, Security kernel users, Call object users, CPU, Memory. |
-| **Server processes** | Each kernel and network listener of the enterprise servers. | Process, Process id, Instance, Kind, Users, Connected, Outstanding requests, Messages received, Memory, CPU, Threads, Database connections, Open transactions, Started, Last message. |
+| **Server processes** | Each kernel and network listener of the enterprise servers. | Process, Process id, Instance, Kind, Process state (*Running* or *Zombie*, from the console's own status of the process), Users, Connected, Outstanding requests, Messages received, Memory, CPU, Threads, Database connections, Open transactions, Started, Last message. |
 | **Business functions** | The business function calls seen by each web server. | Business function, Calls, Average (ms), Longest (ms), Timeouts, Application errors, System errors, Total (ms), Shortest (ms), Instance, Enterprise server. |
 | **Web and AIS servers** | Each web and AIS node. | Instance, Node, Type, Up for, Online users, Sign-in, Java heap used (MB), Java heap maximum (MB), Java heap used (percent). |
 | **JDBj caches** | Each JDBj cache of the HTML servers. | Instance, Node, Cache, Items, Accesses, Hits, Misses, Hit ratio. |
@@ -213,7 +213,9 @@ A filter applies to the rows the console returned: it narrows what is shown, not
 
 ## The Server Manager connection \{#connection\}
 
-The screens use the `jde_server_manager` connector, the one the [health check](./jde-servers.md#job) already uses. In **Liberty Next → Data → Connectors**, open it and set the address of the console and the password of its account (`jde_admin` by default). The account's rights in Server Manager decide what it may read.
+The screens use the `jde_server_manager` connector, the one the [health check](./jde-servers.md#job) already uses. The connector holds no address and no account: it names the **`jde_server_manager` pool**, where the console is set once. In **Liberty Next → Administer → Pools**, open that pool (kind *HTTP server (an API)*) and set the address of the console's REST service with its account (`jde_admin` by default), its password and whether the TLS certificate is checked. The account's rights in Server Manager decide what it may read.
+
+At installation the pool can be filled from the server's environment instead: `JDE_SM_URL` (the address with its account) and `JDE_SM_VERIFY_SSL` (`true` by default). See [Pools](../../framework/connectors.md#pools).
 
 ---
 
@@ -243,7 +245,7 @@ Each screen shows to the roles that hold its menu entry. A raw service of the ca
 ## Tips & best practices \{#tips\}
 
 - Start with **Instances**: an instance that is not `RUNNING` explains an empty line in the other screens.
-- In **Server processes**, sort on **Outstanding requests** or **CPU** to find the kernel that holds a queue.
+- In **Server processes**, sort on **Outstanding requests** or **CPU** to find the kernel that holds a queue; sort on **Process state** to bring together the *Zombie* processes — those that ended without being cleaned up.
 - In **Business functions**, sort on **System errors** or **Timeouts** after a deployment: a function that fails on one web server only points at that server.
 - **Web and AIS servers** — a heap used close to its maximum over several refreshes is the signal to look at before the users call.
 - **JDBj caches** — a low **Hit ratio** just after a restart is normal; one that stays low points at a cache too small for what is used. Clear a cache after changing what it holds in JD Edwards (security, menus, data dictionary) rather than restarting the server.
@@ -255,4 +257,4 @@ Each screen shows to the roles that hold its menu entry. A raw service of the ca
 - [JDE Health Check](./jde-servers.md) — the checks kept over time and their alerts.
 - [Performance](./performance.md) and [Platform analysis](./platform-analysis.md) — the same console read as advice and as an analysis.
 - [JD Edwards services (AIS)](../ais/services.md) — the same approach for the AIS server.
-- [Overview — the home page](../home.md).
+- [Overview — the way in](../home.md).

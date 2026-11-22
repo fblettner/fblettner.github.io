@@ -1,12 +1,12 @@
 ---
 title: Saved analyses and dashboards
 description: "Keeping Data Explorer work in Liberty Next: saved analyses, private or shared, with an audience; dashboards of saved analyses with their own period and layout; Excel and PDF export; a menu entry for a shared analysis or dashboard (Add to a menu); the analyses and dashboards an app ships."
-keywords: [Liberty Next, Data Explorer, saved analysis, shared, audience, dashboard, tiles, layout, export, Excel, PDF]
+keywords: [Liberty Next, Data Explorer, saved analysis, find, shared, audience, dashboard, tiles, layout, export, Excel, PDF]
 ---
 
 # Saved analyses and dashboards
 
-The mode bar at the top of the explorer has two modes: **Analyses**, the editor with its saved analyses, and **Dashboards**, grids of saved analyses. Each mode shows how many items it holds.
+The mode bar at the top of the explorer has two modes: **Analyses**, the editor with its saved analyses, and **Dashboards**, grids of saved analyses. Each mode shows how many items the model holds; **Find**, beside them, looks in every model.
 
 ---
 
@@ -125,6 +125,18 @@ The mode bar at the top of the explorer has two modes: **Analyses**, the editor 
   <text x="1150" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">columns × height · 🗑</text>
   <line x1="1140" y1="267.0" x2="1050.0" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
 </svg>
+
+---
+
+## Find an analysis or a dashboard \{#find\}
+
+An analysis or a dashboard is saved under one model, and the picker of each mode lists those of the model shown. **Find**, beside *Analyses* and *Dashboards*, opens *Find an analysis or a dashboard*: every saved analysis and dashboard of the models the user may use — the shared ones and his own —, grouped under their application and model, the current one marked *the model shown*.
+
+- Typing narrows the list on the name, the description, the audience, the owner and the model; case and accents are ignored. **All**, **Analyses** and **Dashboards** keep one kind.
+- Each line gives the name, the audience and the description, *mine* on a private one, and the date it was last saved; the foot counts *N of M*.
+- A click opens it — switching first to its model when it is another.
+
+The model picker says what each model holds, in its label: *Sales orders (8 analyses, 1 dashboard)*; a model that holds nothing keeps its plain name. The list comes from `GET /api/explorer/saved`, without the definitions: opening an object reads it.
 
 ---
 

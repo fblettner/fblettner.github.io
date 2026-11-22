@@ -8,7 +8,7 @@ keywords: [Nomasx-1, security, LDAP, Active Directory, users without AD, orphan 
 
 The **Users without AD** screen lists every account known to a connected application that **cannot be matched** to a corporate LDAP / Active Directory entry. One line per `(Application, User)` pair.
 
-The match runs against two AD attributes: the `Description` (typically the HR matricule) and the `samAccountName` (the Windows login). When neither resolves to an AD entry, the row lands here.
+The match runs against two AD attributes: the `Description` (typically the HR matricule) and the `samAccountName` (the Windows login). When neither resolves to an AD entry, the row lands here. The directory compared with is the one collected for the applications of type `LDAP` declared in [Applications](../../settings/global/applications.md), whatever their ID.
 
 ---
 

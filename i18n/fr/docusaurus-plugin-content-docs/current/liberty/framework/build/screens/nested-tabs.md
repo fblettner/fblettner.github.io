@@ -45,7 +45,7 @@ Un onglet `nested_form` affiche, dans le dialogue, le **formulaire d'un autre é
 | **`form_screen`** *(obligatoire)* | L'identifiant de l'écran dont le formulaire est réutilisé. |
 | **`connector`** | Le connecteur de cet écran. Vide = le connecteur de l'écran parent. |
 | **`param_binds`** | Lie les valeurs du parent aux requêtes de l'écran réutilisé — en général `CUSTOMER_ID ← CUSTOMER_ID`. |
-| **`label`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | Comme sur tout onglet. |
+| **`label`**, **`l`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | Comme sur tout onglet — voir [Paramètres de l'onglet](./dialog-builder.md#tab-settings). |
 
 ### Comportement
 

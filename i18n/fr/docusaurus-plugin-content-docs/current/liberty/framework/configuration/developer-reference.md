@@ -208,7 +208,7 @@ Une commande présente son rôle, sa syntaxe avec **Copier**, les **Options de t
 
 Chaque entité de la configuration avec ce qu'elle utilise et ce qui l'utilise, de proche en proche : ce qu'atteint la modification d'un pool, d'une requête, d'un écran ou d'un élément du dictionnaire. Les liens sont ceux que suit l'analyse des dépendances du [Package](../build/packages.md).
 
-À gauche, les entités par nature — pools, connecteurs, requêtes, endpoints API, éléments du dictionnaire, listes, séquences, énumérations, écrans, éléments de menu, graphiques, tableaux de bord, actions partagées, modèles Explorer, tâches, règles de notification, blocs IA —, repliées par défaut, avec une recherche (`scope.nom`). **Inutilisées seulement** ne garde que les entités auxquelles rien ne fait référence — éléments de menu, tâches, règles de notification, pools, modèles Explorer et éléments du dictionnaire, ouverts ou atteints autrement, ne sont jamais comptés comme inutilisés —, et **Référencées mais non définies** liste les références à une entité inexistante.
+À gauche, les entités par nature — pools, connecteurs, requêtes, endpoints API, éléments du dictionnaire, listes, séquences, énumérations, écrans, éléments de menu, graphiques, tableaux de bord, services, modèles Explorer, tâches, règles de notification, blocs IA —, repliées par défaut, avec une recherche (`scope.nom`). **Inutilisées seulement** ne garde que les entités auxquelles rien ne fait référence — éléments de menu, tâches, règles de notification, pools, modèles Explorer et éléments du dictionnaire, ouverts ou atteints autrement, ne sont jamais comptés comme inutilisés —, et **Référencées mais non définies** liste les références à une entité inexistante.
 
 Une entité choisie présente :
 

@@ -206,7 +206,7 @@ Click a row → the panel on the right loads the form of the entry, in three tab
 | `label` | Yes | The sidebar text. |
 | `l` (Translations tab) | Yes | Per-language overrides. See [Translations and icons](./translations-and-icons.md). |
 | `icon` | Yes | One of the [sidebar icons](./translations-and-icons.md#icons). |
-| `type` | Yes | Dropdown. Blank = folder. Switching from leaf to folder clears `target` / `connector` / `params`. |
+| `type` | Yes | Dropdown: *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — see [Item types](./item-types.md). Blank = folder. Switching from leaf to folder clears `target` / `connector` / `params`. |
 | `connector` | Only for `query` / `endpoint` leaves | Blank = the app's own connector. |
 | `target` | Only for leaves | A SearchSelect populated with valid targets for the chosen `type` + `connector`. |
 | `params` | Only for leaves | Fixed parameters passed to the target when it opens. |

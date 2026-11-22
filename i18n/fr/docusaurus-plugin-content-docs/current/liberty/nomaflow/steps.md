@@ -21,13 +21,13 @@ Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent 
 | produit un fichier Excel ou PDF à partir d'une analyse enregistrée, d'un tableau de bord ou d'un rapport | **`report`** |
 | envoie un message, accompagné des fichiers de l'exécution | **`notify`** |
 
-Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types et insère l'étape à cet endroit ; un clic sur la carte d'une étape ouvre ses champs à côté du flux. Quelques clés n'existent que dans `jobs.toml` (signalées ci-dessous).
+Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types et insère l'étape à cet endroit ; un clic sur la carte d'une étape ouvre ses champs à côté du flux. Quelques clés n'existent que dans `jobs.toml` (signalées ci-dessous). Chaque liste déroulante du formulaire d'une étape s'ouvre avec sa recherche prête : la saisie filtre aussitôt, et une liste de lignes *code — description* est triée sur le code, une description se retrouvant en la tapant.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1320 562" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 822" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="nfst-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="nfst-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -35,7 +35,7 @@ Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types 
     <marker id="nfst-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="880" height="522" rx="14" fill="url(#nfst-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="880" height="782" rx="14" fill="url(#nfst-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">⛓</text>
   <text x="262" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tâche · sales-load</text>
   <text x="262" y="60" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Paramètres de la tâche + le pipeline d'étapes</text>
@@ -45,29 +45,40 @@ Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types 
   <text x="969" y="101" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">modifications non enregistrées</text>
   <rect x="979" y="86" width="101" height="22" rx="5" fill="url(#nfst-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="1029.5" y="100.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="240" y="122" width="470" height="400" rx="10" fill="#0b1020" stroke="#1f2937" strokeWidth="1"/>
-  <line x1="254" y1="140" x2="702" y2="140" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="162" x2="702" y2="162" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="184" x2="702" y2="184" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="206" x2="702" y2="206" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="228" x2="702" y2="228" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="250" x2="702" y2="250" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="272" x2="702" y2="272" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="294" x2="702" y2="294" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="316" x2="702" y2="316" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="338" x2="702" y2="338" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="360" x2="702" y2="360" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="382" x2="702" y2="382" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="404" x2="702" y2="404" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="426" x2="702" y2="426" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="448" x2="702" y2="448" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="470" x2="702" y2="470" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="492" x2="702" y2="492" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <line x1="254" y1="514" x2="702" y2="514" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
-  <rect x="614" y="132" width="84" height="22" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="626" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">−</text>
-  <text x="656" y="147" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">100%</text>
-  <text x="684" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="240" y="122" width="330" height="660" rx="10" fill="#0b1020" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="254" y1="140" x2="562" y2="140" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="162" x2="562" y2="162" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="184" x2="562" y2="184" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="206" x2="562" y2="206" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="228" x2="562" y2="228" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="250" x2="562" y2="250" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="272" x2="562" y2="272" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="294" x2="562" y2="294" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="316" x2="562" y2="316" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="338" x2="562" y2="338" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="360" x2="562" y2="360" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="382" x2="562" y2="382" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="404" x2="562" y2="404" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="426" x2="562" y2="426" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="448" x2="562" y2="448" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="470" x2="562" y2="470" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="492" x2="562" y2="492" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="514" x2="562" y2="514" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="536" x2="562" y2="536" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="558" x2="562" y2="558" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="580" x2="562" y2="580" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="602" x2="562" y2="602" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="624" x2="562" y2="624" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="646" x2="562" y2="646" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="668" x2="562" y2="668" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="690" x2="562" y2="690" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="712" x2="562" y2="712" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="734" x2="562" y2="734" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <line x1="254" y1="756" x2="562" y2="756" stroke="#263247" strokeWidth="1.6" strokeDasharray="1.6 20.4"/>
+  <rect x="474" y="132" width="84" height="22" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="486" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">−</text>
+  <text x="516" y="147" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">100%</text>
+  <text x="544" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">+</text>
   <rect x="256" y="180" width="72" height="26" rx="13" fill="rgba(74,158,255,0.12)" stroke="#334155" strokeWidth="1"/>
   <text x="270" y="197" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">▶</text>
   <text x="284" y="197" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Début</text>
@@ -76,55 +87,55 @@ Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types 
   <circle cx="343.0" cy="193" r="8" fill="#111827" stroke="#475569" strokeWidth="1"/>
   <text x="343.0" y="196.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
-  <rect x="362" y="169" width="150" height="48" rx="9" fill="#111827" stroke="#4a9eff" strokeWidth="1.6"/>
-  <rect x="359" y="166" width="156" height="54" rx="11" fill="none" stroke="rgba(74,158,255,0.30)" strokeWidth="3"/>
+  <rect x="362" y="169" width="140" height="48" rx="9" fill="#111827" stroke="#4a9eff" strokeWidth="1.6"/>
+  <rect x="359" y="166" width="146" height="54" rx="11" fill="none" stroke="rgba(74,158,255,0.30)" strokeWidth="3"/>
   <text x="372" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FILE_LOAD</text>
   <text x="372" y="197" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">load-sales</text>
-  <text x="372" y="210" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">? → sales.fact_sales</text>
-  </g>
-  <line x1="514" y1="193" x2="540" y2="193" stroke="#334155" strokeWidth="2"/>
-  <path d="M538,189 L544,193 L538,197 Z" fill="#334155"/>
-  <circle cx="527.0" cy="193" r="8" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="527.0" y="196.5" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <g>
-  <rect x="546" y="169" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="556" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL_QUERY</text>
-  <text x="556" y="197" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">refresh-totals</text>
-  <text x="556" y="210" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">sales.totals_refresh</text>
+  <text x="372" y="210" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">→ sales.fact_sales</text>
   </g>
   <line x1="256" y1="271" x2="282" y2="271" stroke="#334155" strokeWidth="2"/>
   <path d="M280,267 L286,271 L280,275 Z" fill="#334155"/>
   <circle cx="269.0" cy="271" r="8" fill="#111827" stroke="#475569" strokeWidth="1"/>
   <text x="269.0" y="274.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
-  <rect x="288" y="247" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="298" y="261" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOTIFY</text>
-  <text x="298" y="275" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
-  <text x="298" y="288" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">role:management · Sal…</text>
+  <rect x="288" y="247" width="140" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="298" y="261" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL_QUERY</text>
+  <text x="298" y="275" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">refresh-totals</text>
+  <text x="298" y="288" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">sales.totals_refresh</text>
   </g>
-  <line x1="440" y1="271" x2="466" y2="271" stroke="#334155" strokeWidth="2"/>
-  <path d="M464,267 L470,271 L464,275 Z" fill="#334155"/>
-  <circle cx="453.0" cy="271" r="8" fill="#111827" stroke="#475569" strokeWidth="1"/>
-  <text x="453.0" y="274.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <rect x="472" y="258" width="60" height="26" rx="13" fill="rgba(50,215,75,0.10)" stroke="#334155" strokeWidth="1"/>
-  <text x="486" y="275" fill="#4ade80" fontSize="9.5" fontFamily="system-ui, sans-serif">⚑</text>
-  <text x="500" y="275" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fin</text>
-  <rect x="477.0" y="207" width="112" height="200" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="489.0" y="226" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_copy</text>
-  <text x="489.0" y="245" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_query</text>
-  <text x="489.0" y="264" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">python</text>
-  <text x="489.0" y="283" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">ldap_sync</text>
-  <text x="489.0" y="302" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">http</text>
-  <text x="489.0" y="321" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">call_job</text>
-  <text x="489.0" y="340" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_load</text>
-  <text x="489.0" y="359" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_export</text>
-  <text x="489.0" y="378" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">report</text>
-  <text x="489.0" y="397" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">notify</text>
-  <rect x="724" y="122" width="356" height="400" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="738" y="134" width="61" height="16" rx="4" fill="#4ade80" fillOpacity="0.14" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="745" y="145.5" fill="#4ade80" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">file_load</text>
-  <text x="807" y="146" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">load-sales</text>
-  <text x="879" y="146" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">? → fact_sales</text>
+  <line x1="256" y1="349" x2="282" y2="349" stroke="#334155" strokeWidth="2"/>
+  <path d="M280,345 L286,349 L280,353 Z" fill="#334155"/>
+  <circle cx="269.0" cy="349" r="8" fill="#111827" stroke="#475569" strokeWidth="1"/>
+  <text x="269.0" y="352.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <g>
+  <rect x="288" y="325" width="140" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="298" y="339" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOTIFY</text>
+  <text x="298" y="353" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
+  <text x="298" y="366" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">role:management · Sal…</text>
+  </g>
+  <line x1="430" y1="349" x2="456" y2="349" stroke="#334155" strokeWidth="2"/>
+  <path d="M454,345 L460,349 L454,353 Z" fill="#334155"/>
+  <circle cx="443.0" cy="349" r="8" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="443.0" y="352.5" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="462" y="336" width="60" height="26" rx="13" fill="rgba(50,215,75,0.10)" stroke="#334155" strokeWidth="1"/>
+  <text x="476" y="353" fill="#4ade80" fontSize="9.5" fontFamily="system-ui, sans-serif">⚑</text>
+  <text x="490" y="353" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fin</text>
+  <rect x="387.0" y="363" width="112" height="200" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="399.0" y="382" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_copy</text>
+  <text x="399.0" y="401" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_query</text>
+  <text x="399.0" y="420" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">python</text>
+  <text x="399.0" y="439" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">ldap_sync</text>
+  <text x="399.0" y="458" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">http</text>
+  <text x="399.0" y="477" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">call_job</text>
+  <text x="399.0" y="496" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_load</text>
+  <text x="399.0" y="515" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_export</text>
+  <text x="399.0" y="534" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">report</text>
+  <text x="399.0" y="553" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">notify</text>
+  <rect x="584" y="122" width="496" height="660" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="598" y="134" width="61" height="16" rx="4" fill="#4ade80" fillOpacity="0.14" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="605" y="145.5" fill="#4ade80" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">file_load</text>
+  <text x="667" y="146" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">load-sales</text>
+  <text x="739" y="146" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">→ sales.fact_sales</text>
   <rect x="970" y="132" width="20" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
   <text x="980.0" y="146" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↑</text>
   <rect x="994" y="132" width="20" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
@@ -133,72 +144,140 @@ Dans l'éditeur de tâche, le **+** d'une liaison du flux propose les dix types 
   <text x="1028.0" y="146" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
   <rect x="1042" y="132" width="20" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
   <text x="1052.0" y="146" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <text x="738" y="172" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">NOM DE L'ÉTAPE</text>
-  <rect x="738" y="177" width="328" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="191.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">load-sales</text>
-  <rect x="738" y="208" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="755" y="217" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Si cette étape échoue, exécuter quand même les suivantes (…)</text>
-  <rect x="738" y="226" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="755" y="235" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Désactivée pour cette installation — ne s'exécute jamais (…)</text>
-  <text x="738" y="255" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHIER</text>
-  <text x="738" y="271" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CHEMIN ($&#123;PARAMS.X&#125; ET $&#123;RUN.ID&#125; ACCEPTÉS…)</text>
-  <rect x="738" y="276" width="328" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="290.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">/data/in/sales-$&#123;params.period&#125;.xlsx</text>
-  <text x="738" y="314" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DOSSIER SURVEILLÉ (SI LE CHEMIN EST VIDE)</text>
-  <rect x="738" y="319" width="216" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="333.5" fill="#475569" fontSize="8.5" fontFamily="ui-monospace, monospace">/data/in/sales</text>
-  <text x="962" y="314" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MOTIF</text>
-  <rect x="962" y="319" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="972" y="333.5" fill="#475569" fontSize="8.5" fontFamily="ui-monospace, monospace">∗.xlsx</text>
-  <text x="738" y="364" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FEUILLE</text>
-  <rect x="738" y="369" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="383.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales</text>
-  <text x="850" y="364" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIGNE D'EN-TÊTE</text>
-  <rect x="850" y="369" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="860" y="383.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">1</text>
-  <text x="962" y="364" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SÉPARATEUR CSV</text>
-  <rect x="962" y="369" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="972" y="383.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">vide = détection</text>
-  <text x="738" y="412" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CIBLE</text>
-  <text x="738" y="428" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
-  <rect x="738" y="433" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="447.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">sales</text>
-  <text x="830" y="447.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="850" y="428" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHÉMA</text>
-  <rect x="850" y="433" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="860" y="447.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">public</text>
-  <text x="962" y="428" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TABLE</text>
-  <rect x="962" y="433" width="104" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="972" y="447.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">fact_sales</text>
-  <text x="738" y="478" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Colonnes · Constantes · Mode de chargement · Garde-fous …</text>
+  <text x="598" y="172" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">NOM DE L'ÉTAPE</text>
+  <rect x="598" y="177" width="468" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="191.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">load-sales</text>
+  <rect x="598" y="206" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="615" y="215" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Si cette étape échoue, exécuter quand même les suivantes (…)</text>
+  <rect x="598" y="222" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="615" y="231" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Désactivée pour cette installation — ne s'exécute jamais (…)</text>
+  <text x="598" y="251" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">LE FICHIER</text>
+  <text x="598" y="267" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">D'OÙ VIENT LE FICHIER</text>
+  <rect x="598" y="272" width="468" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="286.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Donné par la personne qui lance le job</text>
+  <text x="1054" y="286.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="598" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">La fenêtre de lancement du job demande le fichier. Rien d'autre à régler ici.</text>
+  <text x="598" y="330.5" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">COMMENT LE LIRE</text>
+  <text x="598" y="346.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FEUILLE (EXCEL)</text>
+  <rect x="598" y="351.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="366.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales</text>
+  <text x="756" y="346.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIGNE DES TITRES</text>
+  <rect x="756" y="351.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="766" y="366.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">1</text>
+  <text x="914" y="346.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SÉPARATEUR (CSV)</text>
+  <rect x="914" y="351.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="366.0" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">vide : détecté</text>
+  <text x="598" y="380.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">NOMBRES ÉCRITS EN TEXTE</text>
+  <rect x="598" y="385.5" width="308" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="400.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Détecté (1,5 est lu 1.5 — précisez…</text>
+  <text x="894" y="400.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="914" y="380.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ENCODAGE</text>
+  <rect x="914" y="385.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="400.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">utf-8-sig</text>
+  <text x="598" y="430.5" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">LA TABLE QU'IL ALIMENTE</text>
+  <text x="598" y="446.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
+  <rect x="598" y="451.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="466.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">sales</text>
+  <text x="736" y="466.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="756" y="446.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHÉMA</text>
+  <rect x="756" y="451.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="766" y="466.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">public</text>
+  <text x="894" y="466.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="914" y="446.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TABLE</text>
+  <rect x="914" y="451.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="466.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">fact_sales</text>
+  <text x="598" y="486.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">COLONNES NOMMÉES AUTREMENT DANS LE FICHIER</text>
+  <text x="598" y="502.5" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Colonne de la table</text>
+  <text x="823" y="502.5" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Son titre dans le fichier, ou sa position</text>
+  <rect x="598" y="506.5" width="217" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="520.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">revenue</text>
+  <text x="805" y="520.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="823" y="506.5" width="217" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="833" y="520.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Chiffre d'affaires</text>
+  <rect x="1046" y="506.5" width="20" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="1056.0" y="520.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="598" y="534.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">VALEURS ÉCRITES SUR CHAQUE LIGNE</text>
+  <rect x="598" y="540.5" width="217" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="554.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">period</text>
+  <text x="805" y="554.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="823" y="540.5" width="217" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="833" y="554.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">$&#123;params.period&#125;</text>
+  <rect x="1046" y="540.5" width="20" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="1056.0" y="554.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="598" y="584.5" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">COMMENT IL EST CHARGÉ</text>
+  <text x="598" y="600.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIGNES DÉJÀ DANS LA TABLE</text>
+  <rect x="598" y="605.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="620.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Remplacées, pou…</text>
+  <text x="736" y="620.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="756" y="600.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REMPLACÉES SELON</text>
+  <rect x="756" y="605.5" width="308" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="766" y="620.0" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <rect x="762" y="608.5" width="56" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="769" y="620.0" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">period ✕</text>
+  <rect x="823" y="608.5" width="61" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="830" y="620.0" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">company ✕</text>
+  <text x="598" y="636.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">UNE CELLULE ILLISIBLE</text>
+  <rect x="598" y="641.5" width="308" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="656.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Arrête le chargement</text>
+  <text x="894" y="656.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="914" y="636.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAILLE DE LOT</text>
+  <rect x="914" y="641.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="656.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">10000</text>
+  <text x="598" y="686.5" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CONTRÔLES</text>
+  <text x="598" y="702.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REQUÊTE QUI REFUSE LE FICHIER</text>
+  <rect x="598" y="707.5" width="308" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="722.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">period_closed_get</text>
+  <text x="894" y="722.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="914" y="702.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LUE SUR</text>
+  <rect x="914" y="707.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="722.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">le connecteur de…</text>
+  <text x="1052" y="722.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="598" y="738.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">COLONNE À TOTALISER</text>
+  <rect x="598" y="743.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="758.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">revenue</text>
+  <text x="736" y="758.0" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="756" y="738.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TOTAL ATTENDU</text>
+  <rect x="756" y="743.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="766" y="758.0" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">@Totals!B2</text>
+  <text x="914" y="738.5" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ÉCART ACCEPTÉ</text>
+  <rect x="914" y="743.5" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="924" y="758.0" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">0</text>
   <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un clic sur une carte</text>
   <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre l'étape à côté du flux</text>
   <line x1="200" y1="137.0" x2="400" y2="173" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
-  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le menu +</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les dix types d'étape</text>
-  <line x1="200" y1="317.0" x2="477.0" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
-  <rect x="20" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Continue à la ligne</text>
-  <text x="30" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une longue tâche reste lisible</text>
-  <line x1="200" y1="457.0" x2="256" y2="271" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le menu +</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les dix types d'étape</text>
+  <line x1="200" y1="397.0" x2="387.0" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="20" y="600" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="615" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Colonnes de la table</text>
+  <text x="30" y="628" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">en liste, une fois la table nommée</text>
+  <line x1="200" y1="617.0" x2="598" y2="516.5" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
   <rect x="1120" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Icônes de l'étape</text>
   <text x="1130" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">monter, descendre, cloner, supprimer</text>
   <line x1="1120" y1="93.0" x2="1010" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
-  <rect x="1120" y="190" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cases communes</text>
-  <text x="1130" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">continuer après échec · désactivée</text>
-  <line x1="1120" y1="207.0" x2="1066" y2="229" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · D'où vient le fichier</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un choix, ses seuls champs</text>
+  <line x1="1120" y1="227.0" x2="1076" y2="248" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
   <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Champs du type</text>
-  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ici un file_load</text>
-  <line x1="1120" y1="307.0" x2="1066" y2="287" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
-  <rect x="1120" y="420" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cible</text>
-  <text x="1130" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">connecteur, schéma, table</text>
-  <line x1="1120" y1="437.0" x2="1066" y2="444" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">2 · Comment le lire</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">feuille, titres, séparateurs</text>
+  <line x1="1120" y1="307.0" x2="1076" y2="327.5" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="1120" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">3 · La table alimentée</text>
+  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colonnes renommées, valeurs ajoutées</text>
+  <line x1="1120" y1="397.0" x2="1076" y2="427.5" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="1120" y="500" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="515" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">4 · Les lignes existantes</text>
+  <text x="1130" y="528" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">conservées, ou remplacées</text>
+  <line x1="1120" y1="517.0" x2="1076" y2="581.5" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
+  <rect x="1120" y="610" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">5 · Ce qui est contrôlé</text>
+  <text x="1130" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête de refus, total</text>
+  <line x1="1120" y1="627.0" x2="1076" y2="718.5" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfst-arrow)"/>
 </svg>
 
 ---
@@ -256,59 +335,67 @@ Transfère les lignes d'une table source vers une table cible, éventuellement s
 
 Charge un classeur Excel (`.xlsx`, `.xlsm`) ou un fichier texte (`.csv`, `.txt`, `.tsv`) dans une table — selon une planification, sans personne au clavier, aux volumes d'une table de faits, et rejouable pour une période sans toucher aux autres.
 
-### Le fichier
+Le formulaire de l'étape pose cinq questions, dans l'ordre où on se les pose — **Le fichier**, **Comment le lire**, **La table qu'il alimente**, **Comment il est chargé**, **Contrôles**. Chaque champ porte un libellé court, et son rôle est écrit dessous.
 
-Le fichier vient, par ordre de priorité :
+### Le fichier \{#file-load-source\}
 
-1. **d'un fichier choisi au lancement de la tâche** — la fenêtre **Exécuter avec des paramètres** affiche un sélecteur de fichier pour chaque étape `file_load` (la fenêtre s'ouvre pour toute tâche qui en contient une), de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md), pour les étapes sans `path` ni dossier surveillé ;
-2. **de `path`** — un chemin sur le serveur, qui peut contenir `${params.x}` (un paramètre d'exécution), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx` ;
-3. **d'un dossier surveillé** — `watch_dir` et `watch_pattern` (`*.xlsx`) : chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur.
+**D'où vient le fichier** est un choix unique, qui n'affiche que ses propres champs :
+
+| Choix | Champs | Remarques |
+|---|---|---|
+| *Donné par la personne qui lance le job* | — | La fenêtre de lancement demande le fichier : **Exécuter avec des paramètres** affiche un sélecteur de fichier pour chaque étape de ce type, de même que la page de la tâche ouverte [depuis le menu d'une application](./jobs/run-from-menu.md). Rien d'autre à régler. |
+| *Un fichier sur le serveur* | **Fichier sur le serveur** (`path`) | Son chemin complet, qui peut contenir `${params.x}` (une valeur donnée au lancement), `${run.id}` et `${job.id}` : `/data/in/sales-${params.period}.xlsx`. |
+| *Un dossier surveillé* | **Dossier** (`watch_dir`), **Fichiers à prendre** (`watch_pattern`, `*` par défaut) | Chaque fichier correspondant est chargé dans l'ordre des noms, chacun dans sa propre transaction, puis déplacé dans son sous-dossier `done/` ou `failed/` sous un nom horodaté. Un fichier en échec arrête l'exécution ; les fichiers suivants restent dans le dossier. Un dossier vide n'est pas une erreur. |
+
+Choisir une source vide les champs des autres. Un fichier donné au lancement l'emporte toujours.
+
+### Comment le lire \{#file-load-reading\}
 
 | Champ | Défaut | Remarques |
 |---|---|---|
-| `sheet` | première feuille | Un nom ou un numéro (1 = la première). |
-| `header_row` | `1` | La ligne des en-têtes de colonnes ; les données commencent en dessous. Les lignes vides sont ignorées. |
-| `delimiter` | détecté | Séparateur CSV ; détecté parmi `;` `,` tabulation `|` s'il est vide. |
-| `encoding` | `utf-8-sig` | CSV uniquement. |
-| `decimal_separator` — **Nombres écrits en texte** | *Détecter* | La façon dont le fichier écrit un nombre stocké en texte : *1,234.56 — un point pour les décimales* ou *1.234,56 — une virgule pour les décimales* ; l'autre caractère sert alors de séparateur de milliers. Les cellules d'un tableur typées comme nombres sont lues telles quelles. |
+| **Feuille (Excel)** — `sheet` | la première | Un nom ou un numéro (1 = la première). |
+| **Ligne des titres de colonnes** — `header_row` | `1` | Les données commencent en dessous. Les lignes vides sont ignorées. |
+| **Séparateur (CSV)** — `delimiter` | détecté | Détecté parmi `;` `,` tabulation `\|` s'il est vide. |
+| **Nombres écrits en texte** — `decimal_separator` | *Détecté* | La façon dont le fichier écrit un nombre stocké en texte : *1,234.56 — un point pour les décimales* ou *1.234,56 — une virgule pour les décimales* ; l'autre caractère sert alors de séparateur de milliers. Les cellules d'un tableur typées comme nombres sont lues telles quelles. |
+| **Encodage** — `encoding` | `utf-8-sig` | CSV uniquement. |
 
-### La cible
-
-| Champ | Remarques |
-|---|---|
-| `target` = `{connector, schema, table}` | Un connecteur SQL ; la table doit exister. |
-| `columns` | Colonne cible ← en-tête du fichier ou position (`#3`). Les en-têtes se retrouvent sans tenir compte de la casse, des espaces, de `_` et de `-` ; les colonnes non citées se retrouvent par leur nom. |
-| `constants` | Colonne cible ← valeur, pour ce que le fichier ne porte pas : `period = "${params.period}"`, `batch_id = "${run.id}"`. |
-
-Chaque cellule est convertie au type de sa colonne cible : entiers, décimaux, dates (`2026-10-27`, `27/10/2026`, `27.10.2026`, `20261027`, et dates Excel), booléens (`1`, `true`, `yes`, `oui`…), texte. Un nombre saisi comme texte ne retrouve pas les zéros de tête que le tableur a déjà retirés.
-
-Un nombre écrit en texte suit le réglage **Nombres écrits en texte**. Les espaces et les apostrophes entre les chiffres sont toujours des séparateurs de milliers. Avec *Détecter* :
+Un nombre écrit en texte suit le réglage **Nombres écrits en texte**. Les espaces et les apostrophes entre les chiffres sont toujours des séparateurs de milliers. Avec *Détecté* :
 
 - quand un point et une virgule sont présents, le dernier est le séparateur décimal — `1.234,56` et `1,234.56` donnent tous deux 1234,56 ;
 - plusieurs occurrences du même caractère sont des séparateurs de milliers — `1,234,567` ;
 - une occurrence unique est le séparateur décimal — `12,5` et `12.5` donnent tous deux 12,5 — sauf dans une colonne d'entiers, où les groupes de trois chiffres sont des milliers : `1,000` donne 1000.
 
-*Détecter* ne peut pas trancher le sens de `1,000` dans une colonne décimale — mille, ou un — et le lit comme 1 : il faut alors préciser le séparateur du fichier s'il écrit ainsi les milliers.
+*Détecté* ne peut pas trancher le sens de `1,000` dans une colonne décimale — mille, ou un — et le lit comme 1 : il faut alors préciser le séparateur du fichier s'il écrit ainsi les milliers.
 
-### Mode de chargement
-
-| Champ | Choix |
-|---|---|
-| `load_mode` | `append` (défaut) ajoute les lignes. `replace_partition` supprime d'abord les lignes des partitions présentes dans le fichier, puis insère — **en une seule transaction** : un chargement en échec laisse les données précédentes en place, et un mois corrigé ne remplace que ce mois. |
-| `partition_by` | Les colonnes de partition (`period, company`) — obligatoires avec `replace_partition`. Les partitions viennent des constantes quand elles couvrent toutes les colonnes, sinon des valeurs distinctes trouvées dans le fichier. |
-| `on_error` | `fail` (défaut) : la première cellule invalide fait échouer l'étape et cite la ligne. `skip` : les lignes invalides sont comptées comme rejetées et écrites dans un CSV (fichier, ligne, motif) proposé dans le détail de l'exécution. |
-| `batch_size` | `10000` lignes par insertion. |
-
-### Garde-fous
+### La table qu'il alimente \{#file-load-table\}
 
 | Champ | Remarques |
 |---|---|
-| `refuse_query` | Une requête nommée lancée avant toute écriture, avec les paramètres d'exécution et les constantes comme paramètres liés. Avec `partition_by`, elle s'exécute une fois par partition présente dans le fichier, les colonnes de partition servant de paramètres liés (`:YEAR`, `:MONTH`, `:COMPANY_CODE`) : la garde suit le fichier, et non un paramètre saisi au lancement. Si elle renvoie une ligne, le chargement est refusé et la première colonne en donne le motif : *période 2026-02 clôturée*. `refuse_connector` : son connecteur, celui de la cible par défaut. |
-| `control_column` + `control_total` | La colonne est sommée sur les lignes chargées et comparée à une valeur, à `${params.total}` ou à une cellule du fichier (`@B2`, `@Totaux!B2`), à `control_tolerance` près. Un écart annule le chargement du fichier et cite les deux montants. |
+| **Connecteur**, **Schéma**, **Table** — `target` | Un connecteur SQL ; la table doit exister. Une fois la table nommée, ses colonnes sont proposées en liste dans les champs suivants. |
+| **Colonnes nommées autrement dans le fichier** — `columns` | Des lignes **Colonne de la table** et **Son titre dans le fichier, ou sa position** (`#3` pour un fichier sans titres). Une colonne qui porte le même nom dans le fichier et dans la table est reconnue d'elle-même : seules les autres sont à indiquer. Les titres se retrouvent sans tenir compte de la casse, des espaces, de `_` et de `-`. **Ajouter une colonne** ajoute une ligne. |
+| **Valeurs écrites sur chaque ligne** — `constants` | Des lignes **Colonne de la table** et **Valeur**, pour une colonne que le fichier ne contient pas : `${run.id}` (le numéro de l'exécution), `${params.period}` (une valeur donnée au lancement) ou un texte fixe. **Ajouter une valeur** ajoute une ligne. |
+
+Chaque cellule est convertie au type de sa colonne : entiers, décimaux, dates (`2026-10-27`, `27/10/2026`, `27.10.2026`, `20261027`, et dates Excel), booléens (`1`, `true`, `yes`, `oui`…), texte. Un nombre saisi comme texte ne retrouve pas les zéros de tête que le tableur a déjà retirés.
+
+### Comment il est chargé \{#file-load-mode\}
+
+| Champ | Choix |
+|---|---|
+| **Lignes déjà dans la table** — `load_mode` | *Conservées — le fichier s'y ajoute* (`append`, par défaut). *Remplacées, pour ce que le fichier contient* (`replace_partition`) : les lignes de la table qui ont les mêmes valeurs que le fichier dans les colonnes **Remplacées selon** sont supprimées, puis le fichier est chargé — **en une seule transaction** : un chargement en échec laisse les données précédentes en place, et un mois corrigé ne remplace que ce mois. |
+| **Remplacées selon** — `partition_by` | Les colonnes qui délimitent ce qui est remplacé (`period`, `company`), choisies parmi les colonnes de la table — obligatoires avec *Remplacées*. Les valeurs viennent des valeurs écrites sur chaque ligne quand elles couvrent toutes ces colonnes, sinon des valeurs distinctes trouvées dans le fichier. |
+| **Une cellule illisible** — `on_error` | *Arrête le chargement* (`fail`, par défaut) : la première cellule invalide fait échouer l'étape et cite la ligne. *Sa ligne est écartée, et comptée comme rejetée* (`skip`) : les lignes invalides sont écrites dans un CSV (fichier, ligne, motif) proposé dans le détail de l'exécution. |
+| **Taille de lot** — `batch_size` | `10000` lignes par insertion. |
+
+### Contrôles \{#file-load-checks\}
+
+| Champ | Remarques |
+|---|---|
+| **Requête qui refuse le fichier** — `refuse_query`, **Lue sur** — `refuse_connector` | Une requête, choisie parmi les requêtes de lecture du connecteur (**Lue sur** : le connecteur de la table par défaut), exécutée avant toute écriture. Elle reçoit les valeurs données au lancement et les valeurs écrites sur chaque ligne. Avec **Remplacées selon**, elle s'exécute une fois pour chaque jeu de valeurs présent dans le fichier, ces colonnes servant de paramètres liés (`:YEAR`, `:MONTH`, `:COMPANY_CODE`) : le contrôle suit le fichier, et non une valeur saisie au lancement. Si elle renvoie une ligne, le chargement est refusé et la première colonne donne le motif affiché : *période 2026-02 clôturée*. |
+| **Colonne à totaliser** — `control_column`, **Total attendu** — `control_total`, **Écart accepté** — `control_tolerance` | La colonne, choisie parmi celles de la table, est additionnée sur les lignes chargées et comparée au total attendu : un nombre, `${params.total}`, ou une cellule du fichier (`@B2`, `@Totaux!B2`). Un autre total, au-delà de l'écart accepté, annule le chargement et cite les deux montants. |
 
 ### Dans l'exécution
 
-Le détail de l'exécution affiche *N read · N inserted · N rejected* et, quand des lignes ont été rejetées, **Rejected rows (csv)** pour les télécharger. Le journal ajoute les partitions remplacées et les lignes supprimées.
+Le détail de l'exécution affiche *N lues · N insérées · N rejetées* et, quand des lignes ont été rejetées, **Lignes rejetées (csv)** pour les télécharger. Le journal ajoute les partitions remplacées et les lignes supprimées.
 
 Les fichiers envoyés et les fichiers de rejets vont dans la zone de travail des tâches, `.nomaflow/files` à côté de la configuration ; un envoi est limité à 200 Mo.
 
@@ -332,12 +419,77 @@ control_total = "@Totaux!B2"
 
 ## Python — `python` \{#python\}
 
-Appelle une fonction d'un plugin : `callable = "paquet.module:fonction"`.
+Appelle une fonction du plugin d'une application.
 
 | Champ | Remarques |
 |---|---|
-| `callable` | `module.chemin:fonction` — forme vérifiée à l'enregistrement, import au lancement de l'étape. |
-| `op_kwargs` | Les arguments passés à la fonction, fusionnés par-dessus les paramètres partagés de la tâche. |
+| **Fonction** — `callable` | Choisie dans la liste des fonctions livrées par les applications : voir ci-dessous. Enregistrée sous la forme `module.chemin:fonction` — forme vérifiée à l'enregistrement, import au lancement de l'étape. |
+| **Valeurs données à la fonction** — `op_kwargs` | Des lignes nom / valeur passées à la fonction, fusionnées par-dessus les paramètres partagés de la tâche. |
+
+**Le sélecteur de fonction** est le même partout où une fonction se choisit — cette étape, l'étape fonction d'un [service](../framework/build/services.md), un point d'accès servi par une fonction, un outil de l'assistant, les étapes exécutées après un paquet de modifications :
+
+<svg viewBox="0 0 1200 398" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="nfcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfcp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfcp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfcp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="358" rx="14" fill="url(#nfcp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#c084fc" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">python</text>
+  <text x="292" y="46" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">refresh-totals</text>
+  <text x="240" y="74" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FONCTION</text>
+  <rect x="240" y="80" width="720" height="24" rx="5" fill="#0a0e1a" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="250" y="96" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_refresh_totals</text>
+  <text x="352.24" y="96" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Rebuild the monthly totals from the loaded sales</text>
+  <text x="946" y="96" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="240" y="110" width="720" height="216" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="248" y="118" width="704" height="22" rx="5" fill="#0a0e1a" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="258" y="133" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Rechercher ou saisir une valeur…</text>
+  <line x1="258" y1="123" x2="258" y2="136" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="254" y="164" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SALES · LOADS</text>
+  <text x="254" y="187" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_load_items</text>
+  <text x="334.68" y="187" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Load the item file into the items table</text>
+  <text x="254" y="209" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_refresh_periods</text>
+  <text x="364.13" y="209" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Rebuild the period rows from the loaded sales</text>
+  <rect x="246" y="217" width="708" height="20" rx="4" fill="rgba(74,158,255,0.14)"/>
+  <text x="254" y="231" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_refresh_totals</text>
+  <text x="358.24" y="231" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Rebuild the monthly totals from the loaded sales</text>
+  <text x="254" y="252" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SALES · REPORTS</text>
+  <text x="254" y="275" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_month_digest</text>
+  <text x="346.46" y="275" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The monthly digest: revenue by business unit</text>
+  <text x="254" y="296" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">STOCK · CHECKS</text>
+  <text x="254" y="319" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">j_negative_stock</text>
+  <text x="358.24" y="319" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">List the items whose stock is below zero</text>
+  <text x="240" y="348" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">sales.loads:j_refresh_totals</text>
+  <text x="393.56" y="348" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">— Rebuild the monthly totals from the loaded sales</text>
+  <text x="240" y="364" fill="#475569" fontSize="8" fontStyle="italic" fontFamily="system-ui, sans-serif">(sous le champ, liste fermée : ce qui est enregistré, et la description complète)</text>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La saisie filtre aussitôt</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la recherche a le focus</text>
+  <line x1="200" y1="87.0" x2="248" y2="129" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application · module</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un groupe chacun, par nom</text>
+  <line x1="200" y1="187.0" x2="254" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est enregistré</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">module:fonction, description</text>
+  <line x1="200" y1="317.0" x2="240" y2="344" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1000" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La fonction choisie</text>
+  <text x="1010" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">son application en tête</text>
+  <line x1="1000" y1="87.0" x2="930" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1000" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nom et rôle</text>
+  <text x="1010" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">triés par nom</text>
+  <line x1="1000" y1="217.0" x2="920" y2="227" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+</svg>
+
+- la liste est **regroupée par application et par module** ; chaque ligne donne le nom de la fonction et son rôle en clair, dans l'ordre des noms ; l'application de la fonction déjà choisie vient en tête ;
+- à l'ouverture de la liste, la recherche a le focus : la saisie filtre aussitôt, sur le nom ou la description ;
+- sous le champ figurent ce qui est enregistré (`module:fonction`) et la description complète ; un nom absent de la liste reste saisissable, et la ligne du dessous indique *absente des fonctions livrées par les applications : vérifiez le nom*.
 
 La fonction reçoit ses arguments par mot-clé et, quand elle les déclare par leur nom, `connectors` (le registre des connecteurs), `ctx` (l'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`) et `settings`. Elle peut être `async` ou non. Sa valeur de retour : un `int` donne le nombre de lignes modifiées, un `dict` est conservé comme détail de l'étape, `None` convient ; une exception fait échouer l'étape. Pour écrire dans le journal de l'exécution, utiliser un logger d'un espace de noms enregistré. Le contrat complet se trouve dans [Écrire un callable](../framework/build/plugins/write-a-callable.md).
 
@@ -362,12 +514,13 @@ Lit des entrées d'un annuaire LDAP et lance une requête d'écriture d'un conne
 
 | Champ | Remarques |
 |---|---|
-| `server` | `ldaps://ad.example.com:636`. |
-| `bind_dn`, `bind_password` | Le compte de lecture ; écrire le mot de passe `${LDAP_PASSWORD}`. |
-| `search_base`, `search_filter` | Où et quoi chercher : `DC=example,DC=com`, `(objectClass=user)`. |
-| `attributes` | Les attributs à lire. |
-| `target_connector`, `target_query` | La requête d'écriture lancée pour chaque entrée. |
-| `mapping` | Attribut LDAP → paramètre de la requête. Un attribut absent donne `NULL`. |
+| **Pool d'annuaire** (`pool`) | Un [pool de type annuaire LDAP](../framework/connectors.md#pool-ldap), réglé dans Liberty Next → Administrer → Pools : son serveur, son compte et sa base sont utilisés, et les trois champs suivants deviennent inutiles — le formulaire les masque. |
+| **Serveur LDAP** (`server`) | Sans pool : `ldaps://ad.example.com:636`. |
+| **DN de connexion**, **Mot de passe de connexion** (`bind_dn`, `bind_password`) | Sans pool : le compte de lecture ; écrire le mot de passe `${LDAP_PASSWORD}`. |
+| **Base de recherche**, **Filtre de recherche** (`search_base`, `search_filter`) | Où et quoi chercher : `DC=example,DC=com`, `(objectClass=user)`. Avec un pool, une base de recherche vide reprend le DN de base du pool ; si le pool n'en a pas, l'étape échoue en demandant la base de recherche. |
+| **Attributs** (`attributes`) | Les attributs à lire. |
+| **Connecteur cible**, **Requête cible** (`target_connector`, `target_query`) | La requête d'écriture lancée pour chaque entrée. |
+| **Correspondance attribut → colonne** (`mapping`) | Attribut LDAP → paramètre de la requête. Un attribut absent donne `NULL`. |
 
 Enregistre le nombre d'entrées lues et de lignes écrites.
 
@@ -528,7 +681,7 @@ Produit un document dans la zone de travail de l'exécution : une [analyse ou un
 | **Modèle d'exploration**, **Analyses** / **Tableaux de bord** | Le modèle, puis l'une de ses analyses ou l'un de ses tableaux de bord **partagés**. Un élément privé n'est pas proposé. |
 | **Rapport** | Pour un rapport de plugin : le rapport, parmi ceux des applications installées. |
 | **Format** | Excel ou PDF — les mêmes documents que l'export de l'explorateur, graphiques dessinés dans le PDF. |
-| **Période** | Un préréglage (*Mois dernier*, *Ce trimestre*, *7 derniers jours*…, ou toutes les dates), ou *La période propre de l'analyse*. |
+| **Période** | Une période par son nom — *Mois dernier*, *Ce mois-ci*, *Année dernière*, *Cette année*, *Ce trimestre*, *30 derniers jours*, *7 derniers jours*, *Hier*, *Aujourd'hui*, *Toutes les dates* — ou *La période propre de l'analyse*. |
 | **Nom du fichier** | Le nom du fichier ; par défaut, le titre de l'analyse. |
 | **Rendre comme l'utilisateur** | Le document contient ce que voit cet utilisateur : le périmètre de données de ses rôles, avec ses attributs. Une synthèse rendue pour le responsable d'une société ne contient que cette société. |
 | **Rendre comme le rôle** | Le périmètre de données d'un rôle. Une règle dont les valeurs viennent d'un attribut utilisateur n'autorise rien dans ce cas : pour ces rôles, préférer **Rendre comme l'utilisateur**. |

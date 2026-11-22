@@ -210,7 +210,7 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
 | Region | What it does |
 |---|---|
 | **Add a field** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A filter narrows the list; a click on an entry adds a field card to the current tab. The panel folds away with its arrow. |
-| **Dialog** *(center)* | The tabs strip across the top — each tab with its field count, **＋ Add tab** at the end — then **Tab settings** (folded: tab label, tab type, columns, tab actions) and the field cards. Each card shows the label, a preview of the input (a number, a date, a lookup and its query…), the column name and its *key* mark; the picked card has a blue border. The header counts the grid's columns and the tab's fields. A **Hidden fields** group at the bottom collects the fields with `hidden = true`. |
+| **Dialog** *(center)* | The tabs strip across the top — each tab with its field count, **＋ Add tab** at the end — then **Tab settings** (folded: tab label, tab type, columns, the title in the other languages, the two *Left out* boxes, tab actions) and the field cards. Each card shows the label, a preview of the input (a number, a date, a lookup and its query…), the column name and its *key* mark; the picked card has a blue border. The header counts the grid's columns and the tab's fields. A **Hidden fields** group at the bottom collects the fields with `hidden = true`. |
 | **Inspector** *(right)* | The picked field and its **Column configuration** — see Step 3 —, or, with no field picked, the dialog's title and its events. It folds away with its arrow. |
 
 **Delete dialog**, above the panels, removes the whole form: the screen becomes a read-only or grid-edit table again.
@@ -259,12 +259,91 @@ Click **＋ Add tab** at the end of the tab strip; it asks for the tab's id. The
 | **Notes** | Free-text fields. |
 | **Address** | A group of related fields (street, city, postcode, country). |
 
-Two flags on each tab (in `screens.toml`) control visibility per mode:
+### Tab settings \{#tab-settings\}
 
-| Flag | Effect |
+**Tab settings**, above the field cards, sets the picked tab: its label, its type, its columns — and how it reads in other languages and when it is shown.
+
+<svg viewBox="0 0 1200 302" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dbts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dbts-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dbts-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dbts-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="260" rx="14" fill="url(#dbts-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#94a3b8" fontSize="8.5" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIALOG</text>
+  <text x="960" y="46" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">cols: 2 · fields: 6</text>
+  <rect x="240" y="58" width="82" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="281.0" y="72.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Customer · 4</text>
+  <rect x="328" y="58" width="67" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="361.5" y="72.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit · 2</text>
+  <rect x="401" y="58" width="67" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="434.5" y="72.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add tab</text>
+  <rect x="240" y="94" width="720" height="168" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="114" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾  Tab settings</text>
+  <rect x="910" y="103" width="35" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="927.5" y="114.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">form</text>
+  <text x="254" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAB LABEL</text>
+  <rect x="254" y="141" width="235" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="499" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAB TYPE</text>
+  <rect x="499" y="141" width="276" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="509" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="508" y="155.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">form</text>
+  <text x="534.328" y="155.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Form — a grid of editable fields</text>
+  <text x="763" y="155.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="785" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">COLUMNS</text>
+  <rect x="785" y="141" width="161" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="795" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">2</text>
+  <text x="254" y="184" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITLE IN THE OTHER LANGUAGES</text>
+  <rect x="254" y="189" width="90" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="203.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="263" y="203.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="278.664" y="203.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Franç…</text>
+  <text x="332" y="203.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="350" y="189" width="152" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="360" y="203.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Client</text>
+  <rect x="508" y="189" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="519.0" y="203.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="254" y="218" width="56" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="263" y="230" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ add</text>
+  <rect x="546" y="191" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="563" y="200" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Left out when a record is added</text>
+  <rect x="546" y="211" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="563" y="220" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Left out when a record is edited</text>
+  <text x="254" y="254" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Tab actions</text>
+  <rect x="20" y="52" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="67" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tabs of the form</text>
+  <text x="30" y="80" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each with its field count</text>
+  <line x1="200" y1="69.0" x2="240" y2="69" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="20" y="128" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="143" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Label, type, columns</text>
+  <text x="30" y="156" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">as written</text>
+  <line x1="200" y1="145.0" x2="254" y2="152" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="20" y="186" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Title per language</text>
+  <text x="30" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in the user's language</text>
+  <line x1="200" y1="203.0" x2="254" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="1000" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Left out on add</text>
+  <text x="1010" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">e.g. an audit tab</text>
+  <line x1="1000" y1="187.0" x2="725.24" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="1000" y="222" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="237" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Left out on edit</text>
+  <text x="1010" y="250" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">e.g. a creation-only tab</text>
+  <line x1="1000" y1="239.0" x2="730.28" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+</svg>
+
+| Field | Effect |
 |---|---|
-| **`hide_on_add`** | Tab disappears when adding a new row. |
-| **`hide_on_edit`** | Tab disappears when editing an existing row. |
+| **Tab label** | The tab's title, as written. |
+| **Tab type** | *Form* (a grid of editable fields), a nested table or another screen's form — see [Nested tabs](./nested-tabs.md). |
+| **Columns** | The number of columns of the tab's grid. |
+| **Title in the other languages** | The title for the users of another language: a language picked in the list, then its text; **+ add** for another. A language with no line shows the tab label as written. |
+| **Left out when a record is added** (`hide_on_add`) | The tab is not shown when a new record is added. |
+| **Left out when a record is edited** (`hide_on_edit`) | The tab is not shown when an existing record is edited. |
+| **Tab actions** | Buttons shown inside the tab — see [Tab actions](#tab-actions). |
 
 ### Step 5 — Reorder fields
 
@@ -297,7 +376,7 @@ The visual builder shows the same tab strip for all three — switching to a `ne
 
 ---
 
-## Per-tab actions
+## Per-tab actions \{#tab-actions\}
 
 Each tab can carry its own action list — buttons shown inside the tab, set under **Tab settings → Tab actions** (**Add action**). Common patterns:
 

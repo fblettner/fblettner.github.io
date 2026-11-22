@@ -208,7 +208,7 @@ A command shows what it does, its usage with **Copy**, the **Options of every co
 
 Every entity of the configuration with what it uses and what uses it, followed through: what a change to a pool, a query, a screen or a dictionary entry reaches. The links are the ones the [Package](../build/packages.md) dependency walk follows.
 
-On the left, the entities by kind — pools, connectors, queries, API endpoints, dictionary entries, lookups, sequences, enums, screens, menu items, charts, dashboards, shared actions, Explorer models, jobs, notification rules, AI blocks —, folded by default, with a search (`scope.name`). **Unused only** keeps the entities nothing points at — menu items, jobs, notification rules, pools, Explorer models and dictionary entries, opened or reached otherwise, are never counted as unused —, and **Referenced but not defined** lists the references to an entity that does not exist.
+On the left, the entities by kind — pools, connectors, queries, API endpoints, dictionary entries, lookups, sequences, enums, screens, menu items, charts, dashboards, services, Explorer models, jobs, notification rules, AI blocks —, folded by default, with a search (`scope.name`). **Unused only** keeps the entities nothing points at — menu items, jobs, notification rules, pools, Explorer models and dictionary entries, opened or reached otherwise, are never counted as unused —, and **Referenced but not defined** lists the references to an entity that does not exist.
 
 A picked entity shows:
 

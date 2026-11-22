@@ -51,7 +51,7 @@ Four kwargs are auto-injected **when the function declares them by name** (the e
 
 | Kwarg | Type | What it gives you |
 |---|---|---|
-| **`connectors`** | `ConnectorRegistry` | Access to every SQL and API pool defined in `connectors.toml`. `connectors.pools.engine("default")` returns the SQLAlchemy async engine. |
+| **`connectors`** | `ConnectorRegistry` | Access to every SQL and API pool defined in `connectors.toml`. `connectors.pools.engine("default")` returns the SQLAlchemy async engine of a database pool, `connectors.pools.directory("corp_directory")` what it takes to bind to an [LDAP directory pool](../../connectors.md#pool-ldap) (host, port, TLS, account, password, base), `connectors.pools.where(name)` where a pool points, without its account. |
 | **`ctx`** | `RunContext` | The per-run state: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Pass `ctx.run_id` to your logs / audit writes so they line up with the Nomaflow run record. |
 | **`settings`** | `Settings` | Live config — `settings.connectors.config_path`, `settings.app`, etc. Useful for callables that operate on the config files themselves. |
 | **`app_state`** | the server state | The running server's live state — the applications, the Data Explorer models, the dictionary. For callables that act on the live configuration, such as `liberty.jobs.dictionary:refresh_model_dictionary`. Absent outside a running server. |

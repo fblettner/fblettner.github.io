@@ -36,7 +36,7 @@ Lance immédiatement le contrôle de santé des serveurs JD Edwards au travers d
 
 ## Montée de version et tests \{#upgrade-tests\}
 
-Les deux tâches de l'analyse de montée de version se lancent depuis la page **Montée de version**, avec **Charger la liste d'Oracle** et **Lancer l'analyse** — voir [Analyse de montée de version](./upgrade/analysis.md#steps). **Tests → Lancer les tests** se trouve dans le dossier Tests du menu — voir [Tests de non-régression](./tests.md#job).
+Les deux tâches de l'analyse de montée de version se lancent depuis la page **Préparer la montée de version**, avec **Charger la liste d'Oracle** et **Lancer l'analyse** — voir [Préparer la montée de version](./upgrade/analysis.md#steps). **Tests → Lancer les tests** se trouve dans le dossier Tests du menu — voir [Tests de non-régression](./tests.md#job).
 
 ---
 
@@ -55,4 +55,4 @@ Les mêmes appels AIS — et quelques autres : comptage de lignes, appel d'une f
 
 ## Qui peut les lancer \{#access\}
 
-Une entrée s'affiche pour les titulaires de la permission `job:<id>` (type de règle **Tâche** dans les règles *Au-delà des menus* d'un rôle). Chaque titulaire voit toutes les exécutions de la tâche, pas seulement les siennes.
+Une entrée s'affiche pour qui peut lancer la tâche : un rôle qui place l'entrée — ou son dossier — en **Lecture et modification**, ou qui détient la permission `job:<id>` (type de règle **Tâche** dans ses règles *Au-delà des menus*). La seule **Lecture** ne l'affiche jamais : lire ne lance rien. Chaque personne autorisée voit toutes les exécutions de la tâche, pas seulement les siennes.

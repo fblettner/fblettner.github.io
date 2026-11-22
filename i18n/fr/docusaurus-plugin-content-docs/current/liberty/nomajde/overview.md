@@ -164,7 +164,7 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
       <li>Types UDC et valeurs UDC — chaque type et chaque valeur dans une grille avec recherche, filtres et export Excel.</li>
       <li>Carnet d'adresses, clients et fournisseurs — des grilles en consultation, avec leurs onglets liés et <i>Open in JDE</i>.</li>
-      <li>Articles, sociétés et comptes, tables de paramétrage, projets OMW — des modules prêts à appliquer depuis Liberty Next, lus dans les tables de JDE.</li>
+      <li>Sociétés et comptes, articles, tables de paramétrage, projets OMW — 21 écrans en consultation livrés prêts à l'emploi, lus dans les tables de JDE.</li>
     </ul>
   </div>
 
@@ -197,7 +197,7 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
       <li>Les serveurs enterprise, web et AIS contrôlés par Server Manager toutes les cinq minutes — état, santé, contrôles en échec.</li>
       <li>La disponibilité sur 24 heures de chaque instance sur la vue d'ensemble, les instances en défaut en tête.</li>
       <li>Un contrôle en échec déclenche les alertes de la tâche ; une instance en échec peut être arrêtée automatiquement.</li>
-      <li>Server Manager en direct, conseils de Performance, Analyse de la plateforme et Audit de la base de données — ce qui ralentit la plateforme, et par où commencer.</li>
+      <li>Synthèse de la plateforme et Architecture — la plateforme en un coup d'œil, dessinée d'après ce qui est trouvé ; Server Manager en direct, conseils de Performance, Analyse de la plateforme et Audit de la base de données — ce qui ralentit la plateforme, et par où commencer.</li>
     </ul>
   </div>
 
@@ -207,40 +207,53 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
 
 ## La carte de l'application
 
-Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
+Le menu suit le travail, du point d'entrée aux tâches de maintenance.
 
 | Section | Ce qu'elle couvre |
 |---|---|
-| **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
-| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
+| **Vue d'ensemble** | [Le point d'entrée](./home.md) : un groupe de liens par besoin, et les tâches avec leur dernière exécution. |
+| **Synthèse de la plateforme** | [La plateforme en un coup d'œil](./synthesis.md) : six chiffres, ce que signalent les analyses des serveurs, des performances et de la base en une seule liste, l'architecture, un onglet par analyse. |
+| **Préparer la montée de version** | [Une seule page pour toute l'analyse de montée de version](./upgrade/analysis.md) : ce qu'il faut reprendre pour une version, avec quelle complexité, en combien de jours, dans quel ordre et où en est le travail — à partir de la liste d'objets d'Oracle et des objets du client, avec les objets définis par l'utilisateur à retester. |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de développement et de montée de version, et de dix-huit modèles sur les modules JD Edwards. |
 | **Références croisées** | [Ce que contient un objet JD Edwards et où il est utilisé](./cross-reference.md) : applications, états, données, vues, tables, structures de données, fonctions métier, UDO. |
-| **Montée de version** | [Une seule page pour toute l'analyse de montée de version](./upgrade/analysis.md) : ce qu'il faut reprendre pour une version, avec quelle complexité, en combien de jours, dans quel ordre et où en est le travail — à partir de la liste d'objets d'Oracle et des objets du client, avec les objets définis par l'utilisateur à retester. |
-| **Données de base** | [Types UDC](./master-data/udc-types.md) et [codes UDC](./master-data/udc-codes.md), des grilles en consultation avec recherche, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
-| **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
-| **Développement** | Object Librarian et Data Dictionary, en lecture. |
-| **Supervision** | [Contrôle de santé JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. [Performance](./monitoring/performance.md), [Analyse de la plateforme](./monitoring/platform-analysis.md) et [Audit de la base de données](./monitoring/database-audit.md) : la plateforme lue en direct, sous forme de conseils et d'analyses. [Server Manager](./monitoring/server-manager.md) : sept écrans lus en direct sur la console — instances, utilisateurs connectés, serveurs d'entreprise, processus, fonctions métier, serveurs web et AIS, caches JDBj. |
+| **Données JD Edwards** | **Données de base** — [Types UDC](./master-data/udc-types.md) et [Codes UDC](./master-data/udc-codes.md), le [carnet d'adresses](./master-data/address-book.md) avec les clients et les fournisseurs, [Sociétés et comptes, Articles](./master-data/delivered-screens.md) — et [**Paramétrage**](./master-data/delivered-screens.md#setup) : conditions de paiement, devises et taux de change, zones de taxe, ICA, numéros suivants, règles d'activité des commandes, types de ligne, types de document, constantes de magasin / usine. Des grilles en consultation, livrées prêtes à l'emploi. |
+| **Maintenance de la sécurité** | Gestion des utilisateurs, Préférences utilisateur, Gestion des rôles, Relations de rôles, Environnements, Security Workbench, Sécurité des UDO. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
+| **Développement** | Object Librarian, Dictionnaire de données et l'[Object Management Workbench](./master-data/delivered-screens.md#omw) (projets, objets des projets, journal), en lecture. |
+| **Supervision** | [Contrôle de santé JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. [Performance](./monitoring/performance.md), [Analyse de la plateforme](./monitoring/platform-analysis.md) et [Audit de la base de données](./monitoring/database-audit.md) : la plateforme lue en direct, sous forme de conseils et d'analyses. [Architecture](./monitoring/architecture.md) : la plateforme dessinée d'après ce qui est trouvé. [Server Manager](./monitoring/server-manager.md) : sept écrans lus en direct sur la console — instances, utilisateurs connectés, serveurs d'entreprise, processus, fonctions métier, serveurs web et AIS, caches JDBj. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
 | **Tests** | [Tests de non-régression](./tests.md) joués par AIS : enregistrer une référence avant un changement, comparer après. |
 | **Services JD Edwards (AIS)** | Le [catalogue de services AIS](./ais/services.md) et [Créer à partir de…](./ais/create-from.md) : un point d'accès ou un écran complet à partir d'une application, d'un formulaire, d'une table, d'un état, d'une fonction métier ou d'une orchestration JD Edwards. |
+
+L'[assistant IA](./ai-assistant.md) connaît les références croisées, la montée de version et les performances de la plateforme, avec les mêmes données que les pages.
 
 ---
 
 ## Qui s'en sert
 
-| Rôle | Pourquoi on ouvre Nomajde |
+| Profil | Pourquoi on ouvre Nomajde |
 |---|---|
-| **Administrateur sécurité JDE** | Les cinq écrans de Maintenance sécurité — ajouter un utilisateur, rattacher un rôle, exécuter Importer la sécurité sur un clone, parcourir la grille security workbench. |
+| **Administrateur sécurité JDE** | Les écrans de Maintenance de la sécurité — ajouter un utilisateur, rattacher un rôle, exécuter Importer la sécurité sur un clone, parcourir la grille du Security Workbench. |
 | **Développeur JDE** | [Références croisées](./cross-reference.md) — ce qu'une modification atteint avant de la faire : les applications, les états et les UDO qui utilisent une table, une vue ou une fonction. |
-| **Référent données de base** | Carnet d'adresses, clients et fournisseurs ; types et valeurs UDC pour le catalogue. |
-| **Ingénieur ops** | [Contrôle de santé JDE](./monitoring/jde-servers.md) et [Server Manager](./monitoring/server-manager.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle ; [Performance](./monitoring/performance.md) pour ce qui ralentit la plateforme. |
-| **Chef de projet de montée de version** | [Analyse de montée de version](./upgrade/analysis.md) — les objets à reprendre, les jours par type et par personne, le suivi des travaux. |
+| **Référent données de base** | Carnet d'adresses, clients et fournisseurs, sociétés et comptes, articles ; types et valeurs UDC ; les tables de paramétrage. |
+| **Chef de projet de montée de version** | [Préparer la montée de version](./upgrade/analysis.md) — les objets à reprendre, les jours par type et par personne, le suivi des travaux. |
 | **Testeur fonctionnel** | [Tests de non-régression](./tests.md) — les cas qui doivent continuer de fonctionner, joués avant et après un ESU ou une version d'outils. |
 | **Développeur d'intégration** | [Créer à partir de…](./ais/create-from.md) — un écran Liberty sur un formulaire JD Edwards, sans écrire un appel. |
+| **Ingénieur d'exploitation** | D'abord la [Synthèse de la plateforme](./synthesis.md) et l'[Architecture](./monitoring/architecture.md) ; le [Contrôle de santé JDE](./monitoring/jde-servers.md) et [Server Manager](./monitoring/server-manager.md) pour la santé de chaque serveur ; [Performance](./monitoring/performance.md) pour ce qui ralentit la plateforme. |
 
 ---
 
-## Qui voit quoi \{#roles\}
+## Rôles prédéfinis \{#roles\}
 
-Nomajde n'embarque pas de rôles propres : les accès sont accordés par les rôles de la plateforme. Un rôle détient les entrées de menu qu'il ouvre, les pages (Références croisées, Performance, Analyse de la plateforme, Audit de la base de données), les tâches qu'il peut lancer et les services JD Edwards qu'il peut appeler — chaque point d'accès AIS ou Server Manager a sa propre permission.
+Nomajde livre cinq rôles prêts à ajouter, dans **Liberty Next → Administrer → Accès → Rôles → Ajouter un rôle prédéfini…** :
 
-Un déploiement typique sépare les personnes qui entretiennent les données de base de celles qui gèrent les droits d'accès, et réserve à quelques-uns les services qui modifient JD Edwards ou la plateforme.
+| Rôle | Ce qu'il couvre |
+|---|---|
+| **Gestionnaire des données de base** | Le dossier **Données de base** en lecture et modification — les UDC, le carnet d'adresses, Sociétés et comptes, Articles, et ce que les versions suivantes ajouteront à ce dossier ; le **Paramétrage** en lecture. |
+| **Administrateur de la sécurité** | Les utilisateurs, rôles, environnements et le Security Workbench de JD Edwards — le dossier **Maintenance de la sécurité** — en lecture et modification, avec les deux tâches qui reconstruisent la sécurité fusionnée (*Refusionner la sécurité*). |
+| **Développeur** | En lecture : le dossier **Développement** (Object Librarian, Dictionnaire de données, Object Management Workbench), les [Références croisées](./cross-reference.md), [Préparer la montée de version](./upgrade/analysis.md) et l'[Explorateur de données](./data-explorer.md). |
+| **Exploitant de la plateforme** | En lecture : la [Synthèse de la plateforme](./synthesis.md), le dossier **Supervision** — serveurs, Server Manager, architecture, performance, analyse de la plateforme et de la base — et les **Tests** ; lance le contrôle de santé et la suite de tests. |
+| **Administrateur** | Tout dans l'application : lecture et modification, y compris ses tâches et ses pages. |
+
+Chacun ouvre la [Vue d'ensemble](./home.md) et l'[assistant IA](./ai-assistant.md). Une personne peut en cumuler plusieurs : les droits s'additionnent — un administrateur de la sécurité qui est aussi développeur voit les deux périmètres. Un rôle désigne des dossiers du menu, pas des écrans : il suit ses dossiers quand une version ultérieure y ajoute des écrans.
+
+Au-delà de ces rôles, les accès s'accordent par les rôles de la plateforme, comme pour toute application : un rôle détient les entrées de menu qu'il ouvre, les pages, les tâches qu'il peut lancer et les services JD Edwards qu'il peut appeler — chaque point d'accès AIS ou Server Manager a sa propre permission. Un déploiement typique sépare les personnes qui entretiennent les données de base de celles qui gèrent les droits d'accès, et réserve à quelques-uns les services qui modifient JD Edwards ou la plateforme.

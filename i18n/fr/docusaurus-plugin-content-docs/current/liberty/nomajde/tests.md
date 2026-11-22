@@ -651,4 +651,4 @@ Les trois permissions de tests se trouvent dans les règles *Au-delà des menus*
 
 - [Tests](../framework/build/tests.md) — la page Cas en détail ; [Résultats des tests](../monitoring/test-results.md).
 - [Services JD Edwards (AIS)](./ais/services.md) et [Créer à partir de…](./ais/create-from.md) — les appels possibles dans une étape.
-- [Analyse de montée de version](./upgrade/analysis.md) — ce qu'il faut reprendre avant de jouer les tests.
+- [Préparer la montée de version](./upgrade/analysis.md) — ce qu'il faut reprendre avant de jouer les tests.

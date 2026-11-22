@@ -8,7 +8,7 @@ keywords: [Nomasx-1, paramètres, LDAP, Active Directory, DN de base, filtre LDA
 
 L'écran **LDAP** porte, pour chaque application connectée, la partie de l'annuaire LDAP / Active Directory lue par la collecte LDAP — les comptes comparés aux utilisateurs de l'application dans les écrans *Sécurité → LDAP*. Une ligne par application. Accès : **Paramètres → Global → LDAP**.
 
-Les mêmes champs figurent dans l'onglet **LDAP** d'[Applications](./applications.md) ; cet écran présente toutes les applications côte à côte.
+Les mêmes champs figurent dans l'onglet **LDAP** d'[Applications](./applications.md) ; cet écran présente toutes les applications côte à côte. Le serveur d'annuaire, le compte et le mot de passe ne se règlent pas ici : ils appartiennent au **pool d'annuaire** désigné par l'application dans son onglet *Application* — voir [onglet LDAP](./applications.md#tab-ldap). Un **Contexte LDAP** vide désigne la base de ce pool.
 
 ---
 

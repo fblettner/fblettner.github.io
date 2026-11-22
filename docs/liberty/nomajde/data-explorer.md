@@ -40,7 +40,7 @@ The objects of the [upgrade analysis](./upgrade/analysis.md): kind, retrofit, co
 
 ## Models shipped by the JDE presets \{#presets\}
 
-The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assistant.md) also give the explorer ready-made models, built from the Oracle E1 data models: the hub table with the tables joined to it.
+Nomajde also ships **eighteen models on the JD Edwards modules** — those of the JD Edwards presets of the [Screen Assistant](../framework/build/screen-assistant.md), built from the Oracle E1 data models: the hub table with the tables joined to it.
 
 | Area | Models |
 |---|---|
@@ -55,7 +55,7 @@ The JD Edwards presets of the [Screen Assistant](../framework/build/screen-assis
 | Product Data Management | Bill of Material (F3002), Routing (F3003). |
 | Product Costing | Item Cost Components (F30026). |
 
-They appear in the model picker with the others; the page header says *shipped by the preset “…”*. They are built at first use. To adapt one, a superuser adds a model in **Liberty Next → Insight → Explorer** from the same preset, then changes it.
+They appear in the model picker with the others, grouped by area (*JDE · Accounts Payable*, *JDE · Sales*…); the page header says *shipped by the preset “…”*. They are real models: in the Explorer builder (**Liberty Next → Insight → Explorer**) a superuser opens one and changes it like a model made by hand — its entities on the real columns of the tables, its hub, its relations. Their fields carry the labels of the JD Edwards data dictionary from the start (in English, the language of the data dictionary).
 
 JD Edwards amounts are shown in real units: the data dictionary's decimals apply in the tables, the totals and the filters.
 

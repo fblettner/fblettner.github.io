@@ -40,7 +40,7 @@ Le modèle **Upgrade analysis** porte les objets de l'[analyse de montée de ver
 
 ## Modèles fournis par les préréglages JDE \{#presets\}
 
-Les préréglages JD Edwards de l'[assistant de création d'écran](../framework/build/screen-assistant.md) fournissent aussi à l'explorateur des modèles prêts à l'emploi, construits d'après les modèles de données Oracle E1 : la table pivot et les tables qui s'y rattachent.
+Nomajde livre aussi **dix-huit modèles sur les modules JD Edwards** — ceux des préréglages JD Edwards de l'[assistant de création d'écran](../framework/build/screen-assistant.md), construits d'après les modèles de données Oracle E1 : la table pivot et les tables qui s'y rattachent.
 
 | Domaine | Modèles |
 |---|---|
@@ -55,7 +55,7 @@ Les préréglages JD Edwards de l'[assistant de création d'écran](../framework
 | Données techniques | Bill of Material (F3002), Routing (F3003). |
 | Calcul des coûts | Item Cost Components (F30026). |
 
-Ils figurent dans le sélecteur de modèle avec les autres ; l'en-tête de la page indique *fourni par le préréglage « … »*. Ils sont construits à la première utilisation. Pour en adapter un, un superutilisateur ajoute un modèle dans **Liberty Next → Analyse → Explorateur** à partir du même préréglage, puis le modifie.
+Ils figurent dans le sélecteur de modèle avec les autres, regroupés par domaine (*JDE · Accounts Payable*, *JDE · Sales*…) ; l'en-tête de la page indique *fourni par le préréglage « … »*. Ce sont des modèles à part entière : dans le concepteur de l'explorateur (**Liberty Next → Analyse → Explorateur**), un superutilisateur en ouvre un et le modifie comme un modèle créé à la main — ses entités sur les vraies colonnes des tables, sa table pivot, ses relations. Leurs champs portent d'emblée les libellés du dictionnaire de données JD Edwards (en anglais, la langue de ce dictionnaire).
 
 Les montants JD Edwards s'affichent en unités réelles : les décimales du dictionnaire de données s'appliquent aux tableaux, aux totaux et aux filtres.
 

@@ -39,7 +39,7 @@ See [Health endpoints](../monitoring/health-endpoints.md).
 |---|---|---|
 | `POST` | `/auth/login` | `{username, password}` → access and refresh tokens. `429` after too many failures. |
 | `POST` | `/auth/refresh` | A refresh token → a new pair. The refresh token presented is consumed: keep the new one. |
-| `GET` | `/auth/me` | The token's identity: roles, permissions, attributes, data scope. |
+| `GET` | `/auth/me` | The token's identity: roles, permissions, attributes, data scope — and `implied`, what the role's menu grants give, so a button a page shows or hides agrees with the server. |
 | `GET` / `PATCH` | `/auth/profile` | The signed-in user's profile. |
 | `POST` | `/auth/change-password` | Change one's own password (local users). |
 | `POST` | `/auth/tokens` | Create a personal access token for the MCP endpoint (`{days}`, 90 by default) → `{token, expires_at, days}`. Requires `mcp:use`. |
@@ -63,7 +63,7 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `GET` | `/api/sql/{connector}/_schemas`, `/_schema` | Schemas and tables of the connector's database. |
 | `POST` | `/api/sql/{connector}/_import` | Import rows (the grid's Excel import). |
 | `POST` | `/api/http/{connector}/{endpoint}` | Call an API connector's endpoint. |
-| `GET` | `/api/actions`, `/api/actions/{action_id}` | Shared actions. |
+| `GET` | `/api/actions`, `/api/actions/{action_id}` | Services (Logic → Services). |
 | `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Plugin functions callable from screens. |
 
 ---
@@ -114,7 +114,7 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 
 | Family | Paths | Description |
 |---|---|---|
-| Access | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}` | Users (create, update, attributes, password) and roles (permissions, data scope). |
+| Access | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}`, `/admin/access/menu-rules`, `/admin/access/role-templates` | Users (create, update, attributes, password), roles (permissions, data scope), what each menu entry gives in read and in read and change, and the predefined roles the applications ship. |
 | Configuration | `/admin/config/{section}/parsed` (`GET` / `PUT`) for `connectors`, `dictionary`, `menus`, `screens`, `charts`, `dashboards`, `actions`, `notifications`, `theme`, `jobs`, `app`, `reports`, `explorer`; `/admin/config/pools` | Read and save a configuration file as JSON; a save is validated, then applied. |
 | Configuration tools | `/admin/config/connectors/{connector}/test-sql`, `/admin/config/api/test`, `/admin/config/rename`, `/admin/config/move`, `/admin/config/clone-app`, `/admin/config/delete-app`, `/admin/config/integrity`, `/admin/config/schema` | Tests, cross-file renames and moves, integrity check, JSON schemas. |
 | Studio, services, tests | `/admin/studio/overview`, `/admin/studio/map`, `/admin/studio/services`, `/admin/studio/run` and `/admin/studio/expose` (`POST`) — the [Overview and the Studio](../framework/studio.md), [Services](../framework/build/services.md). `/admin/tests` (`GET`), `/admin/tests/{suite}` (`GET` / `PUT` / `DELETE`), `/admin/tests/{suite}/run` and `/admin/tests/try` (`POST`), `/admin/test-results` — the [tests](../framework/build/tests.md), open to the holders of `tests:view` / `tests:run` / `tests:edit`. `/admin/config/api/generate` (`POST`) — [Create from…](../framework/build/api-endpoints.md#create-from); `/admin/config/pools/test` (`POST`) — **Test connection** on a pool. |

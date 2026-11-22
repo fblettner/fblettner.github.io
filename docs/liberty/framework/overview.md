@@ -73,7 +73,7 @@ Everything the framework does is composed from five concepts:
 
 | Concept | What it is | What it solves |
 |---|---|---|
-| **[Pool](./connectors.md#pools)** | A connection to a database: its type, host, port and database, and the account that signs in. | "How do I reach this data?" |
+| **[Pool](./connectors.md#pools)** | A connection of the installation — a database, an HTTP server an API connector calls, an LDAP directory: its address and the account that signs in. | "How do I reach this data?" |
 | **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
 | **[Screen](./build/screens/overview.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
 | **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |

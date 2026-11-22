@@ -73,7 +73,7 @@ Tout ce que fait le framework se compose à partir de cinq concepts :
 
 | Concept | Ce que c'est | Ce qu'il résout |
 |---|---|---|
-| **[Pool](./connectors.md#pools)** | Une connexion à une base de données : son type, son hôte, son port et sa base, et le compte qui s'y connecte. | « Comment j'atteins ces données ? » |
+| **[Pool](./connectors.md#pools)** | Une connexion de l'installation — une base de données, un serveur HTTP appelé par un connecteur API, un annuaire LDAP : son adresse et le compte qui s'y connecte. | « Comment j'atteins ces données ? » |
 | **[Connecteur](./connectors.md)** | Un ensemble nommé de requêtes / endpoints au-dessus d'un pool. | « Quelles questions je veux poser à cette source ? » |
 | **[Écran](./build/screens/overview.md)** | Une grille + un dialogue d'édition au-dessus des requêtes d'un connecteur. | « Comment je laisse une personne consulter et modifier ça ? » |
 | **[Tableau de bord](./dashboards.md)** | Une mise en page de KPI et de graphiques sur les mêmes requêtes. | « Comment je résume ça pour quelqu'un qui veut juste l'essentiel ? » |

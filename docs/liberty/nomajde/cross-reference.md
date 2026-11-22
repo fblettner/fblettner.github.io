@@ -189,6 +189,8 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
 
 Type part of a name, an identifier or a description; the examples under the search box start one in a click: `P01012`, `P4210`, `R42565`, `AN8`, `V0101E`, `F0101`, `F4211`, `D0100033`, `B4200310`, `F4211FSBeginDoc`, *address number*, *sales order*. The results are grouped by kind — **Applications**, **Reports**, **Data items**, **Business views**, **Tables**, **Data structures**, **Business functions**, **User defined objects** — each line with its description from the Object Librarian. A click opens the object on the right.
 
+The closest match comes first: an identifier typed exactly, then — for the applications and the reports — the object whose title is exactly what was typed, before those whose title only starts with it. Typing *address book* opens on `P01012` *Address Book*, ahead of the twenty applications whose title begins with those words.
+
 A user defined object is found by any part of its identifier, its name or its description; its line says its type and the application, form and version it sits on.
 
 ### List a whole kind \{#browse\}
@@ -398,12 +400,13 @@ The page shows to the roles that hold its menu entry; the functions it reads nee
 - During an upgrade, tick **Only the applications of the upgrade analysis** to see what a change of Oracle reaches in the customer's code.
 - Look at **Who uses it** before retrofitting a modified report: nobody may have run it for years.
 - A form's **UDOs** tab lists what the users built on it — queries, grid formats, personal forms, form extensions, the pages and service requests that open it: what to check again when the form changes with a release.
+- The assistant knows the object open on the page: ask it *Where is this object used?* or *What would a change to the table F0101 touch?* — see [AI assistant](./ai-assistant.md).
 - To review the user defined objects one by one, choose the **UDOs** chip: each line gives the type, and a word of the name narrows the list.
 
 ---
 
 ## Related
 
-- [Upgrade analysis](./upgrade/analysis.md) — what to retrofit, in which order, with the UDOs to test again.
+- [Prepare for upgrade](./upgrade/analysis.md) — what to retrofit, in which order, with the UDOs to test again.
 - [Create from…](./ais/create-from.md) — an endpoint or a screen from a JD Edwards application.
 - [Performance](./monitoring/performance.md) — the business functions that cost the most, with who calls them.

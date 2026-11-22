@@ -487,11 +487,17 @@ The menu opens on the three dashboards, the Data Explorer and the reports, then 
 
 ## Roles inside Nomasx-1
 
-Nomasx-1 delivers two roles, created by a job the administrator runs once after the install and after each upgrade:
+Nomasx-1 ships four predefined roles:
 
-| Role | What it grants |
+| Role | For |
 |---|---|
-| `nomasx1_auditor` | Reading every screen, dashboard and Explorer model, the AI assistant, and running the two reports — no change to the settings. It receives the monthly reports. |
-| `nomasx1_admin` | Everything, the settings and every Nomasx-1 job included. |
+| **Auditor** (`nomasx1_auditor`) | Reads everything and runs the two audit reports. Changes no setting. The monthly reports are mailed to it. |
+| **Security officer** (`nomasx1_security_officer`) | Security and segregation of duties in read and change, with their settings, the security collection and its report. The rest in read. |
+| **Licence manager** (`nomasx1_licence_manager`) | Licences and database in read and change, with the licence settings, the licence collection and its report. The rest in read. |
+| **Administrator** (`nomasx1_admin`) | Everything in the application: read and change, the settings and the jobs of its menu included. |
 
-Assign them under **Liberty Next → Administer → Access**. A typical deployment keeps the auditors apart from the administrators: the person who configures the analysis is not the one who reviews its findings. See [Jobs](./jobs.md#access).
+Each role names menu folders, so it follows them when a version adds screens to a folder. A person may hold several — a security officer who is also the licence manager: the rights add up.
+
+Add them one at a time under **Liberty Next → Administer → Access → Roles → Add a predefined role…** (see [Predefined roles](../framework/build/secure/roles-and-permissions.md#predefined)), or all four at once with the [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles) job, which also gives the administrator every `nomasx1-*` job. Run again, the job puts the shipped rights back on a role changed in Access; users are not touched.
+
+A typical deployment keeps the auditors apart from the administrators: the person who configures the analysis is not the one who reviews its findings. See [Jobs](./jobs.md#access).

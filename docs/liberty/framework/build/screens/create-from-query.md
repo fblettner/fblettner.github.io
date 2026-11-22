@@ -42,9 +42,9 @@ The empty screen appears in the list; click it to open the **Screen Designer**.
 
 ## Step 3 — What it is
 
-The designer opens on its first stage, **What it is**: identity, the connector override and the behaviour flags. The fields are a single scrolling list, in this order; a dropdown shows the connector the screen runs against, the app's own by default.
+The designer opens on its first stage, **What it is**: identity, the connector override and the behaviour flags. The fields are a single scrolling list, in this order; a dropdown shows the connector the screen runs against, the app's own by default. Under the label and under the description, **Label translations** and **Description translations** give each of them in the other languages: one line per language, **+ add** for another.
 
-<svg viewBox="0 0 1320 614" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 606" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="cfq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="cfq-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -52,121 +52,116 @@ The designer opens on its first stage, **What it is**: identity, the connector o
     <marker id="cfq-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="880" height="578" rx="14" fill="url(#cfq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="880" height="566" rx="14" fill="url(#cfq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
-  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <text x="356.24" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
   <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
-  <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="999.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
   <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
-  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Customers</text>
-  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106" x2="380.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA</text>
-  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
-  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
-  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
+  <line x1="510.0" y1="106" x2="523.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
-  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 column(s)</text>
-  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filter(s) · 1 view(s)</text>
-  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">6 column(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">4 filter(s)</text>
+  <line x1="653.0" y1="106" x2="666.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD FORM</text>
-  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 tab(s)</text>
-  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 field(s)</text>
-  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">1 tab(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">4 field(s)</text>
+  <line x1="796.0" y1="106" x2="809.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="#c084fc" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
-  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 toolbar action(s)</text>
-  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 in the row menu · 1 on s…</text>
-  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">0 toolbar action(s)</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">2 in the row menu · 0 on s…</text>
+  <line x1="939.0" y1="106" x2="952.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTPUT</text>
-  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">the grid's own export</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">the grid's own export</text>
   <text x="238" y="152" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Behaviour flags for this screen — auto-load, audit table, row cap, key columns.</text>
-  <text x="238" y="176" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
-  <rect x="238" y="181" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="195.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
-  <text x="1070" y="195.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="238" y="220" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
-  <rect x="238" y="225" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="239.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Customers</text>
-  <text x="238" y="259" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Short label shown in the menu / list.</text>
-  <text x="238" y="272" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
-  <rect x="238" y="277" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="291.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Customer portfolio</text>
-  <text x="238" y="311" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Longer description shown as the page title.</text>
-  <text x="238" y="324" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUDIT TABLE</text>
-  <rect x="238" y="329" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="343.3" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">e.g. AUD_USERS — leave blank to disable</text>
-  <text x="660.0" y="368" fill="#64748b" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
-  <text x="238.0" y="386" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUTO LOAD</text>
-  <rect x="238.0" y="396" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M240.5,401.5 L242.8,403.8 L246.8,399" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="255.0" y="405" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="238.0" y="420" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Run the read query as soon as the screen opens.</text>
-  <text x="660.0" y="386" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EDITABLE</text>
-  <rect x="660.0" y="396" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M662.5,401.5 L664.8,403.8 L668.8,399" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="677.0" y="405" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="660.0" y="420" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Allow inline grid editing on this screen.</text>
-  <text x="238.0" y="438" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">UPLOADABLE</text>
-  <rect x="238.0" y="448" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="255.0" y="457" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="238.0" y="472" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Show the Excel / CSV import button.</text>
-  <text x="660.0" y="438" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">READ ONLY</text>
-  <rect x="660.0" y="448" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="677.0" y="457" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="660.0" y="472" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Make the whole screen view-only.</text>
-  <line x1="238" y1="486" x2="1082" y2="486" stroke="#1f2937" strokeWidth="1"/>
-  <text x="238" y="504" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WHEN A ROW IS CLICKED</text>
-  <text x="238" y="520" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">BEHAVIOR</text>
-  <rect x="238" y="525" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="539.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Do nothing (or fall through to the screen's own dialog)</text>
-  <text x="556" y="539.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <line x1="220" y1="556" x2="1100" y2="556" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="1027" y="566" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1054.5" y="580.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="954" y="566" width="65" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="986.5" y="580.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <text x="238" y="172" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
+  <rect x="238" y="177" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="191.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="238" y="215" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <rect x="238" y="220" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="234.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="238" y="254" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Short label shown in the menu / list.</text>
+  <text x="238" y="270" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL TRANSLATIONS</text>
+  <rect x="238" y="275" width="303" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="289.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="247" y="289.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="262.664" y="289.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="529" y="289.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="547" y="275" width="507" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="557" y="289.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Clients</text>
+  <rect x="1060" y="275" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1071.0" y="289.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="304" width="40" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="247" y="316" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ add</text>
+  <text x="238" y="333" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The label per language (the tab, the list of screens).</text>
+  <text x="238" y="351" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <rect x="238" y="356" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="370.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customers — codes from the sales, names completed by hand</text>
+  <text x="238" y="390" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Longer description shown as the page title.</text>
+  <text x="238" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION TRANSLATIONS</text>
+  <rect x="238" y="411" width="303" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="425.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="247" y="425.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="262.664" y="425.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="529" y="425.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="547" y="411" width="507" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="557" y="425.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Clients — codes issus des ventes, noms complétés à la main</text>
+  <rect x="1060" y="411" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1071.0" y="425.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="440" width="40" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="247" y="452" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ add</text>
+  <text x="238" y="469" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The description per language (the page's heading).</text>
+  <text x="238" y="487" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUDIT TABLE</text>
+  <rect x="238" y="492" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="506.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">e.g. AUD_USERS — leave blank to disable</text>
+  <text x="660.0" y="532" fill="#64748b" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <line x1="220" y1="544" x2="1100" y2="544" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1039" y="554" width="43" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1060.5" y="568.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="967" y="554" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="999.0" y="568.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
   <rect x="20" y="82" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Opens on What it is</text>
   <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">identity and behaviour</text>
-  <line x1="200" y1="99.0" x2="258.0" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="175" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="190" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector</text>
-  <text x="30" y="203" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the app's, unless set otherwise</text>
-  <line x1="200" y1="192.0" x2="238" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="219" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="234" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Label and description</text>
-  <text x="30" y="247" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">menu text and page title</text>
-  <line x1="200" y1="236.0" x2="238" y2="236" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="323" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="338" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit table</text>
-  <text x="30" y="351" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mirrors every write</text>
-  <line x1="200" y1="340.0" x2="238" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="383" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="398" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Behaviour flags</text>
-  <text x="1130" y="411" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">auto-load, grid editing…</text>
-  <line x1="1120" y1="400.0" x2="720.0" y2="405" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="448" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read only</text>
-  <text x="1130" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">no write control at all</text>
-  <line x1="1120" y1="465.0" x2="820.0" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="519" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="534" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row click</text>
-  <text x="1130" y="547" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dialog, sibling screen or route</text>
-  <line x1="1120" y1="536.0" x2="568" y2="536" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <line x1="200" y1="99.0" x2="258" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Label</text>
+  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the menu, the list of screens</text>
+  <line x1="200" y1="237.0" x2="238" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In each language</text>
+  <text x="30" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the tab and the list of screens</text>
+  <line x1="200" y1="309.0" x2="238" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="1120" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The label in French</text>
+  <text x="1130" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ add: another language</text>
+  <line x1="1120" y1="309.0" x2="1052" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Heading per language</text>
+  <text x="30" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shown at the top of the page</text>
+  <line x1="200" y1="445.0" x2="238" y2="438" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="1120" y="484" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="499" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit table</text>
+  <text x="1130" y="512" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">then the behaviour flags</text>
+  <line x1="1120" y1="501.0" x2="1082" y2="500" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
 </svg>
 
 ### Field by field
@@ -175,7 +170,9 @@ The designer opens on its first stage, **What it is**: identity, the connector o
 |---|---|
 | **Connector** | Defaults to *Use the app's connector — \<app>*. Set explicitly only when the screen reads/writes through a **different** connector than the one the app is named after (rare but legitimate — e.g. a `crm` app that reads its reporting tables through a `reporting` connector). |
 | **Label** | Short text shown in menus and lists. Falls back to `description`, then `id`. |
+| **Label translations** | The label in each other language — a language picked in the list (`fr Français`), then its text. It names the screen's tab and its line in the list of screens for the users of that language. A language with no line shows the label as written. |
 | **Description** | Longer text shown as the page title. |
+| **Description translations** | The description in each other language: the page's heading for the users of that language. |
 | **auto_load** | When on, the grid runs the read query as soon as the screen opens. When off, the user clicks *Run* to fetch. Turn off only for screens with required filter parameters or genuinely expensive queries. |
 | **editable** | When on, the grid supports inline cell editing — click a cell, type, press Enter; *Save* commits via `update_query`. When off, the user edits only through the dialog. |
 | **uploadable** | When on, an Excel / CSV *Import* button appears in the grid toolbar. Requires `key_columns` to know which rows are updates vs inserts. |

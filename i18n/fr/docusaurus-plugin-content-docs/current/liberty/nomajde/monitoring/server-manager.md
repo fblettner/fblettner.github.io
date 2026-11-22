@@ -170,7 +170,7 @@ Tous les écrans sont en lecture seule et se chargent à l'ouverture. Chacun dem
 | **Instances** | Toutes les instances gérées par la console. | Instance, Type, État, Version des outils, Hôte, Répertoire JDE. |
 | **Utilisateurs connectés** | Les sessions web et AIS — et, sur demande, les processus du serveur d'entreprise auxquels chaque utilisateur est connecté. | Utilisateur, Session, Instance, Environnement, Rôle, Depuis, Applications ouvertes, Connecté à, Inactif (secondes), Dernière activité, Processus. |
 | **Serveurs d'entreprise** | Une ligne par serveur d'entreprise. | Instance, Hôte, En service depuis, Processus réseau, Processus noyau, Processus zombies, Utilisateurs du noyau sécurité, Utilisateurs call object, CPU, Mémoire. |
-| **Processus des serveurs** | Chaque noyau et chaque écouteur réseau des serveurs d'entreprise. | Processus, Id processus, Instance, Nature, Utilisateurs, Connectés, Requêtes en attente, Messages reçus, Mémoire, CPU, Threads, Connexions base, Transactions ouvertes, Démarré, Dernier message. |
+| **Processus des serveurs** | Chaque noyau et chaque écouteur réseau des serveurs d'entreprise. | Processus, Id processus, Instance, Nature, État du processus (*Running* ou *Zombie*, d'après l'état que la console donne au processus), Utilisateurs, Connectés, Requêtes en attente, Messages reçus, Mémoire, CPU, Threads, Connexions base, Transactions ouvertes, Démarré, Dernier message. |
 | **Fonctions métier** | Les appels de fonctions métier vus par chaque serveur web. | Fonction métier, Appels, Moyenne (ms), Plus long (ms), Délais dépassés, Erreurs applicatives, Erreurs système, Total (ms), Plus court (ms), Instance, Serveur d'entreprise. |
 | **Serveurs web et AIS** | Chaque nœud web et AIS. | Instance, Nœud, Type, En service depuis, Utilisateurs en ligne, Connexion, Mémoire Java utilisée (Mo), Mémoire Java maximale (Mo), Mémoire Java utilisée (en pourcentage). |
 | **Caches JDBj** | Chaque cache JDBj des serveurs HTML. | Instance, Nœud, Cache, Éléments, Accès, Trouvés, Manqués, Taux de réussite. |
@@ -213,7 +213,9 @@ Un filtre s'applique aux lignes renvoyées par la console : il réduit ce qui es
 
 ## La connexion à Server Manager \{#connection\}
 
-Les écrans utilisent le connecteur `jde_server_manager`, déjà employé par le [contrôle de santé](./jde-servers.md#job). Dans **Liberty Next → Données → Connecteurs**, l'ouvrir pour renseigner l'adresse de la console et le mot de passe de son compte (`jde_admin` par défaut). Les droits de ce compte dans Server Manager déterminent ce qu'il peut lire.
+Les écrans utilisent le connecteur `jde_server_manager`, déjà employé par le [contrôle de santé](./jde-servers.md#job). Ce connecteur ne porte ni adresse ni compte : il désigne le **pool `jde_server_manager`**, où la console se paramètre une seule fois. Dans **Liberty Next → Administrer → Pools**, ouvrir ce pool (type *HTTP server (an API)*) et y saisir l'adresse du service REST de la console avec son compte (`jde_admin` par défaut), le mot de passe et la vérification ou non du certificat TLS. Les droits de ce compte dans Server Manager déterminent ce qu'il peut lire.
+
+À l'installation, le pool peut aussi être alimenté par l'environnement du serveur : `JDE_SM_URL` (l'adresse avec son compte) et `JDE_SM_VERIFY_SSL` (`true` par défaut). Voir [Pools](../../framework/connectors.md#pools).
 
 ---
 
@@ -243,7 +245,7 @@ Chaque écran est visible des rôles qui détiennent son entrée de menu. Un ser
 ## Conseils & bonnes pratiques \{#tips\}
 
 - Commencer par **Instances** : une instance qui n'est pas `RUNNING` explique une ligne vide dans les autres écrans.
-- Dans **Processus des serveurs**, trier sur **Requêtes en attente** ou **CPU** pour trouver le noyau qui retient une file.
+- Dans **Processus des serveurs**, trier sur **Requêtes en attente** ou **CPU** pour trouver le noyau qui retient une file ; trier sur **État du processus** pour regrouper les processus *Zombie* — terminés sans avoir été nettoyés.
 - Dans **Fonctions métier**, trier sur **Erreurs système** ou **Délais dépassés** après un déploiement : une fonction en erreur sur un seul serveur web désigne ce serveur.
 - **Serveurs web et AIS** — une mémoire utilisée proche de son maximum sur plusieurs actualisations est le signal à traiter avant l'appel des utilisateurs.
 - **Caches JDBj** — un **Taux de réussite** bas juste après un redémarrage est normal ; s'il reste bas, le cache est trop petit pour ce qui est utilisé. Vider un cache après avoir modifié ce qu'il contient dans JD Edwards (sécurité, menus, dictionnaire de données) plutôt que de redémarrer le serveur.
@@ -255,4 +257,4 @@ Chaque écran est visible des rôles qui détiennent son entrée de menu. Un ser
 - [Contrôle de santé JDE](./jde-servers.md) — les contrôles conservés dans le temps et leurs alertes.
 - [Performance](./performance.md) et [Analyse de la plateforme](./platform-analysis.md) — la même console lue sous forme de conseils et d'analyse.
 - [Services JD Edwards (AIS)](../ais/services.md) — la même approche pour le serveur AIS.
-- [Vue d'ensemble — la page d'accueil](../home.md).
+- [Vue d'ensemble — le point d'entrée](../home.md).

@@ -81,7 +81,7 @@ liberty-next/
 │   ├── charts/               ← définitions des graphiques
 │   ├── menus/                ← arborescence menu + élagage par permissions
 │   ├── jobs/                 ← Nomaflow (tâches, étapes, planificateur)
-│   ├── actions/              ← actions partagées
+│   ├── actions/              ← services
 │   ├── notify/               ← notifications
 │   ├── ai/                   ← assistant Anthropic tool-use
 │   ├── licensing/            ← vérification de clé de licence RS256
@@ -128,7 +128,7 @@ liberty-apps/
 │   ├── screens.toml          ← grilles et dialogues
 │   ├── charts.toml           ← graphiques enregistrés
 │   ├── dashboards.toml       ← tableaux de bord
-│   ├── actions.toml          ← services (actions partagées)
+│   ├── actions.toml          ← services
 │   ├── explorer.toml         ← modèles de l'explorateur livrés avec les applications
 │   ├── ai.toml               ← questions de départ et procédures de l'assistant IA
 │   ├── theme.toml            ← couleurs et identité visuelle

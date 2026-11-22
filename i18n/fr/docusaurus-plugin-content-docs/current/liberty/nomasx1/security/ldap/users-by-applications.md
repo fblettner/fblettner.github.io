@@ -8,7 +8,7 @@ keywords: [Nomasx-1, sécurité, LDAP, département AD, accès application, expo
 
 L'écran **Utilisateurs par applications** est le croisement qui relie le catalogue **LDAP / Active Directory** de l'entreprise à chaque application connectée, pour les départements AD déclarés dans *Paramètres*. Une ligne par tuple *(Groupe, Application, Département AD, Utilisateur LDAP)*.
 
-C'est la grille que les auditeurs emportent : filtrée sur un *Groupe* ou un département, elle s'exporte telle quelle par **Exporter → Excel (.xlsx)** — ou en CSV.
+C'est la grille que les auditeurs emportent : **Exporter les classeurs** produit un fichier Excel par groupe, une feuille par application ; **Exporter → Excel (.xlsx)** — ou CSV — exporte les lignes de la grille telles qu'elles s'affichent.
 
 ---
 
@@ -23,9 +23,9 @@ C'est la grille que les auditeurs emportent : filtrée sur un *Groupe* ou un dé
   </defs>
 
   <rect x="220" y="20" width="880" height="277" rx="14" fill="url(#nxlda-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Users by application</text>
-  <rect x="445.15600000000006" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="467.15600000000006" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Utilisateurs par application</text>
+  <rect x="475.5" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="497.5" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.ldap_apps_get</text>
   <line x1="220" y1="88" x2="1100" y2="88" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="112" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">640 lignes · 8,6 ms</text>
@@ -34,10 +34,12 @@ C'est la grille que les auditeurs emportent : filtrée sur un *Groupe* ou un dé
   <text x="985.0" y="113.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Tableau</text>
   <line x1="1018" y1="105" x2="1018" y2="115" stroke="#334155" strokeWidth="1"/>
   <text x="1056.0" y="113.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Graphique</text>
-  <rect x="240" y="128" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
-  <rect x="418" y="128" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="458.0" y="142.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <rect x="240" y="128" width="128" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="304.0" y="142.5" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▤ Exporter les classeurs</text>
+  <rect x="376" y="128" width="100" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="386" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
+  <rect x="484" y="128" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="524.0" y="142.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
   <rect x="648" y="128" width="112" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="658" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Lignes max  défaut</text>
   <rect x="766" y="128" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -102,9 +104,13 @@ C'est la grille que les auditeurs emportent : filtrée sur un *Groupe* ou un dé
   <text x="1045.0" y="278.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
   <rect x="1058" y="265" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1067.0" y="278.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="20" y="122" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="137" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exporter les classeurs</text>
+  <text x="30" y="150" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un fichier par groupe</text>
+  <line x1="200" y1="139" x2="240" y2="139" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxlda-arrow)"/>
   <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Groupe · département</text>
-  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issus de LDAP › Settings</text>
+  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issus de LDAP › Paramètres</text>
   <line x1="200" y1="227.0" x2="270" y2="194" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxlda-arrow)"/>
   <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aucun compte</text>
@@ -119,6 +125,14 @@ C'est la grille que les auditeurs emportent : filtrée sur un *Groupe* ou un dé
   <text x="1130" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">compte, statut, connexion, rôles</text>
   <line x1="1120" y1="277.0" x2="1070" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxlda-arrow)"/>
 </svg>
+
+---
+
+## Exporter les classeurs \{#export-workbooks\}
+
+**Exporter les classeurs**, à gauche de la barre d'outils, produit le livrable d'audit en un clic : **un fichier Excel par groupe** (`ldap_<groupe>.xlsx`) et, dans chaque fichier, **une feuille par application**, avec les utilisateurs AD du groupe et leur compte sur cette application. Avec plusieurs groupes, les fichiers arrivent ensemble dans un `.zip`. Les groupes et leurs départements sont ceux de [LDAP → Paramètres](./settings.md).
+
+**Exporter → Excel (.xlsx)** reste disponible pour une extraction ponctuelle : il exporte la grille telle que filtrée à l'écran, sur une seule feuille.
 
 ---
 
@@ -158,7 +172,7 @@ Si un utilisateur AD n'a pas de compte rapproché sur l'application, les colonne
 
 ## Conseils & bonnes pratiques
 
-- **Filtrer avant d'exporter.** Restreindre la grille à un seul *Groupe* allège le fichier exporté — pratique quand l'audit ne couvre qu'un pôle fonctionnel.
+- **Passer par *Exporter les classeurs* pour le livrable** — un fichier par groupe, c'est ce que chaque responsable métier relit. Filtrer la grille et utiliser **Exporter** seulement pour une extraction ponctuelle.
 - **Trier par *Groupe* + *Département*** — ou grouper la grille par ces colonnes avec **Grouper** — pour vérifier les lignes avant l'export.
 - **Une ligne sans *Utilisateur ID* n'est pas un trou en soi** — elle signifie simplement que l'utilisateur AD n'a pas de compte sur cette application. C'est une appréciation métier ; la ligne reste dans l'export pour que l'auditeur puisse le constater.
-- **Un département absent de la grille** est un département non ajouté dans *Paramètres*. L'ajouter dans [LDAP → Settings](./settings.md), puis relancer la collecte.
+- **Un département absent de la grille** est un département non ajouté dans *Paramètres*. L'ajouter dans [LDAP → Paramètres](./settings.md), puis relancer la collecte.

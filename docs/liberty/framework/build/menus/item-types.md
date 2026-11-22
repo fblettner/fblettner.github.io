@@ -302,7 +302,7 @@ A `job` leaf opens the page of a Nomaflow job for users who do not administer No
 | **`connector`** | Must NOT be set. |
 | **`params`** | Optional: `{ preset = "Licences" }` runs the job with one of its presets — one job, several menu entries. |
 
-The item needs the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
+The item is shown to who may run the job: the entry or its folder in **Read and change** in the role, or the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
 
 ### Example
 
@@ -372,7 +372,7 @@ For `dashboard` and `page`, the field is **always blank** — the validator enfo
 params = { STATUS = "OPEN", REGION = "EU" }
 ```
 
-For `query` leaves, the values bind to the query's `:placeholder` parameters. For `endpoint`, they pre-fill the HttpRunner's form. For `page`, they become query-string parameters.
+For `screen` and `query` leaves, the values bind to the query's `:placeholder` parameters. For `endpoint`, they pre-fill the HttpRunner's form. For `page`, they become query-string parameters. A `screen`, `query` or `endpoint` leaf passes them in its address when it opens — the page fills its inputs from them, as it does for a link that opens it on a record —, and so does a [Links widget](../../dashboards.md#text-links) that points at the entry.
 
 The two reserved tokens — `#LOGIN_USER#` and `#SYSDATE#` — work here too: a *My data* leaf with `params = { OWNER = "#LOGIN_USER#" }` lands the user on a view scoped to their own rows.
 

@@ -110,9 +110,28 @@ plugins/
 - The permission is `page:<app>:<page>`, asked of the menu entry too; the role editor knows it.
 - The module's default export is a function that receives what the framework's own pages are made of — React, the shared components, the shared grid (search, filters, sort, grouping, columns, export, saved views), the API client, the theme, the interface language — and returns the component to draw. The page imports nothing, so it looks like the rest of the application.
 - The shared grid (`Grid`) takes the page's columns and rows. With a `detail` function, a row can be opened: every row gets a chevron, and what the function returns is drawn under the row — an object's dependencies, a nested list.
-- The contract carries its `version`: `detail` needs version 3 or later, which a page that relies on it can check first.
 - `call('module:j_function', { … })` runs a function of the application and returns its answer; the caller needs `plugin:<that reference>`.
 - The page runs in the user's session: it reads only what that user's permissions let the API answer.
+
+### What the page receives \{#page-contract\}
+
+The object the page receives is a contract: a field is added, never renamed or removed, and its `version` goes up when a page could tell the difference. A page that relies on a recent field checks `version` first and says so.
+
+| Field | Gives | Version |
+|---|---|---|
+| `version`, `app`, `page` | The contract's version, the application and the page being drawn. | 1 |
+| `React`, `styled`, `theme`, `ui`, `icon` | The framework's React, its styled components, the theme's tokens (they follow dark / light), the shared components (`PageLayout`, `Card`, `Button`, `Input`, `SearchSelect`, `Tag`, `Banner`, `Modal`…), a menu icon by its name. | 1 |
+| `api`, `call` | The API client, in the user's session; `call` runs a function of the application. | 1 |
+| `useLang`, `useUser`, `useOpen` | Hooks: the interface's language (the page ships its own texts), who is signed in, a function that opens a route of the application in its tab. | 1 |
+| `useCan` | Hook: a function that says whether the user holds a permission (`job:<id>`, `plugin:…`) — to show a button only to who may use it. The server decides in the end. | 1 |
+| `Grid` | The shared grid. | 2 |
+| `Grid` with `detail` | A row of the grid opens. | 3 |
+| `useAssistantContext(title, facts)` | Tells the [assistant](../ai-assistant.md#context) what the user is looking at. | 4 |
+| `Diagram` | A diagram laid out by the server, drawn — see below. | 5 |
+
+**The assistant on a page.** `useAssistantContext('Cross Reference', { object: 'P4210', form: 'W4210A' })` gives a title and a few facts in a few words — the object open, the tab, a filter, never rows. Blank facts are left out, long ones cut, 20 at most. The chat shows them as its usual chip, sends them with each question while this page is the one on screen, and offers the application's starter questions for the page — declared like a screen's, under the page's name (Liberty Next → Logic → AI, *Starter questions per screen*, or `[ai.<app>.screens.<page>]`).
+
+**A diagram.** For a picture of a platform or a system, the application's function builds the model — **groups** (a tier, drawn as a column, or a host, drawn as a box inside its tier), **nodes** (a card in a group: a kind, a label, a second line, a state `ok` / `warn` / `down` / `unknown`, whether it is declared, a few badges) and **links** (from a card or a box to another, with a label and the *evidence* each one is drawn on) — and returns it laid out by `liberty.diagram.lay_out`, on the server. The page draws it with `<Diagram layout={answer.diagram} picked={id} onPick={(node) => …} words={{ ok, warn, down, unknown, undeclared }} />`, in a box that has a height: the tiers as columns, a card per element with its state, a dashed outline for what is not declared, the links on their paths, a legend, the zoom. The same coordinates give the picture of a PDF report: `liberty.diagram.render_svg` paints it in print colours, the state as a mark and a word, each text cut to fit.
 
 ---
 

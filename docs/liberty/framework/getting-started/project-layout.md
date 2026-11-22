@@ -81,7 +81,7 @@ liberty-next/
 │   ├── charts/               ← chart definitions
 │   ├── menus/                ← menu tree + permission pruning
 │   ├── jobs/                 ← Nomaflow (jobs, steps, scheduler)
-│   ├── actions/              ← shared actions
+│   ├── actions/              ← services
 │   ├── notify/               ← notifications
 │   ├── ai/                   ← Anthropic tool-use assistant
 │   ├── licensing/            ← RS256 license-key verification
@@ -128,7 +128,7 @@ liberty-apps/
 │   ├── screens.toml          ← grids and dialogs
 │   ├── charts.toml           ← saved charts
 │   ├── dashboards.toml       ← dashboards
-│   ├── actions.toml          ← services (shared actions)
+│   ├── actions.toml          ← services
 │   ├── explorer.toml         ← Data Explorer models shipped with the apps
 │   ├── ai.toml               ← starter questions and playbooks for the AI assistant
 │   ├── theme.toml            ← colours and branding

@@ -1,12 +1,12 @@
 ---
 title: Types UDC
-description: "Données de base → UDC → UDC Types dans Nomajde : le catalogue des types User Defined Code de JD Edwards EnterpriseOne (F0004) dans une grille avec recherche, filtres avancés et export Excel."
+description: "Données JD Edwards → Données de base → UDC → Types UDC dans Nomajde : le catalogue des types User Defined Code de JD Edwards EnterpriseOne (F0004) dans une grille avec recherche, filtres avancés et export Excel."
 keywords: [Nomajde, UDC, User Defined Codes, JD Edwards, F0004, données de base, types UDC]
 ---
 
 # Types UDC
 
-**Master Data → UDC → UDC Types** liste chaque type de *User Defined Code* déclaré dans JD Edwards (F0004) : une ligne par code produit et type UDC, avec sa description. Les valeurs de chaque type se trouvent dans [UDC Code](./udc-codes.md).
+**Données JD Edwards → Données de base → UDC → Types UDC** liste chaque type de *User Defined Code* déclaré dans JD Edwards (F0004) : une ligne par code produit et type UDC, avec sa description. Les valeurs de chaque type se trouvent dans [UDC Code](./udc-codes.md).
 
 ---
 

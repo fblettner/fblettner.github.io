@@ -166,10 +166,7 @@ Un clic sur une ligne ouvre l'instance dans une fenêtre. L'onglet **Général**
 
 ## Sur la vue d'ensemble \{#overview\}
 
-La [page d'accueil](../home.md) de Nomajde comporte deux tuiles **Serveurs JDE**, calculées sur la dernière vérification de chaque instance au cours des 24 dernières heures :
-
-- le nombre d'instances en bonne santé sur le nombre d'instances suivies, avec l'heure de la dernière vérification ;
-- la liste des instances : type de serveur et hôte, contrôles en échec et action menée, une pastille d'état — **OK**, **En échec**, **Arrêtée**, **Erreur** —, la disponibilité sur 24 heures (la part de vérifications réussies) et le nombre de vérifications. Les instances en défaut apparaissent en premier ; une instance dont la dernière vérification date de plus de 30 minutes passe en orange, avec la pastille **En retard**.
+La [Vue d'ensemble](../home.md) de Nomajde y mène depuis son groupe *La plateforme*, et affiche la dernière exécution de la tâche `nomajde-jde-health` parmi ses tâches. Pour l'état des instances à cet instant, voir la [Synthèse de la plateforme](../synthesis.md).
 
 ---
 
@@ -177,7 +174,7 @@ La [page d'accueil](../home.md) de Nomajde comporte deux tuiles **Serveurs JDE**
 
 La tâche `nomajde-jde-health` vérifie les serveurs au travers de l'API REST de Server Manager. Elle est livrée **désactivée**, planifiée toutes les cinq minutes (Europe/Paris).
 
-1. Dans **Liberty Next → Données → Connecteurs**, ouvrir le connecteur `jde_server_manager` et renseigner l'adresse de Server Manager et le mot de passe du compte `jde_admin`.
+1. Dans **Liberty Next → Administrer → Pools**, ouvrir le pool `jde_server_manager` et renseigner l'adresse de Server Manager avec son compte (`jde_admin`) et le mot de passe — voir [la connexion à Server Manager](./server-manager.md#connection).
 2. Dans **Nomaflow → Tâches**, ajuster au besoin les paramètres de `nomajde-jde-health`, puis l'activer.
 3. **Tâches → Vérifier les serveurs JDE**, dans le menu Nomajde, lance la vérification immédiatement, sans attendre la planification.
 
@@ -201,4 +198,4 @@ Détail de la tâche : [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nom
 - [Server Manager](./server-manager.md) — les écrans en direct : instances, utilisateurs connectés, processus, mémoire Java.
 - [Tâches](../jobs.md) — les tâches Nomajde, dont *Vérifier les serveurs JDE*.
 - [Notifications](../../nomaflow/notifications.md) — pour être alerté d'un échec de la vérification.
-- [Vue d'ensemble — la page d'accueil](../home.md).
+- [Vue d'ensemble — le point d'entrée](../home.md).

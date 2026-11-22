@@ -155,6 +155,7 @@ The editor opens in a window titled by the chart (`[charts.<connector>.<id>]`) a
 | **Id** | The chart's identifier: letters, digits, underscores and hyphens. Dashboards refer to the chart by this id. |
 | **Label** | The chart's title in lists and dashboards. |
 | **Description** | Optional. |
+| **Keep this one as it is on upgrade (an upgrade of the application then leaves it as saved here)** | Ticked, an upgrade of the application that ships the chart leaves it as saved here — see [Upgrades](#override). |
 | **Connector** | The connector of the scope — fixed; to move a chart to another connector, recreate it in that scope. |
 | **Query** | The read query whose result the chart draws. The buttons next to it edit the query, clone it or create a new one without leaving the editor. |
 
@@ -193,7 +194,7 @@ A dashboard's **Chart** widget shows a saved chart by its id, or holds its own c
 
 ## Upgrades \{#override\}
 
-The *override* badge flags a chart marked as a local customisation: an upgrade package does not overwrite it. See [Packages](./build/packages.md).
+The *override* badge flags a chart marked as a local customisation — the **Keep this one as it is on upgrade** box of its editor: an upgrade package does not overwrite it. See [Packages](./build/packages.md).
 
 ---
 

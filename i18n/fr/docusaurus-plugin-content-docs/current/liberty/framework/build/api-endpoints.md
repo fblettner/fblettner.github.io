@@ -1,7 +1,7 @@
 ---
 title: Points d'accès d'API
 description: "Les points d'accès (endpoints) d'un connecteur d'API dans Liberty Next : l'éditeur dessiné en quatre étapes (ce qu'il est, entrées, l'appel, la réponse), des paramètres qui disent ce qu'ils attendent, Créer à partir de… et Actualiser depuis le serveur, les points d'accès qui modifient des données, les champs d'erreur et d'avertissement, les lignes lisibles par un écran, les points d'accès servis par une fonction ou par un service, les groupes, les permissions et la sûreté des valeurs."
-keywords: [Liberty Next, connecteur d'API, point d'accès, endpoint, REST, paramètres, Créer à partir de, générateur, modifie des données, champs d'erreur, lignes, servi par une fonction, servi par une action, permissions, api_run]
+keywords: [Liberty Next, connecteur d'API, point d'accès, endpoint, REST, paramètres, Créer à partir de, générateur, modifie des données, champs d'erreur, lignes, servi par une fonction, servi par un service, permissions, api_run]
 ---
 
 # Points d'accès d'API
@@ -230,7 +230,7 @@ Chaque **paramètre** est une ligne — son nom, son libellé, sa valeur par dé
 
 **Méthode** et **Chemin de l'URL**, **En-têtes supplémentaires**, **Content-Type**, **Corps** (avec **Formater le JSON**) et **Paramètres de requête**. **Ne pas envoyer un paramètre de requête dont la valeur est vide** n'envoie que les paramètres renseignés, pour un serveur qui lit un paramètre vide comme un filtre sur rien.
 
-À la place d'un appel HTTP, le point d'accès peut être **Servi par une fonction** ou **Servi par une action** — voir plus bas.
+À la place d'un appel HTTP, le point d'accès peut être **Servi par une fonction** ou **Servi par un service** — voir plus bas.
 
 ### La réponse \{#answer\}
 
@@ -241,6 +241,7 @@ Chaque **paramètre** est une ligne — son nom, son libellé, sa valeur par dé
 | **Titres des colonnes** | L'endroit où la réponse donne son titre à chaque clé — le libellé d'une colonne que ni l'écran ni le dictionnaire ne nomment. |
 | **Paramètre du nombre de lignes** | Le paramètre qui porte le nombre maximal de lignes : un écran le renseigne avec son propre *Max lignes*. |
 | **Indicateur « autres lignes »** | L'endroit où le serveur signale qu'il y a plus que ce qu'il a retourné : l'écran indique alors un résultat tronqué. |
+| **Refus qui signifient « aucune ligne »** | Pour un serveur qui refuse quand il n'y a rien à lister : une partie de son message d'erreur, ou son statut HTTP (`404`), séparés par des virgules — `404, no active users`. Un écran affiche alors une liste vide au lieu d'une erreur ; tout autre refus reste une erreur. |
 | **Champs d'erreur** | L'endroit où le serveur place ses erreurs quand il répond 200 malgré tout : un contenu à cet endroit fait de l'appel un échec, avec ce contenu comme erreur. |
 | **Champs d'avertissement** | L'endroit où le serveur place ses avertissements : signalés avec la réponse, l'appel reste valide. |
 | **Champ de réponse**, **Correspondances de réponse** | La partie de la réponse retournée, et des noms logiques associés à des chemins de la réponse. |
@@ -341,7 +342,7 @@ Un seul appel HTTP ne peut pas tout faire : modifier un enregistrement qu'un ser
 
 ## Servi par un service \{#service\}
 
-**Servi par une action** désigne un [service](./services.md) : ses étapes — requêtes, autres points d'accès, fonctions, conditions, boucles — s'exécutent sur le serveur et répondent comme un seul point d'accès. Les paramètres du point d'accès sont les entrées du service ; ce que le service retourne est la réponse. Il s'exécute avec la permission du point d'accès : qui peut appeler le point d'accès exécute ses étapes. **Exposer**, dans la page Services, crée un tel point d'accès en un clic.
+**Servi par un service** désigne un [service](./services.md) : ses étapes — requêtes, autres points d'accès, fonctions, conditions, boucles — s'exécutent sur le serveur et répondent comme un seul point d'accès. Les paramètres du point d'accès sont les entrées du service ; ce que le service retourne est la réponse. Il s'exécute avec la permission du point d'accès : qui peut appeler le point d'accès exécute ses étapes. **Exposer**, dans la page Services, crée un tel point d'accès en un clic.
 
 ---
 

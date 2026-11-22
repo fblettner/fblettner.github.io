@@ -160,9 +160,17 @@ The endpoints [Create from…](./create-from.md#guarantees) builds for a change 
 
 ---
 
+## The AIS connection \{#connection\}
+
+The `ais_connection` connector holds no address and no account: it names the **`jde_ais` pool**, where the AIS server is set once, like the JD Edwards database. In **Liberty Next → Administer → Pools**, open the `jde_ais` pool (kind *HTTP server (an API)*) and set the AIS REST address with its JD Edwards account — `https://JDE@host:port/jderest/v2` —, its password and whether the TLS certificate is checked. When the calls are made as the signed-in user ([each call as the signed-in user](../../framework/connectors.md#api-user-jwt)), the signing key is a field of the same pool.
+
+At installation the pool can be filled from the server's environment instead: `JDE_AIS_URL` (the address with its account) and `JDE_AIS_VERIFY_SSL` (`true` by default). See [Pools](../../framework/connectors.md#pools).
+
+---
+
 ## What JD Edwards sees \{#account\}
 
-Every call runs under the **JD Edwards account of the connector**: JD Edwards security applies to that account, the audit records it, and texts come back in its language. Give it the rights the integrations need, no more.
+Every call runs under the **JD Edwards account of the `jde_ais` pool**: JD Edwards security applies to that account, the audit records it, and texts come back in its language. Give it the rights the integrations need, no more.
 
 What JD Edwards refuses is reported in its own words. A business function's error fails the call with its message; a warning — *Duplicate Address Book record exists* — is reported with the answer and the call stands.
 
@@ -184,7 +192,7 @@ For the AI assistant, a service that changes JD Edwards also requires the user t
 
 - Try a service in the **Test** tab before putting it in a job or a screen.
 - **Query a table or a view** with `KIND` = `COUNT` answers a volume question without reading the rows.
-- Use a dedicated JD Edwards account for the connector, so that the audit separates what Nomajde did from what a person did.
+- Use a dedicated JD Edwards account for the `jde_ais` pool, so that the audit separates what Nomajde did from what a person did.
 - When the same JSON is typed twice, it is time for **Create from…**.
 
 ---

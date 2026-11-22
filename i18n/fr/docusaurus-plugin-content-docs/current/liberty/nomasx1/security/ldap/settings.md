@@ -8,7 +8,7 @@ keywords: [Nomasx-1, sécurité, LDAP, paramètres, regroupement département AD
 
 L'écran **Paramètres LDAP** est la table de regroupement qui alimente la vue *Utilisateurs par applications*. Chaque ligne associe un **département AD** à une **application** et un libellé de **groupe** libre.
 
-Le même regroupement structure l'export Excel de *Utilisateurs par applications* : filtrée sur un groupe ou un département, la grille donne par **Exporter → Excel (.xlsx)** le fichier que les auditeurs demandent généralement pour confirmer *« qui appartient à quel département AD, sur quelle application, avec quels rôles »*.
+Le même regroupement structure l'export Excel de *Utilisateurs par applications* : **Exporter les classeurs** y produit un fichier par groupe, une feuille par application — les fichiers que les auditeurs demandent généralement pour confirmer *« qui appartient à quel département AD, sur quelle application, avec quels rôles »*.
 
 ---
 
@@ -23,7 +23,7 @@ Le même regroupement structure l'export Excel de *Utilisateurs par applications
   </defs>
 
   <rect x="220" y="20" width="880" height="300" rx="14" fill="url(#nxlds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Department</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Département</text>
   <rect x="380.572" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="402.572" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.ldap_department_get</text>
@@ -113,7 +113,7 @@ Le même regroupement structure l'export Excel de *Utilisateurs par applications
 Deux finalités complémentaires :
 
 - **Regrouper les départements AD.** La colonne *Groupe* est un libellé humain qui rassemble plusieurs départements AD dans un même pôle fonctionnel (FINANCE couvre `FIN-AP`, `FIN-AR`, `FIN-CONTROL`, …). Elle pilote la manière dont la vue *Utilisateurs par applications* agrège ses lignes.
-- **Structurer l'export Excel.** Seuls les départements listés ici apparaissent dans *Utilisateurs par applications*, donc dans son export ; filtrer cette grille sur un *Groupe* avant **Exporter → Excel (.xlsx)** donne un fichier par groupe de départements.
+- **Structurer l'export Excel.** Seuls les départements listés ici apparaissent dans *Utilisateurs par applications*, donc dans son export ; son bouton **Exporter les classeurs** produit un fichier par *Groupe*, une feuille par application.
 
 ---
 

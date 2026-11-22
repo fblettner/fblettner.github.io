@@ -1,12 +1,12 @@
 ---
-title: Analyse de montée de version
-description: "La page Montée de version de Nomajde : charger la liste d'objets publiée par Oracle pour une version ou une mise à jour de JD Edwards EnterpriseOne, lancer l'analyse d'un path code et suivre sur une seule page ce qu'il faut reprendre, avec quelle complexité, en combien de jours, dans quel ordre, par qui et où en est le travail — avec les dépendances, les objets définis par l'utilisateur à retester, les objets restés dans d'autres path codes et la liste d'Oracle."
+title: Préparer la montée de version
+description: "La page Préparer la montée de version de Nomajde : charger la liste d'objets publiée par Oracle pour une version ou une mise à jour de JD Edwards EnterpriseOne, lancer l'analyse d'un path code et suivre sur une seule page ce qu'il faut reprendre, avec quelle complexité, en combien de jours, dans quel ordre, par qui et où en est le travail — avec les dépendances, les objets définis par l'utilisateur à retester, les objets restés dans d'autres path codes et la liste d'Oracle."
 keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, reprise, liste d'objets, UN9, path code, Object Librarian, objets spécifiques, complexité, jours, vagues, dépendances, références croisées, UDO, objets définis par l'utilisateur]
 ---
 
-# Analyse de montée de version
+# Préparer la montée de version
 
-**Montée de version**, juste sous **Références croisées** dans le menu de Nomajde, répond à la première question d'une montée de version ou d'une mise à jour de JD Edwards EnterpriseOne : **que faut-il reprendre, et en combien de jours ?** Nomajde lit les objets du client dans un path code, les compare à la liste des objets modifiés par Oracle dans la version cible, et attribue à chaque objet une nature, une décision de reprise, une complexité et un nombre de jours. Tout se trouve ensuite sur une seule page : le travail et l'avancement en chiffres, la répartition du travail (type, complexité, statut, personne), l'ordre dans lequel le mener, et cinq onglets — **Vue d'ensemble**, **Objets**, **Objets définis par l'utilisateur**, **Autres path codes**, **Liste d'Oracle**. JD Edwards est seulement lu ; l'analyse et la planification sont conservées dans la base de Nomajde.
+**Préparer la montée de version**, juste sous **Synthèse de la plateforme** dans le menu de Nomajde, répond à la première question d'une montée de version ou d'une mise à jour de JD Edwards EnterpriseOne : **que faut-il reprendre, et en combien de jours ?** Nomajde lit les objets du client dans un path code, les compare à la liste des objets modifiés par Oracle dans la version cible, et attribue à chaque objet une nature, une décision de reprise, une complexité et un nombre de jours. Tout se trouve ensuite sur une seule page : le travail et l'avancement en chiffres, la répartition du travail (type, complexité, statut, personne), l'ordre dans lequel le mener, et cinq onglets — **Vue d'ensemble**, **Objets**, **Objets définis par l'utilisateur**, **Autres path codes**, **Liste d'Oracle**. JD Edwards est seulement lu ; l'analyse et la planification sont conservées dans la base de Nomajde.
 
 ---
 
@@ -21,7 +21,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, r
   </defs>
 
   <rect x="220" y="20" width="880" height="424" rx="14" fill="url(#upa-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Montée de version</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Préparer la montée de version</text>
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PD920 par rapport à UN9 · analysé le 2026-11-22 — Ce qu'il y a à reprendre…</text>
   <rect x="1027" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1053.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
@@ -267,7 +267,7 @@ Les vagues demandent les liens entre les objets du client. Quand aucun n'est con
   </defs>
 
   <rect x="220" y="20" width="880" height="384" rx="14" fill="url(#upb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Montée de version</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Préparer la montée de version</text>
   <rect x="240" y="60" width="541" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="281.0" y="73.0" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Vue d'ensemble</text>
   <rect x="323" y="61" width="76" height="18" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
@@ -639,7 +639,7 @@ Un objet qu'Oracle n'a pas modifié est `Not updated` : rien à reprendre. Pour 
 
 ## Synthèses \{#summaries\}
 
-Le modèle **Upgrade analysis** de l'[explorateur de données](../data-explorer.md) donne les totaux, avec quatre analyses enregistrées : *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*. La [page d'accueil](../home.md) de Nomajde affiche le nombre d'objets à reprendre, les jours par type d'objet et les objets par complexité.
+Le modèle **Upgrade analysis** de l'[explorateur de données](../data-explorer.md) donne les totaux, avec quatre analyses enregistrées : *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*. La [vue d'ensemble](../home.md) de Nomajde y mène depuis son groupe *Préparer la montée de version*.
 
 ---
 
@@ -658,7 +658,7 @@ La page est visible des rôles qui détiennent son entrée de menu, avec les per
 - Avant les tests, exporter l'onglet **Objets définis par l'utilisateur** sur **Les vôtres** : chaque ligne est un écran à revérifier après la montée de version.
 - Collecter les références croisées dans Nomasx-1 avant de lancer l'analyse : les vagues, **Attend** et les UDO en dépendent.
 - Exporter l'onglet **Objets** pour partager le plan : les dépendances y figurent en colonnes.
-- L'assistant IA connaît la procédure : lui demander de *préparer une montée de version* suffit pour qu'il lance les deux tâches et lise le résultat.
+- L'assistant IA connaît la procédure : lui demander de *préparer une montée de version* suffit pour qu'il lance les deux tâches et lise le résultat. Il connaît aussi l'onglet, le filtre et l'objet ouverts sur la page : *Quels objets peut-on commencer maintenant ?* — voir [Assistant IA](../ai-assistant.md).
 
 ---
 

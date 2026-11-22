@@ -169,10 +169,12 @@ Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP,
 | **Période par défaut (tableaux de bord)** | Le préréglage d'ouverture d'un tableau de bord qui n'en indique pas — voir [Tableaux de bord](../dashboards.md#period). |
 | **Taille de page des grilles** | La taille de page initiale des grilles (10 à 10 000, 50 par défaut). La taille propre d'une vue enregistrée l'emporte. |
 | **Cache des tableaux de bord (secondes, 0 = aucun)** | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord (60 par défaut). |
-| **Plusieurs onglets à la fois (sinon : une page à la fois)** | Activé par défaut. Désactivé : ouvrir une page remplace la page courante. |
-| **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets des pages Liberty Next, de la Surveillance et des exécutions restent ouverts. |
-| **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme l'onglet le plus ancien. |
+| **Plusieurs onglets à la fois (sinon : une page à la fois)** | Activé par défaut. Désactivé : ouvrir une page remplace la page courante — sauf une page qui contient des modifications non enregistrées, qui garde son onglet. |
+| **Fermer les onglets au changement d'application** | Désactivé par défaut. Activé : choisir une autre application dans le sélecteur ferme les onglets des autres applications ; les onglets des pages Liberty Next, de la Surveillance et des exécutions restent ouverts, de même qu'un onglet qui contient des modifications non enregistrées. |
+| **Onglets au maximum** | 5 par défaut (de 1 à 50). Une fois la limite atteinte, ouvrir une page ferme le plus ancien onglet sans modification en attente. |
 | **Les navigations s'ouvrent dans l'onglet courant (…)** | Désactivé par défaut. Activé : la navigation depuis une ligne s'ouvre en panneau dans l'onglet courant, avec un fil d'Ariane et **Retour**, sauf si l'action en décide autrement — voir [Actions](./screens/actions-and-lifecycle.md#drill). |
+
+**Une modification non enregistrée n'est jamais perdue sans avertissement.** Une page qui contient des modifications pas encore enregistrées — un constructeur ou une fenêtre d'édition de Liberty Next, une tâche en cours de modification, une grille en modification groupée, une fiche ouverte — garde son onglet quand l'utilisateur passe sur une autre page, et l'onglet porte un point orange (*Modifications non enregistrées — conservées tant que cet onglet reste ouvert*). La fermeture de cet onglet, **Fermer tous les onglets** et le changement de langue demandent d'abord confirmation (*Modifications non enregistrées* — **Perdre les modifications** ou **Rester**) ; le navigateur demande confirmation avant un rechargement ou la fermeture de la fenêtre. Rien n'est demandé quand rien n'est en attente.
 
 ## Adresses externes \{#external-urls\}
 
@@ -287,7 +289,7 @@ Voir [Assistant IA](../ai-assistant.md), et [Données transmises à Anthropic](.
 
 | Champ | Remarques |
 |---|---|
-| **Activé** | Fait mener **Se connecter avec OIDC**, toujours présent sur la page de connexion, au fournisseur ; désactivé, le bouton renvoie une 404. |
+| **Activé** | Affiche **Se connecter avec OIDC** sur la page de connexion, vers le fournisseur ; désactivé, la page ne propose que le formulaire local. |
 | **URL de découverte** | Le `.well-known/openid-configuration` du fournisseur. |
 | **ID client**, **Secret client**, **Scopes** | Tels qu'enregistrés chez le fournisseur (`openid email profile` par défaut). |
 | **Revendication identifiant**, **Revendication e-mail**, **Revendication nom** | Les revendications du jeton d'identité qui renseignent l'utilisateur (`preferred_username`, `email`, `name`). |

@@ -39,7 +39,7 @@ Voir [Points de santé](../monitoring/health-endpoints.md).
 |---|---|---|
 | `POST` | `/auth/login` | `{username, password}` → jetons d'accès et de rafraîchissement. `429` après trop d'échecs. |
 | `POST` | `/auth/refresh` | Un jeton de rafraîchissement → une nouvelle paire. Le jeton présenté est consommé : conserver le nouveau. |
-| `GET` | `/auth/me` | L'identité du jeton : rôles, permissions, attributs, périmètre de données. |
+| `GET` | `/auth/me` | L'identité du jeton : rôles, permissions, attributs, périmètre de données — et `implied`, ce que donnent les droits sur les menus, pour qu'un bouton affiché ou masqué par une page corresponde à la décision du serveur. |
 | `GET` / `PATCH` | `/auth/profile` | Le profil de l'utilisateur connecté. |
 | `POST` | `/auth/change-password` | Changer son propre mot de passe (utilisateurs locaux). |
 | `POST` | `/auth/tokens` | Crée un jeton d'accès personnel pour le point d'accès MCP (`{days}`, 90 par défaut) → `{token, expires_at, days}`. Demande `mcp:use`. |
@@ -63,7 +63,7 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | `GET` | `/api/sql/{connector}/_schemas`, `/_schema` | Schémas et tables de la base du connecteur. |
 | `POST` | `/api/sql/{connector}/_import` | Importe des lignes (l'import Excel de la grille). |
 | `POST` | `/api/http/{connector}/{endpoint}` | Appelle un endpoint d'un connecteur API. |
-| `GET` | `/api/actions`, `/api/actions/{action_id}` | Les actions partagées. |
+| `GET` | `/api/actions`, `/api/actions/{action_id}` | Les services (Logique → Services). |
 | `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Les fonctions de plugin appelables depuis les écrans. |
 
 ---
@@ -114,7 +114,7 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 
 | Famille | Chemins | Description |
 |---|---|---|
-| Accès | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}` | Utilisateurs (création, modification, attributs, mot de passe) et rôles (permissions, périmètre de données). |
+| Accès | `/admin/access/users`, `/admin/access/users/{username}` (+ `/password`), `/admin/access/roles`, `/admin/access/roles/{name}`, `/admin/access/menu-rules`, `/admin/access/role-templates` | Utilisateurs (création, modification, attributs, mot de passe), rôles (permissions, périmètre de données), ce que donne chaque entrée de menu en lecture et en modification, et les rôles prédéfinis livrés par les applications. |
 | Configuration | `/admin/config/{section}/parsed` (`GET` / `PUT`) pour `connectors`, `dictionary`, `menus`, `screens`, `charts`, `dashboards`, `actions`, `notifications`, `theme`, `jobs`, `app`, `reports`, `explorer` ; `/admin/config/pools` | Lire et enregistrer un fichier de configuration en JSON ; un enregistrement est validé, puis appliqué. |
 | Outils de configuration | `/admin/config/connectors/{connector}/test-sql`, `/admin/config/api/test`, `/admin/config/rename`, `/admin/config/move`, `/admin/config/clone-app`, `/admin/config/delete-app`, `/admin/config/integrity`, `/admin/config/schema` | Tests, renommages et déplacements entre fichiers, contrôle d'intégrité, schémas JSON. |
 | Studio, services, tests | `/admin/studio/overview`, `/admin/studio/map`, `/admin/studio/services`, `/admin/studio/run` et `/admin/studio/expose` (`POST`) — la [Vue d'ensemble et le Studio](../framework/studio.md), les [Services](../framework/build/services.md). `/admin/tests` (`GET`), `/admin/tests/{suite}` (`GET` / `PUT` / `DELETE`), `/admin/tests/{suite}/run` et `/admin/tests/try` (`POST`), `/admin/test-results` — les [tests](../framework/build/tests.md), ouverts aux détenteurs de `tests:view` / `tests:run` / `tests:edit`. `/admin/config/api/generate` (`POST`) — [Créer à partir de…](../framework/build/api-endpoints.md#create-from) ; `/admin/config/pools/test` (`POST`) — **Tester la connexion** d'un pool. |

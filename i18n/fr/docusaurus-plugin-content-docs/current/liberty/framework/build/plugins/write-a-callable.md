@@ -51,7 +51,7 @@ Quatre kwargs sont auto-injectés **quand la fonction les déclare par leur nom*
 
 | Kwarg | Type | Ce qu'il apporte |
 |---|---|---|
-| **`connectors`** | `ConnectorRegistry` | Accès à tous les pools SQL et API définis dans `connectors.toml`. `connectors.pools.engine("default")` retourne le moteur asynchrone SQLAlchemy. |
+| **`connectors`** | `ConnectorRegistry` | Accès à tous les pools SQL et API définis dans `connectors.toml`. `connectors.pools.engine("default")` retourne le moteur asynchrone SQLAlchemy d'un pool de base de données, `connectors.pools.directory("corp_directory")` ce qu'il faut pour s'authentifier sur un [pool d'annuaire LDAP](../../connectors.md#pool-ldap) (hôte, port, TLS, compte, mot de passe, base), `connectors.pools.where(name)` la cible d'un pool, sans son compte. |
 | **`ctx`** | `RunContext` | L'état par exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`, `ctx.prev_rows_affected`, `ctx.parent_chain`. Passer `ctx.run_id` aux logs / écritures d'audit pour les aligner avec l'enregistrement d'exécution Nomaflow. |
 | **`settings`** | `Settings` | Configuration vivante — `settings.connectors.config_path`, `settings.app`, etc. Utile pour les callables qui opèrent sur les fichiers de configuration eux-mêmes. |
 | **`app_state`** | l'état du serveur | L'état vivant du serveur en cours d'exécution — les applications, les modèles de l'explorateur de données, le dictionnaire. Pour les callables qui agissent sur la configuration en service, comme `liberty.jobs.dictionary:refresh_model_dictionary`. Absent hors d'un serveur en cours d'exécution. |

@@ -1,7 +1,7 @@
 ---
 title: Dictionnaire
 description: "Le dictionnaire définit une seule fois chaque donnée — libellé, format, règle, valeur par défaut, traductions — et chaque colonne de requête qui y renvoie hérite de cette définition. Entrées, énumérations, lookups, séquences et listes du framework, partagés ou par connecteur, dans Liberty Next → Données → Dictionnaire."
-keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séquences, libellés, formats, règles, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, traductions]
+keywords: [Liberty Next, dictionnaire, entrées, énumérations, lookups, séquences, libellés, formats, règles, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, POOL, traductions]
 ---
 
 # Dictionnaire
@@ -210,7 +210,7 @@ La liste de gauche affiche la clé de chaque entrée, son libellé en dessous, e
 | General | **Format** | La façon d'afficher et de saisir la valeur — voir [Formats](#formats). |
 | General | **Decimals** | Pour `jdenumber`, le nombre de décimales implicites de l'entier stocké ; pour les autres formats numériques, le nombre de décimales affichées (0 à 9). |
 | Rule | **Rules** | La règle appliquée à la donnée — voir [Règles](#rules). |
-| Rule | **Rules values** | L'argument de la règle : la valeur « vrai » pour `BOOLEAN`, l'énumération pour `ENUM`, le lookup pour `LOOKUP`, la séquence pour `SEQUENCE`. La liste proposée suit la règle choisie. |
+| Rule | **Rules values** | L'argument de la règle : la valeur « vrai » pour `BOOLEAN`, l'énumération pour `ENUM`, le lookup pour `LOOKUP`, la séquence pour `SEQUENCE`, un connecteur SQL pour `POOL`. La liste proposée suit la règle choisie. |
 | Rule | **False value** | Pour `BOOLEAN` uniquement : la valeur écrite quand la case est décochée. Vide, elle se déduit de la valeur « vrai » (`Y` → `N`, `1` → `0`, `true` → `false`) ; pour toute autre valeur, NULL est écrit. |
 | Rule | **Default** | La valeur initiale d'une nouvelle ligne. |
 | Rule | **Justify** | Pour les colonnes caractères de longueur fixe : `right_blank` (cadrage à droite, complété par des espaces) ou `right_zero` (cadrage à droite, complété par des zéros). Appliqué aux valeurs écrites et aux clés de la clause WHERE. Vide = cadrage à gauche. |
@@ -252,6 +252,7 @@ L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 | `LOGIN` | À chaque insertion ou mise à jour, le serveur écrit le nom de l'utilisateur connecté, en majuscules, quelle que soit la valeur envoyée. À l'ajout d'une ligne, le formulaire l'affiche déjà renseigné. |
 | `SYSDATE` | À l'insertion ou à la mise à jour, le serveur écrit la date et l'heure courantes (heure locale du serveur) si aucune valeur n'est envoyée. À l'ajout d'une ligne, le formulaire affiche la date du jour. |
 | `PASSWORD` | À l'écriture, le serveur chiffre la valeur avec la clé maître (`ENC:…`) afin de pouvoir la déchiffrer à l'usage — pour les mots de passe de connexion stockés dans une table. Un mot de passe laissé vide en mise à jour conserve la valeur enregistrée. À associer au format `password` pour masquer le champ. |
+| `POOL` | Le champ désigne un pool de l'installation (libellé *Database pool (of this installation)*) : partout où une liste de valeurs est dessinée — grille, fiche, filtre —, il devient une liste déroulante des pools, si bien qu'un réglage qui nomme un pool se choisit au lieu de se saisir. **Rules values** vide propose tous les pools ; un connecteur SQL à cet endroit ne propose que les pools sur lesquels il peut s'exécuter — le sien d'abord, puis ses autres environnements. Voir [Pools](./connectors.md#pools). |
 | `DEFAULT` | À l'insertion ou à la mise à jour, la valeur **Default** est écrite quand la colonne arrive vide. |
 | `DISABLED` | Sur une colonne d'écran : annule, pour cet écran, la règle héritée de l'entrée (par exemple un écran d'import dont les lignes portent déjà leurs dates). |
 

@@ -202,13 +202,15 @@ Les règles sont listées à gauche, chacune avec son déclencheur et ses canaux
 
 | Déclencheur | Se déclenche quand | Réglages |
 |---|---|---|
-| **A screen event** | Une ligne est créée, modifiée ou supprimée par un écran. | App, Screen, Events (`insert` / `update` / `delete`) et, au besoin, **Only when the written row has** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **A job event** | Une exécution Nomaflow se termine. | Jobs — plusieurs choisies dans une même liste, vide = toutes les tâches — et Events : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
-| **A screen action** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions). | Rien de plus : l'action d'écran nomme la règle et transmet les valeurs de la ligne. |
+| **Un événement d'écran** | Une ligne est créée, modifiée ou supprimée par un écran. | Application, Écran, Événements (`insert` / `update` / `delete`) et, au besoin, **Seulement quand la ligne écrite a (ET)** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
+| **Un événement de tâche** | Une exécution Nomaflow se termine. | Tâches — plusieurs choisies dans une même liste, vide = toutes les tâches — et Événements : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
+| **Une action d'écran** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions), ou l'étape **Notification** d'un [service](../framework/build/services.md#notification). | Rien de plus : l'action ou l'étape nomme la règle et transmet les valeurs de la ligne, ainsi que celles dont son message a besoin. |
 
 `long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
 
 ### Canaux
+
+Dans l'éditeur, les canaux se cochent sous leur nom : **Dans l'application** (`portal`), **E-mail** (`email`), **Une requête ou un point d'accès** (`action`).
 
 | Canal | Délivre |
 |---|---|
@@ -226,7 +228,7 @@ Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait 
 | `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
 | `email:finance@example.com` | Une adresse — e-mail uniquement. |
 
-Dans l'éditeur, choisir **role**, **user** ou **email** à côté du champ, puis le rôle ou l'utilisateur dans la liste, ou saisir une adresse ; chaque destinataire devient une pastille, retirée par sa ✕. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
+Dans l'éditeur, choisir **Un rôle**, **Un utilisateur** ou **Une adresse e-mail** à côté du champ, puis le rôle ou l'utilisateur dans la liste, ou saisir une adresse ; chaque destinataire devient une pastille, retirée par sa ✕. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
 
 ### Variables
 

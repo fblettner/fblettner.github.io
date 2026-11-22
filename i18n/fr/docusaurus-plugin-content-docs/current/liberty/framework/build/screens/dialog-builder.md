@@ -211,7 +211,7 @@ Un écran sans dialogue fonctionne quand même comme un tableau en lecture seule
 | Région | Rôle |
 |---|---|
 | **Ajouter un champ** *(à gauche)* | La source des nouveaux champs. Deux sous-onglets : **Dictionnaire** (chaque entrée disponible dans la portée du connecteur courant) et **Colonnes** (chaque colonne que renvoie la requête de lecture). Un filtre réduit la liste ; un clic sur une entrée ajoute une carte de champ à l'onglet courant. Le panneau se replie par sa flèche. |
-| **Dialogue** *(au centre)* | La barre d'onglets en haut — chaque onglet avec son nombre de champs, **＋ Ajouter un onglet** au bout —, puis **Paramètres de l'onglet** (replié : libellé, type d'onglet, colonnes, actions de l'onglet) et les cartes de champ. Chaque carte affiche le libellé, un aperçu de la saisie (un nombre, une date, un lookup et sa requête…), le nom de la colonne et sa marque *clé* ; la carte choisie a une bordure bleue. L'en-tête compte les colonnes de la grille et les champs de l'onglet. Un groupe **Champs masqués** en bas rassemble les champs avec `hidden = true`. |
+| **Dialogue** *(au centre)* | La barre d'onglets en haut — chaque onglet avec son nombre de champs, **＋ Ajouter un onglet** au bout —, puis **Paramètres de l'onglet** (replié : libellé, type d'onglet, colonnes, titre dans les autres langues, les deux cases *Absent à…*, actions de l'onglet) et les cartes de champ. Chaque carte affiche le libellé, un aperçu de la saisie (un nombre, une date, un lookup et sa requête…), le nom de la colonne et sa marque *clé* ; la carte choisie a une bordure bleue. L'en-tête compte les colonnes de la grille et les champs de l'onglet. Un groupe **Champs masqués** en bas rassemble les champs avec `hidden = true`. |
 | **Inspecteur** *(à droite)* | Le champ choisi et sa **Configuration de la colonne** — voir l'étape 3 —, ou, sans champ choisi, le titre du dialogue et ses événements. Il se replie par sa flèche. |
 
 **Supprimer le dialogue**, au-dessus des panneaux, retire toute la fiche : l'écran redevient un tableau en lecture seule ou en édition de grille.
@@ -261,12 +261,91 @@ Cliquer sur **＋ Ajouter un onglet** au bout de la barre d'onglets ; l'identifi
 | **Notes** | Champs en texte libre. |
 | **Adresse** | Un groupe de champs liés (rue, ville, code postal, pays). |
 
-Deux indicateurs sur chaque onglet (dans `screens.toml`) contrôlent la visibilité par mode :
+### Paramètres de l'onglet \{#tab-settings\}
 
-| Indicateur | Effet |
+**Paramètres de l'onglet**, au-dessus des cartes de champ, règle l'onglet choisi : son libellé, son type, ses colonnes — ainsi que son titre dans les autres langues et les cas où il est affiché.
+
+<svg viewBox="0 0 1200 302" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dbts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dbts-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dbts-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dbts-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="260" rx="14" fill="url(#dbts-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#94a3b8" fontSize="8.5" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIALOGUE</text>
+  <text x="960" y="46" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">cols: 2 · fields: 6</text>
+  <rect x="240" y="58" width="82" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="281.0" y="72.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Customer · 4</text>
+  <rect x="328" y="58" width="67" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="361.5" y="72.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit · 2</text>
+  <rect x="401" y="58" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="459.5" y="72.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter un onglet</text>
+  <rect x="240" y="94" width="720" height="168" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="114" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾  Paramètres de l'onglet</text>
+  <rect x="910" y="103" width="35" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="927.5" y="114.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">form</text>
+  <text x="254" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIBELLÉ DE L'ONGLET</text>
+  <rect x="254" y="141" width="235" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="499" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TYPE D'ONGLET</text>
+  <rect x="499" y="141" width="276" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="509" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="508" y="155.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">form</text>
+  <text x="534.328" y="155.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Formulaire — une grille de champs éditables</text>
+  <text x="763" y="155.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="785" y="136" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">COLONNES</text>
+  <rect x="785" y="141" width="161" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="795" y="155.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">2</text>
+  <text x="254" y="184" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITRE DANS LES AUTRES LANGUES</text>
+  <rect x="254" y="189" width="90" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="203.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="263" y="203.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="278.664" y="203.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Franç…</text>
+  <text x="332" y="203.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="350" y="189" width="152" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="360" y="203.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Client</text>
+  <rect x="508" y="189" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="519.0" y="203.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="254" y="218" width="56" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="263" y="230" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <rect x="546" y="191" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="563" y="200" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Absent à l'ajout d'un enregistrement</text>
+  <rect x="546" y="211" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="563" y="220" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Absent à la modification d'un enregistrement</text>
+  <text x="254" y="254" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Actions de l'onglet</text>
+  <rect x="20" y="52" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="67" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Onglets de la fiche</text>
+  <text x="30" y="80" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chacun avec son nombre de champs</text>
+  <line x1="200" y1="69.0" x2="240" y2="69" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="20" y="128" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="143" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Libellé, type, colonnes</text>
+  <text x="30" y="156" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tels qu'écrits</text>
+  <line x1="200" y1="145.0" x2="254" y2="152" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="20" y="186" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Titre par langue</text>
+  <text x="30" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dans la langue de l'utilisateur</text>
+  <line x1="200" y1="203.0" x2="254" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="1000" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Absent à l'ajout</text>
+  <text x="1010" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par exemple un onglet d'audit</text>
+  <line x1="1000" y1="187.0" x2="750.44" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+  <rect x="1000" y="222" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="237" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Absent à la modification</text>
+  <text x="1010" y="250" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par exemple un onglet de création</text>
+  <line x1="1000" y1="239.0" x2="790.76" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbts-arrow)"/>
+</svg>
+
+| Champ | Effet |
 |---|---|
-| **`hide_on_add`** | L'onglet disparaît à l'ajout d'une nouvelle ligne. |
-| **`hide_on_edit`** | L'onglet disparaît à la modification d'une ligne existante. |
+| **Libellé de l'onglet** | Le titre de l'onglet, tel qu'écrit. |
+| **Type d'onglet** | *Formulaire* (une grille de champs éditables), une table imbriquée ou la fiche d'un autre écran — voir [Onglets imbriqués](./nested-tabs.md). |
+| **Colonnes** | Le nombre de colonnes de la grille de l'onglet. |
+| **Titre dans les autres langues** | Le titre pour les utilisateurs d'une autre langue : une langue choisie dans la liste, puis son texte ; **+ ajouter** pour une autre langue. Sans ligne pour une langue, le libellé tel qu'écrit est affiché. |
+| **Absent à l'ajout d'un enregistrement** (`hide_on_add`) | L'onglet n'est pas affiché à l'ajout d'un enregistrement. |
+| **Absent à la modification d'un enregistrement** (`hide_on_edit`) | L'onglet n'est pas affiché à la modification d'un enregistrement existant. |
+| **Actions de l'onglet** | Les boutons affichés dans l'onglet — voir [Actions de l'onglet](#tab-actions). |
 
 ### Étape 5 — Réorganiser les champs
 
@@ -299,7 +378,7 @@ Le constructeur visuel affiche la même barre d'onglets pour les trois — un on
 
 ---
 
-## Actions par onglet
+## Actions par onglet \{#tab-actions\}
 
 Chaque onglet peut porter sa propre liste d'actions — des boutons affichés dans l'onglet, réglés sous **Paramètres de l'onglet → Actions de l'onglet** (**Ajouter une action**). Patrons courants :
 

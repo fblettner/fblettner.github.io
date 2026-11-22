@@ -136,7 +136,7 @@ An item can pin one of the job's [presets](./schedules.md#schedulable-presets) w
 
 ## Who may run it \{#access\}
 
-The item and its page need the permission `job:<id>` — in **Liberty Next → Administer → Access → Roles**, **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
+The item and its page are for who may run the job — in **Liberty Next → Administer → Access → Roles**, the entry or its folder in **Read and change** (**Read** alone does not show it), or the permission `job:<id>` under **Beyond the menus**, rule type **Job**, then the job. A deny (`!job:<id>`) hides the item even when the menu would show it. Superusers see every job.
 
 Every holder of the permission sees **all** the runs of the job — the previous runs list, their logs and their files —, not only their own.
 
@@ -144,9 +144,21 @@ Every holder of the permission sees **all** the runs of the job — the previous
 
 ## User parameters \{#user-params\}
 
-A job declares in `jobs.toml` what a user may set when running it from its page. Anything else is refused; the operator's other settings stay out of reach.
+What a user may set when running the job from its page is declared in the job editor, section [What the user may set when starting it](./create.md#user-params). Anything else is refused; the operator's other settings stay out of reach.
 
-```toml title="jobs.toml"
+| Field (job editor) | In `jobs.toml` | Meaning |
+|---|---|---|
+| **Name** | `name` | The step argument the value is given to. |
+| **Label**, **In the other languages** | `label`, `l` | The label shown, per language. Default: the name. |
+| **Goes to** | `step` | The step that receives the value. **Every step** by default. |
+| **Default** | `default` | The pre-filled value. |
+| **Required** | `required` | The job does not start without a value. |
+| **Choices** — *A fixed list* | `choices` | The page shows a dropdown and refuses any other value. |
+| **Choices** — *The rows of a query*, *The Explorer models of an application*, *The test suites* | `choices_from` | The rows of a read query, such as the applications of Nomasx-1; the Data Explorer models of an application; the suites of [Tests](../../framework/build/tests.md), of one API connector or all. |
+| **Several values** | `multiple` | Several values may be ticked, with **All**. |
+| **One run per value of** | `for_each` | See below. |
+
+```toml title="jobs.toml — as the editor saves it"
 [[jobs.user_params]]
 name = "models"
 label = "Explorer model (blank = every model)"
@@ -155,20 +167,9 @@ step = "refresh"
 choices_from = "explorer_models:nomajde"
 ```
 
-| Key | Meaning |
-|---|---|
-| `name` | The step argument the value is given to. |
-| `label`, `l` | The label shown, per language. Default: the name. |
-| `step` | The step that receives the value. Without it, the value goes to every step of the job. |
-| `default` | The pre-filled value. |
-| `required` | `true`: the job does not start without a value. |
-| `choices` | A fixed list of values: the page shows a dropdown and refuses any other value. |
-| `choices_from` | `explorer_models:<app>` — the Data Explorer models of an application; `query:<connector>/<query>:<value column>:<label column>` — the rows of a read query, such as the applications of Nomasx-1; or `test_suites` (`test_suites:<connector>` for one API connector) — the suites of [Tests](../../framework/build/tests.md). |
-| `multiple` | `true`: several values may be ticked, with **All**. |
-
 A blank value means *not set*: the step's own default applies. The same parameters show in the operators' **Run with parameters** window.
 
-**One run per value.** A job that declares `for_each = "<parameter>"` runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
+**One run per value.** A job whose **One run per value of** names a parameter runs once for each value ticked — one run after the other, each with a single value —; **All** takes every value the parameter offers. A job scheduled with the value `all` covers every value at each fire: every application of Nomasx-1, for example.
 
 ---
 

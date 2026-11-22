@@ -724,7 +724,7 @@ A model tells the explorer what a user may analyse and how the tables relate. It
 | **Description** | Shown under the explorer's title. |
 | **Preset (Screen Assistant)** | Fills the model from a preset — see [below](#preset). |
 
-**Save** writes the model and reloads it: the explorer sees it at once. A model without any entity is not saved.
+**Save** writes the model and reloads it: the explorer sees it at once. A model without any entity is refused, by name — *Not saved: these models have no entity yet — crm · deals. Add an entity (or apply a preset), or delete the model.* — unless it names a preset: it is then kept, filled from the preset at first use, and the page draws it with the offer to fill it.
 
 ---
 
@@ -889,10 +889,12 @@ An empty model starts **From a prebuilt model** — a preset — or **By hand**.
 | **Label** | The name of the group in the fields pane. |
 | **Rows per hub row** | **1..1 · one** — at most one row per hub row (the customer of a deal); **1..n · many** — several rows (the activities of a deal). The hub itself is always 1..1. |
 | **Description** | Free text. |
-| **Connector** | The connector of the query; the app's own by default. |
-| **Query** | A SELECT query of that connector, without parameters. Its columns are discovered by running it for one row. An entity filled from a preset reads its table directly: the field then shows **Table**, not editable. |
+| **Connector** | The connector of the query; the app's own by default. The list holds the SQL connectors and the API connectors that have an endpoint with rows, shown as `name (API)` — see [below](#api-entity). |
+| **Query** | A SELECT query of that connector — or, on an API connector, one of its endpoints with rows. Its columns are discovered by running it for one row. An entity filled from a preset reads its table directly: the field then shows **Table**, not editable. |
 | **Screen (column hints)** | A screen whose column settings give the labels, formats and lists of values. The screens that read the same query come first. The entity opens a row in that screen's dialog, so **Deploy → Integrity** counts the screen as reached even when no menu entry leads to it. |
 | **Default date** | The date field the period applies to first. |
+| **Fixed values of the query's parameters** | Shown when the query asks for parameters — those it declares and the binds of its statement —, one field each: the value given there is used for every analysis. A parameter left blank is not sent. |
+| **Keep this entity as it is on upgrade** | An upgrade of the application then leaves the entity as saved here. |
 
 The **Columns** table lists the discovered columns, with the label and the type taken from the screen. For each one:
 
@@ -908,7 +910,7 @@ Each column becomes a **field** of the pane, labelled and formatted through the 
 
 ### An entity read from an API endpoint \{#api-entity\}
 
-An entity can also read an endpoint of an API connector — one that returns rows, as a screen reads it. The entity form lists the SQL connectors, so such an entity is written in the model's configuration (the API connector as its connector, the endpoint as its query); it then shows on the diagram like the others. Its fields are discovered from the endpoint's columns and labelled by the dictionary; the explorer reads the rows under the user's data scope and filters, groups, measures, sorts and pages them itself, so analyses, dashboards, exports and the assistant work on it unchanged. An `=` filter on a field that is a parameter of the endpoint is also sent to the endpoint.
+An entity can also read an endpoint of an API connector — one that returns rows, as a screen reads it. It is picked in the entity form: the API connector in **Connector** — listed as `name (API)` when it has an endpoint with rows —, the endpoint in **Query**; it then shows on the diagram like the others. Its fields are discovered from the endpoint's columns and labelled by the dictionary; the explorer reads the rows under the user's data scope and filters, groups, measures, sorts and pages them itself, so analyses, dashboards, exports and the assistant work on it unchanged. An `=` filter on a field that is a parameter of the endpoint is also sent to the endpoint.
 
 Such an entity is never joined with another one and takes no calculated field: both are refused with the reason. Every request calls the endpoint, up to 50,000 rows.
 
@@ -946,7 +948,8 @@ To change such a model, add a model in Liberty Next → Insight → Explorer fro
 | Situation | What happens | What to do |
 |---|---|---|
 | An entity is not linked to the hub. | **Save** is refused and names the entities left out. | Add the missing relation. |
-| The entity's query expects parameters. | The explorer runs it without any. | Point the entity at a query without parameters. |
+| The entity's query expects parameters. | The explorer sends the fixed values given in the entity form; a parameter left blank is not sent. | Fill **Fixed values of the query's parameters**, or point the entity at a query without parameters. |
+| **Save** says a model has no entity yet. | A model with neither an entity nor a preset cannot be read by anybody. | Add an entity, apply a preset, or delete the model. |
 | No column is discovered. | The query failed or returned nothing. | Check the query in Liberty Next → Data → Connectors. |
 | A field is missing in the pane. | It is hidden, or the query does not return it. | Untick **Hidden**, or add the column to the query. |
 | Fields show their raw column name. | The columns have no dictionary entry. | On the explorer page, a superuser sees *N column(s) have no dictionary entry and show their column name* and **Create the entries from the data dictionary** creates them in one click. |

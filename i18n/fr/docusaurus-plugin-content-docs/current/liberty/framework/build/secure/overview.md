@@ -31,13 +31,13 @@ Les mots de passe locaux sont hachés (Argon2id). Après dix échecs de connexio
 
 ## Autorisations \{#authorization\}
 
-Une permission est une chaîne séparée par des deux-points — `sql:sales:orders_get`, `api:crm:get_customer`, `menu:sales:orders`, `dashboard:sales.overview`, `ai:chat` — et un rôle en est une liste, autorisations et refus (`!…`). L'éditeur de rôles les écrit à partir de l'arborescence des menus.
+Une permission est une chaîne séparée par des deux-points — `sql:sales:orders_get`, `api:crm:get_customer`, `menu:sales:orders`, `dashboard:sales.overview`, `ai:chat` — et un rôle en est une liste, autorisations et refus (`!…`). L'éditeur de rôles les écrit à partir de l'arborescence des menus : un dossier ou une entrée en **Lecture** (`menu:<app>:<id>`) ou en **Lecture et modification** (`edit:<app>:<id>`), le serveur déduisant ce dont ses écrans ont besoin — leurs requêtes, leurs listes, les onglets de leur fiche et, en modification, ce qu'ils écrivent et lancent. Voir [Rôles et permissions](./roles-and-permissions.md#access).
 
 | Surface | Contrôle |
 |---|---|
-| Lancer la requête de lecture d'un écran, écrire une ligne | `sql:<connecteur>:<requête>` de cette requête, puis le périmètre de données. |
+| Lancer la requête de lecture d'un écran, écrire une ligne | `sql:<connecteur>:<requête>` de cette requête — détenue nommément, ou donnée par l'entrée de menu de l'écran ou son dossier (lecture pour la requête de lecture, lecture et modification pour les écritures) —, puis le périmètre de données. |
 | Appeler un endpoint d'API | `api:<connecteur>:<endpoint>`. |
-| Voir une entrée de menu | La permission de ce qu'ouvre l'entrée, ou une autorisation `menu:` explicite ; un refus `menu:` ou `dashboard:` la masque. |
+| Voir une entrée de menu | L'entrée, ou son dossier, en **Lecture** ou **Lecture et modification** (une entrée de tâche : **Lecture et modification**), ou la permission de ce qu'ouvre l'entrée ; un refus `menu:` ou `dashboard:` la masque. |
 | Utiliser l'assistant | `ai:chat` ; les requêtes de l'assistant sont filtrées par le périmètre de données. |
 | Les pages Liberty Next, Surveillance, Nomaflow, paquets de modifications | **Superutilisateur** uniquement. |
 

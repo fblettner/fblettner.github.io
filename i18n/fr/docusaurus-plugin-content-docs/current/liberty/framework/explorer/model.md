@@ -724,7 +724,7 @@ Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et commen
 | **Description** | Affichée sous le titre de l'explorateur. |
 | **Préréglage (assistant écran)** | Remplit le modèle depuis un préréglage — voir [plus bas](#preset). |
 
-**Enregistrer** écrit le modèle et le recharge : l'explorateur le voit aussitôt. Un modèle sans entité n'est pas enregistré.
+**Enregistrer** écrit le modèle et le recharge : l'explorateur le voit aussitôt. Un modèle sans entité est refusé, avec son nom — *Non enregistré : ces modèles n'ont encore aucune entité — crm · deals. Ajoutez une entité (ou appliquez un préréglage), ou supprimez le modèle.* —, sauf s'il désigne un préréglage : il est alors conservé, rempli à partir du préréglage à la première utilisation, et la page le dessine en proposant de le remplir.
 
 ---
 
@@ -889,10 +889,12 @@ Un modèle vide se commence **À partir d'un modèle prêt à l'emploi** — un 
 | **Libellé** | Le nom du groupe dans le volet des champs. |
 | **Lignes par ligne du pivot** | **1..1 · une** — au plus une ligne par ligne du pivot (le client d'une affaire) ; **1..n · plusieurs** — plusieurs lignes (les activités d'une affaire). Le pivot est toujours en 1..1. |
 | **Description** | Texte libre. |
-| **Connecteur** | Le connecteur de la requête ; par défaut, celui de l'application. |
-| **Requête** | Une requête SELECT de ce connecteur, sans paramètre. Ses colonnes se découvrent en l'exécutant sur une ligne. Une entité remplie depuis un préréglage lit directement sa table : le champ affiche alors **Table**, non modifiable. |
+| **Connecteur** | Le connecteur de la requête ; par défaut, celui de l'application. La liste contient les connecteurs SQL et les connecteurs API qui ont un point d'accès renvoyant des lignes, affichés `nom (API)` — voir [plus bas](#api-entity). |
+| **Requête** | Une requête SELECT de ce connecteur — ou, sur un connecteur API, un de ses points d'accès qui renvoient des lignes. Ses colonnes se découvrent en l'exécutant sur une ligne. Une entité remplie depuis un préréglage lit directement sa table : le champ affiche alors **Table**, non modifiable. |
 | **Écran (indications de colonnes)** | Un écran dont les réglages de colonnes fournissent libellés, formats et listes de valeurs. Les écrans qui lisent la même requête apparaissent en tête. L'entité ouvre une ligne dans la fiche de cet écran : **Déployer → Intégrité** compte donc l'écran comme atteint, même si aucune entrée de menu n'y mène. |
 | **Date par défaut** | Le champ date auquel la période s'applique en premier. |
+| **Valeurs fixes des paramètres de la requête** | Présent quand la requête attend des paramètres — ceux qu'elle déclare et les variables de son instruction —, un champ par paramètre : la valeur saisie sert à toutes les analyses. Un paramètre laissé vide n'est pas envoyé. |
+| **Garder cette entité telle quelle à la mise à jour** | Une mise à jour de l'application laisse alors l'entité telle qu'enregistrée ici. |
 
 Le tableau **Colonnes** liste les colonnes découvertes, avec le libellé et le type fournis par l'écran. Pour chacune :
 
@@ -908,7 +910,7 @@ Chaque colonne devient un **champ** du volet, libellé et formaté par le dictio
 
 ### Une entité lue sur un point d'accès d'API \{#api-entity\}
 
-Une entité peut aussi lire un point d'accès d'un connecteur API — un point d'accès qui renvoie des lignes, tel qu'un écran le lit. Le formulaire d'entité ne liste que les connecteurs SQL : une telle entité s'écrit donc dans la configuration du modèle (le connecteur API comme connecteur, le point d'accès comme requête), puis figure sur le schéma comme les autres. Ses champs se déduisent des colonnes du point d'accès et prennent les libellés du dictionnaire ; l'explorateur lit les lignes dans le périmètre de données de l'utilisateur, puis les filtre, les regroupe, les agrège, les trie et les pagine lui-même : analyses, tableaux de bord, exports et assistant fonctionnent sans changement. Un filtre `=` sur un champ qui est aussi un paramètre du point d'accès est transmis au point d'accès.
+Une entité peut aussi lire un point d'accès d'un connecteur API — un point d'accès qui renvoie des lignes, tel qu'un écran le lit. Elle se choisit dans le formulaire d'entité : le connecteur API dans **Connecteur** — affiché `nom (API)` s'il a un point d'accès qui renvoie des lignes —, le point d'accès dans **Requête** ; elle figure ensuite sur le schéma comme les autres. Ses champs se déduisent des colonnes du point d'accès et prennent les libellés du dictionnaire ; l'explorateur lit les lignes dans le périmètre de données de l'utilisateur, puis les filtre, les regroupe, les agrège, les trie et les pagine lui-même : analyses, tableaux de bord, exports et assistant fonctionnent sans changement. Un filtre `=` sur un champ qui est aussi un paramètre du point d'accès est transmis au point d'accès.
 
 Une telle entité ne se joint à aucune autre et n'accepte pas de champ calculé : les deux sont refusés, avec le motif. Chaque requête appelle le point d'accès, dans la limite de 50 000 lignes.
 
@@ -946,7 +948,8 @@ Pour modifier un tel modèle, ajouter un modèle dans Liberty Next → Analyse �
 | Situation | Effet | Solution |
 |---|---|---|
 | Une entité n'est pas reliée au pivot. | L'enregistrement est refusé, avec le nom des entités isolées. | Ajouter la relation manquante. |
-| La requête de l'entité attend des paramètres. | L'explorateur l'exécute sans paramètre. | Rattacher l'entité à une requête sans paramètre. |
+| La requête de l'entité attend des paramètres. | L'explorateur envoie les valeurs fixes saisies dans le formulaire d'entité ; un paramètre laissé vide n'est pas envoyé. | Renseigner **Valeurs fixes des paramètres de la requête**, ou rattacher l'entité à une requête sans paramètre. |
+| **Enregistrer** signale un modèle sans entité. | Un modèle sans entité ni préréglage ne peut être lu par personne. | Ajouter une entité, appliquer un préréglage ou supprimer le modèle. |
 | Aucune colonne découverte. | La requête a échoué ou n'a rien renvoyé. | Vérifier la requête dans Liberty Next → Données → Connecteurs. |
 | Un champ manque dans le volet. | Il est masqué, ou la requête ne le renvoie pas. | Décocher **Masquée**, ou ajouter la colonne à la requête. |
 | Des champs affichent leur nom de colonne brut. | Ces colonnes n'ont pas d'entrée de dictionnaire. | Sur la page de l'explorateur, un superutilisateur voit *N colonne(s) sans entrée de dictionnaire affichent leur nom de colonne* et **Créer les entrées depuis le dictionnaire de données** les crée en un clic. |

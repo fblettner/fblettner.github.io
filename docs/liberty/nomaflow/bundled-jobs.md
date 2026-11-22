@@ -294,14 +294,16 @@ One-time provisioning. Run **once** at customer-stand-up; safe to re-run (idempo
 
 ### `nomasx1-roles` \{#nomasx1-roles\}
 
-**Create or refresh the Nomasx-1 roles.**
+**Create or refresh the predefined roles of Nomasx-1, as shipped.** The same four roles can be added one by one under Access → Roles → *Add a predefined role…* (see [Predefined roles](../framework/build/secure/roles-and-permissions.md#predefined)). Running the job again gives a role changed in Access its shipped rights back; users are not touched.
 
 | Role | Grants |
 |---|---|
-| `nomasx1_auditor` | Every read of the Nomasx-1 data, the Data Explorer, the AI assistant and the two report jobs; the monthly reports are mailed to it. |
-| `nomasx1_admin` | Everything: the whole application, its settings and every `nomasx1-*` job. |
+| `nomasx1_auditor` | *Auditor* — reads everything and runs the two audit reports; the monthly reports are mailed to it. Changes no setting. |
+| `nomasx1_security_officer` | *Security officer* — security and segregation of duties in read and change, with their settings, the security collection and its report; the rest in read. |
+| `nomasx1_licence_manager` | *Licence manager* — licences and database in read and change, with the licence settings, the licence collection and its report; the rest in read. |
+| `nomasx1_admin` | *Administrator* — everything in the application, its settings included; the job also gives it every `nomasx1-*` job. |
 
-Run it once after the install and after each upgrade, so that new read queries are granted; then assign the roles to users under **Liberty Next → Administer → Access**. Idempotent; shipped disabled.
+Run it once after the install, then assign the roles to users under **Liberty Next → Administer → Access**. Idempotent; shipped disabled.
 
 ---
 
@@ -437,7 +439,7 @@ Jobs that reach the JD Edwards servers themselves: Server Manager for the health
 | `auto_stop` | `false` | Stops a running instance that failed (`stopinstance`), and the running instances of a failed enterprise server. |
 | `keep_days` | `30` | Rows older than this are removed at each run. |
 
-**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address and the `jde_admin` password on the `jde_server_manager` connector in **Liberty Next → Data → Connectors**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
+**Schedule** — `*/5 * * * *` (Europe/Paris), `enabled = false`: set the Server Manager address with its account (`jde_admin`) and its password on the `jde_server_manager` pool in **Liberty Next → Administer → Pools**, then enable the job. *Nomajde → Jobs → Check the JDE servers* runs it on demand.
 
 **Alerts** — the run fails when an instance did not pass (`failed`, `down` or `error`), after writing the rows; `on_failure` alerts are on.
 

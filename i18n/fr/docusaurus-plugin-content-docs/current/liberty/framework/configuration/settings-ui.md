@@ -171,7 +171,7 @@ Le menu s'ouvre sur **Vue d'ensemble**, puis suit l'ordre dans lequel une applic
 | | **Explorateur** | Les modèles de l'explorateur de données. | [Construire un modèle](../explorer/model.md) |
 | | **Modèles de rapport** | Les modèles de rapport écrits par les exploitants ; la charte PDF de l'installation se règle dans App. | [Modèles de rapport](../report-templates.md) |
 | **Administrer** | **App** | Tous les réglages de l'installation, en quatre groupes : l'installation, la connexion, ce qui est activé, l'exploitation. | [Paramètres de l'application](../build/settings-app.md) |
-| | **Pools** | Les connexions aux bases : adresse, compte, schémas, liens de base, réglages fins — avec **Tester la connexion**. | [Connecteurs](../connectors.md) |
+| | **Pools** | Les connexions de l'installation — bases de données, serveurs HTTP, annuaires LDAP : adresse, compte, schémas, liens de base, réglages fins — avec **Tester la connexion**. | [Connecteurs](../connectors.md) |
 | | **Accès** | Utilisateurs et rôles. | [Utilisateurs](../build/secure/users.md), [Rôles et permissions](../build/secure/roles-and-permissions.md) |
 | | **Thème** | Palette, police et taille du texte, avec un aperçu en sombre et en clair. | — |
 | **Exploiter** | **Résultats des tests** | Le bilan des tests, exécution après exécution. | [Résultats des tests](../../monitoring/test-results.md) |

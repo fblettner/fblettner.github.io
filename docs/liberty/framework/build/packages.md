@@ -1,6 +1,6 @@
 ---
 title: Packages
-description: "Ship configuration from one Liberty install to another with the Package page: pick screens, menu items, dashboards, Explorer models, jobs, notification rules, shared actions or assistant material as seeds, the dependency walker pulls in everything they reach, and the package exports as a ZIP — or is promoted straight to another instance. On the target, the import is previewed entity by entity, with a field diff, before it is applied."
+description: "Ship configuration from one Liberty install to another with the Package page: pick screens, menu items, dashboards, Explorer models, jobs, notification rules, services or assistant material as seeds, the dependency walker pulls in everything they reach, and the package exports as a ZIP — or is promoted straight to another instance. On the target, the import is previewed entity by entity, with a field diff, before it is applied."
 keywords: [Liberty Framework, package, export, import, preview, promotion, target instance, deploy, ZIP, dependency closure, seeds, merge, overwrite, replace all, override, encrypted secrets, build-package, import-package]
 ---
 
@@ -79,7 +79,7 @@ This is the standard *staging → production* path. It's also the right tool for
   <text x="250" y="344" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">MENU ITEMS · 0/18</text>
   <text x="250" y="366" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">DASHBOARDS · 0/3</text>
   <text x="250" y="388" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">NOMAFLOW JOBS · 0/6</text>
-  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SHARED ACTIONS · 0/4</text>
+  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SERVICES · 0/4</text>
   <text x="680.0" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DEPENDENCIES</text>
   <text x="761.6" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 6/8 will be packaged</text>
   <line x1="666.0" y1="192" x2="1084.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
@@ -181,7 +181,7 @@ The left panel groups the candidates by kind, each group with its count of ticke
 | **Explorer models** | The Data Explorer models, with their shipped analyses and dashboards. |
 | **nomaflow jobs** | The jobs of `jobs.toml`. |
 | **Notification rules** | The rules of Liberty Next → Logic → Notifications. |
-| **Shared actions** | The actions reused by several screens. |
+| **Services** | The services the screens call (Logic → Services). |
 | **Assistant (starters, playbooks)** | What an application ships for the AI assistant — one entry per application. |
 
 **Filter seeds**, above the panels, filters the visible list by name / label / scope. The per-section *select all* respects the filter — narrow first (e.g. type `audit`), then tick *select all* to grab only the matching screens.
@@ -209,7 +209,7 @@ The Dependencies panel pre-ticks every dep **except** three kinds:
 |---|---|
 | **Connectors** | The target install almost always already has its own connector with the right pool / credentials. Shipping the source's connector would clobber the target's secrets. |
 | **Pools** | Same — pools carry DB credentials. The target's pool is the one you want. |
-| **API endpoints** | Same — endpoints carry auth headers / Bearer tokens specific to the source install's wiring. An endpoint a screen reads its rows from, or saves through, is the screen's data: it is ticked like the screen's queries, and an endpoint served by a shared action brings that action with it. |
+| **API endpoints** | Same — endpoints carry auth headers / Bearer tokens specific to the source install's wiring. An endpoint a screen reads its rows from, or saves through, is the screen's data: it is ticked like the screen's queries, and an endpoint served by a service brings that service with it. |
 
 This makes the typical "promote screens between envs" workflow safe out of the box: nothing that carries secrets ships unless you opt in. Tick the *Connectors* group manually only when the target genuinely has none — typically a brand-new install or a per-customer staging spin-up.
 

@@ -1,7 +1,7 @@
 ---
 title: Dictionary
 description: "The dictionary defines each data item once — label, format, rule, default, translations — and every query column that references it inherits that definition. Entries, enums, lookups, sequences and framework enums, shared or per connector, edited from Liberty Next → Data → Dictionary."
-keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels, formats, rules, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, translations, scan a table]
+keywords: [Liberty Next, dictionary, entries, enums, lookups, sequences, labels, formats, rules, BOOLEAN, ENUM, LOOKUP, SEQUENCE, LOGIN, SYSDATE, PASSWORD, POOL, translations, scan a table]
 ---
 
 # Dictionary
@@ -210,7 +210,7 @@ The left-hand list shows each entry's key with its label underneath, and a filte
 | General | **Format** | How the value is displayed and entered — see [Formats](#formats). |
 | General | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
 | Rule | **Rules** | The rule applied to the item — see [Rules](#rules). |
-| Rule | **Rules values** | The rule's argument: the true value for `BOOLEAN`, the enum for `ENUM`, the lookup for `LOOKUP`, the sequence for `SEQUENCE`. The list changes with the rule. |
+| Rule | **Rules values** | The rule's argument: the true value for `BOOLEAN`, the enum for `ENUM`, the lookup for `LOOKUP`, the sequence for `SEQUENCE`, a SQL connector for `POOL`. The list changes with the rule. |
 | Rule | **False value** | `BOOLEAN` only: the value written when the box is unticked. Blank infers it from the true value (`Y` → `N`, `1` → `0`, `true` → `false`); any other true value writes NULL. |
 | Rule | **Default** | The initial value when a new row is added. |
 | Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
@@ -252,6 +252,7 @@ The **Framework** tab can add values to this list.
 | `LOGIN` | On every insert or update, the server writes the signed-in user's name, in upper case, whatever the form sent. The form shows it already filled when a row is added. |
 | `SYSDATE` | On insert or update, the server writes the current date and time (server local time) when no value was sent. The form shows today's date when a row is added. |
 | `PASSWORD` | On write, the server encrypts the value with the master key (`ENC:…`) so that it can be decrypted when used — for connection passwords stored in a table. A blank password on update leaves the stored value unchanged. Pair it with the `password` format to mask the field. |
+| `POOL` | The field names a pool of the installation (shown as *Database pool (of this installation)*): wherever a list of values is drawn — grid, record form, filter —, it is a dropdown of the pools, so a setting that names a pool is picked, not typed. **Rules values** blank offers every pool; a SQL connector there offers only the pools it may run on — its own first, then its other environments. See [Pools](./connectors.md#pools). |
 | `DEFAULT` | On insert or update, the **Default** value is written when the column comes empty. |
 | `DISABLED` | Set on a screen column: cancels the rule inherited from the entry for that screen (for example an import screen whose rows already carry their dates). |
 

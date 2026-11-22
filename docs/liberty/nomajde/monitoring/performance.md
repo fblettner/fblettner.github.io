@@ -63,6 +63,8 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
   <text x="252" y="247" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">WHAT TO DO</text>
   <text x="360" y="247" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Start here. Look at who calls it and at what it reads.</text>
   <text x="360" y="262" fill="#94a3b8" fontSize="8.2" fontFamily="ui-monospace, monospace">Called from 6 object(s), 14 place(s): P4210 · W4210A — Sales Order Entry …</text>
+  <rect x="899" y="204" width="51" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="924.5" y="216.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Details</text>
   <text x="242" y="292" fill="#94a3b8" fontSize="8.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TO REVIEW  (1)</text>
   <rect x="240" y="300" width="720" height="62" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240" y="300" width="3" height="62" fill="#fb923c"/>
@@ -72,6 +74,8 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
   <text x="360" y="333" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Processes that ended without being cleaned up: a kernel crashed.</text>
   <text x="252" y="349" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">WHAT TO DO</text>
   <text x="360" y="349" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Read the enterprise server's logs, then clear the zombies from Server Manager.</text>
+  <rect x="899" y="306" width="51" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="924.5" y="318.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Details</text>
   <text x="242" y="380" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Nothing to flag: Web and AIS, Caches, Database.</text>
   <rect x="240" y="390" width="720" height="34" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="404" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">HOW TO READ THIS PAGE</text>
@@ -88,6 +92,10 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
   <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Heaviest first</text>
   <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">act first · review · know</text>
   <line x1="200" y1="237.0" x2="242" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nperf-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Details</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the rows behind the line, live</text>
+  <line x1="1000" y1="167.0" x2="940" y2="213" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nperf-arrow)"/>
   <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Who calls it</text>
   <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from the cross reference</text>
@@ -130,6 +138,25 @@ The lines are grouped by weight — **To act on first**, **To review**, **To kno
 
 An area read with nothing to flag is named under the list (*Nothing to flag: …*): silence is not "not read". A source that did not answer is said in a warning; the rest of the page is still read.
 
+### Details \{#details\}
+
+Most lines carry a **Details** button, at their right: it reads, live, the rows behind the figure and shows them under the line, in a grid with search, filters, columns and export. **Hide** closes them.
+
+| Line | What **Details** lists |
+|---|---|
+| Tables never analysed, or with stale statistics | Each table: owner, table, its description, rows, last analysis, state of its statistics. |
+| Unusable indexes | Each index, its table and its type. |
+| Blocked sessions | The sessions waiting, and who blocks them: session, user, program, machine, wait. |
+| A slow statement | Its full text and the plan the database runs it with. |
+| Low database cache hit ratio | The statements that read the disk most. |
+| Statements parsed from scratch | The statements sent with their values written in the text. |
+| Redo logs switching too often | The switches by hour. |
+| A business function | Who calls it: the applications and reports whose event rules name it, up to 200 places. |
+| Zombie processes, kernel with requests waiting, open transactions | The processes of the enterprise server named — the zombies themselves when Server Manager says which they are, otherwise every process of the server. |
+| Java heap, server step, cache | The nodes, the business function calls or the caches of the server named. |
+
+A database detail is read from an Oracle database only; on another database the line says so. Like the rest of the page, **Details** only reads: no AWR, no ASH.
+
 ---
 
 ## How to read the page \{#limits\}
@@ -145,7 +172,9 @@ The box at the bottom of the page states its limits:
 
 ## Access \{#access\}
 
-The page shows to the roles that hold its menu entry and the permissions `plugin:nomajde.performance:*`. It uses the `jde_server_manager` connector (see [Server Manager](./server-manager.md#connection)) and the JD Edwards database connection.
+The page shows to the roles that hold its menu entry and the permissions `plugin:nomajde.performance:*`; **Details** needs nothing more. It reads Server Manager through the `jde_server_manager` pool (see [Server Manager](./server-manager.md#connection)) and the JD Edwards database.
+
+The assistant is told what the page shows — the heaviest advice — and offers its own questions: *What should I look at first, and why?* See [AI assistant](../ai-assistant.md).
 
 ---
 
@@ -154,10 +183,10 @@ The page shows to the roles that hold its menu entry and the permissions `plugin
 - Start with **To act on first**: one business function that takes a large share of the time is where users feel an improvement most.
 - Open the callers of a slow function in the [cross reference](../cross-reference.md) to know which screens and reports are affected.
 - After a restart, the counters start from zero: read the page again once the platform has worked for a while.
-- For the details behind a line, go to [Platform analysis](./platform-analysis.md) (servers, processes, functions, INI) or [Database audit](./database-audit.md).
+- **Details** first, for the rows behind a line; then [Platform analysis](./platform-analysis.md) (servers, processes, functions, INI) or [Database audit](./database-audit.md) for the whole picture.
 
 ---
 
 ## Related
 
-- [Platform analysis](./platform-analysis.md) · [Database audit](./database-audit.md) · [Server Manager](./server-manager.md) · [JDE Health Check](./jde-servers.md).
+- [Platform synthesis](../synthesis.md) · [Platform analysis](./platform-analysis.md) · [Database audit](./database-audit.md) · [Server Manager](./server-manager.md) · [JDE Health Check](./jde-servers.md).

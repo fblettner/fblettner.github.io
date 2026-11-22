@@ -164,7 +164,7 @@ A web application that sits next to JD Edwards and reads its data live — throu
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
       <li>UDC types and UDC codes — every type and value on one searchable grid, with filters and Excel export.</li>
       <li>Address Book, customers and suppliers — read-only grids with their related tabs and <i>Open in JDE</i>.</li>
-      <li>Items, companies and accounts, setup tables, OMW projects — modules ready to apply from Liberty Next, read from the JDE tables.</li>
+      <li>Companies and accounts, items, setup tables, OMW projects — 21 read-only screens delivered ready to use, read from the JDE tables.</li>
     </ul>
   </div>
 
@@ -197,7 +197,7 @@ A web application that sits next to JD Edwards and reads its data live — throu
       <li>The enterprise, web and AIS servers checked through Server Manager every five minutes — state, health, failed checks.</li>
       <li>Availability over 24 hours per instance on the overview, the instances in trouble first.</li>
       <li>A failed check sends the job's alerts; a failed instance can be stopped automatically.</li>
-      <li>Server Manager live, Performance advice, Platform analysis and Database audit — what slows the platform down, and what to look at first.</li>
+      <li>Platform synthesis and Architecture — the platform at a glance, drawn from what is found; Server Manager live, Performance advice, Platform analysis and Database audit — what slows the platform down, and what to look at first.</li>
     </ul>
   </div>
 
@@ -320,21 +320,24 @@ The User Management grid, with the editable user record, the attached roles and 
 
 ## The application map
 
-The menu follows the work, from the home page to the maintenance jobs.
+The menu follows the work, from the way in to the maintenance jobs.
 
 | Section | What it covers |
 |---|---|
-| **Overview** | The [home page](./home.md): what Nomajde does, the live figures of the JD Edwards instance, the entry points of each domain. |
-| **Data Explorer** | [Free analysis](./data-explorer.md) of the security and development data, and of the models shipped by the JD Edwards presets. |
+| **Overview** | [The way in](./home.md): one group of links per thing a person comes to do, and the jobs with their last run. |
+| **Platform synthesis** | [The platform at a glance](./synthesis.md): six figures, what the server, performance and database analyses flag in one list, the architecture, one tab per analysis. |
+| **Prepare for upgrade** | [One page for the whole upgrade analysis](./upgrade/analysis.md): what has to be retrofitted for a release, how complex, for how many days, in which order and how far the work is — from Oracle's object list and the customer's own objects, with the user defined objects to test again. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, development and upgrade data, and of eighteen models on the JD Edwards modules. |
 | **Cross Reference** | [What is in a JD Edwards object and where it is used](./cross-reference.md): applications, reports, data items, views, tables, data structures, business functions, UDOs. |
-| **Upgrade** | [One page for the whole upgrade analysis](./upgrade/analysis.md): what has to be retrofitted for a release, how complex, for how many days, in which order and how far the work is — from Oracle's object list and the customer's own objects, with the user defined objects to test again. |
-| **Master Data** | [UDC Types](./master-data/udc-types.md) and [UDC Code](./master-data/udc-codes.md), searchable read-only grids, and the [Address Book](./master-data/address-book.md): address book, customers and suppliers, read-only, with Open in JDE. |
+| **JD Edwards data** | **Master Data** — [UDC Types](./master-data/udc-types.md) and [UDC Code](./master-data/udc-codes.md), the [Address Book](./master-data/address-book.md) with customers and suppliers, [Companies and accounts, Items](./master-data/delivered-screens.md) — and [**Setup**](./master-data/delivered-screens.md#setup): payment terms, currencies and rates, tax areas, AAIs, next numbers, order activity rules, line types, document types, branch / plant constants. Read-only grids, delivered ready to use. |
 | **Security Maintenance** | User Management, User Preferences, Role Management, Role Relationships, Environments, Security Workbench, UDO Security. The JD Edwards security catalogue condensed into a few screens with grid editing. |
-| **Development** | Object Librarian and Data Dictionary, read-only. |
-| **Monitoring** | [JDE Health Check](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. [Performance](./monitoring/performance.md), [Platform analysis](./monitoring/platform-analysis.md) and [Database audit](./monitoring/database-audit.md): the platform read live as advice and analyses. [Server Manager](./monitoring/server-manager.md): seven screens read live from the console — instances, connected users, enterprise servers, processes, business functions, web and AIS servers, JDBj caches. |
+| **Development** | Object Librarian, Data Dictionary and the [Object Management Workbench](./master-data/delivered-screens.md#omw) (projects, project objects, log), read-only. |
+| **Monitoring** | [JDE Health Check](./monitoring/jde-servers.md): the health checks of the JD Edwards servers over a period, and the history of each one. [Performance](./monitoring/performance.md), [Platform analysis](./monitoring/platform-analysis.md) and [Database audit](./monitoring/database-audit.md): the platform read live as advice and analyses. [Architecture](./monitoring/architecture.md): the platform drawn from what is found. [Server Manager](./monitoring/server-manager.md): seven screens read live from the console — instances, connected users, enterprise servers, processes, business functions, web and AIS servers, JDBj caches. |
 | **Jobs** | [Re-merge the security, refresh the data dictionary, check the JDE servers](./jobs.md), with a live log. |
 | **Tests** | [Non-regression tests](./tests.md) played through AIS: record a reference before a change, compare after it. |
 | **JD Edwards services (AIS)** | The [catalogue of AIS services](./ais/services.md) and [Create from…](./ais/create-from.md): an endpoint or a whole screen from a JD Edwards application, form, table, report, business function or orchestration. |
+
+The [AI assistant](./ai-assistant.md) knows the cross reference, the upgrade and the platform's performance, with the same data as the pages.
 
 ---
 
@@ -342,18 +345,28 @@ The menu follows the work, from the home page to the maintenance jobs.
 
 | Role | What they typically open Nomajde for |
 |---|---|
-| **JDE security administrator** | The five Security Maintenance screens — add a user, attach a role, run Import Security on a clone, walk through the security workbench grid. |
+| **JDE security administrator** | The Security Maintenance screens — add a user, attach a role, run Import Security on a clone, walk through the security workbench grid. |
 | **JDE developer** | [Cross Reference](./cross-reference.md) — what a change reaches before making it: the applications, reports and UDOs that use a table, a view or a function. |
-| **Master-data steward** | Address Book, customers and suppliers; UDC types and codes for the catalogue work. |
-| **Upgrade project lead** | [Upgrade analysis](./upgrade/analysis.md) — the objects to retrofit, the days by type and by assignee, the follow-up of the work. |
+| **Master-data steward** | Address Book, customers and suppliers, companies and accounts, items; UDC types and codes; the setup tables. |
+| **Upgrade project lead** | [Prepare for upgrade](./upgrade/analysis.md) — the objects to retrofit, the days by type and by assignee, the follow-up of the work. |
 | **Functional tester** | [Non-regression tests](./tests.md) — the cases that must keep working, played before and after an ESU or a tools release. |
 | **Integration developer** | [Create from…](./ais/create-from.md) — a Liberty screen on a JD Edwards form, without writing a call. |
-| **Ops engineer** | [JDE Health Check](./monitoring/jde-servers.md) and [Server Manager](./monitoring/server-manager.md) — the health of every enterprise, web and AIS server, its availability over 24 hours, the alerts of the check; [Performance](./monitoring/performance.md) for what slows the platform down. |
+| **Ops engineer** | [Platform synthesis](./synthesis.md) and [Architecture](./monitoring/architecture.md) first; [JDE Health Check](./monitoring/jde-servers.md) and [Server Manager](./monitoring/server-manager.md) for the health of every server; [Performance](./monitoring/performance.md) for what slows the platform down. |
 
 ---
 
-## Who sees what \{#roles\}
+## Predefined roles \{#roles\}
 
-Nomajde does not ship roles of its own: access is granted by the roles of the platform. A role holds the menu entries it opens, the pages (Cross Reference, Performance, Platform analysis, Database audit), the jobs it may run and the JD Edwards services it may call — each AIS or Server Manager endpoint has its own permission.
+Nomajde ships five roles ready to add, in **Liberty Next → Administer → Access → Roles → Add a predefined role…**:
 
-A typical deployment keeps the people who maintain master data apart from those who manage access rights, and grants the services that change JD Edwards or the platform to few.
+| Role | What it covers |
+|---|---|
+| **Master data steward** | The **Master Data** folder in read and change — the UDC, the Address Book, Companies and accounts, Items, and what later versions add to that folder; the **Setup** in read. |
+| **Security administrator** | JD Edwards users, roles, environments and the security workbench — the **Security Maintenance** folder — in read and change, with the two jobs that rebuild the merged security (*Re-merge security*). |
+| **Developer** | In read: the **Development** folder (Object Librarian, Data Dictionary, Object Management Workbench), [Cross Reference](./cross-reference.md), [Prepare for upgrade](./upgrade/analysis.md) and the [Data Explorer](./data-explorer.md). |
+| **Platform operator** | In read: [Platform synthesis](./synthesis.md), the **Monitoring** folder — servers, Server Manager, architecture, performance, platform and database analysis — and the **Tests**; runs the health check and the test suite. |
+| **Administrator** | Everything in the application: read and change, its jobs and its pages included. |
+
+Each of them opens the [Overview](./home.md) and the [AI assistant](./ai-assistant.md). A person may hold several: the rights add up — a security administrator who is also a developer sees both. A role names menu folders, not screens: it follows its folders when a later version adds screens to them.
+
+Beyond these roles, access is granted by the roles of the platform as for any application: a role holds the menu entries it opens, the pages, the jobs it may run and the JD Edwards services it may call — each AIS or Server Manager endpoint has its own permission. A typical deployment keeps the people who maintain master data apart from those who manage access rights, and grants the services that change JD Edwards or the platform to few.

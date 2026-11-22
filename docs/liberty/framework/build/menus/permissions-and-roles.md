@@ -81,7 +81,7 @@ Every leaf is gated by the permission of its target:
 | `dashboard` | The permission of at least one of its data widgets, or `dashboard:<id>` — see [below](#gating). |
 | `page` | The page's own: `explorer:<app>:<model>` for the Data Explorer, `page:<app>:<page>` for a page an application ships, `nomaflow:view` for the Nomaflow pages, `tests:view` for the Tests pages, none for the others. |
 
-An explicit `menu:<app>:<id>` allow in a role also shows the leaf, even without the target's permission; a `menu:` deny always hides it. The role editor writes these strings when an entry is allowed or denied on its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md).
+A role that sets the entry, its folder or the whole application to **Read** (`menu:<app>:<id>`) or **Read and change** (`edit:<app>:<id>`) also shows the leaf: the server gives it what the screen needs, its target's permission included. A `menu:` deny always hides it. The role editor writes these strings from its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md#access).
 
 A user with `sql:crm:customers_get` sees the menu leaf that opens the Customers screen. A user without it doesn't — the leaf vanishes from the rendered menu.
 
@@ -217,22 +217,16 @@ Liberty's permission strings follow a simple pattern:
 | `sql:*` | Run every query on every connector. |
 | `api:<connector>:<endpoint>` | Call that specific API endpoint. |
 | `api:<connector>:*` | Call every endpoint on that connector. |
-| `menu:<app>:<id>` | Show that menu entry. A `!menu:…` deny hides it. |
+| `menu:<app>:<id>` | That menu folder or entry in read: shown, with what its screens read. A `!menu:…` deny hides it. |
+| `edit:<app>:<id>` | On top of `menu:`, read and change: what its screens write and run, its jobs included. |
+| `menu:<app>:*`, `edit:<app>:*` | The whole application, in read or in read and change; a choice on a folder or an entry wins over it. |
 | `*` | Everything. |
 
 A superuser is a flag on the user, not a permission: it passes every check.
 
-For menu pruning, the relevant permissions are `sql:` and `api:` (matching the leaf's `target`) and `menu:`. A role granting `sql:crm:*` opens every `screen` and `query` leaf on the `crm` app.
+For menu pruning, the relevant permissions are `menu:` (the folder or entry granted) and `sql:` / `api:` (matching the leaf's `target`). A role granting `menu:crm:*` or `sql:crm:*` opens every `screen` and `query` leaf on the `crm` app.
 
-Granular vs broad:
-
-| Granular `sql:<c>:<query>` | Broad `sql:<c>:*` |
-|---|---|
-| Per-screen control — pick which screens this role sees. | Whole-app control — this role sees every screen on the connector. |
-| Tedious to maintain for apps with 50+ screens. | One permission per role per app. |
-| Useful for compliance scenarios. | The default for most installs. |
-
-Most teams settle on broad `sql:<c>:*` per role per app, and use the `roles` filter on individual items for fine-grained exceptions.
+The usual way to grant an application is the **menu grant**, set in the role editor: a folder, or the whole application, in **Read** or in **Read and change**. The server works out the `sql:` / `api:` permissions the screens under it need — read query, dropdown lists, record-form tabs, and for change the writes, the actions' targets and the jobs —, so a role stays a few lines and follows its folders when screens are added. `sql:<c>:*` remains possible for a role that should run every query of a connector, menus or not; the `roles` filter on individual items handles the exceptions.
 
 ---
 
@@ -262,10 +256,10 @@ An entry is shown for what the user may open through it:
 | `query`, `endpoint` | The user holds `sql:<connector>:<target>` / `api:<connector>:<target>`. |
 | `dashboard` | The user can read at least one of its data widgets, or holds `dashboard:<id>`. A dashboard of texts and links only is shown to everyone. |
 | `page` | Data Explorer, or an analysis or dashboard of it: the user may use the model (`explorer:<app>:<model>`). A page an application ships (`/app/<app>/<page>`): `page:<app>:<page>`. Nomaflow pages: `nomaflow:view`. Tests pages: `tests:view`. Any other page: everyone. |
-| `job` | The user holds `job:<id>`. |
+| `job` | The user may run the job: the entry or its folder in **Read and change**, or `job:<id>`. **Read** alone does not show it. |
 | `url` | Everyone. |
 
-On every type, an explicit `menu:<app>:<id>` allow shows the entry, a deny hides it, and the `roles` filter applies first.
+On every type but `job`, the entry or its folder in **Read** shows the entry; on every type, a `menu:` deny hides it, and the `roles` filter applies first.
 
 **Which applications a user sees.** An application that has a menu and is shown in the switcher is listed for a user only when at least one of its entries is theirs through a permission. The entries open to everyone — an external address, an open page, a dashboard of texts — do not list an application by themselves. A superuser, or a role holding `*`, sees every application.
 
@@ -281,9 +275,10 @@ To check a role, open it in **Liberty Next → Administer → Access**: the eye 
 | Granting `sql:crm:*` to a role but the screen still doesn't appear. | The user's session was issued before the grant. | Sign out / sign back in to refresh the JWT. |
 | `roles = []` (explicit empty list). | Equivalent to leaving the field blank — implicit permission alone. | If you meant "only admins", use `roles = ["admin"]`. |
 | Folder visible despite all leaves being hidden. | The pruning ran on stale data (rare race condition during a hot reload). | Refresh the page. |
-| A user does not see a dashboard entry. | The role reads none of the dashboard's data widgets. | Grant the `sql:` permission of its widgets' queries, or `dashboard:<id>`. |
+| A user does not see a dashboard entry. | The role reads none of the dashboard's data widgets. | Set the entry or its folder to **Read**, or grant `dashboard:<id>`. |
+| A user does not see a job entry. | The entry or its folder is in **Read**: running a job needs **Read and change**. | Set the entry or its folder to **Read and change**, or grant `job:<id>`. |
 | A user does not see an application in the switcher. | Its only entries open to that user need no permission (links, open pages). | Grant a permission on one of its screens, dashboards or Data Explorer models. |
-| Menu shows nothing for a brand-new user. | The user's role grants no `sql:` / `api:` permissions on this app. | Verify the role has at least one matching permission. |
+| Menu shows nothing for a brand-new user. | The user's role grants no folder or entry of this app, and no `sql:` / `api:` permission on it. | Set a folder, or the whole application, to **Read** in the role. |
 
 ---
 

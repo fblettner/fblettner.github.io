@@ -1,14 +1,14 @@
 ---
 title: Services
 description: "Logic → Services in Liberty Next: a service is a sequence of steps — queries, endpoint calls, plugin functions, conditions, loops — drawn as a flow and edited beside it; Run tries it with inputs and shows the answer and the steps that ran, Expose turns it into an API endpoint that a screen, a job, the assistant or an outside caller uses like any other."
-keywords: [Liberty Next, services, shared actions, flow designer, low-code, steps, condition, loop, run, expose, API endpoint, composed service, orchestration]
+keywords: [Liberty Next, services, shared actions, notification step, flow designer, low-code, steps, condition, loop, run, expose, API endpoint, composed service, orchestration]
 ---
 
 # Services
 
 A **service** composes several steps into one call: read a row, check it, call an endpoint, branch on the answer, write, answer. It is built by drawing — no code — and used two ways: a screen calls it from a button, or it is **exposed as an API endpoint** that a job, the assistant or an outside system calls like any other.
 
-Access: **Liberty Next → Logic → Services**, for superusers. A service is the shared action a screen calls with `call_action`; see [Actions and lifecycle](./screens/actions-and-lifecycle.md) for the actions of a screen.
+Access: **Liberty Next → Logic → Services**, for superusers. A screen calls a service with `call_action`; see [Actions and lifecycle](./screens/actions-and-lifecycle.md) for the actions of a screen.
 
 ---
 
@@ -23,8 +23,8 @@ Access: **Liberty Next → Logic → Services**, for superusers. A service is th
   </defs>
 
   <rect x="220" y="20" width="880" height="432" rx="14" fill="url(#svd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Shared action</text>
-  <text x="333.18" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Service</text>
+  <text x="293" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
   <rect x="1036" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1047.0" y="44.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
   <rect x="1062" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -270,7 +270,7 @@ Each line gives the service's identifier, its label, its number of steps and inp
 
 ## The flow \{#flow\}
 
-The designer opens over the whole window, titled *Shared action ·* `[actions.<id>]`, on the **Flow** view; **List** gives the same service as a form — label, description, inputs, then the steps one per line, with **Add action**. **Save** writes the service and reloads the configuration; **Cancel** with unsaved changes asks whether to save them, discard them or keep editing.
+The designer opens over the whole window, titled *Service ·* `[actions.<id>]`, on the **Flow** view; **List** gives the same service as a form — label, description, inputs, then the steps one per line, with **Add action**. **Save** writes the service and reloads the configuration; **Cancel** with unsaved changes asks whether to save them, discard them or keep editing.
 
 The flow reads left to right: **Start**, which shows the inputs; one card per step; **Answer**, which shows what the service returns. A **condition** forks into its **True** and **False** lanes; a **loop** or a **group** frames its own steps. The layout follows the structure of the service: nothing is placed by hand. A long flow continues on the next row, and the zoom (− / % / +) is kept on the device.
 
@@ -282,14 +282,24 @@ The flow reads left to right: **Start**, which shows the inputs; one card per st
 |---|---|
 | **Query** | Runs a query of a connector. |
 | **Endpoint** | Calls an API endpoint. When the endpoint says where its rows are, the next steps read them by column name: `<step>.first_row.<COLUMN>`, `<step>.rows`. |
-| **Function** | Calls a function of an application's plugin. |
+| **Function** | Calls a function of an application's plugin, picked in a list grouped by application and module — the same picker as a job's [Python step](../../nomaflow/steps.md#python). |
 | **Service** | Calls another service. |
 | **Condition** | Forks on a test. |
 | **For each** | Repeats its steps for each row. |
-| **Message**, **Notification** | Tells the user, or sends a notification. |
+| **Message**, **Notification** | Tells the user, or sends a notification rule — see [below](#notification). |
 | **Answer** | Says what the service returns. |
 
 A step reads the service's inputs as `INPUT.<name>`, and the result of an earlier step by that step's id — `<step>.first_row.<COLUMN>`, `<step>.rows` — when that step has **Bind result** ticked. An input's default (a literal, or `#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`) is used when the caller does not give it.
+
+### The Notification step \{#notification\}
+
+A **Notification** step sends one of the rules of [Logic → Notifications](../../nomaflow/notifications.md) whose trigger is *A screen action*: the rule says who receives the message and through which channels, the step says when.
+
+| Field | Content |
+|---|---|
+| **Notification rule** | The rules triggered *by an action*, by label. A disabled rule is listed as *(disabled)* and the step sends nothing until it is enabled; a rule that does not exist, or has another trigger, is said too — the step would send nothing. With no such rule yet, the field says to create one first. |
+| **Values of the message** | The values of the current record are sent by themselves. Each line adds what the message needs besides — a **name in the message** (a `{name}` of its subject, body or link) and its value or source: what the user typed (`INPUT.<name>`), the result of an earlier step. |
+
 
 ---
 

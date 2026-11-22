@@ -155,6 +155,7 @@ L'éditeur s'ouvre dans une fenêtre qui porte le nom du graphique (`[charts.<co
 | **Id** | L'identifiant du graphique : lettres, chiffres, tirets bas et tirets. Les tableaux de bord désignent le graphique par cet identifiant. |
 | **Libellé** | Le titre du graphique dans les listes et les tableaux de bord. |
 | **Description** | Facultative. |
+| **Garder tel quel à la mise à jour (une mise à jour de l'application le laisse alors tel qu'enregistré ici)** | Cochée, cette case protège le graphique : une mise à jour de l'application qui le livre le laisse tel qu'enregistré ici — voir [Mises à jour](#override). |
 | **Connecteur** | Le connecteur de la portée, non modifiable ; pour rattacher un graphique à un autre connecteur, le recréer dans cette portée. |
 | **Requête** | La requête de lecture dont le résultat est représenté. Les boutons voisins modifient la requête, la clonent ou en créent une nouvelle sans quitter l'éditeur. |
 
@@ -193,7 +194,7 @@ Le widget **Graphique** d'un tableau de bord affiche un graphique enregistré pa
 
 ## Mises à jour \{#override\}
 
-Le badge *surcharge* signale un graphique marqué comme personnalisation locale : un package de mise à jour ne l'écrase pas. Voir [Packages](./build/packages.md).
+Le badge *surcharge* signale un graphique marqué comme personnalisation locale — la case **Garder tel quel à la mise à jour** de son éditeur : un package de mise à jour ne l'écrase pas. Voir [Packages](./build/packages.md).
 
 ---
 

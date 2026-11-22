@@ -209,7 +209,7 @@ The audit reads the data Nomasx-1 has already collected for the application — 
 - **Roles and assignments** — the role catalog and the user-role assignments.
 - **Object security** — the Security Workbench grants (run / add / change / delete, direct or via `*ROLE`, and `*PUBLIC` grants).
 - **The SoD conflict tables** — refreshed by `nomasx1-collect-all`, decorated by the matrix and its process / activity / object / risk dimensions.
-- **The applications registry** — for the cover and scope.
+- **The applications registry** — for the cover and scope. The database named comes from the pool the application names (the service name of an Oracle pool, the base of a directory), and the pool is printed; an application that names no pool keeps what its row holds.
 
 A run against an application with no collected data still produces the document, but the affected sections read as empty rather than wrong.
 

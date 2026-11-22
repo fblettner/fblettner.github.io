@@ -81,7 +81,7 @@ Chaque feuille est conditionnée par la permission de sa cible :
 | `dashboard` | La permission d'au moins un de ses widgets de données, ou `dashboard:<id>` — voir [plus bas](#gating). |
 | `page` | Celle de la page : `explorer:<app>:<modèle>` pour l'explorateur de données, `page:<app>:<page>` pour une page livrée par une application, `nomaflow:view` pour les pages Nomaflow, `tests:view` pour les pages de tests, aucune pour les autres. |
 
-Une autorisation explicite `menu:<app>:<id>` dans un rôle affiche aussi la feuille, même sans la permission de la cible ; un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes quand une entrée est autorisée ou refusée sur son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md).
+Un rôle qui place l'entrée, son dossier ou toute l'application en **Lecture** (`menu:<app>:<id>`) ou en **Lecture et modification** (`edit:<app>:<id>`) affiche aussi la feuille : le serveur lui donne ce dont l'écran a besoin, permission de la cible comprise. Un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes à partir de son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md#access).
 
 Un utilisateur qui a `sql:crm:customers_get` voit la feuille de menu qui ouvre l'écran Clients. Un utilisateur sans cette permission ne la voit pas — la feuille disparaît du menu rendu.
 
@@ -224,22 +224,16 @@ Les chaînes de permission Liberty suivent un schéma simple :
 | `sql:*` | Exécuter toutes les requêtes de tous les connecteurs. |
 | `api:<connector>:<endpoint>` | Appeler cet endpoint API précis. |
 | `api:<connector>:*` | Appeler tous les endpoints de ce connecteur. |
-| `menu:<app>:<id>` | Afficher cette entrée de menu. Un refus `!menu:…` la masque. |
+| `menu:<app>:<id>` | Ce dossier ou cette entrée de menu en lecture : affiché, avec ce que lisent ses écrans. Un refus `!menu:…` le masque. |
+| `edit:<app>:<id>` | En plus de `menu:`, la lecture et modification : ce que ses écrans écrivent et lancent, tâches comprises. |
+| `menu:<app>:*`, `edit:<app>:*` | Toute l'application, en lecture ou en lecture et modification ; un choix sur un dossier ou une entrée l'emporte. |
 | `*` | Tout. |
 
 Un superutilisateur est un indicateur porté par l'utilisateur, pas une permission : il passe toutes les vérifications.
 
-Pour l'élagage des menus, les permissions pertinentes sont `sql:` et `api:` (qui correspondent au `target` de la feuille) et `menu:`. Un rôle qui accorde `sql:crm:*` ouvre toutes les feuilles `screen` et `query` de l'application `crm`.
+Pour l'élagage des menus, les permissions pertinentes sont `menu:` (le dossier ou l'entrée accordés) et `sql:` / `api:` (qui correspondent au `target` de la feuille). Un rôle qui accorde `menu:crm:*` ou `sql:crm:*` ouvre toutes les feuilles `screen` et `query` de l'application `crm`.
 
-Granulaire ou large :
-
-| Granulaire `sql:<c>:<query>` | Large `sql:<c>:*` |
-|---|---|
-| Contrôle par écran — choisir quels écrans ce rôle voit. | Contrôle pour toute l'application — ce rôle voit tous les écrans du connecteur. |
-| Fastidieux à maintenir pour des applications de 50 écrans ou plus. | Une permission par rôle et par application. |
-| Utile pour les scénarios de conformité. | Le choix par défaut pour la plupart des installations. |
-
-La plupart des équipes adoptent `sql:<c>:*` large par rôle et par application, et utilisent le filtre `roles` sur des éléments précis pour les exceptions fines.
+La façon habituelle d'ouvrir une application à un rôle est le **droit sur le menu**, réglé dans l'éditeur de rôles : un dossier, ou toute l'application, en **Lecture** ou en **Lecture et modification**. Le serveur déduit les permissions `sql:` / `api:` dont ont besoin les écrans concernés — requête de lecture, listes déroulantes, onglets de la fiche et, en modification, les écritures, les cibles des actions et les tâches —, si bien qu'un rôle tient en quelques lignes et suit ses dossiers quand des écrans y sont ajoutés. `sql:<c>:*` reste possible pour un rôle qui doit exécuter toutes les requêtes d'un connecteur, menus ou non ; le filtre `roles` sur des éléments précis traite les exceptions.
 
 ---
 
@@ -269,10 +263,10 @@ Une entrée est affichée d'après ce que l'utilisateur peut ouvrir par elle :
 | `query`, `endpoint` | L'utilisateur détient `sql:<connector>:<target>` / `api:<connector>:<target>`. |
 | `dashboard` | L'utilisateur peut lire au moins un de ses widgets de données, ou détient `dashboard:<id>`. Un tableau de bord fait uniquement de textes et de liens est affiché à tous. |
 | `page` | Explorateur de données, ou l'une de ses analyses ou tableaux de bord : l'utilisateur peut utiliser le modèle (`explorer:<app>:<modèle>`). Page livrée par une application (`/app/<app>/<page>`) : `page:<app>:<page>`. Pages Nomaflow : `nomaflow:view`. Pages de tests : `tests:view`. Toute autre page : tout le monde. |
-| `job` | L'utilisateur détient `job:<id>`. |
+| `job` | L'utilisateur peut lancer la tâche : l'entrée ou son dossier en **Lecture et modification**, ou `job:<id>`. La **Lecture** seule ne l'affiche pas. |
 | `url` | Tout le monde. |
 
-Pour tous les types, une autorisation explicite `menu:<app>:<id>` affiche l'entrée, un refus la masque, et le filtre `roles` s'applique en premier.
+Pour tous les types sauf `job`, l'entrée ou son dossier en **Lecture** affiche l'entrée ; pour tous les types, un refus `menu:` la masque, et le filtre `roles` s'applique en premier.
 
 **Les applications visibles par un utilisateur.** Une application qui a un menu et figure dans le sélecteur n'est listée pour un utilisateur que si au moins une de ses entrées lui revient par une permission. Les entrées ouvertes à tous — une adresse externe, une page libre, un tableau de bord de textes — ne suffisent pas à lister une application. Un superutilisateur, ou un rôle qui détient `*`, voit toutes les applications.
 
@@ -288,9 +282,10 @@ Pour vérifier un rôle, l'ouvrir dans **Liberty Next → Administrer → Accès
 | Accorder `sql:crm:*` à un rôle mais l'écran n'apparaît toujours pas. | La session de l'utilisateur a été émise avant l'attribution. | Se déconnecter / se reconnecter pour rafraîchir le JWT. |
 | `roles = []` (liste vide explicite). | Équivaut à laisser le champ vide — permission implicite seule. | Pour signifier « uniquement les admins », utiliser `roles = ["admin"]`. |
 | Dossier visible alors que toutes ses feuilles sont masquées. | L'élagage s'est exécuté sur des données périmées (rare condition de course pendant un rechargement à chaud). | Rafraîchir la page. |
-| Un utilisateur ne voit pas l'entrée d'un tableau de bord. | Le rôle ne lit aucun des widgets de données du tableau de bord. | Accorder la permission `sql:` des requêtes de ses widgets, ou `dashboard:<id>`. |
+| Un utilisateur ne voit pas l'entrée d'un tableau de bord. | Le rôle ne lit aucun des widgets de données du tableau de bord. | Passer l'entrée ou son dossier en **Lecture**, ou accorder `dashboard:<id>`. |
+| Un utilisateur ne voit pas l'entrée d'une tâche. | L'entrée ou son dossier est en **Lecture** : lancer une tâche demande **Lecture et modification**. | Passer l'entrée ou son dossier en **Lecture et modification**, ou accorder `job:<id>`. |
 | Un utilisateur ne voit pas une application dans le sélecteur. | Ses seules entrées ouvertes à cet utilisateur ne demandent aucune permission (liens, pages libres). | Accorder une permission sur un de ses écrans, tableaux de bord ou modèles de l'explorateur de données. |
-| Le menu n'affiche rien pour un nouvel utilisateur. | Le rôle de l'utilisateur n'accorde aucune permission `sql:` / `api:` sur cette application. | Vérifier que le rôle possède au moins une permission correspondante. |
+| Le menu n'affiche rien pour un nouvel utilisateur. | Le rôle de l'utilisateur n'accorde aucun dossier ni aucune entrée de cette application, ni aucune permission `sql:` / `api:` sur elle. | Passer un dossier, ou toute l'application, en **Lecture** dans le rôle. |
 
 ---
 

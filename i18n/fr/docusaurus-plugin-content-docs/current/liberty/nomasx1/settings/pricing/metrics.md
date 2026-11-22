@@ -25,7 +25,7 @@ La métrique définit *comment* un composant est compté — par utilisateur nom
   <rect x="215" y="20" width="890" height="284" rx="14" fill="url(#pmt-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings - Licenses Metrics</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres - Métriques de licence</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <text x="233" y="96" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9 lignes · 12 ms</text>
   <rect x="959" y="84" width="128" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>

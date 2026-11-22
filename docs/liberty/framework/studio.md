@@ -482,7 +482,7 @@ Pick an application at the top left. Beside it, the search box and the counts: s
 
 | Column | Holds |
 |---|---|
-| **Menu** | The entries of the application's menu, in its order: a folder's entries are indented under it; the icon tells a folder, a screen or a dashboard. |
+| **Menu** | The entries of the application's menu, in its order: a folder's entries are indented under it; the icon tells a folder, a screen or a dashboard. Its count is the number of entries, as on the overview's card — the folders are not counted. |
 | **Screens** | Its screens, each with its label and its id. Icons say *Has a record form* and *Read only*. |
 | **Data** | The queries (a database icon) and the endpoints (a globe) its screens use, each with its label and its key `connector.name`. A pen marks what *changes data*. |
 | **Services** | The services its screens call, with their id. **All services…** opens the [Services](./build/services.md) page. |
@@ -506,7 +506,7 @@ The Studio shows what an application carries for nothing, and what is broken:
 | **Show the N no screen uses** (end of the Data column) | Lists the application's queries and endpoints no screen uses; **Hide the N no screen uses** folds them again. |
 | Orange chip at the top | The number of screens nothing opens. |
 
-The integrity chip beside it opens the full check.
+A screen is opened when a menu entry opens it (the screen itself, or a query it reads), when another screen opens it (its row click, a tab of its record form, a `navigate` action), or when an [Explorer entity](./explorer/model.md) names it. The rule is the one **Deploy → Integrity** applies: a screen the Studio says nothing opens is the orphan screen Integrity reports. The integrity chip beside it opens the full check.
 
 ### Edit in place \{#edit\}
 
@@ -529,7 +529,7 @@ The editors open **over the map** and come back to it, reloaded, with the select
 | **Edit the endpoint** | The [endpoint editor](./build/api-endpoints.md). |
 | **Design the flow** (or a double click on a service) | The [service designer](./build/services.md): the flow from **Start** to **Answer**, the service's label, description and inputs on the right. |
 | **Run** | Runs the service as it is saved, with the inputs typed, and shows its answer; its steps really run. |
-| **Edit the menu**, a dashboard | The menus or the dashboards editor, in a window with **Close**. |
+| **Edit the menu**, a dashboard | The menus editor, opened on the application shown, or the dashboards editor, in a window with **Close**. |
 
 **Open the screen** leaves the Studio for the screen itself.
 
@@ -538,7 +538,7 @@ The editors open **over the map** and come back to it, reloaded, with the select
 ## Tips & best practices \{#tips\}
 
 - Open the Studio **before** changing a shared query or service: the lit items are the test plan.
-- Clear the loose items before a delivery — a screen nothing opens is either a missing menu entry or dead configuration. A screen that only an [Explorer entity](./explorer/model.md) opens still shows here, while **Deploy → Integrity** counts it as reached.
+- Clear the loose items before a delivery — a screen nothing opens is either a missing menu entry or dead configuration.
 - New to an application? Select its menu entries one by one: the map is its documentation.
 - The Studio is one application at a time; **Find usages**, in each editor, searches the whole installation.
 

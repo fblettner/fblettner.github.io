@@ -42,9 +42,9 @@ L'écran vide apparaît dans la liste ; cliquer dessus pour ouvrir le **Concepte
 
 ## Étape 3 — Ce qu'il est
 
-Le concepteur s'ouvre sur sa première étape, **Ce qu'il est** : l'identité, la surcharge du connecteur et les indicateurs de comportement. Les champs forment une seule liste qui défile, dans cet ordre ; une liste déroulante indique le connecteur de l'écran, celui de l'application par défaut.
+Le concepteur s'ouvre sur sa première étape, **Ce qu'il est** : l'identité, la surcharge du connecteur et les indicateurs de comportement. Les champs forment une seule liste qui défile, dans cet ordre ; une liste déroulante indique le connecteur de l'écran, celui de l'application par défaut. Sous le libellé (**Label**) et sous la description, **Label translations** et **Description translations** les donnent dans les autres langues : une ligne par langue, **+ ajouter** pour en ajouter une.
 
-<svg viewBox="0 0 1320 614" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 606" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="cfq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="cfq-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -52,121 +52,116 @@ Le concepteur s'ouvre sur sa première étape, **Ce qu'il est** : l'identité, l
     <marker id="cfq-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="880" height="578" rx="14" fill="url(#cfq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="880" height="566" rx="14" fill="url(#cfq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran ·</text>
-  <text x="367.648" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
-  <rect x="1011" y="32" width="69" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1045.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
-  <rect x="981" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="993.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <text x="376.4" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
   <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QU'IL EST</text>
-  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Clients</text>
-  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106" x2="380.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DONNÉES</text>
-  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
-  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 requête(s) d'enregistrem…</text>
-  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">3 requête(s) d'enregistrement</text>
+  <line x1="510.0" y1="106" x2="523.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRILLE</text>
-  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 colonne(s)</text>
-  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filtre(s) · 1 vue(s)</text>
-  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">6 colonne(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">4 filtre(s)</text>
+  <line x1="653.0" y1="106" x2="666.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHE</text>
-  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 onglet(s)</text>
-  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 champ(s)</text>
-  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">1 onglet(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">4 champ(s)</text>
+  <line x1="796.0" y1="106" x2="809.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="#c084fc" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
-  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 action(s) de barre d…</text>
-  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 dans le menu de ligne ·…</text>
-  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">0 action(s) de barre d'outils</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">2 dans le menu de ligne · 0…</text>
+  <line x1="939.0" y1="106" x2="952.0" y2="106" stroke="#475569" strokeWidth="1.3" markerEnd="url(#cfq-flow)"/>
   <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeOpacity="0.5" strokeWidth="1"/>
   <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SORTIE</text>
-  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">l'export de la grille</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">l'export de la grille</text>
   <text x="238" y="152" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Indicateurs de comportement pour cet écran — chargement auto, table d'audit, plafond de lignes, colonnes clés.</text>
-  <text x="238" y="176" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
-  <rect x="238" y="181" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="195.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
-  <text x="1070" y="195.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="238" y="220" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
-  <rect x="238" y="225" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="239.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Clients</text>
-  <text x="238" y="259" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Short label shown in the menu / list.</text>
-  <text x="238" y="272" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
-  <rect x="238" y="277" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="291.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Portefeuille clients</text>
-  <text x="238" y="311" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Longer description shown as the page title.</text>
-  <text x="238" y="324" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUDIT TABLE</text>
-  <rect x="238" y="329" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="343.3" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">e.g. AUD_USERS — leave blank to disable</text>
-  <text x="660.0" y="368" fill="#64748b" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
-  <text x="238.0" y="386" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUTO LOAD</text>
-  <rect x="238.0" y="396" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M240.5,401.5 L242.8,403.8 L246.8,399" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="255.0" y="405" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="238.0" y="420" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Run the read query as soon as the screen opens.</text>
-  <text x="660.0" y="386" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EDITABLE</text>
-  <rect x="660.0" y="396" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M662.5,401.5 L664.8,403.8 L668.8,399" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="677.0" y="405" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="660.0" y="420" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Allow inline grid editing on this screen.</text>
-  <text x="238.0" y="438" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">UPLOADABLE</text>
-  <rect x="238.0" y="448" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="255.0" y="457" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="238.0" y="472" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Show the Excel / CSV import button.</text>
-  <text x="660.0" y="438" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">READ ONLY</text>
-  <rect x="660.0" y="448" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="677.0" y="457" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="660.0" y="472" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Make the whole screen view-only.</text>
-  <line x1="238" y1="486" x2="1082" y2="486" stroke="#1f2937" strokeWidth="1"/>
-  <text x="238" y="504" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AU CLIC SUR UNE LIGNE</text>
-  <text x="238" y="520" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">COMPORTEMENT</text>
-  <rect x="238" y="525" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="539.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Ne rien faire (ou laisser faire le dialogue de l'écran)</text>
-  <text x="556" y="539.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <line x1="220" y1="556" x2="1100" y2="556" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="990" y="566" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1036.0" y="580.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="911" y="566" width="71" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="946.5" y="580.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <text x="238" y="172" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
+  <rect x="238" y="177" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="191.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="238" y="215" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <rect x="238" y="220" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="234.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="238" y="254" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Short label shown in the menu / list.</text>
+  <text x="238" y="270" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL TRANSLATIONS</text>
+  <rect x="238" y="275" width="303" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="289.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="247" y="289.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="262.664" y="289.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="529" y="289.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="547" y="275" width="507" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="557" y="289.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Clients</text>
+  <rect x="1060" y="275" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1071.0" y="289.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="304" width="59" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="247" y="316" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <text x="238" y="333" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The label per language (the tab, the list of screens).</text>
+  <text x="238" y="351" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <rect x="238" y="356" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="370.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customers — codes from the sales, names completed by hand</text>
+  <text x="238" y="390" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Longer description shown as the page title.</text>
+  <text x="238" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION TRANSLATIONS</text>
+  <rect x="238" y="411" width="303" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="425.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="247" y="425.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="262.664" y="425.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="529" y="425.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="547" y="411" width="507" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="557" y="425.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Clients — codes issus des ventes, noms complétés à la main</text>
+  <rect x="1060" y="411" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1071.0" y="425.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="440" width="59" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="247" y="452" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <text x="238" y="469" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The description per language (the page's heading).</text>
+  <text x="238" y="487" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">AUDIT TABLE</text>
+  <rect x="238" y="492" width="844" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="506.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">e.g. AUD_USERS — leave blank to disable</text>
+  <text x="660.0" y="532" fill="#64748b" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <line x1="220" y1="544" x2="1100" y2="544" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1002" y="554" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1042.0" y="568.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="925" y="554" width="69" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="959.5" y="568.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
   <rect x="20" y="82" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">S'ouvre sur Ce qu'il est</text>
   <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">identité et comportement</text>
-  <line x1="200" y1="99.0" x2="258.0" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="175" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="190" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connecteur</text>
-  <text x="30" y="203" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">celui de l'application par défaut</text>
-  <line x1="200" y1="192.0" x2="238" y2="192" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="219" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="234" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Libellé et description</text>
-  <text x="30" y="247" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">texte du menu et titre de page</text>
-  <line x1="200" y1="236.0" x2="238" y2="236" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="20" y="323" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="338" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Table d'audit</text>
-  <text x="30" y="351" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reçoit une copie de chaque écriture</text>
-  <line x1="200" y1="340.0" x2="238" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="383" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="398" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Indicateurs</text>
-  <text x="1130" y="411" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chargement auto, édition en grille…</text>
-  <line x1="1120" y1="400.0" x2="720.0" y2="405" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="448" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lecture seule</text>
-  <text x="1130" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">aucune commande d'écriture</text>
-  <line x1="1120" y1="465.0" x2="820.0" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
-  <rect x="1120" y="519" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="534" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic sur une ligne</text>
-  <text x="1130" y="547" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dialogue, écran frère ou route</text>
-  <line x1="1120" y1="536.0" x2="568" y2="536" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <line x1="200" y1="99.0" x2="258" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Libellé</text>
+  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le menu, la liste des écrans</text>
+  <line x1="200" y1="237.0" x2="238" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dans chaque langue</text>
+  <text x="30" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'onglet et la liste des écrans</text>
+  <line x1="200" y1="309.0" x2="238" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="1120" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le libellé en français</text>
+  <text x="1130" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ ajouter : une autre langue</text>
+  <line x1="1120" y1="309.0" x2="1052" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="20" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Titre par langue</text>
+  <text x="30" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">affiché en haut de la page</text>
+  <line x1="200" y1="445.0" x2="238" y2="438" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
+  <rect x="1120" y="484" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="499" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Table d'audit</text>
+  <text x="1130" y="512" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">puis les options de comportement</text>
+  <line x1="1120" y1="501.0" x2="1082" y2="500" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfq-arrow)"/>
 </svg>
 
 ### Champ par champ
@@ -175,7 +170,9 @@ Le concepteur s'ouvre sur sa première étape, **Ce qu'il est** : l'identité, l
 |---|---|
 | **Connecteur** | Par défaut *Utiliser le connecteur de l'application — \<app>*. À définir explicitement uniquement quand l'écran lit/écrit via un connecteur **différent** de celui qui donne son nom à l'application (rare mais légitime — ex. une application `crm` qui lit ses tables de reporting via un connecteur `reporting`). |
 | **Libellé** | Texte court affiché dans les menus et listes. Retombe sur `description`, puis `id`. |
+| **Label translations** | Le libellé dans chacune des autres langues : une langue choisie dans la liste (`fr Français`), puis son texte. Il nomme l'onglet de l'écran et sa ligne dans la liste des écrans pour les utilisateurs de cette langue. Sans ligne pour une langue, le libellé tel qu'écrit est affiché. |
 | **Description** | Texte plus long affiché comme titre de page. |
+| **Description translations** | La description dans chacune des autres langues : le titre de la page pour les utilisateurs de cette langue. |
 | **auto_load** | Quand activé, la grille exécute la requête de lecture dès l'ouverture de l'écran. Quand désactivé, l'utilisateur clique sur *Exécuter* pour récupérer les données. À désactiver uniquement pour les écrans qui exigent des paramètres de filtre ou pour des requêtes véritablement coûteuses. |
 | **editable** | Quand activé, la grille gère l'édition de cellules en ligne — cliquer une cellule, taper, Entrée ; *Enregistrer* valide via `update_query`. Quand désactivé, l'utilisateur édite uniquement via le dialogue. |
 | **uploadable** | Quand activé, un bouton *Importer* Excel / CSV apparaît dans la barre d'outils de la grille. Nécessite `key_columns` pour savoir quelles lignes sont des mises à jour et lesquelles sont des insertions. |

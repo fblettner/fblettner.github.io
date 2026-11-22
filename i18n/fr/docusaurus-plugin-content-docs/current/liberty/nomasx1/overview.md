@@ -245,7 +245,7 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
   </defs>
 
   <rect x="220" y="20" width="880" height="380" rx="14" fill="url(#nxsor-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - Required (ORACLE)</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licences - Requises (ORACLE)</text>
   <rect x="454.1416" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="476.1416" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.license_oracle_required_get</text>
@@ -343,7 +343,7 @@ Un deuxième exemple : **Applications → Conflits → Synthèse**, les conflits
   </defs>
 
   <rect x="220" y="20" width="880" height="334" rx="14" fill="url(#nxsso-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">SOD - Summary</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">SoD - Synthèse</text>
   <rect x="348.5608" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="370.5608" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.sod_summary_get</text>
@@ -487,11 +487,17 @@ Le menu s'ouvre sur les trois tableaux de bord, l'Explorateur de données et les
 
 ## Les rôles dans Nomasx-1
 
-Nomasx-1 livre deux rôles, créés par une tâche que l'administrateur lance une fois après l'installation, puis après chaque mise à jour :
+Nomasx-1 livre quatre rôles prédéfinis :
 
-| Rôle | Ce qu'il accorde |
+| Rôle | Pour |
 |---|---|
-| `nomasx1_auditor` | La lecture de tous les écrans, tableaux de bord et modèles de l'Explorateur, l'assistant IA et l'exécution des deux rapports — sans modification des paramètres. Il reçoit les rapports mensuels. |
-| `nomasx1_admin` | Tout, y compris les paramètres et toutes les tâches Nomasx-1. |
+| **Auditeur** (`nomasx1_auditor`) | Lit tout et lance les deux rapports d'audit. Ne modifie aucun réglage. Il reçoit les rapports mensuels. |
+| **Responsable sécurité** (`nomasx1_security_officer`) | Sécurité et séparation des tâches en lecture et modification, avec leurs réglages, la collecte de la sécurité et son rapport. Le reste en lecture. |
+| **Gestionnaire des licences** (`nomasx1_licence_manager`) | Licences et base de données en lecture et modification, avec les réglages des licences, la collecte des licences et son rapport. Le reste en lecture. |
+| **Administrateur** (`nomasx1_admin`) | Tout dans l'application : lecture et modification, y compris les réglages et les tâches de son menu. |
 
-Les rôles s'attribuent dans **Liberty Next → Administrer → Accès**. Un déploiement typique sépare les auditeurs des administrateurs : la personne qui configure l'analyse n'est pas celle qui en examine les constats. Voir [Tâches](./jobs.md#access).
+Chaque rôle désigne des dossiers du menu : il suit donc ces dossiers quand une version y ajoute des écrans. Une même personne peut en cumuler plusieurs — un responsable sécurité également gestionnaire des licences : les droits s'additionnent.
+
+Ils s'ajoutent un par un dans **Liberty Next → Administrer → Accès → Rôles → Ajouter un rôle prédéfini…** (voir [Rôles prédéfinis](../framework/build/secure/roles-and-permissions.md#predefined)), ou tous les quatre d'un coup avec la tâche [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles), qui donne en plus à l'administrateur toutes les tâches `nomasx1-*`. Relancée, la tâche rétablit les droits livrés sur un rôle modifié dans Accès ; les utilisateurs ne sont pas touchés.
+
+Un déploiement typique sépare les auditeurs des administrateurs : la personne qui configure l'analyse n'est pas celle qui en examine les constats. Voir [Tâches](./jobs.md#access).

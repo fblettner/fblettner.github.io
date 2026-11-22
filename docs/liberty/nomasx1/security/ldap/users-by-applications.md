@@ -8,7 +8,7 @@ keywords: [Nomasx-1, security, LDAP, AD department, application access, Excel ex
 
 The **Users by applications** screen is the cross-tab that joins the corporate **LDAP / Active Directory** catalog to each connected application, for the AD departments declared in *Settings*. One line per *(Group, Application, AD department, LDAP user)*.
 
-It is the grid auditors take away: filter it on a *Group* or a department, then **Export → Excel (.xlsx)** — or CSV — exports the rows as they stand.
+It is the grid auditors take away: **Export workbooks** gives one Excel file per group, one sheet per application; **Export → Excel (.xlsx)** — or CSV — exports the rows of the grid as they stand.
 
 ---
 
@@ -34,10 +34,12 @@ It is the grid auditors take away: filter it on a *Group* or a department, then 
   <text x="1010.5" y="113.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Table</text>
   <line x1="1039" y1="105" x2="1039" y2="115" stroke="#334155" strokeWidth="1"/>
   <text x="1067.5" y="113.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Chart</text>
-  <rect x="240" y="128" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Search…</text>
-  <rect x="418" y="128" width="64" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="450.0" y="142.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="240" y="128" width="108" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="294.0" y="142.5" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▤ Export workbooks</text>
+  <rect x="356" y="128" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="366" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="474" y="128" width="64" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="506.0" y="142.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
   <rect x="673" y="128" width="107" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="683" y="142.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Max rows  default</text>
   <rect x="786" y="128" width="47" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -102,6 +104,10 @@ It is the grid auditors take away: filter it on a *Group* or a department, then 
   <text x="1045.0" y="278.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
   <rect x="1058" y="265" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1067.0" y="278.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="20" y="122" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="137" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export workbooks</text>
+  <text x="30" y="150" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one file per group, one sheet per application</text>
+  <line x1="200" y1="139" x2="240" y2="139" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxlda-arrow)"/>
   <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Group · department</text>
   <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from LDAP › Settings</text>
@@ -119,6 +125,14 @@ It is the grid auditors take away: filter it on a *Group* or a department, then 
   <text x="1130" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">account, status, login, roles</text>
   <line x1="1120" y1="277.0" x2="1070" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxlda-arrow)"/>
 </svg>
+
+---
+
+## Export workbooks \{#export-workbooks\}
+
+**Export workbooks**, at the left of the toolbar, produces the audit deliverable in one click: **one Excel file per group** (`ldap_<group>.xlsx`), and in each file **one sheet per application**, with the group's AD users and their account on that application. With several groups, the files arrive together in a `.zip`. The groups and their departments are those of [LDAP → Settings](./settings.md).
+
+**Export → Excel (.xlsx)** remains for a one-off extract: it exports the grid as filtered on screen, in a single sheet.
 
 ---
 
@@ -158,7 +172,7 @@ If an AD user has no matched account on the application, the source-system colum
 
 ## Tips & best practices
 
-- **Filter before exporting.** Limiting the grid to one *Group* gives a leaner export — useful when the audit covers a single business area.
+- **Use *Export workbooks* for the deliverable** — one file per group is what each business owner reviews. Filter the grid and use **Export** only for a one-off extract.
 - **Sort by *Group* + *Department*** — or **Group** the grid by them — to check the rows before exporting.
 - **A row without User ID is not a gap by itself** — it simply means the AD user has no account on that application. Whether that is expected is a business judgement, but the row stays in the export so the auditor can confirm it.
 - **An AD department missing from the grid** means it was not added to *Settings*. Add it under [LDAP → Settings](./settings.md), then run the collection again.

@@ -121,7 +121,7 @@ Le champ **Application ID** au-dessus de la grille la restreint à une applicati
 
 ## Boîte de dialogue \{#edit-dialog\}
 
-**Ajouter une ligne** crée les paramètres JD Edwards d'une application ; un clic sur une ligne les ouvre. La fenêtre, **Modifier · JD Edwards Settings**, est un formulaire unique sur quatre colonnes, avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
+**Ajouter une ligne** crée les paramètres JD Edwards d'une application ; un clic sur une ligne les ouvre. La fenêtre, **Modifier · Paramètres JD Edwards**, est un formulaire unique sur quatre colonnes, avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
 
 <svg viewBox="0 0 1320 552" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -132,7 +132,7 @@ Le champ **Application ID** au-dessus de la grille la restreint à une applicati
   </defs>
 
   <rect x="215" y="20" width="890" height="502" rx="14" fill="url(#sjdd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · JD Edwards Settings</text>
+  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Paramètres JD Edwards</text>
   <rect x="1061" y="36" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1073.0" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <line x1="215" y1="68" x2="1105" y2="68" stroke="#1f2937" strokeWidth="1"/>

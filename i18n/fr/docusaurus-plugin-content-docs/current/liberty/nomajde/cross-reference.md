@@ -189,6 +189,8 @@ La page lit les références croisées collectées dans les spécifications de J
 
 Il suffit de taper une partie d'un nom, d'un identifiant ou d'une description ; les exemples sous la zone de recherche en lancent une d'un clic : `P01012`, `P4210`, `R42565`, `AN8`, `V0101E`, `F0101`, `F4211`, `D0100033`, `B4200310`, `F4211FSBeginDoc`, *address number*, *sales order*. Les résultats sont regroupés par nature — **Applications**, **États**, **Données**, **Vues métier**, **Tables**, **Structures de données**, **Fonctions métier**, **Objets définis par l'utilisateur** —, chaque ligne avec sa description issue de l'Object Librarian. Un clic ouvre l'objet à droite.
 
+Le résultat le plus proche vient en tête : d'abord l'identifiant tapé tel quel, puis — pour les applications et les états — l'objet dont le titre correspond exactement à la saisie, avant ceux dont le titre ne fait que commencer par elle. La saisie *address book* place ainsi `P01012` *Address Book* devant la vingtaine d'applications dont le titre commence par ces mots.
+
 Un objet défini par l'utilisateur se trouve par n'importe quelle partie de son identifiant, de son nom ou de sa description ; sa ligne indique son type et l'application, l'écran et la version sur lesquels il est posé.
 
 ### Lister toute une famille \{#browse\}
@@ -398,12 +400,13 @@ La page s'affiche pour les rôles qui détiennent son entrée de menu ; les fonc
 - Pendant une montée de version, cocher **Seulement les applications de l'analyse de montée de version** pour voir ce qu'une modification d'Oracle atteint dans le code du client.
 - Consulter **Qui l'utilise** avant de reprendre un état modifié : personne ne l'a peut-être lancé depuis des années.
 - L'onglet **UDO** d'un écran liste ce que les utilisateurs ont construit dessus — requêtes, formats de grille, écrans personnalisés, extensions d'écran, pages et demandes de service qui l'ouvrent : autant d'éléments à revérifier quand l'écran change avec une version.
+- L'assistant connaît l'objet ouvert sur la page : lui demander *Où cet objet est-il utilisé ?* ou *Que toucherait une modification de la table F0101 ?* — voir [Assistant IA](./ai-assistant.md).
 - Pour passer en revue les objets définis par l'utilisateur un à un, choisir la pastille **UDO** : chaque ligne indique le type, et un mot du nom réduit la liste.
 
 ---
 
 ## Voir aussi
 
-- [Analyse de montée de version](./upgrade/analysis.md) — ce qu'il faut reprendre, dans quel ordre, avec les UDO à retester.
+- [Préparer la montée de version](./upgrade/analysis.md) — ce qu'il faut reprendre, dans quel ordre, avec les UDO à retester.
 - [Créer à partir de…](./ais/create-from.md) — un point d'accès ou un écran à partir d'une application JD Edwards.
 - [Performance](./monitoring/performance.md) — les fonctions métier les plus coûteuses, avec qui les appelle.

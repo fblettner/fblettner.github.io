@@ -206,6 +206,8 @@ The audit reads the data Nomasx-1 has already collected for the application — 
 - **Roles, user-role assignments and access rights per role**, plus the **JDE menus** (object → module mapping) that link usage to modules.
 - **The database options and packs inventory** — Oracle components in use versus subscribed.
 - **The licence inventory and pricing** (*Licenses* and *Settings → Pricing*), otherwise the financial figures drift from the real price book.
+- **The technical accounts** — the *Technical* flag of [Users properties](../settings/security/users-properties.md); while the application has no user property at all, the naming rules of its [Technical accounts](../settings/global/applications.md#technical-accounts) tab. With no flag and no rule, no account is counted as technical.
+- **The application's pool** — the server and the database the report names in its scope are read from the pool the application names, and the pool is printed; an application that names no pool keeps what its row holds.
 
 A run against an application with no collected usage still produces the document, but the usage and financial sections will read as empty rather than wrong.
 

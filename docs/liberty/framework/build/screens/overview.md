@@ -302,7 +302,7 @@ The designer **reads like the screen**: six stages drawn as a flow — **What it
 
 | Stage | Sections | The card says | Carries |
 |---|---|---|---|
-| **What it is** | General | The screen's label, *read only*. | Identity, connector override, audit table, row cap, key columns, behaviour flags (auto-load, editable, uploadable), grouping, treeview, default chart, row-click behaviour. |
+| **What it is** | General | The screen's label, *read only*. | Identity (label and description, each in the other languages too), connector override, audit table, row cap, key columns, behaviour flags (auto-load, editable, uploadable), grouping, treeview, default chart, row-click behaviour. |
 | **Data** | Queries | The read query and the number of save queries — in **orange** when no read query is set, or when an editable screen has nothing to save through. | The read (required), update, insert and delete — queries of the connector, or [API endpoints](./api-screens.md); **Saves through** for a screen read by SQL and saved by an API. |
 | **Grid** | Columns · Views · Summary | The number of columns, filters and views, *a summary*. | The columns; the shared [views](../../saved-views.md) of the grid; the grouping columns of the [Summary view](../../saved-views.md#summary). |
 | **Record form** | Dialog | The number of tabs and fields, or *no record form*. | The visual builder — **Add a field** / **Dialog** / **Inspector** — where fields are added to tabs. Optional: a screen without a record form still works as a read-only or grid-edit table. |

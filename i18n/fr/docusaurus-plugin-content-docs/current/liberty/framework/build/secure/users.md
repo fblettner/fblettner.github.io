@@ -187,7 +187,7 @@ Cliquer sur **＋ Ajouter un utilisateur**. La fenêtre **Ajouter un utilisateur
 | **E-mail** | non | Où un lien *Mot de passe oublié ?* est envoyé (voir [plus bas](#forgot)), et l'adresse des notifications. |
 | **Mot de passe** | oui (pour les nouveaux utilisateurs) | Au moins 8 caractères. Enregistré sous forme de hachage Argon2id, jamais relisible. Laisser vide en modification pour conserver le mot de passe actuel. |
 | **Demander un nouveau mot de passe à la prochaine connexion** | coché par défaut pour un nouvel utilisateur | Le mot de passe saisi ici est temporaire : l'utilisateur choisit le sien à la première connexion (voir [plus bas](#first-sign-in)). Comptes locaux uniquement. |
-| **Rôles** | non | Sélecteur de pastilles — taper ou choisir dans la liste. La liste contient chaque rôle configuré sous l'onglet Rôles. |
+| **Rôles** | non | Sélecteur de pastilles — taper ou choisir dans la liste. La liste contient chaque rôle configuré sous l'onglet Rôles. Les droits de plusieurs rôles s'additionnent — voir [Rôles prédéfinis](./roles-and-permissions.md#predefined). |
 | **Actif** | oui (activé par défaut) | Désactivé, l'utilisateur ne peut pas se connecter ; les sessions existantes s'arrêtent au prochain rafraîchissement de jeton. |
 | **Superutilisateur** | non | Activé, passe outre chaque vérification de permission et chaque périmètre de données. À utiliser avec parcimonie. |
 | **Attributs de périmètre de données** | non | Paires clé / valeur lues par le périmètre de données des rôles — voir [plus bas](#attributes). |

@@ -206,7 +206,7 @@ Cliquer une ligne → le panneau de droite charge le formulaire de l'entrée, en
 | `label` | Oui | Le texte de la barre latérale. |
 | `l` (onglet Traductions) | Oui | Libellés par langue. Voir [Traductions et icônes](./translations-and-icons.md). |
 | `icon` | Oui | L'une des [icônes du menu latéral](./translations-and-icons.md#icons). |
-| `type` | Oui | Liste déroulante. Vide = dossier. Passer de feuille à dossier efface `target` / `connector` / `params`. |
+| `type` | Oui | Liste déroulante : *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — voir [Types d'éléments](./item-types.md). Vide = dossier. Passer de feuille à dossier efface `target` / `connector` / `params`. |
 | `connector` | Uniquement pour les feuilles `query` / `endpoint` | Vide = le connecteur de l'application. |
 | `target` | Uniquement pour les feuilles | Un SearchSelect alimenté avec les cibles valides pour le `type` + `connector` choisis. |
 | `params` | Uniquement pour les feuilles | Paramètres fixes transmis à la cible à l'ouverture. |

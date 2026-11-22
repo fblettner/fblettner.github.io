@@ -205,7 +205,9 @@ L'audit lit les données que Nomasx-1 a déjà collectées pour l'application �
 - **La liste des utilisateurs JD Edwards** — utilisateurs déclarés, actifs et désactivés, avec dates de création et de dernier usage.
 - **Les rôles, les affectations utilisateur-rôle et les droits d'accès par rôle**, plus les **menus JDE** (mapping objet → module) qui relient l'usage aux modules.
 - **L'inventaire des options et packs de la base** — composants Oracle en usage face à ceux souscrits.
-- **L'inventaire des licences et la tarification** (*Licences* et *Configuration → Pricing*), faute de quoi les chiffres financiers s'écartent du price book réel.
+- **L'inventaire des licences et la tarification** (*Licences* et *Paramètres → Tarification*), faute de quoi les chiffres financiers s'écartent du tarif réel.
+- **Les comptes techniques** — l'indicateur *Technique* des [propriétés des utilisateurs](../settings/security/users-properties.md) ; tant que l'application n'a aucune propriété utilisateur, les règles de nommage de son onglet [Comptes techniques](../settings/global/applications.md#technical-accounts). Sans indicateur ni règle, aucun compte n'est compté comme technique.
+- **Le pool de l'application** — le serveur et la base cités dans le périmètre du rapport sont lus dans le pool désigné par l'application, dont le nom est imprimé ; une application sans pool garde ce que porte sa ligne.
 
 Une exécution sur une application sans usage collecté produit tout de même le document, mais les sections usage et finance apparaîtront vides plutôt que fausses.
 

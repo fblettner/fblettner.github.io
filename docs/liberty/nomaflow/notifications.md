@@ -204,11 +204,13 @@ The rules are listed on the left, each with its trigger and its channels; **Add 
 |---|---|---|
 | **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
 | **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
-| **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain). | Nothing more: the screen action names the rule and passes the row's values. |
+| **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain), or the **Notification** step of a [service](../framework/build/services.md#notification). | Nothing more: the action or the step names the rule and passes the row's values, plus the values its message needs. |
 
 `long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
 
 ### Channels
+
+In the editor, the channels are ticked by their names: **In the application** (`portal`), **Email** (`email`), **A query or an endpoint** (`action`).
 
 | Channel | Delivers |
 |---|---|
@@ -226,7 +228,7 @@ A channel that fails is logged and does not stop the others. Sending runs in the
 | `role:controllers` | Every active user holding the role. |
 | `email:finance@example.com` | An address — e-mail only. |
 
-In the editor, choose **role**, **user** or **email** beside the field, then pick the role or the user from the list, or type an address; each recipient becomes a chip, removed with its ✕. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
+In the editor, choose **A role**, **A user** or **An email address** beside the field, then pick the role or the user from the list, or type an address; each recipient becomes a chip, removed with its ✕. An entry without a prefix is sent to as an address when it contains `@`; any other is ignored and logged.
 
 ### Placeholders
 

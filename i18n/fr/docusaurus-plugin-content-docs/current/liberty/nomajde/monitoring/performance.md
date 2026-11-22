@@ -63,6 +63,8 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
   <text x="252" y="247" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">QUE FAIRE</text>
   <text x="360" y="247" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Commencez ici. Regardez qui l'appelle et ce qu'elle lit.</text>
   <text x="360" y="262" fill="#94a3b8" fontSize="8.2" fontFamily="ui-monospace, monospace">Appelée depuis 6 objet(s), 14 endroit(s) : P4210 · W4210A — Sales Order Entry …</text>
+  <rect x="899" y="204" width="51" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="924.5" y="216.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Détails</text>
   <text x="242" y="292" fill="#94a3b8" fontSize="8.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">À EXAMINER  (1)</text>
   <rect x="240" y="300" width="720" height="62" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240" y="300" width="3" height="62" fill="#fb923c"/>
@@ -72,6 +74,8 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
   <text x="360" y="333" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Des processus terminés sans être nettoyés : un noyau s'est arrêté.</text>
   <text x="252" y="349" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">QUE FAIRE</text>
   <text x="360" y="349" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Lisez les journaux du serveur d'entreprise, puis nettoyez les zombies.</text>
+  <rect x="899" y="306" width="51" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="924.5" y="318.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Détails</text>
   <text x="242" y="380" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Rien à signaler : Web et AIS, Caches, Base de données.</text>
   <rect x="240" y="390" width="720" height="34" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="404" fill="#64748b" fontSize="7" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">COMMENT LIRE CETTE PAGE</text>
@@ -88,6 +92,10 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
   <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le plus lourd d'abord</text>
   <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">traiter · examiner · savoir</text>
   <line x1="200" y1="237.0" x2="242" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nperf-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Détails</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les lignes derrière l'avis, en direct</text>
+  <line x1="1000" y1="167.0" x2="940" y2="213" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nperf-arrow)"/>
   <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Qui l'appelle</text>
   <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">depuis les références croisées</text>
@@ -130,6 +138,25 @@ Les lignes sont regroupées par poids — **À traiter d'abord**, **À examiner*
 
 Un domaine lu sans rien à signaler est nommé sous la liste (*Rien à signaler : …*) : un silence ne veut pas dire « non lu ». Une source qui n'a pas répondu est signalée par un avertissement ; le reste de la page est lu malgré tout.
 
+### Détails \{#details\}
+
+La plupart des lignes portent à droite un bouton **Détails** : il lit en direct les lignes qui se cachent derrière le chiffre et les affiche sous le conseil, dans une grille avec recherche, filtres, colonnes et export. **Masquer** les referme.
+
+| Conseil | Ce que liste **Détails** |
+|---|---|
+| Tables jamais analysées, ou aux statistiques périmées | Chaque table : propriétaire, table, sa description, nombre de lignes, dernière analyse, état des statistiques. |
+| Index inutilisables | Chaque index, sa table et son type. |
+| Sessions bloquées | Les sessions en attente et celles qui les bloquent : session, utilisateur, programme, machine, attente. |
+| Une requête lente | Son texte complet et le plan d'exécution retenu par la base. |
+| Taux de réussite du cache de la base trop bas | Les requêtes qui lisent le plus sur disque. |
+| Requêtes analysées de zéro | Les requêtes envoyées avec leurs valeurs écrites dans le texte. |
+| Journaux redo qui basculent trop souvent | Les bascules par heure. |
+| Une fonction métier | Ses appelants : les applications et les états dont les règles d'événement la nomment, jusqu'à 200 endroits. |
+| Processus zombies, noyau avec des requêtes en attente, transactions ouvertes | Les processus du serveur d'entreprise concerné — les zombies eux-mêmes quand Server Manager les distingue, sinon tous les processus du serveur. |
+| Mémoire Java, étape du serveur, cache | Les nœuds, les appels de fonctions métier ou les caches du serveur concerné. |
+
+Un détail de la base n'est lu que sur une base Oracle ; sur une autre base, la ligne le précise. Comme le reste de la page, **Détails** ne fait que lire : ni AWR, ni ASH.
+
 ---
 
 ## Comment lire la page \{#limits\}
@@ -145,7 +172,9 @@ L'encadré du bas de page en donne les limites :
 
 ## Accès \{#access\}
 
-La page s'affiche pour les rôles qui détiennent son entrée de menu et les permissions `plugin:nomajde.performance:*`. Elle utilise le connecteur `jde_server_manager` (voir [Server Manager](./server-manager.md#connection)) et la connexion à la base de JD Edwards.
+La page s'affiche pour les rôles qui détiennent son entrée de menu et les permissions `plugin:nomajde.performance:*` ; **Détails** ne demande rien de plus. Elle lit Server Manager par le pool `jde_server_manager` (voir [Server Manager](./server-manager.md#connection)) et la base de JD Edwards.
+
+L'assistant connaît ce qu'affiche la page — le conseil le plus lourd — et propose ses propres questions : *Que faut-il regarder en premier, et pourquoi ?* Voir [Assistant IA](../ai-assistant.md).
 
 ---
 
@@ -154,10 +183,10 @@ La page s'affiche pour les rôles qui détiennent son entrée de menu et les per
 - Commencer par **À traiter d'abord** : une fonction métier qui pèse lourd dans le temps mesuré est l'endroit où une amélioration se ressent le plus.
 - Ouvrir les appelants d'une fonction lente dans les [références croisées](../cross-reference.md) pour savoir quels écrans et quels états sont concernés.
 - Après un redémarrage, les compteurs repartent de zéro : relire la page une fois que la plateforme a travaillé un moment.
-- Pour le détail derrière une ligne : [Analyse de la plateforme](./platform-analysis.md) (serveurs, processus, fonctions, INI) ou [Audit de la base de données](./database-audit.md).
+- Ouvrir d'abord **Détails** pour les lignes qui se cachent derrière un conseil ; puis [Analyse de la plateforme](./platform-analysis.md) (serveurs, processus, fonctions, INI) ou [Audit de la base de données](./database-audit.md) pour une vue complète.
 
 ---
 
 ## Voir aussi
 
-- [Analyse de la plateforme](./platform-analysis.md) · [Audit de la base de données](./database-audit.md) · [Server Manager](./server-manager.md) · [Contrôle de santé JDE](./jde-servers.md).
+- [Synthèse de la plateforme](../synthesis.md) · [Analyse de la plateforme](./platform-analysis.md) · [Audit de la base de données](./database-audit.md) · [Server Manager](./server-manager.md) · [Contrôle de santé JDE](./jde-servers.md).

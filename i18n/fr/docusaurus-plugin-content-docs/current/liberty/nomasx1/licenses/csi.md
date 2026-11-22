@@ -25,7 +25,7 @@ Le CSI est l'ancrage contractuel : les volumétries (licences acquises, support)
   <rect x="215" y="20" width="890" height="262" rx="14" fill="url(#csi-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - Contracts</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licences - Contrats</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <text x="233" y="96" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">3 lignes · 12 ms</text>
   <rect x="959" y="84" width="128" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -145,7 +145,7 @@ Les colonnes d'audit (`CSI_AUDIT_USER`, `CSI_AUDIT_DATE`) sont masquées mais tr
   </defs>
 
   <rect x="215" y="20" width="890" height="322" rx="14" fill="url(#csd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · License - Contracts</text>
+  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Licences - Contrats</text>
   <rect x="1061" y="36" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1073.0" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <line x1="215" y1="68" x2="1105" y2="68" stroke="#1f2937" strokeWidth="1"/>

@@ -13,7 +13,7 @@ A user signs into Liberty through one of two paths:
 | **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against the stored users and mints a JWT. |
 | **OIDC** | The user clicks *Sign in with OIDC*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
 
-Both can coexist — the sign-in screen carries both buttons, and users pick whichever applies.
+Both can coexist — once OIDC is enabled, the sign-in screen carries both, and users pick whichever applies.
 
 ---
 
@@ -41,8 +41,8 @@ Both can coexist — the sign-in screen carries both buttons, and users pick whi
   <text x="600.0" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Forgot password?</text>
   <rect x="464" y="252" width="272" height="28" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="600.0" y="269.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in with OIDC</text>
-  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">OIDC must be enabled in config/app.toml; otherwise</text>
-  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">that button 404s.</text>
+  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Single sign-on with your organisation's account, when</text>
+  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">your administrator has set it up.</text>
   <rect x="160" y="40" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="170" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The application's name</text>
   <text x="170" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">App name, else Liberty Next</text>
@@ -57,11 +57,11 @@ Both can coexist — the sign-in screen carries both buttons, and users pick whi
   <line x1="840" y1="187.0" x2="660.0" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
   <rect x="840" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="850" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Single sign-on</text>
-  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to the OIDC provider</text>
+  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">only when OIDC is enabled</text>
   <line x1="840" y1="277.0" x2="736" y2="266" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
 </svg>
 
-The screen shows the application's name (**App name**, else *Liberty Next*), the local form, then **Sign in with OIDC** and a line under it saying that OIDC must be enabled. The OIDC button is always there: while OIDC is not enabled, it leads to an error page (404). **Forgot password?** appears under **Sign in** only when e-mail notifications are set up — see [Users → Forgot password](./users.md#forgot).
+The screen shows the application's name (**App name**, else *Liberty Next*), the local form, then — only when OIDC is enabled — **Sign in with OIDC** and a line under it meant for the user: *Single sign-on with your organisation's account, when your administrator has set it up.* While OIDC is not enabled, the screen offers the local form alone. **Forgot password?** appears under **Sign in** only when e-mail notifications are set up — see [Users → Forgot password](./users.md#forgot).
 
 ---
 
@@ -99,7 +99,7 @@ OIDC is set in **Liberty Next → Administer → App → OpenID Connect (SSO)**.
 
 | Field | Required | Notes |
 |---|---|---|
-| **Enabled** | yes | Makes **Sign in with OIDC** lead to the provider; off, the button answers 404. |
+| **Enabled** | yes | Shows **Sign in with OIDC** on the sign-in screen, leading to the provider; off, the button is not shown. |
 | **Discovery URL** | yes | The provider's `.well-known/openid-configuration` URL. |
 | **Client ID** | yes | The client id registered at the provider. |
 | **Client secret** | yes | Encrypted when saved. |
@@ -202,7 +202,7 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 | The **Discovery URL** returns 404 or HTML. | Sign-in fails at startup with a config error. | Verify the URL — most providers add `/.well-known/openid-configuration` to a base URL; Liberty needs the full path. |
 | The **Username claim** is not in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
 | OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Liberty Next → Administer → Access → Users*. |
-| OIDC configured but not enabled. | **Sign in with OIDC** leads to a 404 page. | Tick **Enabled**. |
+| OIDC configured but not enabled. | The sign-in screen shows no **Sign in with OIDC** button. | Tick **Enabled**. |
 
 ---
 

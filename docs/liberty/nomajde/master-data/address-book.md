@@ -6,7 +6,7 @@ keywords: [Nomajde, Address Book, F0101, Who's Who, F0111, F0116, Customer Maste
 
 # Address Book
 
-The **Address Book** folder, under **Master Data**, shows the JD Edwards EnterpriseOne Address Book in three read-only screens: the address book itself, the customers and the suppliers. The data is read live in JD Edwards; changes are made in JD Edwards, which **Open in JDE** opens on the right record.
+The **Address Book** folder, under **JD Edwards data → Master Data**, shows the JD Edwards EnterpriseOne Address Book in three read-only screens: the address book itself, the customers and the suppliers. The data is read live in JD Edwards; changes are made in JD Edwards, which **Open in JDE** opens on the right record.
 
 ---
 

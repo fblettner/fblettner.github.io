@@ -307,7 +307,7 @@ Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui 
 | **`connector`** | NE doit PAS être renseigné. |
 | **`params`** | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
 
-L'entrée demande la permission `job:<id>` (type de règle **Tâche** dans le bloc *Au-delà des menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
+L'entrée s'affiche pour qui peut lancer la tâche : l'entrée ou son dossier en **Lecture et modification** dans le rôle, ou la permission `job:<id>` (type de règle **Tâche** dans le bloc *Au-delà des menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
 
 ### Exemple
 
@@ -377,7 +377,7 @@ Pour `dashboard` et `page`, le champ est **toujours vide** — le validateur l'i
 params = { STATUS = "OPEN", REGION = "EU" }
 ```
 
-Pour les feuilles `query`, les valeurs se lient aux paramètres `:placeholder` de la requête. Pour `endpoint`, elles pré-remplissent le formulaire du HttpRunner. Pour `page`, elles deviennent des paramètres de chaîne de requête.
+Pour les feuilles `screen` et `query`, les valeurs se lient aux paramètres `:placeholder` de la requête. Pour `endpoint`, elles pré-remplissent le formulaire du HttpRunner. Pour `page`, elles deviennent des paramètres de chaîne de requête. Une feuille `screen`, `query` ou `endpoint` les transmet dans son adresse à l'ouverture — la page en remplit ses champs, comme pour un lien qui l'ouvre sur un enregistrement —, de même qu'un [widget Liens](../../dashboards.md#text-links) qui pointe sur l'entrée.
 
 Les deux jetons réservés — `#LOGIN_USER#` et `#SYSDATE#` — fonctionnent ici aussi : une feuille *Mes données* avec `params = { OWNER = "#LOGIN_USER#" }` amène l'utilisateur sur une vue limitée à ses propres lignes.
 

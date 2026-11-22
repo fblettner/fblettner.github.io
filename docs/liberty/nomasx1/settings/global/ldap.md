@@ -8,7 +8,7 @@ keywords: [Nomasx-1, settings, LDAP, Active Directory, base DN, LDAP filter, exc
 
 The **LDAP** screen holds, for each connected application, which part of the LDAP / Active Directory directory the LDAP collection reads — the accounts compared with the application's users on the *Security → LDAP* screens. One line per application. Open it from **Settings → Global → LDAP**.
 
-The same fields are on the **LDAP** tab of [Applications](./applications.md); this screen shows every application side by side.
+The same fields are on the **LDAP** tab of [Applications](./applications.md); this screen shows every application side by side. The directory server, the account and the password are not set here: they belong to the **directory pool** the application names on its *Application* tab — see [LDAP tab](./applications.md#tab-ldap). A blank **LDAP Context** means the base of that pool.
 
 ---
 

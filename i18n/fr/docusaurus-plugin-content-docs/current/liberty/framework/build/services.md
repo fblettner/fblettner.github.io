@@ -8,7 +8,7 @@ keywords: [Liberty Next, services, actions partagées, concepteur de flux, low-c
 
 Un **service** compose plusieurs étapes en un seul appel : lire une ligne, la contrôler, appeler un point d'accès, bifurquer selon la réponse, écrire, répondre. Il se construit en le dessinant — sans code — et s'utilise de deux façons : un écran l'appelle depuis un bouton, ou il est **exposé comme point d'accès d'API**, qu'une tâche, l'assistant ou un système extérieur appelle comme un autre.
 
-Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. Un service est l'action partagée qu'un écran appelle avec `call_action` ; voir [Actions et cycle de vie](./screens/actions-and-lifecycle.md) pour les actions d'un écran.
+Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. Un écran appelle un service avec `call_action` ; voir [Actions et cycle de vie](./screens/actions-and-lifecycle.md) pour les actions d'un écran.
 
 ---
 
@@ -23,8 +23,8 @@ Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. 
   </defs>
 
   <rect x="220" y="20" width="880" height="432" rx="14" fill="url(#svd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Action partagée</text>
-  <text x="346.9" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Service</text>
+  <text x="293" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
   <rect x="1036" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1047.0" y="44.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
   <rect x="1062" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -270,7 +270,7 @@ Chaque ligne donne l'identifiant du service, son libellé, son nombre d'étapes 
 
 ## Le flux \{#flow\}
 
-Le concepteur s'ouvre sur toute la fenêtre, sous le titre *Action partagée ·* `[actions.<id>]`, dans la vue **Flux** ; **Liste** présente le même service sous forme de formulaire — libellé, description, entrées, puis les étapes, une par ligne, avec **Ajouter une action**. **Enregistrer** écrit le service et recharge la configuration ; **Annuler** avec des modifications en cours propose de les enregistrer, de les abandonner ou de continuer.
+Le concepteur s'ouvre sur toute la fenêtre, sous le titre *Service ·* `[actions.<id>]`, dans la vue **Flux** ; **Liste** présente le même service sous forme de formulaire — libellé, description, entrées, puis les étapes, une par ligne, avec **Ajouter une action**. **Enregistrer** écrit le service et recharge la configuration ; **Annuler** avec des modifications en cours propose de les enregistrer, de les abandonner ou de continuer.
 
 Le flux se lit de gauche à droite : **Début**, qui montre les entrées ; une carte par étape ; **Réponse**, qui montre ce que le service retourne. Une **condition** se divise en deux voies, **Vrai** et **Faux** ; une **boucle** ou un **groupe** encadre ses propres étapes. La disposition découle de la structure du service : rien n'est placé à la main. Un flux long continue sur la ligne suivante, et le zoom (− / % / +) est mémorisé sur le poste.
 
@@ -282,14 +282,24 @@ Le flux se lit de gauche à droite : **Début**, qui montre les entrées ; une c
 |---|---|
 | **Requête** | Exécute une requête d'un connecteur. |
 | **Point d'accès** | Appelle un point d'accès d'API. Si le point d'accès indique où se trouvent ses lignes, les étapes suivantes les lisent par nom de colonne : `<étape>.first_row.<COLONNE>`, `<étape>.rows`. |
-| **Fonction** | Appelle une fonction du plugin d'une application. |
+| **Fonction** | Appelle une fonction du plugin d'une application, choisie dans une liste regroupée par application et par module — le même sélecteur que l'[étape Python](../../nomaflow/steps.md#python) d'une tâche. |
 | **Service** | Appelle un autre service. |
 | **Condition** | Bifurque selon un test. |
 | **Pour chaque** | Répète ses étapes pour chaque ligne. |
-| **Message**, **Notification** | Informe l'utilisateur, ou envoie une notification. |
+| **Message**, **Notification** | Informe l'utilisateur, ou envoie une règle de notification — voir [plus bas](#notification). |
 | **Réponse** | Indique ce que le service retourne. |
 
 Une étape lit les entrées du service par `INPUT.<nom>`, et le résultat d'une étape précédente par l'identifiant de celle-ci — `<étape>.first_row.<COLONNE>`, `<étape>.rows` — à condition que **Bind result** y soit coché. La valeur par défaut d'une entrée (un littéral, ou `#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`) sert quand l'appelant ne la fournit pas.
+
+### L'étape Notification \{#notification\}
+
+Une étape **Notification** envoie l'une des règles de [Logique → Notifications](../../nomaflow/notifications.md) dont le déclencheur est *Une action d'écran* : la règle fixe les destinataires et les canaux, l'étape fixe le moment.
+
+| Champ | Contenu |
+|---|---|
+| **Règle de notification** | Les règles déclenchées « par une action », par libellé. Une règle désactivée est signalée *(désactivée)* et l'étape n'envoie rien tant qu'elle n'est pas réactivée ; une règle inexistante, ou d'un autre déclencheur, est signalée elle aussi — l'étape n'enverrait rien. Sans aucune règle de ce type, le champ invite à en créer une d'abord. |
+| **Valeurs du message** | Les valeurs de l'enregistrement courant sont envoyées d'elles-mêmes. Chaque ligne ajoute ce que le message demande en plus : un **nom dans le message** (un `{nom}` de son objet, de son corps ou de son lien) et sa valeur ou sa source — ce que l'utilisateur a saisi (`INPUT.<nom>`), le résultat d'une étape précédente. |
+
 
 ---
 

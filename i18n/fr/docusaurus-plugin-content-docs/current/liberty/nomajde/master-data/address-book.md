@@ -6,7 +6,7 @@ keywords: [Nomajde, carnet d'adresses, F0101, contacts, F0111, F0116, fichier cl
 
 # Carnet d'adresses
 
-Le dossier **Carnet d'adresses**, sous **Données de base**, présente le carnet d'adresses de JD Edwards EnterpriseOne dans trois écrans en consultation : le carnet d'adresses lui-même, les clients et les fournisseurs. Les données sont lues en direct dans JD Edwards ; les modifications se font dans JD Edwards, que **Open in JDE** ouvre sur la bonne fiche.
+Le dossier **Carnet d'adresses**, sous **Données JD Edwards → Données de base**, présente le carnet d'adresses de JD Edwards EnterpriseOne dans trois écrans en consultation : le carnet d'adresses lui-même, les clients et les fournisseurs. Les données sont lues en direct dans JD Edwards ; les modifications se font dans JD Edwards, que **Open in JDE** ouvre sur la bonne fiche.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Connecteurs
-description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les points d'accès nommés d'une API web. Modifiés dans Liberty Next → Données → Connecteurs ; un connecteur doté d'un menu et de Show in switcher est une application."
-keywords: [Liberty Next, connecteur, SQL, API, pool, requête nommée, point d'accès, endpoint, tables, requêtes, séquences, lookups, permissions, multi-pools, Oracle thick]
+description: "Un connecteur est le moyen par lequel Liberty Next atteint une source de données : un connecteur SQL porte les requêtes nommées d'un pool de base de données, un connecteur API les points d'accès nommés d'une API web, son serveur étant un pool de type serveur HTTP. Les pools — bases de données, serveurs HTTP, annuaires LDAP — se règlent dans Liberty Next → Administrer → Pools, les connecteurs dans Liberty Next → Données → Connecteurs."
+keywords: [Liberty Next, connecteur, SQL, API, pool, serveur HTTP, annuaire LDAP, Active Directory, requête nommée, point d'accès, endpoint, tables, requêtes, séquences, lookups, permissions, multi-pools, Oracle thick]
 ---
 
 # Connecteurs
@@ -11,7 +11,7 @@ Un **connecteur** est le moyen par lequel Liberty Next atteint une source de don
 | Type | Atteint | Contient |
 |---|---|---|
 | **SQL** | Une base de données, par un [pool](#pools). | Des **requêtes** nommées, de quatre types : tables, requêtes, séquences, lookups. |
-| **API** | Une API web (REST, JSON). | Des **points d'accès** nommés : méthode, chemin, en-têtes, corps, extraction de la réponse. |
+| **API** | Une API web (REST, JSON), par un [pool de type serveur HTTP](#pool-http) ou sa propre adresse. | Des **points d'accès** nommés : méthode, chemin, en-têtes, corps, extraction de la réponse. |
 
 Un connecteur doté d'un menu, avec **Show In Switcher** activé, est une **application**, choisie dans le sélecteur — voir [Applications](./apps/overview.md).
 
@@ -45,7 +45,7 @@ Un connecteur doté d'un menu, avec **Show In Switcher** activé, est une **appl
   <rect x="244" y="134" width="180" height="36" rx="6" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="254" y="156.0" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
   <text x="270" y="148" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">crm</text>
-  <text x="270" y="161" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">sql · 3 table(s) · 6 requête(s)</text>
+  <text x="270" y="161" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">sql · 3 table(s) · 3 requête(s)…</text>
   <rect x="244" y="176" width="180" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
   <text x="254" y="198.0" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
   <text x="270" y="190" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">sales</text>
@@ -159,13 +159,21 @@ Un connecteur doté d'un menu, avec **Show In Switcher** activé, est une **appl
 
 ## Liberty Next → Données → Connecteurs \{#page\}
 
-La liste de gauche a un filtre et deux groupes : **Applications** (connecteurs dotés d'un menu) et **Sources de données** (les autres). Chaque ligne indique ce que contient le connecteur — `sql · 117 table(s) · 34 requête(s)`, `api · 68 point(s) d'accès`. L'en-tête de la page regroupe **＋ Connecteur** (un nom, le type SQL ou API), **Abandonner** (annule les modifications en attente), **Enregistrer** (écrit `connectors.toml` et applique la modification sans redémarrage) et **Recharger la config**. Le connecteur choisi s'ouvre à droite, avec ses boutons dans son en-tête — **Rechercher les usages**, **Cloner** (avec sa portée du dictionnaire, ses écrans, son menu, ses graphiques et tableaux de bord), **Renommer** (toutes les références réécrites), **Supprimer** (avec tout ce qui lui appartient).
+La liste de gauche a un filtre et deux groupes : **Applications** (connecteurs dotés d'un menu) et **Sources de données** (les autres). Chaque ligne indique ce que contient le connecteur, chaque type sous son propre nom — `sql · 118 table(s) · 34 requête(s) · 19 séquence(s) · 14 liste(s) de valeurs`, `api · 68 point(s) d'accès`. L'en-tête de la page regroupe **＋ Connecteur** (un nom, le type SQL ou API), **Abandonner** (annule les modifications en attente), **Enregistrer** (écrit `connectors.toml` et applique la modification sans redémarrage) et **Recharger la config**. Le connecteur choisi s'ouvre à droite, avec ses boutons dans son en-tête — **Rechercher les usages**, **Cloner** (avec sa portée du dictionnaire, ses écrans, son menu, ses graphiques et tableaux de bord), **Renommer** (toutes les références réécrites), **Supprimer** (avec tout ce qui lui appartient).
 
 ### Pools \{#pools\}
 
-Un pool est une connexion à une base de données, définie dans **Liberty Next → Administrer → Pools** et partagée par les connecteurs qui l'utilisent. La liste indique la cible de chaque pool — `postgresql · hôte:5432 / base` — et l'en-tête regroupe **＋ Ajouter un pool**, **Abandonner**, **Enregistrer** et **Recharger la config**.
+Un pool est une connexion de l'installation, définie dans **Liberty Next → Administrer → Pools** et désignée par ce qui l'utilise. Tout ce qui est propre à l'installation — une adresse, un compte, un mot de passe, une clé — s'y règle une seule fois, et nulle part ailleurs. Le début de son URL indique ce que le pool atteint :
 
-<svg viewBox="0 0 1320 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+| Type | URL | Désigné par |
+|---|---|---|
+| **Une base de données** — PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite | `postgresql+asyncpg://…`, `oracle+oracledb://…` | Les connecteurs SQL, les étapes de tâche, l'environnement d'un écran. |
+| **Un serveur HTTP** | `http://…` ou `https://…` | Les connecteurs API et chacun de leurs environnements — voir [Un serveur HTTP](#pool-http). |
+| **Un annuaire LDAP** | `ldap://…` ou `ldaps://…` | L'étape `ldap_sync` d'une tâche et le code d'une application — voir [Un annuaire LDAP](#pool-ldap). |
+
+La liste indique la cible de chaque pool — `postgresql · hôte:5432 / base`, `http · hôte:8443/api/v2`, `ldap · hôte:636 / dc=example,dc=com` — et l'en-tête regroupe **＋ Ajouter un pool**, **Abandonner**, **Enregistrer** et **Recharger la config**. Un champ d'écran peut proposer les pools sous forme de liste : c'est la règle [`POOL`](./dictionary.md#rules) du dictionnaire.
+
+<svg viewBox="0 0 1320 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="pol-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="pol-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -173,125 +181,156 @@ Un pool est une connexion à une base de données, définie dans **Liberty Next 
     <marker id="pol-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="10" width="880" height="440" rx="14" fill="url(#pol-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="10" width="880" height="450" rx="14" fill="url(#pol-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="238" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Pools</text>
-  <rect x="660" y="32" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="718.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter un pool</text>
-  <rect x="783" y="32" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="822.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Abandonner</text>
-  <rect x="867" y="32" width="83" height="22" rx="5" fill="url(#pol-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="908.5" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
   <rect x="956" y="32" width="128" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1020.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Recharger la config</text>
+  <rect x="867" y="32" width="83" height="22" rx="5" fill="url(#pol-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="908.5" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="783" y="32" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="822.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Abandonner</text>
+  <rect x="660" y="32" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="718.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter un pool</text>
   <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="236" y="80" width="210" height="350" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="80" width="210" height="370" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="244" y="90" width="194" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="112.0" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="254" y="112" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
   <text x="270" y="104" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">default</text>
   <text x="270" y="117" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql · db-host:5432 / liberty</text>
-  <rect x="244" y="132" width="194" height="36" rx="6" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="254" y="154.0" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
-  <text x="270" y="146" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">crm</text>
-  <text x="270" y="159" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql · db-host:5432 / crm</text>
-  <rect x="244" y="174" width="194" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="196.0" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
-  <text x="270" y="188" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">erp</text>
-  <text x="270" y="201" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">oracle · erp-db:1521 / ORCL</text>
-  <rect x="458" y="80" width="626" height="350" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="472" y="104" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">crm</text>
-  <rect x="546" y="90" width="113" height="22" rx="5" fill="url(#pol-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="602.5" y="104.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tester la connexion</text>
-  <rect x="664" y="90" width="123" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="725.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rechercher les usages</text>
-  <rect x="792" y="90" width="58" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="821.0" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
-  <rect x="855" y="90" width="149" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="929.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Recharger depuis le disque</text>
-  <rect x="1009" y="90" width="63" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="1040.5" y="104.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="244" y="132" width="194" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="154" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="270" y="146" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">erp</text>
+  <text x="270" y="159" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">oracle · erp-db:1521 / ORCL</text>
+  <rect x="244" y="174" width="194" height="36" rx="6" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="254" y="196" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="270" y="188" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">erp_api</text>
+  <text x="270" y="201" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">http · api.example.com:8443/api/v2</text>
+  <rect x="244" y="216" width="194" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="238" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="270" y="230" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">corp_directory</text>
+  <text x="270" y="243" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ldap · ad.example.com:636 / dc=exa…</text>
+  <rect x="458" y="80" width="626" height="370" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="472" y="104" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">erp_api</text>
+  <rect x="1011" y="90" width="61" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1041.5" y="104.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="859" y="90" width="147" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="932.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Recharger depuis le disque</text>
+  <rect x="798" y="90" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="826.0" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
+  <rect x="672" y="90" width="121" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="732.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rechercher les usages</text>
+  <rect x="556" y="90" width="111" height="22" rx="5" fill="url(#pol-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="611.5" y="104.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tester la connexion</text>
   <rect x="470" y="122" width="602" height="24" rx="6" fill="rgba(50,215,75,0.08)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
-  <text x="480" y="138" fill="#4ade80" fontSize="9.5" fontFamily="system-ui, sans-serif">Connecté en 33 ms — postgresql 16.4</text>
-  <rect x="470" y="156" width="113" height="60" rx="8" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="480" y="138" fill="#4ade80" fontSize="9.2" fontFamily="system-ui, sans-serif">Connecté en 85 ms — http HTTP 404 Le serveur répond à cette adresse, quel que soit le statut.</text>
+  <rect x="470" y="156" width="290" height="60" rx="8" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.3"/>
   <rect x="479" y="165" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="500" y="176" fill="#4a9eff" fontSize="8.0" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE DE DONNÉES</text>
-  <text x="480" y="194" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql · db-host</text>
-  <text x="480" y="207" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">postgresql+asyncpg</text>
-  <line x1="584" y1="186" x2="591" y2="186" stroke="#475569" strokeWidth="1" markerEnd="url(#pol-flow)"/>
-  <rect x="592" y="156" width="113" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="601" y="165" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="622" y="176" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPTE</text>
-  <text x="602" y="194" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">crm_app</text>
-  <text x="602" y="207" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">mot de passe réglé</text>
-  <line x1="706" y1="186" x2="713" y2="186" stroke="#475569" strokeWidth="1" markerEnd="url(#pol-flow)"/>
-  <rect x="714" y="156" width="113" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="723" y="165" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="744" y="176" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHÉMAS</text>
-  <text x="724" y="194" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">0 schéma(s)</text>
-  <line x1="828" y1="186" x2="835" y2="186" stroke="#475569" strokeWidth="1" markerEnd="url(#pol-flow)"/>
-  <rect x="836" y="156" width="113" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="845" y="165" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="866" y="176" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIENS DE BASE</text>
-  <text x="846" y="194" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">0 lien(s)</text>
-  <line x1="950" y1="186" x2="957" y2="186" stroke="#475569" strokeWidth="1" markerEnd="url(#pol-flow)"/>
-  <rect x="958" y="156" width="113" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="967" y="165" width="15" height="15" rx="4" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1"/>
-  <text x="988" y="176" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RÉGLAGES FINS</text>
-  <text x="968" y="194" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">10 connexions + 5</text>
+  <text x="500" y="176" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE DE DONNÉES</text>
+  <text x="480" y="194" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">http · api.example.com:8443/api/v2</text>
+  <text x="480" y="207" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">https</text>
+  <line x1="761" y1="186" x2="779" y2="186" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#pol-flow)"/>
+  <rect x="782" y="156" width="290" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="791" y="165" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="812" y="176" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPTE</text>
+  <text x="792" y="194" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">svc_liberty</text>
+  <text x="792" y="207" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">mot de passe réglé</text>
   <text x="470" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TYPE DE BASE</text>
-  <rect x="470" y="246" width="192.66666666666666" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="479" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">PostgreSQL</text>
-  <text x="648.6666666666666" y="261.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="674.6666666666666" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HÔTE</text>
-  <rect x="674.6666666666666" y="246" width="192.66666666666666" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="683.6666666666666" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">db-host</text>
-  <text x="879.3333333333333" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
-  <rect x="879.3333333333333" y="246" width="192.66666666666666" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="888.3333333333333" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">5432</text>
-  <text x="470" y="290" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE</text>
-  <rect x="470" y="296" width="192.66666666666666" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="479" y="311.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">crm</text>
-  <text x="470" y="342" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">›  Avancé : pilote, options, URL</text>
-  <text x="470" y="366" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">URL composée à partir des champs :</text>
-  <rect x="470" y="374" width="602" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="480" y="388.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">postgresql+asyncpg://crm_app@db-host:5432/crm</text>
-  <rect x="20" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un pool par ligne</text>
-  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">type · hôte:port / base</text>
-  <line x1="200" y1="127.0" x2="256" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
-  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">L'adresse en champs</text>
-  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">type, hôte, port, base</text>
-  <line x1="200" y1="267.0" x2="470" y2="258" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
-  <rect x="20" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Avancé</text>
-  <text x="30" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pilote, options, URL modifiable</text>
-  <line x1="200" y1="377.0" x2="470" y2="345" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="470" y="246" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="479" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
+  <text x="648" y="261.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="675" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HÔTE</text>
+  <rect x="675" y="246" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="684" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">api.example.com</text>
+  <text x="880" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
+  <rect x="880" y="246" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="889" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">8443</text>
+  <rect x="470" y="276" width="192" height="164" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="482" y="292.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">PostgreSQL</text>
+  <text x="482" y="310.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">Oracle</text>
+  <text x="482" y="329.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MySQL</text>
+  <text x="482" y="347.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MariaDB</text>
+  <text x="482" y="366.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQL Server</text>
+  <text x="482" y="384.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQLite</text>
+  <text x="482" y="403.0" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP directory</text>
+  <rect x="472" y="409.5" width="188" height="17" rx="4" fill="rgba(74,158,255,0.14)"/>
+  <text x="482" y="421.5" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
+  <text x="650" y="421.5" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="675" y="290" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHEMIN DE BASE</text>
+  <rect x="675" y="296" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="684" y="311.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">api/v2</text>
+  <text x="676" y="352" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">›  Avancé : pilote, options, URL</text>
+  <text x="676" y="376" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">URL composée à partir des champs :</text>
+  <rect x="676" y="384" width="396" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="686" y="398.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">https://svc_liberty@api.example.com:8443/api/v2</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un pool par ligne</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">type · adresse</text>
+  <line x1="200" y1="113.0" x2="256" y2="112" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="20" y="196" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un serveur HTTP</text>
+  <text x="30" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">appelé par un connecteur API</text>
+  <line x1="200" y1="213.0" x2="256" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="20" y="256" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="271" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un annuaire LDAP</text>
+  <text x="30" y="284" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lu par l'étape ldap_sync</text>
+  <line x1="200" y1="273.0" x2="256" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="20" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le type</text>
+  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">huit types, une seule liste</text>
+  <line x1="200" y1="367.0" x2="470" y2="380" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
   <rect x="1120" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tester la connexion</text>
-  <text x="1130" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tel qu'à l'écran, sans enregistrer</text>
+  <text x="1130" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">serveur : répond-il ?</text>
   <line x1="1120" y1="57.0" x2="586" y2="90" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
-  <rect x="1120" y="130" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La réponse</text>
-  <text x="1130" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">durée et version du serveur</text>
-  <line x1="1120" y1="147.0" x2="1072" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
-  <rect x="1120" y="220" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cinq étapes</text>
-  <text x="1130" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque carte résume son contenu</text>
-  <line x1="1120" y1="237.0" x2="1044" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="1120" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La réponse</text>
+  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">durée et statut HTTP</text>
+  <line x1="1120" y1="137.0" x2="1072" y2="134" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="1120" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux étapes</text>
+  <text x="1130" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ni schémas ni réglages fins</text>
+  <line x1="1120" y1="207.0" x2="1072" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
+  <rect x="1120" y="290" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Chemin de base</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce qui suit l'hôte</text>
+  <line x1="1120" y1="307.0" x2="867" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
 </svg>
 
 #### Un pool, étape par étape \{#pool-stages\}
 
-Le pool choisi est dessiné en cinq cartes d'étape, chacune résumant son contenu : **Base de données**, **Compte**, **Schémas**, **Liens de base**, **Réglages fins**. Ses boutons sont **Tester la connexion**, **Rechercher les usages**, **Renommer**, **Recharger depuis le disque** et **Supprimer**.
+Le pool choisi est dessiné en cartes d'étape, chacune résumant son contenu : **Base de données**, **Compte**, **Schémas**, **Liens de base**, **Réglages fins** pour une base — seulement **Base de données** et **Compte** pour un serveur HTTP ou un annuaire, qui n'exécutent pas de SQL. Ses boutons sont **Tester la connexion**, **Rechercher les usages**, **Renommer**, **Recharger depuis le disque** et **Supprimer**.
 
 | Étape | Champs |
 |---|---|
-| **Base de données** | L'adresse, saisie comme une adresse : le **Type de base** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite), l'**Hôte**, le **Port**, et le nom propre au type — **Base**, un **Nom de service** Oracle (un **SID** si l'URL est écrite ainsi), un **Fichier** SQLite. Choisir un autre type y fait passer le pool : son pilote, son port habituel ; le type choisit aussi la [variante par dialecte](./build/queries/per-dialect-sql.md) d'une requête. **Avancé : pilote, options, URL** contient le **Pilote**, les **Options** (ce qui suit le `?` de l'URL) et l'**URL** composée à partir des champs, qui reste modifiable (`${VARIABLE}` accepté). Une URL que la page ne sait pas présenter champ par champ est gardée telle qu'elle est écrite. |
-| **Compte** | L'**Utilisateur** et le **Password**, tenu hors de l'URL et chiffré à l'enregistrement. Un mot de passe écrit dans l'URL est signalé, avec le bouton **Le déplacer dans le champ mot de passe**. |
+| **Base de données** | L'adresse, saisie comme une adresse : le **Type de base** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite, *LDAP directory*, *HTTP server (an API)*), l'**Hôte**, le **Port**, et le nom propre au type — **Base**, un **Nom de service** Oracle (un **SID** si l'URL est écrite ainsi), un **Fichier** SQLite, le **DN de base** d'un annuaire, le **Chemin de base** d'un serveur. Choisir un autre type y fait passer le pool : son pilote, son port habituel ; le type choisit aussi la [variante par dialecte](./build/queries/per-dialect-sql.md) d'une requête. **Avancé : pilote, options, URL** contient le **Pilote**, les **Options** (ce qui suit le `?` de l'URL) et l'**URL** composée à partir des champs, qui reste modifiable (`${VARIABLE}` accepté). Une URL que la page ne sait pas présenter champ par champ est gardée telle qu'elle est écrite. |
+| **Compte** | L'**Utilisateur** et le **Password**, tenu hors de l'URL et chiffré à l'enregistrement ; le champ du mot de passe a un bouton afficher / masquer. Un mot de passe écrit dans l'URL est signalé, avec le bouton **Le déplacer dans le champ mot de passe**. Le compte d'un annuaire se saisit tel quel dans **Compte (DN de liaison, DOMAINE\utilisateur ou utilisateur@domaine)** ; celui d'un serveur HTTP dans **Compte**, avec sa **Signing key**, son **Certificate** et **Verify SSL** — voir [plus bas](#pool-http). |
 | **Schémas**, **Liens de base** | Les valeurs des jetons `#SCHEMA.<NOM>#` et `#DBLINK.<NOM>#` — voir [plus bas](#schema-and-db-link-tokens). |
 | **Réglages fins** | **Pool size**, **Max overflow** (connexions gardées ouvertes, connexions supplémentaires sous charge), **Pool pre ping** (contrôle de validité), **Pool recycle** (secondes avant le renouvellement d'une connexion), **Echo** (journalise chaque instruction, pour la mise au point), **Max rows** (limite de lignes par défaut des lectures du pool, 1 000 si vide), **Arraysize** (Oracle : lignes lues par aller-retour ; à relever entre 500 et 1 000 pour les gros volumes), **Trim strings** (retire les espaces de fin des textes de longueur fixe — Oracle `CHAR`, JD Edwards), **Coalesce nulls** (à l'écriture, remplace les valeurs vides par un espace ou 0 — colonnes texte Oracle `NOT NULL`), **Debug sql** (journalise chaque instruction avec ses valeurs finales). |
 
-**Tester la connexion** ouvre une connexion avec le pool tel qu'il est à l'écran — enregistré ou non — et répond *Connecté en N ms* avec la version du serveur, ou *Connexion impossible* avec les termes du pilote. Rien n'est enregistré et les pools en service ne sont pas touchés.
+**Tester la connexion** ouvre une connexion avec le pool tel qu'il est à l'écran — enregistré ou non — et répond *Connecté en N ms* avec la version du serveur, ou *Connexion impossible* avec les termes du pilote. Sur un annuaire, le test s'authentifie une fois avec le compte puis se déconnecte. Sur un serveur HTTP, il envoie une requête à l'adresse, et tout statut HTTP vaut réponse : *Connecté en 85 ms — http HTTP 404 Le serveur répond à cette adresse, quel que soit le statut…* ; l'acceptation du compte se vérifie par le **Test** du connecteur API, qui connaît sa façon de s'authentifier. Rien n'est enregistré et les pools en service ne sont pas touchés.
+
+#### Un serveur HTTP \{#pool-http\}
+
+Un pool dont l'URL commence par `http://` ou `https://` est le serveur qu'appelle un connecteur API — `https://svc_liberty@api.example.com:8443/api/v2`. Le connecteur API le désigne dans son champ **Serveur**, chacun de ses environnements aussi : l'adresse, le compte et les secrets sont alors ceux du pool, et le connecteur ne garde que sa façon de s'authentifier et ses points d'accès — voir [Le serveur d'un connecteur API](#api-server).
+
+| Étape | Champ | Effet |
+|---|---|---|
+| Base de données | **Hôte**, **Port**, **Chemin de base** | L'adresse à laquelle s'ajoutent les chemins des points d'accès. Le schéma (`https` ou `http`) est le **Pilote**, sous *Avancé*. |
+| Compte | **Compte** | Le compte avec lequel le connecteur s'authentifie. Vide quand le serveur prend un jeton : le champ **Password** porte alors le jeton. |
+| Compte | **Password** | Le mot de passe du compte — ou le jeton. Chiffré à l'enregistrement ; `${VARIABLE}` accepté. |
+| Compte | **Signing key** | Pour un connecteur qui fait chaque appel au nom de l'utilisateur connecté : la clé privée qui signe les jetons — le texte PEM, ou le chemin d'un fichier PEM sur le serveur ; une valeur `ENC:` est acceptée. Qui la détient peut agir au nom de n'importe quel utilisateur de ce serveur : elle se protège comme la clé maître. |
+| Compte | **Certificate** | Facultatif : le certificat de la clé de signature (le texte PEM, ou le chemin du fichier `.cer` / `.pem` remis au serveur) ; son empreinte est alors écrite dans l'en-tête du jeton. |
+| Compte | **Verify SSL** | Contrôle le certificat TLS du serveur. À désactiver seulement pour un serveur de test au certificat auto-signé. |
+
+Un serveur HTTP n'exécute pas de SQL : une requête, un écran ou une copie qui le désigne est refusé, avec la raison.
+
+#### Un annuaire LDAP \{#pool-ldap\}
+
+Un pool dont l'URL commence par `ldap://` ou `ldaps://` (chiffré par TLS) est un annuaire — un Active Directory, un OpenLDAP. Il se crée comme une base de données, avec le type **LDAP directory** : **Hôte**, **Port** (636 en `ldaps`, 389 en `ldap`), **DN de base** — point de départ des recherches, facultatif —, le compte saisi tel quel dans **Compte (DN de liaison, DOMAINE\utilisateur ou utilisateur@domaine)** (`cn=liberty,ou=services,dc=example,dc=com`, `EXAMPLE\svc_liberty`, `svc_liberty@example.com`), et le **Password**, conservé comme celui de tout pool (`ENC:` ou `${VARIABLE}`). **Tester la connexion** s'authentifie une fois avec le compte puis se déconnecte.
+
+Ce qui lit un annuaire désigne le pool au lieu de porter un serveur et un compte : le **Pool d'annuaire** de l'[étape `ldap_sync`](../nomaflow/steps.md#ldap-sync) d'une tâche, et le code d'une application par `connectors.pools.directory(name)`. Un annuaire n'exécute pas de SQL, et un pool de base de données n'est pas un annuaire : l'une ou l'autre erreur est refusée, avec le nom du pool. `connectors.pools.where(name)` indique où pointe un pool — hôte, port, base ou DN de base — sans son compte : ce qu'un rapport imprime d'un système.
+
+Le client d'annuaire est une partie facultative du serveur : s'il manque, le test le signale et nomme l'extra `ldap` à installer.
 
 ### Tables et requêtes à côté de leur liste \{#list-beside\}
 
@@ -370,9 +409,9 @@ Un connecteur API appelé depuis ces écrans — AIS, pour JD Edwards — peut s
 
 ## Connecteur API \{#api\}
 
-Un connecteur API appelle une API web. Il est dessiné en six cartes d'étape, chacune résumant ce qu'elle contient ou ce qui lui manque encore — l'hôte du serveur, le type d'authentification, les environnements, le nombre de points d'accès et combien écrivent, les webhooks, le test :
+Un connecteur API appelle une API web. Son serveur — adresse, compte, secrets, contrôle TLS — est de préférence un [pool de type serveur HTTP](#pool-http), désigné dans **Serveur** ; le connecteur garde alors sa façon de s'authentifier et ses points d'accès. Il est dessiné en six cartes d'étape, chacune résumant ce qu'elle contient ou ce qui lui manque encore — le pool de serveur désigné (`→ erp_api`) ou l'hôte du serveur, le type d'authentification et ce qui lui manque, les environnements, le nombre de points d'accès et combien écrivent, les webhooks, le test :
 
-<svg viewBox="0 0 1320 428" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="cna-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="cna-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -380,107 +419,136 @@ Un connecteur API appelle une API web. Il est dessiné en six cartes d'étape, c
     <marker id="cna-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="880" height="398" rx="14" fill="url(#cna-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="242" y="46" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">[connectors.erp_api]  ·  api</text>
-  <rect x="777" y="32" width="123" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="838.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rechercher les usages</text>
-  <rect x="905" y="32" width="48" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="929.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
-  <rect x="958" y="32" width="58" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="987.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
-  <rect x="1021" y="32" width="63" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="1052.5" y="46.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
-  <rect x="242" y="64" width="129" height="60" rx="8" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.3"/>
-  <rect x="251" y="73" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="272" y="84" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNEXION</text>
-  <text x="252" y="102" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">erp.example.com</text>
-  <line x1="372" y1="94" x2="380" y2="94" stroke="#475569" strokeWidth="1" markerEnd="url(#cna-flow)"/>
-  <rect x="381" y="64" width="129" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="390" y="73" width="15" height="15" rx="4" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1"/>
-  <text x="411" y="84" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AUTHENTIFICATION</text>
-  <text x="391" y="102" fill="#e2e8f0" fontSize="7.5" fontFamily="system-ui, sans-serif">Utilisateur et mot de passe</text>
-  <line x1="511" y1="94" x2="519" y2="94" stroke="#475569" strokeWidth="1" markerEnd="url(#cna-flow)"/>
-  <rect x="520" y="64" width="129" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="529" y="73" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="550" y="84" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVIRONNEMENTS</text>
-  <text x="530" y="102" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">un serveur pour tous</text>
-  <line x1="650" y1="94" x2="658" y2="94" stroke="#475569" strokeWidth="1" markerEnd="url(#cna-flow)"/>
-  <rect x="659" y="64" width="129" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="668" y="73" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="689" y="84" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POINTS D'ACCÈS</text>
-  <text x="669" y="102" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">12 point(s) d'accès</text>
-  <text x="669" y="115" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">3 qui écrivent</text>
-  <line x1="789" y1="94" x2="797" y2="94" stroke="#475569" strokeWidth="1" markerEnd="url(#cna-flow)"/>
-  <rect x="798" y="64" width="129" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="807" y="73" width="15" height="15" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
-  <text x="828" y="84" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WEBHOOKS</text>
-  <text x="808" y="102" fill="#e2e8f0" fontSize="9.4" fontFamily="system-ui, sans-serif">pas encore disponible</text>
-  <line x1="928" y1="94" x2="936" y2="94" stroke="#475569" strokeWidth="1" markerEnd="url(#cna-flow)"/>
-  <rect x="937" y="64" width="129" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="946" y="73" width="15" height="15" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
-  <text x="967" y="84" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
-  <text x="947" y="102" fill="#e2e8f0" fontSize="8.3" fontFamily="system-ui, sans-serif">essayer un point d'accès</text>
-  <text x="242" y="150" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">APPLICATION</text>
-  <line x1="242" y1="156" x2="1078" y2="156" stroke="#1f2937" strokeWidth="1"/>
-  <text x="242" y="176" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AFFICHER DANS LE SÉLECTEUR</text>
-  <rect x="242" y="187" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M244.5,192.5 L246.8,194.8 L250.8,190" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="259" y="196" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">activé</text>
-  <text x="542" y="176" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACCUEIL</text>
-  <rect x="542" y="182" width="536" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="551" y="197.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">orders_list</text>
-  <text x="1064" y="197.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="242" y="236" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNEXION</text>
-  <line x1="242" y1="242" x2="1078" y2="242" stroke="#1f2937" strokeWidth="1"/>
-  <text x="242" y="262" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">URL DE BASE</text>
-  <rect x="242" y="268" width="836" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="251" y="283.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">https://erp.example.com/api/v2</text>
-  <text x="242" y="314" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DÉLAI (MS)</text>
-  <rect x="242" y="320" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="251" y="335.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">30000</text>
-  <text x="462" y="314" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VÉRIFICATION SSL</text>
-  <rect x="462" y="320" width="616" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="471" y="335.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">true (vérifier le certificat)</text>
-  <text x="1064" y="335.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="242" y="372" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EN-TÊTES PAR DÉFAUT</text>
-  <rect x="242" y="382" width="836" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="252" y="397.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Accept: application/json</text>
+  <rect x="220" y="10" width="880" height="425" rx="14" fill="url(#cna-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">[connectors.erp_api]  ·  api</text>
+  <rect x="1017" y="32" width="67" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1050.5" y="46.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="949" y="32" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="980.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
+  <rect x="892" y="32" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="917.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
+  <rect x="755" y="32" width="131" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="820.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rechercher les usages</text>
+  <rect x="238" y="66" width="134" height="60" rx="8" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <rect x="247" y="75" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="268" y="86" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNEXION</text>
+  <text x="248" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">→ erp_api</text>
+  <line x1="373" y1="96" x2="382" y2="96" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#cna-flow)"/>
+  <rect x="383" y="66" width="134" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="392" y="75" width="15" height="15" rx="4" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1"/>
+  <text x="413" y="86" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AUTHENTIFICATION</text>
+  <text x="393" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">Utilisateur et mot…</text>
+  <line x1="518" y1="96" x2="527" y2="96" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#cna-flow)"/>
+  <rect x="528" y="66" width="134" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="537" y="75" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="558" y="86" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVIRONNEMENTS</text>
+  <text x="538" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">un serveur pour tous</text>
+  <line x1="663" y1="96" x2="672" y2="96" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#cna-flow)"/>
+  <rect x="673" y="66" width="134" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="682" y="75" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="703" y="86" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POINTS D'ACCÈS</text>
+  <text x="683" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">12 point(s) d'accès</text>
+  <text x="683" y="117" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">3 qui écrivent</text>
+  <line x1="808" y1="96" x2="817" y2="96" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#cna-flow)"/>
+  <rect x="818" y="66" width="134" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="827" y="75" width="15" height="15" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="848" y="86" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WEBHOOKS</text>
+  <text x="828" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">pas encore disponible</text>
+  <line x1="953" y1="96" x2="962" y2="96" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#cna-flow)"/>
+  <rect x="963" y="66" width="134" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="972" y="75" width="15" height="15" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="993" y="86" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <text x="973" y="104" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">essayer un point d'accès</text>
+  <rect x="238" y="142" width="470" height="280" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="162" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNEXION</text>
+  <text x="252" y="184" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SERVEUR</text>
+  <rect x="252" y="190" width="442" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="261" y="205.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">erp_api</text>
+  <text x="310.23" y="205.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">api.example.com:8443/api/v2</text>
+  <text x="680" y="205.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="252" y="228" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">L'adresse, le compte, le mot de passe ou le jeton et le contrôle TLS sont lus dans ce pool.</text>
+  <text x="252" y="250" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DÉLAI (MS)</text>
+  <rect x="252" y="256" width="442" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="261" y="271.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">30000</text>
+  <text x="252" y="304" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EN-TÊTES PAR DÉFAUT</text>
+  <text x="252" y="322" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EN-TÊTES</text>
+  <rect x="252" y="328" width="442" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="261" y="343.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">Accept: application/json</text>
+  <text x="252" y="372" fill="#64748b" fontSize="8.5" fontStyle="italic" fontFamily="system-ui, sans-serif">Sans serveur : URL de base et Vérification SSL se règlent ici.</text>
+  <rect x="720" y="142" width="362" height="280" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="734" y="162" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TYPE D'AUTHENTIFICATION</text>
+  <text x="734" y="184" fill="#94a3b8" fontSize="8.4" fontFamily="system-ui, sans-serif">Le compte et ses secrets sont ceux du pool erp_api :</text>
+  <text x="734" y="197" fill="#94a3b8" fontSize="8.4" fontFamily="system-ui, sans-serif">seule la façon de s'authentifier se règle ici.</text>
+  <text x="734" y="218" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MÉTHODE</text>
+  <rect x="734" y="224" width="334" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="743" y="239.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Basic (identifiant + mot de passe)</text>
+  <text x="1054" y="239.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="734" y="278" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Sans serveur, les champs de la méthode :</text>
+  <text x="734" y="296" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IDENTIFIANT</text>
+  <rect x="734" y="302" width="160" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="743" y="317.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">svc_liberty</text>
+  <text x="908" y="296" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MOT DE PASSE</text>
+  <rect x="908" y="302" width="160" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="917" y="317.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">••••••••</text>
+  <text x="1054" y="317.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">👁</text>
+  <rect x="734" y="302" width="160" height="24" rx="5" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="734" y="350" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Chaque utilisateur sous son nom : Clé de signature,</text>
+  <text x="734" y="363" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Certificat — ceux du pool quand un serveur est nommé.</text>
   <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six cartes d'étape</text>
-  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce que chaque partie contient</text>
-  <line x1="200" y1="87.0" x2="242" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
-  <rect x="20" y="180" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une application</text>
-  <text x="30" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sélecteur + entrée d'accueil</text>
-  <line x1="200" y1="197.0" x2="242" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
-  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le serveur</text>
-  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">$&#123;VARIABLE&#125; accepté</text>
-  <line x1="200" y1="307.0" x2="242" y2="280" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
-  <rect x="1120" y="24" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="39" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons du connecteur</text>
-  <text x="1130" y="52" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">usages, cloner, renommer, supprimer</text>
-  <line x1="1120" y1="41.0" x2="1084" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
-  <rect x="1120" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Points d'accès qui écrivent</text>
-  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">comptés sur la carte</text>
-  <line x1="1120" y1="137.0" x2="719" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résumé de la carte</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">serveur nommé, ou ce qui manque</text>
+  <line x1="200" y1="87.0" x2="250" y2="116" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <rect x="20" y="186" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Serveur</text>
+  <text x="30" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un pool de type HTTP server</text>
+  <line x1="200" y1="203.0" x2="252" y2="203" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">URL de base, Vérification SSL</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement sans serveur</text>
+  <line x1="200" y1="317.0" x2="252" y2="368" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <rect x="1120" y="70" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six cartes d'étape</text>
+  <text x="1130" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce que chaque partie contient</text>
+  <line x1="1120" y1="87.0" x2="1097" y2="96" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <rect x="1120" y="176" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="191" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Façon de s'authentifier</text>
+  <text x="1130" y="204" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reste sur le connecteur</text>
+  <line x1="1120" y1="193.0" x2="1068" y2="236" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
   <rect x="1120" y="300" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Vérification SSL</text>
-  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">true, false ou une variable</text>
-  <line x1="1120" y1="317.0" x2="1058" y2="330" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Secrets</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bouton afficher / masquer</text>
+  <line x1="1120" y1="317.0" x2="1054" y2="314" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cna-arrow)"/>
 </svg>
 
 | Étape | Contenu |
 |---|---|
-| **Connexion** | Section *Application* : **Afficher dans le sélecteur**, **Accueil**. Section *Connexion* : **URL de base** (`https://api.example.com`, `${VARIABLE}` accepté), **Délai (ms)**, **Vérification SSL** (*true*, *false*, ou une variable comme `${JDE_AIS_VERIFY_SSL:-true}`, conservée telle quelle). Section *En-têtes par défaut* : **En-têtes**, des paires `Clé:Valeur` séparées par des points-virgules, envoyées avec chaque requête. |
-| **Authentification** | **Méthode** : *Aucune*, *Basic* (identifiant et mot de passe), *Bearer* (jeton statique), *Clé API* (nom de l'en-tête et clé), *OAuth2 / JWT* (chemin du point d'accès de jeton, corps et Content-Type de la demande, en-têtes de la demande de jeton, champ du jeton, durée de vie du jeton), *Chaque utilisateur sous son nom (jeton signé)* — chaque appel fait au nom de l'utilisateur connecté, voir [Chaque appel au nom de l'utilisateur connecté](#api-user-jwt). Les secrets sont chiffrés à l'enregistrement. |
+| **Connexion** | Section *Application* : **Afficher dans le sélecteur**, **Accueil**. Section *Connexion* : **Serveur** — un pool de type serveur HTTP, ou *Réglé sur ce connecteur* ; avec un pool, l'adresse, le compte, le mot de passe ou le jeton et le contrôle TLS sont lus dans ce pool. Sans pool, **URL de base** (`https://api.example.com`, `${VARIABLE}` accepté) et **Vérification SSL** (*true*, *false*, ou une variable comme `${API_VERIFY_SSL:-true}`, conservée telle quelle) se règlent ici. **Délai (ms)** dans les deux cas. Section *En-têtes par défaut* : **En-têtes**, des paires `Clé:Valeur` séparées par des points-virgules, envoyées avec chaque requête. |
+| **Authentification** | **Méthode** : *Aucune*, *Basic* (identifiant et mot de passe), *Bearer* (jeton statique), *Clé API* (nom de l'en-tête et clé), *OAuth2 / JWT* (chemin du point d'accès de jeton, corps et Content-Type de la demande, en-têtes de la demande de jeton, champ du jeton, durée de vie du jeton), *Chaque utilisateur sous son nom (jeton signé)* — chaque appel fait au nom de l'utilisateur connecté, voir [Chaque appel au nom de l'utilisateur connecté](#api-user-jwt). Quand le connecteur désigne un serveur, seule la méthode et ses propres réglages se règlent ici : le compte, le mot de passe ou le jeton, la clé de signature et son certificat sont ceux du pool. Sinon, les champs de la méthode sont ici ; les secrets sont chiffrés à l'enregistrement, et le mot de passe, le jeton et la clé de signature ont un bouton afficher / masquer. La carte nomme la méthode et ce qui lui manque : *pas encore d'utilisateur*, *ni jeton ni adresse de jeton*, *pas d'adresse de jeton*, *pas encore de clé de signature*. |
 | **Environnements** | Un serveur par environnement, pour un connecteur utilisé avec plusieurs environnements JDE — voir [Un serveur par environnement](#api-environments). |
 | **Points d'accès** | Les points d'accès nommés — voir [Points d'accès d'API](./build/api-endpoints.md). |
 | **Webhooks** | Pas encore disponible : un système externe ne peut pas pousser d'événements vers Liberty Next. |
 | **Test** | Choisir un **Point d'accès**, renseigner ses **Paramètres**, **Exécuter** : le **Résultat** s'affiche, rien n'est enregistré. Sur un connecteur sans point d'accès, **Tester la connexion** vérifie l'adresse et l'authentification. |
 
 Un point d'accès est un appel nommé — **Ce qu'il est** (nom, libellé, description, *Modifie des données*, groupe), **Entrées** (ses paramètres), **L'appel** (méthode, chemin de l'URL, en-têtes, corps, paramètres de requête — ou une fonction, ou un service qui répond à la place) et **La réponse** (lignes, colonnes, champs d'erreur et d'avertissement, champ et correspondances de réponse). Chaque étape est décrite dans [Points d'accès d'API](./build/api-endpoints.md).
+
+### Le serveur d'un connecteur API \{#api-server\}
+
+Le champ **Serveur** désigne un [pool de type serveur HTTP](#pool-http) : ce qui est propre à l'installation — l'adresse, le compte, le mot de passe ou le jeton, la clé de signature et son certificat, le contrôle TLS — se trouve alors à un seul endroit, sous Liberty Next → Administrer → Pools, et un identifiant se change là une fois pour tous les connecteurs qui l'utilisent. Le connecteur garde sa façon de s'authentifier (la méthode et ses réglages : point d'accès de jeton, attribut de l'utilisateur, signature…) et ses points d'accès.
+
+Un connecteur livré par une application ne porte aucune valeur de l'installation : une mise à jour le rafraîchit quelle que soit l'adresse, et conserve le **Serveur** choisi par l'installation. Un connecteur qui ne désigne aucun serveur garde ses propres champs **URL de base** et identifiants.
+
+Un pool de serveur absent, ou encore sans adresse, n'empêche pas le serveur de démarrer : chaque appel passé par le connecteur échoue en indiquant quoi régler — *the connector names the server pool 'erp_api': there is no such pool — create it under Liberty → Pools (kind HTTP server)*. Le **Test** du connecteur s'exécute avec l'adresse et le compte du pool : il vérifie que le compte est accepté, là où *Tester la connexion* sur le pool vérifie seulement que le serveur répond.
+
+```toml
+[pools.erp_api]
+url = "https://svc_liberty@api.example.com:8443/api/v2"
+password = "ENC:…"
+
+[connectors.erp_api]
+type = "api"
+server = "erp_api"          # adresse, compte, secrets : ceux du pool
+auth_type = "basic"         # façon de s'authentifier : celle du connecteur
+```
 
 Les points d'accès sont appelés par les écrans (un point d'accès qui renvoie des lignes se lit comme une requête), les actions d'écran (`call_api`), les [services](./build/services.md), les entrées de menu (type `endpoint`), les règles de notification (canal `action`), les plugins (`connectors.api(…).call(…)`), les [tests](./build/tests.md) et — s'il y est autorisé — l'assistant IA. Une étape Nomaflow `http` appelle directement une URL, sans connecteur.
 
@@ -587,8 +655,8 @@ Avec la méthode **Chaque utilisateur sous son nom (jeton signé)**, le connecte
 
 | Champ | Défaut | Effet |
 |---|---|---|
-| **Clé de signature** | — | La clé privée : le chemin d'un fichier PEM sur le serveur Liberty, ou le texte PEM (une valeur `ENC:` est acceptée). Qui la détient peut agir au nom de n'importe quel utilisateur du serveur : elle se protège comme la clé maître. |
-| **Certificat (facultatif)** | — | Le certificat remis au serveur (son fichier, ou son texte PEM). Son empreinte est écrite dans le jeton (`x5t`) ; certains serveurs s'en servent pour choisir le certificat. |
+| **Clé de signature** | — | La clé privée : le chemin d'un fichier PEM sur le serveur Liberty, ou le texte PEM (une valeur `ENC:` est acceptée). Qui la détient peut agir au nom de n'importe quel utilisateur du serveur : elle se protège comme la clé maître. Quand le connecteur désigne un serveur, c'est un champ du [pool](#pool-http), absent d'ici. |
+| **Certificat (facultatif)** | — | Le certificat remis au serveur (son fichier, ou son texte PEM). Son empreinte est écrite dans le jeton (`x5t`) ; certains serveurs s'en servent pour choisir le certificat. C'est aussi un champ du pool quand le connecteur désigne un serveur. |
 | **Attribut de l'utilisateur** | `jde_user` | L'attribut de l'utilisateur Liberty qui porte son nom sur le serveur — renseigné par un administrateur dans les [attributs de périmètre de données](./build/secure/users.md#attributes) de l'utilisateur, jamais par l'utilisateur lui-même. Vide : le nom d'utilisateur Liberty. |
 | **Nom envoyé** | *En majuscules (JD Edwards)* | Ou *Tel qu'écrit*. |
 | **Quand aucun utilisateur ne peut être nommé** | *Refuser l'appel* | Ou *Utiliser le compte de service ci-dessous* : la section **Identifiants** apparaît alors, et l'appel part avec cet identifiant et ce mot de passe. Un traitement ou une planification n'a pas d'utilisateur ; un utilisateur peut ne pas avoir l'attribut. |
@@ -605,8 +673,8 @@ Quand les écrans s'appuient sur un [connecteur multi-pools](#multi-pool) — pl
 
 | Champ | Effet |
 |---|---|
-| **Environnement (pool)** | L'environnement (pool) du serveur du connecteur — sa **Base URL** et ses identifiants. Obligatoire dès qu'il y a un autre environnement. |
-| **Autres environnements** | Une entrée par autre pool : **Base URL**, **Username**, **Password**, **Token**, **Vérification SSL**. Un champ vide reprend la valeur du connecteur. Mots de passe et jetons sont chiffrés à l'enregistrement. |
+| **Environnement (pool)** | L'environnement (pool) du serveur du connecteur — son **Serveur**, ou son **URL de base** et ses identifiants. Obligatoire dès qu'il y a un autre environnement. |
+| **Autres environnements** | Une entrée par autre pool : son **Serveur** — un pool de type serveur HTTP, dont sont alors lus l'adresse, le compte, les secrets et le contrôle TLS —, ou, réglés sur le connecteur, **URL de base**, **Identifiant**, **Mot de passe**, **Jeton**, **Vérification SSL**. Un champ vide reprend la valeur du connecteur. Mots de passe et jetons sont chiffrés à l'enregistrement. La ligne d'un environnement affiche `→ pool` ou son URL de base. |
 
 Personne ne choisit le serveur. Un appel suit l'environnement de l'écran — le **Pool** choisi dans la barre latérale, ou celui par défaut — et le `pool` d'une étape de tâche (tout type d'étape). Cela couvre les actions d'écran (`call_api`), les plugins, `/api/http` et l'assistant IA.
 
@@ -614,15 +682,14 @@ Un appel fait pour un des environnements du connecteur sans serveur est **refus�
 
 ```toml
 [connectors.ais_connection]
-base_url = "${JDE_AIS_URL}"
-pool = "jdedwards"                          # l'environnement de base_url
+server = "jde_ais"                          # le pool de serveur HTTP de la production
+pool = "jdedwards"                          # l'environnement de ce serveur
 
 [connectors.ais_connection.targets.jdedwards_dev]
-base_url = "https://ais-dev.example.com:7077/jderest/v2"
-auth_password = "ENC:…"                     # seulement ce qui diffère
+server = "jde_ais_dev"                      # le pool de serveur HTTP de cet environnement
 ```
 
-Pour nommer l'environnement avant un appel sensible, utilisez `#POOL#` dans le message d'un `confirm` : `Reset the password of {INPUT.user} on #POOL#?`. Une mise à jour des applications sous licence conserve le `pool` et les `targets` d'une installation.
+Pour nommer l'environnement avant un appel sensible, utilisez `#POOL#` dans le message d'un `confirm` : `Reset the password of {INPUT.user} on #POOL#?`. Une mise à jour des applications sous licence conserve le `server`, le `pool` et les `targets` d'une installation.
 
 ---
 
@@ -656,6 +723,7 @@ Elles s'accordent par les rôles : autoriser une entrée de menu accorde ce qu'e
 - **Nommer les requêtes d'après l'entité** — `invoices_get`, `invoices_by_status_get` — les listes se lisent d'elles-mêmes.
 - **Décrire les requêtes** que doit utiliser l'assistant IA : libellé et description (étape *Ce que c'est*).
 - **Préférer le dictionnaire aux libellés par écran** : une entrée sert tous les écrans.
+- **Placer l'adresse et le compte d'un serveur dans un pool**, pas sur le connecteur API : un seul endroit pour changer un mot de passe, et un connecteur qu'une mise à jour peut rafraîchir.
 - **Tenir les secrets hors des fichiers** par des références `${VARIABLE}` quand un gestionnaire de secrets est en place — voir [Chiffrement et secrets](./configuration/encryption-secrets.md).
 
 ---

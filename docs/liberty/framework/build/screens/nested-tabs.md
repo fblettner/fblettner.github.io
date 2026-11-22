@@ -45,7 +45,7 @@ A `nested_form` tab shows, inside the dialog, the **form of another existing scr
 | **`form_screen`** *(required)* | The id of the screen whose form is reused. |
 | **`connector`** | The connector of that screen. Blank = the parent screen's connector. |
 | **`param_binds`** | Bind the parent's values into the reused screen's queries — typically `CUSTOMER_ID ← CUSTOMER_ID`. |
-| **`label`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | As on any tab. |
+| **`label`**, **`l`**, **`hide_on_add`**, **`hide_on_edit`**, **`actions`** | As on any tab — see [Tab settings](./dialog-builder.md#tab-settings). |
 
 ### Behaviour
 

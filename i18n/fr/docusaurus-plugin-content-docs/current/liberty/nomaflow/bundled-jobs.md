@@ -294,14 +294,16 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 
 ### `nomasx1-roles` \{#nomasx1-roles\}
 
-**Crée ou met à jour les rôles de Nomasx-1.**
+**Crée ou remet en état les rôles prédéfinis de Nomasx-1, tels que livrés.** Les quatre mêmes rôles s'ajoutent aussi un par un dans Accès → Rôles → *Ajouter un rôle prédéfini…* (voir [Rôles prédéfinis](../framework/build/secure/roles-and-permissions.md#predefined)). Une nouvelle exécution rend ses droits d'origine à un rôle modifié dans Accès ; les utilisateurs ne sont pas modifiés.
 
 | Rôle | Accorde |
 |---|---|
-| `nomasx1_auditor` | Toutes les lectures des données de Nomasx-1, l'explorateur de données, l'assistant IA et les deux tâches de rapport ; les rapports mensuels lui sont envoyés. |
-| `nomasx1_admin` | Tout : l'application entière, ses paramètres et toutes les tâches `nomasx1-*`. |
+| `nomasx1_auditor` | *Auditeur* — lit tout et lance les deux rapports d'audit ; les rapports mensuels lui sont envoyés. Ne modifie aucun réglage. |
+| `nomasx1_security_officer` | *Responsable sécurité* — sécurité et séparation des tâches en lecture et modification, avec leurs réglages, la collecte de la sécurité et son rapport ; le reste en lecture. |
+| `nomasx1_licence_manager` | *Gestionnaire des licences* — licences et base de données en lecture et modification, avec les réglages des licences, la collecte des licences et son rapport ; le reste en lecture. |
+| `nomasx1_admin` | *Administrateur* — tout dans l'application, réglages compris ; la tâche lui donne en plus toutes les tâches `nomasx1-*`. |
 
-À lancer une fois après l'installation et après chaque mise à jour, pour que les nouvelles requêtes de lecture soient accordées ; attribuer ensuite les rôles aux utilisateurs dans **Liberty Next → Administrer → Accès**. Peut être relancée sans risque ; livrée désactivée.
+À lancer une fois après l'installation ; attribuer ensuite les rôles aux utilisateurs dans **Liberty Next → Administrer → Accès**. Peut être relancée sans risque ; livrée désactivée.
 
 ---
 
@@ -439,7 +441,7 @@ Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pou
 | `auto_stop` | `false` | Arrête une instance démarrée en échec (`stopinstance`), ainsi que les instances démarrées d'un serveur enterprise en échec. |
 | `keep_days` | `30` | Les lignes plus anciennes sont supprimées à chaque exécution. |
 
-**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager et le mot de passe de `jde_admin` sur le connecteur `jde_server_manager` dans **Liberty Next → Données → Connecteurs**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
+**Planification** — `*/5 * * * *` (Europe/Paris), `enabled = false` : renseigner l'adresse de Server Manager avec son compte (`jde_admin`) et son mot de passe dans le pool `jde_server_manager`, sous **Liberty Next → Administrer → Pools**, puis activer la tâche. *Nomajde → Tâches → Vérifier les serveurs JDE* la lance à la demande.
 
 **Alertes** — l'exécution échoue dès qu'une instance n'a pas réussi ses contrôles (`failed`, `down` ou `error`), après l'écriture des lignes ; les alertes `on_failure` sont actives.
 

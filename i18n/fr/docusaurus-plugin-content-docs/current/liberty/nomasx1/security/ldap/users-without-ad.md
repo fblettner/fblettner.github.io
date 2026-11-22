@@ -8,7 +8,7 @@ keywords: [Nomasx-1, sécurité, LDAP, Active Directory, utilisateurs sans AD, c
 
 L'écran **Utilisateurs sans AD** liste tous les comptes connus d'une application connectée qui **ne peuvent pas être rapprochés** d'une entrée LDAP / Active Directory de l'entreprise. Une ligne par couple `(Application, Utilisateur)`.
 
-Le rapprochement s'appuie sur deux attributs AD : la `Description` (généralement le matricule RH) et le `samAccountName` (login Windows). Quand ni l'un ni l'autre ne pointe vers une entrée AD, la ligne atterrit ici.
+Le rapprochement s'appuie sur deux attributs AD : la `Description` (généralement le matricule RH) et le `samAccountName` (login Windows). Quand ni l'un ni l'autre ne pointe vers une entrée AD, la ligne apparaît ici. L'annuaire de référence est celui collecté pour les applications de type `LDAP` déclarées dans [Applications](../../settings/global/applications.md), quel que soit leur identifiant.
 
 ---
 
@@ -23,9 +23,9 @@ Le rapprochement s'appuie sur deux attributs AD : la `Description` (généraleme
   </defs>
 
   <rect x="220" y="20" width="880" height="277" rx="14" fill="url(#nxldx-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Users undefined</text>
-  <rect x="412.86400000000003" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="434.86400000000003" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP - Utilisateurs non définis</text>
+  <rect x="449.5" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="471.5" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.ldap_undefined_get</text>
   <line x1="220" y1="88" x2="1100" y2="88" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="112" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">9 lignes · 8,1 ms</text>

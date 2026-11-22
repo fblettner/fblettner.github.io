@@ -470,16 +470,24 @@ const sidebars: SidebarsConfig = {
   nomajdeSidebar: [
     'liberty/nomajde/overview',
     'liberty/nomajde/home',
+    'liberty/nomajde/synthesis',
+    'liberty/nomajde/upgrade/analysis',
     'liberty/nomajde/data-explorer',
     'liberty/nomajde/cross-reference',
-    'liberty/nomajde/upgrade/analysis',
     {
       type: 'category',
-      label: 'Master Data',
+      label: 'JD Edwards data',
       items: [
-        'liberty/nomajde/master-data/udc-types',
-        'liberty/nomajde/master-data/udc-codes',
-        'liberty/nomajde/master-data/address-book',
+        {
+          type: 'category',
+          label: 'Master Data',
+          items: [
+            'liberty/nomajde/master-data/udc-types',
+            'liberty/nomajde/master-data/udc-codes',
+            'liberty/nomajde/master-data/address-book',
+          ],
+        },
+        'liberty/nomajde/master-data/delivered-screens',
       ],
     },
     {
@@ -496,10 +504,11 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Monitoring',
-      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/server-manager'],
+      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/architecture', 'liberty/nomajde/monitoring/server-manager'],
     },
     'liberty/nomajde/jobs',
     'liberty/nomajde/tests',
+    'liberty/nomajde/ai-assistant',
     {
       type: 'category',
       label: 'JD Edwards services (AIS)',

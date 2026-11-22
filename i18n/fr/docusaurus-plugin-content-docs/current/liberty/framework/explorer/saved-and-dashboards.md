@@ -1,12 +1,12 @@
 ---
 title: Analyses enregistrées et tableaux de bord
 description: "Conserver le travail de l'explorateur de données de Liberty Next : analyses enregistrées, privées ou partagées, avec un public ; tableaux de bord d'analyses avec leur propre période et leur disposition ; export Excel et PDF ; une entrée de menu pour une analyse ou un tableau de bord partagé (Ajouter à un menu) ; analyses et tableaux de bord livrés avec une application."
-keywords: [Liberty Next, explorateur de données, analyse enregistrée, partage, public, tableau de bord, tuiles, disposition, export, Excel, PDF]
+keywords: [Liberty Next, explorateur de données, analyse enregistrée, rechercher, partage, public, tableau de bord, tuiles, disposition, export, Excel, PDF]
 ---
 
 # Analyses enregistrées et tableaux de bord
 
-La barre de mode, en haut de l'explorateur, offre deux modes : **Analyses**, l'éditeur avec ses analyses enregistrées, et **Tableaux de bord**, des grilles d'analyses enregistrées. Chaque mode affiche le nombre d'éléments qu'il contient.
+La barre de mode, en haut de l'explorateur, offre deux modes : **Analyses**, l'éditeur avec ses analyses enregistrées, et **Tableaux de bord**, des grilles d'analyses enregistrées. Chaque mode affiche le nombre d'éléments que contient le modèle ; **Rechercher**, à côté, cherche dans tous les modèles.
 
 ---
 
@@ -125,6 +125,18 @@ La barre de mode, en haut de l'explorateur, offre deux modes : **Analyses**, l'�
   <text x="1150" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colonnes × hauteur · 🗑</text>
   <line x1="1140" y1="267.0" x2="1050.0" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
 </svg>
+
+---
+
+## Retrouver une analyse ou un tableau de bord \{#find\}
+
+Une analyse ou un tableau de bord est enregistré sous un modèle, et la liste de chaque mode ne montre que ceux du modèle affiché. **Rechercher**, à côté d'*Analyses* et de *Tableaux de bord*, ouvre *Retrouver une analyse ou un tableau de bord* : toutes les analyses et tous les tableaux de bord enregistrés dans les modèles accessibles à l'utilisateur — les partagés et les siens —, regroupés par application et par modèle, le modèle courant signalé par *le modèle affiché*.
+
+- La saisie filtre la liste sur le nom, la description, le public, le propriétaire et le modèle, sans tenir compte de la casse ni des accents. **Tout**, **Analyses** et **Tableaux de bord** limitent la liste à un type.
+- Chaque ligne donne le nom, le public et la description, *à moi* sur un élément privé, et la date du dernier enregistrement ; le pied de la fenêtre affiche *N sur M*.
+- Un clic l'ouvre — en passant d'abord à son modèle s'il est enregistré ailleurs.
+
+Le sélecteur de modèle indique ce que contient chaque modèle, dans son libellé : *Commandes clients (8 analyses, 1 tableau de bord)* ; un modèle vide garde son simple nom. La liste vient de `GET /api/explorer/saved`, sans les définitions : l'ouverture d'un élément les lit.
 
 ---
 

@@ -47,7 +47,7 @@ The **Jobs** page lists every job of `jobs.toml`, one line per job, grouped by a
   <text x="252" y="173" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
   <text x="266" y="173" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▤</text>
   <text x="282" y="173" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Run history retention</text>
-  <text x="399.84000000000003" y="173" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· 30d · cap 100/job · every 60 min</text>
+  <text x="399.84000000000003" y="173" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· 30 d · 100 per job at most · every 60 min</text>
   <rect x="240" y="188" width="840" height="26" rx="7" fill="rgba(168,85,247,0.05)" stroke="#334155" strokeWidth="1"/>
   <text x="252" y="205" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
   <text x="266" y="205" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">⊘</text>

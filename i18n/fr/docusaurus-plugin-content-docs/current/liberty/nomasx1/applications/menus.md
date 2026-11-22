@@ -25,7 +25,7 @@ L'écran sert à *comprendre la navigation* d'une application connectée sous l'
   <rect x="215" y="20" width="890" height="340" rx="14" fill="url(#mnu-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Security - Menus</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Sécurité - Menus</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <rect x="233" y="84" width="854" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="245" y="100" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">›  ⏷  Filtres avancés</text>
@@ -220,7 +220,7 @@ Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre so
   </defs>
 
   <rect x="215" y="20" width="890" height="358" rx="14" fill="url(#mnt-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Security - Menus</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Sécurité - Menus</text>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <text x="233" y="96" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">4280 lignes · 12 ms</text>

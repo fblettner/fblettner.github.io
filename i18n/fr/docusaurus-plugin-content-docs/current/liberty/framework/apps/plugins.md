@@ -110,9 +110,28 @@ plugins/
 - La permission est `page:<app>:<page>`, demandée aussi à l'entrée de menu ; l'éditeur de rôles la connaît.
 - L'export par défaut du module est une fonction qui reçoit ce dont sont faites les pages du framework — React, les composants partagés, la grille partagée (recherche, filtres, tri, regroupement, colonnes, export, vues enregistrées), le client d'API, le thème, la langue de l'interface — et renvoie le composant à afficher. La page n'importe rien : elle a donc l'apparence du reste de l'application.
 - La grille partagée (`Grid`) reçoit les colonnes et les lignes de la page. Avec une fonction `detail`, une ligne peut être dépliée : chaque ligne reçoit un chevron, et ce que renvoie la fonction s'affiche sous la ligne — les dépendances d'un objet, une liste imbriquée.
-- Le contrat porte sa `version` : `detail` demande la version 3 ou plus, ce qu'une page qui en dépend peut vérifier au préalable.
 - `call('module:j_fonction', { … })` exécute une fonction de l'application et renvoie sa réponse ; l'appelant doit détenir `plugin:<cette référence>`.
 - La page s'exécute dans la session de l'utilisateur : elle ne lit que ce que les permissions de celui-ci autorisent l'API à renvoyer.
+
+### Ce que reçoit la page \{#page-contract\}
+
+L'objet que reçoit la page est un contrat : un champ s'y ajoute, il n'est jamais renommé ni retiré, et sa `version` augmente dès qu'une page pourrait voir la différence. Une page qui s'appuie sur un champ récent vérifie d'abord `version` et le signale.
+
+| Champ | Fournit | Version |
+|---|---|---|
+| `version`, `app`, `page` | La version du contrat, l'application et la page affichée. | 1 |
+| `React`, `styled`, `theme`, `ui`, `icon` | Le React du framework, ses composants stylés, les jetons du thème (ils suivent le mode sombre / clair), les composants partagés (`PageLayout`, `Card`, `Button`, `Input`, `SearchSelect`, `Tag`, `Banner`, `Modal`…), une icône de menu par son nom. | 1 |
+| `api`, `call` | Le client d'API, dans la session de l'utilisateur ; `call` exécute une fonction de l'application. | 1 |
+| `useLang`, `useUser`, `useOpen` | Des hooks : la langue de l'interface (la page livre ses propres textes), l'utilisateur connecté, une fonction qui ouvre une route de l'application dans son onglet. | 1 |
+| `useCan` | Hook : une fonction qui indique si l'utilisateur détient une permission (`job:<id>`, `plugin:…`) — pour n'afficher un bouton qu'à qui peut s'en servir. Le serveur a le dernier mot. | 1 |
+| `Grid` | La grille partagée. | 2 |
+| `Grid` avec `detail` | Une ligne de la grille se déplie. | 3 |
+| `useAssistantContext(titre, faits)` | Indique à l'[assistant](../ai-assistant.md#context) ce que l'utilisateur a sous les yeux. | 4 |
+| `Diagram` | Un schéma mis en page par le serveur, puis dessiné — voir plus bas. | 5 |
+
+**L'assistant sur une page.** `useAssistantContext('Cross Reference', { object: 'P4210', form: 'W4210A' })` transmet un titre et quelques faits en peu de mots — l'objet ouvert, l'onglet, un filtre, jamais de lignes. Les faits vides sont ignorés, les longs tronqués, 20 au plus. Le chat les affiche dans sa pastille habituelle, les joint à chaque question tant que cette page est à l'écran, et propose les questions de départ que l'application prévoit pour la page — déclarées comme celles d'un écran, sous le nom de la page (Liberty Next → Logique → IA, *Questions de départ par écran*, ou `[ai.<app>.screens.<page>]`).
+
+**Un schéma.** Pour représenter une plateforme ou un système, la fonction de l'application construit le modèle — des **groupes** (un niveau, dessiné en colonne, ou un hôte, dessiné en cadre dans son niveau), des **nœuds** (une carte dans un groupe : un type, un libellé, une seconde ligne, un état `ok` / `warn` / `down` / `unknown`, déclaré ou non, quelques badges) et des **liens** (d'une carte ou d'un cadre vers un autre, avec un libellé et l'*indice* sur lequel chacun repose) — puis le renvoie mis en page par `liberty.diagram.lay_out`, côté serveur. La page le dessine avec `<Diagram layout={answer.diagram} picked={id} onPick={(node) => …} words={{ ok, warn, down, unknown, undeclared }} />`, dans un conteneur qui a une hauteur : les niveaux en colonnes, une carte par élément avec son état, un contour en pointillés pour ce qui n'est pas déclaré, les liens sur leurs tracés, une légende, le zoom. Les mêmes coordonnées donnent l'image d'un rapport PDF : `liberty.diagram.render_svg` la dessine en couleurs d'impression, l'état sous forme de repère et de mot, chaque texte tronqué à la place disponible.
 
 ---
 

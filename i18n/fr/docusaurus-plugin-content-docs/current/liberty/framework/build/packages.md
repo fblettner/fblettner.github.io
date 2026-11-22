@@ -1,6 +1,6 @@
 ---
 title: Packages
-description: "Transporter la configuration d'une installation Liberty vers une autre avec la page Paquet : choisir comme points de départ des écrans, entrées de menu, tableaux de bord, modèles de l'explorateur, tâches, règles de notification, actions partagées ou contenus de l'assistant ; le résolveur de dépendances parcourt tout ce qu'ils atteignent et le paquet est exporté en ZIP — ou promu directement vers une autre instance. Sur la cible, l'import est d'abord présenté élément par élément, avec le détail des champs, avant d'être appliqué."
+description: "Transporter la configuration d'une installation Liberty vers une autre avec la page Paquet : choisir comme points de départ des écrans, entrées de menu, tableaux de bord, modèles de l'explorateur, tâches, règles de notification, services ou contenus de l'assistant ; le résolveur de dépendances parcourt tout ce qu'ils atteignent et le paquet est exporté en ZIP — ou promu directement vers une autre instance. Sur la cible, l'import est d'abord présenté élément par élément, avec le détail des champs, avant d'être appliqué."
 keywords: [Liberty Framework, package, export, import, aperçu, promotion, instance cible, déploiement, ZIP, clôture de dépendances, points de départ, merge, overwrite, replace all, override, secrets chiffrés, build-package, import-package]
 ---
 
@@ -79,7 +79,7 @@ C'est le parcours standard *préproduction → production*. C'est aussi l'outil 
   <text x="250" y="344" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ENTRÉES DE MENU · 0/18</text>
   <text x="250" y="366" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">TABLEAUX DE BORD · 0/3</text>
   <text x="250" y="388" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">TÂCHES NOMAFLOW · 0/6</text>
-  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ACTIONS PARTAGÉES · 0/4</text>
+  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SERVICES · 0/4</text>
   <text x="680.0" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DÉPENDANCES</text>
   <text x="755.3" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 6/8 sera inclus dans le paquet</text>
   <line x1="666.0" y1="192" x2="1084.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
@@ -181,7 +181,7 @@ Le panneau de gauche regroupe les candidats par type, chaque groupe avec le nomb
 | **Modèles de l'Explorateur** | Les modèles de l'explorateur de données, avec leurs analyses et tableaux de bord livrés. |
 | **Tâches nomaflow** | Les tâches de `jobs.toml`. |
 | **Règles de notification** | Les règles de Liberty Next → Logique → Notifications. |
-| **Actions partagées** | Les actions réutilisées par plusieurs écrans. |
+| **Services** | Les services appelés par les écrans (Logique → Services). |
 | **Assistant (questions, procédures)** | Ce qu'une application livre pour l'assistant IA — une entrée par application. |
 
 **Filtrer les points de départ**, au-dessus des panneaux, filtre la liste visible par nom / libellé / portée. Le lien *tout sélectionner* de chaque section respecte le filtre — réduire d'abord (par exemple en saisissant `audit`), puis cliquer *tout sélectionner* pour ne prendre que les écrans correspondants.
@@ -209,7 +209,7 @@ Le panneau **Dépendances** pré-coche chaque dépendance **sauf** trois types :
 |---|---|
 | **Connecteurs** | L'installation cible possède presque toujours déjà son propre connecteur avec le bon pool et les bonnes informations d'identification. Livrer le connecteur de la source écraserait les secrets de la cible. |
 | **Pools** | Idem — les pools portent les informations d'identification de la base. C'est le pool de la cible qu'il faut conserver. |
-| **Points d'accès API** | Idem — les points d'accès portent des en-têtes d'authentification / jetons Bearer propres au câblage de l'installation source. Un point d'accès dont un écran lit ses lignes, ou par lequel il enregistre, fait partie des données de l'écran : il est coché comme les requêtes de l'écran, et un point d'accès servi par une action partagée emporte cette action. |
+| **Points d'accès API** | Idem — les points d'accès portent des en-têtes d'authentification / jetons Bearer propres au câblage de l'installation source. Un point d'accès dont un écran lit ses lignes, ou par lequel il enregistre, fait partie des données de l'écran : il est coché comme les requêtes de l'écran, et un point d'accès servi par un service emporte ce service. |
 
 Cela rend sûr d'emblée le scénario typique « promouvoir des écrans entre environnements » : rien qui porte des secrets n'est livré sans accord explicite. Cocher manuellement le groupe *Connecteurs* uniquement quand la cible n'en a réellement aucun — typiquement une installation toute neuve ou une préproduction par client à monter de zéro.
 

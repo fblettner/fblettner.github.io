@@ -136,7 +136,7 @@ Une entrée peut fixer l'un des [préréglages](./schedules.md#schedulable-prese
 
 ## Qui peut la lancer \{#access\}
 
-L'entrée et sa page demandent la permission `job:<id>` — dans **Liberty Next → Administrer → Accès → Roles**, bloc **Au-delà des menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
+L'entrée et sa page sont réservées à qui peut lancer la tâche — dans **Liberty Next → Administrer → Accès → Rôles**, l'entrée ou son dossier en **Lecture et modification** (la **Lecture** seule ne l'affiche pas), ou la permission `job:<id>` dans le bloc **Au-delà des menus**, type de règle **Tâche**, puis la tâche. Un refus (`!job:<id>`) masque l'entrée même quand le menu l'afficherait. Les superutilisateurs voient toutes les tâches.
 
 Chaque titulaire de la permission voit **toutes** les exécutions de la tâche — la liste des exécutions précédentes, leurs journaux et leurs fichiers —, pas seulement les siennes.
 
@@ -144,9 +144,21 @@ Chaque titulaire de la permission voit **toutes** les exécutions de la tâche �
 
 ## Paramètres utilisateur \{#user-params\}
 
-Une tâche déclare dans `jobs.toml` ce qu'un utilisateur peut régler en la lançant depuis sa page. Toute autre valeur est refusée ; les autres réglages de l'exploitant restent hors de portée.
+Ce qu'un utilisateur peut régler en lançant la tâche depuis sa page se déclare dans l'éditeur de tâche, section [Ce que l'utilisateur peut régler au lancement](./create.md#user-params). Toute autre valeur est refusée ; les autres réglages de l'exploitant restent hors de portée.
 
-```toml title="jobs.toml"
+| Champ (éditeur de tâche) | Dans `jobs.toml` | Rôle |
+|---|---|---|
+| **Nom** | `name` | L'argument de l'étape qui reçoit la valeur. |
+| **Libellé**, **Dans les autres langues** | `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
+| **Destinataire** | `step` | L'étape qui reçoit la valeur. **Toutes les étapes** par défaut. |
+| **Valeur par défaut** | `default` | La valeur préremplie. |
+| **Obligatoire** | `required` | La tâche ne démarre pas sans valeur. |
+| **Choix** — *Une liste fixe* | `choices` | La page affiche une liste déroulante et refuse toute autre valeur. |
+| **Choix** — *Les lignes d'une requête*, *Les modèles Explorer d'une application*, *Les suites de tests* | `choices_from` | Les lignes d'une requête de lecture, comme les applications de Nomasx-1 ; les modèles de l'explorateur de données d'une application ; les suites des [Tests](../../framework/build/tests.md), d'un connecteur API ou de tous. |
+| **Plusieurs valeurs** | `multiple` | Plusieurs valeurs peuvent être cochées, avec **Tout**. |
+| **Une exécution par valeur de** | `for_each` | Voir ci-dessous. |
+
+```toml title="jobs.toml — tel que l'éditeur l'enregistre"
 [[jobs.user_params]]
 name = "models"
 label = "Explorer model (blank = every model)"
@@ -155,20 +167,9 @@ step = "refresh"
 choices_from = "explorer_models:nomajde"
 ```
 
-| Clé | Rôle |
-|---|---|
-| `name` | L'argument de l'étape qui reçoit la valeur. |
-| `label`, `l` | Le libellé affiché, par langue. Par défaut : le nom. |
-| `step` | L'étape qui reçoit la valeur. Sans elle, la valeur va à toutes les étapes de la tâche. |
-| `default` | La valeur préremplie. |
-| `required` | `true` : la tâche ne démarre pas sans valeur. |
-| `choices` | Une liste fixe de valeurs : la page affiche une liste déroulante et refuse toute autre valeur. |
-| `choices_from` | `explorer_models:<app>` — les modèles de l'explorateur de données d'une application ; `query:<connecteur>/<requête>:<colonne valeur>:<colonne libellé>` — les lignes d'une requête de lecture, comme les applications de Nomasx-1 ; ou `test_suites` (`test_suites:<connecteur>` pour un seul connecteur API) — les suites des [Tests](../../framework/build/tests.md). |
-| `multiple` | `true` : plusieurs valeurs peuvent être cochées, avec **Tout**. |
-
 Une valeur vide signifie *non renseigné* : la valeur par défaut de l'étape s'applique. Les mêmes paramètres apparaissent dans la fenêtre **Exécuter avec des paramètres** des exploitants.
 
-**Une exécution par valeur.** Une tâche qui déclare `for_each = "<paramètre>"` s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
+**Une exécution par valeur.** Une tâche dont le champ **Une exécution par valeur de** nomme un paramètre s'exécute une fois pour chaque valeur cochée — l'une après l'autre, chacune avec une seule valeur — ; **Tout** reprend toutes les valeurs que propose le paramètre. Une tâche planifiée avec la valeur `all` traite toutes les valeurs à chaque déclenchement : toutes les applications de Nomasx-1, par exemple.
 
 ---
 

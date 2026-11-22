@@ -187,7 +187,7 @@ Click **＋ Add user**. The **Add user** dialog opens with every field empty: Us
 | **Email** | no | Where a *Forgot password?* link is mailed (see [below](#forgot)), and the notifications' address. |
 | **Password** | yes (for new users) | At least 8 characters. Stored as an Argon2id hash, never readable back. Leave blank on edit to keep the current password. |
 | **Ask for a new password at the next sign-in** | default on for a new user | The password given here is a temporary one: the user chooses their own at the first sign-in (see [below](#first-sign-in)). Local accounts only. |
-| **Roles** | no | Chip picker — type or pick from the dropdown. The dropdown lists every role configured under the Roles tab. |
+| **Roles** | no | Chip picker — type or pick from the dropdown. The dropdown lists every role configured under the Roles tab. Several roles add up — see [Predefined roles](./roles-and-permissions.md#predefined). |
 | **Active** | yes (default on) | When off, the user can't sign in; existing sessions die on next token refresh. |
 | **Superuser** | no | When on, bypasses every permission check and every data scope. Use sparingly. |
 | **Data-scope attributes** | no | Key / value pairs read by the roles' data scope — see [below](#attributes). |

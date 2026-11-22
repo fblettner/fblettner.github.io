@@ -13,7 +13,7 @@ Un utilisateur se connecte à Liberty par l'un de ces deux chemins :
 | **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie auprès des utilisateurs enregistrés et émet un JWT. |
 | **OIDC** | L'utilisateur clique sur *Se connecter avec OIDC*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
 
-Les deux peuvent coexister — l'écran de connexion porte les deux boutons, et chacun choisit celui qui le concerne.
+Les deux peuvent coexister — une fois l'OIDC activé, l'écran de connexion propose les deux, et chacun choisit celui qui le concerne.
 
 ---
 
@@ -41,8 +41,8 @@ Les deux peuvent coexister — l'écran de connexion porte les deux boutons, et 
   <text x="600.0" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Mot de passe oublié ?</text>
   <rect x="464" y="252" width="272" height="28" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="600.0" y="269.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter avec OIDC</text>
-  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">OIDC doit être activé dans config/app.toml ; sinon</text>
-  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">ce bouton renvoie une 404.</text>
+  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Authentification unique avec le compte de votre organisation,</text>
+  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">si votre administrateur l'a configurée.</text>
   <rect x="160" y="40" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="170" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le nom de l'application</text>
   <text x="170" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Nom de l'application, sinon Liberty Next</text>
@@ -57,11 +57,11 @@ Les deux peuvent coexister — l'écran de connexion porte les deux boutons, et 
   <line x1="840" y1="187.0" x2="660.0" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
   <rect x="840" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="850" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Authentification unique</text>
-  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vers le fournisseur OIDC</text>
+  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement si l'OIDC est activé</text>
   <line x1="840" y1="277.0" x2="736" y2="266" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
 </svg>
 
-L'écran affiche le nom de l'application (**Nom de l'application**, sinon *Liberty Next*), le formulaire local, puis **Se connecter avec OIDC** et une ligne rappelant que l'OIDC doit être activé. Le bouton OIDC est toujours présent : tant que l'OIDC n'est pas activé, il mène à une page d'erreur (404). **Mot de passe oublié ?** apparaît sous **Se connecter** seulement si les notifications par e-mail sont configurées — voir [Utilisateurs → Mot de passe oublié](./users.md#forgot).
+L'écran affiche le nom de l'application (**Nom de l'application**, sinon *Liberty Next*), le formulaire local, puis — seulement si l'OIDC est activé — **Se connecter avec OIDC** et, dessous, une ligne destinée à l'utilisateur : *Authentification unique avec le compte de votre organisation, si votre administrateur l'a configurée.* Tant que l'OIDC n'est pas activé, l'écran ne propose que le formulaire local. **Mot de passe oublié ?** apparaît sous **Se connecter** seulement si les notifications par e-mail sont configurées — voir [Utilisateurs → Mot de passe oublié](./users.md#forgot).
 
 
 ---
@@ -100,7 +100,7 @@ L'OIDC se règle dans **Liberty Next → Administrer → App → OpenID Connect 
 
 | Champ | Requis | Remarques |
 |---|---|---|
-| **Activé** | oui | Fait mener **Se connecter avec OIDC** au fournisseur ; désactivé, le bouton renvoie une 404. |
+| **Activé** | oui | Affiche **Se connecter avec OIDC** sur l'écran de connexion, vers le fournisseur ; désactivé, le bouton n'apparaît pas. |
 | **URL de découverte** | oui | L'URL `.well-known/openid-configuration` du fournisseur. |
 | **ID client** | oui | L'identifiant client déclaré chez le fournisseur. |
 | **Secret client** | oui | Chiffré à l'enregistrement. |
@@ -203,7 +203,7 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 | L'**URL de découverte** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
 | La **Revendication identifiant** est absente du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
 | Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Liberty Next → Administrer → Accès → Utilisateurs*. |
-| OIDC configuré mais non activé. | **Se connecter avec OIDC** mène à une page 404. | Cocher **Activé**. |
+| OIDC configuré mais non activé. | L'écran de connexion n'affiche pas le bouton **Se connecter avec OIDC**. | Cocher **Activé**. |
 
 ---
 

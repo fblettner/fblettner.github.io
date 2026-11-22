@@ -6,7 +6,7 @@ keywords: [Nomasx-1, applications, Object Usage Tracking, OUT, objets, programme
 
 # OUT — Objets
 
-L'écran **OUT — Objets** (*License - Object Usage Tracking - Objects*) compte les appels de chaque objet, jour par jour, sur une application connectée : une ligne par `(Application, Objet, Version, Date Utilisation)`, avec le type d'objet et le nombre d'appels du jour. Accès : **Applications → Traçabilité des objets → OUT - Objects**, ou depuis le menu de ligne d'*OUT — Composants*.
+L'écran **OUT — Objets** (*Licences - Traçabilité des objets - Objets*) compte les appels de chaque objet, jour par jour, sur une application connectée : une ligne par `(Application, Objet, Version, Date Utilisation)`, avec le type d'objet et le nombre d'appels du jour. Accès : **Applications → Traçabilité des objets → OUT - Objects**, ou depuis le menu de ligne d'*OUT — Composants*.
 
 C'est la vue objet, complément d'*OUT — Utilisateurs* : la même traçabilité, lue selon *ce qui* a été exécuté et *combien de fois* plutôt que *qui* l'a exécuté.
 
@@ -25,7 +25,7 @@ C'est la vue objet, complément d'*OUT — Utilisateurs* : la même traçabilit�
   <rect x="215" y="20" width="890" height="318" rx="14" fill="url(#ouo-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - Object Usage Tracking - Objects</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licences - Traçabilité des objets - Objets</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <rect x="233" y="84" width="854" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="245" y="100" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">›  ⏷  Filtres avancés</text>

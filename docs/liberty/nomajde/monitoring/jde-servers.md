@@ -166,10 +166,7 @@ Opening a row shows the instance in a dialog. The **General** tab repeats the fi
 
 ## On the overview \{#overview\}
 
-The Nomajde [home page](../home.md) carries two **JDE servers** tiles, based on the last check of each instance over 24 hours:
-
-- the number of healthy instances out of the instances monitored, with the time of the last check;
-- the list of instances: the server type and host, the failed checks and the action taken, a status pill — **OK**, **Failed**, **Down**, **Error** —, the availability over 24 hours (the share of passed checks) and the number of checks. Instances in trouble come first; an instance whose last check is older than 30 minutes is shown in amber, tagged **Late**.
+The Nomajde [Overview](../home.md) leads here from its *The platform* group, and shows the last run of the `nomajde-jde-health` job among its jobs. For the state of the instances at this moment, see [Platform synthesis](../synthesis.md).
 
 ---
 
@@ -177,7 +174,7 @@ The Nomajde [home page](../home.md) carries two **JDE servers** tiles, based on 
 
 The `nomajde-jde-health` job checks the servers through the Server Manager REST API. It ships **disabled**, scheduled every five minutes (Europe/Paris).
 
-1. In **Liberty Next → Data → Connectors**, open the `jde_server_manager` connector and set the Server Manager address and the password of the `jde_admin` account.
+1. In **Liberty Next → Administer → Pools**, open the `jde_server_manager` pool and set the Server Manager address with its account (`jde_admin`) and its password — see [the Server Manager connection](./server-manager.md#connection).
 2. In **Nomaflow → Jobs**, adjust the parameters of `nomajde-jde-health` if needed, then enable it.
 3. **Jobs → Check the JDE servers** in the Nomajde menu runs the check at once, without waiting for the schedule.
 
@@ -201,4 +198,4 @@ Details of the job: [`nomajde-jde-health`](../../nomaflow/bundled-jobs.md#nomajd
 - [Server Manager](./server-manager.md) — the live screens: instances, connected users, processes, Java memory.
 - [Jobs](../jobs.md) — the Nomajde jobs, including *Check the JDE servers*.
 - [Notifications](../../nomaflow/notifications.md) — to be alerted when the check fails.
-- [Overview — the home page](../home.md).
+- [Overview — the way in](../home.md).

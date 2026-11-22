@@ -169,10 +169,12 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
 | **Dashboard cache (seconds, 0 = none)** | How long a reopened dashboard reuses its widgets' results (default 60). |
-| **Several tabs at once (off: one page at a time)** | On by default. Off: opening a page replaces the current one. |
-| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the tabs of the Liberty Next pages, of Monitoring and of the runs stay. |
-| **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
+| **Several tabs at once (off: one page at a time)** | On by default. Off: opening a page replaces the current one — except a page that holds unsaved changes, which keeps its tab. |
+| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the tabs of the Liberty Next pages, of Monitoring and of the runs stay, and so does a tab that holds unsaved changes. |
+| **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab that holds no unsaved changes. |
 | **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
+
+**Unsaved changes are never lost without a word.** A page that holds edits not yet saved — a builder or an editor window of Liberty Next, a job being edited, a data grid in bulk edit, an open record form — keeps its tab when the user moves to another page, and the tab carries an orange dot (*Changes not saved yet — kept while this tab stays open*). Closing that tab, **Close all tabs** and switching the language ask first (*Unsaved changes* — **Lose the changes** or **Stay**); the browser asks before a reload or a closed window. Nothing is asked when nothing is unsaved.
 
 ## External addresses \{#external-urls\}
 
@@ -287,7 +289,7 @@ See [AI assistant](../ai-assistant.md), and [Data sent to Anthropic](../ai-data-
 
 | Field | Notes |
 |---|---|
-| **Enabled** | Makes **Sign in with OIDC**, always on the sign-in page, lead to the provider; off, the button answers 404. |
+| **Enabled** | Shows **Sign in with OIDC** on the sign-in page, leading to the provider; off, the sign-in page offers the local form alone. |
 | **Discovery URL** | The provider's `.well-known/openid-configuration`. |
 | **Client ID**, **Client secret**, **Scopes** | As registered at the provider (`openid email profile` by default). |
 | **Username claim**, **Email claim**, **Name claim** | Which ID-token claims fill the user (`preferred_username`, `email`, `name`). |

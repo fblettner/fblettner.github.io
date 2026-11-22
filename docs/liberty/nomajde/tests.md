@@ -651,4 +651,4 @@ The three test permissions are in a role's *Beyond the menus* rules, type **Test
 
 - [Tests](../framework/build/tests.md) — the Cases page in full; [Test results](../monitoring/test-results.md).
 - [JD Edwards services (AIS)](./ais/services.md) and [Create from…](./ais/create-from.md) — the calls a step can make.
-- [Upgrade analysis](./upgrade/analysis.md) — what to retrofit before the tests are played.
+- [Prepare for upgrade](./upgrade/analysis.md) — what to retrofit before the tests are played.

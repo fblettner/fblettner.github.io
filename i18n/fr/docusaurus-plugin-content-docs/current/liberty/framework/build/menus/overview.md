@@ -282,7 +282,7 @@ La page suivante détaille le câblage des deux côtés.
 
 Quand l'utilisateur ouvre l'application, `GET /api/menus` renvoie l'arbre **filtré à ce que l'utilisateur peut exécuter** :
 
-- Une feuille est conservée quand l'utilisateur peut exécuter ce qu'elle ouvre (`sql:<connector>:<target>` pour `screen` / `query`, `api:<connector>:<target>` pour `endpoint`), ou quand un rôle autorise explicitement son `menu:<app>:<id>` — voir [Permissions et rôles](./permissions-and-roles.md).
+- Une feuille est conservée quand l'utilisateur peut exécuter ce qu'elle ouvre (`sql:<connector>:<target>` pour `screen` / `query`, `api:<connector>:<target>` pour `endpoint`), ou quand un rôle place la feuille, son dossier ou toute l'application en **Lecture** ou **Lecture et modification** (une tâche : **Lecture et modification**) — voir [Permissions et rôles](./permissions-and-roles.md).
 - Un refus `menu:` ou `dashboard:` la retire.
 - Un dossier sans enfant survivant est replié.
 - Les éléments avec un filtre `roles` ne sont conservés que si les rôles de l'utilisateur croisent la liste.

@@ -1,7 +1,7 @@
 ---
 title: API endpoints
 description: "The endpoints of an API connector in Liberty Next: the editor drawn as four stages (what it is, inputs, the call, the answer), parameters that say what they expect, Create from… and Refresh from the server, endpoints that change data, error and warning fields, rows a screen can read, endpoints served by a function or by a service, groups, permissions and the safety of the values."
-keywords: [Liberty Next, API connector, endpoint, REST, parameters, Create from, generator, changes data, error fields, rows, served by a function, served by an action, permissions, api_run]
+keywords: [Liberty Next, API connector, endpoint, REST, parameters, Create from, generator, changes data, error fields, rows, served by a function, served by a service, permissions, api_run]
 ---
 
 # API endpoints
@@ -230,7 +230,7 @@ Each **parameter** is a line — its name, its label, its default, *Required* �
 
 **Method** and **URL path**, **Extra headers**, **Content-Type**, **Body** (with **Format JSON**) and **Query params**. **Leave out a query parameter whose value is blank** sends only the query parameters that have a value, for a server that reads an empty one as a filter on nothing.
 
-Instead of an HTTP call, the endpoint can be **Served by a function** or **Served by an action** — see below.
+Instead of an HTTP call, the endpoint can be **Served by a function** or **Served by a service** — see below.
 
 ### The answer \{#answer\}
 
@@ -241,6 +241,7 @@ Instead of an HTTP call, the endpoint can be **Served by a function** or **Serve
 | **Column titles** | Where the answer gives each key its title — the label of a column neither the screen nor the dictionary names. |
 | **Row limit parameter** | The parameter that carries the maximum number of rows: a screen fills it from its own *Max rows*. |
 | **"More rows" flag** | Where the server says there is more than it returned: the screen then says the result is truncated. |
+| **Refusals that mean “no rows”** | For a server that refuses when there is nothing to list: part of its error text, or its HTTP status (`404`), separated by commas — `404, no active users`. A screen then shows an empty list instead of an error; any other refusal stays an error. |
 | **Error fields** | Where the server puts its errors when it answers 200 all the same: something there makes the call a failure, with that content as its error. |
 | **Warning fields** | Where the server puts its warnings: reported with the answer, the call stands. |
 | **Response field**, **Response mappings** | The part of the answer returned, and logical names mapped to paths of the answer. |
@@ -341,7 +342,7 @@ One HTTP call cannot do everything: changing a record a server only offers throu
 
 ## Served by a service \{#service\}
 
-**Served by an action** names a [service](./services.md): its steps — queries, other endpoints, functions, conditions, loops — run on the server and answer as one endpoint. The endpoint's parameters are the service's inputs; what the service returns is the answer. It runs with the endpoint's permission: who may call the endpoint runs its steps. **Expose**, on the Services page, creates such an endpoint in one click.
+**Served by a service** names a [service](./services.md): its steps — queries, other endpoints, functions, conditions, loops — run on the server and answer as one endpoint. The endpoint's parameters are the service's inputs; what the service returns is the answer. It runs with the endpoint's permission: who may call the endpoint runs its steps. **Expose**, on the Services page, creates such an endpoint in one click.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Actions et cycle de vie
-description: "L'onglet Actions — hooks de dialogue (on_load / on_save / on_cancel), boutons de barre d'outils, hooks de ligne (on_insert / on_update / on_delete / on_duplicate), menu de ligne, types d'actions et leurs param_binds, saisies préalables, chaînes et actions partagées."
+description: "L'onglet Actions — hooks de dialogue (on_load / on_save / on_cancel), boutons de barre d'outils, hooks de ligne (on_insert / on_update / on_delete / on_duplicate), menu de ligne, types d'actions et leurs param_binds, saisies préalables, chaînes, traductions et services."
 keywords: [Liberty Next, actions, on_load, on_save, on_cancel, on_insert, on_update, on_delete, on_duplicate, run_query, call_api, call_plugin, call_action, navigate, chain, param_binds, prompt_fields]
 ---
 
@@ -164,14 +164,14 @@ Pour un clic simple sur une ligne, utiliser les réglages de **clic sur une lign
 
 ## Types d'actions \{#types\}
 
-Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'une chaîne), un **label** (texte du bouton) et **stop_on_error**.
+Chaque action porte un **id** (unique dans sa liste, et clé dans le contexte d'une chaîne), un **label** (texte du bouton), son libellé dans les autres langues ([Translations](#translations)) et **stop_on_error**.
 
 | Type | Rôle | Champs principaux |
 |---|---|---|
 | **`run_query`** | Exécute une requête d'un connecteur, en lecture ou en écriture. | `connector`, `query`, `param_binds`, `bind_result` |
 | **`call_api`** | Appelle un endpoint d'un connecteur API. | `connector`, `endpoint`, `param_binds`, `bind_result` |
 | **`call_plugin`** | Appelle une fonction Python côté serveur (`module:fonction`), les mêmes points d'entrée que les étapes Nomaflow. | `callable`, `param_binds`, `bind_result` |
-| **`call_action`** | Exécute une [action partagée](#shared) par son identifiant. | `ref`, `param_binds` |
+| **`call_action`** | Exécute un [service](#shared) par son identifiant. | `ref`, `param_binds` |
 | **`navigate`** | Ouvre une autre vue : un écran (`screen`) ou une requête (`to`), les `param_binds` lui étant transmis comme paramètres. | `connector`, `screen` ou `to`, `param_binds` |
 | **`open_url`** | Ouvre une adresse externe — une autre application sur la fiche de la ligne. | `url`, `new_tab` |
 | **`set_field`** | Écrit une valeur dans un champ du formulaire. | `target`, `value` ou `source` |
@@ -232,13 +232,103 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 
 Les valeurs saisies sont disponibles sous `INPUT.<nom>` pour l'action et pour toutes les étapes suivantes de la même chaîne. **Annuler** arrête la chaîne sans erreur.
 
+### Le libellé dans les autres langues \{#translations\}
+
+L'éditeur d'une action présente trois onglets sous sa cible : **General** (identifiant, libellé, arrêt en cas d'erreur), **Translations** et **Prompt**. **Translations** donne le libellé dans chacune des autres langues : une langue choisie dans la liste (`fr Français`), puis son texte ; **+ ajouter** pour une autre langue. L'utilisateur lit le libellé dans sa langue partout où l'action apparaît : entrée du menu de ligne, bouton de barre d'outils ou d'onglet, étape d'une chaîne. Sans ligne pour une langue, le libellé tel qu'écrit est affiché.
+
+<svg viewBox="0 0 1200 483" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="aclt-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="aclt-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="aclt-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="aclt-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="445" rx="14" fill="url(#aclt-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Menu contextuel de ligne</text>
+  <rect x="936" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="948.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <line x1="220" y1="64" x2="980" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="86" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">Menu contextuel de ligne</text>
+  <text x="381.91999999999996" y="86" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">›  Show orders</text>
+  <line x1="240" y1="94" x2="960" y2="94" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="112" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TYPE</text>
+  <rect x="240" y="117" width="720" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="131.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="249" y="131.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">navigate</text>
+  <text x="948" y="131.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="240" y="156" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TYPE DE CIBLE</text>
+  <rect x="240" y="161" width="720" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="175.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="249" y="175.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Écran</text>
+  <text x="948" y="175.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="240" y="200" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ÉCRAN</text>
+  <rect x="240" y="205" width="720" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="219.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="249" y="219.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="285.992" y="219.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Orders</text>
+  <text x="948" y="219.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="240" y="240" width="57" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="268.5" y="254.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="303" y="240" width="82" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="344.0" y="254.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
+  <rect x="391" y="240" width="52" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="417.0" y="254.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Prompt</text>
+  <line x1="240" y1="270" x2="960" y2="270" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="290" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TRANSLATIONS</text>
+  <rect x="240" y="295" width="259" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="309.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="249" y="309.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="264.664" y="309.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="487" y="309.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="505" y="295" width="427" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="515" y="309.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Afficher les commandes</text>
+  <rect x="938" y="295" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="949.0" y="309.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="324" width="59" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
+  <text x="249" y="336" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <text x="240" y="353" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The label per language (a row-menu entry, a button).</text>
+  <text x="240" y="379" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Liaisons de paramètres</text>
+  <rect x="240" y="389" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="403.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <rect x="448" y="389" width="76" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="467.0" y="403.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">val</text>
+  <rect x="487" y="390" width="36" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="505.0" y="403.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">src</text>
+  <rect x="530" y="389" width="430" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="540" y="403.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <line x1="220" y1="423" x2="980" y2="423" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="906" y="433" width="54" height="22" rx="5" fill="url(#aclt-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="933.0" y="447.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Fermer</text>
+  <rect x="20" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">L'action elle-même</text>
+  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">type et cible</text>
+  <line x1="200" y1="127.0" x2="240" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
+  <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet Translations</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à côté de General et Prompt</text>
+  <line x1="200" y1="253.0" x2="307" y2="251" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
+  <rect x="20" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Langue</text>
+  <text x="30" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par langue</text>
+  <line x1="200" y1="309.0" x2="240" y2="306" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
+  <rect x="1000" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le libellé dans cette langue</text>
+  <text x="1010" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">menu de ligne, bouton, étape</text>
+  <line x1="1000" y1="309.0" x2="800" y2="306" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
+  <rect x="1000" y="375" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="390" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En dessous : liaisons</text>
+  <text x="1010" y="403" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">comme sur l'onglet General</text>
+  <line x1="1000" y1="392.0" x2="920" y2="400" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
+</svg>
+
 ---
 
-## Actions partagées \{#shared\}
+## Services \{#shared\}
 
-Une action utilisée par plusieurs écrans se définit une seule fois dans **Liberty Next → Logique → Services** : un identifiant, un libellé, une description, des **params** déclarés, des **prompt_fields** facultatifs et ses **steps** (les mêmes types d'actions). La page liste les actions partagées avec **Find usages**, **Cloner** et **Supprimer** ; un clic sur une ligne ouvre le concepteur d'action.
+Une action utilisée par plusieurs écrans se définit une seule fois sous forme de **service**, dans **Liberty Next → Logique → Services** : un identifiant, un libellé, une description, des entrées déclarées et ses étapes (les mêmes types d'actions), dessinées en flux dans le concepteur de service — voir [Services](../services.md).
 
-Un écran l'exécute avec `call_action` : `ref` désigne l'action partagée, et ses `param_binds` alimentent les valeurs `INPUT.<param>` de l'action.
+Un écran l'exécute avec `call_action` : `ref` désigne le service (le champ s'intitule *Action partagée*), et ses `param_binds` alimentent les valeurs `INPUT.<param>` du service.
 
 ---
 

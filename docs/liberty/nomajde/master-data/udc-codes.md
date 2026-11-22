@@ -1,12 +1,12 @@
 ---
 title: UDC Code
-description: "Master Data → UDC → UDC Code in Nomajde: the values of every JD Edwards EnterpriseOne User Defined Code type (F0005) in one searchable grid — code, descriptions, special handling, hard-coded flag — with advanced filters and Excel export."
+description: "JD Edwards data → Master Data → UDC → UDC Code in Nomajde: the values of every JD Edwards EnterpriseOne User Defined Code type (F0005) in one searchable grid — code, descriptions, special handling, hard-coded flag — with advanced filters and Excel export."
 keywords: [Nomajde, UDC, User Defined Codes, JD Edwards, F0005, master data, code values]
 ---
 
 # UDC Code
 
-**Master Data → UDC → UDC Code** lists the values of the JD Edwards UDC types (F0005): the codes the JD Edwards forms check against, one row per product code, UDC type and code.
+**JD Edwards data → Master Data → UDC → UDC Code** lists the values of the JD Edwards UDC types (F0005): the codes the JD Edwards forms check against, one row per product code, UDC type and code.
 
 ---
 

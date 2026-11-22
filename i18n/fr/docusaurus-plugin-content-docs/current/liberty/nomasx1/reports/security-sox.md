@@ -209,7 +209,7 @@ L'audit lit les données que Nomasx-1 a déjà collectées pour l'application �
 - **Les rôles et affectations** — le catalogue des rôles et les affectations utilisateur ⟷ rôle.
 - **La sécurité des objets** — les droits du Security Workbench (exécution / ajout / modification / suppression, directs ou via `*ROLE`, et les droits `*PUBLIC`).
 - **Les tables de conflits SoD** — rafraîchies par `nomasx1-collect-all`, enrichies par la matrice et ses dimensions processus / activité / objet / risque.
-- **Le registre des applications** — pour la garde et le périmètre.
+- **Le registre des applications** — pour la page de garde et le périmètre. La base citée provient du pool désigné par l'application (le nom de service d'un pool Oracle, la base d'un annuaire), et le nom du pool est imprimé ; une application sans pool garde ce que porte sa ligne.
 
 Une exécution sur une application sans données collectées produit quand même le document, mais les sections concernées s'affichent vides plutôt que fausses.
 

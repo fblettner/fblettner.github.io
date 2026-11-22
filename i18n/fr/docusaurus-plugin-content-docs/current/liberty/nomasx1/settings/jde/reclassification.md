@@ -25,7 +25,7 @@ Chaque ligne dit : *pour cet objet, utiliser ce `SY` à la place du défaut*. Le
   <rect x="215" y="20" width="890" height="262" rx="14" fill="url(#jrc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings - Reclassification (JDE)</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres - Reclassification (JDE)</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <text x="233" y="96" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">192 lignes · 12 ms</text>
   <rect x="959" y="84" width="128" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -123,7 +123,7 @@ Chaque ligne dit : *pour cet objet, utiliser ce `SY` à la place du défaut*. Le
 
 ## Boîte de dialogue
 
-**Ajouter une ligne** rattache un nouvel objet à un autre code système ; un clic sur une ligne l'ouvre. **Importer** charge une liste depuis un fichier Excel ou `.csv`. La fenêtre, **Modifier · Settings - Reclassification (JDE)**, est un formulaire unique avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
+**Ajouter une ligne** rattache un nouvel objet à un autre code système ; un clic sur une ligne l'ouvre. **Importer** charge une liste depuis un fichier Excel ou `.csv`. La fenêtre, **Modifier · Paramètres - Reclassification (JDE)**, est un formulaire unique avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
 
 <svg viewBox="0 0 1320 353" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -134,7 +134,7 @@ Chaque ligne dit : *pour cet objet, utiliser ce `SY` à la place du défaut*. Le
   </defs>
 
   <rect x="215" y="20" width="890" height="272" rx="14" fill="url(#jrd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Settings - Reclassification (JDE)</text>
+  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Paramètres - Reclassification (JDE)</text>
   <rect x="1061" y="36" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1073.0" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <line x1="215" y1="68" x2="1105" y2="68" stroke="#1f2937" strokeWidth="1"/>

@@ -31,13 +31,13 @@ Local passwords are hashed (Argon2id). After ten failed sign-ins in five minutes
 
 ## Authorization \{#authorization\}
 
-A permission is a colon-separated string — `sql:sales:orders_get`, `api:crm:get_customer`, `menu:sales:orders`, `dashboard:sales.overview`, `ai:chat` — and a role is a list of them, allows and denies (`!…`). The role editor writes them from the menu tree.
+A permission is a colon-separated string — `sql:sales:orders_get`, `api:crm:get_customer`, `menu:sales:orders`, `dashboard:sales.overview`, `ai:chat` — and a role is a list of them, allows and denies (`!…`). The role editor writes them from the menu tree: a folder or entry in **Read** (`menu:<app>:<id>`) or in **Read and change** (`edit:<app>:<id>`), and the server works out what the screens under it need — their queries, lists and record-form tabs, and for change what they write and run. See [Roles and permissions](./roles-and-permissions.md#access).
 
 | Surface | Checked |
 |---|---|
-| Run a screen's read query, write a row | `sql:<connector>:<query>` of that query, then the data scope. |
+| Run a screen's read query, write a row | `sql:<connector>:<query>` of that query — held by name, or given by the screen's menu entry or folder (read for the read query, read and change for the writes) —, then the data scope. |
 | Call an API endpoint | `api:<connector>:<endpoint>`. |
-| See a menu entry | The permission of what the entry runs, or an explicit `menu:` allow; a `menu:` or `dashboard:` deny hides it. |
+| See a menu entry | The entry, or its folder, in **Read** or **Read and change** (a job entry: **Read and change**), or the permission of what the entry runs; a `menu:` or `dashboard:` deny hides it. |
 | Use the assistant | `ai:chat`; the assistant's queries are filtered by the data scope. |
 | The Liberty Next pages, Monitoring, Nomaflow, change packages | **Superuser** only. |
 

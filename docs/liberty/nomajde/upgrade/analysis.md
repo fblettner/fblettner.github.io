@@ -1,12 +1,12 @@
 ---
-title: Upgrade analysis
-description: "The Upgrade page of Nomajde: load the object list Oracle publishes for a JD Edwards EnterpriseOne release or update, run the analysis of a path code, and follow on one page what has to be retrofitted, how complex it is, how many days it takes, in which order, who does it and how far it is — with the dependencies, the user defined objects to test again, the objects left in other path codes and Oracle's list."
+title: Prepare for upgrade
+description: "The Prepare for upgrade page of Nomajde: load the object list Oracle publishes for a JD Edwards EnterpriseOne release or update, run the analysis of a path code, and follow on one page what has to be retrofitted, how complex it is, how many days it takes, in which order, who does it and how far it is — with the dependencies, the user defined objects to test again, the objects left in other path codes and Oracle's list."
 keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release, update, UN9, path code, Object Librarian, custom objects, complexity, days, waves, dependencies, cross reference, UDO, user defined objects]
 ---
 
-# Upgrade analysis
+# Prepare for upgrade
 
-**Upgrade**, right under **Cross Reference** in the Nomajde menu, answers the first question of a JD Edwards EnterpriseOne upgrade or update: **what has to be retrofitted, and for how many days?** Nomajde reads the customer's objects of a path code, compares them with the list of objects Oracle changed in the target release, and gives each object a kind, a retrofit decision, a complexity and a number of days. Everything then sits on one page: the work and the progress in figures, where the work is (type, complexity, status, person), in which order to do it, and five tabs — **Overview**, **Objects**, **User defined objects**, **Other path codes**, **Oracle's list**. JD Edwards is only read; the analysis and the planning are kept in Nomajde's own database.
+**Prepare for upgrade**, right under **Platform synthesis** in the Nomajde menu, answers the first question of a JD Edwards EnterpriseOne upgrade or update: **what has to be retrofitted, and for how many days?** Nomajde reads the customer's objects of a path code, compares them with the list of objects Oracle changed in the target release, and gives each object a kind, a retrofit decision, a complexity and a number of days. Everything then sits on one page: the work and the progress in figures, where the work is (type, complexity, status, person), in which order to do it, and five tabs — **Overview**, **Objects**, **User defined objects**, **Other path codes**, **Oracle's list**. JD Edwards is only read; the analysis and the planning are kept in Nomajde's own database.
 
 ---
 
@@ -21,7 +21,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release,
   </defs>
 
   <rect x="220" y="20" width="880" height="424" rx="14" fill="url(#upa-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Upgrade</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Prepare for upgrade</text>
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PD920 against UN9 · analysed 2026-11-22 — What there is to retrofit for the release…</text>
   <rect x="1005" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
@@ -267,7 +267,7 @@ The waves need the links between the customer's objects. When none is known, **I
   </defs>
 
   <rect x="220" y="20" width="880" height="384" rx="14" fill="url(#upb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Upgrade</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Prepare for upgrade</text>
   <rect x="240" y="60" width="456" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="267.5" y="73.0" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Overview</text>
   <rect x="296" y="61" width="80" height="18" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
@@ -639,7 +639,7 @@ An object Oracle did not change is `Not updated`: nothing to retrofit. For the o
 
 ## Summaries \{#summaries\}
 
-The [Data Explorer](../data-explorer.md) model **Upgrade analysis** gives the totals, with four saved analyses: *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*. The Nomajde [home page](../home.md) shows the number of objects to retrofit, the days by object type and the objects by complexity.
+The [Data Explorer](../data-explorer.md) model **Upgrade analysis** gives the totals, with four saved analyses: *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*. The Nomajde [Overview](../home.md) leads here from its *Prepare for upgrade* group.
 
 ---
 
@@ -658,7 +658,7 @@ The page shows to the roles that hold its menu entry, with the permissions `page
 - Before the tests, export the **User defined objects** tab on **Yours**: each line is a screen to check again after the upgrade.
 - Collect the cross reference in Nomasx-1 before running the analysis: the waves, **Waits for** and the UDOs depend on it.
 - Export the **Objects** tab to share the plan: the dependencies travel as columns.
-- The AI assistant knows the procedure: ask it to *prepare an upgrade* and it runs the two jobs and reads the result with you.
+- The AI assistant knows the procedure: ask it to *prepare an upgrade* and it runs the two jobs and reads the result with you. It also knows the tab, the filter and the object open on the page: *Which objects can be started now?* — see [AI assistant](../ai-assistant.md).
 
 ---
 

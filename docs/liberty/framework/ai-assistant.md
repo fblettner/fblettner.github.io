@@ -175,17 +175,19 @@ While a data screen is the active tab, every message carries what the user is lo
 
 On the **Data Explorer** page, the context is the model and the analysis on the canvas (entity, rows, measures, period) or the saved analysis open: *Save this as an analysis* or *Make a dashboard of these* need no further explanation.
 
+On a page an application ships (see [Pages an application ships](./apps/plugins.md#pages)), the page itself says what the user is looking at: a title and a few facts — the object open, the tab, a filter, never rows. A question about *this* then needs no name there either.
+
 A line under the drawer's header shows what is sent — *Page: orders · filters: 2 · the clicked row*, with the screen's identifier. Its **×** stops sending the page for as long as the user stays on it. The context is limited to 4,000 characters.
 
 ---
 
 ## Starter questions \{#starters\}
 
-On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen (or of the Data Explorer page), else those of the application, else those set for everywhere — the most specific place that has questions wins. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place. When an application ships its questions in several languages, the drawer shows them in the user's language.
+On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen (or of the Data Explorer page, or of the page an application ships), else those of the application, else those set for everywhere — the most specific place that has questions wins. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place. When an application ships its questions in several languages, the drawer shows them in the user's language.
 
 Questions come from two sources:
 
-- **Liberty Next → Logic → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
+- **Liberty Next → Logic → AI**: the questions an application ships, per application, by heading and per screen, in each language — see [below](#settings-ai);
 - **Liberty Next → Administer → App → AI Assistant → Starter questions**: the operator's own, for everywhere, an application or an *application/screen*. They win over the application's questions for the same place.
 
 ---
@@ -259,7 +261,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
 
 ## Liberty Next → Logic → AI \{#settings-ai\}
 
-<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 614" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="aip-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="aip-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -267,7 +269,7 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
     <marker id="aip-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="432" rx="14" fill="url(#aip-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="760" height="574" rx="14" fill="url(#aip-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="12" fontFamily="system-ui, sans-serif">✦</text>
   <text x="258" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">AI</text>
   <rect x="867" y="31" width="93" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -287,72 +289,90 @@ A **playbook** is a step-by-step procedure an application ships for the assistan
   <rect x="381.16" y="76" width="74" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="418.16" y="89.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add scope</text>
   <text x="240" y="114" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">What the application ships for the assistant — starter questions for the app and for its screens.</text>
-  <rect x="240" y="124" width="720" height="82" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="142" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✦ Starter questions anywhere in sales</text>
-  <text x="254" y="160" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">How many open orders per company this month?</text>
-  <text x="944" y="160" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
-  <text x="254" y="176" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Which customers have not ordered since June?</text>
-  <text x="944" y="176" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="254" y="182" width="652" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="264" y="194.5" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">A question the user can click…</text>
-  <rect x="240" y="216" width="720" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="234" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">▤ Starter questions per screen</text>
-  <rect x="820" y="222" width="124" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="830" y="235.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ a screen… ▾</text>
-  <text x="254" y="260" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">orders</text>
-  <text x="300" y="260" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">— Orders</text>
-  <text x="254" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Which order of this list is the oldest?</text>
-  <rect x="240" y="296" width="720" height="74" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="314" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Playbooks</text>
-  <rect x="313.88" y="302" width="84" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="355.88" y="314.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add playbook</text>
-  <text x="254" y="340" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">close_period — Close a period</text>
-  <text x="254" y="354" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">When the accounting period of a company is closed.</text>
-  <rect x="840" y="334" width="39" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="859.5" y="346.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit</text>
-  <rect x="894" y="334" width="48" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="918.0" y="346.5" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
-  <rect x="240" y="380" width="720" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="398" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Tools</text>
-  <rect x="292.6" y="386" width="66" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="325.6" y="398.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add tool</text>
-  <text x="254" y="422" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">No tool yet.</text>
-  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One scope per app</text>
-  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">∗ = everywhere</text>
-  <line x1="200" y1="87.0" x2="276.16" y2="97" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
-  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">App questions</text>
-  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">offered everywhere in it</text>
-  <line x1="200" y1="167.0" x2="254" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
-  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per screen</text>
-  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the most specific place wins</text>
-  <line x1="200" y1="267.0" x2="254" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
-  <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Playbooks</text>
-  <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">picked by their title</text>
-  <line x1="200" y1="347.0" x2="254" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
-  <rect x="1000" y="28" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="43" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Discard · Save</text>
-  <text x="1010" y="56" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">save writes and reloads</text>
-  <line x1="1000" y1="45.0" x2="960" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="240" y="126" width="720" height="50" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="252" y="146" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">文A  Language</text>
+  <rect x="728" y="134" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="738" y="148.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="737" y="148.3" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">fr</text>
+  <text x="752.664" y="148.3" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">French</text>
+  <text x="936" y="148.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="252" y="166" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">The questions shown to the users whose language is French. A list left empty here shows the one as written.</text>
+  <rect x="240" y="188" width="720" height="74" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="206" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✦  Starter questions anywhere in sales</text>
+  <text x="252" y="224" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Quelles commandes sont en retard ?</text>
+  <text x="948" y="224" fill="#94a3b8" fontSize="8.6" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="252" y="232" width="672" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="246.5" fill="#475569" fontSize="8.6" fontFamily="system-ui, sans-serif">A question the user can click…</text>
+  <rect x="930" y="232" width="20" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="940.0" y="246.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="240" y="274" width="720" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="292" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">☰  Starter questions by heading</text>
+  <rect x="855" y="281" width="93" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="901.5" y="295.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add a heading</text>
+  <text x="252" y="310" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">The chat shows the headings, then the picked heading's questions. When headings are set, they are shown instead of the list above.</text>
+  <rect x="252" y="320" width="696" height="72" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="264" y="328" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="274" y="342.5" fill="#94a3b8" fontSize="8.8" fontFamily="system-ui, sans-serif">Commandes</text>
+  <rect x="914" y="328" width="22" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="925.0" y="342.5" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="264" y="366" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Quelles commandes sont en retard ?</text>
+  <text x="264" y="382" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Quel client a le plus commandé ce mois-ci ?</text>
+  <rect x="240" y="414" width="720" height="84" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="432" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">▤  Starter questions per screen</text>
+  <rect x="728" y="420" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="738" y="434.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="737" y="434.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">+ a screen…</text>
+  <text x="936" y="434.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="252" y="444" width="696" height="44" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="264" y="461" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="303.992" y="461" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">— Orders</text>
+  <text x="264" y="478" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Pourquoi cette commande est-elle bloquée ?</text>
+  <rect x="240" y="510" width="720" height="30" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="529" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">📖  Playbooks</text>
+  <rect x="240" y="548" width="720" height="30" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="567" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">🔧  Tools</text>
   <rect x="1000" y="72" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="87" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add scope</text>
   <text x="1010" y="100" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">another application</text>
   <line x1="1000" y1="89.0" x2="455.16" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
-  <rect x="1000" y="386" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="401" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tools</text>
-  <text x="1010" y="414" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">plugin functions, read-only</text>
-  <line x1="1000" y1="403.0" x2="960" y2="404" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="135" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="150" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
+  <text x="30" y="163" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">as written, or another language</text>
+  <line x1="200" y1="152.0" x2="240" y2="145" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="155" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="170" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Empty list in a language</text>
+  <text x="1010" y="183" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">= the one as written</text>
+  <line x1="1000" y1="172.0" x2="840" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="204" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="219" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Everywhere in the app</text>
+  <text x="30" y="232" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the default questions</text>
+  <line x1="200" y1="221.0" x2="240" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="329" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="344" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Headings</text>
+  <text x="30" y="357" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">grouped questions, shown first</text>
+  <line x1="200" y1="346.0" x2="264" y2="339" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="359" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="374" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">+ Add a heading</text>
+  <text x="1010" y="387" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a label and its questions</text>
+  <line x1="1000" y1="376.0" x2="900" y2="299" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="446" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="461" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per screen</text>
+  <text x="30" y="474" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the most specific place wins</text>
+  <line x1="200" y1="463.0" x2="264" y2="462" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="534" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="549" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Playbooks, tools</text>
+  <text x="1010" y="562" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the same for every language</text>
+  <line x1="1000" y1="551.0" x2="960" y2="558" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
 </svg>
 
 **Liberty Next → Logic → AI** edits what each application ships for the assistant; **Discard** and **Save** are in the page header. The **App** row lists the applications that already have some, plus `*` for everywhere; **Add scope** picks another one. For each:
 
 | Part | Content |
 |---|---|
+| **Language** | The language whose questions are shown and edited: **As written** (the questions as the application ships them), or another language — then the lists below are the questions shown to the users of that language. A list left empty in a language shows the one as written. Shown when the interface has another language than the one the configuration is written in. |
 | **Starter questions anywhere in** *app* | The questions offered everywhere in the application. |
-| **Starter questions per screen** | **+ a screen…** adds a screen and its own questions. |
+| **Starter questions by heading** | **Add a heading**: a **Heading** and its questions. The chat shows the headings first, then the questions of the heading picked; when headings are set, they are shown instead of the list above. *No heading: the chat shows the list above.* |
+| **Starter questions per screen** | **+ a screen…** adds a screen — or a page the application ships, by its name — and its own questions. A screen taken out leaves every language with it. |
 | **Playbooks** | **Add playbook**: an **Id** (letters, digits, `_` and `-`, unique in the application), a **Title** — what the procedure achieves, the assistant picks a playbook by it —, **When it applies** (one line, optional) and **The procedure** in Markdown. |
 | **Tools** | **Add tool**: an **Id** (lowercase letters, digits and `_`, unique in the application — the assistant sees the tool as `<app>_<id>`), the **Function (module:function)** — one of the entry points of the application's [plugins](./build/plugins/overview.md), whose parameters become the tool's arguments —, the **Description** (what it answers and when to use it: the assistant picks a tool by it) and the **Permission the user needs** (blank: the function's own). A tool must not change anything. Tools belong to an application: none on the `*` scope. |
 

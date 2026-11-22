@@ -670,5 +670,9 @@
   "sidebar.nomajdeSidebar.category.JD Edwards services (AIS)": {
     "message": "Services JD Edwards (AIS)",
     "description": "The label for category 'JD Edwards services (AIS)' in sidebar 'nomajdeSidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.JD Edwards data": {
+    "message": "Données JD Edwards",
+    "description": "The label for category 'JD Edwards data' in sidebar 'nomajdeSidebar'"
   }
 }

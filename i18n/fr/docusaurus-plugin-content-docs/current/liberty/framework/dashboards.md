@@ -525,11 +525,12 @@ Un clic sur une ligne, ou **Ajouter un tableau de bord**, ouvre l'éditeur sur t
 
 | Partie | Contenu |
 |---|---|
-| **Titre**, **Description** | Affichés en tête du tableau de bord. |
+| **Titre**, **Description** | Affichés en tête du tableau de bord ; le bloc *Dans les autres langues* placé dessous les donne dans les autres langues — voir [Textes dans les autres langues](#languages). |
+| **Garder tel quel à la mise à jour (une mise à jour de l'application le laisse alors tel qu'enregistré ici)** | Cochée, cette case protège le tableau de bord : une mise à jour de l'application qui le livre le laisse tel qu'enregistré ici. |
 | **Ajouter un widget** | Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches** : la fenêtre du widget s'ouvre sur ce type, et **Annuler** ne laisse rien derrière soi. |
 | La grille | Les vrais widgets, dessinés avec leurs données comme sur le tableau de bord, chacun sous son libellé. Au survol, une carte affiche ses outils : la **poignée**, sa taille (`4 × 1`, colonnes × lignes), **✎** pour la modifier et la corbeille pour la retirer. Une carte se déplace par **glisser-déposer** — sa poignée glissée sur une autre carte, une barre indiquant le côté où elle sera déposée — et se dimensionne par son **coin inférieur droit**, en colonnes (1 à 12) et en lignes (1 à 8) entières. La poignée répond aussi au clavier : les flèches déplacent la carte, Maj + flèches la dimensionnent. |
 | **Période** | **Ajouter une période** / **Retirer la période** : **S'ouvre sur** (un préréglage, ou *Valeur de l'application (Liberty Next → Administrer → App)*), **Colonne de date** ou **ou élément du dictionnaire**, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
-| **Filtres** | **Ajouter un filtre** : **Id**, **Libellé**, **Clé du dictionnaire**, puis le **Connecteur**, la **Requête**, la **Colonne valeur** et la **Colonne libellé** qui remplissent la liste déroulante. Sous chaque filtre, *Atteint : …* nomme les widgets qu'il filtre — voir [Filtres](#filters). |
+| **Filtres** | **Ajouter un filtre** : **Id**, **Libellé**, **Clé du dictionnaire**, puis le **Connecteur**, la **Requête**, la **Colonne valeur** et la **Colonne libellé** qui remplissent la liste déroulante. Sous chaque filtre, *Atteint : …* nomme les widgets qu'il filtre — voir [Filtres](#filters) —, et un bloc *Dans les autres langues* donne son libellé dans les autres langues. Un filtre sans identifiant ou sans libellé bloque l'enregistrement : *Un filtre n'a pas encore d'identifiant ou de libellé : complétez-le ou retirez-le.* |
 
 Le pied de l'éditeur compte les widgets et porte **Annuler** et **Enregistrer**. Fermer l'éditeur avec des modifications non enregistrées propose de les enregistrer, de les abandonner ou de continuer à modifier.
 
@@ -537,7 +538,119 @@ Le pied de l'éditeur compte les widgets et porte **Annuler** et **Enregistrer**
 
 Le **✎** d'une carte ouvre la fenêtre **Widget** : les neuf types en onglets en haut — un widget peut changer de type —, puis **Libellé**, **Largeur (1–12)**, **Hauteur (lignes)**, **Sous-titre**, le connecteur et la requête, et les champs propres au type (voir [Widgets](#widgets)). Sous les champs, un aperçu dessine le widget avec ses données dès que les champs requis sont renseignés. Le pied de la fenêtre affiche le type du widget (`stat`, `list`…) à gauche, **Annuler** et **Enregistrer** à droite.
 
-Un tableau de bord s'affiche dans la langue de l'utilisateur : son titre, sa description, les libellés des filtres et les textes des widgets peuvent porter une version française, et une liste peut lire ses titres dans une colonne française de sa requête.
+### Textes dans les autres langues \{#languages\}
+
+Un tableau de bord s'affiche dans la langue de l'utilisateur. Chaque texte qu'il présente se saisit dans les autres langues directement dans l'éditeur, dans un bloc **Dans les autres langues** placé sous le champ : une ligne par langue, une case par texte. Une case laissée vide affiche le texte tel qu'écrit (*Laissé vide, le texte ci-dessus est affiché.*).
+
+<svg viewBox="0 0 1200 422" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dbl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dbl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dbl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dbl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="380" rx="14" fill="url(#dbl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <line x1="220" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITRE</text>
+  <rect x="240" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="606.0" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <rect x="606.0" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="616.0" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Orders, revenue and margin of the month</text>
+  <rect x="240" y="124" width="720" height="58" rx="8" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 3"/>
+  <text x="250" y="139" fill="#94a3b8" fontSize="7.6" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">DANS LES AUTRES LANGUES</text>
+  <text x="389.25440000000003" y="139" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">Laissé vide, le texte ci-dessus est affiché.</text>
+  <text x="250" y="169" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="326.0" y="152" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Titre</text>
+  <rect x="326.0" y="156" width="308" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="336.0" y="169.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Vue d'ensemble des ventes</text>
+  <text x="642.0" y="152" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Description</text>
+  <rect x="642.0" y="156" width="308" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652.0" y="169.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Commandes, chiffre d'affaires et marge du mois</text>
+  <rect x="240" y="195" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="257" y="204" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Garder tel quel à la mise à jour (une mise à jour de l'application le laisse alors tel qu'enregistré ici)</text>
+  <text x="240" y="237" fill="#94a3b8" fontSize="8.6" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter un widget :</text>
+  <rect x="341.504" y="222" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="373.504" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Graphique</text>
+  <rect x="411.504" y="222" width="36" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="429.504" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">KPI</text>
+  <rect x="453.504" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="476.004" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Table</text>
+  <rect x="504.504" y="222" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="532.004" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Chiffre</text>
+  <rect x="565.504" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="588.004" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Liste</text>
+  <rect x="616.504" y="222" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="641.504" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Barres</text>
+  <rect x="672.504" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="695.004" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Texte</text>
+  <rect x="723.504" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="746.004" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Liens</text>
+  <rect x="774.504" y="222" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="799.504" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Tâches</text>
+  <line x1="220" y1="252" x2="980" y2="252" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="266" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Widget — Chiffre</text>
+  <text x="240" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIBELLÉ</text>
+  <rect x="240" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Orders</text>
+  <text x="484.0" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SOUS-TITRE</text>
+  <rect x="484.0" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="494.0" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">This month</text>
+  <text x="728.0" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIGNE SECONDAIRE</text>
+  <rect x="728.0" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="738.0" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">&#123;AMOUNT:integer&#125; €</text>
+  <rect x="240" y="324" width="720" height="58" rx="8" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 3"/>
+  <text x="250" y="339" fill="#94a3b8" fontSize="7.6" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">DANS LES AUTRES LANGUES</text>
+  <text x="389.25440000000003" y="339" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">Laissé vide, le texte ci-dessus est affiché.</text>
+  <text x="250" y="369" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">Français</text>
+  <text x="326.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Libellé</text>
+  <rect x="326.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="336.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Commandes</text>
+  <text x="484.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Sous-titre</text>
+  <rect x="484.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="494.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Ce mois-ci</text>
+  <text x="642.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Ligne secondaire</text>
+  <rect x="642.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif"></text>
+  <text x="800.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Unité</text>
+  <rect x="800.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Titre et description</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tels qu'écrits</text>
+  <line x1="200" y1="101.0" x2="240" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="142" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="157" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dans les autres langues</text>
+  <text x="30" y="170" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par langue</text>
+  <line x1="200" y1="159.0" x2="240" y2="154" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="1000" y="142" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="157" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Vide = le texte du dessus</text>
+  <text x="1010" y="170" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rien à saisir deux fois</text>
+  <line x1="1000" y1="159.0" x2="920" y2="172" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="182" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="197" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Garder à la mise à jour</text>
+  <text x="30" y="210" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la mise à jour n'y touche pas</text>
+  <line x1="200" y1="199.0" x2="240" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="336" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="351" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Chaque carte aussi</text>
+  <text x="30" y="364" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ses propres textes, selon le type</text>
+  <line x1="200" y1="353.0" x2="240" y2="352" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="1000" y="336" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="351" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Champs selon le type</text>
+  <text x="1010" y="364" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ligne secondaire, unité, note…</text>
+  <line x1="1000" y1="353.0" x2="900" y2="374" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+</svg>
+
+| Emplacement | Ce que donne le bloc |
+|---|---|
+| Le tableau de bord | Son **Titre** et sa **Description**. |
+| Un widget (sa fenêtre) | Son **Libellé** et son **Sous-titre**, puis selon le type : la **Ligne secondaire** et l'**Unité** d'un Chiffre ; le **Libellé du compte**, l'**Unité**, la **Colonne de titre**, la **Colonne de sous-titre** et la **Colonne d'étiquette (une pastille)** d'une Liste ; la **Note sous les barres**, l'**Unité**, la **Colonne de libellé** et la **Colonne de sous-libellé** des Barres ; le **Texte (Markdown)** d'un Texte. |
+| Un lien d'un widget Liens | Son **Libellé** et sa **Description**. |
+| Un filtre | Son **Libellé**. |
+
+Une colonne saisie dans une autre langue désigne la colonne à lire pour les utilisateurs de cette langue — pour une requête qui renvoie une colonne par langue (`TITLE`, `TITLE_FR`).
 
 Pour rendre le tableau de bord accessible, ajouter une entrée **dashboard** à un menu ([Menus](./build/menus/item-types.md)) ; sa permission est `dashboard:<application>.<id>`.
 

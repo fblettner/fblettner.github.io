@@ -1,6 +1,6 @@
 ---
 title: Jobs
-description: "The Jobs folder of the Nomasx-1 menu: collect the security and segregation-of-duties data or the licence data of one or several applications, render the licence audit and the Security & SoD assessment and mail them — run on demand with a live log, or monthly on a schedule. The auditor and administrator roles."
+description: "The Jobs folder of the Nomasx-1 menu: collect the security and segregation-of-duties data or the licence data of one or several applications, render the licence audit and the Security & SoD assessment and mail them — run on demand with a live log, or monthly on a schedule. The four predefined roles."
 keywords: [Nomasx-1, jobs, collect security, segregation of duties, collect licences, licence audit report, security SoD report, monthly report, several applications, roles, auditor]
 ---
 
@@ -24,7 +24,7 @@ The **Jobs** folder, at the bottom of the Nomasx-1 menu, lets the compliance tea
 After a collection, **Last Refresh** and the *Data freshness* list of the [Audit synthesis](./audit-synthesis.md) show the new date. On **Last Refresh**, the lines are grouped by module, and a click on a line opens the run that collected it.
 
 :::info[JDE-specific]
-The collections read JD Edwards EnterpriseOne. For another source system, the collection is the one its connector provides.
+The built-in collections read JD Edwards EnterpriseOne. Another application gives its users, roles, assignments, menus and rights through its own [custom queries](./settings/global/custom-queries.md) — segregation of duties then runs on it too; the licence collections stay JD Edwards only.
 
 The effective rights include the access paths of the user defined objects: a composite page gives the applications and reports its tiles open, the forms its panes show and the tasks of its menu; an E1 page gives the applications and reports its content calls. The other user defined objects — orchestrations, service requests, notifications… — give no access path. The rights, the segregation-of-duties conflicts and the licence figures that follow from them take these paths into account. Which pages are read depends on the **E1 Composite** and **E1 Pages** flags of the [application](./settings/global/applications.md): switching one on or off changes these figures at the next collection.
 :::
@@ -47,13 +47,17 @@ The operators schedule the same jobs in Nomaflow: the collection every night on 
 
 ## Who may run them \{#access\}
 
-An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own.
+An entry shows to whoever may run its job: a role that sets the entry, or its folder, to **Read and change** — or that holds the `job:<id>` permission. *Read* alone never shows it. Each holder sees every run of the job, not only their own.
 
-Nomasx-1 delivers two roles, created by a job the administrator runs once after the install and after each upgrade:
+Nomasx-1 ships four predefined roles; the auditor and the two managers run the reports and collections of their part, the administrator every job:
 
 | Role | For |
 |---|---|
-| `nomasx1_auditor` | Reading every screen, dashboard and Explorer model, the AI assistant, and running the two reports; it receives the monthly reports. |
-| `nomasx1_admin` | Everything, the settings and every Nomasx-1 job included. |
+| **Auditor** (`nomasx1_auditor`) | Reads everything and runs the two audit reports. Changes no setting. The monthly reports are mailed to it. |
+| **Security officer** (`nomasx1_security_officer`) | Security and segregation of duties in read and change, with their settings, the security collection and its report. The rest in read. |
+| **Licence manager** (`nomasx1_licence_manager`) | Licences and database in read and change, with the licence settings, the licence collection and its report. The rest in read. |
+| **Administrator** (`nomasx1_admin`) | Everything in the application: read and change, the settings and the jobs of its menu included. |
 
-Assign them to users under **Liberty Next → Administer → Access**. See [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles).
+Each role names menu folders, so it follows them when a version adds screens to a folder. A person may hold several — a security officer who is also the licence manager: the rights add up.
+
+Add them one at a time under **Liberty Next → Administer → Access → Roles → Add a predefined role…** (see [Predefined roles](../framework/build/secure/roles-and-permissions.md#predefined)), or all four at once with the [`nomasx1-roles`](../nomaflow/bundled-jobs.md#nomasx1-roles) job, which also gives the administrator every `nomasx1-*` job. Run again, the job puts the shipped rights back on a role changed in Access; users are not touched.

@@ -484,7 +484,7 @@ L'application se choisit en haut à gauche. À côté se trouvent la zone de rec
 
 | Colonne | Contenu |
 |---|---|
-| **Menu** | Les entrées du menu de l'application, dans son ordre : les entrées d'un dossier sont décalées sous lui ; l'icône distingue un dossier, un écran et un tableau de bord. |
+| **Menu** | Les entrées du menu de l'application, dans son ordre : les entrées d'un dossier sont décalées sous lui ; l'icône distingue un dossier, un écran et un tableau de bord. Son compteur donne le nombre d'entrées, comme la carte de la vue d'ensemble — les dossiers n'y figurent pas. |
 | **Écrans** | Ses écrans, chacun avec son libellé et son identifiant. Des icônes signalent *A une fiche* et *Lecture seule*. |
 | **Données** | Les requêtes (icône de base de données) et les points d'accès (icône de globe) utilisés par ses écrans, chacun avec son libellé et sa clé `connecteur.nom`. Un crayon marque ce qui *modifie des données*. |
 | **Services** | Les services appelés par ses écrans, avec leur identifiant. **Tous les services…** ouvre la page [Services](./build/services.md). |
@@ -508,7 +508,7 @@ Le Studio signale ce qu'une application porte pour rien, et ce qui est cassé :
 | **Afficher les N qu'aucun écran n'utilise** (en bas de la colonne Données) | Liste les requêtes et les points d'accès de l'application qu'aucun écran n'utilise ; **Masquer les N qu'aucun écran n'utilise** les replie. |
 | Pastille orange en haut | Le nombre d'écrans que rien n'ouvre. |
 
-La pastille d'intégrité, à côté, ouvre le contrôle complet.
+Un écran est ouvert par une entrée de menu (l'écran lui-même, ou une requête qu'il lit), par un autre écran (son clic sur une ligne, un onglet de sa fiche, une action `navigate`) ou par une [entité de l'Explorateur](./explorer/model.md) qui le désigne. La règle est celle de **Déployer → Intégrité** : un écran que le Studio dit n'être ouvert par rien est l'écran orphelin que signale l'Intégrité. La pastille d'intégrité, à côté, ouvre le contrôle complet.
 
 ### Modifier sur place \{#edit\}
 
@@ -531,7 +531,7 @@ Les éditeurs s'ouvrent **par-dessus la carte** et y reviennent ; la carte est a
 | **Modifier le point d'accès** | L'[éditeur de point d'accès](./build/api-endpoints.md). |
 | **Concevoir le flux** (ou un double-clic sur un service) | Le [concepteur de service](./build/services.md) : le flux de **Début** à **Réponse**, avec à droite le libellé, la description et les entrées du service. |
 | **Exécuter** | Exécute le service tel qu'il est enregistré, avec les entrées saisies, et affiche sa réponse ; ses étapes s'exécutent réellement. |
-| **Modifier le menu**, un tableau de bord | L'éditeur des menus ou des tableaux de bord, dans une fenêtre fermée par **Fermer**. |
+| **Modifier le menu**, un tableau de bord | L'éditeur des menus, ouvert sur l'application affichée, ou celui des tableaux de bord, dans une fenêtre fermée par **Fermer**. |
 
 **Ouvrir l'écran** quitte le Studio pour l'écran lui-même.
 
@@ -540,7 +540,7 @@ Les éditeurs s'ouvrent **par-dessus la carte** et y reviennent ; la carte est a
 ## Conseils & bonnes pratiques \{#tips\}
 
 - Ouvrir le Studio **avant** de modifier une requête ou un service partagé : les éléments éclairés forment le plan de test.
-- Traiter les éléments isolés avant une livraison — un écran que rien n'ouvre est soit une entrée de menu manquante, soit de la configuration morte. Un écran ouvert seulement par une [entité de l'Explorateur](./explorer/model.md) apparaît encore ici, alors que **Déployer → Intégrité** le compte comme atteint.
+- Traiter les éléments isolés avant une livraison — un écran que rien n'ouvre est soit une entrée de menu manquante, soit de la configuration morte.
 - Pour découvrir une application, sélectionner ses entrées de menu une à une : la carte lui sert de documentation.
 - Le Studio traite une application à la fois ; **Rechercher les usages**, dans chaque éditeur, parcourt toute l'installation.
 

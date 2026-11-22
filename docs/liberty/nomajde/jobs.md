@@ -36,7 +36,7 @@ Runs the health check of the JD Edwards servers through Server Manager at once, 
 
 ## Upgrade and tests \{#upgrade-tests\}
 
-The two jobs of the upgrade analysis are started from the **Upgrade** page, with **Load Oracle's list** and **Run the analysis** — see [Upgrade analysis](./upgrade/analysis.md#steps). **Tests → Run the tests** sits in the Tests folder of the menu — see [Non-regression tests](./tests.md#job).
+The two jobs of the upgrade analysis are started from the **Prepare for upgrade** page, with **Load Oracle's list** and **Run the analysis** — see [Prepare for upgrade](./upgrade/analysis.md#steps). **Tests → Run the tests** sits in the Tests folder of the menu — see [Non-regression tests](./tests.md#job).
 
 ---
 
@@ -55,4 +55,4 @@ The same AIS calls — and a few more: count rows, call a business function, run
 
 ## Who may run them \{#access\}
 
-An entry shows to the holders of the `job:<id>` permission (rule type **Job** in a role's *Beyond the menus* rules). Each holder sees every run of the job, not only their own.
+An entry shows to whoever may run the job: a role that sets the entry — or its folder — to **Read and change**, or that holds the `job:<id>` permission (rule type **Job** in its *Beyond the menus* rules). **Read** alone never shows it: reading never starts anything. Each person who may run the job sees every run of it, not only their own.

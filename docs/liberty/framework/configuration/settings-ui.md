@@ -171,7 +171,7 @@ The menu opens on **Overview** and then follows the order an application is buil
 | | **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
 | | **Report templates** | The report templates written by the operators; the PDF branding of the install is under App. | [Report templates](../report-templates.md) |
 | **Administer** | **App** | Every setting of the install, in four groups: the installation, signing in, what is switched on, running it. | [App settings](../build/settings-app.md) |
-| | **Pools** | Database connections: address, account, schemas, database links, tuning — with **Test connection**. | [Connectors](../connectors.md) |
+| | **Pools** | The installation's connections — databases, HTTP servers, LDAP directories: address, account, schemas, database links, tuning — with **Test connection**. | [Connectors](../connectors.md) |
 | | **Access** | Users and roles. | [Users](../build/secure/users.md), [Roles and permissions](../build/secure/roles-and-permissions.md) |
 | | **Theme** | Palette, fonts and text size, previewed in dark and in light. | — |
 | **Operate** | **Test results** | How the tests went, run after run. | [Test results](../../monitoring/test-results.md) |

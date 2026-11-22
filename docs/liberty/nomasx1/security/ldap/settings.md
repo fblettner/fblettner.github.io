@@ -8,7 +8,7 @@ keywords: [Nomasx-1, security, LDAP, settings, AD department grouping, Excel exp
 
 The **LDAP Settings** screen is the grouping table behind the *Users by applications* view. Each row associates an **AD department** with an **application** and a free-form **group** label.
 
-The same grouping shapes the Excel export of *Users by applications* — filtered on a group or a department, **Export → Excel (.xlsx)** gives the file auditors usually request to confirm *"who is in which AD department, on which application, with which roles"*.
+The same grouping shapes the Excel export of *Users by applications* — **Export workbooks** gives one file per group, one sheet per application: the files auditors usually request to confirm *"who is in which AD department, on which application, with which roles"*.
 
 ---
 
@@ -113,7 +113,7 @@ The same grouping shapes the Excel export of *Users by applications* — filtere
 Two complementary purposes:
 
 - **Group AD departments.** The *Group* column is a human label that rolls several AD departments into one functional bucket (FINANCE covers `FIN-AP`, `FIN-AR`, `FIN-CONTROL`, …). It controls how the *Users by applications* view groups its rows.
-- **Shape the Excel export.** Only the departments listed here reach *Users by applications*, so only they reach its export; filtering that grid on one *Group* before **Export → Excel (.xlsx)** gives one file per group of departments.
+- **Shape the Excel export.** Only the departments listed here reach *Users by applications*, so only they reach its export; its **Export workbooks** gives one file per *Group*, one sheet per application.
 
 ---
 

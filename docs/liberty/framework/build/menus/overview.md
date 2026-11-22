@@ -282,7 +282,7 @@ The next page covers the wiring from both sides.
 
 When the user opens the app, `GET /api/menus` returns the tree **filtered to what the user can run**:
 
-- A leaf is kept when the user may run what it opens (`sql:<connector>:<target>` for `screen` / `query`, `api:<connector>:<target>` for `endpoint`), or when a role explicitly allows its `menu:<app>:<id>` — see [Permissions and roles](./permissions-and-roles.md).
+- A leaf is kept when the user may run what it opens (`sql:<connector>:<target>` for `screen` / `query`, `api:<connector>:<target>` for `endpoint`), or when a role sets the leaf, its folder or the whole application to **Read** or **Read and change** (a job: **Read and change**) — see [Permissions and roles](./permissions-and-roles.md).
 - A `menu:` or `dashboard:` deny removes it.
 - A folder with no surviving children is collapsed away.
 - Items with a `roles` filter are kept only when the user's roles intersect the list.

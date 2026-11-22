@@ -160,9 +160,17 @@ Les points d'accès que [Créer à partir de…](./create-from.md#guarantees) co
 
 ---
 
+## La connexion à l'AIS \{#connection\}
+
+Le connecteur `ais_connection` ne porte ni adresse ni compte : il désigne le **pool `jde_ais`**, où le serveur AIS se paramètre une seule fois, comme la base de JD Edwards. Dans **Liberty Next → Administrer → Pools**, ouvrir le pool `jde_ais` (type *HTTP server (an API)*) et y saisir l'adresse REST de l'AIS avec son compte JD Edwards — `https://JDE@hote:port/jderest/v2` —, le mot de passe et la vérification ou non du certificat TLS. Quand les appels sont faits au nom de l'utilisateur connecté ([chaque appel au nom de l'utilisateur connecté](../../framework/connectors.md#api-user-jwt)), la clé de signature est elle aussi un champ de ce pool.
+
+À l'installation, le pool peut aussi être alimenté par l'environnement du serveur : `JDE_AIS_URL` (l'adresse avec son compte) et `JDE_AIS_VERIFY_SSL` (`true` par défaut). Voir [Pools](../../framework/connectors.md#pools).
+
+---
+
 ## Ce que voit JD Edwards \{#account\}
 
-Chaque appel s'exécute sous le **compte JD Edwards du connecteur** : la sécurité de JD Edwards s'applique à ce compte, l'audit l'enregistre, et les textes reviennent dans sa langue. Lui donner les droits nécessaires aux intégrations, pas davantage.
+Chaque appel s'exécute sous le **compte JD Edwards du pool `jde_ais`** : la sécurité de JD Edwards s'applique à ce compte, l'audit l'enregistre, et les textes reviennent dans sa langue. Lui donner les droits nécessaires aux intégrations, pas davantage.
 
 Ce que JD Edwards refuse est rapporté dans ses propres termes. Une erreur de fonction métier fait échouer l'appel avec son message ; un avertissement — *Duplicate Address Book record exists* — est signalé avec la réponse et l'appel reste valide.
 
@@ -184,7 +192,7 @@ Pour l'assistant IA, un service qui modifie JD Edwards demande en plus que l'uti
 
 - Essayer un service dans l'onglet **Test** avant de le placer dans une tâche ou un écran.
 - **Query a table or a view** avec `KIND` = `COUNT` répond à une question de volume sans lire les lignes.
-- Réserver un compte JD Edwards au connecteur : l'audit distingue alors ce que Nomajde a fait de ce qu'une personne a fait.
+- Réserver un compte JD Edwards au pool `jde_ais` : l'audit distingue alors ce que Nomajde a fait de ce qu'une personne a fait.
 - Un même JSON saisi deux fois est le signe qu'il faut passer par **Créer à partir de…**.
 
 ---

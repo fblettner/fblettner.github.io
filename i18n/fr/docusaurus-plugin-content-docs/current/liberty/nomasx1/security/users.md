@@ -23,9 +23,9 @@ La liste est alimentée automatiquement à chaque scan, depuis les tables de sé
   </defs>
 
   <rect x="220" y="20" width="880" height="357" rx="14" fill="url(#nxusr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Security - Users</text>
-  <rect x="361.7584" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="383.7584" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Sécurité - Utilisateurs</text>
+  <rect x="412.72" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="434.72" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.security_users_get</text>
   <line x1="220" y1="88" x2="1100" y2="88" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240" y="100" width="840" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -211,7 +211,7 @@ La ligne porte aussi les indicateurs technique, générique et lié. Ils ne sont
 
 ## Clic sur la ligne et menu contextuel \{#context-menu\}
 
-Un clic sur une ligne ouvre la fenêtre **Modifier · Security - Users properties** du compte — voir [plus bas](#edit-dialog). Le bouton **⋯** en début de ligne, ou un clic droit sur la ligne, ouvre le menu de ligne avec trois raccourcis filtrés sur l'utilisateur sélectionné.
+Un clic sur une ligne ouvre la fenêtre **Modifier · Sécurité - Propriétés des utilisateurs** du compte — voir [plus bas](#edit-dialog). Le bouton **⋯** en début de ligne, ou un clic droit sur la ligne, ouvre le menu de ligne avec trois raccourcis filtrés sur l'utilisateur sélectionné.
 
 | Action | Vers où |
 |---|---|
@@ -234,7 +234,7 @@ La fenêtre modifie les indicateurs du compte cliqué — le même enregistremen
   </defs>
 
   <rect x="320" y="30" width="680" height="360" rx="12" fill="url(#nxusrd-g-card)" stroke="#334155" strokeWidth="1.4"/>
-  <text x="340" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Security - Users properties</text>
+  <text x="340" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Sécurité - Propriétés des utilisateurs</text>
   <line x1="320" y1="72" x2="1000" y2="72" stroke="#1f2937" strokeWidth="1"/>
   <text x="340" y="94" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID</text>
   <rect x="340" y="100" width="640" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>

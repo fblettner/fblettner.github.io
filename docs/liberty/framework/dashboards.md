@@ -525,11 +525,12 @@ A click on a line, or **Add dashboard**, opens the editor over the whole window.
 
 | Part | Content |
 |---|---|
-| **Title**, **Description** | Shown at the top of the dashboard. |
+| **Title**, **Description** | Shown at the top of the dashboard; the *In the other languages* block under them gives both in the other languages — see [Texts in other languages](#languages). |
+| **Keep this one as it is on upgrade (an upgrade of the application then leaves it as saved here)** | Ticked, an upgrade of the application that ships the dashboard leaves it as saved here. |
 | **Add widget** | Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**: the widget's dialog opens on that kind, and **Cancel** leaves nothing behind. |
 | The grid | The real widgets, drawn with live data as the dashboard shows them, each under its label. Hovering a card shows its tools: the **grip**, its size (`4 × 1`, columns × rows), **✎** to edit it and the bin to remove it. A card is moved by **drag and drop** — its grip dragged onto another card, a bar showing on which side it will land — and sized by its **bottom-right corner**, in whole columns (1 to 12) and rows (1 to 8). The grip takes the keyboard too: arrows move the card, Shift + arrows size it. |
 | **Period** | **Add a period** / **Remove the period**: **Opens on** (a preset, or *App default (Liberty Next → Administer → App)*), **Date column** or **or dictionary item**, and optional **Date bases** (key, label, date column or dictionary item). |
-| **Filters** | **Add filter**: **Id**, **Label**, **Dictionary key**, then the **Connector**, the **Query**, the **Value column** and the **Label column** that fill the dropdown. Under each filter, *Reaches: …* names the widgets it filters — see [Filters](#filters). |
+| **Filters** | **Add filter**: **Id**, **Label**, **Dictionary key**, then the **Connector**, the **Query**, the **Value column** and the **Label column** that fill the dropdown. Under each filter, *Reaches: …* names the widgets it filters — see [Filters](#filters) —, and an *In the other languages* block gives its label in the other languages. A filter left without an id or a label stops the save: *A filter has no id or no label yet: complete it or remove it.* |
 
 The footer counts the widgets and holds **Cancel** and **Save**. Closing the editor with unsaved changes asks whether to save them, discard them or keep editing.
 
@@ -537,7 +538,119 @@ The footer counts the widgets and holds **Cancel** and **Save**. Closing the edi
 
 The **✎** of a card opens the **Widget** dialog: the nine kinds as tabs at the top — a widget can change kind —, then **Label**, **Width (1–12)**, **Height (rows)**, **Subtitle**, the connector and the query, and the fields of the kind (see [Widgets](#widgets)). Below the fields, a preview draws the widget with live data as soon as the required fields are set. The footer shows the widget's kind (`stat`, `list`…) on the left, **Cancel** and **Save** on the right.
 
-A dashboard reads in the user's language: its title, its description, the filters' labels and the widgets' texts can carry a French version, and a List can read its titles from a French column of its query.
+### Texts in other languages \{#languages\}
+
+A dashboard reads in the user's language. Every text it shows is given in the other languages in the editor itself, in an **In the other languages** block under the field: one line per language, one box per text. A box left blank shows the text as written (*Left blank, the text above is shown.*).
+
+<svg viewBox="0 0 1200 422" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dbl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dbl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dbl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dbl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="380" rx="14" fill="url(#dbl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <line x1="220" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITLE</text>
+  <rect x="240" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="606.0" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <rect x="606.0" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="616.0" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Orders, revenue and margin of the month</text>
+  <rect x="240" y="124" width="720" height="58" rx="8" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 3"/>
+  <text x="250" y="139" fill="#94a3b8" fontSize="7.6" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">IN THE OTHER LANGUAGES</text>
+  <text x="383.7216" y="139" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">Left blank, the text above is shown.</text>
+  <text x="250" y="169" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">French</text>
+  <text x="326.0" y="152" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Title</text>
+  <rect x="326.0" y="156" width="308" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="336.0" y="169.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Vue d'ensemble des ventes</text>
+  <text x="642.0" y="152" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Description</text>
+  <rect x="642.0" y="156" width="308" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652.0" y="169.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Commandes, chiffre d'affaires et marge du mois</text>
+  <rect x="240" y="195" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="257" y="204" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Keep this one as it is on upgrade (an upgrade of the application then leaves it as saved here)</text>
+  <text x="240" y="237" fill="#94a3b8" fontSize="8.6" fontWeight="700" fontFamily="system-ui, sans-serif">Add widget:</text>
+  <rect x="302.976" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="325.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Chart</text>
+  <rect x="353.976" y="222" width="36" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="371.976" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">KPI</text>
+  <rect x="395.976" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="418.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Table</text>
+  <rect x="446.976" y="222" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="471.976" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Figure</text>
+  <rect x="502.976" y="222" width="41" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="523.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">List</text>
+  <rect x="549.976" y="222" width="41" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="570.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Bars</text>
+  <rect x="596.976" y="222" width="41" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="617.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Text</text>
+  <rect x="643.976" y="222" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="666.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Links</text>
+  <rect x="694.976" y="222" width="41" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="715.476" y="236.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Jobs</text>
+  <line x1="220" y1="252" x2="980" y2="252" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="266" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Widget — Figure</text>
+  <text x="240" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <rect x="240" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Orders</text>
+  <text x="484.0" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SUBTITLE</text>
+  <rect x="484.0" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="494.0" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">This month</text>
+  <text x="728.0" y="284" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SUB LINE</text>
+  <rect x="728.0" y="289" width="232" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="738.0" y="303.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">&#123;AMOUNT:integer&#125; €</text>
+  <rect x="240" y="324" width="720" height="58" rx="8" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 3"/>
+  <text x="250" y="339" fill="#94a3b8" fontSize="7.6" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">IN THE OTHER LANGUAGES</text>
+  <text x="383.7216" y="339" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">Left blank, the text above is shown.</text>
+  <text x="250" y="369" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">French</text>
+  <text x="326.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Label</text>
+  <rect x="326.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="336.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Commandes</text>
+  <text x="484.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Subtitle</text>
+  <rect x="484.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="494.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Ce mois-ci</text>
+  <text x="642.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Sub line</text>
+  <rect x="642.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif"></text>
+  <text x="800.0" y="352" fill="#94a3b8" fontSize="7.4" fontFamily="system-ui, sans-serif">Unit</text>
+  <rect x="800.0" y="356" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810.0" y="369.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Title and description</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">as written</text>
+  <line x1="200" y1="101.0" x2="240" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="142" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="157" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In the other languages</text>
+  <text x="30" y="170" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one line per language</text>
+  <line x1="200" y1="159.0" x2="240" y2="154" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="1000" y="142" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="157" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Blank = the text above</text>
+  <text x="1010" y="170" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nothing to fill twice</text>
+  <line x1="1000" y1="159.0" x2="920" y2="172" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="182" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="197" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Keep on upgrade</text>
+  <text x="30" y="210" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the application leaves it</text>
+  <line x1="200" y1="199.0" x2="240" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="20" y="336" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="351" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Each card too</text>
+  <text x="30" y="364" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its own texts, by kind</text>
+  <line x1="200" y1="353.0" x2="240" y2="352" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+  <rect x="1000" y="336" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="351" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fields of the card's kind</text>
+  <text x="1010" y="364" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sub line, unit, note…</text>
+  <line x1="1000" y1="353.0" x2="900" y2="374" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dbl-arrow)"/>
+</svg>
+
+| Where | The block gives |
+|---|---|
+| The dashboard | Its **Title** and its **Description**. |
+| A widget (its dialog) | Its **Label** and **Subtitle**, and by kind: the **Sub line** and **Unit** of a Figure; the **Count wording**, **Unit**, and the **Title column**, **Subtitle column** and **Tag column (a pill)** of a List; the **Note under the bars**, **Unit**, **Label column** and **Sub label column** of Bars; the **Text (Markdown)** of a Text. |
+| A link of a Links widget | Its **Label** and its **Description**. |
+| A filter | Its **Label**. |
+
+A column given in another language names the column to read for the users of that language — for a query that returns one column per language (`TITLE`, `TITLE_FR`).
 
 To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 

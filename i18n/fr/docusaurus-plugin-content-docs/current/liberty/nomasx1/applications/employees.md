@@ -97,7 +97,7 @@ Le **Tableau de bord** trace une courbe par groupe — **INTERNAL_COUNT** et **E
 
 ## Synthèse \{#summary\}
 
-**Synthèse** (*License - JDE Employees*) donne, pour chaque application et chaque jour de collecte, le nombre de personnes distinctes de chaque groupe.
+**Synthèse** (*Licences - Employés JDE*) donne, pour chaque application et chaque jour de collecte, le nombre de personnes distinctes de chaque groupe.
 
 <svg viewBox="0 0 1320 364" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -110,7 +110,7 @@ Le **Tableau de bord** trace une courbe par groupe — **INTERNAL_COUNT** et **E
   <rect x="215" y="20" width="890" height="284" rx="14" fill="url(#ems-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - JDE Employees</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licences - Employés JDE</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <text x="233" y="96" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">10 lignes · 12 ms</text>
   <rect x="959" y="84" width="128" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -220,7 +220,7 @@ Le bouton **···** d'une ligne (ou un clic droit) propose **Display Employees*
 
 ## Détails \{#details\}
 
-**Détails** (*License - JDE Employees - Details*) liste les personnes, une ligne par numéro d'adresse et par jour de collecte.
+**Détails** (*Licences - Employés JDE - Détails*) liste les personnes, une ligne par numéro d'adresse et par jour de collecte.
 
 <svg viewBox="0 0 1320 376" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -233,7 +233,7 @@ Le bouton **···** d'une ligne (ou un clic droit) propose **Display Employees*
   <rect x="215" y="20" width="890" height="296" rx="14" fill="url(#emp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <rect x="233" y="38" width="18" height="18" rx="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
   <line x1="233" y1="44" x2="251" y2="44" stroke="#4a9eff" strokeWidth="1"/><line x1="239" y1="44" x2="239" y2="56" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - JDE Employees - Details</text>
+  <text x="261" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licences - Employés JDE - Détails</text>
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <rect x="233" y="84" width="854" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="245" y="100" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">›  ⏷  Filtres avancés</text>
