@@ -202,7 +202,7 @@ Chaque lien ouvre une entrée du menu ; sous son titre, une ligne indique ce qu'
 | **Données JD Edwards** | [Codes UDC](./master-data/udc-codes.md), [Carnet d'adresses](./master-data/address-book.md), [Sociétés, Centres de coûts, Plan de comptes, Articles, Conditions de paiement](./master-data/delivered-screens.md) — le paramétrage commence par les conditions de paiement. |
 | **Maintenance de la sécurité** | [Gestion des utilisateurs](./security-maintenance/user-management.md), [Gestion des rôles](./security-maintenance/role-management.md), [Relations de rôles](./security-maintenance/role-relationships.md), [Environnements](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md), Sécurité des UDO. |
 | **Explorer** | L'[Explorateur de données](./data-explorer.md) et *À propos de Nomajde*, la page du produit. |
-| **Tâches** | La dernière exécution des principales tâches — contrôle de santé, synchronisation quotidienne, tests, analyse de montée de version, refusion de la sécurité — avec leur état, leur planification, et **▷** pour en lancer une immédiatement. |
+| **Tâches** | La dernière exécution des principales tâches — contrôle de santé, relevé de la plateforme, [rapports de plateforme et hebdomadaire de montée de version](./jobs.md#reports), synchronisation quotidienne, tests, analyse de montée de version, refusion de la sécurité — avec leur état, leur planification, et **▷** pour en lancer une immédiatement. |
 
 Deux lignes, en bas de page, présentent Nomajde. **Excel** et **PDF**, à côté de **↻**, exportent la page.
 

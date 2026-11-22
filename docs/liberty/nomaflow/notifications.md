@@ -202,13 +202,13 @@ The rules are listed on the left, each with its trigger and its channels; **Add 
 
 | Trigger | Fires when | Settings |
 |---|---|---|
-| **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events (`insert` / `update` / `delete`), and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
-| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: `failure`, `succeeded`, `canceled`, `missed` (a schedule that did not run — see [Schedules](./jobs/schedules.md#missed)), `long_run` with a threshold in minutes, `late` (no successful run by the job's **Must have succeeded by** deadline). |
+| **A screen event** | A row is inserted, updated or deleted through a screen. | App, Screen, Events — *a record is added* (`insert`), *a record is changed* (`update`), *a record is deleted* (`delete`) —, and optionally **Only when the written row has**: field = value conditions, all required (`STATUS = closed`). |
+| **A job event** | A Nomaflow run ends. | Jobs — several picked in one list, empty = every job — and Events: *it fails* (`failure`), *it succeeds* (`succeeded`), *it is cancelled* (`canceled`), *it did not start when planned* (`missed`, see [Schedules](./jobs/schedules.md#missed)), *it runs longer than allowed* (`long_run`, with a threshold in minutes), *it has not finished by the time set* (`late`: no successful run by the job's **Must have succeeded by** deadline). |
 | **A screen action** | A screen action of type `send_notification` runs (a button or a step of an action chain), or the **Notification** step of a [service](../framework/build/services.md#notification). | Nothing more: the action or the step names the rule and passes the row's values, plus the values its message needs. |
 
 `long_run` is checked when the run ends: it reports a run that lasted at least the threshold, not a run still in progress.
 
-### Channels
+### Channels \{#channels\}
 
 In the editor, the channels are ticked by their names: **In the application** (`portal`), **Email** (`email`), **A query or an endpoint** (`action`).
 
@@ -217,6 +217,10 @@ In the editor, the channels are ticked by their names: **In the application** (`
 | `portal` | A notification in the bell of each recipient user. |
 | `email` | An e-mail to each recipient that has an address. |
 | `action` | Runs a query (SQL connector) or calls an endpoint (API connector) with the message's values — to post to Teams or a webhook, or to write a log table. Its parameters are the event's values plus `SUBJECT`, `BODY` and `RULE`. |
+
+With **A query or an endpoint** ticked, the rule names what it runs: **Action: connector**, then **Query (SQL connector)** or **Endpoint (API connector)**, picked among that connector's own queries or endpoints. **Values passed** adds what the query or the service receives on top of the event's own values, as name / value lines; a value may hold placeholders (`{PERIOD}`). The rule is not saved while the connector or its query / endpoint is missing: *Pick the connector and the query or endpoint the action runs.*
+
+**Keep this rule as it is on upgrade** makes an upgrade of the application leave the rule as saved here. The editor's title gives the rule's label, then its id.
 
 A channel that fails is logged and does not stop the others. Sending runs in the background: a save or a job never waits for the mail server.
 
@@ -266,7 +270,7 @@ body = "{ERROR}"
 
 ## From a job step \{#notify-step\}
 
-A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. Its recipients take the same forms, plus `user:{USER}`: the person who started the run, left out when a schedule started it. See [Steps → Notify](./steps.md#notify).
+A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. Its recipients take the same forms, plus `user:{USER}`: the person who started the run, left out when a schedule started it. The step sends to the bell and by e-mail only: the *query or endpoint* channel is a rule's — a job that must call an endpoint does it with its own *Call an address* step. See [Steps → Notify](./steps.md#notify).
 
 ---
 
@@ -280,7 +284,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. Write recipients as `user:`, `role:` or `email:` — an entry without a prefix is taken as an e-mail address.
+On failure, each recipient gets a notification *Job &lt;id&gt; failed* with the error, in the bell and by e-mail. With **Warn if a run exceeds (minutes)** (`on_long_run_minutes`), a run that lasts at least that long also sends *Job &lt;id&gt; ran N min (threshold T)*, whether it failed or not. The recipients are picked as in a rule — a role, a user or an address; in `jobs.toml` they are written `user:`, `role:` or `email:`. See [Create a job → Alerts](./jobs/create.md#alerts).
 
 ---
 

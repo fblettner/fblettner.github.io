@@ -90,7 +90,7 @@ Tous les écrans de l'application affichent désormais ces libellés — ceux sa
 
 ### Le statut client — une énumération
 
-Onglet **Énumérations**, **＋ Ajouter une énumération** `CUSTOMER_STATUS`, avec les valeurs `ACTIVE` (Actif), `PROSPECT` (Prospect), `INACTIVE` (Inactif). Puis sur l'entrée `STATUS` : **Rules** `ENUM`, **Rules values** `CUSTOMER_STATUS`.
+Onglet **Énumérations**, **＋ Ajouter une énumération** `CUSTOMER_STATUS`, avec les valeurs `ACTIVE` (Actif), `PROSPECT` (Prospect), `INACTIVE` (Inactif). Puis sur l'entrée `STATUS` : **Kind of field** *A fixed list of values*, **List of values** `CUSTOMER_STATUS`.
 
 La grille affiche *Actif* au lieu de `ACTIVE`, et le dialogue propose les trois valeurs.
 
@@ -100,7 +100,7 @@ Un lookup remplace un code (l'identifiant du client) par un libellé (son nom), 
 
 1. **Liberty Next → Données → Connecteurs → crm → Lookups → ＋ Ajouter un lookup** : table `customers`, colonne valeur `ID`, colonne libellé `NAME`. L'assistant écrit la requête et le lookup `customers` du dictionnaire.
 2. Même chose pour les étapes : table `deal_stages`, valeur `CODE`, libellé `LABEL`.
-3. Dans le dictionnaire, entrée `CUSTOMER_ID` : **Rules** `LOOKUP`, **Rules values** `customers` ; entrée `STAGE` : **Rules** `LOOKUP`, **Rules values** `deal_stages`.
+3. Dans le dictionnaire, entrée `CUSTOMER_ID` : **Kind of field** *A list read from a table*, **List from a table** `customers` ; entrée `STAGE` : **Kind of field** *A list read from a table*, **List from a table** `deal_stages`.
 
 Enregistrer le dictionnaire. Voir [Dictionnaire](../dictionary.md) et [Séquences et lookups](../build/queries/sequences-and-lookups.md).
 

@@ -19,7 +19,7 @@ Every night, copy the `orders` and `customers` tables of the operational databas
 
 ## The job \{#job\}
 
-**+ New job**: id `nightly-reporting-sync`, tag `etl`, **Schedule (cron)** `0 2 * * *`, **Timezone** `Europe/Paris`. Then three steps:
+**+ New job**: id `nightly-reporting-sync`, tag `etl`, **Schedule (cron)** *On chosen days, at a set time* at 02:00, no day picked (`0 2 * * *`), **Timezone** `Europe/Paris`. Then three steps:
 
 | # | Type | Settings |
 |---|---|---|

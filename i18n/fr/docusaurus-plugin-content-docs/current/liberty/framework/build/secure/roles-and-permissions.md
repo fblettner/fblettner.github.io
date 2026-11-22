@@ -28,6 +28,10 @@ Cette page traite des rôles de Liberty Next lui-même. Les rôles de JD Edwards
 
   <rect x="220" y="20" width="880" height="724" rx="14" fill="url(#accr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Accès</text>
+  <rect x="745" y="32" width="90" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="790.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Abandonner</text>
+  <rect x="843" y="32" width="90" height="22" rx="5" fill="url(#accr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="888.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
   <rect x="941" y="32" width="139" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1010.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Recharger la config</text>
   <rect x="240" y="66" width="415.0" height="40" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -240,10 +244,6 @@ Cette page traite des rôles de Liberty Next lui-même. Les rôles de JD Edwards
   <text x="792" y="687.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Choisir…</text>
   <rect x="910" y="674" width="55" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="937.5" y="687.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Ajouter</text>
-  <rect x="984" y="704" width="80" height="22" rx="5" fill="url(#accr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="1024.0" y="718.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="912" y="704" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="944.0" y="718.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
   <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rôles prédéfinis</text>
   <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">livrés par les applications</text>
@@ -350,7 +350,7 @@ Certains droits ne correspondent à aucune entrée de menu. Le bloc **Au-delà d
 
 Une page livrée par une application donne accès à la page, pas aux fonctions qu'elle appelle : pour les ouvrir à un rôle, ajouter ici une règle **Motif (expert)** `plugin:<module>:*`.
 
-**Enregistrer** enregistre le rôle ; **Annuler** abandonne les modifications. Le nom d'un rôle ne peut plus changer après sa création.
+**Enregistrer** et **Abandonner**, dans l'en-tête de la page comme dans tous les éditeurs, enregistrent le rôle ou abandonnent ses modifications ; *modifications non enregistrées* s'affiche à côté tant que le rôle en contient. Ouvrir un autre rôle, en ajouter un ou passer aux **Utilisateurs** avec des modifications non enregistrées demande d'abord confirmation : *Ce rôle contient des modifications non enregistrées. Le quitter et les perdre ?* Le nom d'un rôle ne peut plus changer après sa création.
 
 ### Rôles prédéfinis \{#predefined\}
 

@@ -248,7 +248,7 @@ Dates et heures suivent l'heure locale du serveur, avec un seul instant par inst
 |---|---|
 | **Enregistrement d'un dialogue** (insertion, mise à jour, suppression) | Rien à déclarer : chaque colonne est liée au paramètre de même nom, et le WHERE de la mise à jour utilise `:<CLÉ>_ORIGINAL`, la valeur de la clé à l'ouverture du dialogue. |
 | **Action** (exécuter une requête, appeler une API ou un plugin, ouvrir un écran…) | Les `param_binds` de l'action. |
-| **Colonne à lookup** | Le champ **lookup_param_binds** de la colonne (onglet Rules), ou le champ **Lookup params** de l'entrée du dictionnaire pour des valeurs fixes. |
+| **Colonne à lookup** | Le champ **Values given to the list** de la colonne (onglet Rules), ou le champ **List parameters** de l'entrée du dictionnaire pour des valeurs fixes. |
 | **Onglet imbriqué** | Les `param_binds` de l'onglet — en général la clé de la ligne parent. |
 | **Entrée de menu** | **Params** (onglet Advanced) : des valeurs fixes transmises à la cible à son ouverture. |
 | **Tableau de bord** | La période et les filtres lient `:PERIOD_FROM`, `:PERIOD_TO` et les colonnes filtrées — voir [Tableaux de bord](../../dashboards.md). |

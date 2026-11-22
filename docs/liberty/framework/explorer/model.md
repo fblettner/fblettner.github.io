@@ -723,6 +723,19 @@ A model tells the explorer what a user may analyse and how the tables relate. It
 | **Hub** | The entity every analysis starts from: a fact table, a document header, the lines of a document. |
 | **Description** | Shown under the explorer's title. |
 | **Preset (Screen Assistant)** | Fills the model from a preset — see [below](#preset). |
+| **Listed under** | The heading the model sits under in the explorer's list of models (*Finance*). Blank: its preset's, else the application. |
+| **Keep this model as it is on upgrade** | An upgrade of the application then leaves the model as saved here. |
+| **Delivered analyses**, **Delivered dashboards** | What the model delivers: analyses and dashboards installed for everyone, picked among those saved and shared in the explorer — see [What a model delivers](#delivers). |
+
+### What a model delivers \{#delivers\}
+
+Under the model's settings, two lists name the analyses and the dashboards the application ships with the model. **Deliver a saved analysis…** / **Deliver a saved dashboard…** offers the model's analyses and dashboards that are saved and shared in the explorer; the one picked is copied into the model, with its version (*version 1*). Each delivered line has:
+
+- **↻** — *Refresh from the saved one*: its version goes up, and the installed copies nobody changed follow;
+- the bin — *No longer deliver it*: the installed copies stay.
+
+Picking again one already delivered (*delivered — pick to refresh*) refreshes it too. A delivered dashboard that shows analyses not delivered says so: *shows analyses that are not delivered: …*.
+
 
 **Save** writes the model and reloads it: the explorer sees it at once. A model without any entity is refused, by name — *Not saved: these models have no entity yet — crm · deals. Add an entity (or apply a preset), or delete the model.* — unless it names a preset: it is then kept, filled from the preset at first use, and the page draws it with the offer to fill it.
 
@@ -734,7 +747,7 @@ In **Insight → Explorer**, a model is drawn: the **hub**, the entities it reac
 
 | Click | The side panel shows |
 |---|---|
-| Nothing | The model's own settings: **Label**, **Hub**, **Description**, **Preset (Screen Assistant)**. |
+| Nothing | The model's own settings: **Label**, **Hub**, **Description**, **Preset (Screen Assistant)**, **Listed under**, **Keep this model as it is on upgrade**, and what it delivers. |
 | An entity | What it is — its query or table, key, measures, default date — and its relations, with **Edit**, **Make it the hub**, **Delete**, and **Add relation** from it. A relation of the list opens it; the button at the top goes back. |
 | A line | The relation: its two entities, its column pairs (**Joined on**) and **Delete this relation**. |
 
@@ -890,7 +903,9 @@ An empty model starts **From a prebuilt model** — a preset — or **By hand**.
 | **Rows per hub row** | **1..1 · one** — at most one row per hub row (the customer of a deal); **1..n · many** — several rows (the activities of a deal). The hub itself is always 1..1. |
 | **Description** | Free text. |
 | **Connector** | The connector of the query; the app's own by default. The list holds the SQL connectors and the API connectors that have an endpoint with rows, shown as `name (API)` — see [below](#api-entity). |
-| **Query** | A SELECT query of that connector — or, on an API connector, one of its endpoints with rows. Its columns are discovered by running it for one row. An entity filled from a preset reads its table directly: the field then shows **Table**, not editable. |
+| **Reads** | *a query* or *a table* — on an API connector, *a service*. The fields below follow the choice. |
+| **Query** | With *a query*: a SELECT query of that connector — or, on an API connector, one of its endpoints with rows (**a service**). Its columns are discovered by running it for one row. |
+| **Schema**, **Table** | With *a table*: the table is read as it is, without writing a query — the schema, then the table, picked from the database (or typed). An entity filled from a preset reads its table this way. |
 | **Screen (column hints)** | A screen whose column settings give the labels, formats and lists of values. The screens that read the same query come first. The entity opens a row in that screen's dialog, so **Deploy → Integrity** counts the screen as reached even when no menu entry leads to it. |
 | **Default date** | The date field the period applies to first. |
 | **Fixed values of the query's parameters** | Shown when the query asks for parameters — those it declares and the binds of its statement —, one field each: the value given there is used for every analysis. A parameter left blank is not sent. |

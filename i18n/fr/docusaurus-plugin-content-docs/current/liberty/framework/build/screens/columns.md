@@ -1,203 +1,191 @@
 ---
 title: Colonnes
-description: "Les colonnes d'un écran Liberty Next, dans le Concepteur d'écran (Grille → Colonnes) — définir une fois le titre d'affichage, le format, la référence dictionnaire, la règle d'édition, la valeur par défaut et le filtrage de chaque colonne ; la grille et le dialogue les utilisent tous deux."
-keywords: [Liberty Framework, colonnes, ColumnHint, dictionnaire, format, lookup, filtre, masqué, clé, valeur par défaut]
+description: "Les colonnes d'un écran Liberty Next, dans le Concepteur d'écran (Grille → Colonnes) — définir une fois le libellé, le format, l'élément du dictionnaire, la nature du champ, la valeur par défaut et le filtrage de chaque colonne ; une liste lue dans une table créée d'un seul geste ; la grille et la fiche les utilisent toutes deux."
+keywords: [Liberty Framework, colonnes, élément du dictionnaire, nature du champ, format, lookup, liste depuis une table, filtre, masqué, clé, valeur par défaut]
 ---
 
 # Colonnes
 
-**Grille → Colonnes**, dans le [Concepteur d'écran](./overview.md#designer), est l'endroit où l'on définit les métadonnées par colonne : comment la colonne s'affiche dans la grille, comment elle apparaît dans le formulaire de dialogue, si elle filtre, si elle est obligatoire, si elle fait partie de la clé primaire de la ligne. On configure chaque colonne une fois — les deux surfaces (grille et dialogue) utilisent la même configuration.
+**Grille → Colonnes**, dans le [Concepteur d'écran](./overview.md#designer), est l'endroit où l'on définit les réglages de chaque colonne : comment la colonne s'affiche dans la grille, comment elle apparaît dans le formulaire de dialogue, si elle filtre, si elle est obligatoire, si elle fait partie de la clé primaire de la ligne. On configure chaque colonne une fois — les deux surfaces (grille et dialogue) utilisent la même configuration.
 
 ---
 
 ## Les colonnes en un coup d'œil
 
-<svg viewBox="0 0 1320 550" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 610" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="scol-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="scol-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="scol-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="scol-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="svcol-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="svcol-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="svcol-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="svcol-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="880" height="514" rx="14" fill="url(#scol-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran ·</text>
-  <text x="367.648" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
-  <rect x="1011" y="32" width="69" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1045.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
-  <rect x="981" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="993.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
-  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QU'IL EST</text>
-  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Clients</text>
-  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
-  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DONNÉES</text>
-  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
-  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 requête(s) d'enregistrem…</text>
-  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
-  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeWidth="1.2"/>
-  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRILLE</text>
-  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 colonne(s)</text>
-  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filtre(s) · 1 vue(s)</text>
-  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
-  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHE</text>
-  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 onglet(s)</text>
-  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 champ(s)</text>
-  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
-  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
-  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
-  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 action(s) de barre d…</text>
-  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 dans le menu de ligne ·…</text>
-  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
-  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SORTIE</text>
-  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">l'export de la grille</text>
-  <rect x="238" y="146" width="162" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="239" y="147" width="62" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="270.0" y="160.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
-  <line x1="302" y1="151" x2="302" y2="163" stroke="#334155" strokeWidth="1"/>
-  <text x="324.0" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Vues</text>
-  <line x1="346" y1="151" x2="346" y2="163" stroke="#334155" strokeWidth="1"/>
-  <text x="373.0" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Résumé</text>
-  <rect x="238" y="180" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="200" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="194" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <text x="260" y="206" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Client</text>
-  <rect x="472" y="188.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
-  <text x="492.0" y="199.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filtre</text>
-  <rect x="442" y="188.5" width="26" height="15" rx="4" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <text x="455.0" y="199.3" fill="#4a9eff" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">clé</text>
-  <text x="526" y="200" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="218" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="238" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="232" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">NAME</text>
-  <text x="260" y="244" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Nom</text>
-  <rect x="449" y="226.5" width="63" height="15" rx="4" fill="rgba(168,85,247,0.15)" stroke="rgba(168,85,247,0.45)" strokeWidth="1"/>
-  <text x="480.5" y="237.3" fill="#c084fc" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">obligatoire</text>
-  <rect x="405" y="226.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
-  <text x="425.0" y="237.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filtre</text>
-  <text x="526" y="238" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="256" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="276" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="270" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">COUNTRY</text>
-  <text x="260" y="282" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Pays</text>
-  <rect x="472" y="264.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
-  <text x="492.0" y="275.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filtre</text>
-  <text x="526" y="276" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="294" width="300" height="32" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="247" y="314" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="308" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">STATUS</text>
-  <text x="260" y="320" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Statut</text>
-  <rect x="472" y="302.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
-  <text x="492.0" y="313.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filtre</text>
-  <text x="526" y="314" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="332" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="352" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="346" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">CREDIT_LIMIT</text>
-  <text x="260" y="358" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Encours autorisé</text>
-  <rect x="463" y="340.5" width="49" height="15" rx="4" fill="rgba(255,159,10,0.12)" stroke="rgba(255,159,10,0.45)" strokeWidth="1"/>
-  <text x="487.5" y="351.3" fill="#fb923c" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">sensible</text>
-  <text x="526" y="352" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="370" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="247" y="390" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
-  <text x="260" y="384" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">UPDATED_AT</text>
-  <text x="260" y="396" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Modifié le</text>
-  <rect x="468" y="378.5" width="44" height="15" rx="4" fill="rgba(255,255,255,0.05)" stroke="#475569" strokeWidth="1"/>
-  <text x="490.0" y="389.3" fill="#94a3b8" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">masquée</text>
-  <text x="526" y="390" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="238" y="410" width="119" height="20" rx="5" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="248" y="423.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ Ajouter une colonne</text>
-  <rect x="554" y="180" width="528" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <rect x="564" y="190" width="508" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
-  <text x="574" y="206" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
-  <text x="588" y="206" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">STATUS</text>
-  <text x="590.5" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <rect x="621" y="222" width="53" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <text x="647.5" y="236.3" fill="#4a9eff" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Display</text>
-  <text x="702.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Filter</text>
-  <text x="752.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Rules</text>
-  <text x="797.5" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit</text>
-  <text x="850.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Defaults</text>
-  <line x1="564" y1="250" x2="1072" y2="250" stroke="#1f2937" strokeWidth="1"/>
-  <text x="566" y="266" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
-  <rect x="566" y="271" width="504" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="566" y="305" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Display title in the grid header and the dialog field.</text>
-  <text x="566" y="322" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HIDDEN</text>
-  <rect x="566" y="331" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="583" y="340" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="566" y="362" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FORMAT</text>
-  <rect x="566" y="367" width="504" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="575" y="381.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">(default)</text>
-  <text x="1058" y="381.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="566" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ALIGN</text>
-  <rect x="566" y="411" width="247" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="575" y="425.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">(default)</text>
-  <text x="801" y="425.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="823" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WIDTH</text>
-  <rect x="823" y="411" width="247" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="566" y="450" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WRAP · CARD · COLSPAN · DRILL …</text>
-  <line x1="220" y1="492" x2="1100" y2="492" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="990" y="502" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1036.0" y="516.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="911" y="502" width="71" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="946.5" y="516.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
-  <rect x="20" y="82" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six étapes, en flux</text>
-  <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque carte dit ce qu'elle contient</text>
-  <line x1="200" y1="99.0" x2="238" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="20" y="188" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="203" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Les colonnes, en liste</text>
-  <text x="30" y="216" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">glisser ⠿ ; ✕ pour retirer</text>
-  <line x1="200" y1="205.0" x2="244" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Les marques utiles</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clé, filtre, obligatoire, masquée…</text>
-  <line x1="200" y1="317.0" x2="478" y2="348" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une colonne</text>
-  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">de la requête de lecture</text>
-  <line x1="200" y1="417.0" x2="244" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections de l'étape</text>
-  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Colonnes · Vues · Résumé</text>
-  <line x1="1120" y1="177.0" x2="420" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six onglets de réglages</text>
-  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Général, affichage, filtre, règles…</text>
-  <line x1="1120" y1="227.0" x2="879" y2="233" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="1120" y="280" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Affichage dans la grille</text>
-  <text x="1130" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">libellé, masquage, format, largeur…</text>
-  <line x1="1120" y1="297.0" x2="1070" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="1120" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Vide = hérité</text>
-  <text x="1130" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">de l'entrée du dictionnaire</text>
-  <line x1="1120" y1="367.0" x2="1070" y2="372" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
-  <rect x="1120" y="484" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="499" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistre cet écran seul</text>
-  <text x="1130" y="512" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Annuler demande confirmation</text>
-  <line x1="1120" y1="501.0" x2="1040" y2="514" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="220" y="20" width="880" height="572" rx="14" fill="url(#svcol-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran · Customers</text>
+  <text x="463.6" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">crm · customers</text>
+  <rect x="1010" y="31" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1045.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <rect x="240.0" y="62" width="133.3" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250.0" y="78" fill="#4a9eff" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QU'IL EST</text>
+  <text x="250.0" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <rect x="381.3" y="62" width="133.3" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="391.3" y="78" fill="#4a9eff" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DONNÉES</text>
+  <text x="391.3" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="391.3" y="105" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">3 requête(s) d'enregistrement</text>
+  <rect x="522.7" y="62" width="133.3" height="50" rx="8" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1.2"/>
+  <text x="532.7" y="78" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRILLE</text>
+  <text x="532.7" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">6 colonne(s)</text>
+  <text x="532.7" y="105" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">3 filtre(s)</text>
+  <rect x="664.0" y="62" width="133.3" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="674.0" y="78" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHE</text>
+  <text x="674.0" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">2 onglet(s)</text>
+  <text x="674.0" y="105" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">8 champ(s)</text>
+  <rect x="805.3" y="62" width="133.3" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="815.3" y="78" fill="#c084fc" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="815.3" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">1 action(s) de barre d'outils</text>
+  <rect x="946.7" y="62" width="133.3" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="956.7" y="78" fill="#fb923c" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SORTIE</text>
+  <text x="956.7" y="93" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">l'export de la grille</text>
+  <rect x="240" y="124" width="162" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="125" width="62" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="272.0" y="138.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
+  <line x1="304" y1="129" x2="304" y2="141" stroke="#334155" strokeWidth="1"/>
+  <text x="326.0" y="138.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Vues</text>
+  <line x1="348" y1="129" x2="348" y2="141" stroke="#334155" strokeWidth="1"/>
+  <text x="375.0" y="138.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Résumé</text>
+  <rect x="240" y="158" width="260" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="173" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="173" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <text x="264" y="186" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Client</text>
+  <rect x="426" y="168" width="40" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="446.0" y="179.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">filtre</text>
+  <rect x="395" y="168" width="27" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="408.5" y="179.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">clé</text>
+  <text x="484" y="180" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="200" width="260" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="215" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="215" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">NAME</text>
+  <text x="264" y="228" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Nom</text>
+  <rect x="426" y="210" width="40" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="446.0" y="221.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">filtre</text>
+  <text x="484" y="222" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="242" width="260" height="36" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="250" y="257" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="257" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">STATUS</text>
+  <text x="264" y="270" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Statut</text>
+  <rect x="426" y="252" width="40" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="446.0" y="263.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">filtre</text>
+  <rect x="382" y="252" width="40" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="402.0" y="263.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">LOOKUP</text>
+  <text x="484" y="264" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="284" width="260" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="299" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="299" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">COUNTRY</text>
+  <text x="264" y="312" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Pays</text>
+  <rect x="426" y="294" width="40" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="446.0" y="305.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">filtre</text>
+  <text x="484" y="306" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="326" width="260" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="341" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="341" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">CREDIT_LIMIT</text>
+  <text x="264" y="354" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Plafond de crédit</text>
+  <text x="484" y="348" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="368" width="260" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="383" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264" y="383" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">UPDATED_AT</text>
+  <text x="264" y="396" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Modifié le</text>
+  <rect x="394" y="378" width="72" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="430.0" y="389.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">lecture seule</text>
+  <text x="484" y="390" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="412" width="140" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="310.0" y="426.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une colonne</text>
+  <rect x="516" y="158" width="564" height="376" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="530" y="178" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">≋  STATUS</text>
+  <rect x="530" y="188" width="53" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="556.5" y="201.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="587" y="188" width="53" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="613.5" y="201.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Display</text>
+  <rect x="644" y="188" width="48" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="668.0" y="201.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filter</text>
+  <rect x="696" y="188" width="43" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="717.5" y="201.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Rules</text>
+  <rect x="743" y="188" width="38" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="762.0" y="201.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit</text>
+  <rect x="785" y="188" width="58" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="814.0" y="201.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Defaults</text>
+  <text x="530" y="226" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">KIND OF FIELD</text>
+  <rect x="530" y="232" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="540" y="247" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">LOOKUP</text>
+  <text x="587.312" y="247" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">A list read from a table</text>
+  <text x="1054" y="247" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="530" y="268" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">What the field is: free text, a list, a yes / no box… Blank uses the dictionary's.</text>
+  <text x="887.288" y="268" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">plus</text>
+  <text x="530" y="290" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIST FROM A TABLE</text>
+  <rect x="530" y="296" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="540" y="311" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">customer_status</text>
+  <text x="1054" y="311" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="530" y="324" width="197" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="628.5" y="337.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">☰ Nouvelle liste depuis une table…</text>
+  <text x="530" y="356" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">What the kind of field uses: the list, the numbering rule, the value that means yes.</text>
+  <text x="895.856" y="356" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">plus</text>
+  <text x="530" y="378" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ANOTHER KIND WHEN</text>
+  <rect x="530" y="384" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="555.0" y="396.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <text x="530" y="420" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CODE ONLY</text>
+  <rect x="530" y="431" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="547" y="440" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">désactivé</text>
+  <text x="530" y="464" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VALUES GIVEN TO THE LIST</text>
+  <rect x="530" y="470" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="555.0" y="482.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ ajouter</text>
+  <line x1="240" y1="548" x2="1080" y2="548" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="979" y="558" width="101" height="22" rx="5" fill="url(#svcol-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1029.5" y="572.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Enregistrer</text>
+  <rect x="898" y="558" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="934.5" y="572.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <rect x="20" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nommé par son libellé</text>
+  <text x="30" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">puis application · identifiant</text>
+  <line x1="200" y1="47.0" x2="240" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Repères utiles</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clé, filtre, nature, lecture seule…</text>
+  <line x1="200" y1="157.0" x2="440" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une colonne</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">⠿ pour déplacer, ✕ pour retirer</text>
+  <line x1="200" y1="397.0" x2="310" y2="422" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="1125" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1135" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six onglets</text>
+  <text x="1135" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Rules porte la nature du champ</text>
+  <line x1="1125" y1="137.0" x2="717.5" y2="188" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="1125" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1135" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Kind of field</text>
+  <text x="1135" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un choix en mots simples</text>
+  <line x1="1125" y1="227.0" x2="1050" y2="243" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="1125" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1135" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le seul champ utile</text>
+  <text x="1135" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nommé selon la nature</text>
+  <line x1="1125" y1="307.0" x2="1050" y2="305" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="1125" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1135" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouvelle liste depuis une table…</text>
+  <text x="1135" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête et liste d'un coup</text>
+  <line x1="1125" y1="377.0" x2="746" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
+  <rect x="1125" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1135" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aide courte · plus</text>
+  <text x="1135" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le texte long derrière plus</text>
+  <line x1="1125" y1="457.0" x2="903.856" y2="357" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svcol-arrow)"/>
 </svg>
 
-La liste affiche une ligne par colonne (**ColumnHint**) avec ses marques ; un clic sur une ligne ouvre ses réglages à côté de la liste, en six onglets :
+La liste affiche une ligne par colonne avec ses repères — clé, filtre, nature du champ, lecture seule… ; un clic sur une ligne ouvre ses réglages à côté de la liste, en six onglets. Chaque champ porte une phrase d'aide courte ; **plus** ouvre l'explication complète.
 
 | Onglet | Contenu |
 |---|---|
-| **General** | `name`, `dd`, `key`, `sensitive`, `group` (la table liée un à un dans laquelle la colonne s'écrit). |
-| **Display** | `label`, `hidden`, `format`, `align`, `width`, `wrap`, `params_of`, le réglage de carte, la largeur dans la fiche, le lien d'exploration. |
-| **Filter** | `filter`, `filter_period`, `filter_from`, `visible_when`. |
-| **Rules** | `rules`, `rules_values`, `rules_when` — et les réglages de lookup quand la règle en est un. |
-| **Edit** | `required`, `required_when`, `disabled`, `disabled_when`, `disable_on_add`, `disable_on_edit`, `justify` (cadrage de la valeur écrite — vide reprend le dictionnaire). |
-| **Defaults** | `default`, `default_when`, `write_when`. |
+| **General** | **Column**, **Dictionary item**, **Key**, **Sensitive data**, **Related table** (la table liée un à un dans laquelle la colonne s'écrit). |
+| **Display** | **Label**, **Hidden**, **Format**, **Alignment**, **Width**, **Wrap long text**, **Parameters of the service in**, **On a phone**, **Width in the form**, **Link that runs**. |
+| **Filter** | **Filter**, **Period shown at first**, **Narrowed by**, **Shown only when**. |
+| **Rules** | **Kind of field**, le champ propre à cette nature, **Another kind when** — et, pour une liste lue dans une table, **Code only**, **Values given to the list**, **Fills other fields**. |
+| **Edit** | **Required**, **Required only when**, **Read only**, **Read only when**, **Read only when adding**, **Read only when changing**, **Align when saving**, **Align as the item in**. |
+| **Defaults** | **Default value**, **Forced value when**, **Saved only when**. |
 
 Un réglage en liste (une condition, un filtre en cascade) s'ouvre dans le même panneau ; le fil d'Ariane en haut ramène à la colonne.
 
@@ -205,83 +193,129 @@ Un réglage en liste (une condition, un filtre en cascade) s'ouvre dans le même
 
 ## Champ par champ
 
-Chaque indication de colonne porte la même structure. Les champs sont décrits ci-dessous par finalité.
+Chaque colonne porte les mêmes réglages. Ils sont décrits ci-dessous par finalité.
 
 ### Identité
 
 | Champ | Notes |
 |---|---|
-| **`name`** | La colonne du résultat à laquelle s'applique cette indication. Correspondance insensible à la casse contre les colonnes de la requête de lecture. Normalisée en MAJUSCULES à l'enregistrement. |
-| **`dd`** | Entrée de dictionnaire dont hériter `label` / `format` / `rule`. Vide utilise le `name` de la colonne comme clé. Mettre à `""` (chaîne vide entre guillemets) pour se désinscrire totalement du dictionnaire. |
-| **`sensitive`** (*Sensitive*) | Indique si la colonne porte une donnée sensible, pour l'assistant IA : elle est écartée de ce que l'assistant reçoit quand l'installation masque les données sensibles. Trois choix dans l'éditeur : *(default)* suit l'entrée du dictionnaire de la colonne, *yes* marque la colonne, *no* l'exempte même si son entrée est marquée. Voir [Données sensibles](../../ai-data-sent.md#sensitive). |
+| **Column** | La colonne du résultat à laquelle s'appliquent ces réglages. Correspondance insensible à la casse avec les colonnes de la requête de lecture. Mise en MAJUSCULES à l'enregistrement. |
+| **Dictionary item** | L'entrée du dictionnaire qui donne à la colonne son libellé, son format et sa liste. *(par défaut)* prend le nom de la colonne comme clé. |
+| **Sensitive data** | Indique si la colonne porte une donnée sensible, pour l'assistant IA : elle est écartée de ce que l'assistant reçoit quand l'installation masque les données sensibles. Trois choix : *(par défaut)* suit l'entrée du dictionnaire de la colonne, *oui* marque la colonne, *non* l'exempte même si son entrée est marquée. Voir [Données sensibles](../../ai-data-sent.md#sensitive). |
 
-Le système de dictionnaire (`dictionary.toml`) est le vocabulaire centralisé de Liberty — une entrée définit une fois le titre d'affichage, le format, la règle et la recherche d'un champ ; chaque écran qui a une colonne avec ce nom en hérite. Voir [Concepts → Dictionnaire](../../dictionary.md).
+Le dictionnaire est le vocabulaire partagé de Liberty — une entrée définit une fois le libellé, le format, la nature et la liste d'un champ ; chaque écran qui a une colonne de ce nom en hérite. Voir [Concepts → Dictionnaire](../../dictionary.md).
 
 ### Affichage dans la grille
 
 | Champ | Notes |
 |---|---|
-| **`label`** | Titre d'affichage dans l'en-tête de la grille et libellé du champ dans le dialogue. Retombe sur le `label` du dictionnaire, puis sur le `name` de la colonne. |
-| **`hidden`** | Quand activé, la colonne est masquée par défaut. L'opérateur peut la rendre visible via le menu *Colonnes* de la grille. |
-| **`wrap`** | Quand activé, un texte long passe à la ligne dans la grille au lieu d'être tronqué. |
-| **`width`** | Largeur de colonne fixe en pixels. Vide = ajustement automatique. |
-| **`align`** | Alignement du texte — `left`, `right`, `center`. Vide choisit automatiquement selon le type (nombres à droite, texte à gauche). |
-| **`format`** | Comment afficher la valeur — `date`, `number`, `boolean`, `currency`, etc. Surcharge le format du dictionnaire. Pilote à la fois la cellule de grille et le champ de dialogue. |
-| **Long Text**, **Name = value list** | Deux formats à connaître. *Long Text* se saisit dans une zone multiligne, dans la fiche comme dans le mode édition de la grille, et conserve ses retours à la ligne. *Name = value list* présente un texte de lignes `nom = valeur` sous forme de champs dans la fiche (ajout, retrait, **En texte** / **En champs**) ; avec **Params Of** — la colonne de l'écran qui désigne un point d'accès —, il devient le formulaire de ce point d'accès, un champ libellé par paramètre. |
-| **Card** | Sur un téléphone, où la grille est une liste de cartes : `title` place la colonne dans le titre de la carte, `show` lui donne toujours une ligne, `hide` ne l'affiche jamais. Vide : la grille décide. Voir [Téléphone et tablette](../../mobile.md#card-setting). |
+| **Label** | Le titre de l'en-tête de grille et le libellé du champ dans la fiche. À défaut, le libellé du dictionnaire, puis le nom de la colonne. |
+| **Hidden** | La colonne est masquée à l'ouverture. L'opérateur peut l'afficher depuis le menu *Colonnes* de la grille. |
+| **Wrap long text** | Un texte long passe à la ligne dans la grille au lieu d'être tronqué. |
+| **Width** | Largeur fixe de la colonne en pixels. Vide : ajustée au contenu. |
+| **Alignment** | À gauche, à droite ou centré. Vide : selon le type de valeur (nombres à droite, texte à gauche). |
+| **Format** | La façon d'afficher la valeur — date, nombre, oui / non, devise… Remplace le format du dictionnaire. Vaut pour la cellule de grille comme pour le champ de la fiche. |
+| **Long Text**, **Name = value list** | Deux formats à connaître. *Long Text* se saisit dans une zone multiligne, dans la fiche comme dans le mode édition de la grille, et conserve ses retours à la ligne. *Name = value list* présente un texte de lignes `nom = valeur` sous forme de champs dans la fiche (ajout, retrait, **En texte** / **En champs**) ; avec **Parameters of the service in** — la colonne de l'écran qui désigne un point d'accès —, il devient le formulaire de ce point d'accès, un champ libellé par paramètre. |
+| **On a phone** | La place de la colonne sur une carte, quand la grille devient une liste de cartes : `title` la met dans le titre de la carte, `show` lui donne toujours une ligne, `hide` ne l'affiche jamais. Vide : la grille décide. Voir [Téléphone et tablette](../../mobile.md#card-setting). |
 
-### Règle d'édition
+### Nature du champ \{#kind\}
+
+**Kind of field** (onglet Rules) dit ce qu'est le champ, en mots simples, avec son code à côté. *(par défaut)* reprend celle du dictionnaire — la ligne sous le champ l'indique (*What the dictionary says for this item: ENUM (PERIOD_STATUS)*).
+
+| Nature du champ | Code | Dans la fiche | Le champ qu'elle demande |
+|---|---|---|---|
+| *A yes / no box* | `BOOLEAN` | Une case à cocher. | **Value that means yes** (`Y`, `1`, `true`…), et **Value for no**. |
+| *A fixed list of values* | `ENUM` | Une liste déroulante des valeurs de la liste. | **List of values** — une énumération du dictionnaire. |
+| *A list read from a table* | `LOOKUP` | Une liste des lignes de la table, avec recherche. | **List from a table** — un lookup du dictionnaire, ou un nouveau créé d'ici : voir [plus bas](#list-from-table). |
+| *A number given automatically* | `SEQUENCE` | Renseigné par le serveur à l'insertion. | **Numbering rule** — une séquence du dictionnaire. |
+| *The signed-in user* | `LOGIN` | Renseigné avec le nom de l'utilisateur. | — |
+| *Today's date* | `SYSDATE` | Renseigné avec la date du jour. | — |
+| *A password (hidden, stored encrypted)* | `PASSWORD` | Chiffré à l'écriture. | — |
+| *A database of this installation* | `POOL` | Une liste déroulante des pools. | **Only the databases of** — vide, tous les pools sont proposés. |
+| *Free text; left empty, it takes its default value* | `DEFAULT` | Saisie libre. | — (la **Default value** de l'onglet Defaults). |
+| *Free text, whatever the dictionary says* | `DISABLED` | Saisie libre : annule, pour cet écran, la nature donnée par le dictionnaire. | — |
+
+Seul le champ utile à la nature choisie s'affiche, sous le nom de ce qu'il représente pour elle. L'effet de chaque nature sur les écritures est décrit dans [Dictionnaire → Natures de champ](../../dictionary.md#rules).
+
+Une liste lue dans une table ajoute trois réglages :
 
 | Champ | Notes |
 |---|---|
-| **`rules`** | Comment afficher et valider la colonne. `BOOLEAN` affiche une case à cocher, `ENUM` une liste déroulante, `LOOKUP` un sélecteur avec recherche. Vide hérite du dictionnaire. |
-| **`rules_values`** | La valeur de la règle — `BOOLEAN` → le marqueur vrai (`Y` / `1` / `true`) ; `ENUM` → l'identifiant d'énumération ; `LOOKUP` → l'identifiant de recherche ; `SEQUENCE` / `NN` → l'identifiant de séquence. |
-| **`default`** | Valeur pré-remplie à l'ajout d'une nouvelle ligne. |
-| **`required`** | Activé, le champ porte un astérisque et **Enregistrer** reste bloqué tant qu'il est vide. |
-| **`disabled`** | Activé, la colonne est en lecture seule — l'opérateur voit la valeur sans pouvoir la modifier. |
-| **`disable_on_add`** / **`disable_on_edit`** | Lecture seule uniquement à l'ajout d'une ligne, ou uniquement une fois la ligne créée — le second pour les clés qui ne doivent plus changer. |
-| **`required_when`** / **`disabled_when`** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. Un champ obligatoire ne bloque l'enregistrement que s'il est visible. |
-| **`default_when`** | Une valeur imposée (et verrouillée, sauf si **lock** est désactivé) tant qu'une condition est remplie. |
-| **`rules_when`** | Une autre règle (lookup, énumération, booléen) tant qu'une condition est remplie. |
-| **`write_when`** | La colonne n'est écrite que tant qu'une condition est remplie. |
-| **`lookup_param_binds`** | Restreindre la requête d'une règle `LOOKUP` en liant des paramètres supplémentaires. Utilisé quand la recherche dépend de la valeur d'un autre champ (ex. choisir un rôle restreint par l'application courante de la ligne). Voir [Liaison de paramètres](../queries/parameter-binding.md). |
+| **Code only** | Affiche le code seul dans la grille, sans sa description. |
+| **Values given to the list** | Des valeurs de l'enregistrement qui restreignent la requête de la liste — par exemple l'application de la ligne, pour ne proposer que les rôles de cette application. Voir [Liaison des paramètres](../queries/parameter-binding.md). |
+| **Fills other fields** | Au choix d'une ligne, recopie des colonnes de cette ligne dans d'autres champs de l'enregistrement. |
 
-### Clé primaire
+**Another kind when** donne au champ une autre nature — une autre liste, une autre énumération, une case oui / non — tant qu'une autre colonne a une valeur donnée. Voir [Conditions de formulaire](../../form-conditions.md).
+
+### Une liste lue dans une table, d'un seul geste \{#list-from-table\}
+
+Quand la liste n'existe pas encore, **Nouvelle liste depuis une table…**, sous **List from a table**, la crée sans quitter la colonne. La fenêtre *Nouveau lookup* demande :
 
 | Champ | Notes |
 |---|---|
-| **`key`** | Marque cette colonne comme partie de la clé primaire de la ligne. Pilote :<br/>– La correspondance mise à jour-ou-insertion de l'import Excel.<br/>– En ajout, une colonne clé présente une saisie libre au lieu de sa liste de lookup (une nouvelle clé se saisit, elle ne se choisit pas).<br/>– La liaison `:NAME_ORIGINAL` de la requête `_put` (la convention de l'Assistant CRUD). |
+| **Table** | Une table de la base de l'écran. |
+| **Colonne valeur** | Le code stocké sur la ligne. |
+| **Colonne libellé** | La description affichée à l'utilisateur. |
+| **Clause WHERE optionnelle** | Écrite sans le mot-clé. |
+| **Nom de la requête**, **Identifiant**, **Description** | Déduits de la table ; modifiables. |
+| **SQL généré — modifiable** | La requête, telle qu'elle sera enregistrée. |
 
-Une clé n'est pas verrouillée d'office à la modification d'une ligne : cocher **disable_on_edit** (onglet Edit) sur les colonnes clés qui ne doivent plus changer une fois la ligne créée. Marquer chaque colonne qui identifie une ligne de façon unique. Les clés multi-colonnes sont prises en charge — activer l'indicateur sur chacune. Quand `key_columns` de l'écran est vide (le cas habituel), le runtime retombe sur les colonnes dont l'indicateur `key` est activé.
+**Enregistrer** ajoute la requête aux requêtes de liste de l'application et la liste à son dictionnaire — deux objets nouveaux, rien d'existant n'est modifié —, recharge la configuration et sélectionne la nouvelle liste dans la colonne.
+
+### Saisie
+
+| Champ | Notes |
+|---|---|
+| **Required** | Le champ porte un astérisque et **Enregistrer** reste bloqué tant qu'il est vide. |
+| **Read only** | L'opérateur voit la valeur sans pouvoir la modifier. |
+| **Read only when adding** / **Read only when changing** | Lecture seule uniquement à l'ajout d'un enregistrement, ou uniquement une fois celui-ci créé — le second pour les clés qui ne doivent plus changer. |
+| **Required only when** / **Read only when** | Obligatoire ou en lecture seule uniquement tant que des conditions sur d'autres champs sont remplies. Un champ obligatoire ne bloque l'enregistrement que s'il est visible. |
+| **Align when saving** | Le cadrage de la valeur écrite, pour les codes stockés cadrés à droite. Vide : comme le dit le dictionnaire. |
+| **Align as the item in** | La colonne qui désigne l'élément du dictionnaire dont cette valeur suit le cadrage et la largeur. |
+
+### Valeurs par défaut
+
+| Champ | Notes |
+|---|---|
+| **Default value** | La valeur de départ d'un nouvel enregistrement. |
+| **Forced value when** | Une valeur imposée (et verrouillée, sauf si **Locked** est décoché) tant qu'une autre colonne a une valeur donnée. |
+| **Saved only when** | La colonne n'est enregistrée que tant que la condition est remplie ; sinon elle est enregistrée vide. |
+
+### Clé
+
+| Champ | Notes |
+|---|---|
+| **Key** | Cette colonne identifie l'enregistrement, seule ou avec les autres colonnes clés. Elle pilote :<br/>– la correspondance mise à jour-ou-insertion de l'import Excel ;<br/>– en ajout, une colonne clé présente une saisie libre au lieu de sa liste (une nouvelle clé se saisit, elle ne se choisit pas) ;<br/>– la liaison `:NAME_ORIGINAL` de la requête `_put` (la convention de l'Assistant CRUD). |
+
+Une clé n'est pas verrouillée d'office à la modification : cocher **Read only when changing** (onglet Edit) sur les colonnes clés qui ne doivent plus changer une fois l'enregistrement créé. Marquer chaque colonne qui identifie un enregistrement de façon unique. Les clés multi-colonnes sont prises en charge — cocher **Key** sur chacune. Quand **Key columns** de l'écran est vide (le cas habituel), ce sont les colonnes marquées **Key** qui servent.
 
 ### Filtrage
 
 | Champ | Notes |
 |---|---|
-| **`filter`** | Quand activé, la colonne apparaît dans le panneau de filtres du tableau. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste de valeurs (une énumération), plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une colonne à lookup garde un choix unique. Une colonne de date (format `date`, `datetime`, `timestamp`, ou type date dans la base) se filtre par une [période](#period). |
-| **`filter_period`** | Sur une colonne de date avec `filter`, la période proposée à l'ouverture de l'écran : `today`, `yesterday`, `last7`, `last30`, `thisMonth`, `lastMonth`, `thisQuarter`, `thisYear`, `lastYear`, `last12`. Vide ou `all` : aucune période, toutes les lignes. Le premier chargement automatique de l'écran l'applique déjà. |
-| **`filter_from`** | Filtre en cascade — restreint les options de cette colonne en fonction de la valeur d'un autre filtre. Sélectionne une colonne `source` (déjà filtrée) et une `column` sur le résultat de la requête de recherche que la source met en correspondance. |
-| **`visible_when`** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans le dialogue, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
+| **Filter** | La colonne apparaît dans les filtres au-dessus de la grille. L'utilisateur choisit une valeur pour restreindre la grille ; sur une colonne à liste fixe de valeurs, plusieurs valeurs à la fois, et un code saisi hors de la liste est accepté. Une liste lue dans une table garde un choix unique. Une colonne de date (format `date`, `datetime`, `timestamp`, ou type date dans la base) se filtre par une [période](#period). |
+| **Period shown at first** | Sur une colonne de date avec **Filter**, la période proposée à l'ouverture de l'écran : aujourd'hui, hier, 7 ou 30 derniers jours, ce mois-ci ou le mois dernier, ce trimestre, cette année ou l'année dernière, 12 derniers mois. Vide ou *all* : aucune période, toutes les lignes. Le premier chargement automatique de l'écran l'applique déjà. |
+| **Narrowed by** | Filtre en cascade — restreint les choix de cette colonne selon la valeur d'un autre filtre : **Filter** (l'autre filtre) et **Matched on** (la colonne de cette liste comparée à la valeur de ce filtre). |
+| **Shown only when** | Dans la grille, masque la colonne quand un filtre prend une valeur hors de la condition ; dans la fiche, n'affiche le champ que tant que les valeurs du formulaire remplissent la condition. |
 
 Les conditions sont détaillées dans [Conditions de formulaire](../../form-conditions.md), avec des exemples dans [Champs conditionnels](./conditional-fields.md).
 
 ### Une colonne typique
 
-Pour une colonne `STATUS` sur un écran clients, la configuration ressemble habituellement à :
+Pour une colonne `STATUS` sur un écran clients, les réglages sont habituellement :
 
 | Champ | Valeur |
 |---|---|
-| `name` | `STATUS` |
-| `dd` | (vide — utilise `STATUS` comme clé du dictionnaire) |
-| `label` | (vide — hérite du dictionnaire) |
-| `format` | (vide — hérite) |
-| `rules` | `ENUM` |
-| `rules_values` | `STATUS_CODES` (un identifiant d'énumération déclaré dans le dictionnaire) |
-| `default` | `OPEN` |
-| `required` | ✓ |
-| `filter` | ✓ |
+| **Column** | `STATUS` |
+| **Dictionary item** | *(par défaut)* — prend `STATUS` comme clé |
+| **Label**, **Format** | vides — hérités du dictionnaire |
+| **Kind of field** | *A fixed list of values* |
+| **List of values** | `STATUS_CODES` (une énumération du dictionnaire) |
+| **Default value** | `OPEN` |
+| **Required** | ✓ |
+| **Filter** | ✓ |
 
-Cela affiche une liste déroulante dans le dialogue (alimentée par l'énumération `STATUS_CODES`), pré-remplit les nouvelles lignes avec `OPEN`, exige une valeur et ajoute une puce de filtre à la grille.
+La fiche présente alors une liste déroulante (alimentée par l'énumération `STATUS_CODES`), les nouveaux enregistrements partent de `OPEN`, une valeur est exigée et la grille gagne un filtre.
 
 ---
 
@@ -289,14 +323,13 @@ Cela affiche une liste déroulante dans le dialogue (alimentée par l'énumérat
 
 Le comportement par défaut — quand la plupart des champs sont vides — est d'**hériter du dictionnaire**. La chaîne :
 
-```
-ColumnHint.label  → entrée DD.label  → nom de colonne
-ColumnHint.format → entrée DD.format → choisi par le moteur selon le type
-ColumnHint.rules  → entrée DD.rule
-ColumnHint.rules_values → entrée DD.rule_values
-```
+| Réglage de la colonne | Vide → repris de |
+|---|---|
+| **Label** | le libellé de l'entrée, puis le nom de la colonne |
+| **Format** | le format de l'entrée, puis le type de la valeur |
+| **Kind of field** et sa liste | la nature et la liste de l'entrée |
 
-Cela signifie qu'une colonne nommée `USR_ID` sur un écran lit automatiquement son libellé, son format, sa règle et l'argument de cette règle depuis l'entrée de dictionnaire `USR_ID` (ou de l'entrée indiquée dans `dd`). L'écran ne surcharge que quand **cet** écran a besoin d'un comportement différent du reste.
+Une colonne nommée `USR_ID` sur un écran lit donc automatiquement son libellé, son format, sa nature et sa liste dans l'entrée de dictionnaire `USR_ID` (ou celle choisie dans **Dictionary item**). L'écran ne surcharge que quand **cet** écran a besoin d'un comportement différent du reste.
 
 La liste des colonnes est donc majoritairement **vide** pour les installations bien dictionnarisées — des entrées n'apparaissent que quand il y a quelque chose à surcharger.
 
@@ -304,7 +337,7 @@ La liste des colonnes est donc majoritairement **vide** pour les installations b
 
 ## Filtrage et filtres en cascade
 
-Quand une colonne a `filter = true`, une puce pour celle-ci apparaît dans le panneau de filtres de la grille. L'utilisateur choisit une valeur, la grille réexécute la requête de lecture avec cette valeur liée au paramètre `:placeholder` correspondant. La requête est responsable d'accepter la liaison.
+Quand une colonne a **Filter** coché, une puce pour celle-ci apparaît dans le panneau de filtres de la grille. L'utilisateur choisit une valeur, la grille réexécute la requête de lecture avec cette valeur liée au paramètre `:placeholder` correspondant. La requête est responsable d'accepter la liaison.
 
 ### Une période sur une colonne de date \{#period\}
 
@@ -316,11 +349,11 @@ Les **filtres en cascade** restreignent les options d'un filtre selon un autre. 
 
 | Champ | Valeur sur `ROLE_ID` |
 |---|---|
-| `rules` | `LOOKUP` |
-| `rules_values` | `get_roles` |
-| `filter` | ✓ |
-| `filter_from.source` | `APPS_ID` (la colonne source du filtre parent) |
-| `filter_from.column` | `APP_ID` (la colonne du résultat de la requête de recherche qui correspond à la source) |
+| **Kind of field** | *A list read from a table* |
+| **List from a table** | `get_roles` |
+| **Filter** | ✓ |
+| **Narrowed by → Filter** | `APPS_ID` (le filtre parent) |
+| **Narrowed by → Matched on** | `APP_ID` (la colonne de la requête de la liste comparée à la valeur du filtre parent) |
 
 Quand l'utilisateur choisit une application, la recherche de rôles se réexécute avec l'identifiant d'application lié — l'utilisateur ne voit que les rôles de cette application.
 
@@ -328,15 +361,15 @@ Quand l'utilisateur choisit une application, la recherche de rôles se réexécu
 
 ## Ordre des colonnes
 
-L'ordre de la liste **ColumnHint** = l'ordre d'affichage dans la grille. Les colonnes que la requête de lecture retourne mais qui ne sont pas listées ici conservent leur ordre de découverte et suivent celles qui sont indiquées.
+L'ordre de la liste des colonnes = l'ordre d'affichage dans la grille. Les colonnes que la requête de lecture retourne mais qui ne sont pas listées ici conservent leur ordre de découverte et suivent celles qui sont indiquées.
 
 Pour réorganiser :
 
 | Objectif | Action |
 |---|---|
 | Monter / descendre une colonne. | Glisser sa ligne dans la liste (la poignée de glissement est sur le bord gauche de la ligne). |
-| Masquer une colonne entièrement. | Mettre `hidden = true`. L'opérateur peut quand même la rendre visible depuis le menu *Colonnes* de la grille. |
-| Retirer une colonne de la grille et du dialogue. | Supprimer son indication ET s'assurer qu'elle n'est sur les champs d'aucun onglet du dialogue. (Ou modifier la requête de lecture pour ne pas la retourner.) |
+| Masquer une colonne entièrement. | Cocher **Hidden**. L'opérateur peut quand même la rendre visible depuis le menu *Colonnes* de la grille. |
+| Retirer une colonne de la grille et du dialogue. | La retirer de la liste (✕) ET s'assurer qu'elle n'est sur les champs d'aucun onglet du dialogue. (Ou modifier la requête de lecture pour ne pas la retourner.) |
 
 ---
 
@@ -344,12 +377,12 @@ Pour réorganiser :
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| `dd = "USR_ID"` mais pas d'entrée de dictionnaire nommée `USR_ID`. | Le libellé et le format retombent textuellement sur le nom de colonne. | Ajouter l'entrée de dictionnaire, ou mettre `dd = ""` pour se désinscrire et configurer `label`/`format` en ligne. |
-| `rules = LOOKUP` mais `rules_values` vide. | La liste déroulante est vide. | Mettre `rules_values` à un identifiant de recherche du dictionnaire. |
-| `filter_from` renseigné mais la colonne n'a pas `filter`. | La cascade ne fait rien — le filtre source ne se déclenche jamais. | Activer `filter = true` ET renseigner `filter_from`. |
-| `required = true` sur une colonne que la requête de lecture ne retourne pas. | Le dialogue enregistre avec NULL ; si la BD a une contrainte NOT NULL, l'écriture échoue. | Ajouter la colonne à la requête de lecture, ou retirer `required` de l'indication. |
-| `key = true` sur une colonne non unique. | L'import Excel traite les valeurs en double comme des mises à jour de la même ligne. | Vérifier que les colonnes clés identifient véritablement une ligne de façon unique. |
-| `format = currency` mais la valeur est en centimes (entier). | La grille affiche `1,234.00` pour `123456`. | Le format attend la valeur dans l'unité à afficher — diviser par 100 dans la requête, ou utiliser une étape Python avant l'affichage. |
+| **Dictionary item** `USR_ID` sans entrée de dictionnaire `USR_ID`. | Le libellé et le format reprennent tels quels le nom de la colonne. | Ajouter l'entrée de dictionnaire, ou renseigner **Label** et **Format** sur la colonne. |
+| *A list read from a table* avec **List from a table** vide. | La liste déroulante est vide. | Choisir une liste, ou en créer une avec **Nouvelle liste depuis une table…**. |
+| **Narrowed by** renseigné sans **Filter** coché. | La cascade ne fait rien — le filtre source ne se déclenche jamais. | Cocher **Filter** ET renseigner **Narrowed by**. |
+| **Required** sur une colonne que la requête de lecture ne retourne pas. | Le dialogue enregistre NULL ; si la base a une contrainte NOT NULL, l'écriture échoue. | Ajouter la colonne à la requête de lecture, ou décocher **Required**. |
+| **Key** sur une colonne non unique. | L'import Excel traite les valeurs en double comme des mises à jour de la même ligne. | Vérifier que les colonnes clés identifient véritablement une ligne de façon unique. |
+| **Format** *currency* alors que la valeur est en centimes (entier). | La grille affiche `1,234.00` pour `123456`. | Le format attend la valeur dans l'unité à afficher — diviser par 100 dans la requête, ou utiliser une étape Python avant l'affichage. |
 
 ---
 

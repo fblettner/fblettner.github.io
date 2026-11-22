@@ -1,6 +1,6 @@
 ---
 title: Schedules
-description: "When Nomaflow jobs run: the five-field cron syntax and its day-of-week numbering, timezones, the preview of the next runs, the Schedule view, schedulable presets, and missed schedules recorded as MISSED runs."
+description: "When Nomaflow jobs run: the schedule said in words in the job editor, the five-field cron syntax and its day-of-week numbering, timezones, the preview of the next runs, the Schedule view, schedulable presets, and missed schedules recorded as MISSED runs."
 keywords: [Nomaflow, cron, schedule, timezone, Schedule view, presets, missed schedules, MISSED, grace, Liberty Next]
 ---
 
@@ -50,9 +50,20 @@ When both the day of the month and the day of the week are set, **both** must ma
 
 ## In the job editor \{#editor\}
 
-The **Schedule (cron)** field of the job editor offers ready-made choices — **Manual**, **Hourly**, **Daily**, **Weekly**, **Monthly** — and a free cron. Under the field, **Next runs** lists the next five runs in the job's timezone; it is recomputed shortly after each change, and an invalid expression is reported there.
+The **Schedule (cron)** field of the job editor says the schedule in words: first how often, then only the fields that choice needs. The editor saves the matching cron expression.
 
-**Timezone** is an IANA name (`Europe/Paris`, `America/New_York`). The schedule is evaluated in that timezone, daylight saving time included: `0 2 * * *` in `Europe/Paris` runs at 02:00 Paris time all year round.
+| How often | Then | Saved as |
+|---|---|---|
+| *Only when started by hand* | Nothing: *No schedule — this job only runs when triggered manually.* | no schedule |
+| *Every few minutes* | Every **N** `minutes` (1 to 59). | `*/15 * * * *` |
+| *Every hour, or every few hours* | Every **N** `hour(s), at` **M** `minutes past the hour`. | `0 */2 * * *` |
+| *On chosen days, at a set time* | `at` a time, then the days of the week as buttons, Monday to Sunday — *No day picked: every day.* | `0 2 * * *` |
+| *Once a month* | `on day` **N** `at` a time. | `0 7 1 * *` |
+| *Something else (typed)* | The cron expression itself — lists of hours, ranges, months: see [above](#cron). | as typed |
+
+A schedule saved earlier opens on the choice that says it (`30 2 * * *` opens as *On chosen days, at a set time*, 02:30, no day picked); one that no choice says opens as *Something else (typed)*. Under the fields, the schedule is said back in words — *every day at 02:00*, *every 15 minutes* — and **Next runs** lists the next five runs in the job's timezone; it is recomputed shortly after each change, and an invalid expression is reported there.
+
+**Timezone** is picked in the list of time zones (`Europe/Paris`, `America/New_York`). The schedule is evaluated in that timezone, daylight saving time included: `0 2 * * *` in `Europe/Paris` runs at 02:00 Paris time all year round.
 
 ---
 
@@ -188,7 +199,7 @@ Schedules the page cannot put into words — lists of hours, several months — 
 
 ## Schedulable presets \{#schedulable-presets\}
 
-A **preset** is a saved set of run parameters (parameters, step arguments, steps switched on or off, log level), created from the **Run with parameters** window with **Save as preset**. In the job editor, the **Presets & schedules** section gives each preset its own **Schedule (cron)** and **Timezone**, and a **Schedule enabled** checkbox.
+A **preset** is a saved set of run parameters (parameters, step arguments, steps switched on or off, log level), created from the **Run with parameters** window with **Save as preset**. In the job editor, the **Presets & schedules** section gives each preset its own **Schedule (cron)** — said in words like the job's — and **Timezone**, and a **Schedule enabled** checkbox; the same card renames the preset, changes what it gives (log, values, steps) and deletes it — see [Create a job](./create.md#presets).
 
 The scheduler then runs the job on that schedule with the preset's parameters: one job, several schedules, different inputs — a nightly full load and an hourly incremental of the same ETL, for instance.
 
@@ -222,7 +233,7 @@ The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recor
 | Option | Effect |
 |---|---|
 | The job's **enabled** / **disabled** pill on the Jobs page, or **Pause** on a dashboard's jobs card | The job's own schedule stops at once, without a reload. **Run** still works; preset schedules keep running unless switched off. |
-| **Manual** in the Schedule field | The job's own schedule is removed. |
+| *Only when started by hand* in the Schedule field | The job's own schedule is removed. |
 | **Schedule enabled** off on a preset | That preset's schedule stops. |
 
 ---

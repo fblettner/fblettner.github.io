@@ -533,6 +533,8 @@ The editors open **over the map** and come back to it, reloaded, with the select
 
 **Open the screen** leaves the Studio for the screen itself.
 
+A save refused in one of these editors keeps it open over the map, with what to correct listed in it — see [A refused save](./configuration/settings-ui.md#refused).
+
 ---
 
 ## Tips & best practices \{#tips\}

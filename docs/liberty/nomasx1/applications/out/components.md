@@ -123,7 +123,7 @@ It is the headline view for licence reporting and the entry point to drill down 
   <line x1="197" y1="181.0" x2="248" y2="181.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ouc-arrow)"/>
   <rect x="12" y="250.0" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="22" y="265.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">OUT - Users / Details / Objects</text>
-  <text x="22" y="278.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtered on the component</text>
+  <text x="22" y="278.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on the row clicked</text>
   <line x1="197" y1="267.0" x2="276" y2="267.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ouc-arrow)"/>
   <rect x="1119" y="117" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1129" y="132" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export</text>
@@ -158,15 +158,15 @@ The component dimension comes from the JDE System Code → Licence Component map
 
 ---
 
-## Context menu
+## Context menu \{#context-menu\}
 
-Click the **···** button at the start of a row, or right-click the row, to open its menu. Each shortcut drills into the OUT dataset filtered on the selected `(Application, Component)`.
+Click the **···** button at the start of a row, or right-click the row, to open its menu. Each shortcut opens an Object Usage Tracking screen on what was clicked.
 
 | Action | Where it lands |
 |---|---|
-| **OUT - Users** | List of users that invoked any object of the component. |
-| **OUT - Details** | Raw OUT rows for the component. |
-| **OUT - Objects** | List of objects of the component actually invoked. |
+| **OUT - Users** | *License - Object Usage Tracking - Users / Roles*, filtered on the row's application: one line per user and tracking date, with the role and the environment the user signed in with — the most recent first. |
+| **OUT - Details** | [OUT — Details](./details.md), filtered on the row's application and component: one line per user, object and version, with the last usage. |
+| **OUT - Objects** | [OUT — Objects](./objects.md), filtered on the row's application and component: the objects of the component actually run. |
 
 ---
 

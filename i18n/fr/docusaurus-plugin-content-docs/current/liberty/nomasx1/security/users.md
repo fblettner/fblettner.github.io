@@ -302,14 +302,14 @@ La fenêtre modifie les indicateurs du compte cliqué — le même enregistremen
 
 | Champ | Signification |
 |---|---|
-| **Application ID**, **Utilisateur ID** | Le compte de la ligne. |
+| **ID application**, **Utilisateur ID** | Le compte de la ligne ; en lecture seule. |
 | **Privilèges (Y/N)** | Le compte dispose d'un accès super-utilisateur : il est compté parmi les comptes à privilèges de la [Revue de sécurité](../security-review.md) et des rapports. |
 | **Technique (Y/N)** | Compte de traitement par lots ou de service, exclu du décompte des licences. |
 | **Générique (Y/N)**, **Générique nombre** | Identifiant partagé par plusieurs personnes, et le nombre de personnes qui l'utilisent. |
 | **Lié (Y/N)**, **Utilisateur lié** | Le compte appartient à la même personne qu'un autre identifiant — la paire de doublons est alors déclarée. |
 | **Renommé (Y/N)**, **Utilisateur précédent** | Le compte remplace un ancien identifiant de la même personne. |
 
-**Enregistrer** écrit les indicateurs, **Annuler** ferme sans enregistrer. **Dupliquer** et **Supprimer** agissent sur l'enregistrement des propriétés, pas sur le compte du système source.
+**Enregistrer** écrit les indicateurs — pour un compte qui n'a encore aucune propriété, le premier enregistrement crée sa fiche. **Annuler** ferme sans enregistrer. **Dupliquer** et **Supprimer** agissent sur l'enregistrement des propriétés, pas sur le compte du système source.
 
 ---
 

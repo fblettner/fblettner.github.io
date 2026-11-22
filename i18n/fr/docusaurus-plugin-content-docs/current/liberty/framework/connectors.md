@@ -13,7 +13,7 @@ Un **connecteur** est le moyen par lequel Liberty Next atteint une source de don
 | **SQL** | Une base de données, par un [pool](#pools). | Des **requêtes** nommées, de quatre types : tables, requêtes, séquences, lookups. |
 | **API** | Une API web (REST, JSON), par un [pool de type serveur HTTP](#pool-http) ou sa propre adresse. | Des **points d'accès** nommés : méthode, chemin, en-têtes, corps, extraction de la réponse. |
 
-Un connecteur doté d'un menu, avec **Show In Switcher** activé, est une **application**, choisie dans le sélecteur — voir [Applications](./apps/overview.md).
+Un connecteur doté d'un menu, avec **Show in the application list** activé, est une **application**, choisie dans le sélecteur — voir [Applications](./apps/overview.md).
 
 ---
 
@@ -348,13 +348,13 @@ La carte **Réglages** d'un connecteur SQL regroupe ses réglages de connexion.
 
 | Champ | Effet |
 |---|---|
-| **Pool** | Le pool sur lequel s'exécutent les requêtes — une liste des pools définis dans *Liberty Next → Administrer → Pools*. Le connecteur reprend l'adresse, les identifiants et le type de base du pool. |
-| **Pools** | Les pools supplémentaires sur lesquels les mêmes requêtes peuvent s'exécuter — voir [Connecteurs multi-pools](#multi-pool). |
-| **Show In Switcher** | Affiche le connecteur comme une application dans le sélecteur en haut du menu latéral — avec un menu, voir [Faire d'un connecteur une application](./build/menus/make-connector-an-app.md). |
-| **Home** | L'entrée de menu ouverte quand l'application est choisie. |
-| **Home By Role** | Une entrée d'accueil par rôle : un utilisateur arrive sur l'entrée du premier de ses rôles listé ici, sinon sur **Home**. |
-| **Max Rows** | Nombre maximal de lignes d'une lecture par défaut ; sinon celui du pool, puis 1 000. La limite d'un écran ou d'une requête l'emporte. |
-| **Dd Prefix** | Longueur du préfixe de table dans les noms de colonnes (JD Edwards : `2`, pour que `ABCO`, `MCCO` et `SDCO` portent tous l'élément `CO`). Utilisé par le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) des rôles. `0` : les noms de colonnes sont les éléments. |
+| **Database** | Le pool sur lequel s'exécutent les requêtes — une liste des pools définis dans *Liberty Next → Administrer → Pools*. Le connecteur reprend l'adresse, les identifiants et le type de base du pool. |
+| **Other databases** | Les pools supplémentaires sur lesquels les mêmes requêtes peuvent s'exécuter — voir [Connecteurs multi-pools](#multi-pool). |
+| **Show in the application list** | Affiche le connecteur comme une application dans le sélecteur en haut du menu latéral — avec un menu, voir [Faire d'un connecteur une application](./build/menus/make-connector-an-app.md). |
+| **Home page** | L'entrée de menu ouverte quand l'application est choisie. |
+| **Home page per role** | Une entrée d'accueil par rôle : un utilisateur arrive sur l'entrée du premier de ses rôles listé ici, sinon sur **Home page**. |
+| **Rows read at most** | Nombre maximal de lignes d'une lecture par défaut ; sinon celui du pool, puis 1 000. La limite d'un écran ou d'une requête l'emporte. |
+| **Column prefix length** | Longueur du préfixe de table dans les noms de colonnes (JD Edwards : `2`, pour que `ABCO`, `MCCO` et `SDCO` portent tous l'élément `CO`). Utilisé par le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) des rôles. `0` : les noms de colonnes sont les éléments. |
 
 ### Éditeur de requête
 
@@ -522,7 +522,7 @@ Un connecteur API appelle une API web. Son serveur — adresse, compte, secrets,
 
 | Étape | Contenu |
 |---|---|
-| **Connexion** | Section *Application* : **Afficher dans le sélecteur**, **Accueil**. Section *Connexion* : **Serveur** — un pool de type serveur HTTP, ou *Réglé sur ce connecteur* ; avec un pool, l'adresse, le compte, le mot de passe ou le jeton et le contrôle TLS sont lus dans ce pool. Sans pool, **URL de base** (`https://api.example.com`, `${VARIABLE}` accepté) et **Vérification SSL** (*true*, *false*, ou une variable comme `${API_VERIFY_SSL:-true}`, conservée telle quelle) se règlent ici. **Délai (ms)** dans les deux cas. Section *En-têtes par défaut* : **En-têtes**, des paires `Clé:Valeur` séparées par des points-virgules, envoyées avec chaque requête. |
+| **Connexion** | Section *Application* : **Afficher dans le sélecteur**, **Accueil**, **Accueil par rôle** — une page d'accueil différente pour les utilisateurs d'un rôle : le rôle et l'entrée de menu se choisissent tous deux, une ligne par rôle. Section *Connexion* : **Serveur** — un pool de type serveur HTTP, ou *Réglé sur ce connecteur* ; avec un pool, l'adresse, le compte, le mot de passe ou le jeton et le contrôle TLS sont lus dans ce pool. Sans pool, **URL de base** (`https://api.example.com`, `${VARIABLE}` accepté) et **Vérification SSL** (*true*, *false*, ou une variable comme `${API_VERIFY_SSL:-true}`, conservée telle quelle) se règlent ici. **Délai (ms)** dans les deux cas. Section *En-têtes par défaut* : **En-têtes**, des paires `Clé:Valeur` séparées par des points-virgules, envoyées avec chaque requête. |
 | **Authentification** | **Méthode** : *Aucune*, *Basic* (identifiant et mot de passe), *Bearer* (jeton statique), *Clé API* (nom de l'en-tête et clé), *OAuth2 / JWT* (chemin du point d'accès de jeton, corps et Content-Type de la demande, en-têtes de la demande de jeton, champ du jeton, durée de vie du jeton), *Chaque utilisateur sous son nom (jeton signé)* — chaque appel fait au nom de l'utilisateur connecté, voir [Chaque appel au nom de l'utilisateur connecté](#api-user-jwt). Quand le connecteur désigne un serveur, seule la méthode et ses propres réglages se règlent ici : le compte, le mot de passe ou le jeton, la clé de signature et son certificat sont ceux du pool. Sinon, les champs de la méthode sont ici ; les secrets sont chiffrés à l'enregistrement, et le mot de passe, le jeton et la clé de signature ont un bouton afficher / masquer. La carte nomme la méthode et ce qui lui manque : *pas encore d'utilisateur*, *ni jeton ni adresse de jeton*, *pas d'adresse de jeton*, *pas encore de clé de signature*. |
 | **Environnements** | Un serveur par environnement, pour un connecteur utilisé avec plusieurs environnements JDE — voir [Un serveur par environnement](#api-environments). |
 | **Points d'accès** | Les points d'accès nommés — voir [Points d'accès d'API](./build/api-endpoints.md). |

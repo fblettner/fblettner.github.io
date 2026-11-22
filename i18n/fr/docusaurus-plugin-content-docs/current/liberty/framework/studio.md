@@ -535,6 +535,8 @@ Les éditeurs s'ouvrent **par-dessus la carte** et y reviennent ; la carte est a
 
 **Ouvrir l'écran** quitte le Studio pour l'écran lui-même.
 
+Un enregistrement refusé dans l'un de ces éditeurs le laisse ouvert au-dessus de la carte, avec la liste des points à corriger — voir [Un enregistrement refusé](./configuration/settings-ui.md#refused).
+
 ---
 
 ## Conseils & bonnes pratiques \{#tips\}

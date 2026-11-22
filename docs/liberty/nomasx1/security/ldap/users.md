@@ -6,7 +6,7 @@ keywords: [Nomasx-1, security, LDAP, Active Directory, users, identity provider,
 
 # LDAP Users
 
-The **LDAP Users** screen is the raw catalog of accounts read from the corporate **LDAP / Active Directory** directory. One line per directory entry, with the Active Directory attributes side-by-side.
+The **LDAP Users** screen is the raw catalog of accounts read from the corporate **LDAP / Active Directory** directory. One line per directory entry and LDAP application, with the Active Directory attributes side-by-side.
 
 This list is the *identity reference* against which Nomasx-1 reconciles the user accounts found in each connected application. A user known to the source system but absent from this list lands on *Users without AD*; a department here drives the *Users by applications* matrix.
 
@@ -51,45 +51,45 @@ This list is the *identity reference* against which Nomasx-1 reconciles the user
   <rect x="1018" y="128" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1049.0" y="142.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
   <rect x="240" y="160" width="840" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">SAMACCOUNTNAME</text>
-  <text x="333" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DISTINGUISHEDNAME</text>
-  <text x="469" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">NAME</text>
-  <text x="550" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">USERPRINCIPALNAME</text>
-  <text x="675" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COMPANY</text>
-  <text x="740" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">CITY</text>
-  <text x="783" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DEPARTMENT</text>
-  <text x="847" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DESCRIPTION</text>
-  <text x="916" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DISPLAYNAME</text>
+  <text x="250" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">APPLICATION ID (ID)</text>
+  <text x="357" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">APPLICATION ID</text>
+  <text x="440" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">SAMACCOUNTNAME</text>
+  <text x="523" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DISTINGUISHEDNAME</text>
+  <text x="659" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">NAME</text>
+  <text x="740" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">USERPRINCIPALNAME</text>
+  <text x="865" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COMPANY</text>
+  <text x="930" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">CITY</text>
+  <text x="973" y="175.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DEPARTMENT</text>
   <rect x="240" y="186" width="840" height="22" fill="#0d1220"/>
-  <text x="250" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">jdoe</text>
-  <text x="333" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=John Doe,OU=Finance</text>
-  <text x="469" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">John Doe</text>
-  <text x="550" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">jdoe@acme.example</text>
-  <text x="675" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ACME</text>
-  <text x="740" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Lyon</text>
-  <text x="783" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">FIN-AP</text>
-  <text x="847" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">E1001</text>
-  <text x="916" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">John Doe</text>
+  <text x="250" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">10</text>
+  <text x="357" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">AD-CORP</text>
+  <text x="440" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">jdoe</text>
+  <text x="523" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=John Doe,OU=Finance</text>
+  <text x="659" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">John Doe</text>
+  <text x="740" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">jdoe@acme.example</text>
+  <text x="865" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ACME</text>
+  <text x="930" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Lyon</text>
+  <text x="973" y="200.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">FIN-AP</text>
   <rect x="240" y="209" width="840" height="22" fill="rgba(255,255,255,0.015)"/>
-  <text x="250" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">asmith</text>
-  <text x="333" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=Anna Smith,OU=Sales</text>
-  <text x="469" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Anna Smith</text>
-  <text x="550" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">asmith@acme.example</text>
-  <text x="675" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ACME</text>
-  <text x="740" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Paris</text>
-  <text x="783" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">SALES</text>
-  <text x="847" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">E1002</text>
-  <text x="916" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Anna Smith</text>
+  <text x="250" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">10</text>
+  <text x="357" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">AD-CORP</text>
+  <text x="440" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">asmith</text>
+  <text x="523" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=Anna Smith,OU=Sales</text>
+  <text x="659" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Anna Smith</text>
+  <text x="740" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">asmith@acme.example</text>
+  <text x="865" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ACME</text>
+  <text x="930" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Paris</text>
+  <text x="973" y="223.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">SALES</text>
   <rect x="240" y="232" width="840" height="22" fill="#0d1220"/>
-  <text x="250" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">bmartin</text>
-  <text x="333" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=Bruno Martin,OU=Ops</text>
-  <text x="469" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Bruno Martin</text>
-  <text x="550" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">bmartin@acme.example</text>
-  <text x="675" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Beta SARL</text>
-  <text x="740" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Lille</text>
-  <text x="783" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">LOG</text>
-  <text x="847" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">E1003</text>
-  <text x="916" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Bruno Martin</text>
+  <text x="250" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">11</text>
+  <text x="357" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">AD-BETA</text>
+  <text x="440" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">bmartin</text>
+  <text x="523" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">CN=Bruno Martin,OU=Ops</text>
+  <text x="659" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Bruno Martin</text>
+  <text x="740" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">bmartin@beta.example</text>
+  <text x="865" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Beta SARL</text>
+  <text x="930" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Lille</text>
+  <text x="973" y="246.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">LOG</text>
   <text x="240" y="277" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Rows per page</text>
   <rect x="311.88" y="265" width="52" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="321.88" y="278.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">50  ▾</text>
@@ -102,22 +102,22 @@ This list is the *identity reference* against which Nomasx-1 reconciles the user
   <text x="1045.0" y="278.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
   <rect x="1058" y="265" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1067.0" y="278.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
-  <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Directory account</text>
-  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Windows login (sAMAccountName)</text>
-  <line x1="200" y1="227.0" x2="270" y2="194" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
   <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">department</text>
-  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">grouped in LDAP › Settings</text>
-  <line x1="200" y1="137.0" x2="793" y2="194" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the LDAP application read</text>
+  <line x1="200" y1="137.0" x2="270" y2="194" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Directory account</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Windows login (SamAccountName)</text>
+  <line x1="200" y1="277.0" x2="450" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
   <rect x="1120" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Columns</text>
   <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">AD attributes, side by side</text>
   <line x1="1120" y1="137.0" x2="983.5" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
   <rect x="1120" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">…and further right</text>
-  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">manager, phone, title, expiry</text>
-  <line x1="1120" y1="267.0" x2="1070" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
+  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Department</text>
+  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">grouped in LDAP › Settings</text>
+  <line x1="1120" y1="267.0" x2="983" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxldu-arrow)"/>
 </svg>
 
 ---
@@ -137,22 +137,23 @@ The directory pull is the *single source of truth* for human identity. The scree
 
 | Column | Source (AD attribute) | What it tells you |
 |---|---|---|
-| **sAMAccountName** | `LDAP_ACCOUNT` — `samAccountName`. | The Windows login name. This is what most source systems use to match a JDE / SAP / etc. account against the AD identity. |
+| **Application ID** | `LDAP_APPS_ID` — application identifier. | The LDAP application the entry was read from — one per directory declared on [Applications](../../settings/global/applications.md#tab-ldap). It shows twice: its ID and its name. |
+| **SamAccountName** | `LDAP_ACCOUNT` — `samAccountName`. | The Windows login name. This is what most source systems use to match a JDE / SAP / etc. account against the AD identity. |
 | **distinguishedName** | `LDAP_DN` — `distinguishedName`. | Full LDAP path — useful when the directory has nested OUs and the AD admin needs to find the entry. |
-| **name** | `LDAP_NAME` — `name`. | First "name" attribute of the directory entry — typically the legal full name. |
-| **userPrincipalName** | `LDAP_LOGON` — `userPrincipalName`. | Federation-style login (`user@domain`). Used by SSO scenarios. |
-| **company** | `LDAP_COMPANY` — `company`. | Legal entity the person belongs to — useful when the AD covers several subsidiaries. |
-| **city** | `LDAP_CITY` — `l` (locality). | Geographic location. |
-| **department** | `LDAP_DEPARTMENT` — `department`. | The grouping key that drives the *Users by applications* mapping. |
-| **description** | `LDAP_DESCRIPTION` — `description`. | Free text — often carries the HR registration / matricule used to match the AD entry to the source-system account. |
-| **displayName** | `LDAP_DISPLAY_NAME` — `displayName`. | What appears in the AD address book. |
-| **mail** | `LDAP_MAIL` — `mail`. | Email address, as a `mailto:` link. |
-| **manager** | `LDAP_MANAGER` — `manager`. | DN of the manager — useful for approval workflows. |
+| **Name** | `LDAP_NAME` — `name`. | First "name" attribute of the directory entry — typically the legal full name. |
+| **UserPrincipalName** | `LDAP_LOGON` — `userPrincipalName`. | Federation-style login (`user@domain`). Used by SSO scenarios. |
+| **Company** | `LDAP_COMPANY` — `company`. | Legal entity the person belongs to — useful when the AD covers several subsidiaries. |
+| **City** | `LDAP_CITY` — `l` (locality). | Geographic location. |
+| **Department** | `LDAP_DEPARTMENT` — `department`. | The grouping key that drives the *Users by applications* mapping. |
+| **Description** | `LDAP_DESCRIPTION` — `description`. | Free text — often carries the HR registration / matricule used to match the AD entry to the source-system account. |
+| **DisplayName** | `LDAP_DISPLAY_NAME` — `displayName`. | What appears in the AD address book. |
+| **Mail** | `LDAP_MAIL` — `mail`. | Email address, as a `mailto:` link. |
+| **Manager** | `LDAP_MANAGER` — `manager`. | DN of the manager — useful for approval workflows. |
 | **physicalDeliveryOfficeName** | `LDAP_OFFICE` — `physicalDeliveryOfficeName`. | Office location. |
 | **telephoneNumber** | `LDAP_TELEPHONE` — `telephoneNumber`. | Office phone. |
 | **mobile** | `LDAP_MOBILE` — `mobile`. | Mobile phone. |
 | **title** | `LDAP_TITLE` — `title`. | Job title. |
-| **whenCreated** | `LDAP_CREATION` — `whenCreated`. | Date the AD entry was provisioned. |
+| **WhenCreated** | `LDAP_CREATION` — `whenCreated`. | Date the AD entry was provisioned. |
 | **accountExpires** | `LDAP_EXPIRES` — `accountExpires`. | Scheduled expiration date — empty / `Never` for permanent staff. |
 | **userAccountControl** | `LDAP_NEVER_EXPIRES` — `userAccountControl` flag. | Boolean derived flag indicating that the account is set to never expire. |
 
@@ -164,5 +165,5 @@ Hidden columns kept on the row: `LDAP_REFRESH` (last sync timestamp), `LDAP_UKID
 
 - **Sort by *accountExpires* ascending** to surface every contractor about to lose AD access. Cross-check with the *Assignments* screen — every soon-to-expire account that still holds a role on a source system must be deprovisioned there too.
 - **The *Description* attribute often carries the HR matricule** — when present, it makes the join to the source-system *Registration* field straightforward. Inconsistent values in that field are the typical cause of *Users without AD* false positives.
-- **Look at *Title* and *Department* together** to spot misconfigurations (e.g. an accountant marked in the IT department) before they impact the *Users by applications* mapping.
+- **Look at *title* and *Department* together** to spot misconfigurations (e.g. an accountant marked in the IT department) before they impact the *Users by applications* mapping.
 - **The directory is read by the collection's LDAP step**, which the *Everything* collection switches on — see [Jobs](../../jobs.md#steps). **Last Refresh** gives the date of the last read: an old date means the figures here are old too.

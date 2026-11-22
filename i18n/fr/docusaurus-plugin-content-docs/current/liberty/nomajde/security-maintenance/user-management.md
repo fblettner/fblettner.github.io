@@ -72,8 +72,9 @@ Pour chaque utilisateur JDE :
 | **Langue** | `ULLNGP` — code de langue préférée. | Pilote la langue des écrans JDE. |
 | **Format de date** | `ULFRMT` — format de date. | Contrôle la saisie et le rendu des dates (JMA, MJA…). |
 | **Pays** | `ULCTR` — code pays. | Pays par défaut pour les nouvelles transactions saisies par l'utilisateur. |
+| **Numéro d'adresse**, **Séparateur de date**, **Séparateur décimal** | `ULAN8`, `ULDSEP`, `ULDECF`. | Le numéro dans l'Address Book, et l'écriture des dates et des nombres. |
 
-Les attributs JDE masqués portés par la ligne (file de sortie, file de jobs, journal des messages, séparateur décimal, devise, fuseau horaire, format d'heure, traçage OMW, droite-à-gauche, indicateur utilisateur intensif, marqueur action / inactif, colonnes d'audit) sont conservés pour que la boîte de dialogue s'ouvre avec la photographie complète.
+Les attributs JDE masqués portés par la ligne (file de sortie, file de jobs, journal des messages, type et groupe d'utilisateur, colonnes d'audit) sont conservés pour que la boîte de dialogue s'ouvre avec la photographie complète.
 
 ---
 
@@ -114,19 +115,19 @@ Cliquer **Ajouter** dans la barre d'outils pour créer un nouvel utilisateur JDE
 
   <text x="60" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Format de date</text>
   <rect x="60" y="214" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="72" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JMA · /</text>
+  <text x="72" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JMA</text>
 
   <text x="260" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Séparateur décimal</text>
   <rect x="260" y="214" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="272" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">,</text>
 
-  <text x="400" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Devise</text>
+  <text x="400" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Séparateur de date</text>
   <rect x="400" y="214" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="412" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">EUR</text>
+  <text x="412" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">/</text>
 
-  <text x="540" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Fuseau horaire</text>
+  <text x="540" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Numéro d'adresse</text>
   <rect x="540" y="214" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="552" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Europe/Paris</text>
+  <text x="552" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">4242</text>
 
   <rect x="60" y="260" width="280" height="40" rx="8" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
   <text x="200" y="278" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
@@ -151,12 +152,12 @@ L'identification de l'utilisateur et les préférences d'affichage JDE. Chaque c
 | **Nom alpha** | Nom clair tiré de l'Address Book — apparaît sur chaque rapport et écran. |
 | **Langue** | Code de langue préférée (F, E, S…). Pilote la langue des écrans JDE. |
 | **Pays** | Code pays — pays par défaut pour les nouvelles transactions. |
-| **Format de date** | Ordre jour / mois / année et séparateur (`JMA /`, `MJA /`, `AMJ -`…). |
+| **Numéro d'adresse** | Le numéro de l'utilisateur dans l'Address Book. |
+| **Format de date** | Ordre jour / mois / année (`JMA`, `MJA`, `AMJ`…). |
+| **Séparateur de date** | Le caractère entre jour, mois et année (`/`, `-`, `.`). |
 | **Séparateur décimal** | Caractère décimal (`,` ou `.`). |
-| **Devise** | Devise par défaut pour les nouvelles transactions. |
-| **Fuseau horaire** | Fuseau de l'utilisateur — pilote l'affichage des horodatages côté JDE. |
-| **Format d'heure** | 12 h ou 24 h. |
-| **Droite-à-gauche**, **Traçage OMW**, **Utilisateur intensif** | Indicateurs JDE de comportement d'affichage. Laisser la valeur par défaut JDE sauf consigne du déploiement. |
+
+La langue, le pays, le format de date, le séparateur de date et le séparateur décimal sont les préférences d'affichage de l'utilisateur. L'enregistrement d'une modification écrit ces cinq valeurs et l'auteur de la modification : les autres préférences d'affichage de l'utilisateur — société, devise, fuseau horaire, format d'heure… — restent inchangées. La création d'un utilisateur écrit la ligne de préférences complète.
 
 Les champs JDE masqués (file de sortie, file de jobs, niveaux par défaut de journalisation des messages) prennent des valeurs standard fournies par Nomajde — typiquement `QPRINT`, `*NOLIST`, sévérité `00`.
 
@@ -226,7 +227,7 @@ Ajouter un utilisateur JDE n'est pas qu'une insertion SQL. Nomajde enchaîne les
 | Étape | Canal | Ce qu'elle fait |
 |---|---|---|
 | 1 | **SQL** | Écrit la ligne d'identification utilisateur dans le master JDE. |
-| 2 | **SQL** | Écrit la ligne des préférences d'affichage (langue, format de date, devise, fuseau, …). |
+| 2 | **SQL** | Écrit les préférences d'affichage : la ligne complète pour un nouvel utilisateur — ou pour un utilisateur qui n'en a pas encore —, seulement les cinq valeurs affichées par le formulaire pour une modification. |
 | 3 | **API REST AIS** | Authentifie le compte de service Nomajde auprès d'AIS pour obtenir un token utilisé par les deux appels suivants. |
 | 4 | **API REST AIS** | Vérifie si l'utilisateur a déjà un compte de sécurité JDE, puis le crée le cas échéant — c'est ce qui rend l'utilisateur connu de la couche sign-on JDE. |
 | 5 | **API REST AIS** | Fixe le mot de passe initial. Le compte est prêt à la prochaine connexion. |

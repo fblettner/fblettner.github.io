@@ -154,7 +154,7 @@ Tagging of technical / generic / linked users is held in `SECURITY_USERS_PROP`. 
 | Column | Source | What it tells you |
 |---|---|---|
 | **Application ID** | `LOUT_APPS_ID` — application identifier. Filterable. | The connected application. |
-| **Component ID** | `CPT_ID` — licence component. Filterable, hidden by default. | Used by the drill-down from *OUT — Components*. |
+| **Component ID** | `CPT_ID` — licence component. Filterable, hidden by default. | Narrows the list to the users of one component (Advanced filters). |
 | **User ID** | `LOUT_USER` — user identifier. Lookup against the user catalog. | Who used the component. |
 | **Status** | `USR_STATUS` — `01` means *Active*. | Account state in the source system. |
 | **Creation Date** | `USR_DT_CREATION` — date (string-formatted). | When the account was created. |

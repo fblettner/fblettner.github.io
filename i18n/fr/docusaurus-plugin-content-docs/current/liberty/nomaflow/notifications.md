@@ -202,13 +202,13 @@ Les règles sont listées à gauche, chacune avec son déclencheur et ses canaux
 
 | Déclencheur | Se déclenche quand | Réglages |
 |---|---|---|
-| **Un événement d'écran** | Une ligne est créée, modifiée ou supprimée par un écran. | Application, Écran, Événements (`insert` / `update` / `delete`) et, au besoin, **Seulement quand la ligne écrite a (ET)** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
-| **Un événement de tâche** | Une exécution Nomaflow se termine. | Tâches — plusieurs choisies dans une même liste, vide = toutes les tâches — et Événements : `failure`, `succeeded`, `canceled`, `missed` (une planification qui ne s'est pas exécutée — voir [Planifications](./jobs/schedules.md#missed)), `long_run` avec un seuil en minutes, `late` (aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
+| **Un événement d'écran** | Une ligne est créée, modifiée ou supprimée par un écran. | Application, Écran, Événements — *un enregistrement est ajouté* (`insert`), *un enregistrement est modifié* (`update`), *un enregistrement est supprimé* (`delete`) — et, au besoin, **Seulement quand la ligne écrite a (ET)** : des conditions champ = valeur, toutes requises (`STATUS = closed`). |
+| **Un événement de tâche** | Une exécution Nomaflow se termine. | Tâches — plusieurs choisies dans une même liste, vide = toutes les tâches — et Événements : *il échoue* (`failure`), *il réussit* (`succeeded`), *il est annulé* (`canceled`), *il n'a pas démarré au moment prévu* (`missed`, voir [Planifications](./jobs/schedules.md#missed)), *il dure plus longtemps que permis* (`long_run`, avec un seuil en minutes), *il n'a pas fini à l'heure fixée* (`late` : aucune exécution réussie à l'échéance **Doit avoir réussi avant** de la tâche). |
 | **Une action d'écran** | Une action d'écran de type `send_notification` s'exécute (un bouton ou une étape d'une chaîne d'actions), ou l'étape **Notification** d'un [service](../framework/build/services.md#notification). | Rien de plus : l'action ou l'étape nomme la règle et transmet les valeurs de la ligne, ainsi que celles dont son message a besoin. |
 
 `long_run` se vérifie à la fin de l'exécution : il signale une exécution qui a duré au moins le seuil, pas une exécution encore en cours.
 
-### Canaux
+### Canaux \{#channels\}
 
 Dans l'éditeur, les canaux se cochent sous leur nom : **Dans l'application** (`portal`), **E-mail** (`email`), **Une requête ou un point d'accès** (`action`).
 
@@ -217,6 +217,10 @@ Dans l'éditeur, les canaux se cochent sous leur nom : **Dans l'application** (`
 | `portal` | Une notification dans la cloche de chaque utilisateur destinataire. |
 | `email` | Un e-mail à chaque destinataire qui a une adresse. |
 | `action` | Lance une requête (connecteur SQL) ou appelle un endpoint (connecteur API) avec les valeurs du message — pour publier dans Teams ou sur un webhook, ou écrire dans une table de journal. Ses paramètres sont les valeurs de l'événement, plus `SUBJECT`, `BODY` et `RULE`. |
+
+Quand **Une requête ou un point d'accès** est coché, la règle désigne ce qu'elle exécute : **Action : connecteur**, puis **Requête (connecteur SQL)** ou **Point d'accès (connecteur API)**, choisis parmi les requêtes ou les points d'accès de ce connecteur. **Valeurs passées** ajoute ce que la requête ou le service reçoit en plus des valeurs de l'événement, en lignes nom / valeur ; une valeur peut contenir des marqueurs (`{PERIOD}`). La règle n'est pas enregistrée tant que le connecteur ou sa requête / son point d'accès manque : *Choisissez le connecteur et la requête ou le point d'accès que l'action exécute.*
+
+**Garder cette règle telle quelle à la mise à jour** fait qu'une mise à jour de l'application la laisse telle qu'enregistrée ici. Le titre de l'éditeur donne le libellé de la règle, puis son identifiant.
 
 Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait en arrière-plan : un enregistrement ou une tâche n'attend jamais le serveur de messagerie.
 
@@ -266,7 +270,7 @@ body = "{ERROR}"
 
 ## Depuis une étape de tâche \{#notify-step\}
 
-Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Ses destinataires prennent les mêmes formes, plus `user:{USER}` : la personne qui a lancé l'exécution, écartée quand c'est une planification qui l'a lancée. Voir [Étapes → Notification](./steps.md#notify).
+Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Ses destinataires prennent les mêmes formes, plus `user:{USER}` : la personne qui a lancé l'exécution, écartée quand c'est une planification qui l'a lancée. L'étape envoie dans la cloche et par e-mail uniquement : le canal *requête ou point d'accès* est propre aux règles — une tâche qui doit appeler un point d'accès le fait avec sa propre étape *Appeler une adresse*. Voir [Étapes → Notification](./steps.md#notify).
 
 ---
 
@@ -280,7 +284,7 @@ on_failure = true
 recipients = ["role:ops", "user:alice"]
 ```
 
-En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Écrire les destinataires sous la forme `user:`, `role:` ou `email:` — une entrée sans préfixe est prise pour une adresse e-mail.
+En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; failed* avec l'erreur, dans la cloche et par e-mail. Avec **Avertir si une exécution dépasse (minutes)** (`on_long_run_minutes`), une exécution qui dure au moins ce temps envoie en plus *Job &lt;id&gt; ran N min (threshold T)*, qu'elle ait échoué ou non. Les destinataires se choisissent comme dans une règle — un rôle, un utilisateur ou une adresse ; dans `jobs.toml`, ils s'écrivent `user:`, `role:` ou `email:`. Voir [Créer une tâche → Alertes](./jobs/create.md#alerts).
 
 ---
 

@@ -268,7 +268,7 @@ Cross-menu duplicates are fine — `[menus.crm.security]` and `[menus.nomasx1.se
 **A connector is listed in the application picker of the sidebar only when both conditions are true:**
 
 1. A menu exists — `[menus.<connector>]` is set up in *Liberty Next → Screens → Menus*.
-2. **Show In Switcher** on the connector — set in *Liberty Next → Data → Connectors → \<connector> → Settings* (on by default).
+2. **Show in the application list** on the connector — set in *Liberty Next → Data → Connectors → \<connector> → Settings* (on by default).
 
 Miss either one and the connector exists but is not listed. The picker itself appears only when there is more than one application. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
 

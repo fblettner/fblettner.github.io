@@ -90,7 +90,7 @@ Every screen of the app now shows these labels — the labels typed on the Custo
 
 ### The customer status — an enum
 
-**Enums** tab, **＋ Add enum** `CUSTOMER_STATUS`, with the values `ACTIVE` (Active), `PROSPECT` (Prospect), `INACTIVE` (Inactive). Then on the `STATUS` entry: **Rules** `ENUM`, **Rules values** `CUSTOMER_STATUS`.
+**Enums** tab, **＋ Add enum** `CUSTOMER_STATUS`, with the values `ACTIVE` (Active), `PROSPECT` (Prospect), `INACTIVE` (Inactive). Then on the `STATUS` entry: **Kind of field** *A fixed list of values*, **List of values** `CUSTOMER_STATUS`.
 
 The grid shows *Active* instead of `ACTIVE`, and the dialog offers the three values.
 
@@ -100,7 +100,7 @@ A lookup turns a code (the customer's id) into a label (its name), from a query.
 
 1. **Liberty Next → Data → Connectors → crm → Lookups → ＋ Add lookup**: table `customers`, value column `ID`, label column `NAME`. The assistant writes the query and the dictionary lookup `customers`.
 2. Same for the stages: table `deal_stages`, value `CODE`, label `LABEL`.
-3. In the dictionary, entry `CUSTOMER_ID`: **Rules** `LOOKUP`, **Rules values** `customers`; entry `STAGE`: **Rules** `LOOKUP`, **Rules values** `deal_stages`.
+3. In the dictionary, entry `CUSTOMER_ID`: **Kind of field** *A list read from a table*, **List from a table** `customers`; entry `STAGE`: **Kind of field** *A list read from a table*, **List from a table** `deal_stages`.
 
 Save the dictionary. See [Dictionary](../dictionary.md) and [Sequences and lookups](../build/queries/sequences-and-lookups.md).
 

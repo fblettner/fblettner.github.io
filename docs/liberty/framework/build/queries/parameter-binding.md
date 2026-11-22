@@ -248,7 +248,7 @@ Dates and times use the server's local time, one instant per statement. In `COLU
 |---|---|
 | **Dialog save** (insert, update, delete) | Nothing to declare: each column is bound to the parameter of the same name, and the update's WHERE uses `:<KEY>_ORIGINAL`, the key's value when the dialog opened. |
 | **Action** (run a query, call an API or a plugin, open a screen…) | The action's `param_binds`. |
-| **Lookup column** | The column's **lookup_param_binds** (Rules tab), or the dictionary entry's **Lookup params** for fixed values. |
+| **Lookup column** | The column's **Values given to the list** (Rules tab), or the dictionary entry's **List parameters** for fixed values. |
 | **Nested tab** | The tab's `param_binds` — typically the parent row's key. |
 | **Menu item** | **Params** (Advanced tab): fixed values passed to the target when it opens. |
 | **Dashboard** | The period and the filters bind `:PERIOD_FROM`, `:PERIOD_TO` and the filter columns — see [Dashboards](../../dashboards.md). |

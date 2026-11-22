@@ -123,7 +123,7 @@ Les deux types de feuilles les plus courants. Ils ouvrent une grille, mais pas d
 | **`type`** | `screen` ou `query`. |
 | **`target`** | `screen` : l'identifiant de l'écran — `customers`, `security_users`. `query` : le nom de la requête — `customers_get`. La liste déroulante présente les cibles valides pour le type et le connecteur choisis. |
 | **`connector`** | `query` : le connecteur qui possède la requête ; vide = l'application du menu (cas le plus courant). `screen` : en général vide — le connecteur de l'écran exécute ses requêtes. |
-| **`params`** | Optionnel. Valeurs fixes des paramètres `:placeholder` de la requête — par exemple une feuille *Mes tickets ouverts* avec `params = { OWNER = "#LOGIN_USER#", STATUS = "OPEN" }`. |
+| **`params`** (**Fixed values**, onglet Advanced) | Optionnel. Valeurs fixes des filtres de l'écran ou des paramètres `:placeholder` de la requête — par exemple une feuille *Mes tickets ouverts* avec `OWNER` = `#LOGIN_USER#` et `STATUS` = `OPEN`. Les noms se choisissent parmi les filtres de l'écran ou les paramètres de la requête. |
 
 ### Qui voit la feuille
 
@@ -170,7 +170,7 @@ Le deuxième type de feuille : ouvre le HttpRunner avec un endpoint de connecteu
 | **`type`** | `endpoint`. |
 | **`target`** | Un nom d'endpoint déclaré sur le connecteur API. La liste déroulante liste tous les endpoints du connecteur choisi. |
 | **`connector`** | Le connecteur API. Vide = l'application du menu (fonctionne quand l'application est elle-même un connecteur API). |
-| **`params`** | Optionnel. Pré-remplit les champs du formulaire. |
+| **`params`** (**Fixed values**) | Optionnel. Pré-remplit les champs du formulaire. |
 
 ### Quand l'utiliser
 
@@ -207,7 +207,7 @@ Un tableau de bord est une page de graphiques et de KPI déclarée dans `[dashbo
 | **`type`** | `dashboard`. |
 | **`target`** | `<app>.<id>` — le tableau de bord `[dashboards.<app>.<id>]`, par exemple `crm.pipeline`. La liste déroulante présente tous les tableaux de bord. |
 | **`connector`** | **Ne doit pas être renseigné** — l'application fait partie de la cible ; le validateur refuse un `connector` superflu. |
-| **`params`** | Optionnel. Pré-remplit les filtres du tableau de bord. |
+| **`params`** (**Fixed values**) | Optionnel. Pré-remplit les filtres du tableau de bord. |
 
 ### Quand l'utiliser
 
@@ -244,7 +244,7 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 | **`target`** | Le chemin de la route — `/nomaflow`, `/runs/dashboard`, etc. Les routes doivent être **enregistrées** dans le frontend (le menu ne les crée pas ; il y pointe). |
 | **Pages de tests** | `/liberty/tests` et `/liberty/test-results` placent les pages [Tests](../tests.md) et [Résultats des tests](../../../monitoring/test-results.md) dans le menu d'une application ; les entrées sont visibles des détenteurs de `tests:view`. |
 | **`connector`** | **Ne doit pas être renseigné**. La cible est une route, pas une ressource de connecteur. |
-| **`params`** | Optionnel. Le runtime les ajoute en tant que paramètres de chaîne de requête sur la route. |
+| **`params`** (**Fixed values**) | Optionnel. Le runtime les ajoute en tant que paramètres de chaîne de requête sur la route. |
 
 ### L'explorateur de données \{#explorer\}
 
@@ -305,7 +305,7 @@ Une feuille `job` ouvre la page d'une tâche Nomaflow pour des utilisateurs qui 
 | **`type`** | `job` — *Job (run it, follow its log)* dans la liste des types. |
 | **`target`** | L'identifiant de la tâche. La liste présente chaque tâche avec la première ligne de sa description. |
 | **`connector`** | NE doit PAS être renseigné. |
-| **`params`** | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
+| **`params`** (**Fixed values**) | Facultatif : `{ preset = "Licences" }` lance la tâche avec l'un de ses préréglages — une tâche, plusieurs entrées de menu. |
 
 L'entrée s'affiche pour qui peut lancer la tâche : l'entrée ou son dossier en **Lecture et modification** dans le rôle, ou la permission `job:<id>` (type de règle **Tâche** dans le bloc *Au-delà des menus* d'un rôle) ; `!job:<id>` la masque. Voir [Lancer une tâche depuis le menu d'une application](../../../nomaflow/jobs/run-from-menu.md).
 

@@ -1,12 +1,12 @@
 ---
 title: Créer une tâche
-description: "L'éditeur de tâche de Nomaflow, un onglet par tâche : la section Tâche (identifiant, planification, fuseau, étiquettes, activation, délai maximal, position dans l'installation, conservation à la mise à jour), les préréglages et leurs planifications, la politique de réessai, les alertes, les paramètres partagés, ce que l'utilisateur peut régler au lancement, la suite d'étapes — et la conservation des modifications non enregistrées."
-keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fuseau horaire, délai maximal, install_step, override, préréglages, politique de réessai, alertes, paramètres partagés, paramètres utilisateur, user_params, for_each, modifications non enregistrées, étapes, jobs.toml, Liberty Next]
+description: "L'éditeur de tâche de Nomaflow, un onglet par tâche : la section Tâche (identifiant, planification exprimée en clair, fuseau, étiquettes, délai maximal, contenu du journal, activation, position dans l'installation, conservation à la mise à jour), les préréglages modifiés sur place avec leurs planifications, la politique de réessai, les alertes, les paramètres partagés, ce que l'utilisateur peut régler au lancement, la suite d'étapes — et la conservation des modifications non enregistrées."
+keywords: [Nomaflow, créer une tâche, éditeur de tâche, planification, fuseau horaire, délai maximal, niveau de journal, contrôles avant enregistrement, install_step, override, préréglages, politique de réessai, alertes, paramètres partagés, paramètres utilisateur, user_params, for_each, modifications non enregistrées, étapes, jobs.toml, Liberty Next]
 ---
 
 # Créer une tâche
 
-**Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur la ligne d'une tâche, ouvre l'éditeur de tâche dans un onglet dédié — *Tâche · &lt;id&gt;*, un par tâche en cours de modification. **La tâche est dessinée par son flux** — **Début**, une carte par étape avec son type, son nom et ce qu'elle fait, **Fin** — et l'élément choisi se modifie à côté : la tâche elle-même au début, ou une étape. Un seul **Enregistrer**, en haut — actif dès qu'un élément change, avec *modifications non enregistrées* à côté —, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches. Une tâche invalide est refusée avec un message en haut de l'éditeur.
+**Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur la ligne d'une tâche, ouvre l'éditeur de tâche dans un onglet dédié — *Tâche · &lt;id&gt;*, un par tâche en cours de modification. **La tâche est dessinée par son flux** — **Début**, une carte par étape avec son type, son nom et ce qu'elle fait, **Fin** — et l'élément choisi se modifie à côté : la tâche elle-même au début, ou une étape. Un seul **Enregistrer**, en haut — actif dès qu'un élément change, avec *modifications non enregistrées* à côté —, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches. Voir [Contrôles avant l'enregistrement](#checks).
 
 Les modifications restent dans l'onglet quand l'utilisateur passe sur une autre page puis revient : l'onglet porte alors un point orange. **Retour aux tâches**, la fermeture de l'onglet ou de tous les onglets, le changement de langue et le rechargement du navigateur demandent d'abord confirmation — *Modifications non enregistrées*, avec **Perdre les modifications** ou **Rester**. Voir [Modifications non enregistrées](#unsaved).
 
@@ -73,7 +73,7 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
   <text x="343.0" y="196.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="362" y="169" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="372" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FILE_LOAD</text>
+  <text x="372" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHARGER UN FICHIER</text>
   <text x="372" y="197" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">load-sales</text>
   <text x="372" y="210" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">→ sales.fact_sales</text>
   </g>
@@ -83,7 +83,7 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
   <text x="269.0" y="274.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="288" y="247" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="298" y="261" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL_QUERY</text>
+  <text x="298" y="261" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXÉCUTER UNE REQUÊTE</text>
   <text x="298" y="275" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">refresh-totals</text>
   <text x="298" y="288" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">sales.totals_refresh</text>
   </g>
@@ -93,7 +93,7 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
   <text x="269.0" y="352.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="288" y="325" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="298" y="339" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOTIFY</text>
+  <text x="298" y="339" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVOYER UN MESSAGE</text>
   <text x="298" y="353" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
   <text x="298" y="366" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">role:management · Sal…</text>
   </g>
@@ -116,59 +116,72 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
   <rect x="668" y="216" width="398" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="678" y="230.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Fichiers de ventes mensuels vers la table de faits</text>
   <text x="668" y="254" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Planification (cron)</text>
-  <rect x="668" y="261" width="49" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="692.5" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Manuelle</text>
-  <rect x="721" y="261" width="45" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="743.5" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Horaire</text>
-  <rect x="770" y="261" width="63" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="801.5" y="274.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Quotidienne</text>
-  <rect x="837" y="261" width="67" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="870.5" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Hebdomadaire</text>
-  <rect x="908" y="261" width="54" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="935.0" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Mensuelle</text>
-  <rect x="668" y="286" width="398" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="300.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
-  <text x="668" y="322" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">Prochaines exécutions · 23/11/2026 02:00:00 · 24/11/2026 02:00:00 …</text>
-  <text x="668" y="340" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FUSEAU HORAIRE</text>
-  <rect x="668" y="345" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="359.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Europe/Paris</text>
-  <text x="873" y="340" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ÉTIQUETTES</text>
-  <rect x="873" y="345" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="883" y="359.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <rect x="879" y="348" width="50" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="886" y="359.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">sales ✕</text>
-  <rect x="934" y="348" width="40" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="941" y="359.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">etl ✕</text>
-  <text x="668" y="382" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DÉLAI MAXIMAL (SECONDES)</text>
-  <rect x="668" y="387" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="401.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">14400</text>
-  <rect x="873" y="393" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M875.5,398.5 L877.8,400.8 L881.8,396" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="890" y="402" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Activée</text>
-  <text x="668" y="422" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Une exécution encore en cours après ce</text>
-  <text x="668" y="432.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">délai est arrêtée. Vide : 4 heures.</text>
-  <text x="668" y="454" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EXÉCUTER À L'INSTALLATION, EN POSITION</text>
-  <rect x="668" y="459" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="473.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <rect x="873" y="459" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="890" y="468" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Garder cette tâche telle quelle</text>
-  <text x="890" y="480" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">à la mise à jour</text>
-  <text x="668" y="494" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Vide : ne fait pas partie de</text>
-  <text x="668" y="504.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">l'installation. Avec un nombre,</text>
-  <text x="668" y="515.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">l'installation exécute cette tâche une</text>
-  <text x="668" y="525.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">fois, le plus petit nombre d'abord.</text>
-  <text x="873" y="494" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Une mise à jour laisse alors toute la tâche</text>
-  <text x="873" y="504.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">telle qu'enregistrée ici.</text>
-  <rect x="664" y="538" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="552" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Préréglages &amp; plannings</text>
-  <rect x="664" y="562" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="576" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Politique de réessai</text>
-  <rect x="664" y="586" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="600" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Alertes</text>
-  <rect x="664" y="610" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="624" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres partagés</text>
-  <rect x="664" y="634" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="648" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Ce que l'utilisateur peut régler au lancement</text>
+  <text x="668" y="260" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif"></text>
+  <rect x="668" y="265" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="279.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Certains jours, à heure fixe</text>
+  <text x="852" y="279.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="872" y="283" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">à</text>
+  <rect x="886" y="265" width="70" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="279.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">02:00</text>
+  <text x="946" y="280" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">◷</text>
+  <rect x="668" y="294" width="36" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="686.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">lundi</text>
+  <rect x="708" y="294" width="36" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="726.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">mardi</text>
+  <rect x="748" y="294" width="49" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="772.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">mercredi</text>
+  <rect x="801" y="294" width="36" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="819.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">jeudi</text>
+  <rect x="841" y="294" width="49" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="865.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">vendredi</text>
+  <rect x="894" y="294" width="40" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="914.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">samedi</text>
+  <rect x="938" y="294" width="49" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="962.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">dimanche</text>
+  <text x="668" y="326" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Aucun jour choisi : tous les jours.</text>
+  <text x="1066" y="326" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">chaque jour à 02:00</text>
+  <text x="668" y="342" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">Prochaines exécutions · 23/11/2026 02:00:00 · 24/11/2026 02:00:00 …</text>
+  <text x="668" y="358" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FUSEAU HORAIRE</text>
+  <rect x="668" y="363" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="377.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Europe/Paris</text>
+  <text x="849" y="377.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="873" y="358" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ÉTIQUETTES</text>
+  <rect x="873" y="363" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="377.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <rect x="879" y="366" width="50" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="886" y="377.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">sales ✕</text>
+  <rect x="934" y="366" width="40" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="941" y="377.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">etl ✕</text>
+  <text x="668" y="400" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DÉLAI MAXIMAL (SECONDES)</text>
+  <rect x="668" y="405" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="419.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">14400</text>
+  <text x="873" y="400" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CE QUE CONTIENT LE JOURNAL</text>
+  <rect x="873" y="405" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="419.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Les étapes et leurs chiffres (hab…</text>
+  <text x="1054" y="419.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="668" y="440" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Une exécution encore en cours après ce</text>
+  <text x="668" y="450.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">délai est arrêtée. Vide : 4 heures.</text>
+  <text x="873" y="440" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Une exécution lancée à la main peut en</text>
+  <text x="873" y="450.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">demander plus ou moins.</text>
+  <rect x="668" y="459" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M670.5,464.5 L672.8,466.8 L676.8,462" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="685" y="468" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Activée</text>
+  <text x="668" y="484" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EXÉCUTER À L'INSTALLATION, EN POSITION</text>
+  <rect x="668" y="489" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="503.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="873" y="489" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="890" y="498" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Garder cette tâche telle quelle</text>
+  <text x="890" y="510" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">à la mise à jour</text>
+  <rect x="664" y="528" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="542" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Préréglages &amp; plannings</text>
+  <rect x="664" y="552" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="566" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Politique de réessai</text>
+  <rect x="664" y="576" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="590" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Alertes</text>
+  <rect x="664" y="600" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="614" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres partagés</text>
+  <rect x="664" y="624" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="638" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Ce que l'utilisateur peut régler au lancement</text>
   <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Début = la tâche</text>
   <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ses réglages s'ouvrent à côté</text>
@@ -189,22 +202,30 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
   <text x="1130" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un seul Enregistrer</text>
   <text x="1130" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écrit la tâche, retour à la liste</text>
   <line x1="1120" y1="93.0" x2="979" y2="97" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
-  <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Plannings prêts à l'emploi</text>
-  <text x="1130" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ou un cron à cinq champs</text>
-  <line x1="1120" y1="217.0" x2="1066" y2="271" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La planification en clair</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la fréquence, puis ses seuls champs</text>
+  <line x1="1120" y1="177.0" x2="958" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Jours de la semaine</text>
+  <text x="1130" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">aucun choisi : tous les jours</text>
+  <line x1="1120" y1="253.0" x2="987" y2="303" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
   <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Délai maximal</text>
-  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'exécution s'arrête au-delà</text>
-  <line x1="1120" y1="317.0" x2="861" y2="398" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Relue en clair, puis prévue</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les cinq prochaines exécutions</text>
+  <line x1="1120" y1="317.0" x2="1066" y2="323" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
   <rect x="1120" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Installation et mise à jour</text>
-  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">position · garder telle quelle</text>
-  <line x1="1120" y1="397.0" x2="1066" y2="470" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
-  <rect x="1120" y="520" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="535" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Politiques, paramètres</text>
-  <text x="1130" y="548" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">plus bas dans le panneau</text>
-  <line x1="1120" y1="537.0" x2="1070" y2="628" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce que contient le journal</text>
+  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">problèmes · habituel · tout</text>
+  <line x1="1120" y1="397.0" x2="1066" y2="416" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="450" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Installation et mise à jour</text>
+  <text x="1130" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">position · garder telle quelle</text>
+  <line x1="1120" y1="467.0" x2="1066" y2="500" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="540" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="555" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Préréglages, politiques, alertes</text>
+  <text x="1130" y="568" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">plus bas dans le panneau</text>
+  <line x1="1120" y1="557.0" x2="1070" y2="618" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
 </svg>
 
 ---
@@ -217,25 +238,36 @@ Seules les tâches modifiées sont réécrites : les autres tâches de `jobs.tom
 |---|---|
 | **Identifiant** | Lettres, chiffres, `-` et `_`. Figé une fois la tâche créée — il indexe l'historique des exécutions. Pour renommer : **Cloner** sous le nouvel identifiant, puis supprimer l'ancienne tâche. |
 | **Description** | Affichée sur la ligne de la tâche et sur sa page. |
-| **Planification (cron)** | Des choix tout faits (Manuelle, Horaire, Quotidienne, Hebdomadaire, Mensuelle) ou un cron à cinq zones ; **Prochaines exécutions** en affiche les cinq suivantes. Vide : tâche manuelle. Voir [Planifications](./schedules.md). |
-| **Fuseau horaire** | Le nom IANA dans lequel la planification est évaluée. |
+| **Planification (cron)** | La planification exprimée en clair : *Seulement quand on la lance*, *Toutes les quelques minutes*, *Toutes les heures, ou toutes les quelques heures*, *Certains jours, à heure fixe*, *Une fois par mois*, ou *Autre chose (saisi)* pour une expression cron — chaque choix n'affiche que les champs qui le concernent. La planification est ensuite relue en clair (*chaque jour à 02:00*) et **Prochaines exécutions** affiche les cinq suivantes. Voir [Planifications](./schedules.md#editor). |
+| **Fuseau horaire** | Choisi dans la liste des fuseaux (`Europe/Paris`, `America/New_York`) ; la planification y est évaluée. |
 | **Étiquettes** | Libellés libres, utilisés par le filtre de la page des Tâches. |
-| **Activée** | Active ou suspend la planification propre de la tâche. |
 | **Délai maximal (secondes)** | Une exécution encore en cours après ce délai est arrêtée. Vide : 4 heures. |
+| **Ce que contient le journal** | *Les problèmes seulement*, *Les étapes et leurs chiffres (habituel)* ou *Tout, avec chaque instruction* — le niveau des exécutions planifiées. Une exécution lancée à la main peut en demander plus ou moins dans **Exécuter avec des paramètres**. |
+| **Activée** | Active ou suspend la planification propre de la tâche. |
 | **Exécuter à l'installation, en position** | Vide : la tâche ne fait pas partie de l'installation. Avec un nombre, l'installation de l'application exécute cette tâche une fois, le plus petit nombre d'abord — les bases, puis le schéma, puis les données de référence. |
 | **Garder cette tâche telle quelle à la mise à jour** | Une mise à jour de l'application laisse toute la tâche telle qu'enregistrée ici. Case décochée, ses étapes sont rafraîchies depuis le produit et seuls les réglages propres à l'installation sont conservés (activation, planification, préréglages…). |
 
-### Préréglages & plannings
+### Préréglages & plannings \{#presets\}
 
-Les préréglages s'enregistrent depuis **Exécuter avec des paramètres → Enregistrer comme préréglage…**. Ici, chacun peut recevoir sa propre **Planification (cron)**, son **Fuseau horaire** et une case **Planning activé** — voir [Préréglages planifiables](./schedules.md#schedulable-presets).
+Les préréglages se créent depuis **Exécuter avec des paramètres → Enregistrer comme préréglage…** ; ici, chacun est une carte où il se renomme, se modifie ou se supprime :
+
+| Champ | Remarques |
+|---|---|
+| **Nom du préréglage** | Le nom sous lequel il est choisi et planifié. Deux préréglages planifiés d'une même tâche ne peuvent pas porter le même nom. |
+| **Planning activé** | Affiché dès que le préréglage a une planification : l'active ou la suspend. |
+| **Supprimer ce préréglage** | Demande confirmation — *Supprimer le préréglage « … » ? Sa planification part avec lui.* |
+| **Planification (cron)**, **Fuseau horaire** | La planification propre du préréglage, exprimée en clair comme celle de la tâche, et son fuseau — celui de la tâche par défaut. Voir [Préréglages planifiables](./schedules.md#schedulable-presets). |
+| **Ce que contient le journal** | Le niveau d'une exécution lancée avec le préréglage ; *comme le traitement le dit* par défaut. |
+| **Les valeurs qu'il donne** | Les valeurs qu'une exécution lancée avec ce préréglage utilise à la place de celles de la tâche (les paramètres partagés). |
+| **Les étapes qu'il exécute** | Seules les étapes sur lesquelles le préréglage se prononce sont listées, chacune *s'exécute* ou *est ignorée* — les autres suivent le réglage de la tâche. **Décider pour une autre étape…** en ajoute une. Une étape encore nommée par le préréglage mais absente de la tâche est signalée *n'est plus une étape de ce traitement*, pour pouvoir la retirer. |
 
 ### Politique de réessai
 
 **Réessayer les étapes en échec**, puis **Tentatives** (au total), **Délai** (`fixed` ou `exponential`) et **Secondes de base** entre deux tentatives. La politique s'applique à chaque étape.
 
-### Alertes
+### Alertes \{#alerts\}
 
-**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Écrire les destinataires sous la forme `user:alice`, `role:ops` ou `email:ops@example.com` — une entrée sans préfixe est prise pour une adresse e-mail. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. **Doit avoir réussi avant** fixe une échéance (`07:00`, dans le fuseau horaire de la tâche) : un jour où la tâche est planifiée, si aucune exécution n'a réussi à cette heure, les destinataires reçoivent *Job &lt;id&gt; is late* — encore en cours, en échec ou jamais démarrée. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
+**Envoyer des alertes** avec **En cas d'échec** prévient les **Destinataires** quand une exécution échoue, dans la cloche et par e-mail. Un destinataire se choisit : **Rôle**, **Utilisateur** ou **Adresse** à côté du champ, puis le rôle ou l'utilisateur dans la liste, ou une adresse saisie — chacun devient une pastille, retirée par sa ✕. Une ligne enregistrée sans son type (un ancien `ops` au lieu de `role:ops`) apparaît en orange avec *Ceux-ci ne recevraient rien — précisez pour chacun s'il s'agit d'un rôle, d'un utilisateur ou d'une adresse*. **Avertir si une exécution dépasse (minutes)** leur envoie en outre une notification dès qu'une exécution dure au moins ce temps, quelle que soit son issue. **Doit avoir réussi avant** fixe une échéance (`07:00`, dans le fuseau horaire de la tâche) : un jour où la tâche est planifiée, si aucune exécution n'a réussi à cette heure, les destinataires reçoivent *Job &lt;id&gt; is late* — encore en cours, en échec ou jamais démarrée. Pour plusieurs tâches à la fois ou d'autres événements, passer par une règle de notification : voir [Notifications](../notifications.md#job-alerts).
 
 ### Paramètres partagés
 
@@ -386,20 +418,27 @@ La corbeille de la carte retire le paramètre. L'enregistrement écrit exactemen
 
 ### Étapes
 
-Le **+** d'un lien du flux insère une étape à cet endroit, parmi les types `sql_copy`, `sql_query`, `python`, `ldap_sync`, `http`, `call_job`, `file_load`, `file_export`, `report`, `notify`. Un clic sur la carte d'une étape l'ouvre à côté du flux : son **Nom de l'étape**, les champs de son type, et ses icônes — **Monter**, **Descendre**, **Cloner l'étape**, **Supprimer**. Une étape peut être *Désactivée pour cette installation* : elle ne s'exécute jamais, même si une exécution ou un préréglage sélectionne toutes les étapes. Un flux long continue sur la ligne suivante, et le zoom (− / % / +) est mémorisé sur le poste. Les champs de chaque type sont décrits dans [Étapes](../steps.md).
+Le **+** d'un lien du flux insère une étape à cet endroit, parmi dix types exprimés en clair — *Copier une table*, *Exécuter une requête*, *Exécuter une fonction*, *Lire un annuaire*, *Appeler une adresse*, *Lancer un autre traitement*, *Charger un fichier*, *Exporter vers un fichier*, *Produire un rapport*, *Envoyer un message*. Un clic sur la carte d'une étape l'ouvre à côté du flux : son **Nom de l'étape**, les champs de son type, et ses icônes — **Monter**, **Descendre**, **Cloner l'étape**, **Supprimer**. Une étape peut être *Désactivée pour cette installation* : elle ne s'exécute jamais, même si une exécution ou un préréglage sélectionne toutes les étapes. **Autres réglages**, replié tant qu'aucun n'est renseigné, regroupe ce que toute étape possède : **Exécutée par défaut**, **Arrêtée après (secondes)** et **Environnement** — voir [Étapes → Champs communs](../steps.md#common). Un flux long continue sur la ligne suivante, et le zoom (− / % / +) est mémorisé sur le poste. Les champs de chaque type sont décrits dans [Étapes](../steps.md).
 
 ---
 
-## Uniquement dans jobs.toml \{#toml-only\}
+## Contrôles avant l'enregistrement \{#checks\}
 
-Quelques réglages n'ont pas de champ dans l'éditeur ; ils se définissent dans `jobs.toml` :
+**Enregistrer** contrôle d'abord la tâche et n'envoie rien tant qu'un point est à corriger. Ce qui serait refusé est listé en haut de l'éditeur — *Non enregistré — 2 points à corriger :* —, une ligne par problème, avec son emplacement et sa nature :
 
-| Clé | Défaut | Signification |
-|---|---|---|
-| `log_level` (tâche) | `INFO` | Le niveau des exécutions planifiées : `WARNING`, `INFO` ou `DEBUG`. Une exécution manuelle choisit le sien dans **Exécuter avec des paramètres**. |
-| `enabled` (étape) | `true` | `false` saute toujours l'étape. |
-| `timeout_seconds` (étape) | `3600` | L'étape s'arrête après ce délai. |
-| `pool` (`sql_query`, blocs de `sql_copy`) | — | Un autre pool du connecteur — voir [Étapes](../steps.md#sql-query). |
+| Emplacement | Contrôle |
+|---|---|
+| *La tâche* | Elle a un identifiant (*doit avoir un identifiant*), fait de lettres, de chiffres, de `-` et de `_`, différent de celui d'une autre tâche. |
+| *Étape 2 « load-sales »* | Elle a un nom, différent de celui des autres étapes ; elle a ce sur quoi elle agit — *n'a pas son connecteur, sa requête* (une copie sa source et sa cible, une fonction sa fonction, un appel son adresse, un message ses destinataires et son objet…) ; une étape *Lancer un autre traitement* désigne une tâche existante ; une étape de rapport a ses deux dates fixes, ou aucune. |
+| *Préréglage 1* | Il a un nom ; un préréglage planifié porte un nom qui lui est propre. |
+
+**Ouvrir**, sur une ligne, ouvre l'étape concernée, ou les réglages de la tâche elle-même. Ce que le serveur refuse malgré ces contrôles est listé de la même façon, dans les termes de l'éditeur ; un problème qui porte sur une autre tâche du fichier est nommé, sans **Ouvrir**.
+
+---
+
+## Dans jobs.toml \{#toml-only\}
+
+Chaque champ de l'éditeur est enregistré dans `jobs.toml`. Une tâche écrite à la main suit les mêmes clés — les champs ci-dessus, et celles des étapes décrites dans [Étapes](../steps.md) :
 
 ```toml title="jobs.toml"
 [[jobs]]

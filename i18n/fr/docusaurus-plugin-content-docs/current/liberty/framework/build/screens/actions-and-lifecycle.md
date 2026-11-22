@@ -220,6 +220,8 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 
 `run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` et `send_notification` reçoivent une liste de `param_binds` : pour chaque paramètre de la cible, une **value** fixe, ou une **source** lue au moment de l'appel — colonne de la ligne, champ du formulaire, `INPUT.<nom>`, `<étape>.first_row.<COLONNE>`, ou une source intégrée comme `#LOGIN_USER#` / `#SYSDATE#` — avec une valeur **default** facultative. Voir [Liaison de paramètres](../queries/parameter-binding.md).
 
+Dans l'éditeur d'action, la liste s'intitule **Valeurs passées**. Chaque ligne nomme le paramètre, puis **Fixe** — une valeur écrite là — ou **Prise dans** — choisie parmi les colonnes de l'enregistrement, ce que le service a reçu, ce qu'une étape précédente a renvoyé, ou l'utilisateur connecté / la date du jour —, avec **une valeur à utiliser quand celle-ci est vide**. Sans aucune ligne : *Rien n'est passé : l'exécution se fait sans aucune valeur.*
+
 ### Saisie préalable \{#prompt\}
 
 `run_query`, `call_api`, `call_plugin`, `call_action`, `navigate` et `chain` peuvent ouvrir un petit formulaire **avant** de s'exécuter :
@@ -288,15 +290,15 @@ L'éditeur d'une action présente trois onglets sous sa cible : **General** (ide
   <rect x="240" y="324" width="59" height="17" rx="4" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 2"/>
   <text x="249" y="336" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">+ ajouter</text>
   <text x="240" y="353" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The label per language (a row-menu entry, a button).</text>
-  <text x="240" y="379" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Liaisons de paramètres</text>
+  <text x="240" y="379" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Valeurs passées</text>
   <rect x="240" y="389" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="403.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <rect x="448" y="389" width="76" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="467.0" y="403.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">val</text>
-  <rect x="487" y="390" width="36" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="505.0" y="403.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">src</text>
-  <rect x="530" y="389" width="430" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="540" y="403.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <rect x="448" y="389" width="140" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="472.0" y="403.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Fixe</text>
+  <rect x="497" y="390" width="90" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="542.0" y="403.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Prise dans</text>
+  <rect x="596" y="389" width="364" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="606" y="403.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
   <line x1="220" y1="423" x2="980" y2="423" stroke="#1f2937" strokeWidth="1"/>
   <rect x="906" y="433" width="54" height="22" rx="5" fill="url(#aclt-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="933.0" y="447.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Fermer</text>
@@ -317,7 +319,7 @@ L'éditeur d'une action présente trois onglets sous sa cible : **General** (ide
   <text x="1010" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">menu de ligne, bouton, étape</text>
   <line x1="1000" y1="309.0" x2="800" y2="306" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
   <rect x="1000" y="375" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="390" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En dessous : liaisons</text>
+  <text x="1010" y="390" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En dessous : valeurs passées</text>
   <text x="1010" y="403" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">comme sur l'onglet General</text>
   <line x1="1000" y1="392.0" x2="920" y2="400" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aclt-arrow)"/>
 </svg>

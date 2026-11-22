@@ -122,14 +122,14 @@ Three regions:
 | Region | What it carries |
 |---|---|
 | **Header** | The page title and **Reload config**, which re-reads the configuration files. |
-| **Connector bar** | One chip per application that has screens; a click loads its screens below. **＋ Add scope** gives screens to a connector that has none. On the right, **Add screen** (asks for the new screen's id), **Discard** and **Save** for the page-wide edits. Below, **Filter…** narrows the list. |
+| **Connector bar** | One chip per application that has screens; a click loads its screens below. **＋ Add scope** gives screens to a connector that has none. On the right, **Add screen** (asks for the new screen's name — *Its name:* — and makes its id from it, shown while it is typed), **Discard** and **Save** for the page-wide edits. Below, **Filter…** narrows the list. |
 | **Screen list** | One card per screen: its id, its label, then its read query (`<connector>.<query>`) with the number of tabs, fields and row-menu items. Each card has **Find usages**, **Find dependencies**, **Rename**, **Clone** and **Delete**. **A click on the card opens the Screen Designer.** |
 
 ---
 
 ## The Screen Designer \{#designer\}
 
-Clicking a card opens the **Screen Designer** in a near-fullscreen window. The title bar names the screen (`[screens.<app>.<id>]`) and has the *Restore / Maximize* button and **Cancel**; the bottom bar has **Cancel** and **Save** — Save commits **just this screen's edits** and closes — in `screens.toml`, only that screen is rewritten, without its default values and in the file's key order, every other screen staying as it is; Cancel prompts on unsaved changes.
+Clicking a card opens the **Screen Designer** in a near-fullscreen window. The title bar names the screen by its label, followed by its application and its id (*Screen Designer · Customers* `crm · customers`), and has the *Restore / Maximize* button and **Cancel**; the bottom bar has **Cancel** and **Save** — Save commits **just this screen's edits** and closes (a refused save keeps the designer open and lists what to correct above the stages, each line with **Open** — see [A refused save](../../configuration/settings-ui.md#refused)) — in `screens.toml`, only that screen is rewritten, without its default values and in the file's key order, every other screen staying as it is; Cancel prompts on unsaved changes.
 
 The designer **reads like the screen**: six stages drawn as a flow — **What it is → Data → Grid → Record form → Actions → Output** — and each card says what the screen holds there. A click on a card opens it; a stage with several sections shows them under the flow.
 
@@ -142,8 +142,8 @@ The designer **reads like the screen**: six stages drawn as a flow — **What it
   </defs>
 
   <rect x="220" y="20" width="880" height="514" rx="14" fill="url(#sds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
-  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer · Customers</text>
+  <text x="420" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">crm · customers</text>
   <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
   <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -311,7 +311,7 @@ The designer **reads like the screen**: six stages drawn as a flow — **What it
 
 ### The columns \{#columns-list\}
 
-**Grid → Columns** is a list with the picked column's settings beside it. Each line gives the column's name, its label — the screen's own, else the dictionary's — and what is worth seeing without opening it: *key*, *filter*, *hidden*, *required*, *read only*, *sensitive*, and its rule. Drag a line by its grip to reorder, **Add a column**, remove one with its cross; past six columns, a filter box narrows the list (dragging is off while it is filtered). Beside the list, the picked column's settings are grouped in six tabs — **General**, **Display**, **Filter**, **Rules**, **Edit**, **Defaults** — described on [Columns](./columns.md); a condition or a nested rule opens in the same panel, with a breadcrumb back to the column.
+**Grid → Columns** is a list with the picked column's settings beside it. Each line gives the column's name, its label — the screen's own, else the dictionary's — and what is worth seeing without opening it: *key*, *filter*, *hidden*, *required*, *read only*, *sensitive*, and its kind of field. Drag a line by its grip to reorder, **Add a column**, remove one with its cross; past six columns, a filter box narrows the list (dragging is off while it is filtered). Beside the list, the picked column's settings are grouped in six tabs — **General**, **Display**, **Filter**, **Rules**, **Edit**, **Defaults** — described on [Columns](./columns.md); a condition or another kind of field opens in the same panel, with a breadcrumb back to the column.
 
 The next pages of this section walk through each stage as a separate task.
 
@@ -319,27 +319,27 @@ The next pages of this section walk through each stage as a separate task.
 
 ## What a screen carries
 
-The schema's top-level fields, grouped by purpose:
+The settings of a screen, grouped by purpose, by the labels of the designer:
 
 | Group | Fields |
 |---|---|
-| **Identity** | `id`, `label`, `description`, `connector` *(blank = the app's own connector)* |
-| **Read query** | `read_query` (required), `auto_load`, `max_rows`, `page_size` (rows per page of the grid; blank = the app's default), `key_columns` |
-| **Write queries** | `update_query`, `insert_query`, `delete_query` |
-| **Editing & display** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only` (a click on a row opens the dialog view only — no save, no record lock —, its detail tabs loading from the row), `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
-| **Views & summary** | `views` (shared views), `summary`, `value_diff` |
-| **Change packages** | `change_tracked`, `change_entity`, `post_apply` — see [Change packages](../../../nomaflow/change-packages.md) |
-| **Audit** | `audit_table` (e.g. `AUD_USERS` — mirrors writes with AUD_ACTION / AUD_USER / AUD_DATE) |
-| **Form** | `dialog` *(optional — the form on top of the table)* |
-| **Actions / hooks** | `actions` (toolbar), `row_menu` (right-click), `on_insert` / `on_update` / `on_delete` / `on_duplicate` (row hooks) |
-| **Row-click target** | `row_click_screen` + `row_click_connector` + `row_click_binds` *(open a sibling screen as a dialog)* OR `row_click_route` *(open a SPA route)* |
-| **Export** | `export` *(workbook xlsx config)* |
+| **Identity** | **Id**, **Label**, **Description** (each with its translations), **Application of the data** *(blank = the screen's own)* |
+| **Reading** | **Read** (required), **Load on opening**, **Rows read at most**, **Rows per page** (blank = the installation's setting), **Key columns** |
+| **Saving** | **Save a change**, **Add**, **Delete**, **Save through** |
+| **Editing & display** | **Columns**, **Related tables**, **Edit in the grid**, **Editable only when**, **Read only** (a click on a row opens the dialog view only — no save, no record lock —, its detail tabs loading from the row), **No new record**, **Import from a file**, **Grouped by**, **Tree view**, **Chart** |
+| **Views & summary** | **Saved layouts** (shared views), **Summary view**, **Before / after view** |
+| **Change packages** | **Track changes**, **Tracked as**, **Steps after a transfer** — see [Change packages](../../../nomaflow/change-packages.md) |
+| **Audit** | **History table** (e.g. `AUD_USERS` — mirrors writes with AUD_ACTION / AUD_USER / AUD_DATE) |
+| **Form** | **Record form** *(optional — the form on top of the table)* |
+| **Actions** | **Buttons** (toolbar), **Row menu** (right-click), **After adding** / **After a change** / **After deleting** / **After duplicating** |
+| **Row click** | **A click opens the form of** + **In the application** + **Values handed over** *(open a sibling screen as a dialog)* OR **A click opens the page** *(open a page of the application)* |
+| **Export** | **Export to workbooks** *(one Excel file per group, one sheet per sub-group)* |
 
 ---
 
 ## Read-only mode
 
-Set **Read-only** on a screen (a checkbox of the *What it is* stage) to make the whole view non-editable. It hides the dialog's *Save*, *Delete* and *Duplicate*, the grid's *Add* and *Delete selected*, inline cell editing, paste and Excel import — in the nested-table editors too. It is stronger than *Disable add* (which only blocks inserts) and is the right setting for a reference or audit screen that should never be changed from the UI. Server-side permissions still apply on top, independently.
+Tick **Read only** on a screen (a checkbox of the *What it is* stage) to make the whole view non-editable. It hides the dialog's *Save*, *Delete* and *Duplicate*, the grid's *Add* and *Delete selected*, inline cell editing, paste and Excel import — in the nested-table editors too. It is stronger than *No new record* (which only blocks inserts) and is the right setting for a reference or audit screen that should never be changed from the UI. Server-side permissions still apply on top, independently.
 
 ---
 

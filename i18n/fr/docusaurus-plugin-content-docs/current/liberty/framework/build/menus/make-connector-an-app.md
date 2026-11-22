@@ -113,27 +113,27 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
   <rect x="971.6" y="124" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
   <text x="991.6" y="135" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LISTES</text>
   <text x="971.6" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">5 liste(s)</text>
-  <text x="482" y="176" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">POOL</text>
+  <text x="482" y="176" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DATABASE</text>
   <rect x="482" y="181" width="588" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="491" y="195.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">crm</text>
   <text x="1058" y="195.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="482" y="212" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">POOLS</text>
+  <text x="482" y="212" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">OTHER DATABASES</text>
   <rect x="482" y="217" width="46" height="18" rx="4" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="505" y="229.5" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">+ add</text>
-  <text x="482" y="248" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SHOW IN SWITCHER</text>
+  <text x="482" y="248" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SHOW IN THE APPLICATION LIST</text>
   <rect x="482" y="259" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
   <path d="M484.5,264.5 L486.8,266.8 L490.8,262" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="499" y="268" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="482" y="282" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Show this connector in the top app switcher.</text>
-  <text x="482" y="294" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME</text>
+  <text x="482" y="282" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Offer this application in the list at the top of the menu.</text>
+  <text x="482" y="294" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME PAGE</text>
   <rect x="482" y="299" width="588" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="491" y="313.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">overview  Vue d'ensemble</text>
   <text x="1058" y="313.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
-  <text x="482" y="333" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Landing menu item id when this app is picked.</text>
-  <text x="482" y="344" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME BY ROLE</text>
+  <text x="482" y="333" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">The menu entry opened when the application is picked.</text>
+  <text x="482" y="344" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME PAGE PER ROLE</text>
   <rect x="482" y="349" width="46" height="18" rx="4" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="505" y="361.5" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">+ add</text>
-  <text x="482" y="382" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">A landing menu item per role: a user lands on the item of their first role listed here, else on home.</text>
+  <text x="482" y="382" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">A different home page for the users of a role.</text>
   <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Applications</text>
   <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les connecteurs qui ont un menu</text>
@@ -147,15 +147,15 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
   <text x="1130" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les réglages de l'application</text>
   <line x1="1120" y1="189.0" x2="540" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
   <rect x="1120" y="247" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="262" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Show In Switcher</text>
+  <text x="1130" y="262" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Show in the application list</text>
   <text x="1130" y="275" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ un menu = dans le sélecteur</text>
   <line x1="1120" y1="264.0" x2="560" y2="264" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
   <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home</text>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home page</text>
   <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entrée d'arrivée de l'app</text>
   <line x1="1120" y1="317.0" x2="1070" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
   <rect x="1120" y="368" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home By Role</text>
+  <text x="1130" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home page per role</text>
   <text x="1130" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une entrée d'arrivée par rôle</text>
   <line x1="1120" y1="385.0" x2="530" y2="358" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
 </svg>

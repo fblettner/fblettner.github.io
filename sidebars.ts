@@ -289,6 +289,7 @@ const sidebars: SidebarsConfig = {
     'liberty/nomasx1/sod-dashboard',
     'liberty/nomasx1/security-review',
     'liberty/nomasx1/data-explorer',
+    'liberty/nomasx1/ai-assistant',
     'liberty/nomasx1/jobs',
     {
       type: 'category',
@@ -503,8 +504,13 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Development',
+      items: ['liberty/nomajde/development/back-to-standard'],
+    },
+    {
+      type: 'category',
       label: 'Monitoring',
-      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/architecture', 'liberty/nomajde/monitoring/server-manager'],
+      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/server-manager', 'liberty/nomajde/monitoring/architecture', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/server-sizes', 'liberty/nomajde/monitoring/oci-target'],
     },
     'liberty/nomajde/jobs',
     'liberty/nomajde/tests',

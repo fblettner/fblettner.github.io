@@ -122,14 +122,14 @@ Trois régions :
 | Région | Contenu |
 |---|---|
 | **En-tête** | Le titre de la page et **Recharger la config**, qui relit les fichiers de configuration. |
-| **Barre des connecteurs** | Une pastille par application qui a des écrans ; un clic charge ses écrans en dessous. **＋ Ajouter une portée** ouvre les écrans à un connecteur qui n'en a pas. À droite, **Ajouter un écran** (demande l'identifiant du nouvel écran), **Abandonner** et **Enregistrer** pour les modifications de la page. Dessous, **Filtrer…** réduit la liste. |
+| **Barre des connecteurs** | Une pastille par application qui a des écrans ; un clic charge ses écrans en dessous. **＋ Ajouter une portée** ouvre les écrans à un connecteur qui n'en a pas. À droite, **Ajouter un écran** (demande le nom du nouvel écran — *Son nom :* — et en tire son identifiant, affiché pendant la saisie), **Abandonner** et **Enregistrer** pour les modifications de la page. Dessous, **Filtrer…** réduit la liste. |
 | **Liste des écrans** | Une carte par écran : son identifiant, son libellé, puis sa requête de lecture (`<connecteur>.<requête>`) avec le nombre d'onglets, de champs et d'entrées du menu de ligne. Chaque carte porte **Rechercher les usages**, **Rechercher les dépendances**, **Renommer**, **Cloner** et **Supprimer**. **Un clic sur la carte ouvre le Concepteur d'écran.** |
 
 ---
 
 ## Le Concepteur d'écran \{#designer\}
 
-Un clic sur une carte ouvre le **Concepteur d'écran** dans une fenêtre presque plein écran. La barre de titre nomme l'écran (`[screens.<app>.<id>]`) et porte le bouton *Restaurer / Agrandir* et **Annuler** ; la barre du bas porte **Annuler** et **Enregistrer** — Enregistrer valide **les seules modifications de cet écran** et ferme la fenêtre : dans `screens.toml`, seul cet écran est réécrit, sans ses valeurs par défaut et dans l'ordre des clés du fichier, les autres écrans restant tels quels ; Annuler demande confirmation s'il reste des modifications non enregistrées.
+Un clic sur une carte ouvre le **Concepteur d'écran** dans une fenêtre presque plein écran. La barre de titre nomme l'écran par son libellé, suivi de son application et de son identifiant (*Concepteur d'écran · Customers* `crm · customers`), et porte le bouton *Restaurer / Agrandir* et **Annuler** ; la barre du bas porte **Annuler** et **Enregistrer** — Enregistrer valide **les seules modifications de cet écran** et ferme la fenêtre (un enregistrement refusé laisse le concepteur ouvert et liste les points à corriger au-dessus des étapes, chacun avec **Ouvrir** — voir [Un enregistrement refusé](../../configuration/settings-ui.md#refused)) ; dans `screens.toml`, seul cet écran est réécrit, sans ses valeurs par défaut et dans l'ordre des clés du fichier, les autres écrans restant tels quels ; Annuler demande confirmation s'il reste des modifications non enregistrées.
 
 Le concepteur **se lit comme l'écran** : six étapes dessinées en flux — **Ce qu'il est → Données → Grille → Fiche → Actions → Sortie** —, chaque carte résumant ce que l'écran contient à cet endroit. Un clic sur une carte l'ouvre ; une étape à plusieurs sections les affiche sous le flux.
 
@@ -142,8 +142,8 @@ Le concepteur **se lit comme l'écran** : six étapes dessinées en flux — **C
   </defs>
 
   <rect x="220" y="20" width="880" height="514" rx="14" fill="url(#sds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran ·</text>
-  <text x="367.648" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran · Customers</text>
+  <text x="440" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">crm · customers</text>
   <rect x="1011" y="32" width="69" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1045.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
   <rect x="981" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -311,7 +311,7 @@ Le concepteur **se lit comme l'écran** : six étapes dessinées en flux — **C
 
 ### Les colonnes \{#columns-list\}
 
-**Grille → Colonnes** est une liste, avec les réglages de la colonne choisie à côté. Chaque ligne donne le nom de la colonne, son libellé — celui de l'écran, sinon celui du dictionnaire — et l'essentiel, visible sans l'ouvrir : *clé*, *filtre*, *masquée*, *obligatoire*, *lecture seule*, *sensible*, et sa règle. Une ligne se déplace par sa poignée, **Ajouter une colonne** en ajoute une, la croix en retire une ; au-delà de six colonnes, une zone de filtre réduit la liste (le déplacement est alors désactivé). À côté de la liste, les réglages de la colonne choisie se répartissent en six onglets — **General**, **Display**, **Filter**, **Rules**, **Edit**, **Defaults** —, décrits sur la page [Colonnes](./columns.md) ; une condition ou une règle imbriquée s'ouvre dans le même panneau, avec un fil d'Ariane pour revenir à la colonne.
+**Grille → Colonnes** est une liste, avec les réglages de la colonne choisie à côté. Chaque ligne donne le nom de la colonne, son libellé — celui de l'écran, sinon celui du dictionnaire — et l'essentiel, visible sans l'ouvrir : *clé*, *filtre*, *masquée*, *obligatoire*, *lecture seule*, *sensible*, et sa nature de champ. Une ligne se déplace par sa poignée, **Ajouter une colonne** en ajoute une, la croix en retire une ; au-delà de six colonnes, une zone de filtre réduit la liste (le déplacement est alors désactivé). À côté de la liste, les réglages de la colonne choisie se répartissent en six onglets — **General**, **Display**, **Filter**, **Rules**, **Edit**, **Defaults** —, décrits sur la page [Colonnes](./columns.md) ; une condition ou une autre nature de champ s'ouvre dans le même panneau, avec un fil d'Ariane pour revenir à la colonne.
 
 Les pages suivantes de cette section décrivent chaque étape comme une tâche distincte.
 
@@ -319,27 +319,27 @@ Les pages suivantes de cette section décrivent chaque étape comme une tâche d
 
 ## Ce que porte un écran
 
-Les champs de premier niveau du schéma, regroupés par finalité :
+Les réglages d'un écran, regroupés par finalité, sous les libellés du concepteur :
 
 | Groupe | Champs |
 |---|---|
-| **Identité** | `id`, `label`, `description`, `connector` *(vide = le connecteur de l'application)* |
-| **Requête de lecture** | `read_query` (obligatoire), `auto_load`, `max_rows`, `page_size` (lignes par page de la grille ; vide = la valeur de l'application), `key_columns` |
-| **Requêtes d'écriture** | `update_query`, `insert_query`, `delete_query` |
-| **Édition et affichage** | `columns`, `column_groups`, `editable`, `editable_when`, `read_only` (un clic sur une ligne ouvre le dialogue en consultation — ni enregistrement, ni verrou —, ses onglets de détail se chargeant à partir de la ligne), `disable_add`, `uploadable`, `initial_group_by`, `treeview`, `chart_id` |
-| **Vues et résumé** | `views` (vues partagées), `summary`, `value_diff` |
-| **Paquets de modifications** | `change_tracked`, `change_entity`, `post_apply` — voir [Paquets de modifications](../../../nomaflow/change-packages.md) |
-| **Audit** | `audit_table` (ex. `AUD_USERS` — duplique les écritures avec AUD_ACTION / AUD_USER / AUD_DATE) |
-| **Formulaire** | `dialog` *(optionnel — le formulaire posé sur le tableau)* |
-| **Actions / hooks** | `actions` (barre d'outils), `row_menu` (clic droit), `on_insert` / `on_update` / `on_delete` / `on_duplicate` (hooks de ligne) |
-| **Cible au clic sur une ligne** | `row_click_screen` + `row_click_connector` + `row_click_binds` *(ouvre un écran voisin comme dialogue)* OU `row_click_route` *(ouvre une route SPA)* |
-| **Export** | `export` *(configuration du classeur xlsx)* |
+| **Identité** | **Id**, **Label**, **Description** (chacun avec ses traductions), **Application of the data** *(vide = celle de l'écran)* |
+| **Lecture** | **Read** (obligatoire), **Load on opening**, **Rows read at most**, **Rows per page** (vide = le réglage de l'installation), **Key columns** |
+| **Enregistrement** | **Save a change**, **Add**, **Delete**, **Save through** |
+| **Édition et affichage** | **Columns**, **Related tables**, **Edit in the grid**, **Editable only when**, **Read only** (un clic sur une ligne ouvre le dialogue en consultation — ni enregistrement, ni verrou —, ses onglets de détail se chargeant à partir de la ligne), **No new record**, **Import from a file**, **Grouped by**, **Tree view**, **Chart** |
+| **Vues et résumé** | **Saved layouts** (vues partagées), **Summary view**, **Before / after view** |
+| **Paquets de modifications** | **Track changes**, **Tracked as**, **Steps after a transfer** — voir [Paquets de modifications](../../../nomaflow/change-packages.md) |
+| **Audit** | **History table** (ex. `AUD_USERS` — duplique les écritures avec AUD_ACTION / AUD_USER / AUD_DATE) |
+| **Formulaire** | **Record form** *(optionnel — le formulaire posé sur le tableau)* |
+| **Actions** | **Buttons** (barre d'outils), **Row menu** (clic droit), **After adding** / **After a change** / **After deleting** / **After duplicating** |
+| **Clic sur une ligne** | **A click opens the form of** + **In the application** + **Values handed over** *(ouvre un écran voisin comme dialogue)* OU **A click opens the page** *(ouvre une page de l'application)* |
+| **Export** | **Export to workbooks** *(un fichier Excel par groupe, une feuille par sous-groupe)* |
 
 ---
 
 ## Mode lecture seule
 
-Activez **Lecture seule** sur un écran (une case à cocher de l'étape *Ce qu'il est*) pour rendre toute la vue non modifiable. Cela masque les boutons *Enregistrer*, *Supprimer* et *Dupliquer* du dialogue, les boutons *Ajouter* et *Supprimer la sélection* de la grille, l'édition de cellule en ligne, le collage et l'import Excel — dans les éditeurs de tables imbriquées aussi. C'est plus fort que *Désactiver l'ajout* (qui ne bloque que les insertions) : c'est le bon réglage pour un écran de référence ou d'audit qui ne doit jamais être modifié depuis l'interface. Les permissions côté serveur s'appliquent en plus, indépendamment.
+Cocher **Read only** sur un écran (une case à cocher de l'étape *Ce qu'il est*) pour rendre toute la vue non modifiable. Cela masque les boutons *Enregistrer*, *Supprimer* et *Dupliquer* du dialogue, les boutons *Ajouter* et *Supprimer la sélection* de la grille, l'édition de cellule en ligne, le collage et l'import Excel — dans les éditeurs de tables imbriquées aussi. C'est plus fort que *No new record* (qui ne bloque que les insertions) : c'est le bon réglage pour un écran de référence ou d'audit qui ne doit jamais être modifié depuis l'interface. Les permissions côté serveur s'appliquent en plus, indépendamment.
 
 ---
 

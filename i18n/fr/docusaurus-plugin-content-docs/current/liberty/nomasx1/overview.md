@@ -485,7 +485,7 @@ Le menu s'ouvre sur les trois tableaux de bord, l'Explorateur de données et les
 
 ---
 
-## Les rôles dans Nomasx-1
+## Les rôles dans Nomasx-1 \{#roles\}
 
 Nomasx-1 livre quatre rôles prédéfinis :
 

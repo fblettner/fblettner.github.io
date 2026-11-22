@@ -268,7 +268,7 @@ Les doublons entre menus différents sont autorisés — `[menus.crm.security]` 
 **Un connecteur n'apparaît dans le sélecteur d'applications du menu latéral que quand les deux conditions sont réunies :**
 
 1. Un menu existe — `[menus.<connector>]` est configuré dans *Liberty Next → Écrans → Menus*.
-2. **Show In Switcher** sur le connecteur — dans *Liberty Next → Données → Connecteurs → \<connecteur> → Réglages* (activé par défaut).
+2. **Show in the application list** sur le connecteur — dans *Liberty Next → Données → Connecteurs → \<connecteur> → Réglages* (activé par défaut).
 
 Si l'une des deux manque, le connecteur existe mais n'est pas listé. Le sélecteur lui-même n'apparaît que s'il y a plus d'une application. L'ordre habituel : configurer le menu d'abord, **puis** cocher `show_in_switcher`.
 

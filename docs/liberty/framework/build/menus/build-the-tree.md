@@ -191,26 +191,37 @@ Use → (Indent) to push an item under the previous sibling — useful when a fo
 
 ### Step 5 — Save
 
-The page-level **Save** validates the whole menu (unique ids, parents exist, no cycles) and writes `menus.toml`. The hot reload picks up the changes; the user's next page load shows the new tree.
+The page-level **Save** first checks the menus: an entry that opens nothing, two entries with the same id, an entry under a folder that does not exist. Each one is listed above the tree — *crm › Menu entry "Late orders" opens nothing: pick what it opens* — with **Open**, which selects the entry in its tree (folders unfolded, application switched when needed), and nothing is sent. Then the server validates the whole menu (no cycles…) and writes `menus.toml`; a refusal is listed the same way — see [A refused save](../../configuration/settings-ui.md#refused). The hot reload picks up the changes; the user's next page load shows the new tree.
+
+---
+
+## The application line \{#application\}
+
+The line above the tree names the application — its name, else its id — with the number of its entries. A click on it shows the application's own settings beside the tree:
+
+| Field | Notes |
+|---|---|
+| **Application name** | The name shown for the application in the list at the top of the menu. Blank shows its id. |
 
 ---
 
 ## The Inspector form
 
-Click a row → the panel on the right loads the form of the entry, in three tabs — **General** (`id`, `label`, `icon`, `type`, `connector`, `target`), **Advanced** (`parent`, `params`, `roles`, `override`) and **Translations** (`l`). The fields adapt to the `type`:
+Click a row → the panel on the right loads the form of the entry, in three tabs — **General**, **Advanced** and **Translations**. Each field carries one short sentence of help, the longer explanation behind **more**. The fields adapt to what the entry opens:
 
-| Field | Always shown | Notes |
+| Field | Tab | Notes |
 |---|---|---|
-| `id` | Yes | Renaming here updates every child's `parent` reference automatically. Cross-file references (e.g. another connector's `home` pointing at this item) need a manual fix — use *Find usages* first. |
-| `parent` | Yes | A SearchSelect populated with the valid candidates. The tree's indent/outdent actions mutate this field too. |
-| `label` | Yes | The sidebar text. |
-| `l` (Translations tab) | Yes | Per-language overrides. See [Translations and icons](./translations-and-icons.md). |
-| `icon` | Yes | One of the [sidebar icons](./translations-and-icons.md#icons). |
-| `type` | Yes | Dropdown: *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — see [Item types](./item-types.md). Blank = folder. Switching from leaf to folder clears `target` / `connector` / `params`. |
-| `connector` | Only for `query` / `endpoint` leaves | Blank = the app's own connector. |
-| `target` | Only for leaves | A SearchSelect populated with valid targets for the chosen `type` + `connector`. |
-| `params` | Only for leaves | Fixed parameters passed to the target when it opens. |
-| `roles` | Always | Restrict to these roles. See [Permissions and roles](./permissions-and-roles.md). |
+| **Id** | General | A short name for the entry, unique in its application. Renaming here updates every child's folder reference automatically. Cross-file references (e.g. another connector's home pointing at this item) need a manual fix — use *Find usages* first. |
+| **Label** | General | The sidebar text. |
+| **Icon** | General | One of the [sidebar icons](./translations-and-icons.md#icons). |
+| **What it opens** | General | *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — see [Item types](./item-types.md). Blank = folder. Switching from leaf to folder clears what it opens and its fixed values. |
+| **Application** | General | For a query or endpoint: the application that holds it. Blank = this one. |
+| **Opens** | General | Picked among the valid targets for what it opens and its application. |
+| **Folder** | Advanced | The folder the entry sits in, picked among the folders; blank for the top of the menu. The tree's indent / outdent actions change it too. |
+| **Fixed values** | Advanced | Values given to what is opened — a filter already filled in. One line per value: its name, picked among the filters of the screen it opens or the parameters of the query it opens (or typed), and the value. A line left without a name is not saved. |
+| **Only for the roles** | Advanced | Shows the entry to these roles only. See [Permissions and roles](./permissions-and-roles.md). |
+| **Keep on upgrade** | Advanced | An upgrade of the application leaves this entry as saved here. |
+| **Translations** | Translations | The label in the other languages. See [Translations and icons](./translations-and-icons.md). |
 
 Edits are **live in memory** — the tree row updates as you type. Page-level *Save* is what writes to disk.
 
@@ -218,9 +229,9 @@ Edits are **live in memory** — the tree row updates as you type. Page-level *S
 
 ## Renaming an item
 
-Renaming an `id` is more involved than other fields because every reference must update:
+Renaming an **Id** is more involved than other fields because every reference must update:
 
-1. **Children**: the tree's `parent` references update automatically.
+1. **Children**: the children's **Folder** updates automatically.
 2. **Cross-file**: a connector's `home` field, or another menu's item that references this one, doesn't update. Use **Find usages** (on the entry's panel) before renaming to see every place that references the item.
 
 For a heavy rename, the safe pattern is **Find usages → Clone → fix references → delete the old one** — the new id can take over while every reference is updated.
@@ -265,12 +276,12 @@ The filter is case-insensitive and matches anywhere in the id or label. Folders 
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Two items with the same `id` in the same menu. | Save validation fails. | Pick a unique id; the inspector flags duplicates inline. |
-| `parent` references an item that doesn't exist. | Save validation fails ("unknown parent"). | Pick a parent from the dropdown — only valid ids are listed. |
+| Two items with the same id in the same menu. | **Save** lists *has the same id as another entry* and sends nothing. | Pick a unique id. |
+| An entry under a folder that doesn't exist. | **Save** lists *sits under a folder that does not exist*. | Pick a folder from the dropdown — only existing folders are listed. |
 | Parent cycle (A → B → A). | Save validation fails ("parent cycle"). | The tree editor's indent/outdent never creates a cycle; only direct TOML edits do. |
-| Leaf without a `target`. | Save validation fails. | Set `target` in the Inspector. |
-| Folder with `target` set. | Save validation fails ("folder cannot carry target"). | Either remove the target or set a non-folder type. |
-| `dashboard` or `page` leaf with a `connector`. | Save validation fails. | These two leaf types don't carry a connector; leave the field blank. |
+| A leaf that opens nothing. | **Save** lists *opens nothing: pick what it opens*. | Set **Opens** in the Inspector. |
+| Folder with **Opens** set. | Save validation fails ("folder cannot carry target"). | Either remove the target or set a non-folder type. |
+| Dashboard or page leaf with an **Application**. | Save validation fails. | These two leaf types don't carry a connector; leave the field blank. |
 | Renaming an item without checking *Find usages*. | Another connector's `home` or another menu's reference breaks silently. | Always check Find usages before renaming. |
 
 ---

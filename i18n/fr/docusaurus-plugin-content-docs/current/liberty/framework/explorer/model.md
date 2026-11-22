@@ -723,6 +723,19 @@ Un modèle indique à l'explorateur ce qu'un utilisateur peut analyser et commen
 | **Pivot** | L'entité de départ de chaque analyse : une table de faits, un en-tête de document, des lignes de document. |
 | **Description** | Affichée sous le titre de l'explorateur. |
 | **Préréglage (assistant écran)** | Remplit le modèle depuis un préréglage — voir [plus bas](#preset). |
+| **Classé sous** | Le titre sous lequel le modèle apparaît dans la liste des modèles de l'explorateur (*Finance*). Vide : celui de son préréglage, sinon l'application. |
+| **Garder ce modèle tel quel à la mise à jour** | Une mise à jour de l'application laisse alors le modèle tel qu'enregistré ici. |
+| **Analyses livrées**, **Tableaux de bord livrés** | Ce que le modèle livre : des analyses et des tableaux de bord installés pour tous, choisis parmi ceux enregistrés et partagés dans l'explorateur — voir [Ce que livre un modèle](#delivers). |
+
+### Ce que livre un modèle \{#delivers\}
+
+Sous les réglages du modèle, deux listes nomment les analyses et les tableaux de bord que l'application livre avec le modèle. **Livrer une analyse enregistrée…** / **Livrer un tableau de bord enregistré…** propose les analyses et les tableaux de bord du modèle enregistrés et partagés dans l'explorateur ; celui choisi est copié dans le modèle, avec sa version (*version 1*). Chaque ligne livrée porte :
+
+- **↻** — *Rafraîchir depuis l'enregistré* : sa version augmente, et les copies installées que personne n'a modifiées suivent ;
+- la corbeille — *Ne plus le livrer* : les copies installées restent.
+
+Choisir de nouveau un élément déjà livré (*livré — choisir pour rafraîchir*) le rafraîchit aussi. Un tableau de bord livré qui montre des analyses non livrées le signale : *montre des analyses qui ne sont pas livrées : …*.
+
 
 **Enregistrer** écrit le modèle et le recharge : l'explorateur le voit aussitôt. Un modèle sans entité est refusé, avec son nom — *Non enregistré : ces modèles n'ont encore aucune entité — crm · deals. Ajoutez une entité (ou appliquez un préréglage), ou supprimez le modèle.* —, sauf s'il désigne un préréglage : il est alors conservé, rempli à partir du préréglage à la première utilisation, et la page le dessine en proposant de le remplir.
 
@@ -734,7 +747,7 @@ Dans **Analyse → Explorateur**, un modèle est dessiné : le **pivot**, les en
 
 | Clic | Le panneau latéral affiche |
 |---|---|
-| Rien | Les réglages du modèle : **Libellé**, **Pivot**, **Description**, **Préréglage (assistant écran)**. |
+| Rien | Les réglages du modèle : **Libellé**, **Pivot**, **Description**, **Préréglage (assistant écran)**, **Classé sous**, **Garder ce modèle tel quel à la mise à jour**, et ce qu'il livre. |
 | Une entité | Ce qu'elle est — sa requête ou sa table, sa clé, ses mesures, sa date par défaut — et ses relations, avec **Modifier**, **En faire le pivot**, **Supprimer**, et **Ajouter une relation** à partir d'elle. Une relation de la liste s'ouvre d'un clic ; le bouton du haut ramène en arrière. |
 | Un trait | La relation : ses deux entités, ses paires de colonnes (**Jointe sur**) et **Supprimer cette relation**. |
 
@@ -890,7 +903,9 @@ Un modèle vide se commence **À partir d'un modèle prêt à l'emploi** — un 
 | **Lignes par ligne du pivot** | **1..1 · une** — au plus une ligne par ligne du pivot (le client d'une affaire) ; **1..n · plusieurs** — plusieurs lignes (les activités d'une affaire). Le pivot est toujours en 1..1. |
 | **Description** | Texte libre. |
 | **Connecteur** | Le connecteur de la requête ; par défaut, celui de l'application. La liste contient les connecteurs SQL et les connecteurs API qui ont un point d'accès renvoyant des lignes, affichés `nom (API)` — voir [plus bas](#api-entity). |
-| **Requête** | Une requête SELECT de ce connecteur — ou, sur un connecteur API, un de ses points d'accès qui renvoient des lignes. Ses colonnes se découvrent en l'exécutant sur une ligne. Une entité remplie depuis un préréglage lit directement sa table : le champ affiche alors **Table**, non modifiable. |
+| **Lit** | *une requête* ou *une table* — sur un connecteur API, *un service*. Les champs suivants s'adaptent au choix. |
+| **Requête** | Avec *une requête* : une requête SELECT de ce connecteur — ou, sur un connecteur API, un de ses points d'accès qui renvoient des lignes (**un service**). Ses colonnes se découvrent en l'exécutant sur une ligne. |
+| **Schéma**, **Table** | Avec *une table* : la table est lue telle quelle, sans écrire de requête — le schéma, puis la table, choisis dans la base (ou saisis). Une entité remplie depuis un préréglage lit sa table de cette façon. |
 | **Écran (indications de colonnes)** | Un écran dont les réglages de colonnes fournissent libellés, formats et listes de valeurs. Les écrans qui lisent la même requête apparaissent en tête. L'entité ouvre une ligne dans la fiche de cet écran : **Déployer → Intégrité** compte donc l'écran comme atteint, même si aucune entrée de menu n'y mène. |
 | **Date par défaut** | Le champ date auquel la période s'applique en premier. |
 | **Valeurs fixes des paramètres de la requête** | Présent quand la requête attend des paramètres — ceux qu'elle déclare et les variables de son instruction —, un champ par paramètre : la valeur saisie sert à toutes les analyses. Un paramètre laissé vide n'est pas envoyé. |

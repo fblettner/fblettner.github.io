@@ -240,7 +240,7 @@ Identité du contrat.
 
 ### Onglet 2 — Applications
 
-Grille qui relie le CSI aux applications couvertes (*N° CSI*, *Application ID*, avec le type et la base de l'application). Une ligne par application, par **Ajouter une ligne** : une entrée ici est ce qui fait que le contrat compte pour l'application dans *Licences acquises* et les rapports de conformité. Masqué à l'ajout.
+Grille qui relie le CSI aux applications couvertes (*N° CSI*, *ID application*, avec le type et la base de l'application, en lecture seule : ils viennent d'[Applications](../settings/global/applications.md)). Sur une ligne enregistrée, *N° CSI* et *ID application* sont en lecture seule. Une ligne par application, par **Ajouter une ligne** : une entrée ici est ce qui fait que le contrat compte pour l'application dans *Licences acquises* et les rapports de conformité. Masqué à l'ajout.
 
 ### Onglet 3 — Composants
 

@@ -58,7 +58,7 @@ A first job: refresh a summary table every night, then run it by hand to check i
   <g>
   <rect x="362" y="159" width="150" height="48" rx="9" fill="#111827" stroke="#4a9eff" strokeWidth="1.6"/>
   <rect x="359" y="156" width="156" height="54" rx="11" fill="none" stroke="rgba(74,158,255,0.30)" strokeWidth="3"/>
-  <text x="372" y="173" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL_QUERY</text>
+  <text x="372" y="173" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RUN A QUERY</text>
   <text x="372" y="187" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">refresh-summary</text>
   <text x="372" y="200" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">reporting.daily_summary_ref…</text>
   </g>
@@ -69,23 +69,23 @@ A first job: refresh a summary table every night, then run it by hand to check i
   <rect x="546" y="170" width="60" height="26" rx="13" fill="rgba(50,215,75,0.10)" stroke="#334155" strokeWidth="1"/>
   <text x="560" y="187" fill="#4ade80" fontSize="9.5" fontFamily="system-ui, sans-serif">⚑</text>
   <text x="574" y="187" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">End</text>
-  <rect x="323.0" y="218" width="112" height="200" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="335.0" y="237" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_copy</text>
-  <rect x="327.0" y="243" width="104" height="18" rx="4" fill="rgba(74,158,255,0.18)"/>
-  <text x="335.0" y="256" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">sql_query</text>
-  <text x="335.0" y="275" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">python</text>
-  <text x="335.0" y="294" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">ldap_sync</text>
-  <text x="335.0" y="313" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">http</text>
-  <text x="335.0" y="332" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">call_job</text>
-  <text x="335.0" y="351" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_load</text>
-  <text x="335.0" y="370" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">file_export</text>
-  <text x="335.0" y="389" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">report</text>
-  <text x="335.0" y="408" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">notify</text>
+  <rect x="323.0" y="218" width="150" height="200" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="335.0" y="237" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Copy a table</text>
+  <rect x="327.0" y="243" width="142" height="18" rx="4" fill="rgba(74,158,255,0.18)"/>
+  <text x="335.0" y="256" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Run a query</text>
+  <text x="335.0" y="275" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Run a function</text>
+  <text x="335.0" y="294" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Read a directory</text>
+  <text x="335.0" y="313" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Call an address</text>
+  <text x="335.0" y="332" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Start another job</text>
+  <text x="335.0" y="351" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Load a file</text>
+  <text x="335.0" y="370" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Export to a file</text>
+  <text x="335.0" y="389" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Produce a report</text>
+  <text x="335.0" y="408" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Send a message</text>
   <line x1="343.0" y1="191" x2="343.0" y2="218" stroke="#4a9eff" strokeWidth="1" strokeDasharray="3 3"/>
   <rect x="724" y="122" width="356" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="738" y="134" width="61" height="16" rx="4" fill="#4ade80" fillOpacity="0.14" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="745" y="145.5" fill="#4ade80" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">sql_query</text>
-  <text x="807" y="146" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">refresh-summary</text>
+  <rect x="738" y="134" width="66" height="16" rx="4" fill="#4ade80" fillOpacity="0.14" stroke="#4ade80" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="745" y="145.5" fill="#4ade80" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">Run a query</text>
+  <text x="812" y="146" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">refresh-summary</text>
   <text x="738" y="172" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">STEP NAME</text>
   <rect x="738" y="177" width="328" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="748" y="191.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">refresh-summary</text>
@@ -114,7 +114,7 @@ A first job: refresh a summary table every night, then run it by hand to check i
   <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the list of types</text>
   <line x1="200" y1="247.0" x2="337.0" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfgs-arrow)"/>
   <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">2 · Pick sql_query</text>
+  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">2 · Pick Run a query</text>
   <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the card appears in place</text>
   <line x1="200" y1="347.0" x2="323.0" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfgs-arrow)"/>
   <rect x="1120" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -146,11 +146,11 @@ Open **Operations → Jobs** in the Nomaflow menu (address `/nomaflow`). Each jo
 
 ## 3 — Add a step \{#step\}
 
-Click the **+** on the link between **Start** and **End**, then `sql_query` in the list: the step's card appears in the flow, its fields beside it. Give it a **Step name** (`refresh-summary`), pick the **Connector**, then the **Query** `daily_summary_refresh`.
+Click the **+** on the link between **Start** and **End**, then *Run a query* (`sql_query`) in the list: the step's card appears in the flow, its fields beside it. Give it a **Step name** (`refresh-summary`), pick the **Connector**, then the **Query** `daily_summary_refresh`.
 
 ## 4 — Set the schedule \{#schedule\}
 
-Click **Start** to come back to the job's settings: **Daily** above **Schedule (cron)** writes `0 2 * * *`, **Timezone** `Europe/Paris`. **Next runs** lists the next five nights — check them. Then **Save** at the top: the job is written, and the Jobs page opens with the job and its schedule.
+Click **Start** to come back to the job's settings: under **Schedule (cron)**, pick *On chosen days, at a set time*, `at` 02:00 and no day — *every day at 02:00*, saved as `0 2 * * *`; **Timezone** `Europe/Paris`. **Next runs** lists the next five nights — check them. Then **Save** at the top: the job is written, and the Jobs page opens with the job and its schedule.
 
 ## 5 — Run it by hand \{#run\}
 

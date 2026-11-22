@@ -212,7 +212,7 @@ Les paramètres JD Edwards et LDAP de chaque application sont aussi des colonnes
 
 | Champ | À renseigner |
 |---|---|
-| **ID application** | Identifiant numérique. Il reste stable dans tout le produit : ne pas le renuméroter une fois l'application en service. |
+| **ID application** | Identifiant numérique, saisi à la création de l'application et en lecture seule une fois celle-ci enregistrée. Il reste stable dans tout le produit. |
 | **Nom de l'application** | Libellé repris sur chaque écran et chaque export. |
 | **Type d'application** | Type de système source, choisi dans une liste (`JDE` — JD Edwards…). Détermine les étapes de collecte qui s'appliquent. |
 | **Type de base** | Technologie de la base, choisie dans une liste (`ORACLE` — Oracle…). |
@@ -244,9 +244,11 @@ La traçabilité des objets écrit plusieurs milliers de lignes par jour. Une fo
 
 Les valeurs des schémas viennent de l'installation JDE : l'administrateur JDE est l'interlocuteur.
 
+L'onglet s'enregistre avec l'application, **Lecture LOB en mode thick** comprise — y compris sur une application créée sans paramètres JD Edwards : renseigner l'onglet plus tard puis enregistrer l'application les crée.
+
 ### Onglet 3 — Vues de tâches
 
-Grille des vues de tâches JDE (les racines de l'arborescence des menus, comme *EnterpriseOne Menus*) : **Tâche ID**, **Nom Tâche** et **Collecter la sécurité (Y/N)**. Seules les vues cochées ici sont parcourues pour construire la sécurité : les droits des écrans *Menus* et *Droits* en partent. **Ajouter une ligne** déclare une autre vue de tâches.
+Grille des vues de tâches JDE (les racines de l'arborescence des menus, comme *EnterpriseOne Menus*) : **Tâche ID**, **Nom Tâche** et **Collecter la sécurité (Y/N)**. Seules les vues cochées ici sont parcourues pour construire la sécurité : les droits des écrans *Menus* et *Droits* en partent. **Ajouter une ligne** déclare une autre vue de tâches ; sur une ligne enregistrée, *Tâche ID* est en lecture seule.
 
 ### Onglet 4 — LDAP \{#tab-ldap\}
 
@@ -260,7 +262,7 @@ Périmètre LDAP / Active Directory de l'application, lu par la collecte LDAP.
 
 L'annuaire lui-même — son serveur, le compte et le mot de passe avec lesquels la collecte s'y connecte — est le **Pool** de l'application (onglet *Application*) : un pool de type *LDAP directory*, créé dans **Liberty Next → Administrer → Pools** (`ldap://`, ou `ldaps://` pour une connexion chiffrée ; voir [Un annuaire LDAP](../../../framework/connectors.md#pool-ldap)). Quand **Contexte LDAP** est vide, la collecte part du DN de base du pool. Une application LDAP sans pool continue de lire le serveur, le port, l'utilisateur et le mot de passe conservés sur sa ligne ; dès qu'un pool est désigné, c'est lui qui s'applique.
 
-Les mêmes paramètres ont leur propre écran, [LDAP](./ldap.md).
+Comme l'onglet JD Edwards, l'onglet LDAP d'une application créée sans lui s'enregistre quand il est renseigné plus tard. Les mêmes paramètres ont leur propre écran, [LDAP](./ldap.md).
 
 ### Onglet 5 — Suivi d'activité
 
@@ -273,16 +275,20 @@ Grille des règles qui fixent **ce que surveille la collecte d'activité** pour 
 | **Nom** | Nom du rôle, du schéma, de la table ou de l'utilisateur. |
 | **ACL Règle** | `INCLUDE`, `EXCLUDE` ou `AUDIT`. |
 
+*ACL Type*, *ACL Type d'application* et *Nom* identifient la règle : ils sont en lecture seule sur une ligne enregistrée, dont seule *ACL Règle* se modifie.
+
 ### Onglet 6 — Audit Trail
 
 Grille qui porte **la connexion utilisée par Nomasx-1 pour lire les archive logs Oracle** de l'application — une ligne — lue par la collecte qui alimente *Base de données → Audit Trail* et *Audit Lookup*.
 
 | Colonne | À renseigner |
 |---|---|
-| **User ID** / **Password** | Compte de base autorisé à lire les vues des archive logs. |
-| **Host** / **Port** / **Database** | Emplacement de cette base (`1521` sur une installation Oracle standard). |
-| **Last SCN** | *System Change Number* à partir duquel reprend la prochaine extraction. |
-| **Last Timestamp** | Heure de la dernière extraction. |
+| **ID utilisateur** / **Mot de passe** | Compte de base autorisé à lire les vues des archive logs. |
+| **Hôte** / **Port** / **Base de données** | Emplacement de cette base (`1521` sur une installation Oracle standard). |
+| **Dernier SCN** | *System Change Number* à partir duquel reprend la prochaine extraction. |
+| **Dernier horodatage** | Heure de la dernière extraction. |
+
+La ligne appartient à l'application : son *ID application* est en lecture seule une fois enregistrée.
 
 ### Onglet 7 — Colonnes auditées
 

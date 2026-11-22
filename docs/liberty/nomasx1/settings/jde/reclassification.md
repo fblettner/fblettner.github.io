@@ -179,7 +179,7 @@ Click **Add row** to move a new object to another system code, or click a row to
 
 | Field | What to enter |
 |---|---|
-| **Object** | JDE object name (e.g. `P0411Z1`). |
+| **Object** | JDE object name (e.g. `P0411Z1`). Read-only on a saved line: to reclassify another object, add a line. |
 | **Description** | Friendly label of what the program does. |
 | **System Code** | Picked from the list of system codes. The value Nomasx-1 uses instead of the object's own. |
 

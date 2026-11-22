@@ -101,7 +101,7 @@ Each tab says, beside its description, how many of its points are to review.
 |---|---|
 | **Overview** | **The instance** — version, instance, database, mode, platform and the parameters that matter (`control_management_pack_access`, `cursor_sharing`, `db_block_size`, `open_cursors`, `processes`, `sga_target`, `undo_retention`…) — and **What the figures say**. |
 | **Storage** | **Size** by what each owner holds — business data, control tables, central objects, system, object librarian, data dictionary, Oracle, other —; **Tablespaces** with what they use and may grow to; **The largest tables**, their indexes and LOBs counted in, with their description from the Object Librarian. |
-| **Activity** | **Activity** — cache hit ratio, hard parses, executions, commits, sorts on disk, where time was waited —; **The most expensive statements** and who sends them; **Sessions** by program — JDE kernels, JDE batches, web / AIS servers, tools; **Redo logs** and their switches hour by hour. |
+| **Activity** | **Activity** — five figures on one strip: cache hit ratio, hard parses, executions, commits, sorts on disk —; **Where time was waited** beside **Sessions** by program — JDE kernels, JDE batches, web / AIS servers, tools; **Redo logs** and their switches hour by hour, across the page; **The most expensive statements** and who sends them, last. |
 | **Objects** | **Objects and statistics** — invalid objects, unusable indexes, JDE tables never analysed or with stale statistics. |
 
 ---

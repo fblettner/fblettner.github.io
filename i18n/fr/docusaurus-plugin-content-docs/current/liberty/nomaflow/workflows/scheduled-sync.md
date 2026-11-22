@@ -19,7 +19,7 @@ Chaque nuit, copier les tables `orders` et `customers` de la base opérationnell
 
 ## La tâche \{#job\}
 
-**+ Nouvelle tâche** : identifiant `nightly-reporting-sync`, étiquette `etl`, **Planification (cron)** `0 2 * * *`, **Fuseau horaire** `Europe/Paris`. Puis trois étapes :
+**+ Nouvelle tâche** : identifiant `nightly-reporting-sync`, étiquette `etl`, **Planification (cron)** *Certains jours, à heure fixe* à 02:00, aucun jour choisi (`0 2 * * *`), **Fuseau horaire** `Europe/Paris`. Puis trois étapes :
 
 | N° | Type | Réglages |
 |---|---|---|

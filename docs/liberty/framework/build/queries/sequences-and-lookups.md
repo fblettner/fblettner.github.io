@@ -117,7 +117,7 @@ A *sequence* in Liberty is a query that returns one number — the next id to as
 | Connector file | The query, in the connector's **Sequences** section. |
 | Dictionary file | `[connectors.<conn>.sequences.<seqId>] query = "<queryName>"`, `dd_id = "<keyCol>"`, optional `description` |
 
-A dictionary entry (or a screen column) with the rule `SEQUENCE` and **Rules values** = `<seqId>` gets its number from this query on each insert. With `dd_id` set, every column whose entry has that key is numbered too.
+A dictionary entry (or a screen column) with the kind of field *A number given automatically* (`SEQUENCE`) and **Numbering rule** = `<seqId>` gets its number from this query on each insert. With **Dictionary item** set on the sequence, every column carrying that item is numbered too.
 
 ### Concurrency note
 
@@ -132,7 +132,7 @@ For high-concurrency workloads, define the column as a **database SEQUENCE** (Po
 
 ## Lookup — supply a dropdown's options
 
-A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the dictionary's `LOOKUP` rule: a column with the rule `LOOKUP` and **Rules values** = `<lookupId>` shows the label instead of the code and offers the lookup's rows in a searchable list.
+A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs — the source for a screen column's dropdown. It backs the kind of field *A list read from a table* (`LOOKUP`): a column of that kind with **List from a table** = `<lookupId>` shows the label instead of the code and offers the lookup's rows in a searchable list.
 
 <svg viewBox="0 0 1320 588" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -229,7 +229,7 @@ A *lookup* in Liberty is a query that returns rows of *(value, label)* pairs —
 
 When the list should depend on **another field of the same row** — *Role* depends on *Application* — the lookup query takes a parameter, and the screen column binds it:
 
-- in the dialog and grid editing, the column's **lookup_param_binds** — `{ param = "APP_ID", source = "APP_ID" }`;
+- in the dialog and grid editing, the column's **Values given to the list** — `{ param = "APP_ID", source = "APP_ID" }`;
 - in the grid's filter panel, the column's **filter_from**, which narrows the filter's options on the value of another filter.
 
 See [Parameter binding](./parameter-binding.md#where) and [Columns](../screens/columns.md).

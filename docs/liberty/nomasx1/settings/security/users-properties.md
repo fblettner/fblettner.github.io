@@ -245,8 +245,8 @@ Click **Add row** to flag an account, or click a row to open it; **Bulk edit** c
 
 | Field | What to enter |
 |---|---|
-| **Application ID** | The application. |
-| **User ID** | Picked from the application's users. |
+| **Application ID** | The application. Read-only on a saved line. |
+| **User ID** | Picked from the application's users. Read-only on a saved line. |
 | **Privileged (Y/N)** | Tick when the account carries elevated privileges. |
 | **Technical (Y/N)** | Tick when the account is a service / batch user. |
 | **Generic (Y/N)** | Tick when the account is a shared login. |

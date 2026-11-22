@@ -24,7 +24,8 @@ Four types are available: **bar**, **line**, **area** and **pie**.
 
   <rect x="220" y="20" width="760" height="448" rx="14" fill="url(#che-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">▥</text>
-  <text x="258" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="ui-monospace, monospace">[charts.sales.revenue_by_month]</text>
+  <text x="258" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Revenue by month</text>
+  <text x="370" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · revenue_by_month</text>
   <rect x="916" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="927.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <rect x="942" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -146,7 +147,7 @@ Charts are grouped by connector: the **Connector** chips at the top pick one, **
 
 ## The editor \{#editor\}
 
-The editor opens in a window titled by the chart (`[charts.<connector>.<id>]`) and has two tabs, **General** and **Chart**. **Cancel** and **Save** are in its footer; closing it with unsaved changes asks whether to save them, discard them or keep editing.
+The editor opens in a window titled by the chart's label, followed by its connector and its id (*Revenue by month* `sales · revenue_by_month`), and has two tabs, **General** and **Chart**. **Cancel** and **Save** are in its footer; closing it with unsaved changes asks whether to save them, discard them or keep editing.
 
 ### General \{#general\}
 
@@ -169,9 +170,10 @@ The tab loads a sample of the query's rows and draws the chart as it is set:
 | **X axis** | The column along the X axis — the slice labels on a pie. |
 | **Series** | One block per Y column: the column, a colour swatch, **L** / **R** to put the series on the left or the right Y axis, and **✕** to remove it. **+** adds a series. A pie uses the first series only. |
 | **Pivot by** | Optional, not on a pie. A column whose distinct values become the series: one series per value (a process, a status), each the aggregate of the first Y column. A query returning *refresh date · process · lines* gives one bar per refresh, stacked by process, without pivoting in SQL. |
+| **Options** | How the chart is drawn, each box showing what the chart does now: **Stacked** (bar and area only), **Legend**, **Grid lines** (not on a pie) and **Sort the X axis**. |
 | **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 
-The Y axis shows compact ticks (1.2k, 27.5M); the tooltip gives the full figure. As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
+The Y axis shows compact ticks (1.2k, 27.5M); the tooltip gives the full figure. As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. Unless **Legend** says otherwise, the legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
 
 An X column and at least one series are required to save.
 

@@ -24,7 +24,8 @@ Access: **Liberty Next → Logic → Services**, for superusers. A screen calls 
 
   <rect x="220" y="20" width="880" height="432" rx="14" fill="url(#svd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Service</text>
-  <text x="293" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
+  <text x="293" y="44" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">· Check the credit</text>
+  <text x="425" y="44" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">check_credit</text>
   <rect x="1036" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1047.0" y="44.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
   <rect x="1062" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -113,20 +114,22 @@ Access: **Liberty Next → Logic → Services**, for superusers. A screen calls 
   <rect x="800" y="271" width="266" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="810" y="284.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">customer</text>
   <text x="800" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">STOP ON ERROR</text>
-  <text x="936" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">BIND RESULT</text>
+  <text x="936" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">KEEP THE RESULT</text>
   <rect x="800" y="311" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
   <path d="M802.5,316.5 L804.8,318.8 L808.8,314" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="817" y="320" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">enabled</text>
   <rect x="936" y="311" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
   <path d="M938.5,316.5 L940.8,318.8 L944.8,314" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="953" y="320" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="800" y="336" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Param binds</text>
+  <text x="800" y="336" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Values passed</text>
   <rect x="800" y="343" width="62" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="810" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">ID ▾</text>
-  <rect x="866" y="343" width="30" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="881.0" y="356.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">src</text>
-  <rect x="900" y="343" width="166" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="910" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">INPUT.customer</text>
+  <rect x="866" y="343" width="34" height="20" rx="5" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="883.0" y="356.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Fixed</text>
+  <rect x="900" y="343" width="58" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="929.0" y="356.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Taken from</text>
+  <rect x="962" y="343" width="104" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="970" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Input · Customer</text>
   <line x1="220" y1="406" x2="1100" y2="406" stroke="#1f2937" strokeWidth="1"/>
   <rect x="922" y="416" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="957.0" y="430.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
@@ -157,8 +160,8 @@ Access: **Liberty Next → Logic → Services**, for superusers. A screen calls 
   <text x="1130" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">edited beside the flow</text>
   <line x1="1120" y1="107.0" x2="1080" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svd-arrow)"/>
   <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bind result</text>
-  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">later steps read its rows</text>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Keep the result</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ticked once a later step reads it</text>
   <line x1="1120" y1="307.0" x2="1006" y2="316" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svd-arrow)"/>
   <rect x="1120" y="392" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="407" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save</text>
@@ -262,7 +265,7 @@ Access: **Liberty Next → Logic → Services**, for superusers. A screen calls 
 
 Each line gives the service's identifier, its label, its number of steps and inputs and, once it is exposed, the endpoints it serves (`POST /api/http/<connector>/<endpoint>`). A click on the line opens its designer. On a line: **Run**, **Expose**, **Find usages**, **Find dependencies**, **Rename**, **Clone**, **Delete**.
 
-- **New service** asks for an identifier (`snake_case`) and opens the designer of the new, empty service.
+- **New service** asks for its name — *Its name:*, *Close the period* —, makes its identifier from it (*Its technical id will be close_the_period.*) and opens the designer of the new, empty service.
 - **Rename** and **Clone** ask for the new identifier; a rename also rewrites the screens that call the service.
 - **Delete** asks for a confirmation: a screen that still calls the service then fails the integrity check — **Find usages** first.
 
@@ -270,13 +273,13 @@ Each line gives the service's identifier, its label, its number of steps and inp
 
 ## The flow \{#flow\}
 
-The designer opens over the whole window, titled *Service ·* `[actions.<id>]`, on the **Flow** view; **List** gives the same service as a form — label, description, inputs, then the steps one per line, with **Add action**. **Save** writes the service and reloads the configuration; **Cancel** with unsaved changes asks whether to save them, discard them or keep editing.
+The designer opens over the whole window, titled *Service ·* with the service's label, then its identifier in small, on the **Flow** view; **List** gives the same service as a form — label, description, inputs, then the steps one per line, with **Add action**. **Save** writes the service and reloads the configuration; **Cancel** with unsaved changes asks whether to save them, discard them or keep editing.
 
 The flow reads left to right: **Start**, which shows the inputs; one card per step; **Answer**, which shows what the service returns. A **condition** forks into its **True** and **False** lanes; a **loop** or a **group** frames its own steps. The layout follows the structure of the service: nothing is placed by hand. A long flow continues on the next row, and the zoom (− / % / +) is kept on the device.
 
-- **A click on a card** edits that step in the side panel, under the path *service › step*: its **Type**, its target — **Connector** and **Query** for a query (the pencil opens the query), the endpoint, the function or the service otherwise —, its **Id** and **Label**, **Stop on error**, **Bind result**, and its **Param binds**: each parameter of the target takes a literal value or a source (`INPUT.<name>`, `<step>.first_row.<COLUMN>`, a built-in such as `#LOGIN_USER#`). The bin of the card deletes the step.
+- **A click on a card** edits that step in the side panel, under the path *service › step*: its **Type**, its target — **Connector** and **Query** for a query (the pencil opens the query), the endpoint, the function or the service otherwise —, its **Id** and **Label**, **Stop on error**, **Keep the result**, and its **Values passed** — see [Values passed](#values). The bin of the card deletes the step.
 - **The + on a link** opens the list of step kinds and adds the chosen one at that place.
-- **With nothing picked**, the panel edits *The service*: **Label**, **Description**, **Inputs** (**Add input**).
+- **With nothing picked**, the panel edits *The service*: **Label**, **Description**, **Inputs** and **Questions asked first** — see [Inputs and questions](#inputs).
 
 | Step | Does |
 |---|---|
@@ -289,7 +292,28 @@ The flow reads left to right: **Start**, which shows the inputs; one card per st
 | **Message**, **Notification** | Tells the user, or sends a notification rule — see [below](#notification). |
 | **Answer** | Says what the service returns. |
 
-A step reads the service's inputs as `INPUT.<name>`, and the result of an earlier step by that step's id — `<step>.first_row.<COLUMN>`, `<step>.rows` — when that step has **Bind result** ticked. An input's default (a literal, or `#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`) is used when the caller does not give it.
+### Inputs and questions \{#inputs\}
+
+**Inputs** — **Add input** — are what the service receives from what calls it. Each input is a card:
+
+| Field | Meaning |
+|---|---|
+| **Name** | What the steps read it by (`COMPANY`, read as `INPUT.COMPANY`). |
+| **Label** | The name shown where the service is called (*Company*). |
+| **Default value** | Used when the caller gives none: a value, or a built-in — the signed-in user, today… (`#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`). |
+| **What it is for** | A sentence on the input (*The company whose period is closed*). |
+
+**Questions asked first** — **add** — are the fields the user fills in before the service runs, the same list of fields as the questions of a screen's button: a **Name** the steps read the answer by, a **Dictionary item** or a **Label**, a **Format**, **Required**, a **Default value**…
+
+### Values passed \{#values\}
+
+Under **Values passed**, each parameter of the step's target — the query, the endpoint, the function, the service called — receives a value, either **Fixed** (written there) or **Taken from**, picked in a list:
+
+- the service's inputs (*Input · Company*) and the answers to its questions (*Answer · …*);
+- what an earlier query, endpoint or function step returned: *first row of "Find the customer"*, completed by a column, or *every row of "…"*; when that step reads the query of a screen, each column of its first row is offered by itself (*EMAIL — first row of "Find the customer"*);
+- the record, and the built-ins: the signed-in user, today.
+
+A value picked replaces what the field held. Picking an earlier step's result ticks **Keep the result** on that step by itself. **+ a value to use when that one is empty** gives a fallback when the source is empty at run time. In the saved service, an input reads `INPUT.<name>` and an earlier step's result `<step>.first_row.<COLUMN>` or `<step>.rows`.
 
 ### The Notification step \{#notification\}
 

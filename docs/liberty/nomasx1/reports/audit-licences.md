@@ -147,7 +147,7 @@ The charts render inline in both PDF and Markdown output — no external image a
 Nine sections, each built from the data Nomasx-1 has collected:
 
 1. **Synthèse** — executive summary: context and objectives, the principal findings each with a risk level, the estimated financial exposure, and the key recommendations.
-2. **Périmètre de l'audit** — audited components, what is out of scope, the JD Edwards environments table (production vs non-production), and the **technical architecture**: software versions, a server inventory, and an architecture diagram the report generates automatically.
+2. **Périmètre de l'audit** — audited components, what is out of scope, the JD Edwards environments table (production vs non-production), and the **technical architecture**: software versions, a server inventory, and the architecture diagram on a landscape page of its own (see [The architecture page](#architecture)).
 3. **Méthodologie** — the tools and data used, the analysis rules (usage is measured from real consumption, not from authorisations), and a **data-sources** table that dates every input.
 4. **Licences acquises** — the subscribed inventory: Oracle Database Enterprise Edition (NUP), the options and packs, the components detected in use, the *règle des minimas* and the NUP minimum computed from the processor count; then the JD Edwards Oracle Technology Foundation and the application modules.
 5. **Utilisation et conformité** — the core of the report:
@@ -159,6 +159,18 @@ Nine sections, each built from the data Nomasx-1 has collected:
 7. **Plan de remédiation** — concrete clean-up: deactivating never-used accounts, and rationalising roles and access (dropping unassigned roles, reviewing excessive role stacking, aligning access to real use).
 8. **Recommandations et plan d'action** — every action ranked by priority, effort and financial impact, an indicative four-phase schedule, and the follow-up indicators to track afterwards.
 9. **Annexes** — the detailed list of users to deactivate (with creation and last-update dates, and the validation cautions to apply before disabling) and a glossary.
+
+---
+
+## The architecture page \{#architecture\}
+
+The *Périmètre de l'audit* section shows the application's architecture on a landscape page. The report takes the first picture it finds, in this order:
+
+1. **A picture put there for the application** — the file `data/architecture/<apps_id>.svg` in the applications' folder of the installation. It always comes first.
+2. **The platform as Nomajde read it** — on [Nomajde → Monitoring → Architecture](../../nomajde/monitoring/architecture.md#download), **Keep for the audit report** keeps the reading of a JD Edwards pool. The report draws the reading kept for the pool the application names on [Applications](../settings/global/applications.md), **in the report's language** and with the date of the reading. The reading is kept on the installation: the report draws it even where Server Manager cannot be reached from the machine that writes the report. An application that names no pool takes the reading when only one is kept.
+3. **The installation's picture** — the file `data/architecture/default.svg`, for an installation that holds a single application.
+
+Without any of them, the report has no architecture page.
 
 ---
 
@@ -208,6 +220,7 @@ The audit reads the data Nomasx-1 has already collected for the application — 
 - **The licence inventory and pricing** (*Licenses* and *Settings → Pricing*), otherwise the financial figures drift from the real price book.
 - **The technical accounts** — the *Technical* flag of [Users properties](../settings/security/users-properties.md); while the application has no user property at all, the naming rules of its [Technical accounts](../settings/global/applications.md#technical-accounts) tab. With no flag and no rule, no account is counted as technical.
 - **The application's pool** — the server and the database the report names in its scope are read from the pool the application names, and the pool is printed; an application that names no pool keeps what its row holds.
+- **The architecture reading** — when Nomajde is installed, **Keep for the audit report** on its Architecture page for the application's JD Edwards pool, so that the report draws the platform as it stands (see [The architecture page](#architecture)).
 
 A run against an application with no collected usage still produces the document, but the usage and financial sections will read as empty rather than wrong.
 

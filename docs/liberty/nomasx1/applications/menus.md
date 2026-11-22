@@ -202,7 +202,7 @@ Click the **···** button at the start of a row, or right-click the row, to op
 
 | Action | Where it lands |
 |---|---|
-| **Display Users** | List of users that can reach the selected menu leaf. |
+| **Display Users** | List of users that can reach the selected menu leaf, with their status, creation and login dates and the *Technical (Y/N)*, *Generic (Y/N)* and *Is Linked (Y/N)* flags of their properties. |
 | **Display Roles** | List of roles that grant access to the selected menu leaf. |
 
 ---

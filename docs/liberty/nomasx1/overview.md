@@ -485,7 +485,7 @@ The menu opens on the three dashboards, the Data Explorer and the reports, then 
 
 ---
 
-## Roles inside Nomasx-1
+## Roles inside Nomasx-1 \{#roles\}
 
 Nomasx-1 ships four predefined roles:
 

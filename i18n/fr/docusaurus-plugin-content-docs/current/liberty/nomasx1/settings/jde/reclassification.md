@@ -177,7 +177,7 @@ Chaque ligne dit : *pour cet objet, utiliser ce `SY` à la place du défaut*. Le
 
 | Champ | À renseigner |
 |---|---|
-| **Objet** | Nom de l'objet JDE (par exemple `P0411Z1`). |
+| **Objet** | Nom de l'objet JDE (par exemple `P0411Z1`). En lecture seule sur une ligne enregistrée : pour reclassifier un autre objet, ajouter une ligne. |
 | **Description** | Libellé convivial de ce que fait le programme. |
 | **Code système** | Choisi dans la liste des codes système. Valeur retenue par Nomasx-1 à la place de celle de l'objet. |
 

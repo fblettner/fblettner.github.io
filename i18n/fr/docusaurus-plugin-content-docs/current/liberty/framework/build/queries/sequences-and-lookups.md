@@ -117,7 +117,7 @@ Dans Liberty, une *séquence* est une requête qui renvoie un nombre : le numér
 | Connecteur | La requête, dans la section **Séquences** du connecteur. |
 | Dictionnaire | `[connectors.<connecteur>.sequences.<id>]` avec `query = "<nom de la requête>"`, `dd_id = "<colonne>"` et la description. |
 
-Une entrée du dictionnaire (ou une colonne d'écran) dotée de la règle `SEQUENCE` et de **Rules values** = `<id>` reçoit son numéro de cette requête à chaque insertion. Avec `dd_id` renseigné, toute colonne dont l'entrée porte cette clé est numérotée elle aussi.
+Une entrée du dictionnaire (ou une colonne d'écran) dont la nature est *A number given automatically* (`SEQUENCE`) et la **Numbering rule** `<id>` reçoit son numéro de cette requête à chaque insertion. Avec **Dictionary item** renseigné sur la séquence, toute colonne qui porte cet élément est numérotée elle aussi.
 
 ### Accès concurrents
 
@@ -132,7 +132,7 @@ Sous forte concurrence, mieux vaut une **séquence de la base** (`SEQUENCE` Post
 
 ## Lookup — alimenter une liste déroulante
 
-Dans Liberty, un *lookup* est une requête qui renvoie des couples *(code, libellé)* — la source de la liste déroulante d'une colonne. Il sert la règle `LOOKUP` du dictionnaire : une colonne dotée de la règle `LOOKUP` et de **Rules values** = `<id>` affiche le libellé à la place du code et propose les lignes du lookup dans une liste avec recherche.
+Dans Liberty, un *lookup* est une requête qui renvoie des couples *(code, libellé)* — la source de la liste déroulante d'une colonne. Il alimente la nature *A list read from a table* (`LOOKUP`) : une colonne de cette nature avec **List from a table** = `<id>` affiche le libellé à la place du code et propose les lignes du lookup dans une liste avec recherche.
 
 <svg viewBox="0 0 1320 588" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -229,7 +229,7 @@ Dans Liberty, un *lookup* est une requête qui renvoie des couples *(code, libel
 
 Quand la liste dépend d'**un autre champ de la même ligne** — *Rôle* dépend d'*Application* —, la requête du lookup prend un paramètre et la colonne de l'écran le lie :
 
-- dans le dialogue et la saisie en grille, par le champ **lookup_param_binds** de la colonne — `{ param = "APP_ID", source = "APP_ID" }` ;
+- dans le dialogue et la saisie en grille, par le champ **Values given to the list** de la colonne — `{ param = "APP_ID", source = "APP_ID" }` ;
 - dans le panneau de filtres de la grille, par le champ **filter_from** de la colonne, qui restreint les options du filtre selon la valeur d'un autre filtre.
 
 Voir [Liaison de paramètres](./parameter-binding.md#where) et [Colonnes](../screens/columns.md).

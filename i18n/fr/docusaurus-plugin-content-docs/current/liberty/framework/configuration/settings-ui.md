@@ -188,17 +188,101 @@ Chaque page a sa propre adresse — `/liberty/screens`, `/liberty/app`… —, c
 
 Les éditeurs partagent le même cadre : à gauche, la liste, où chaque ligne dit ce qu'est l'élément ; à côté, l'élément choisi ; et dans l'en-tête de la page, toujours au même endroit, ses boutons — **Abandonner**, **Enregistrer**, l'*Ajouter* de la page, **Recharger la config**. Ce qui se dessine se dessine partout de la même façon : un écran en six étapes, une table avec ses requêtes de lecture et d'écriture, un pool, un point d'accès, une tâche et un service en flux de cartes, la carte choisie se modifiant à côté du flux. Dans le menu latéral, le bord droit du menu se fait glisser pour le redimensionner.
 
+### Ce que disent les formulaires \{#forms\}
+
+Les formulaires des éditeurs désignent chaque réglage en mots simples — *Dictionary item*, *Kind of field*, *History table*, *Read only when changing* — avec, sous le champ, une phrase d'aide courte ; **plus**, au bout de cette phrase, ouvre l'explication complète et ses exemples. Un choix se dit lui aussi en mots, accompagné de son code quand il en a un (*LOOKUP — A list read from a table*).
+
+Un éditeur désigne ce qu'il modifie par son libellé, suivi — en plus petit — de son application et de son identifiant technique : *Concepteur d'écran · Orders* `demo · orders`. Un nouvel écran, tableau de bord ou service reçoit un nom (*Son nom :*) ; son identifiant technique en est tiré et s'affiche pendant la saisie — *Commandes clients* donne `commandes_clients`, suivi de `_2` si l'identifiant est déjà pris.
+
 ---
 
 ## Enregistrer \{#save\}
 
-1. **Enregistrer** envoie la configuration modifiée ; le serveur la valide d'après son modèle et refuse une configuration invalide en donnant la raison.
+1. **Enregistrer** envoie la configuration modifiée ; le serveur la valide d'après son modèle et refuse une configuration invalide en listant les points à corriger — voir [Un enregistrement refusé](#refused).
 2. Le fichier est écrit. Une version du contenu précédent est conservée dans **Déployer → Historique**.
 3. Le changement s'applique : aussitôt quand le serveur surveille ses fichiers (**Recharger à chaud les fichiers TOML de configuration quand ils changent** dans Administrer → App → Serveur, coché par défaut), sinon avec **Recharger la config**.
 
 **Recharger la config**, en haut de chaque page d'édition, relit tous les fichiers de configuration dans le serveur en service — *Rechargé — 12 connecteurs, 340 entrées de dictionnaire, 4 applications.* Un rechargement reconstruit les connecteurs à partir des nouveaux fichiers ; s'il échoue, la configuration précédente reste active. Les pools ne sont pas rechargés par la surveillance des fichiers, pour qu'une requête en cours ne perde jamais sa connexion : après la modification d'un pool, utiliser **Recharger la config**.
 
 Les fichiers sont réécrits à partir du modèle enregistré : les commentaires écrits à la main dans un fichier ne sont pas conservés.
+
+### Un enregistrement refusé \{#refused\}
+
+Un enregistrement refusé par le serveur n'écrit rien. L'éditeur affiche, au-dessus de ce qui est en cours de modification, une ligne par point à corriger : l'endroit, avec les mots des éditeurs — l'application, puis chaque objet par son libellé et le champ par son libellé de formulaire —, ce qui ne va pas, et **Ouvrir** pour aller à l'objet.
+
+<svg viewBox="0 0 1200 326" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="svsave-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="svsave-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="svsave-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="svsave-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="282" rx="14" fill="url(#svsave-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Écrans</text>
+  <rect x="830" y="33" width="130" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="895.0" y="47.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger la config</text>
+  <text x="240" y="85" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Connecteur :</text>
+  <rect x="310" y="72" width="33" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="326.5" y="84.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">crm</text>
+  <rect x="349" y="72" width="38" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="368.0" y="84.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">demo</text>
+  <rect x="859" y="70" width="101" height="22" rx="5" fill="url(#svsave-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="909.5" y="84.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Enregistrer</text>
+  <rect x="761" y="70" width="90" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="806.0" y="84.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Abandonner</text>
+  <rect x="630" y="70" width="123" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="691.5" y="84.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter un écran</text>
+  <rect x="240" y="106" width="720" height="78" rx="8" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="254" y="126" fill="#f87171" fontSize="10" fontFamily="system-ui, sans-serif">Non enregistré — 2 points à corriger :</text>
+  <text x="254" y="148" fill="#fca5a5" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">demo › Screen "Orders" › Column "B" › Kind of field</text>
+  <text x="543.32" y="148" fill="#fca5a5" fontSize="9.5" fontFamily="system-ui, sans-serif">doit être un texte</text>
+  <text x="653.08" y="148" fill="#f87171" fontSize="9" fontFamily="system-ui, sans-serif">Ouvrir</text>
+  <line x1="653.08" y1="150" x2="683.32" y2="150" stroke="#f87171" strokeWidth="0.8"/>
+  <text x="254" y="168" fill="#fca5a5" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">demo › Screen "Orders" › Column "ABAN8" › Dictionary item</text>
+  <text x="575.24" y="168" fill="#fca5a5" fontSize="9.5" fontFamily="system-ui, sans-serif">est obligatoire</text>
+  <text x="669.04" y="168" fill="#f87171" fontSize="9" fontFamily="system-ui, sans-serif">Ouvrir</text>
+  <line x1="669.04" y1="170" x2="699.28" y2="170" stroke="#f87171" strokeWidth="0.8"/>
+  <rect x="240" y="196" width="720" height="44" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="214" fill="#e2e8f0" fontSize="10.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="256" y="228" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Clients  ·  demo.customers_get · 2 onglets · 9 champs</text>
+  <rect x="870" y="207" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="910.0" y="221.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Renommer</text>
+  <rect x="240" y="246" width="720" height="44" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="264" fill="#e2e8f0" fontSize="10.5" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="256" y="278" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Commandes  ·  demo.orders_get · 1 onglet · 6 champs</text>
+  <rect x="870" y="257" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="910.0" y="271.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Renommer</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rien n'est écrit</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le fichier reste tel quel</text>
+  <line x1="200" y1="113.0" x2="254" y2="124" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Où, avec les mots des éditeurs</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application › objet › champ</text>
+  <line x1="200" y1="177.0" x2="280" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="1000" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui ne va pas</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par point</text>
+  <line x1="1000" y1="137.0" x2="690" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="1000" y="186" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ouvrir</text>
+  <text x="1010" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre l'objet en cause</text>
+  <line x1="1000" y1="203.0" x2="810" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+</svg>
+
+| Partie d'une ligne | Exemple |
+|---|---|
+| L'endroit | `demo › Screen "Orders" › Column "B" › Kind of field` |
+| Ce qui ne va pas | *est obligatoire*, *doit être un texte*, *doit être un nombre entier*, *doit être oui ou non*, *ne doit pas être vide*, *contient des caractères non autorisés ici*, *« … » n'est pas un réglage qui existe ici*… |
+| **Ouvrir** | Ouvre l'objet dans son éditeur — l'écran dans le Concepteur d'écran, l'entrée dans le Dictionnaire, l'entrée de menu dans son arbre. Pas de **Ouvrir** quand l'objet est déjà celui affiché. |
+
+Un enregistrement refusé laisse le concepteur ou la fenêtre d'édition ouverts, les points à corriger affichés à l'intérieur : rien de ce qui a été saisi n'est perdu.
+
+Certains éditeurs vérifient avant l'envoi et signalent les points à corriger de la même façon :
+
+- **Menus** — une entrée qui n'ouvre rien, deux entrées de même identifiant, une entrée rangée sous un dossier qui n'existe pas. Voir [Construire l'arbre](../build/menus/build-the-tree.md).
+- **Tâches** — une tâche sans identifiant ou dont l'identifiant est celui d'une autre, une étape sans nom ou sans ce sur quoi elle agit (sa source, sa cible, sa requête, sa fonction, son adresse, ses destinataires…), une étape qui lance une tâche inexistante, deux préréglages de même nom. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
 
 ---
 

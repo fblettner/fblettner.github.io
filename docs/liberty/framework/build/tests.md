@@ -40,6 +40,7 @@ Access: **Liberty Next → Logic → Tests**. The results over time are in [Oper
   <circle cx="256" cy="223" r="4.5" fill="none" stroke="#f87171" strokeWidth="1.4"/>
   <text x="267" y="226.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">The price is computed</text>
   <text x="252" y="252" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ New case</text>
+  <text x="252" y="274" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">✧ Case from an endpoint</text>
   <rect x="428" y="72" width="41" height="20" rx="5" fill="url(#tst-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="448.5" y="85.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
   <rect x="474" y="72" width="93" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -152,6 +153,10 @@ Access: **Liberty Next → Logic → Tests**. The results over time are in [Oper
   <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A cleanup step</text>
   <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">played even after a failure</text>
   <line x1="1120" y1="397.0" x2="1044" y2="390" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="20" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Case from an endpoint</text>
+  <text x="30" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its answer now, nothing saved</text>
+  <line x1="200" y1="457.0" x2="250" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
 </svg>
 
 ---
@@ -161,22 +166,36 @@ Access: **Liberty Next → Logic → Tests**. The results over time are in [Oper
 | | |
 |---|---|
 | **Suite** | Names an API connector and holds cases. **New suite** asks for its name. |
-| **Case** | One thing checked — *The customer list still has its columns*. **New case**, under the suite. |
-| **Step** | One call to an endpoint of the suite's connector, with what is expected. |
+| **Case** | One thing checked — *The customer list still has its columns*. **New case**, under the suite, or **Case from an endpoint** to start from what an endpoint answers — see [below](#from-endpoint). |
+| **Step** | One call to an endpoint of the case's connector — the suite's by default —, with what is expected. |
 
-The left column lists the suites — **New suite** at the top — and under each its cases, each with the icon of its last result, then **New case**. The middle holds the buttons of the suite (**Save**, **Run this case**, **Run the suite**, **Record the reference**, **also the cases that write**, **Delete the suite**) above the picked case, drawn as a flow: at the start, what the case checks with its last result; one card per step — its endpoint, its name, a summary of what it expects, **coloured by its last result** —; **End**. The flow has its zoom and continues on the next row when it is long. The right panel edits what is picked: the case, or a step.
+The left column lists the suites — **New suite** at the top — and under each its cases, each with the icon of its last result, then **New case** and **Case from an endpoint**. The middle holds the buttons of the suite (**Save**, **Run this case**, **Run the suite**, **Record the reference**, **also the cases that write**, **Delete the suite**) above the picked case, drawn as a flow: at the start, what the case checks with its last result; one card per step — its endpoint, its name, a summary of what it expects, **coloured by its last result** —; **End**. The flow has its zoom and continues on the next row when it is long. The right panel edits what is picked: the case, or a step.
 
-### The case \{#case\}
+### The suite and the case \{#case\}
+
+The panel opens on **The suite** — the settings shared by its cases — above **The case**:
 
 | Field | Meaning |
 |---|---|
-| **Id** | The case's identifier in its suite. |
+| **Name of the suite** | The name shown at the head of its cases in the list and in the results. Blank: the file's name. |
 | **Connector of the suite** | The API connector whose endpoints the steps call. |
+| **Id** | The case's identifier in its suite. |
+| **Connector of this case** | Another API connector for this case's steps; *the suite's* by default. |
 | **What it checks** | The sentence shown in the lists and the results. |
 | **This case changes data: played only when a run allows it** | Tick it when a step writes. |
 | **Last runs** | The last eight runs of the case — result, date and time; a recorded run is tagged *reference*. |
 
 **Delete the case** is under the list.
+
+### A case from an endpoint \{#from-endpoint\}
+
+**Case from an endpoint**, under the cases of a suite, asks *Which endpoint?* among the endpoints of the suite's connector and prepares a first case for it: one step calling it with the example values of its variables — its example, else its default, else the first of its choices —, expecting what it answers now: at least one row when it returns rows, otherwise the first values its answer holds. The case takes the endpoint's label as what it checks. *Case prepared from what the endpoint answers now: complete what it must check, then save.*
+
+- **An endpoint that changes data is not called**: its case comes marked as writing (*This case changes data*), with the call only — say what it must answer, and add a step that puts things back.
+- A call that fails with the example values gives the case all the same, with the reason: fill the step's parameters, then try it.
+- **Nothing is saved until the suite is saved**: the case is added to the suite being edited; **Save** keeps it.
+
+The link is offered to who may change and run the tests, once the connector has endpoints.
 
 ### A step \{#step\}
 

@@ -243,8 +243,8 @@ Marquer chaque compte pour que les vues en aval filtrent intelligemment :
 
 | Champ | À renseigner |
 |---|---|
-| **Application ID** | L'application. |
-| **Utilisateur ID** | Choisi parmi les utilisateurs de l'application. |
+| **ID application** | L'application. En lecture seule sur une ligne enregistrée. |
+| **Utilisateur ID** | Choisi parmi les utilisateurs de l'application. En lecture seule sur une ligne enregistrée. |
 | **Privilèges (Y/N)** | Cocher quand le compte porte des privilèges élevés. |
 | **Technique (Y/N)** | Cocher quand le compte est un utilisateur de service / batch. |
 | **Générique (Y/N)** | Cocher quand le compte est un login partagé. |

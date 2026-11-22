@@ -1,12 +1,12 @@
 ---
 title: Create a job
-description: "The Nomaflow job editor, a tab per job: the Job section (id, schedule, timezone, tags, enabled, timeout, position in the installation, keep on upgrade), presets and their schedules, the retry policy, alerts, shared parameters, what the user may set when starting the job, the step pipeline — and how unsaved changes are kept."
-keywords: [Nomaflow, create job, job editor, schedule, timezone, timeout, install_step, override, presets, retry policy, alerts, shared params, user parameters, user_params, for_each, unsaved changes, steps, jobs.toml, Liberty Next]
+description: "The Nomaflow job editor, a tab per job: the Job section (id, schedule said in words, timezone, tags, timeout, what the run log holds, enabled, position in the installation, keep on upgrade), presets edited in place with their schedules, the retry policy, alerts, shared parameters, what the user may set when starting the job, the step pipeline — and how unsaved changes are kept."
+keywords: [Nomaflow, create job, job editor, schedule, timezone, timeout, log level, checks before saving, install_step, override, presets, retry policy, alerts, shared params, user parameters, user_params, for_each, unsaved changes, steps, jobs.toml, Liberty Next]
 ---
 
 # Create a job
 
-**New job** on the Jobs page, or **Edit** on a job's line, opens the job editor in a tab of its own — *Job · &lt;id&gt;*, one per job edited. **The job is drawn as its flow** — **Start**, a card per step with its kind, its name and what it does, **End** — and what is picked is edited beside it: the job itself at the start, or a step. One **Save** at the top — active once something changed, with *unsaved changes* beside it — writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page. An invalid job is refused with a message at the top of the editor.
+**New job** on the Jobs page, or **Edit** on a job's line, opens the job editor in a tab of its own — *Job · &lt;id&gt;*, one per job edited. **The job is drawn as its flow** — **Start**, a card per step with its kind, its name and what it does, **End** — and what is picked is edited beside it: the job itself at the start, or a step. One **Save** at the top — active once something changed, with *unsaved changes* beside it — writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page. See [Checked before it is saved](#checks).
 
 The edits stay in the tab while the user goes to another page and comes back: the tab then carries an orange dot. **Back to jobs**, closing the tab, closing every tab, switching the language or reloading the browser asks first — *Unsaved changes*, with **Lose the changes** or **Stay**. See [Unsaved changes](#unsaved).
 
@@ -73,7 +73,7 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
   <text x="343.0" y="196.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="362" y="169" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="372" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FILE_LOAD</text>
+  <text x="372" y="183" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOAD A FILE</text>
   <text x="372" y="197" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">load-sales</text>
   <text x="372" y="210" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">→ sales.fact_sales</text>
   </g>
@@ -83,7 +83,7 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
   <text x="269.0" y="274.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="288" y="247" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="298" y="261" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL_QUERY</text>
+  <text x="298" y="261" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RUN A QUERY</text>
   <text x="298" y="275" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">refresh-totals</text>
   <text x="298" y="288" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">sales.totals_refresh</text>
   </g>
@@ -93,7 +93,7 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
   <text x="269.0" y="352.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
   <g>
   <rect x="288" y="325" width="150" height="48" rx="9" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="298" y="339" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOTIFY</text>
+  <text x="298" y="339" fill="#4a9eff" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEND A MESSAGE</text>
   <text x="298" y="353" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
   <text x="298" y="366" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">role:management · Sal…</text>
   </g>
@@ -115,57 +115,71 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
   <rect x="668" y="216" width="398" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="678" y="230.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Monthly sales files into the facts table</text>
   <text x="668" y="254" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Schedule (cron)</text>
-  <rect x="668" y="261" width="40" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="688.0" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Manual</text>
-  <rect x="712" y="261" width="40" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="732.0" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Hourly</text>
-  <rect x="756" y="261" width="36" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="774.0" y="274.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Daily</text>
-  <rect x="796" y="261" width="40" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="816.0" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Weekly</text>
-  <rect x="840" y="261" width="45" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="862.5" y="274.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Monthly</text>
-  <rect x="668" y="286" width="398" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="300.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
-  <text x="668" y="322" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">Next runs · 11/23/2026, 2:00:00 AM · 11/24/2026, 2:00:00 AM …</text>
-  <text x="668" y="340" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TIMEZONE</text>
-  <rect x="668" y="345" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="359.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Europe/Paris</text>
-  <text x="873" y="340" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAGS</text>
-  <rect x="873" y="345" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="883" y="359.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <rect x="879" y="348" width="50" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="886" y="359.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">sales ✕</text>
-  <rect x="934" y="348" width="40" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
-  <text x="941" y="359.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">etl ✕</text>
-  <text x="668" y="382" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TIMEOUT (SECONDS)</text>
-  <rect x="668" y="387" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="401.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">14400</text>
-  <rect x="873" y="393" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M875.5,398.5 L877.8,400.8 L881.8,396" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="890" y="402" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Enabled</text>
-  <text x="668" y="422" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">A run still going after this is stopped.</text>
-  <text x="668" y="432.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Blank: 4 hours.</text>
-  <text x="668" y="454" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RUN AT INSTALLATION, IN POSITION</text>
-  <rect x="668" y="459" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="678" y="473.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <rect x="873" y="459" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="890" y="468" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Keep this job as it is on upgrade</text>
-  <text x="668" y="494" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Blank: not part of the installation. With a</text>
-  <text x="668" y="504.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">number, the installation runs this job</text>
-  <text x="668" y="515.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">once, the lowest number first.</text>
-  <text x="873" y="494" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">An upgrade then leaves the whole job as</text>
-  <text x="873" y="504.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">saved here.</text>
-  <rect x="664" y="538" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="552" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Presets &amp; schedules</text>
-  <rect x="664" y="562" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="576" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Retry policy</text>
-  <rect x="664" y="586" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="600" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Alerts</text>
-  <rect x="664" y="610" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="624" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Shared params</text>
-  <rect x="664" y="634" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="672" y="648" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">What the user may set when starting it</text>
+  <text x="668" y="260" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif"></text>
+  <rect x="668" y="265" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="279.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">On chosen days, at a set time</text>
+  <text x="852" y="279.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="872" y="283" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">at</text>
+  <rect x="886" y="265" width="70" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="279.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">02:00</text>
+  <text x="946" y="280" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">◷</text>
+  <rect x="668" y="294" width="40" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="688.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Monday</text>
+  <rect x="712" y="294" width="45" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="734.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Tuesday</text>
+  <rect x="761" y="294" width="54" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="788.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Wednesday</text>
+  <rect x="819" y="294" width="49" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="843.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Thursday</text>
+  <rect x="872" y="294" width="40" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="892.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Friday</text>
+  <rect x="916" y="294" width="49" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="940.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Saturday</text>
+  <rect x="969" y="294" width="40" height="18" rx="6" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="989.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Sunday</text>
+  <text x="668" y="326" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">No day picked: every day.</text>
+  <text x="1066" y="326" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">every day at 02:00</text>
+  <text x="668" y="342" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">Next runs · 11/23/2026, 2:00:00 AM · 11/24/2026, 2:00:00 AM …</text>
+  <text x="668" y="358" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TIMEZONE</text>
+  <rect x="668" y="363" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="377.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Europe/Paris</text>
+  <text x="849" y="377.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="873" y="358" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAGS</text>
+  <rect x="873" y="363" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="377.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <rect x="879" y="366" width="50" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="886" y="377.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">sales ✕</text>
+  <rect x="934" y="366" width="40" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="941" y="377.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="ui-monospace, monospace">etl ✕</text>
+  <text x="668" y="400" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TIMEOUT (SECONDS)</text>
+  <rect x="668" y="405" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="419.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">14400</text>
+  <text x="873" y="400" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WHAT THE RUN LOG HOLDS</text>
+  <rect x="873" y="405" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="419.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">The steps and their figures (usu…</text>
+  <text x="1054" y="419.5" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="668" y="440" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">A run still going after this is stopped.</text>
+  <text x="668" y="450.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Blank: 4 hours.</text>
+  <text x="873" y="440" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">A run started by hand can ask for more or</text>
+  <text x="873" y="450.5" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">less.</text>
+  <rect x="668" y="459" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M670.5,464.5 L672.8,466.8 L676.8,462" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="685" y="468" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Enabled</text>
+  <text x="668" y="484" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RUN AT INSTALLATION, IN POSITION</text>
+  <rect x="668" y="489" width="193" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="678" y="503.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="873" y="489" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="890" y="498" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Keep this job as it is on upgrade</text>
+  <rect x="664" y="528" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="542" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Presets &amp; schedules</text>
+  <rect x="664" y="552" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="566" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Retry policy</text>
+  <rect x="664" y="576" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="590" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Alerts</text>
+  <rect x="664" y="600" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="614" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Shared params</text>
+  <rect x="664" y="624" width="406" height="20" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="672" y="638" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">What the user may set when starting it</text>
   <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Start = the job</text>
   <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its settings open beside</text>
@@ -186,22 +200,30 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
   <text x="1130" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One Save</text>
   <text x="1130" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">writes the job, back to the list</text>
   <line x1="1120" y1="93.0" x2="1018" y2="97" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
-  <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ready-made schedules</text>
-  <text x="1130" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">or a five-field cron</text>
-  <line x1="1120" y1="217.0" x2="1066" y2="271" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The schedule in words</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">how often, then what it needs</text>
+  <line x1="1120" y1="177.0" x2="958" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Days of the week</text>
+  <text x="1130" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">none picked: every day</text>
+  <line x1="1120" y1="253.0" x2="1009" y2="303" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
   <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Timeout</text>
-  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the whole run stops after it</text>
-  <line x1="1120" y1="317.0" x2="861" y2="398" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Said back, then previewed</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the next five runs</text>
+  <line x1="1120" y1="317.0" x2="1066" y2="323" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
   <rect x="1120" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Installation and upgrade</text>
-  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">position · keep as it is</text>
-  <line x1="1120" y1="397.0" x2="1066" y2="470" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
-  <rect x="1120" y="520" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="535" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Policies, run parameters</text>
-  <text x="1130" y="548" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">further down the panel</text>
-  <line x1="1120" y1="537.0" x2="1070" y2="628" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">What the run log holds</text>
+  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">problems · usual · everything</text>
+  <line x1="1120" y1="397.0" x2="1066" y2="416" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="450" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Installation and upgrade</text>
+  <text x="1130" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">position · keep as it is</text>
+  <line x1="1120" y1="467.0" x2="1066" y2="500" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
+  <rect x="1120" y="540" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="555" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Presets, policies, alerts</text>
+  <text x="1130" y="568" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">further down the panel</text>
+  <line x1="1120" y1="557.0" x2="1070" y2="618" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfed-arrow)"/>
 </svg>
 
 ---
@@ -214,25 +236,36 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
 |---|---|
 | **Id** | Letters, digits, `-` and `_`. Fixed once the job exists — it keys the run history. To rename, **Clone** under the new id, then delete the old job. |
 | **Description** | Shown on the job's line and on its page. |
-| **Schedule (cron)** | Ready-made choices (Manual, Hourly, Daily, Weekly, Monthly) or a five-field cron; **Next runs** previews the next five. Blank: manual only. See [Schedules](./schedules.md). |
-| **Timezone** | The IANA name the schedule is evaluated in. |
+| **Schedule (cron)** | The schedule said in words: *Only when started by hand*, *Every few minutes*, *Every hour, or every few hours*, *On chosen days, at a set time*, *Once a month*, or *Something else (typed)* for a cron expression — each choice shows only the fields it needs. The schedule is then said back in words (*every day at 02:00*) and **Next runs** previews the next five. See [Schedules](./schedules.md#editor). |
+| **Timezone** | Picked in the list of time zones (`Europe/Paris`, `America/New_York`); the schedule is evaluated in it. |
 | **Tags** | Free labels, used by the filter of the Jobs page. |
-| **Enabled** | Switches the job's own schedule on or off. |
 | **Timeout (seconds)** | A run still going after this is stopped. Blank: 4 hours. |
+| **What the run log holds** | *Problems only*, *The steps and their figures (usual)* or *Everything, with each statement* — the level of the scheduled runs. A run started by hand can ask for more or less in **Run with parameters**. |
+| **Enabled** | Switches the job's own schedule on or off. |
 | **Run at installation, in position** | Blank: the job is not part of the installation. With a number, installing the application runs this job once, the lowest number first — the databases, then the schema, then the reference data. |
 | **Keep this job as it is on upgrade** | An upgrade of the application leaves the whole job as saved here. Unticked, its steps are refreshed from the product and only the installation's own settings are kept (enabled, schedule, presets…). |
 
-### Presets & schedules
+### Presets & schedules \{#presets\}
 
-Presets are saved from **Run with parameters → Save as preset…**. Here each one can get its own **Schedule (cron)**, **Timezone** and **Schedule enabled** — see [Schedulable presets](./schedules.md#schedulable-presets).
+Presets are created from **Run with parameters → Save as preset…**; here each one is a card where it is renamed, changed or deleted:
+
+| Field | Notes |
+|---|---|
+| **Name of the preset** | The name it is picked and scheduled by. Two scheduled presets of a job cannot share a name. |
+| **Schedule enabled** | Shown once the preset has a schedule: switches that schedule on or off. |
+| **Delete this preset** | Asks first — *Delete the preset "…"? Its schedule goes with it.* |
+| **Schedule (cron)**, **Timezone** | The preset's own schedule, said in words like the job's, and its time zone — the job's by default. See [Schedulable presets](./schedules.md#schedulable-presets). |
+| **What the run log holds** | The level of a run started with the preset; *as the job says* by default. |
+| **Values it gives** | The values a run started with this preset uses in place of the job's own (the shared params). |
+| **Steps it runs** | Only the steps the preset decides are listed, each *runs* or *is skipped* — every other step runs or not as the job is set up. **Decide for another step…** adds one. A step the preset still names but the job no longer has is marked *no longer a step of this job*, so that it can be removed. |
 
 ### Retry policy
 
 **Retry failed steps**, then **Attempts** (tries in all), **Backoff** (`fixed` or `exponential`) and **Base seconds** between tries. The policy applies to each step.
 
-### Alerts
+### Alerts \{#alerts\}
 
-**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. Write recipients as `user:alice`, `role:ops` or `email:ops@example.com` — an entry without a prefix is taken as an e-mail address. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. **Must have succeeded by** sets a deadline (`07:00`, in the job's timezone): on a day the job is scheduled, if no run has succeeded by then, the recipients get *Job &lt;id&gt; is late* — still running, failed, or never started. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
+**Send alerts** with **On failure** sends a notification to the **Recipients** when a run fails, in the bell and by e-mail. A recipient is picked: **Role**, **User** or **Address** beside the field, then the role or the user from the list, or an address typed — each becomes a chip removed with its ✕. A line saved without its kind (an old `ops` instead of `role:ops`) is shown in orange with *These would receive nothing — say whether each is a role, a user or an address*. **Warn if a run exceeds (minutes)** sends them a second notification when a run lasts at least that long, whatever its outcome. **Must have succeeded by** sets a deadline (`07:00`, in the job's timezone): on a day the job is scheduled, if no run has succeeded by then, the recipients get *Job &lt;id&gt; is late* — still running, failed, or never started. For several jobs at once or other events, use a notification rule: see [Notifications](../notifications.md#job-alerts).
 
 ### Shared params
 
@@ -382,20 +415,27 @@ The card's bin removes the parameter. Saving writes exactly what was loaded plus
 
 ### Steps
 
-The **+** on a link of the flow inserts a step at that place, among the types `sql_copy`, `sql_query`, `python`, `ldap_sync`, `http`, `call_job`, `file_load`, `file_export`, `report`, `notify`. A click on a step's card opens it beside the flow: its **Step name**, the fields of its type, and its icons — **Up**, **Down**, **Clone step**, **Delete**. A step can be *Turned off for this install*: it never runs, even when a run or a preset selects every step. A long flow continues on the next row, and the zoom (− / % / +) is kept on the device. The fields of each type are on [Steps](../steps.md).
+The **+** on a link of the flow inserts a step at that place, among ten kinds said in words — *Copy a table*, *Run a query*, *Run a function*, *Read a directory*, *Call an address*, *Start another job*, *Load a file*, *Export to a file*, *Produce a report*, *Send a message*. A click on a step's card opens it beside the flow: its **Step name**, the fields of its type, and its icons — **Up**, **Down**, **Clone step**, **Delete**. A step can be *Turned off for this install*: it never runs, even when a run or a preset selects every step. **More settings**, folded until one of them is set, holds what every step has: **Runs by default**, **Stopped after (seconds)** and **Environment** — see [Steps → Common fields](../steps.md#common). A long flow continues on the next row, and the zoom (− / % / +) is kept on the device. The fields of each type are on [Steps](../steps.md).
 
 ---
 
-## Only in jobs.toml \{#toml-only\}
+## Checked before it is saved \{#checks\}
 
-A few settings have no field in the editor; set them in `jobs.toml`:
+**Save** checks the job first and sends nothing while something is wrong. What would be refused is listed at the top of the editor — *Not saved — 2 things to correct:* — one line per problem, naming where it is and what is wrong:
 
-| Key | Default | Meaning |
-|---|---|---|
-| `log_level` (job) | `INFO` | The level of scheduled runs: `WARNING`, `INFO` or `DEBUG`. A manual run picks its own in **Run with parameters**. |
-| `enabled` (step) | `true` | `false` always skips the step. |
-| `timeout_seconds` (step) | `3600` | The step stops after this time. |
-| `pool` (`sql_query`, `sql_copy` endpoints) | — | Another pool of the connector — see [Steps](../steps.md#sql-query). |
+| Where | Checked |
+|---|---|
+| *The job* | It has an id (*needs an id*), made of letters, digits, `-` and `_`, not the id of another job. |
+| *Step 2 "load-sales"* | It has a name, not the name of another step; it has what it acts on — *is missing its connector, its query* (a copy its source and target, a function step its function, a call its address, a message its recipients and subject…); a *Start another job* step names a job that exists; a report step has both fixed dates or neither. |
+| *Preset 1* | It has a name; a scheduled preset's name is its own. |
+
+**Open** on a line opens the step it is on, or the job's own settings. What the server refuses in spite of these checks is listed the same way, in the editor's words; a problem on another job of the file is named, without **Open**.
+
+---
+
+## In jobs.toml \{#toml-only\}
+
+Every field of the editor is saved in `jobs.toml`. A job written by hand follows the same keys — the fields above, the steps' keys on [Steps](../steps.md):
 
 ```toml title="jobs.toml"
 [[jobs]]

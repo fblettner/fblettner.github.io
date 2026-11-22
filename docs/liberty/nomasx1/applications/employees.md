@@ -14,7 +14,7 @@ Each collection takes a snapshot of the day: the history grows run after run, so
 
 ## At a glance \{#dashboard\}
 
-The **Dashboard** draws one line per group — **INTERNAL_COUNT** and **EXTERNAL_COUNT** — with one point per collection day. **Application** narrows it to one application (or **All**); **Excel** and **PDF** export it, the refresh button reads it again.
+The **Dashboard** draws one line per group — **Internal** and **External** — with one point per collection day. **Application** narrows it to one application (or **All**); **Excel** and **PDF** export it, the refresh button reads it again.
 
 <svg viewBox="0 0 1320 410" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -68,9 +68,9 @@ The **Dashboard** draws one line per group — **INTERNAL_COUNT** and **EXTERNAL
   <text x="862.5" y="344" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">2026-10-01</text>
   <text x="1055.0" y="344" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">2026-11-01</text>
   <rect x="560.0" y="352" width="9" height="9" rx="2" fill="#4ade80"/>
-  <text x="573.0" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">EXTERNAL_COUNT</text>
+  <text x="573.0" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">External</text>
   <rect x="651.64" y="352" width="9" height="9" rx="2" fill="#4a9eff"/>
-  <text x="664.64" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">INTERNAL_COUNT</text>
+  <text x="664.64" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Internal</text>
   <rect x="12" y="101" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="22" y="116" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application</text>
   <text x="22" y="129" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one or all JDE systems</text>

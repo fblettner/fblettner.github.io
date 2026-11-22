@@ -160,6 +160,8 @@ The column titles and value lists come from the JD Edwards data dictionary, in t
 | **OMW Project Objects** | F98222 | General. |
 | **OMW Log** | F98210 | General. |
 
+Next to the workbench, **Development → Back to standard** compares the changed objects with Oracle's and names the OMW project that holds each one — see [Back to standard](../development/back-to-standard.md).
+
 ---
 
 ## What goes beyond the standard \{#apply\}

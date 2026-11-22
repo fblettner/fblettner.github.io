@@ -154,7 +154,7 @@ Le marquage technique / générique / lié est stocké dans `SECURITY_USERS_PROP
 | Colonne | Source | Ce qu'on y lit |
 |---|---|---|
 | **Application ID** | `LOUT_APPS_ID` — identifiant de l'application. Filtrable. | Application connectée. |
-| **Composant ID** | `CPT_ID` — composant de licence. Filtrable, masqué par défaut. | Utilisé par le drill-down depuis *OUT — Composants*. |
+| **Composant ID** | `CPT_ID` — composant de licence. Filtrable, masqué par défaut. | Restreint la liste aux utilisateurs d'un composant (Filtres avancés). |
 | **Utilisateur ID** | `LOUT_USER` — identifiant utilisateur. Liste déroulante vers le catalogue. | Auteur de l'usage du composant. |
 | **Statut** | `USR_STATUS` — `01` signifie *Actif*. | État du compte côté source. |
 | **Date de création** | `USR_DT_CREATION` — date (chaîne). | Date de création du compte. |

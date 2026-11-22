@@ -72,14 +72,15 @@ For each JDE user:
 | **Language** | `ULLNGP` — preferred language code. | Drives the language of the JDE forms. |
 | **Date format** | `ULFRMT` — date format pattern. | Controls how dates are typed and rendered (DMY, MDY, …). |
 | **Country** | `ULCTR` — country code. | Default country for new transactions entered by the user. |
+| **Address number**, **Date separator**, **Decimal separator** | `ULAN8`, `ULDSEP`, `ULDECF`. | The Address Book number, and how dates and numbers are written. |
 
-The hidden JDE attributes carried on the row (output queue, job queue, message logging, decimal separator, currency, time zone, time format, OMW logging, right-to-left, intensive-user flag, action / inactive marker, audit columns) are kept on the row so the edit dialog opens with the full picture.
+The hidden JDE attributes carried on the row (output queue, job queue, message logging, user type, user group, audit columns) are kept on the row so the edit dialog opens with the full picture.
 
 ---
 
 ## Edit dialog
 
-Click **Add** in the toolbar to register a new JDE user, or double-click a row to edit an existing one. The dialog has three tabs. The *Roles* and *Environments* tabs are hidden on **Add** — they appear once the user record exists.
+Click **Add** in the toolbar to register a new JDE user, or double-click a row to edit an existing one. The dialog has three tabs. The *Assignments* and *Environments* tabs are hidden on **Add** — they appear once the user record exists.
 
 <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -92,7 +93,7 @@ Click **Add** in the toolbar to register a new JDE user, or double-click a row t
   <rect x="60" y="100" width="120" height="28" rx="6" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="120" y="118" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Default</text>
   <rect x="190" y="100" width="120" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Roles</text>
+  <text x="250" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Assignments</text>
   <rect x="320" y="100" width="120" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="380" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Environments</text>
 
@@ -114,19 +115,19 @@ Click **Add** in the toolbar to register a new JDE user, or double-click a row t
 
   <text x="60" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Date format</text>
   <rect x="60" y="214" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="72" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">DMY · /</text>
+  <text x="72" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">DMY</text>
 
   <text x="260" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Decimal separator</text>
   <rect x="260" y="214" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="272" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">,</text>
 
-  <text x="400" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Currency</text>
+  <text x="400" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Date separator</text>
   <rect x="400" y="214" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="412" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">EUR</text>
+  <text x="412" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">/</text>
 
-  <text x="540" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Time zone</text>
+  <text x="540" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Address number</text>
   <rect x="540" y="214" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="552" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Europe/Paris</text>
+  <text x="552" y="231" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">4242</text>
 
   <rect x="60" y="260" width="280" height="40" rx="8" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
   <text x="200" y="278" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
@@ -151,16 +152,16 @@ The user identification and the JDE display preferences. Every field corresponds
 | **Alpha name** | Friendly name pulled from the Address Book — appears on every report and form. |
 | **Language** | Preferred language code (F, E, S, …). Drives the language of the JDE forms. |
 | **Country** | Country code — default country for new transactions. |
-| **Date format** | Day / month / year ordering and separator (`DMY /`, `MDY /`, `YMD -`, …). |
+| **Address number** | The user's Address Book number. |
+| **Date format** | Day / month / year ordering (`DMY`, `MDY`, `YMD`, …). |
+| **Date separator** | The character between day, month and year (`/`, `-`, `.`). |
 | **Decimal separator** | Decimal character (`,` or `.`). |
-| **Currency** | Default currency for new transactions. |
-| **Time zone** | User's time zone — drives the timestamp display in JDE. |
-| **Time format** | 12 h or 24 h. |
-| **Right-to-left**, **OMW logging**, **Intensive user** | JDE display behaviour switches. Leave at the JDE default unless the deployment guidelines call for a specific value. |
+
+The language, the country, the date format, the date separator and the decimal separator are the user's display preferences. Saving a change writes these five and who changed them: the other display preferences of the user — company, currency, time zone, time format… — are left as they are. Creating a user writes the whole preferences row.
 
 The hidden JDE fields (output queue, job queue, message logging defaults) carry standard values populated by Nomajde — typically `QPRINT`, `*NOLIST`, severity `00`.
 
-### Tab 2 — Roles
+### Tab 2 — Assignments
 
 Nested table listing the roles attached to the user — the same data the *Role Relationships* screen edits, scoped to this user. Each row carries the role, the effective date and the expiration date.
 
@@ -226,7 +227,7 @@ Adding a JDE user is not just a SQL insert. Nomajde chains the SQL writes and th
 | Step | Channel | What it does |
 |---|---|---|
 | 1 | **SQL** | Writes the user identification row in the JDE user master. |
-| 2 | **SQL** | Writes the display preferences row (language, date format, currency, time zone, …). |
+| 2 | **SQL** | Writes the display preferences: the whole row for a new user — also for a user who has none yet —, only the five the form shows for a change. |
 | 3 | **AIS REST** | Authenticates the Nomajde service account against AIS to obtain a token for the next two calls. |
 | 4 | **AIS REST** | Checks whether the user already has a JDE security record, then creates one if missing — this is what makes the user known to the JDE sign-on layer. |
 | 5 | **AIS REST** | Sets the initial password. The new account is ready on the next sign-on. |
@@ -254,4 +255,4 @@ Capture is automatic whenever a draft package is open for the application; nothi
 - **Onboard via *Add*, not via SQL.** A direct SQL insert into the user master skips the AIS security record provisioning — the user appears in the table but cannot sign on. The five-step save chain is what makes the new user usable.
 - **Excel upload** for SI-delivered user lists — the upload runs the same five-step chain for every row, so 50 new users are provisioned in a single import.
 - **Reset Password** is the right tool when an operator reports a forgotten password. It is also what the help desk uses for the *unlock* request — a fresh password resets the failed-attempt counter on the JDE side.
-- **Keep the Roles and Environments tabs in sync.** A user without an environment cannot sign on; a user without a role has no rights. The default environments populate automatically, but the role attachment is a manual step on the *Roles* tab.
+- **Keep the Assignments and Environments tabs in sync.** A user without an environment cannot sign on; a user without a role has no rights. The default environments populate automatically, but the role attachment is a manual step on the *Assignments* tab.

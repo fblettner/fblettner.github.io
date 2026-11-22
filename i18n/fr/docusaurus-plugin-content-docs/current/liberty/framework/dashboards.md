@@ -300,7 +300,7 @@ Avec **Comparer avec la période précédente** coché, un KPI relance sa requê
 
 ## Filtres \{#filters\}
 
-Un tableau de bord peut aussi porter des **filtres**, présentés comme des listes déroulantes dans sa barre. Chaque filtre a un libellé, un élément du dictionnaire, une requête qui fournit ses choix (colonne de valeur et colonne de libellé), et une valeur par défaut facultative. Choisir une valeur recharge chaque widget dont la requête renvoie une colonne portant cet élément — par l'écran du widget, ou directement d'après les colonnes du résultat : une colonne du nom de l'élément, ou de ce nom précédé du préfixe de colonnes du connecteur. Les autres widgets restent tels quels. Une période dont la colonne de date est donnée par un élément du dictionnaire retrouve sa colonne de la même façon.
+Un tableau de bord peut aussi porter des **filtres**, présentés comme des listes déroulantes dans sa barre. Chaque filtre a un libellé, un élément du dictionnaire, une requête qui fournit ses choix (colonne de valeur et colonne de libellé), et une valeur à l'ouverture facultative — celle sur laquelle le tableau de bord s'ouvre. Choisir une valeur recharge chaque widget dont la requête renvoie une colonne portant cet élément — par l'écran du widget, ou directement d'après les colonnes du résultat : une colonne du nom de l'élément, ou de ce nom précédé du préfixe de colonnes du connecteur. Les autres widgets restent tels quels. Une période dont la colonne de date est donnée par un élément du dictionnaire retrouve sa colonne de la même façon.
 
 Dans l'éditeur, chaque filtre indique les widgets qu'il atteint — *Atteint : …*, avec *pas : …* pour les autres — ou *N'atteint aucun widget* quand aucune colonne ne porte l'élément du dictionnaire.
 
@@ -341,7 +341,9 @@ Un widget dont la requête échoue devient une section d'erreur ; le reste de l'
 | **Cloner** | Copie le tableau de bord sous un nouvel identifiant. |
 | **Supprimer** | Supprime le tableau de bord. |
 
-Un clic sur une ligne, ou **Ajouter un tableau de bord**, ouvre l'éditeur sur toute la fenêtre. Sa barre de titre nomme le tableau de bord (`[dashboards.<app>.<id>]`).
+### Ouvrir l'éditeur \{#open-editor\}
+
+**Ajouter un tableau de bord** demande d'abord le nom du nouveau tableau de bord (*Son nom :*, par exemple *Vue d'ensemble des ventes*) et en tire son identifiant (`vue_d_ensemble_des_ventes`), affiché pendant la saisie. Un clic sur une ligne, ou le nom donné, ouvre l'éditeur sur toute la fenêtre. Sa barre de titre nomme le tableau de bord par son titre, suivi de son application et de son identifiant (*Sales overview* `sales · overview`). Un enregistrement refusé laisse l'éditeur ouvert et liste les points à corriger — voir [Un enregistrement refusé](./configuration/settings-ui.md#refused).
 
 <svg viewBox="0 0 1200 674" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -353,7 +355,8 @@ Un clic sur une ligne, ou **Ajouter un tableau de bord**, ouvre l'éditeur sur t
 
   <rect x="220" y="20" width="760" height="638" rx="14" fill="url(#dbe-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="14" fontFamily="system-ui, sans-serif">▦</text>
-  <text x="260" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <text x="260" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="360" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · overview</text>
   <rect x="916" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="927.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <rect x="942" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -530,7 +533,7 @@ Un clic sur une ligne, ou **Ajouter un tableau de bord**, ouvre l'éditeur sur t
 | **Ajouter un widget** | Graphique, KPI, Table, **Chiffre**, **Liste**, **Barres**, **Texte**, **Liens** ou **Tâches** : la fenêtre du widget s'ouvre sur ce type, et **Annuler** ne laisse rien derrière soi. |
 | La grille | Les vrais widgets, dessinés avec leurs données comme sur le tableau de bord, chacun sous son libellé. Au survol, une carte affiche ses outils : la **poignée**, sa taille (`4 × 1`, colonnes × lignes), **✎** pour la modifier et la corbeille pour la retirer. Une carte se déplace par **glisser-déposer** — sa poignée glissée sur une autre carte, une barre indiquant le côté où elle sera déposée — et se dimensionne par son **coin inférieur droit**, en colonnes (1 à 12) et en lignes (1 à 8) entières. La poignée répond aussi au clavier : les flèches déplacent la carte, Maj + flèches la dimensionnent. |
 | **Période** | **Ajouter une période** / **Retirer la période** : **S'ouvre sur** (un préréglage, ou *Valeur de l'application (Liberty Next → Administrer → App)*), **Colonne de date** ou **ou élément du dictionnaire**, et des **Bases de date** facultatives (clé, libellé, colonne de date ou élément du dictionnaire). |
-| **Filtres** | **Ajouter un filtre** : **Id**, **Libellé**, **Clé du dictionnaire**, puis le **Connecteur**, la **Requête**, la **Colonne valeur** et la **Colonne libellé** qui remplissent la liste déroulante. Sous chaque filtre, *Atteint : …* nomme les widgets qu'il filtre — voir [Filtres](#filters) —, et un bloc *Dans les autres langues* donne son libellé dans les autres langues. Un filtre sans identifiant ou sans libellé bloque l'enregistrement : *Un filtre n'a pas encore d'identifiant ou de libellé : complétez-le ou retirez-le.* |
+| **Filtres** | **Ajouter un filtre** : **Id**, **Libellé**, **Clé du dictionnaire**, puis le **Connecteur**, la **Requête**, la **Colonne valeur** et la **Colonne libellé** qui remplissent la liste déroulante, et **Valeur à l'ouverture** — celle sur laquelle le tableau de bord s'ouvre (vide : *aucune : toutes les valeurs*). Sous chaque filtre, *Atteint : …* nomme les widgets qu'il filtre — voir [Filtres](#filters) —, et un bloc *Dans les autres langues* donne son libellé dans les autres langues. Un filtre sans identifiant ou sans libellé bloque l'enregistrement : *Un filtre n'a pas encore d'identifiant ou de libellé : complétez-le ou retirez-le.* |
 
 Le pied de l'éditeur compte les widgets et porte **Annuler** et **Enregistrer**. Fermer l'éditeur avec des modifications non enregistrées propose de les enregistrer, de les abandonner ou de continuer à modifier.
 
@@ -551,7 +554,8 @@ Un tableau de bord s'affiche dans la langue de l'utilisateur. Chaque texte qu'il
   </defs>
 
   <rect x="220" y="20" width="760" height="380" rx="14" fill="url(#dbl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="340" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · overview</text>
   <line x1="220" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITRE</text>
   <rect x="240" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>

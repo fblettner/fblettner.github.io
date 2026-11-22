@@ -28,6 +28,10 @@ This page is about the roles of Liberty Next itself. JD Edwards EnterpriseOne ro
 
   <rect x="220" y="20" width="880" height="724" rx="14" fill="url(#accr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Access</text>
+  <rect x="828" y="32" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="863.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Discard</text>
+  <rect x="906" y="32" width="60" height="22" rx="5" fill="url(#accr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="936.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
   <rect x="974" y="32" width="106" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1027.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Reload config</text>
   <rect x="240" y="66" width="415.0" height="40" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -240,10 +244,6 @@ This page is about the roles of Liberty Next itself. JD Edwards EnterpriseOne ro
   <text x="717" y="687.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Pick…</text>
   <rect x="835" y="674" width="36" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="853.0" y="687.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Add</text>
-  <rect x="984" y="704" width="80" height="22" rx="5" fill="url(#accr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="1024.0" y="718.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="912" y="704" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="944.0" y="718.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
   <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Predefined roles</text>
   <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shipped by the applications</text>
@@ -350,7 +350,7 @@ Some rights are not tied to a menu entry. The **Beyond the menus** block adds th
 
 A page an application ships gives the page, not the functions it calls: to let a role use them, add a **Pattern (expert)** rule `plugin:<module>:*` here.
 
-**Save** writes the role; **Cancel** drops the changes. The role name cannot be changed after creation.
+**Save** and **Discard**, in the page header as in every editor, write the role or drop its changes; *unsaved changes* shows beside them while the role holds edits. Opening another role, adding one or switching to **Users** with changes not saved asks first: *This role holds changes that are not saved. Leave it and lose them?* The role name cannot be changed after creation.
 
 ### Predefined roles \{#predefined\}
 

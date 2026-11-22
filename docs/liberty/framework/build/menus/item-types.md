@@ -123,7 +123,7 @@ The most common leaf kinds. They open a grid, but not from the same target:
 | **`type`** | `screen` or `query`. |
 | **`target`** | `screen`: the screen id — `customers`, `security_users`. `query`: the query name — `customers_get`. The dropdown lists the valid targets for the chosen type and connector. |
 | **`connector`** | `query`: the connector that owns the query; blank = the menu's app (most common case). `screen`: usually blank — the screen's own connector runs its queries. |
-| **`params`** | Optional. Fixed values for the query's `:placeholder` parameters — e.g. a *My open tickets* leaf with `params = { OWNER = "#LOGIN_USER#", STATUS = "OPEN" }`. |
+| **`params`** (**Fixed values**, Advanced tab) | Optional. Fixed values for the filters of the screen or the `:placeholder` parameters of the query — e.g. a *My open tickets* leaf with `OWNER` = `#LOGIN_USER#` and `STATUS` = `OPEN`. The names are picked among the screen's filters or the query's parameters. |
 
 ### Who sees the leaf
 
@@ -169,7 +169,7 @@ The second leaf kind: open the HttpRunner with one API connector endpoint pre-se
 | **`type`** | `endpoint`. |
 | **`target`** | An endpoint name declared on the API connector. The dropdown lists every endpoint on the picked connector. |
 | **`connector`** | The API connector. Blank = the menu's app (works when the app is itself an API connector). |
-| **`params`** | Optional. Pre-fill the form fields. |
+| **`params`** (**Fixed values**) | Optional. Pre-fill the form fields. |
 
 ### When to use
 
@@ -205,7 +205,7 @@ A dashboard is a page of charts and KPIs declared in `[dashboards.*]`. The menu 
 | **`type`** | `dashboard`. |
 | **`target`** | `<app>.<id>` — the dashboard `[dashboards.<app>.<id>]`, for example `crm.pipeline`. The dropdown lists every dashboard. |
 | **`connector`** | **Must not be set** — the app is part of the target; the validator rejects a stray `connector`. |
-| **`params`** | Optional. Pre-fill the dashboard's filters. |
+| **`params`** (**Fixed values**) | Optional. Pre-fill the dashboard's filters. |
 
 ### When to use
 
@@ -241,7 +241,7 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 | **`target`** | The route path — `/nomaflow`, `/runs/dashboard`, etc. Routes must be **registered** in the frontend (the menu doesn't create them; it just points at them). |
 | **Tests pages** | `/liberty/tests` and `/liberty/test-results` put the [Tests](../tests.md) and [Test results](../../../monitoring/test-results.md) pages in an application's menu; the entries show to the holders of `tests:view`. |
 | **`connector`** | **Must not be set**. The target is a route, not a connector resource. |
-| **`params`** | Optional. The runtime appends them as query-string parameters on the route. |
+| **`params`** (**Fixed values**) | Optional. The runtime appends them as query-string parameters on the route. |
 
 ### The Data Explorer \{#explorer\}
 
@@ -300,7 +300,7 @@ A `job` leaf opens the page of a Nomaflow job for users who do not administer No
 | **`type`** | `job` — *Job (run it, follow its log)* in the type list. |
 | **`target`** | The job id. The dropdown lists every job with the first line of its description. |
 | **`connector`** | Must NOT be set. |
-| **`params`** | Optional: `{ preset = "Licences" }` runs the job with one of its presets — one job, several menu entries. |
+| **`params`** (**Fixed values**) | Optional: `{ preset = "Licences" }` runs the job with one of its presets — one job, several menu entries. |
 
 The item is shown to who may run the job: the entry or its folder in **Read and change** in the role, or the permission `job:<id>` (rule type **Job** in a role's *Beyond the menus*); `!job:<id>` hides it. See [Run a job from an application's menu](../../../nomaflow/jobs/run-from-menu.md).
 

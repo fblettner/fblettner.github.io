@@ -302,14 +302,14 @@ The dialog edits the flags of the account clicked — the same record as [Settin
 
 | Field | What it says |
 |---|---|
-| **Application ID**, **User ID** | The account of the row. |
+| **Application ID**, **User ID** | The account of the row; read-only. |
 | **Privileged (Y/N)** | The account carries super-user access: it is counted among the privileged accounts of the [Security review](../security-review.md) and of the reports. |
 | **Technical (Y/N)** | A batch or service account, left out of the headcount of the licence figures. |
 | **Generic (Y/N)**, **Generic count** | A login shared by several people, and how many people are behind it. |
 | **Is linked (Y/N)**, **Linked user ID** | The account belongs to the same person as another login — the duplicate pair is then declared. |
 | **Is renamed (Y/N)**, **Previous user ID** | The account replaces a previous login of the same person. |
 
-**Save** writes the flags, **Cancel** closes without saving. **Duplicate** and **Delete** act on the properties record, not on the account of the source system.
+**Save** writes the flags — for an account that has no properties yet, the first save creates its record. **Cancel** closes without saving. **Duplicate** and **Delete** act on the properties record, not on the account of the source system.
 
 ---
 

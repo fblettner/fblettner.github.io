@@ -40,6 +40,7 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
   <circle cx="256" cy="223" r="4.5" fill="none" stroke="#f87171" strokeWidth="1.4"/>
   <text x="267" y="226.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Le prix est calculé</text>
   <text x="252" y="252" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ Nouveau cas</text>
+  <text x="252" y="274" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">✧ Cas depuis un point d'accès</text>
   <rect x="428" y="72" width="74" height="20" rx="5" fill="url(#tst-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="465.0" y="85.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
   <rect x="507" y="72" width="88" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -152,6 +153,10 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
   <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une étape de nettoyage</text>
   <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">jouée même après un échec</text>
   <line x1="1120" y1="397.0" x2="1044" y2="390" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="20" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cas depuis un point d'accès</text>
+  <text x="30" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sa réponse actuelle, rien d'enregistré</text>
+  <line x1="200" y1="457.0" x2="250" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
 </svg>
 
 ---
@@ -161,22 +166,36 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
 | | |
 |---|---|
 | **Suite** | Désigne un connecteur d'API et contient des cas. **Nouvelle suite** demande son nom. |
-| **Cas** | Une vérification — *La liste des clients a toujours ses colonnes*. **Nouveau cas**, sous la suite. |
-| **Étape** | Un appel à un point d'accès du connecteur de la suite, avec ce qui est attendu. |
+| **Cas** | Une vérification — *La liste des clients a toujours ses colonnes*. **Nouveau cas**, sous la suite, ou **Cas depuis un point d'accès** pour partir de ce qu'un point d'accès répond — voir [plus bas](#from-endpoint). |
+| **Étape** | Un appel à un point d'accès du connecteur du cas — celui de la suite par défaut —, avec ce qui est attendu. |
 
-La colonne de gauche liste les suites — **Nouvelle suite** en tête — et sous chacune ses cas, chacun avec l'icône de son dernier résultat, puis **Nouveau cas**. Le centre porte les boutons de la suite (**Enregistrer**, **Jouer ce cas**, **Jouer la suite**, **Enregistrer la référence**, **aussi les cas qui écrivent**, **Supprimer la suite**) au-dessus du cas choisi, dessiné comme un flux : au début, ce que vérifie le cas avec son dernier résultat ; une carte par étape — son point d'accès, son nom, un résumé de ce qu'elle attend, **colorée selon son dernier résultat** — ; **Fin**. Le flux a son zoom et se poursuit sur la ligne suivante quand il est long. Le panneau de droite modifie l'élément choisi : le cas, ou une étape.
+La colonne de gauche liste les suites — **Nouvelle suite** en tête — et sous chacune ses cas, chacun avec l'icône de son dernier résultat, puis **Nouveau cas** et **Cas depuis un point d'accès**. Le centre porte les boutons de la suite (**Enregistrer**, **Jouer ce cas**, **Jouer la suite**, **Enregistrer la référence**, **aussi les cas qui écrivent**, **Supprimer la suite**) au-dessus du cas choisi, dessiné comme un flux : au début, ce que vérifie le cas avec son dernier résultat ; une carte par étape — son point d'accès, son nom, un résumé de ce qu'elle attend, **colorée selon son dernier résultat** — ; **Fin**. Le flux a son zoom et se poursuit sur la ligne suivante quand il est long. Le panneau de droite modifie l'élément choisi : le cas, ou une étape.
 
-### Le cas \{#case\}
+### La suite et le cas \{#case\}
+
+Le panneau s'ouvre sur **La suite** — les réglages communs à ses cas — au-dessus du **Cas** :
 
 | Champ | Signification |
 |---|---|
-| **Identifiant** | L'identifiant du cas dans sa suite. |
+| **Nom de la suite** | Le nom affiché en tête de ses cas dans la liste et dans les résultats. Vide : le nom du fichier. |
 | **Connecteur de la suite** | Le connecteur d'API dont les étapes appellent les points d'accès. |
+| **Identifiant** | L'identifiant du cas dans sa suite. |
+| **Connecteur de ce cas** | Un autre connecteur d'API pour les étapes de ce cas ; *celui de la suite* par défaut. |
 | **Ce qu'il vérifie** | La phrase affichée dans les listes et les résultats. |
 | **Ce cas modifie des données : joué seulement quand l'exécution l'autorise** | À cocher si une étape écrit. |
 | **Dernières exécutions** | Les huit dernières exécutions du cas — résultat, date et heure ; une exécution enregistrée porte la mention *référence*. |
 
 **Supprimer le cas** se trouve sous la liste.
+
+### Un cas depuis un point d'accès \{#from-endpoint\}
+
+**Cas depuis un point d'accès**, sous les cas d'une suite, demande *Quel point d'accès ?* parmi ceux du connecteur de la suite et prépare un premier cas : une étape qui l'appelle avec les valeurs d'exemple de ses variables — son exemple, sinon sa valeur par défaut, sinon le premier de ses choix —, en attendant ce qu'il répond à cet instant : au moins une ligne s'il renvoie des lignes, sinon les premières valeurs que contient sa réponse. Le cas reprend le libellé du point d'accès comme ce qu'il vérifie. *Cas préparé d'après ce que le point d'accès répond maintenant : complétez ce qu'il doit vérifier, puis enregistrez.*
+
+- **Un point d'accès qui modifie des données n'est pas appelé** : son cas arrive marqué comme écrivant (*Ce cas modifie des données*), avec l'appel seul — reste à dire ce qu'il doit répondre et à ajouter une étape qui remet les choses en place.
+- Un appel qui échoue avec les valeurs d'exemple donne quand même le cas, avec la raison : renseigner les paramètres de l'étape, puis l'essayer.
+- **Rien n'est enregistré avant la suite** : le cas s'ajoute à la suite en cours de modification ; **Enregistrer** le conserve.
+
+Le lien est proposé à qui peut modifier et jouer les tests, dès que le connecteur a des points d'accès.
 
 ### Une étape \{#step\}
 

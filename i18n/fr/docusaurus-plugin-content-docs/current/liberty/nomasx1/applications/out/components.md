@@ -99,11 +99,11 @@ C'est la vue de tête pour le reporting de licence et le point d'entrée vers le
   <text x="1087" y="283" fill="#94a3b8" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">«  ‹  1 2 … 3  ›  »</text>
   <rect x="256" y="191.0" width="159" height="76" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
   <rect x="260" y="197.0" width="151" height="20" rx="4" fill="rgba(74,158,255,0.10)"/>
-  <text x="268" y="211.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Users</text>
+  <text x="268" y="211.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Utilisateurs</text>
   <text x="405" y="211.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="233.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Details</text>
+  <text x="268" y="233.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Détails</text>
   <text x="405" y="233.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="255.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Objects</text>
+  <text x="268" y="255.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">OUT - Objets</text>
   <text x="405" y="255.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
   <rect x="215.0" y="320" width="290.0" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="225.0" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Composant</text>
@@ -122,8 +122,8 @@ C'est la vue de tête pour le reporting de licence et le point d'entrée vers le
   <text x="22" y="192.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ou clic droit sur la ligne</text>
   <line x1="197" y1="181.0" x2="248" y2="181.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ouc-arrow)"/>
   <rect x="12" y="250.0" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="265.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">OUT - Users / Details / Objects</text>
-  <text x="22" y="278.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtrés sur le composant</text>
+  <text x="22" y="265.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Accès au détail</text>
+  <text x="22" y="278.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur la ligne cliquée</text>
   <line x1="197" y1="267.0" x2="276" y2="267.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ouc-arrow)"/>
   <rect x="1119" y="117" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1129" y="132" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exporter</text>
@@ -158,15 +158,15 @@ La dimension composant vient du mappage System Code JDE → Composant de licence
 
 ---
 
-## Menu contextuel
+## Menu contextuel \{#context-menu\}
 
-Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre son menu. Chaque raccourci ouvre le jeu OUT filtré sur le couple `(Application, Composant)` sélectionné.
+Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre son menu. Chaque raccourci ouvre un écran de la traçabilité des objets sur la ligne cliquée.
 
 | Action | Vers où |
 |---|---|
-| **OUT - Users** | Liste des utilisateurs qui ont invoqué un objet du composant. |
-| **OUT - Details** | Lignes OUT brutes pour le composant. |
-| **OUT - Objects** | Liste des objets du composant effectivement invoqués. |
+| **OUT - Utilisateurs** | *Licences - Traçabilité des objets - Utilisateurs / Rôles*, filtré sur l'application de la ligne : une ligne par utilisateur et date d'utilisation, avec le rôle et l'environnement de connexion — les plus récentes d'abord. |
+| **OUT - Détails** | [OUT — Détails](./details.md), filtré sur l'application et le composant de la ligne : une ligne par utilisateur, objet et version, avec la dernière utilisation. |
+| **OUT - Objets** | [OUT — Objets](./objects.md), filtré sur l'application et le composant de la ligne : les objets du composant réellement exécutés. |
 
 ---
 
@@ -174,5 +174,5 @@ Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre so
 
 - **Trier sur *Nb utilisateurs* décroissant** pour le calibrage de licence — les composants à fort volume remontent en haut.
 - **Surveiller *Dernière utilisation*** — un composant sous le seuil d'activité récente est candidat à une renégociation. À présenter à l'éditeur lors du prochain point contractuel.
-- **Ouvrir *OUT - Details* depuis le menu de la ligne** pour voir les utilisateurs, les objets et les dates d'utilisation du composant ; **Retour** ramène aux composants.
+- **Ouvrir *OUT - Détails* depuis le menu de la ligne** pour voir les utilisateurs, les objets et les dates d'utilisation du composant ; **Retour** ramène aux composants.
 - **Recouper avec *Licences → JD Edwards*** pour traduire les chiffres clés en droits contractuels.

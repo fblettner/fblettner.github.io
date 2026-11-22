@@ -1,12 +1,12 @@
 ---
 title: AI assistant
-description: "What the AI assistant knows in Nomajde: five read-only tools on the JD Edwards EnterpriseOne cross reference, the upgrade analysis and the platform's performance, three playbooks, the Upgrade and Platform starter questions, and the Cross Reference, Prepare for upgrade and Performance pages telling it what is on screen — always under the pages' own permissions."
-keywords: [Nomajde, AI assistant, JD Edwards, JDE E1, cross reference, where used, upgrade, retrofit, performance, playbooks, starter questions, MCP, Claude Desktop, Claude Code]
+description: "What the AI assistant knows in Nomajde: eight read-only tools on the JD Edwards EnterpriseOne cross reference, the upgrade analysis, the platform's performance, who may run an object, the orchestrations and the setup of a version, three playbooks, the Upgrade and Platform starter questions, and the Cross Reference, Prepare for upgrade and Performance pages telling it what is on screen — always under the pages' own permissions."
+keywords: [Nomajde, AI assistant, JD Edwards, JDE E1, cross reference, where used, upgrade, retrofit, performance, security, object access, orchestrations, versions, processing options, data selection, playbooks, starter questions, MCP, Claude Desktop, Claude Code]
 ---
 
 # AI assistant
 
-The assistant of Liberty Next — the **Assistant** button at the top right — knows Nomajde: it answers questions on the JD Edwards EnterpriseOne objects, on the upgrade under way and on what slows the platform down, with the same data as the pages, and follows Nomajde's procedures step by step. The same tools are offered to an MCP client (Claude Desktop, Claude Code…) connected to the installation.
+The assistant of Liberty Next — the **Assistant** button at the top right — knows Nomajde: it answers questions on the JD Edwards EnterpriseOne objects, on the upgrade under way, on what slows the platform down, on who may run an application or a report, on the orchestrations and on how a version is set up, with the same data as the pages, and follows Nomajde's procedures step by step. The same tools are offered to an MCP client (Claude Desktop, Claude Code…) connected to the installation.
 
 How the assistant works — the drawer, the conversations, the cards to approve — is described in the [Liberty Next documentation](../framework/ai-assistant.md). This page lists what Nomajde adds.
 
@@ -51,7 +51,7 @@ How the assistant works — the drawer, the conversations, the cards to approve 
   <text x="150" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Cross Reference, Upgrade, Performance</text>
   <line x1="350" y1="137.0" x2="400" y2="124" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njai-arrow)"/>
   <rect x="850" y="210" width="210" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="860" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five read-only tools</text>
+  <text x="860" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Eight read-only tools</text>
   <text x="860" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">under the pages' own permissions</text>
   <line x1="850" y1="227.0" x2="520" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njai-arrow)"/>
   <rect x="140" y="230" width="210" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -68,7 +68,7 @@ How the assistant works — the drawer, the conversations, the cards to approve 
 
 ## What you can ask \{#tools\}
 
-Five tools, **all read-only**: they read JD Edwards and the analyses, never change anything.
+Eight tools, **all read-only**: they read JD Edwards and the analyses, never change anything.
 
 | Tool | What it answers | For example |
 |---|---|---|
@@ -77,8 +77,25 @@ Five tools, **all read-only**: they read JD Edwards and the analyses, never chan
 | **Where it is used** (`nomajde_where_used`) | For a data item, a table, a view, a function, an application or a report: the applications and reports that carry it, the views and structures that hold it, the objects whose event rules name it, the user defined objects around it — for every object or the customer's own only. | *What would a change to the table F0101 touch?* |
 | **Upgrade status** (`nomajde_upgrade_status`) | The figures of the retrofit, its breakdowns and its waves; one object's line; or the objects of a status, a person, a type or a wave. | *Which objects can be started now?* |
 | **Performance advice** (`nomajde_performance_advice`) | What slows the platform down now, the heaviest first, each line with what it means and what to do. | *JD Edwards is slow: where should I look first?* |
+| **Object access** (`nomajde_object_access`) | Who may run an application or a report, and what a user or a role is given — see [below](#object-access). | *Who can run P4210?* · *Can JSMITH change it?* |
+| **Orchestrations** (`nomajde_orchestrations`) | The orchestrations JD Edwards exposes, found by words of their name, description or category (with how many there are in all), or one described: what it does, its version, the inputs it takes and what it gives back. | *Is there an orchestration that creates a sales order?* |
+| **Version setup** (`nomajde_version_options`) | How a version is set up: for a report, its data selection and sequence in words, its processing options per tab as *title = value* and its printer; for an application, its processing option values. Blank options are counted, not listed. | *What are the processing options of P4210 ZJDE0001?* |
 
 The pages answer with thousands of rows; an answer of the assistant is cut to what a model can read. The **totals always count everything**, and a list says how many lines it left out — the full list stays on the page, where it can be exported.
+
+### Who may run an object \{#object-access\}
+
+**Object access** reads the security live from JD Edwards — the security workbench, the roles each user holds today (their effective and expiration dates are read) and the roles' sequence — and answers three questions:
+
+- **an object**: how many users are allowed and how many denied, the first names, the rule that decides for each, and every rule written on the object;
+- **a user or a role**: its own rules — what is given, what is forbidden — and, for a user, the roles held;
+- **both**: run, add, change and delete for that user or role, and the rule that decides.
+
+The decision follows JD Edwards' order: the user's own rules first, then the roles from the highest sequence, then `*PUBLIC` — the most precise rule winning at each level. It reads rules, it never changes them.
+
+### Orchestrations and versions, cut to the answer \{#ais-tools\}
+
+**Orchestrations** and **Version setup** read JD Edwards live through its AIS server. They answer in a few thousand characters where the raw AIS answer runs to tens of thousands: the full list of orchestrations is about 185,000 characters on a standard system, while an answer of the assistant is cut at 60,000. The other AIS reads — a business function's parameters, the scheduler, a count — answer in a few hundred characters and stay with the general call.
 
 ---
 
@@ -124,7 +141,7 @@ The **Cross Reference**, **Prepare for upgrade** and **Performance** pages tell 
 
 ## Who can use it \{#access\}
 
-A tool is offered to whoever may open the page it stands on: the three cross-reference tools need the Cross Reference page's permissions (`plugin:nomajde.xref:*`), the upgrade tool those of Prepare for upgrade (`plugin:nomajde.upgrade_view:*`), the performance tool those of Performance (`plugin:nomajde.performance:*`). Nothing more to grant: a role that opens the pages has the tools, and the assistant itself needs `ai:chat` — every [predefined role](./overview.md#roles) of Nomajde holds it.
+A tool is offered to whoever may open the page it stands on: the three cross-reference tools need the Cross Reference page's permissions (`plugin:nomajde.xref:*`), the upgrade tool those of Prepare for upgrade (`plugin:nomajde.upgrade_view:*`), the performance tool those of Performance (`plugin:nomajde.performance:*`). **Object access** goes to the **Security administrator** and the **Administrator**; **Orchestrations** and **Version setup** to the **Developer** and the **Administrator** — the two AIS tools also need the AIS connection of Nomajde. Nothing more to grant: a role that opens the pages has the tools, and the assistant itself needs `ai:chat` — every [predefined role](./overview.md#roles) of Nomajde holds it.
 
 ---
 

@@ -154,6 +154,26 @@ A save validates every template, writes them and refreshes the list of reports a
 | **Description** | Shown under the title on the Reports page. |
 | **Parameters** | One line per input the report needs at run time: a name, a label, a type (`string`, `int`, `float`, `bool`) and **required**. **Add parameter** adds one. The query receives the parameters by their name. |
 | **Jinja markdown template** | The body of the report, in markdown with Jinja tags. |
+| **Produced as** | **PDF** and / or **Text (Markdown)** — the formats the report is offered in; one at least stays ticked. |
+| **PDF settings of this report** | What this report's PDF does differently from the installation's [PDF branding](./build/settings-app.md#branding) — see [below](#pdf). |
+
+Closing the window with changes not saved asks first: *This report holds changes that are not saved. Close it and lose them?*
+
+### A parameter's value, help and choices \{#params\}
+
+Under its name, label, type and **required**, each parameter has a second line:
+
+| Field | Use |
+|---|---|
+| **Default value** | The value the field starts with; *none* by default. |
+| **Help** | The sentence shown under the field when the report is run — *The year the report covers*. |
+| **Choices** | *none: a plain field*, or a dropdown whose choices come from: *A fixed list* — **The list**, one line per choice: the value, then `=` and what is shown (`EN = English`); *The connectors* of the installation; *The schemas of a database* — **Read from** a connector, or *the connector picked in "…"* another parameter; *The rows of a query* — **Read from**, **Query**, **Column of the value**, **Column shown**. |
+
+Incomplete choices stop the save and name the parameter: *Parameter "company": pick the query its choices are read from.* Only what the kind of choices uses is saved.
+
+### PDF settings \{#pdf\}
+
+**PDF settings of this report** is a list of **setting** / value lines; the setting is picked among: **Title**, **Subtitle**, **Client**, **Author**, **Date**, **Version**, **Marked confidential (true / false)**, **Line above the title**, **Name on the cover**, **Reference on the cover**, **Header, left**, **Header, right**, **Footer, left**, **Main colour**, **Light colour**. A setting left out keeps the installation's branding. The list is shown while **PDF** is ticked.
 
 ### Writing the template \{#template\}
 

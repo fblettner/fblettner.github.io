@@ -188,17 +188,101 @@ Each page has its own address — `/liberty/screens`, `/liberty/app`… —, so 
 
 The editors share the same frame: the list on the left with a line that says what each item is, the picked item beside it, and the page's buttons — **Discard**, **Save**, the *Add* of the page, **Reload config** — in the page header, always at the same place. What is drawn is drawn the same way everywhere: a screen as six stages, a table as its read and write statements, a pool, an endpoint, a job and a service as flows of cards, with the picked card edited beside the flow. In the sidebar, the menu's right edge is dragged to resize it.
 
+### What the forms say \{#forms\}
+
+The forms of the editors name each setting in plain words — *Dictionary item*, *Kind of field*, *History table*, *Read only when changing* — with one short sentence of help under the field; **more**, at the end of that sentence, opens the longer explanation and its examples. A choice is said in words too, with its code beside it when it has one (*LOOKUP — A list read from a table*).
+
+An editor names what it edits by its label, followed — smaller — by its application and its technical id: *Screen Designer · Orders* `demo · orders`. A new screen, dashboard or service is given a name (*Its name:*); its technical id is made from that name and shown while it is typed — *Customer orders* gives `customer_orders`, followed by `_2` when the id is already taken.
+
 ---
 
 ## Saving \{#save\}
 
-1. **Save** sends the edited configuration; the server validates it against its model and refuses an invalid one with the reason.
+1. **Save** sends the edited configuration; the server validates it against its model and refuses an invalid one, listing what to correct — see [A refused save](#refused).
 2. The file is written. A version of the previous content is kept in **Deploy → History**.
 3. The change is applied: at once when the server watches its files (**Hot-reload config TOML files on change** in Administer → App → Server, the default), or with **Reload config** otherwise.
 
 **Reload config**, at the top of every editor page, re-reads every configuration file into the running server — *Reloaded — 12 connectors, 340 dictionary entries, 4 apps.* A reload rebuilds the connectors from the new files; if they fail, the previous configuration stays active. The pools are not reloaded by the file watcher, so that a running query never loses its connection: after changing a pool, use **Reload config**.
 
 Files are rewritten from the saved model: comments written by hand in a file are not kept.
+
+### A refused save \{#refused\}
+
+A save the server refuses writes nothing. The editor shows, above what is being edited, one line per thing to correct: where it is, in the editors' own words — the application, then each object by its label and the field by its form label —, then what is wrong, and **Open** to go to the object.
+
+<svg viewBox="0 0 1200 326" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="svsave-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="svsave-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="svsave-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="svsave-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="282" rx="14" fill="url(#svsave-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Screens</text>
+  <rect x="830" y="33" width="130" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="895.0" y="47.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Reload config</text>
+  <text x="240" y="85" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Connector:</text>
+  <rect x="310" y="72" width="33" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="326.5" y="84.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">crm</text>
+  <rect x="349" y="72" width="38" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="368.0" y="84.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">demo</text>
+  <rect x="898" y="70" width="62" height="22" rx="5" fill="url(#svsave-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="929.0" y="84.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Save</text>
+  <rect x="817" y="70" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="853.5" y="84.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Discard</text>
+  <rect x="719" y="70" width="90" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="764.0" y="84.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add screen</text>
+  <rect x="240" y="106" width="720" height="78" rx="8" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="254" y="126" fill="#f87171" fontSize="10" fontFamily="system-ui, sans-serif">Not saved — 2 things to correct:</text>
+  <text x="254" y="148" fill="#fca5a5" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">demo › Screen "Orders" › Column "B" › Kind of field</text>
+  <text x="543.32" y="148" fill="#fca5a5" fontSize="9.5" fontFamily="system-ui, sans-serif">must be text</text>
+  <text x="621.1600000000001" y="148" fill="#f87171" fontSize="9" fontFamily="system-ui, sans-serif">Open</text>
+  <line x1="621.1600000000001" y1="150" x2="641.32" y2="150" stroke="#f87171" strokeWidth="0.8"/>
+  <text x="254" y="168" fill="#fca5a5" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">demo › Screen "Orders" › Column "ABAN8" › Dictionary item</text>
+  <text x="575.24" y="168" fill="#fca5a5" fontSize="9.5" fontFamily="system-ui, sans-serif">is required</text>
+  <text x="647.76" y="168" fill="#f87171" fontSize="9" fontFamily="system-ui, sans-serif">Open</text>
+  <line x1="647.76" y1="170" x2="667.92" y2="170" stroke="#f87171" strokeWidth="0.8"/>
+  <rect x="240" y="196" width="720" height="44" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="214" fill="#e2e8f0" fontSize="10.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="256" y="228" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Customers  ·  demo.customers_get · 2 tabs · 9 fields</text>
+  <rect x="870" y="207" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="910.0" y="221.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Rename</text>
+  <rect x="240" y="246" width="720" height="44" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="264" fill="#e2e8f0" fontSize="10.5" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="256" y="278" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Orders  ·  demo.orders_get · 1 tab · 6 fields</text>
+  <rect x="870" y="257" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="910.0" y="271.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Rename</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nothing written</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the file stays as it was</text>
+  <line x1="200" y1="113.0" x2="254" y2="124" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Where, in the editors' words</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application › object › field</text>
+  <line x1="200" y1="177.0" x2="280" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="1000" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">What is wrong</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one line per problem</text>
+  <line x1="1000" y1="137.0" x2="690" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+  <rect x="1000" y="186" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Open</text>
+  <text x="1010" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">goes to the object</text>
+  <line x1="1000" y1="203.0" x2="810" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svsave-arrow)"/>
+</svg>
+
+| Part of a line | Example |
+|---|---|
+| Where | `demo › Screen "Orders" › Column "B" › Kind of field` |
+| What is wrong | *is required*, *must be text*, *must be a whole number*, *must be yes or no*, *must not be empty*, *has characters that are not allowed here*, *"…" is not a setting that exists here*… |
+| **Open** | Opens the object in its editor — the screen in the Screen Designer, the entry in the Dictionary, the menu entry in its tree. No **Open** when the object is the one already in front. |
+
+A refused save keeps the designer or the editor window open, with the problems shown in it: what was typed is not lost.
+
+Some editors check before sending, and say what to correct the same way:
+
+- **Menus** — an entry that opens nothing, two entries with the same id, an entry under a folder that does not exist. See [Build the menu tree](../build/menus/build-the-tree.md).
+- **Jobs** — a job without an id or whose id is another job's, a step without a name or without what it acts on (its source, target, query, function, address, recipients…), a step that starts a job that does not exist, two presets with the same name. See [Create a job](../../nomaflow/jobs/create.md).
 
 ---
 

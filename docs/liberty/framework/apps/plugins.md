@@ -127,11 +127,20 @@ The object the page receives is a contract: a field is added, never renamed or r
 | `Grid` | The shared grid. | 2 |
 | `Grid` with `detail` | A row of the grid opens. | 3 |
 | `useAssistantContext(title, facts)` | Tells the [assistant](../ai-assistant.md#context) what the user is looking at. | 4 |
-| `Diagram` | A diagram laid out by the server, drawn — see below. | 5 |
+| `Diagram` | A diagram laid out by the server, drawn — see [below](#page-diagram). | 5 |
+| `download(path, name, body)` | Gives the user a file a route of the server answers — see [below](#page-download). | 6 |
 
-**The assistant on a page.** `useAssistantContext('Cross Reference', { object: 'P4210', form: 'W4210A' })` gives a title and a few facts in a few words — the object open, the tab, a filter, never rows. Blank facts are left out, long ones cut, 20 at most. The chat shows them as its usual chip, sends them with each question while this page is the one on screen, and offers the application's starter questions for the page — declared like a screen's, under the page's name (Liberty Next → Logic → AI, *Starter questions per screen*, or `[ai.<app>.screens.<page>]`).
+#### The assistant on a page \{#page-assistant\}
 
-**A diagram.** For a picture of a platform or a system, the application's function builds the model — **groups** (a tier, drawn as a column, or a host, drawn as a box inside its tier), **nodes** (a card in a group: a kind, a label, a second line, a state `ok` / `warn` / `down` / `unknown`, whether it is declared, a few badges) and **links** (from a card or a box to another, with a label and the *evidence* each one is drawn on) — and returns it laid out by `liberty.diagram.lay_out`, on the server. The page draws it with `<Diagram layout={answer.diagram} picked={id} onPick={(node) => …} words={{ ok, warn, down, unknown, undeclared }} />`, in a box that has a height: the tiers as columns, a card per element with its state, a dashed outline for what is not declared, the links on their paths, a legend, the zoom. The same coordinates give the picture of a PDF report: `liberty.diagram.render_svg` paints it in print colours, the state as a mark and a word, each text cut to fit.
+`useAssistantContext('Cross Reference', { object: 'P4210', form: 'W4210A' })` gives a title and a few facts in a few words — the object open, the tab, a filter, never rows. Blank facts are left out, long ones cut, 20 at most. The chat shows them as its usual chip, sends them with each question while this page is the one on screen, and offers the application's starter questions for the page — declared like a screen's, under the page's name (Liberty Next → Logic → AI, *Starter questions per screen*, or `[ai.<app>.screens.<page>]`).
+
+#### A diagram \{#page-diagram\}
+
+For a picture of a platform or a system, the application's function builds the model — **groups** (a tier, drawn as a column, or a host, drawn as a box inside its tier), **nodes** (a card in a group: a kind, a label, a second line, a state `ok` / `warn` / `down` / `unknown`, whether it is declared, a few badges) and **links** (from a card or a box to another, with a label and the *evidence* each one is drawn on) — and returns it laid out by `liberty.diagram.lay_out`, on the server. The page draws it with `<Diagram layout={answer.diagram} picked={id} onPick={(node) => …} words={{ ok, warn, down, unknown, undeclared }} />`, in a box that has a height: the tiers as columns, a card per element with its state, a dashed outline for what is not declared, the links on their paths, a legend, the zoom. The same coordinates give the picture of a PDF report: `liberty.diagram.render_svg` paints it in print colours, the state as a mark and a word, each text cut to fit. In the PDF, a picture placed on a landscape page has that page to itself: the heading written just above it goes onto the landscape page with its number — the table of contents points at it there —, and the chapter that follows starts on a new portrait page.
+
+#### A file for the user \{#page-download\}
+
+`download('/api/reports/<scope>/<id>/run', 'report.pdf', { format: 'pdf', params })` asks a route of the server for a file — a report as a PDF, an export — and saves it on the user's machine: with a body the route is called with a `POST`, without one with a `GET`. The file takes the name the server gives it, else the one passed. A refusal comes back as the server's message, for the page to show. The applications' own pages use it for their documents — the platform report, the OCI estimate, the weekly upgrade report.
 
 ---
 

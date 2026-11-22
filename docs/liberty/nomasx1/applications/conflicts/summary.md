@@ -196,10 +196,10 @@ Click the **···** button at the start of a row, or right-click the row, to op
 
 | Action | Where it lands |
 |---|---|
-| **Display Users** | List of users in conflict for the selected `(Process, Risk)` pair. |
-| **Display Roles** | Pairs of incompatible roles for the selected `(Process, Risk)` pair. |
-| **Display Objects** | Source-system objects backing the conflict. |
-| **Display Details** | Full *Conflicts → Details* set filtered on the selected `(Process, Risk)`. |
+| **Display Users** | List of users in conflict for the row's application, process and risk. |
+| **Display Roles** | Pairs of incompatible roles for the row's application, process and risk. |
+| **Display Objects** | Source-system objects backing the conflict, for the same row. |
+| **Display Details** | Full *Conflicts → Details* set filtered on the row's application, process and risk. |
 
 ---
 

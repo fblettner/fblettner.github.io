@@ -191,36 +191,47 @@ Utiliser → (Indenter) pour placer un élément sous le frère précédent — 
 
 ### Étape 5 — Enregistrer
 
-Le bouton **Enregistrer** au niveau de la page valide tout le menu (ids uniques, parents existants, pas de cycles) et écrit `menus.toml`. Le rechargement à chaud prend les modifications en compte ; le prochain chargement de page de l'utilisateur affiche le nouvel arbre.
+Le bouton **Enregistrer** au niveau de la page vérifie d'abord les menus : une entrée qui n'ouvre rien, deux entrées de même identifiant, une entrée rangée sous un dossier qui n'existe pas. Chaque point est listé au-dessus de l'arbre — *crm › Entrée de menu « Commandes en retard » n'ouvre rien : choisissez ce qu'elle ouvre* — avec **Ouvrir**, qui sélectionne l'entrée dans son arbre (dossiers dépliés, application changée au besoin), et rien n'est envoyé. Le serveur valide ensuite tout le menu (pas de cycle…) et écrit `menus.toml` ; un refus est listé de la même façon — voir [Un enregistrement refusé](../../configuration/settings-ui.md#refused). Le rechargement à chaud prend les modifications en compte ; le prochain chargement de page de l'utilisateur affiche le nouvel arbre.
+
+---
+
+## La ligne de l'application \{#application\}
+
+La ligne au-dessus de l'arbre nomme l'application — son nom, sinon son identifiant — avec le nombre de ses entrées. Un clic dessus affiche, à côté de l'arbre, les réglages de l'application elle-même :
+
+| Champ | Notes |
+|---|---|
+| **Nom de l'application** | Le nom affiché pour l'application dans la liste en haut du menu. Vide : son identifiant. |
 
 ---
 
 ## Le formulaire de l'Inspecteur
 
-Cliquer une ligne → le panneau de droite charge le formulaire de l'entrée, en trois onglets — **General** (`id`, `label`, `icon`, `type`, `connector`, `target`), **Advanced** (`parent`, `params`, `roles`, `override`) et **Translations** (`l`). Les champs s'adaptent au `type` :
+Cliquer une ligne → le panneau de droite charge le formulaire de l'entrée, en trois onglets — **General**, **Advanced** et **Translations**. Chaque champ porte une phrase d'aide courte, l'explication complète derrière **plus**. Les champs s'adaptent à ce que l'entrée ouvre :
 
-| Champ | Toujours affiché | Notes |
+| Champ | Onglet | Notes |
 |---|---|---|
-| `id` | Oui | Renommer ici met à jour automatiquement la référence `parent` de chaque enfant. Les références entre fichiers (par exemple le champ `home` d'un autre connecteur qui pointe vers cet élément) demandent une correction manuelle — utiliser *Rechercher les usages* d'abord. |
-| `parent` | Oui | Un SearchSelect alimenté avec les candidats valides. Les actions d'indentation/désindentation de l'arbre modifient ce champ aussi. |
-| `label` | Oui | Le texte de la barre latérale. |
-| `l` (onglet Traductions) | Oui | Libellés par langue. Voir [Traductions et icônes](./translations-and-icons.md). |
-| `icon` | Oui | L'une des [icônes du menu latéral](./translations-and-icons.md#icons). |
-| `type` | Oui | Liste déroulante : *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — voir [Types d'éléments](./item-types.md). Vide = dossier. Passer de feuille à dossier efface `target` / `connector` / `params`. |
-| `connector` | Uniquement pour les feuilles `query` / `endpoint` | Vide = le connecteur de l'application. |
-| `target` | Uniquement pour les feuilles | Un SearchSelect alimenté avec les cibles valides pour le `type` + `connector` choisis. |
-| `params` | Uniquement pour les feuilles | Paramètres fixes transmis à la cible à l'ouverture. |
-| `roles` | Toujours | Restreint à ces rôles. Voir [Permissions et rôles](./permissions-and-roles.md). |
+| **Id** | General | Un nom court pour l'entrée, unique dans son application. Le renommer ici met à jour automatiquement le dossier de chaque enfant. Les références entre fichiers (par exemple la page d'accueil d'un autre connecteur qui pointe vers cette entrée) demandent une correction manuelle — passer d'abord par *Rechercher les usages*. |
+| **Label** | General | Le texte du menu latéral. |
+| **Icon** | General | L'une des [icônes du menu latéral](./translations-and-icons.md#icons). |
+| **What it opens** | General | *Screen (designed view)*, *Query (raw table view)*, *Endpoint (API call)*, *Dashboard (widget grid)*, *Page (frontend route)*, *Job (run it, follow its log)*, *Link (an address, opened in a new tab)* — voir [Types d'éléments](./item-types.md). Vide = dossier. Passer de feuille à dossier efface ce qu'elle ouvre et ses valeurs fixes. |
+| **Application** | General | Pour une requête ou un point d'accès : l'application qui le porte. Vide = celle-ci. |
+| **Opens** | General | Choisi parmi les cibles valides pour ce que l'entrée ouvre et son application. |
+| **Folder** | Advanced | Le dossier où se range l'entrée, choisi parmi les dossiers ; vide pour le haut du menu. Les actions d'indentation et de désindentation de l'arbre le modifient aussi. |
+| **Fixed values** | Advanced | Des valeurs transmises à ce qui s'ouvre — un filtre déjà renseigné. Une ligne par valeur : son nom, choisi parmi les filtres de l'écran ouvert ou les paramètres de la requête ouverte (ou saisi), puis la valeur. Une ligne laissée sans nom n'est pas enregistrée. |
+| **Only for the roles** | Advanced | N'affiche l'entrée qu'à ces rôles. Voir [Permissions et rôles](./permissions-and-roles.md). |
+| **Keep on upgrade** | Advanced | Une mise à jour de l'application laisse cette entrée telle qu'enregistrée ici. |
+| **Translations** | Translations | Le libellé dans les autres langues. Voir [Traductions et icônes](./translations-and-icons.md). |
 
-Les modifications sont **vives en mémoire** — la ligne de l'arbre se met à jour à la frappe. C'est le bouton *Enregistrer* au niveau de la page qui écrit sur disque.
+Les modifications s'appliquent **aussitôt en mémoire** — la ligne de l'arbre suit la saisie. C'est le bouton *Enregistrer* au niveau de la page qui écrit sur disque.
 
 ---
 
 ## Renommer un élément
 
-Renommer un `id` est plus engageant que les autres champs parce que chaque référence doit être mise à jour :
+Renommer un **Id** est plus engageant que les autres champs parce que chaque référence doit être mise à jour :
 
-1. **Enfants** : les références `parent` de l'arbre sont mises à jour automatiquement.
+1. **Enfants** : le **Folder** des enfants est mis à jour automatiquement.
 2. **Entre fichiers** : le champ `home` d'un connecteur, ou un élément d'un autre menu qui référence celui-ci, n'est pas mis à jour. Utiliser **Rechercher les usages** (sur le panneau de l'entrée) avant de renommer pour voir chaque endroit qui référence l'élément.
 
 Pour un renommage lourd, le schéma sûr est **Rechercher les usages → Cloner → corriger les références → supprimer l'ancien** — le nouvel id peut prendre le relais pendant la mise à jour de chaque référence.
@@ -265,12 +276,12 @@ Le filtre est insensible à la casse et trouve la sous-chaîne n'importe où dan
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Deux éléments avec le même `id` dans le même menu. | La validation à l'enregistrement échoue. | Choisir un id unique ; l'inspecteur signale les doublons en ligne. |
-| `parent` référence un élément qui n'existe pas. | La validation à l'enregistrement échoue (« parent inconnu »). | Choisir un parent dans la liste déroulante — seuls les ids valides sont listés. |
+| Deux éléments de même identifiant dans le même menu. | **Enregistrer** signale *a le même identifiant qu'une autre entrée* et n'envoie rien. | Choisir un identifiant unique. |
+| Une entrée rangée sous un dossier qui n'existe pas. | **Enregistrer** signale *est sous un dossier qui n'existe pas*. | Choisir un dossier dans la liste déroulante — seuls les dossiers existants y figurent. |
 | Cycle de parent (A → B → A). | La validation à l'enregistrement échoue (« cycle de parent »). | L'indentation/désindentation de l'éditeur d'arbre ne crée jamais de cycle ; seules les éditions TOML directes le font. |
-| Feuille sans `target`. | La validation à l'enregistrement échoue. | Définir `target` dans l'Inspecteur. |
-| Dossier avec `target` défini. | La validation à l'enregistrement échoue (« un dossier ne peut pas porter de cible »). | Soit retirer la cible, soit définir un type non-dossier. |
-| Feuille `dashboard` ou `page` avec un `connector`. | La validation à l'enregistrement échoue. | Ces deux types de feuille ne portent pas de connecteur ; laisser le champ vide. |
+| Une feuille qui n'ouvre rien. | **Enregistrer** signale *n'ouvre rien : choisissez ce qu'elle ouvre*. | Renseigner **Opens** dans l'Inspecteur. |
+| Dossier avec **Opens** renseigné. | La validation à l'enregistrement échoue (« un dossier ne peut pas porter de cible »). | Soit retirer la cible, soit définir un type non-dossier. |
+| Feuille tableau de bord ou page avec une **Application**. | La validation à l'enregistrement échoue. | Ces deux types de feuille ne portent pas de connecteur ; laisser le champ vide. |
 | Renommer un élément sans vérifier *Rechercher les usages*. | Le `home` d'un autre connecteur ou la référence d'un autre menu casse silencieusement. | Toujours vérifier Rechercher les usages avant de renommer. |
 
 ---

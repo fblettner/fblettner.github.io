@@ -147,7 +147,7 @@ Les graphiques s'affichent inline en sortie PDF comme en Markdown — pas d'imag
 Neuf sections, chacune construite à partir des données collectées par Nomasx-1 :
 
 1. **Synthèse** — résumé pour la direction : contexte et objectifs, les constats principaux assortis chacun d'un niveau de risque, le risque financier estimé et les recommandations clés.
-2. **Périmètre de l'audit** — composants audités, ce qui est hors périmètre, le tableau des environnements JD Edwards (production vs hors production) et l'**architecture technique** : versions logicielles, inventaire des serveurs et un schéma d'architecture que le rapport génère automatiquement.
+2. **Périmètre de l'audit** — composants audités, ce qui est hors périmètre, le tableau des environnements JD Edwards (production vs hors production) et l'**architecture technique** : versions logicielles, inventaire des serveurs et schéma d'architecture sur une page au format paysage (voir [La page d'architecture](#architecture)).
 3. **Méthodologie** — les outils et données utilisés, les règles d'analyse (l'usage se mesure à la consommation réelle, pas aux autorisations) et un tableau des **sources de données** qui date chaque entrée.
 4. **Licences acquises** — l'inventaire souscrit : Oracle Database Enterprise Edition (NUP), les options et packs, les composants détectés en usage, la *règle des minimas* et le minimum NUP calculé à partir du nombre de processeurs ; puis l'Oracle Technology Foundation de JD Edwards et les modules applicatifs.
 5. **Utilisation et conformité** — le cœur du rapport :
@@ -159,6 +159,18 @@ Neuf sections, chacune construite à partir des données collectées par Nomasx-
 7. **Plan de remédiation** — un nettoyage concret : désactivation des comptes jamais utilisés, et rationalisation des rôles et des accès (suppression des rôles non affectés, revue des cumuls de rôles excessifs, alignement des accès sur l'usage réel).
 8. **Recommandations et plan d'action** — chaque action classée par priorité, effort et impact financier, un planning indicatif en quatre phases, et les indicateurs de suivi à surveiller ensuite.
 9. **Annexes** — la liste détaillée des utilisateurs à désactiver (avec dates de création et de dernière modification, et les précautions de validation à appliquer avant désactivation) et un glossaire.
+
+---
+
+## La page d'architecture \{#architecture\}
+
+La section *Périmètre de l'audit* présente l'architecture de l'application sur une page au format paysage. Le rapport retient la première image disponible, dans cet ordre :
+
+1. **Une image déposée pour l'application** — le fichier `data/architecture/<apps_id>.svg` du dossier des applications de l'installation. Elle passe toujours en premier.
+2. **La plateforme telle que Nomajde l'a lue** — dans [Nomajde → Supervision → Architecture](../../nomajde/monitoring/architecture.md#download), **Conserver pour le rapport d'audit** enregistre la lecture d'un pool JD Edwards. Le rapport dessine la lecture conservée pour le pool désigné par l'application dans [Applications](../settings/global/applications.md), **dans la langue du rapport** et avec la date de la lecture. La lecture est conservée sur l'installation : le rapport la dessine même quand Server Manager n'est pas joignable depuis la machine qui produit le rapport. Une application sans pool reprend la lecture conservée quand il n'y en a qu'une.
+3. **L'image de l'installation** — le fichier `data/architecture/default.svg`, pour une installation qui ne compte qu'une application.
+
+Sans aucune de ces images, le rapport ne comporte pas de page d'architecture.
 
 ---
 
@@ -208,6 +220,7 @@ L'audit lit les données que Nomasx-1 a déjà collectées pour l'application �
 - **L'inventaire des licences et la tarification** (*Licences* et *Paramètres → Tarification*), faute de quoi les chiffres financiers s'écartent du tarif réel.
 - **Les comptes techniques** — l'indicateur *Technique* des [propriétés des utilisateurs](../settings/security/users-properties.md) ; tant que l'application n'a aucune propriété utilisateur, les règles de nommage de son onglet [Comptes techniques](../settings/global/applications.md#technical-accounts). Sans indicateur ni règle, aucun compte n'est compté comme technique.
 - **Le pool de l'application** — le serveur et la base cités dans le périmètre du rapport sont lus dans le pool désigné par l'application, dont le nom est imprimé ; une application sans pool garde ce que porte sa ligne.
+- **La lecture de l'architecture** — quand Nomajde est installé, **Conserver pour le rapport d'audit** sur sa page Architecture pour le pool JD Edwards de l'application, afin que le rapport dessine la plateforme dans son état actuel (voir [La page d'architecture](#architecture)).
 
 Une exécution sur une application sans usage collecté produit tout de même le document, mais les sections usage et finance apparaîtront vides plutôt que fausses.
 

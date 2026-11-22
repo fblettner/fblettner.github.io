@@ -154,6 +154,26 @@ L'enregistrement valide chaque modèle, les écrit et met aussitôt à jour la l
 | **Description** | Affichée sous le titre sur la page Rapports. |
 | **Paramètres** | Une ligne par donnée nécessaire à l'exécution : un nom, un libellé, un type (`string`, `int`, `float`, `bool`) et **requis**. **Ajouter un paramètre** en ajoute un. La requête reçoit les paramètres sous leur nom. |
 | **Modèle Jinja markdown** | Le corps du rapport, en markdown avec des balises Jinja. |
+| **Produit en** | **PDF** et / ou **Texte (Markdown)** — les formats dans lesquels le rapport est proposé ; au moins un reste coché. |
+| **Réglages PDF de ce rapport** | Ce que le PDF de ce rapport fait différemment de la [charte PDF](./build/settings-app.md#branding) de l'installation — voir [plus bas](#pdf). |
+
+Fermer la fenêtre avec des modifications non enregistrées demande confirmation : *Ce rapport contient des modifications non enregistrées. Le fermer et les perdre ?*
+
+### Valeur, aide et choix d'un paramètre \{#params\}
+
+Sous son nom, son libellé, son type et **requis**, chaque paramètre a une seconde ligne :
+
+| Champ | Usage |
+|---|---|
+| **Valeur par défaut** | La valeur initiale du champ ; *aucune* par défaut. |
+| **Aide** | La phrase affichée sous le champ à l'exécution du rapport — *L'année couverte par le rapport*. |
+| **Choix** | *aucun : un champ simple*, ou une liste déroulante dont les choix viennent de : *Une liste fixe* — **La liste**, une ligne par choix : la valeur, puis `=` et ce qui est affiché (`FR = Français`) ; *Les connecteurs* de l'installation ; *Les schémas d'une base* — **Lu depuis** un connecteur, ou *le connecteur choisi dans « … »* un autre paramètre ; *Les lignes d'une requête* — **Lu depuis**, **Requête**, **Colonne de la valeur**, **Colonne affichée**. |
+
+Des choix incomplets bloquent l'enregistrement et nomment le paramètre : *Paramètre « company » : choisissez la requête dont ses choix sont lus.* Seul ce qu'utilise le type de choix est enregistré.
+
+### Réglages PDF \{#pdf\}
+
+**Réglages PDF de ce rapport** est une liste de lignes **réglage** / valeur ; le réglage se choisit parmi : **Titre**, **Sous-titre**, **Client**, **Auteur**, **Date**, **Version**, **Marqué confidentiel (true / false)**, **Ligne au-dessus du titre**, **Nom sur la couverture**, **Référence sur la couverture**, **En-tête, gauche**, **En-tête, droite**, **Pied de page, gauche**, **Couleur principale**, **Couleur claire**. Un réglage absent garde la charte de l'installation. La liste s'affiche tant que **PDF** est coché.
 
 ### Écrire le modèle \{#template\}
 

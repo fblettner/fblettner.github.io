@@ -43,7 +43,7 @@ CREATE TABLE expense_claims (
 
 ### 2. Status list
 
-**Liberty Next → Data → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
+**Liberty Next → Data → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Kind of field** *A fixed list of values*, **List of values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
 
 ### 3. One query per transition
 

@@ -29,31 +29,31 @@ C'est l'écran que les auditeurs ouvrent pour *voir ce qui a changé dans la lig
   <line x1="215" y1="70" x2="1105" y2="70" stroke="#1f2937" strokeWidth="1"/>
   <rect x="233" y="84" width="854" height="114" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="245" y="100" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">⌄  ⏷  Filtres avancés</text>
-  <text x="245" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID</text>
+  <text x="245" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ID APPLICATION</text>
   <rect x="245" y="128" width="20" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="255.0" y="141.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">=</text>
   <rect x="269" y="128" width="126" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="279" y="141.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">filtrer…</text>
-  <text x="407" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TRANSACTION DATE</text>
+  <text x="407" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATE DE TRANSACTION</text>
   <rect x="407" y="128" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="417" y="141.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">▦ Toutes les dates</text>
   <text x="547" y="141" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="569" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USER</text>
+  <text x="569" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UTILISATEUR</text>
   <rect x="569" y="128" width="20" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="579.0" y="141.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">=</text>
   <rect x="593" y="128" width="126" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="603" y="141.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">filtrer…</text>
-  <text x="731" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLE NAME</text>
+  <text x="731" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOM DE LA TABLE</text>
   <rect x="731" y="128" width="20" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="741.0" y="141.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">=</text>
   <rect x="755" y="128" width="126" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="765" y="141.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">filtrer…</text>
-  <text x="893" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLUMN</text>
+  <text x="893" y="122" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLONNE</text>
   <rect x="893" y="128" width="20" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="903.0" y="141.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">=</text>
   <rect x="917" y="128" width="126" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="927" y="141.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">filtrer…</text>
-  <text x="245" y="162" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VALUE</text>
+  <text x="245" y="162" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VALEUR</text>
   <rect x="245" y="168" width="20" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="255.0" y="181.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">=</text>
   <rect x="269" y="168" width="126" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -82,86 +82,70 @@ C'est l'écran que les auditeurs ouvrent pour *voir ce qui a changé dans la lig
   <rect x="998" y="236" width="89" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="250.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩ Exporter ▾</text>
   <rect x="233" y="268" width="854" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="321" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">APPLICATIO…</text>
-  <text x="371" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">ROW ID</text>
-  <text x="385" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">TRANSACTION DATE</text>
-  <text x="505" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">USER</text>
-  <text x="575" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">TABLE NAME</text>
-  <text x="645" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">TYPE</text>
-  <text x="715" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COLUMN</text>
-  <text x="785" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">VALUE</text>
-  <text x="905" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">OPERATION</text>
-  <text x="975" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">SCHEMA</text>
+  <text x="299" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">ID APPLICA…</text>
+  <text x="359" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">ID DE LI…</text>
+  <text x="373" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DATE DE TRANSACTION</text>
+  <text x="497" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">UTILISATEUR</text>
+  <text x="571" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">NOM DE LA TAB…</text>
+  <text x="655" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">TYPE</text>
+  <text x="709" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COLONNE</text>
+  <text x="773" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">VALEUR</text>
+  <text x="873" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">OPÉRATION</text>
+  <text x="945" y="283.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">SCHÉMA</text>
   <rect x="233" y="294" width="854" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <rect x="239" y="297" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="248" y="308.0" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">···</text>
-  <text x="321" y="308.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
-  <text x="371" y="308.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">7</text>
-  <text x="385" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T15:55:39</text>
-  <text x="505" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JDE</text>
-  <text x="575" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
-  <text x="645" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
-  <text x="715" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABALKY</text>
-  <text x="785" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR00012345</text>
-  <text x="905" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">UPDATE</text>
-  <text x="975" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
+  <text x="299" y="308.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="359" y="308.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">7</text>
+  <text x="373" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T15:55:39</text>
+  <text x="497" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JDE</text>
+  <text x="571" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
+  <text x="655" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
+  <text x="709" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABALKY</text>
+  <text x="773" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR00012345</text>
+  <text x="873" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">UPDATE</text>
+  <text x="945" y="308.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
   <rect x="233" y="316" width="854" height="22" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="0.6"/>
-  <rect x="239" y="319" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="248" y="330.0" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">···</text>
-  <text x="321" y="330.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
-  <text x="371" y="330.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">5</text>
-  <text x="385" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T13:09:03</text>
-  <text x="505" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
-  <text x="575" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
-  <text x="645" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
-  <text x="715" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABALKY</text>
-  <text x="785" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR00012345</text>
-  <text x="905" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">UPDATE</text>
-  <text x="975" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
+  <text x="299" y="330.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="359" y="330.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">5</text>
+  <text x="373" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T13:09:03</text>
+  <text x="497" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
+  <text x="571" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
+  <text x="655" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
+  <text x="709" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABALKY</text>
+  <text x="773" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR00012345</text>
+  <text x="873" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">UPDATE</text>
+  <text x="945" y="330.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
   <rect x="233" y="338" width="854" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <rect x="239" y="341" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="248" y="352.0" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">···</text>
-  <text x="321" y="352.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
-  <text x="371" y="352.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
-  <text x="385" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T10:21:44</text>
-  <text x="505" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JDE</text>
-  <text x="575" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
-  <text x="645" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
-  <text x="715" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABAN8</text>
-  <text x="785" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">4021</text>
-  <text x="905" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INSERT</text>
-  <text x="975" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
+  <text x="299" y="352.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="359" y="352.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
+  <text x="373" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">2026-11-18T10:21:44</text>
+  <text x="497" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JDE</text>
+  <text x="571" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">F0101</text>
+  <text x="655" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">AFTER</text>
+  <text x="709" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ABAN8</text>
+  <text x="773" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">4021</text>
+  <text x="873" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INSERT</text>
+  <text x="945" y="352.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PRODDTA</text>
   <text x="233" y="384" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lignes par page</text>
   <rect x="307" y="372" width="56" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="317" y="385.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">50  ⌄</text>
   <text x="375" y="385" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Affichage 1–3 sur 3</text>
   <text x="1087" y="385" fill="#94a3b8" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">«  ‹  1  ›  »</text>
-  <rect x="256" y="315.0" width="164" height="54" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <rect x="260" y="321.0" width="156" height="20" rx="4" fill="rgba(74,158,255,0.10)"/>
-  <text x="268" y="335.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Users</text>
-  <text x="410" y="335.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="357.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Rights</text>
-  <text x="410" y="357.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
   <rect x="215.0" y="422" width="440.0" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="225.0" y="437" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Colonne · valeur</text>
   <text x="225.0" y="450" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par valeur indexée</text>
-  <line x1="435.0" y1="422" x2="723" y2="361.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
+  <line x1="435.0" y1="422" x2="717" y2="361.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
   <rect x="665.0" y="422" width="440.0" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="675.0" y="437" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Opération · schéma</text>
   <text x="675.0" y="450" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">INSERT, UPDATE, DELETE</text>
-  <line x1="885.0" y1="422" x2="913" y2="361.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
+  <line x1="885.0" y1="422" x2="881" y2="361.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
   <rect x="12" y="107" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="22" y="122" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recherche par valeur</text>
   <text x="22" y="135" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colonne = ABALKY, valeur = FR…</text>
   <line x1="197" y1="124.0" x2="233" y2="124" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
-  <rect x="12" y="288.0" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="303.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Actions de la ligne (···)</text>
-  <text x="22" y="316.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Display Users · Display Rights</text>
-  <line x1="197" y1="305.0" x2="248" y2="305.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
-  <rect x="1119" y="230" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1129" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécuter</text>
-  <text x="1129" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rien n'est lu avant</text>
-  <line x1="1119" y1="247.0" x2="409" y2="247" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
+  <rect x="12" y="230" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="22" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécuter</text>
+  <text x="22" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rien n'est lu avant</text>
+  <line x1="197" y1="247.0" x2="273" y2="247" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#alk-arrow)"/>
 </svg>
 
 ---
@@ -190,17 +174,6 @@ Pour chaque colonne captée dans une opération auditée :
 | **Value** | `AUD_VALUE` — valeur brute. Filtrable. | Valeur capturée. |
 | **Operation** | `AUD_OPERATION` — `INSERT` / `UPDATE` / `DELETE`. | Type de l'opération sous-jacente. |
 | **Schema** | `AUD_SEG_OWNER` — schéma de base. | Localisation de la table. |
-
----
-
-## Menu contextuel \{#context-menu\}
-
-Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre son menu.
-
-| Action | Vers où |
-|---|---|
-| **Display Users** | Les affectations de l'application (*Sécurité → Affectations*), pour voir les rôles du compte à l'origine de la modification. |
-| **Display Rights** | Les droits des rôles (*Sécurité → Rôles*, vue des droits), pour voir ce qui permet à ce compte de modifier la table. |
 
 ---
 

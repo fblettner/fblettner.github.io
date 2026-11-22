@@ -1,14 +1,14 @@
 ---
 title: Server Manager
-description: "Monitoring → Server Manager in Nomajde: seven screens that read the JD Edwards Server Manager console live — instances, connected users, enterprise servers, server processes, business function calls and errors, web and AIS servers with their Java memory, JDBj caches — with advanced filters, pick-lists, cache clearing from a row, and the catalogue of Server Manager REST services behind them."
-keywords: [Nomajde, JD Edwards, Server Manager, monitoring, instances, connected users, enterprise server, kernel, business functions, Java heap, AIS server, web server, JDBj cache, clear cache, REST API]
+description: "Monitoring → Server Manager in Nomajde: seven screens that read the JD Edwards Server Manager console live — instances, connected users, enterprise servers, server processes, business function calls and errors, web and AIS servers with their Java memory, JDBj caches — with advanced filters, pick-lists, starting, stopping and restarting an instance and clearing a cache from a row, and the catalogue of Server Manager REST services behind them."
+keywords: [Nomajde, JD Edwards, Server Manager, monitoring, instances, connected users, enterprise server, kernel, business functions, Java heap, AIS server, web server, JDBj cache, clear cache, start instance, stop instance, restart instance, REST API]
 ---
 
 # Server Manager
 
-**Monitoring → Server Manager** shows what the JD Edwards Server Manager console knows, in seven Nomajde grids: the instances and their state, who is connected, the load of the enterprise servers and of their processes, the business function calls and errors, the Java memory of the web and AIS servers, the JDBj caches of the HTML servers. A row's menu clears a cache. The screens read the console **live** each time they are opened or refreshed; nothing is stored in Nomajde.
+**Monitoring → Server Manager** shows what the JD Edwards Server Manager console knows, in seven Nomajde grids: the instances and their state, who is connected, the load of the enterprise servers and of their processes, the business function calls and errors, the Java memory of the web and AIS servers, the JDBj caches of the HTML servers. A row's menu starts, stops or restarts an instance, or clears a cache. The screens read the console **live** each time they are opened or refreshed; nothing is stored in Nomajde.
 
-For the health of the servers over time — checks every five minutes, availability, alerts — see [JDE Health Check](./jde-servers.md).
+For the health of the servers over time — checks every five minutes, availability, alerts — see [JDE Health Check](./jde-servers.md); to watch the instances and restart one that fails, see the *Instances watch* job in [Jobs](../jobs.md).
 
 ---
 
@@ -163,11 +163,11 @@ For the health of the servers over time — checks every five minutes, availabil
 
 ## The screens \{#screens\}
 
-Every screen is read-only and loads when opened. Each one asks the console for its instances, then reads every **running** instance of the right kind together: one grid covers the whole platform. An instance that is stopped, or that the console refuses to answer for, keeps a row whose **Note** column says why — `not running (STOPPED)` for example.
+Every screen loads when opened and only reads; the row actions below are the only changes made from them. Each one asks the console for its instances, then reads every **running** instance of the right kind together: one grid covers the whole platform. An instance that is stopped, or that the console refuses to answer for, keeps a row whose **Note** column says why — `not running (STOPPED)` for example.
 
 | Menu entry | What it lists | Main columns |
 |---|---|---|
-| **Instances** | Every instance the console manages. | Instance, Type, State, Tools release, Host, JDE home. |
+| **Instances** (*JDE instances*) | Every instance the console manages. | Instance, Type, State, Tools release, Host, JDE home. |
 | **Connected users** | The web and AIS sessions — and, on request, the enterprise server processes each user is connected to. | User, Session, Instance, Environment, Role, From, Open applications, Signed in at, Idle (seconds), Last active, Process. |
 | **Enterprise servers** | One row per enterprise server. | Instance, Host, Up for, Network jobs, Kernel jobs, Zombie processes, Security kernel users, Call object users, CPU, Memory. |
 | **Server processes** | Each kernel and network listener of the enterprise servers. | Process, Process id, Instance, Kind, Process state (*Running* or *Zombie*, from the console's own status of the process), Users, Connected, Outstanding requests, Messages received, Memory, CPU, Threads, Database connections, Open transactions, Started, Last message. |
@@ -180,6 +180,91 @@ Figures are numbers: they sort, total and export as such. **JDBj caches**, **Ser
 ### Connected users \{#users\}
 
 The **Show** dropdown above the grid chooses between **Sessions** — the web and AIS sessions, the default — and **Sessions and server processes**, which adds the enterprise server processes each user is connected to. The grid is empty when nobody is signed in.
+
+---
+
+## Starting, stopping and restarting an instance \{#start-stop\}
+
+The **Instances** screen (*JDE instances*) has three row actions in each row's menu (**···**). Each one asks for a confirmation first, then reads the list again.
+
+<svg viewBox="0 0 1200 268" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="nsmi-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nsmi-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nsmi-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nsmi-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="18" width="760" height="236" rx="14" fill="url(#nsmi-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">JDE instances</text>
+  <text x="240" y="63" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Every instance Server Manager manages, with its type and state — read live.</text>
+  <rect x="240" y="80" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif"></text>
+  <text x="284" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INSTANCE</text>
+  <text x="394" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TYPE</text>
+  <text x="490" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATE</text>
+  <text x="582" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOOLS RELEASE</text>
+  <text x="682" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HOST</text>
+  <text x="794" y="97.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JDE HOME</text>
+  <rect x="240" y="112" width="720" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">···</text>
+  <text x="284" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ENT_PD</text>
+  <text x="394" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">entserver</text>
+  <rect x="490" y="116.0" width="51" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="515.5" y="127.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">RUNNING</text>
+  <text x="582" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">9.2.26.2</text>
+  <text x="682" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">JDEENT01</text>
+  <text x="794" y="127.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">/u01/jde_home/SCFHA</text>
+  <rect x="240" y="140" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">···</text>
+  <text x="284" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">HTML_PD</text>
+  <text x="394" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">webserver</text>
+  <rect x="490" y="144.0" width="51" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="515.5" y="155.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">RUNNING</text>
+  <text x="582" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">9.2.26.2</text>
+  <text x="682" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">JDEWEB01</text>
+  <text x="794" y="155.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">/u01/jde_home/SCFHA</text>
+  <rect x="240" y="168" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">···</text>
+  <text x="284" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">AIS_PD</text>
+  <text x="394" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">restserver</text>
+  <rect x="490" y="172.0" width="51" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="515.5" y="183.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">STOPPED</text>
+  <text x="582" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">9.2.26.2</text>
+  <text x="682" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">JDEWEB01</text>
+  <text x="794" y="183.5" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">/u01/jde_home/SCFHA</text>
+  <rect x="266" y="158" width="210" height="78" rx="7" fill="#0f172a" stroke="#334155" strokeWidth="1"/>
+  <text x="280" y="177" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Start this instance</text>
+  <text x="280" y="201" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Stop this instance</text>
+  <rect x="270" y="210" width="202" height="22" rx="5" fill="rgba(74,158,255,0.14)"/>
+  <text x="280" y="225" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">Restart this instance</text>
+  <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row menu (···)</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on each instance</text>
+  <line x1="200" y1="137.0" x2="254" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nsmi-arrow)"/>
+  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Start · Stop</text>
+  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sent to Server Manager as is</text>
+  <line x1="200" y1="217.0" x2="266" y2="188" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nsmi-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Restart</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stop, wait, start, wait</text>
+  <line x1="1000" y1="167.0" x2="476" y2="221" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nsmi-arrow)"/>
+  <rect x="1000" y="80" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">State</text>
+  <text x="1010" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">refreshed after the action</text>
+  <line x1="1000" y1="97.0" x2="520" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nsmi-arrow)"/>
+</svg>
+
+| Row action | What happens |
+|---|---|
+| **Start this instance** | Sent to Server Manager as it is. Server Manager starts the instance; refresh the list to follow its state. |
+| **Stop this instance** | Sent to Server Manager as it is. Its users are disconnected and what they were doing is lost. |
+| **Restart this instance** | Liberty stops the instance, waits until Server Manager says it is stopped, starts it and waits until it runs — a few minutes. An instance that does not stop is **not** started again; an instance that does not come back says so. In both cases the message gives the state it was left in, to look at in Server Manager. An instance found stopped is simply started. |
+
+Everything goes through Server Manager's REST API: nothing is installed on the JD Edwards servers.
+
+The **Instances watch** job asks every enterprise, HTML and AIS server for its state and for the console's own health checks, keeps what is wrong and alerts; it can also restart an instance whose checks fail, within guards. It is described in [Jobs](../jobs.md).
 
 ---
 
@@ -238,13 +323,14 @@ Provisioning (create, register or delete an instance), passwords, TLS, users and
 
 ## Access \{#access\}
 
-Each screen shows to the roles that hold its menu entry. A raw service of the catalogue needs the permission `api:jde_server_manager:<service>` (rule type **API endpoint** in a role's *Beyond the menus* rules): grant the reading ones widely, those that change the platform — the cache clearing of the row menus included — to the platform team only.
+Each screen shows to the roles that hold its menu entry. **Start this instance** and **Stop this instance** call the services `sm_startinstance` and `stopinstance` and need their API endpoint permission; **Restart this instance** runs with `plugin:nomajde.instances:*`, which the predefined roles **Platform operator** and **Administrator** hold. A raw service of the catalogue needs the permission `api:jde_server_manager:<service>` (rule type **API endpoint** in a role's *Beyond the menus* rules): grant the reading ones widely, those that change the platform — the cache clearing of the row menus included — to the platform team only.
 
 ---
 
 ## Tips & best practices \{#tips\}
 
 - Start with **Instances**: an instance that is not `RUNNING` explains an empty line in the other screens.
+- Prefer **Restart this instance** to a stop followed by a start: it waits for the stop to be over, where a start sent too early does nothing.
 - In **Server processes**, sort on **Outstanding requests** or **CPU** to find the kernel that holds a queue; sort on **Process state** to bring together the *Zombie* processes — those that ended without being cleaned up.
 - In **Business functions**, sort on **System errors** or **Timeouts** after a deployment: a function that fails on one web server only points at that server.
 - **Web and AIS servers** — a heap used close to its maximum over several refreshes is the signal to look at before the users call.

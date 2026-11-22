@@ -1,6 +1,6 @@
 ---
 title: Planifications
-description: "Quand s'exécutent les tâches Nomaflow : la syntaxe cron à cinq zones et la numérotation des jours de la semaine, les fuseaux horaires, l'aperçu des prochaines exécutions, la vue Planning, les préréglages planifiables, et les planifications manquées enregistrées comme exécutions MISSED."
+description: "Quand s'exécutent les tâches Nomaflow : la planification exprimée en clair dans l'éditeur, la syntaxe cron à cinq zones et la numérotation des jours de la semaine, les fuseaux horaires, l'aperçu des prochaines exécutions, la vue Planning, les préréglages planifiables, et les planifications manquées enregistrées comme exécutions MISSED."
 keywords: [Nomaflow, cron, planification, fuseau horaire, vue Planning, préréglages, planifications manquées, MISSED, tolérance, Liberty Next]
 ---
 
@@ -50,9 +50,20 @@ Quand le jour du mois et le jour de la semaine sont tous deux renseignés, **les
 
 ## Dans l'éditeur de tâche \{#editor\}
 
-Le champ **Planification (cron)** de l'éditeur propose des choix tout faits — **Manuelle**, **Horaire**, **Quotidienne**, **Hebdomadaire**, **Mensuelle** — et un cron libre. Sous le champ, **Prochaines exécutions** liste les cinq prochaines exécutions dans le fuseau de la tâche ; la liste est recalculée peu après chaque modification, et une expression invalide y est signalée.
+Le champ **Planification (cron)** de l'éditeur exprime la planification en clair : d'abord la fréquence, puis les seuls champs que ce choix demande. L'éditeur enregistre l'expression cron correspondante.
 
-**Fuseau horaire** est un nom IANA (`Europe/Paris`, `America/New_York`). La planification est évaluée dans ce fuseau, heure d'été comprise : `0 2 * * *` en `Europe/Paris` s'exécute à 02:00 heure de Paris toute l'année.
+| Fréquence | Puis | Enregistrée sous la forme |
+|---|---|---|
+| *Seulement quand on la lance* | Rien : *Aucune planification — cette tâche ne s'exécute que sur déclenchement manuel.* | aucune planification |
+| *Toutes les quelques minutes* | Toutes les **N** `minutes` (de 1 à 59). | `*/15 * * * *` |
+| *Toutes les heures, ou toutes les quelques heures* | Toutes les **N** `heure(s), à` **M** `minutes après l'heure`. | `0 */2 * * *` |
+| *Certains jours, à heure fixe* | `à` une heure, puis les jours de la semaine sous forme de boutons, du lundi au dimanche — *Aucun jour choisi : tous les jours.* | `0 2 * * *` |
+| *Une fois par mois* | `le jour` **N** `à` une heure. | `0 7 1 * *` |
+| *Autre chose (saisi)* | L'expression cron elle-même — listes d'heures, intervalles, mois : voir [plus haut](#cron). | telle que saisie |
+
+Une planification enregistrée auparavant s'ouvre sur le choix qui l'exprime (`30 2 * * *` s'ouvre en *Certains jours, à heure fixe*, 02:30, aucun jour choisi) ; celle qu'aucun choix n'exprime s'ouvre en *Autre chose (saisi)*. Sous les champs, la planification est relue en clair — *chaque jour à 02:00*, *toutes les 15 minutes* — et **Prochaines exécutions** liste les cinq prochaines exécutions dans le fuseau de la tâche ; la liste est recalculée peu après chaque modification, et une expression invalide y est signalée.
+
+**Fuseau horaire** se choisit dans la liste des fuseaux (`Europe/Paris`, `America/New_York`). La planification est évaluée dans ce fuseau, heure d'été comprise : `0 2 * * *` en `Europe/Paris` s'exécute à 02:00 heure de Paris toute l'année.
 
 ---
 
@@ -188,7 +199,7 @@ Les planifications que la page ne sait pas exprimer en clair — listes d'heures
 
 ## Préréglages planifiables \{#schedulable-presets\}
 
-Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** et son **Fuseau horaire**, ainsi qu'une case **Planning activé**.
+Un **préréglage** est un jeu de paramètres d'exécution enregistré (paramètres, arguments des étapes, étapes activées ou non, niveau de journal), créé depuis la fenêtre **Exécuter avec des paramètres** avec **Enregistrer comme préréglage…**. Dans l'éditeur de tâche, la section **Préréglages & plannings** donne à chaque préréglage sa propre **Planification (cron)** — exprimée en clair comme celle de la tâche — et son **Fuseau horaire**, ainsi qu'une case **Planning activé** ; la même carte renomme le préréglage, modifie ce qu'il donne (journal, valeurs, étapes) et le supprime — voir [Créer une tâche](./create.md#presets).
 
 Le planificateur exécute alors la tâche selon cette planification avec les paramètres du préréglage : une tâche, plusieurs planifications, des entrées différentes — un chargement complet la nuit et un incrément toutes les heures pour le même ETL, par exemple.
 
@@ -222,7 +233,7 @@ La politique s'enregistre dans `jobs.toml`, sous `[meta.missed]`. Une heure manq
 | Option | Effet |
 |---|---|
 | La pastille **activée** / **désactivée** de la tâche dans la page des Tâches, ou **Mettre la planification en pause** sur la carte des tâches d'un tableau de bord | La planification propre de la tâche s'arrête aussitôt, sans rechargement. **Exécuter** fonctionne toujours ; les planifications des préréglages continuent, sauf si elles sont désactivées. |
-| **Manuelle** dans le champ Planification | La planification propre de la tâche est retirée. |
+| *Seulement quand on la lance* dans le champ Planification | La planification propre de la tâche est retirée. |
 | **Planning activé** décoché sur un préréglage | La planification de ce préréglage s'arrête. |
 
 ---

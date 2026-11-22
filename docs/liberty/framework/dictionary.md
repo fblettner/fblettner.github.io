@@ -99,7 +99,8 @@ It is edited from **Liberty Next → Data → Dictionary**, which holds five kin
   <rect x="388" y="438" width="31" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
   <text x="403.5" y="449.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">date</text>
   <rect x="500" y="158" width="582" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="512" y="180" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">[connectors.crm.entries.CUSTOMER_STATUS]</text>
+  <text x="512" y="180" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Customer status</text>
+  <text x="614" y="180" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">crm · CUSTOMER_STATUS</text>
   <rect x="512" y="190" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="558.0" y="204.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Find usages  3</text>
   <rect x="609" y="190" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -111,32 +112,26 @@ It is edited from **Liberty Next → Data → Dictionary**, which holds five kin
   <text x="542.5" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
   <rect x="577" y="222" width="45" height="24" rx="5" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="599.5" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rule</text>
-  <text x="669.5" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
-  <text x="750.0" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
+  <text x="662.0" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
+  <text x="737.0" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
   <line x1="512" y1="252" x2="1070" y2="252" stroke="#1f2937" strokeWidth="1"/>
-  <text x="512" y="270" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RULES</text>
-  <rect x="512" y="276" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="521" y="290.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">LOOKUP  Lookup</text>
-  <text x="771.0" y="290.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="797.0" y="270" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RULES VALUES</text>
-  <rect x="797.0" y="276" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="806.0" y="290.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_STATUSES</text>
+  <text x="512" y="270" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">KIND OF FIELD</text>
+  <rect x="512" y="276" width="558" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="290.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">LOOKUP</text>
+  <text x="566" y="290.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">A list read from a table</text>
   <text x="1056.0" y="290.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="512" y="312" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FALSE VALUE</text>
-  <rect x="512" y="318" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="797.0" y="312" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEFAULT</text>
-  <rect x="797.0" y="318" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="806.0" y="332.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">A</text>
-  <text x="512" y="354" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JUSTIFY</text>
-  <rect x="512" y="360" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="521" y="374.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">(default)</text>
-  <text x="771.0" y="374.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="797.0" y="354" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SIZE</text>
-  <rect x="797.0" y="360" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="512" y="398" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SENSITIVE</text>
-  <rect x="512" y="409" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="529" y="418" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">disabled</text>
-  <text x="512" y="436" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOOKUP PARAMS</text>
+  <text x="512" y="310" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">What the field is: free text, a list, a yes / no box, a number given automatically… <tspan fill="#4a9eff">more</tspan></text>
+  <text x="512" y="330" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIST FROM A TABLE</text>
+  <rect x="512" y="336" width="558" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="350.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_STATUSES</text>
+  <text x="1056.0" y="350.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="512" y="378" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEFAULT VALUE</text>
+  <rect x="512" y="384" width="273" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="398.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">A</text>
+  <text x="797.0" y="378" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SENSITIVE DATA</text>
+  <rect x="797" y="389" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="814" y="398" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">disabled</text>
+  <text x="512" y="436" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIST PARAMETERS</text>
   <rect x="512" y="442" width="558" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="521" y="456.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">TYPE = CUSTOMER</text>
   <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -165,11 +160,11 @@ It is edited from **Liberty Next → Data → Dictionary**, which holds five kin
   <line x1="1120" y1="197.0" x2="1070" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
   <rect x="1120" y="250" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rule tab</text>
-  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rule, its value, default…</text>
+  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">kind of field, its list, default…</text>
   <line x1="1120" y1="267.0" x2="622" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
   <rect x="1120" y="430" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="445" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lookup params</text>
-  <text x="1130" y="458" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values for the lookup's :params</text>
+  <text x="1130" y="445" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">List parameters</text>
+  <text x="1130" y="458" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values for the list's :params</text>
   <line x1="1120" y1="447.0" x2="1070" y2="453" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
 </svg>
 
@@ -196,29 +191,29 @@ A query of the `sales` connector looks for an entry in the `sales` scope first, 
 
 A column of a query picks up the entry whose key matches its name (`CUSTOMER_STATUS`), or the entry named in its `dd` field when the names differ (an empty `dd` opts out). A label or format set on the column itself takes precedence over the entry's. See [Connectors → Schema discovery and column hints](./connectors.md#schema-discovery-and-column-hints).
 
-On a screen, a column can also switch off the rule it inherits by setting the rule `DISABLED` — see [Rules](#rules).
+On a screen, a column can also switch off the kind of field it inherits with *Free text, whatever the dictionary says* — see [Kinds of field](#rules).
 
 ---
 
 ## Entries \{#entries\}
 
-The left-hand list shows each entry's key with its label underneath, and a filter field. Entry keys are written in upper case. The picked entry opens on the right under its full name (`[connectors.crm.entries.CUSTOMER_STATUS]`), its form split into tabs:
+The left-hand list shows each entry's key with its label underneath, and a filter field. Entry keys are written in upper case. The picked entry opens on the right under its label, followed by its scope and its key (*Customer status* `crm · CUSTOMER_STATUS`), its form split into tabs. Each field has one short sentence of help under it; **more** opens the longer explanation.
 
 | Tab | Field | Effect |
 |---|---|---|
 | General | **Label** | The default label, used when no translation matches the user's language. |
 | General | **Format** | How the value is displayed and entered — see [Formats](#formats). |
 | General | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
-| Rule | **Rules** | The rule applied to the item — see [Rules](#rules). |
-| Rule | **Rules values** | The rule's argument: the true value for `BOOLEAN`, the enum for `ENUM`, the lookup for `LOOKUP`, the sequence for `SEQUENCE`, a SQL connector for `POOL`. The list changes with the rule. |
-| Rule | **False value** | `BOOLEAN` only: the value written when the box is unticked. Blank infers it from the true value (`Y` → `N`, `1` → `0`, `true` → `false`); any other true value writes NULL. |
-| Rule | **Default** | The initial value when a new row is added. |
-| Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
-| Rule | **Size** | The stored width of the item, used with **Justify** when the physical column is wider. |
-| Rule | **Sensitive** | Marks the item as sensitive data — see [Sensitive data](#sensitive). |
-| Rule | **Lookup params** | Fixed values for the `:params` of the lookup's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the lookup declares. |
+| Rule | **Kind of field** | What the field is, in plain words — see [Kinds of field](#rules). |
+| Rule | the kind's own field | Shown only for a kind that needs one, under the name of what it is for that kind: **Value that means yes**, **List of values**, **List from a table**, **Numbering rule**, **Only the databases of**. The list changes with the kind. |
+| Rule | **Value for no** | *A yes / no box* only: the value written when the box is unticked. Blank infers it from the value that means yes (`Y` → `N`, `1` → `0`, `true` → `false`); any other value writes NULL. |
+| Rule | **Default value** | The initial value when a new row is added. |
+| Rule | **Sensitive data** | Marks the item as sensitive data — see [Sensitive data](#sensitive). |
+| Rule | **List parameters** | *A list read from a table* only: fixed values for the `:params` of the list's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the list declares. |
+| Advanced | **Align when saving** | For fixed-width character columns: right-aligned and padded with spaces, or with zeros. Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
+| Advanced | **Stored width** | The stored width of the item, used with **Align when saving** when the physical column is wider. |
+| Advanced | **Keep on upgrade** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
 | Translations | one line per language | The label in that language. |
-| Advanced | **Override** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
 
 The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Renaming an entry, a lookup or a sequence updates its references in the other configuration files (screens, connectors, dictionary) and reloads; it asks to save pending changes first.
 
@@ -241,26 +236,28 @@ For `url`, `email` and `color`, any other value stays plain text, and sorting, f
 
 The **Framework** tab can add values to this list.
 
-### Rules \{#rules\}
+### Kinds of field \{#rules\}
 
-| Rule | Effect |
-|---|---|
-| `BOOLEAN` | The value shows as a tick or a cross, and the form shows a check box. **Rules values** gives the true value (`Y`, `1`, `01`, `true`, `T`); **False value** the other one. |
-| `ENUM` | The code shows with its label from the enum named in **Rules values**; the form offers the enum's values. |
-| `LOOKUP` | The code shows with its label from the lookup named in **Rules values**; the form offers the lookup's rows in a searchable list. |
-| `SEQUENCE` | On insert, the server fills the column with the next number of the sequence named in **Rules values**, inside the same transaction. |
-| `LOGIN` | On every insert or update, the server writes the signed-in user's name, in upper case, whatever the form sent. The form shows it already filled when a row is added. |
-| `SYSDATE` | On insert or update, the server writes the current date and time (server local time) when no value was sent. The form shows today's date when a row is added. |
-| `PASSWORD` | On write, the server encrypts the value with the master key (`ENC:…`) so that it can be decrypted when used — for connection passwords stored in a table. A blank password on update leaves the stored value unchanged. Pair it with the `password` format to mask the field. |
-| `POOL` | The field names a pool of the installation (shown as *Database pool (of this installation)*): wherever a list of values is drawn — grid, record form, filter —, it is a dropdown of the pools, so a setting that names a pool is picked, not typed. **Rules values** blank offers every pool; a SQL connector there offers only the pools it may run on — its own first, then its other environments. See [Pools](./connectors.md#pools). |
-| `DEFAULT` | On insert or update, the **Default** value is written when the column comes empty. |
-| `DISABLED` | Set on a screen column: cancels the rule inherited from the entry for that screen (for example an import screen whose rows already carry their dates). |
+**Kind of field** is one choice in plain words; the code stays shown beside it. No kind picked: a field typed freely.
 
-The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
+| Kind of field | Code | Effect |
+|---|---|---|
+| *A yes / no box* | `BOOLEAN` | The value shows as a tick or a cross, and the form shows a check box. **Value that means yes** gives the true value (`Y`, `1`, `01`, `true`, `T`); **Value for no** the other one. |
+| *A fixed list of values* | `ENUM` | The code shows with its label from the enum named in **List of values**; the form offers the enum's values. |
+| *A list read from a table* | `LOOKUP` | The code shows with its label from the lookup named in **List from a table**; the form offers the lookup's rows in a searchable list. On a screen column, **New list from a table…** makes the lookup in one step — see [Columns](./build/screens/columns.md#list-from-table). |
+| *A number given automatically* | `SEQUENCE` | On insert, the server fills the column with the next number of the sequence named in **Numbering rule**, inside the same transaction. |
+| *The signed-in user* | `LOGIN` | On every insert or update, the server writes the signed-in user's name, in upper case, whatever the form sent. The form shows it already filled when a row is added. |
+| *Today's date* | `SYSDATE` | On insert or update, the server writes the current date and time (server local time) when no value was sent. The form shows today's date when a row is added. |
+| *A password (hidden, stored encrypted)* | `PASSWORD` | On write, the server encrypts the value with the master key (`ENC:…`) so that it can be decrypted when used — for connection passwords stored in a table. A blank password on update leaves the stored value unchanged. Pair it with the `password` format to mask the field. |
+| *A database of this installation* | `POOL` | The field names a pool of the installation: wherever a list of values is drawn — grid, record form, filter —, it is a dropdown of the pools, so a setting that names a pool is picked, not typed. **Only the databases of** blank offers every pool; a SQL connector there offers only the pools it may run on — its own first, then its other environments. See [Pools](./connectors.md#pools). |
+| *Free text; left empty, it takes its default value* | `DEFAULT` | On insert or update, the **Default value** is written when the column comes empty. |
+| *Free text, whatever the dictionary says* | `DISABLED` | Set on a screen column: cancels the kind inherited from the entry for that screen (for example an import screen whose rows already carry their dates). |
+
+The kinds applied by the server (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
 
 ### Sensitive data \{#sensitive\}
 
-**Sensitive**, in the *Rule* tab of an entry, says the item holds sensitive data — a person's name, an e-mail address, a bank identifier. Where the installation hides sensitive data from the AI assistant, every column carrying the item is left out of what the assistant is given, in the drawer and through MCP. It changes nothing in the screens. A screen column has the same flag, for a column without an item. See [Sensitive data](./ai-data-sent.md#sensitive).
+**Sensitive data**, in the *Rule* tab of an entry, says the item holds sensitive data — a person's name, an e-mail address, a bank identifier. Where the installation hides sensitive data from the AI assistant, every column carrying the item is left out of what the assistant is given, in the drawer and through MCP. It changes nothing in the screens. A screen column has the same flag, for a column without an item. See [Sensitive data](./ai-data-sent.md#sensitive).
 
 ### Audit columns \{#form-layer-defaults\}
 
@@ -286,10 +283,10 @@ An enum is a fixed list of codes, for values known in advance (`L` / `M` / `H` f
 | Field | Effect |
 |---|---|
 | **Label** | The name of the list. |
-| **Values** | One line per code: **Value** (the stored code), **Label** (the text shown), and **Translations** of the label. |
-| **Override** | As for entries. |
+| **Values** | One line per code: **Code** (the stored code), **Label** (the text shown in its place), and **Translations** of the label. |
+| **Keep on upgrade** | As for entries. |
 
-An entry uses it with **Rules** = `ENUM` and **Rules values** = the enum's id.
+An entry uses it with **Kind of field** = *A fixed list of values* and **List of values** = the enum.
 
 ---
 
@@ -300,18 +297,18 @@ A lookup is a query whose rows turn a code into a label — for values held in a
 | Field | Effect |
 |---|---|
 | **Description** | What the lookup returns. |
-| **Connector** | The connector of the query. Blank uses the connector of the column that references it. |
+| **Application** | The application whose query feeds the list. Blank uses the one of the column that references it. |
 | **Query** | The query returning the codes and labels. Buttons next to it edit the query, clone it, create one, or **generate** it from a table. |
-| **Value** | The result column holding the code. |
-| **Label** | The result column shown instead of the code. |
-| **Union sources** | Further queries, possibly on other connectors or databases, whose rows are added to the list. Each must return the same columns as the main query. |
+| **Code column** | The result column holding the code. |
+| **Label column** | The result column shown instead of the code. |
+| **More sources** | Further queries, possibly on other connectors or databases, whose rows are added to the list. Each must return the same columns as the main query. |
 | **Key columns** | Columns that make the code unique when the same code has different labels (a code per company, for instance): the grid matches them against the row's columns of the same name. |
-| **Return params** | Columns that a screen column can copy into other fields of the form when a row is picked. |
-| **Display fields** | Extra columns shown next to the code and label in the list, to tell similar rows apart. |
-| **Filter fields** | Display fields that get filter chips at the top of the list. |
-| **Override** | As for entries. |
+| **Columns handed back** | Columns that a screen column can copy into other fields of the form when a row is picked. |
+| **Extra columns shown** | Extra columns shown next to the code and label in the list, to tell similar rows apart. |
+| **Columns to filter on** | Extra columns that get filter chips at the top of the list. |
+| **Keep on upgrade** | As for entries. |
 
-The lookup's query declares its own `:params`; their values come from the entry's **Lookup params**, or from the screen column. Cascading lists are built on the screen — see [Sequences and lookups](./build/queries/sequences-and-lookups.md).
+The lookup's query declares its own `:params`; their values come from the entry's **List parameters**, or from the screen column. Cascading lists are built on the screen — see [Sequences and lookups](./build/queries/sequences-and-lookups.md).
 
 ---
 
@@ -322,11 +319,11 @@ A sequence is a query that returns the next number, typically `SELECT COALESCE(M
 | Field | Effect |
 |---|---|
 | **Description** | What the sequence numbers. |
-| **Connector** | The connector of the query. Blank uses the connector that fires it. |
+| **Application** | The application whose query gives the number. Blank uses the one that fires it. |
 | **Query** | The query returning the next number. Its `:params` take their values from the row being inserted. |
-| **Dd id** | Fires the sequence for every column whose entry has this key, even without the `SEQUENCE` rule. Blank limits it to the entries pointing at it. |
-| **Params** | The parameters the query expects — for information. |
-| **Override** | As for entries. |
+| **Dictionary item** | Fires the sequence for every column carrying this item, even without the kind *A number given automatically*. Blank limits it to the entries pointing at it. |
+| **Parameters** | The parameters the query expects — for information. |
+| **Keep on upgrade** | As for entries. |
 
 The sequence only fires on insert, inside the insert's transaction.
 
@@ -334,7 +331,7 @@ The sequence only fires on insert, inside the insert's transaction.
 
 ## Framework \{#framework\}
 
-The builders' drop-down lists (formats, rules, datasource types, HTTP methods, column alignments…) come from lists shipped with the framework. **Override framework enum** copies one of them here to change it: the copy replaces the shipped list. Removing the override brings back the shipped values.
+The builders' drop-down lists (formats, kinds of field, datasource types, HTTP methods, column alignments…) come from lists shipped with the framework. **Override framework enum** copies one of them here to change it: the copy replaces the shipped list. Removing the override brings back the shipped values.
 
 ---
 
@@ -370,7 +367,7 @@ The builders' drop-down lists (formats, rules, datasource types, HTTP methods, c
 
 ## Saving
 
-**Save** checks every entry, enum, lookup and sequence, writes the file and reloads the configuration: screens show the new labels on their next refresh. **Discard** drops the unsaved changes. Settings is open to superusers only.
+**Save** checks every entry, enum, lookup and sequence, writes the file and reloads the configuration: screens show the new labels on their next refresh. A refused save writes nothing and lists what to correct, each line with **Open** to go to the entry, enum, lookup or sequence in question — see [Saving](./configuration/settings-ui.md#save). **Discard** drops the unsaved changes. Settings is open to superusers only.
 
 Translated labels follow the user's language; how it is chosen is described in [Translations](./apps/i18n.md).
 

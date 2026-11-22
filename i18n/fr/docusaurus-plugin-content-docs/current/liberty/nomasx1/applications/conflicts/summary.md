@@ -126,13 +126,13 @@ C'est l'écran ouvert au début d'une revue trimestrielle et celui que l'on capt
   <text x="1087" y="361" fill="#94a3b8" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">«  ‹  1 2 … 3  ›  »</text>
   <rect x="256" y="225.0" width="169" height="98" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
   <rect x="260" y="231.0" width="161" height="20" rx="4" fill="rgba(74,158,255,0.10)"/>
-  <text x="268" y="245.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Users</text>
+  <text x="268" y="245.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les utilisateurs</text>
   <text x="415" y="245.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="267.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Roles</text>
+  <text x="268" y="267.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les rôles</text>
   <text x="415" y="267.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="289.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Objects</text>
+  <text x="268" y="289.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les objets</text>
   <text x="415" y="289.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="311.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Details</text>
+  <text x="268" y="311.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les détails</text>
   <text x="415" y="311.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
   <rect x="215.0" y="398" width="290.0" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="225.0" y="413" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Processus</text>
@@ -196,10 +196,10 @@ Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre so
 
 | Action | Vers où |
 |---|---|
-| **Display Users** | Liste des utilisateurs en conflit pour le couple `(Processus, Risque)` sélectionné. |
-| **Display Roles** | Paires de rôles incompatibles pour le couple `(Processus, Risque)` sélectionné. |
-| **Display Objects** | Objets source qui supportent le conflit. |
-| **Display Details** | Jeu *Conflits → Détails* filtré sur le `(Processus, Risque)` sélectionné. |
+| **Afficher les utilisateurs** | Liste des utilisateurs en conflit pour l'application, le processus et le risque de la ligne. |
+| **Afficher les rôles** | Paires de rôles incompatibles pour l'application, le processus et le risque de la ligne. |
+| **Afficher les objets** | Objets source qui supportent le conflit, pour la même ligne. |
+| **Afficher les détails** | Jeu *Conflits → Détails* filtré sur l'application, le processus et le risque de la ligne. |
 
 ---
 

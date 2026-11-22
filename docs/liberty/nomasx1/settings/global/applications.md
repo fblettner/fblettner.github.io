@@ -212,7 +212,7 @@ Click **Add row** to declare a new application, or click a row to open it. The d
 
 | Field | What to enter |
 |---|---|
-| **Application ID** | Numeric identifier. Stays stable across the product — do not renumber it once the application is in use. |
+| **Application ID** | Numeric identifier, entered when the application is created and read-only on a saved application. It stays stable across the product. |
 | **Application Name** | Friendly label shown on every screen and export. |
 | **Application Type** | Kind of source system, picked from a list (`JDE` — JD Edwards…). Drives which collection steps apply. |
 | **Database type** | Database technology, picked from a list (`ORACLE` — Oracle…). |
@@ -244,9 +244,11 @@ Object Usage Tracking writes several thousand rows a day. Once Nomasx-1 has aggr
 
 The schema values come from the JDE installation — the JDE administrator is the right person to ask.
 
+The tab is saved with the application, **Thick LOB read** included — also on an application created without JD Edwards settings: filling the tab later and saving the application creates them.
+
 ### Tab 3 — Task Views
 
-Grid of the JDE task views (the roots of the menu tree, such as *EnterpriseOne Menus*): **Task ID**, **Task Name** and **Collect Security (Y/N)**. Only the task views ticked here are walked by the security build — the rights of the *Menus* and *Rights* screens start from them. **Add row** declares another task view.
+Grid of the JDE task views (the roots of the menu tree, such as *EnterpriseOne Menus*): **Task ID**, **Task Name** and **Collect Security (Y/N)**. Only the task views ticked here are walked by the security build — the rights of the *Menus* and *Rights* screens start from them. **Add row** declares another task view; on a saved line, *Task ID* is read-only.
 
 ### Tab 4 — LDAP \{#tab-ldap\}
 
@@ -260,7 +262,7 @@ LDAP / Active Directory scope of the application, read by the LDAP collection.
 
 The directory itself — its server, the account and the password the collection binds with — is the application's **Pool** (tab *Application*): a pool of type *LDAP directory*, created under **Liberty Next → Administer → Pools** (`ldap://`, or `ldaps://` for an encrypted connection; see [An LDAP directory](../../../framework/connectors.md#pool-ldap)). When **LDAP Context** is blank, the collection starts from the pool's base DN. An LDAP application that names no pool keeps reading the host, port, user and password stored on its row; naming a pool takes over.
 
-The same settings are on their own screen, [LDAP](./ldap.md).
+Like the JD Edwards tab, the LDAP tab of an application created without it is saved when it is filled later. The same settings are on their own screen, [LDAP](./ldap.md).
 
 ### Tab 5 — Activity Log
 
@@ -273,6 +275,8 @@ Grid of the rules that decide **what the activity collection watches** to feed *
 | **Name** | Name of the role, schema, table or user. |
 | **ACL Rule** | `INCLUDE`, `EXCLUDE` or `AUDIT`. |
 
+*ACL Type*, *ACL Application Type* and *Name* identify the rule: read-only on a saved line, where only *ACL Rule* changes.
+
 ### Tab 6 — Audit Trail
 
 Grid holding **the connection Nomasx-1 uses to read the Oracle archive logs** of the application — one row — read by the collection that feeds *Database → Audit Trail* and *Audit Lookup*.
@@ -283,6 +287,8 @@ Grid holding **the connection Nomasx-1 uses to read the Oracle archive logs** of
 | **Host** / **Port** / **Database** | Where that database is (`1521` on a standard Oracle install). |
 | **Last SCN** | *System Change Number* the next extraction resumes from. |
 | **Last Timestamp** | Time of the last extraction. |
+
+The line belongs to the application: its *Application ID* is read-only once saved.
 
 ### Tab 7 — Audit Columns
 

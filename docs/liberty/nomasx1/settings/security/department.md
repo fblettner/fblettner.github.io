@@ -55,7 +55,7 @@ It is intentionally simple — just the two text columns. The read-only [Securit
   <text x="1048.0" y="126.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩ Export ▾</text>
   <rect x="233" y="144" width="854" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
   <text x="243" y="159.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">GROUP</text>
-  <text x="543" y="159.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DÉPARTMENT</text>
+  <text x="543" y="159.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DEPARTMENT</text>
   <rect x="233" y="170" width="854" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
   <text x="243" y="184.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Finance</text>
   <text x="543" y="184.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Accounting</text>
@@ -109,7 +109,7 @@ It is intentionally simple — just the two text columns. The read-only [Securit
 | Column | Source | What it tells you |
 |---|---|---|
 | **Group** | `LDAPD_GROUP` — text. | High-level functional bucket. |
-| **Départment** | `LDAPD_DEPARTEMENT` — text. | AD department value. Must match the `department` attribute on the LDAP entries. |
+| **Department** | `LDAPD_DEPARTEMENT` — text. | AD department value. Must match the `department` attribute on the LDAP entries. |
 
 ---
 
@@ -133,7 +133,7 @@ Click **Add row** to declare a new pair, or click a row to open it; **Bulk edit*
   <text x="235.0" y="92" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GROUP</text>
   <rect x="235.0" y="98" width="850.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="245.0" y="112.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Finance</text>
-  <text x="235.0" y="138" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DÉPARTMENT</text>
+  <text x="235.0" y="138" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEPARTMENT</text>
   <rect x="235.0" y="144" width="850.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="245.0" y="158.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Accounting</text>
   <line x1="215" y1="192" x2="1105" y2="192" stroke="#1f2937" strokeWidth="1"/>
@@ -160,7 +160,9 @@ Click **Add row** to declare a new pair, or click a row to open it; **Bulk edit*
 | Field | What to enter |
 |---|---|
 | **Group** | Free text. The functional bucket that ties departments together. |
-| **Départment** | Free text. Must match the `department` attribute on an LDAP entry, character for character. |
+| **Department** | Free text. Must match the `department` attribute on an LDAP entry, character for character. |
+
+Both fields can be changed on a saved line: saving moves the department to another group, or corrects its spelling.
 
 ---
 

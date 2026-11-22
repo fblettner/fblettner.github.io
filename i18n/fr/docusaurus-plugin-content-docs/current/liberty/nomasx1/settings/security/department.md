@@ -160,6 +160,8 @@ Il est volontairement simple — uniquement les deux colonnes texte. L'écran [S
 | **Groupe** | Texte libre. Pôle fonctionnel qui regroupe les départements. |
 | **Département** | Texte libre. Doit correspondre à l'attribut `department` d'une entrée LDAP, à la lettre près. |
 
+Les deux champs se modifient sur une ligne enregistrée : l'enregistrement rattache le département à un autre groupe, ou en corrige l'orthographe.
+
 ---
 
 ## Conseils & bonnes pratiques

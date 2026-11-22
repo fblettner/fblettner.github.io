@@ -13,7 +13,7 @@ A **connector** is how Liberty Next reaches a data source. Every screen, chart, 
 | **SQL** | A database, through a [pool](#pools). | Named **queries**, in four kinds: tables, queries, sequences, lookups. |
 | **API** | A web API (REST, JSON), through an [HTTP server pool](#pool-http) or its own address. | Named **endpoints**: method, path, headers, body, response mapping. |
 
-A connector with a menu and **Show In Switcher** on is an **app**, picked in the switcher — see [Apps](./apps/overview.md).
+A connector with a menu and **Show in the application list** on is an **app**, picked in the switcher — see [Apps](./apps/overview.md).
 
 ---
 
@@ -348,13 +348,13 @@ The **Settings** card of a SQL connector holds its connection settings.
 
 | Field | Effect |
 |---|---|
-| **Pool** | The pool the queries run on — a dropdown of the pools defined in *Liberty Next → Administer → Pools*. The connector takes the pool's address, credentials and database type. |
-| **Pools** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
-| **Show In Switcher** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
-| **Home** | The menu entry opened when the application is picked. |
-| **Home By Role** | A landing menu entry per role: a user lands on the entry of the first of their roles listed here, otherwise on **Home**. |
-| **Max Rows** | Default row limit of a read; otherwise the pool's, then 1 000. A screen's or a request's limit wins. |
-| **Dd Prefix** | Length of the table prefix in column names (JD Edwards: `2`, so `ABCO`, `MCCO` and `SDCO` all carry the dictionary item `CO`). Used by a role's [data scope](./build/secure/roles-and-permissions.md#data-scope). `0`: column names are the items. |
+| **Database** | The pool the queries run on — a dropdown of the pools defined in *Liberty Next → Administer → Pools*. The connector takes the pool's address, credentials and database type. |
+| **Other databases** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
+| **Show in the application list** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
+| **Home page** | The menu entry opened when the application is picked. |
+| **Home page per role** | A landing menu entry per role: a user lands on the entry of the first of their roles listed here, otherwise on **Home page**. |
+| **Rows read at most** | Default row limit of a read; otherwise the pool's, then 1 000. A screen's or a request's limit wins. |
+| **Column prefix length** | Length of the table prefix in column names (JD Edwards: `2`, so `ABCO`, `MCCO` and `SDCO` all carry the dictionary item `CO`). Used by a role's [data scope](./build/secure/roles-and-permissions.md#data-scope). `0`: column names are the items. |
 
 ### Query editor
 
@@ -522,7 +522,7 @@ An API connector calls a web API. Its server — address, account, secrets, TLS 
 
 | Stage | Content |
 |---|---|
-| **Connection** | Section *App*: **Show in switcher**, **Home**. Section *Connection*: **Server** — an HTTP server pool, or *Set on this connector*; with a pool, the address, the account, the password or token and the TLS check are read from it. Without one, **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted) and **SSL Verify** (*true*, *false*, or a variable such as `${API_VERIFY_SSL:-true}`, kept as written) are set here. **Timeout (ms)** in both cases. Section *Default headers*: **Headers**, `Key:Value` pairs separated by semicolons, sent with every request. |
+| **Connection** | Section *App*: **Show in switcher**, **Home**, **Home per role** — a different home page for the users of a role: the role and the menu entry are both picked, one line per role. Section *Connection*: **Server** — an HTTP server pool, or *Set on this connector*; with a pool, the address, the account, the password or token and the TLS check are read from it. Without one, **Base URL** (`https://api.example.com`, `${VARIABLE}` accepted) and **SSL Verify** (*true*, *false*, or a variable such as `${API_VERIFY_SSL:-true}`, kept as written) are set here. **Timeout (ms)** in both cases. Section *Default headers*: **Headers**, `Key:Value` pairs separated by semicolons, sent with every request. |
 | **Authentication** | **Method**: *None*, *Basic* (username and password), *Bearer* (static token), *API Key* (header name and key), *OAuth2 / JWT* (token endpoint path, body template and Content-Type, token request headers, token field, token lifetime), *Each user as himself (a signed token)* — each call made as the signed-in user, see [Each call as the signed-in user](#api-user-jwt). When the connector names a server, only the method and its own settings are set here: the account, the password or token, the signing key and its certificate are the pool's. Otherwise the method's fields are here; the secrets are encrypted when saved, and the password, the token and the signing key have a show / hide button. The card names the method and what it still lacks: *no user yet*, *no token, no token address*, *no token address*, *no signing key yet*. |
 | **Environments** | One server per environment, for a connector used with several JDE environments — see [One server per environment](#api-environments). |
 | **Endpoints** | The named endpoints — see [API endpoints](./build/api-endpoints.md). |

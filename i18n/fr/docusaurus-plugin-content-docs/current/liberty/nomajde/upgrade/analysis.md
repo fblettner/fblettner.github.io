@@ -1,7 +1,7 @@
 ---
 title: Préparer la montée de version
 description: "La page Préparer la montée de version de Nomajde : charger la liste d'objets publiée par Oracle pour une version ou une mise à jour de JD Edwards EnterpriseOne, lancer l'analyse d'un path code et suivre sur une seule page ce qu'il faut reprendre, avec quelle complexité, en combien de jours, dans quel ordre, par qui et où en est le travail — avec les dépendances, les objets définis par l'utilisateur à retester, les objets restés dans d'autres path codes et la liste d'Oracle."
-keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, reprise, liste d'objets, UN9, path code, Object Librarian, objets spécifiques, complexité, jours, vagues, dépendances, références croisées, UDO, objets définis par l'utilisateur]
+keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, reprise, liste d'objets, UN9, path code, Object Librarian, objets spécifiques, complexité, jours, vagues, dépendances, références croisées, UDO, objets définis par l'utilisateur, copie, original, rapport hebdomadaire, PDF]
 ---
 
 # Préparer la montée de version
@@ -25,10 +25,12 @@ keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, r
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PD920 par rapport à UN9 · analysé le 2026-11-22 — Ce qu'il y a à reprendre…</text>
   <rect x="1027" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1053.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
-  <rect x="912" y="34" width="107" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="965.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Lancer l'analyse</text>
-  <rect x="749" y="34" width="155" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="826.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Charger la liste d'Oracle</text>
+  <rect x="847" y="34" width="172" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="933.0" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport hebdomadaire (PDF)</text>
+  <rect x="732" y="34" width="107" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="785.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Lancer l'analyse</text>
+  <rect x="569" y="34" width="155" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="646.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Charger la liste d'Oracle</text>
   <line x1="232" y1="74" x2="1088" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="88" width="114.9" height="52" rx="8" fill="#0d1220" stroke="#4a9eff" strokeWidth="1"/>
   <text x="248.0" y="107" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">86</text>
@@ -192,7 +194,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, montée de version, upgrade, retrofit, r
   <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Les deux tâches</text>
   <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chacune s'ouvre pré-remplie</text>
-  <line x1="1120" y1="47.0" x2="965.5" y2="34" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upa-arrow)"/>
+  <line x1="1120" y1="47.0" x2="785.5" y2="34" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upa-arrow)"/>
   <rect x="1120" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Vos UDO</text>
   <text x="1130" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à retester après la montée</text>
@@ -217,9 +219,10 @@ L'en-tête indique le path code, la liste comparée et la date de l'analyse. Qua
 |---|---|
 | **Charger la liste d'Oracle** | Ouvre la [tâche de chargement de la liste d'objets d'Oracle](#load). |
 | **Lancer l'analyse** | Ouvre la [tâche d'analyse](#build), avec le path code et la liste déjà renseignés. |
+| **Rapport hebdomadaire (PDF)** | Télécharge le [rapport hebdomadaire](#weekly-report) du path code affiché, dans la langue de la page. |
 | **Relire** | Relit la page — après une exécution, ou quand un collègue a modifié la planification. |
 
-Chaque bouton n'apparaît qu'aux utilisateurs autorisés à lancer sa tâche. Avant la première analyse, la page l'indique et renvoie aux deux étapes.
+Les deux boutons de tâche n'apparaissent qu'aux utilisateurs autorisés à lancer leur tâche ; **Rapport hebdomadaire (PDF)** apparaît dès qu'une analyse existe. Avant la première analyse, la page l'indique et renvoie aux deux étapes.
 
 ### Les chiffres \{#figures\}
 
@@ -506,7 +509,7 @@ Un clic sur une ligne ouvre l'objet dans une fenêtre, au-dessus de la liste.
   <text x="280" y="382" fill="#64748b" fontSize="6.8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">NOTE</text>
   <rect x="280" y="387" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="290" y="400.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Règles de prix déplacées dans le nouvel écran</text>
-  <text x="280" y="420" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Votre complexité et vos jours sont appliqués par la prochaine analyse.</text>
+  <text x="280" y="420" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Votre complexité, vos jours et l'original que vous nommez sont appliqués par la prochaine analyse.</text>
   <line x1="261" y1="432" x2="939" y2="432" stroke="#1f2937" strokeWidth="1"/>
   <rect x="843" y="440" width="77" height="22" rx="5" fill="url(#upc-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="881.5" y="454.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
@@ -540,14 +543,14 @@ Un clic sur une ligne ouvre l'objet dans une fenêtre, au-dessus de la liste.
 
 | Partie | Contenu |
 |---|---|
-| **Ce que c'est** | Le type, la nature, l'original d'une copie, l'auteur et la date de la dernière modification. |
+| **Ce que c'est** | Le type, la nature, l'auteur et la date de la dernière modification ; pour une copie, son original, [la façon dont il a été trouvé](#original) et les autres objets dont elle pourrait être la copie (*pourrait aussi être*). |
 | **À reprendre** / **Pas de reprise** | La complexité, les jours, la vague, la date de modification par Oracle. |
 | **Dernière utilisation** | La dernière utilisation et le nombre d'utilisateurs — ou *aucune utilisation enregistrée*. |
 | **Attend**, **L'attendent**, **Utilise**, **Utilisé par** | Des liens : un clic ouvre cet objet dans la même fenêtre. |
 | **Objets définis par l'utilisateur posés dessus** | Les UDO de l'objet : nom, type et, s'il n'est pas livré par Oracle, l'utilisateur qui l'a créé. |
-| **Planification** | **Statut** (À faire, En cours, À tester, Terminé, Abandonné), **Affecté à**, **Début**, **Fin**, **Module**, **Complexité (la vôtre)**, **Jours (les vôtres)**, **Note**. |
+| **Planification** | **Statut** (À faire, En cours, À tester, Terminé, Abandonné), **Affecté à**, **Début**, **Fin**, **Module**, **Complexité (la vôtre)**, **Jours (les vôtres)**, **Copie de (votre choix)** — pour un objet qui n'est ni un objet standard modifié ni une table d'audit —, **Note**. |
 
-**Enregistrer** écrit la planification, puis la page est relue. La planification survit à chaque nouvelle analyse. Une complexité saisie dans **Complexité (la vôtre)** remplace la complexité calculée, et des jours saisis dans **Jours (les vôtres)** remplacent les jours calculés — les deux sont appliqués par la prochaine analyse. Sans le droit de modifier la planification, les champs restent grisés et une ligne l'indique.
+**Enregistrer** écrit la planification, puis la page est relue. La planification survit à chaque nouvelle analyse. Une complexité saisie dans **Complexité (la vôtre)** remplace la complexité calculée, des jours saisis dans **Jours (les vôtres)** remplacent les jours calculés, et un objet indiqué dans **Copie de (votre choix)** devient l'original de la copie — les trois sont appliqués par la prochaine analyse. Sans le droit de modifier la planification, les champs restent grisés et une ligne l'indique.
 
 ---
 
@@ -583,6 +586,23 @@ L'onglet **Autres path codes** liste les objets du client trouvés dans un autre
 ## Liste d'Oracle \{#oracle-list\}
 
 L'onglet **Liste d'Oracle** présente les objets qu'Oracle modifie, tels que chargés depuis son fichier. Une pastille par liste chargée, avec son nombre d'objets ; la liste de l'analyse est sélectionnée d'emblée. Colonnes : **Objet**, **Version**, **Description**, **Code système**, **Modifié le**, **À vous** — la nature de l'objet quand il figure dans l'analyse du client — et **Tel qu'écrit dans le fichier**. Un clic sur un objet du client ouvre sa fenêtre.
+
+---
+
+## Rapport hebdomadaire de montée de version \{#weekly-report\}
+
+**Rapport hebdomadaire (PDF)** télécharge un document destiné au comité de pilotage — **pas la liste des objets**, que la page donne déjà, mais ce qui a bougé et la suite :
+
+| Section | Contenu |
+|---|---|
+| **Où en est le travail** | Quatre chiffres — avancement, objets terminés, jours restants, prêts à démarrer —, les objets à reprendre et leurs jours, ce qui est terminé et abandonné ; ce qui a bougé depuis le dernier rapport conservé ; et une prévision : au rythme des quatre dernières semaines, la date à laquelle les jours restants seront épuisés. |
+| **Cette semaine** | Les objets terminés et démarrés sur les sept derniers jours, d'après les dates et les statuts saisis dans la planification, puis les objets en cours. |
+| **La suite** | Les objets **en retard** (date de fin dépassée), ceux **à terminer** dans les jours à venir et ceux **prêts à démarrer** — ceux qui débloquent le plus d'abord ; les objets restant à faire que personne ne porte. |
+| **Qui porte quoi** | Par personne, puis par module : les objets, les jours, ce qui est terminé, les jours restants. |
+| **Le reste à faire, semaine après semaine** | Un graphique des jours restants et des jours réalisés, à partir des chiffres que conserve chaque rapport. |
+| **Ce qui pourrait être laissé de côté** | Les applications et les états à reprendre qu'aucun utilisateur n'a lancés, et les jours qu'ils représentent. |
+
+Chaque liste s'arrête à vingt lignes et compte le reste. La prévision et « ce qui a bougé » demandent des chiffres conservés d'une semaine à l'autre : la tâche [Rapport hebdomadaire de montée de version](../jobs.md#report-upgrade) les conserve à chaque exécution, puis envoie le document aux développeurs chaque lundi. La couverture peut porter le nom du client quand c'est la tâche qui produit le document.
 
 ---
 
@@ -624,7 +644,7 @@ Ces éléments demandent que les références croisées et leur étape UDO aient
 |---|---|---|
 | **Audit Trail** | Une table d'audit de la base. | Non — complexité `Configuration`, 0 jour. |
 | **Custom** | Un objet créé par le client, sans original JD Edwards. | Non — `Retrofit not needed`. |
-| **Copied** | Une copie d'un objet standard : son original est retrouvé grâce à l'identifiant d'application conservé par la copie. | Oui si Oracle a modifié **l'original** dans la liste. |
+| **Copied** | Une copie d'un objet standard : son original est retrouvé comme [indiqué ci-dessous](#original). | Oui si Oracle a modifié **l'original** dans la liste. |
 | **Modified** | Un objet standard modifié par le client. | Oui si Oracle l'a modifié dans la liste. |
 
 Un objet qu'Oracle n'a pas modifié est `Not updated` : rien à reprendre. Pour les autres, la complexité et les jours dépendent du type d'objet :
@@ -634,6 +654,19 @@ Un objet qu'Oracle n'a pas modifié est `Not updated` : rien à reprendre. Pour 
 | Applications, états | `Hard` | 3 |
 | Fonctions métier | `Medium` | 1 |
 | Tout le reste | `Easy` | 0,5 |
+
+### Comment l'original d'une copie est retrouvé \{#original\}
+
+Une copie doit être reprise quand Oracle modifie son original, mais rien dans JD Edwards n'indique « cet objet est une copie de celui-là ». L'analyse recherche l'original comme le ferait un consultant, de la méthode la plus fiable à la moins fiable, parmi les objets standard **du même type** :
+
+| Ordre | Trouvé par | Comment |
+|---|---|---|
+| 1 | **Votre choix** | L'objet indiqué dans **Copie de (votre choix)** — dans la [fenêtre de l'objet](#object), ou dans la colonne du même nom de l'écran *Montée de version — objets à reprendre* (ouvert depuis le modèle *Upgrade analysis* de l'explorateur de données), où la liste fournie par un client peut être collée dans la grille. |
+| 2 | **Son identifiant d'application** | L'identifiant d'application que la copie a conservé de son original. |
+| 3 | **Son nom** | Le nom sans le code système du client : `P554210` est `P4210`, `R5543500` est `R43500`. |
+| 4 | **Sa description** | La même description qu'un seul objet standard de son type — une description trop courte pour être significative n'est pas retenue. |
+
+Seul un objet ajouté par le client peut être une copie. La fenêtre de l'objet indique comment son original a été trouvé — *votre choix*, *trouvé par son identifiant d'application*, *trouvé par son nom*, *trouvé par sa description* — et, quand plusieurs objets ont été rencontrés, les autres possibles (*pourrait aussi être*). Un choix saisi ou collé est appliqué par la prochaine exécution de l'analyse.
 
 ---
 
@@ -645,7 +678,7 @@ Le modèle **Upgrade analysis** de l'[explorateur de données](../data-explorer.
 
 ## Accès \{#access\}
 
-La page est visible des rôles qui détiennent son entrée de menu, avec les permissions `page:nomajde:upgrade` et `plugin:nomajde.upgrade_view:*`. Enregistrer la planification demande `sql:nomajde:jde_upg_object_put` ; les deux boutons demandent la permission `job:` de leur tâche. La connexion utilisée pour lire JD Edwards doit pouvoir lire les tables de l'Object Librarian et des objets centraux.
+La page est visible des rôles qui détiennent son entrée de menu, avec les permissions `page:nomajde:upgrade` et `plugin:nomajde.upgrade_view:*`. Enregistrer la planification demande `sql:nomajde:jde_upg_object_put` ; les deux boutons de tâche demandent la permission `job:` de leur tâche, et le rapport hebdomadaire le droit de lancer les rapports de Nomajde, que détiennent les rôles **Développeur** et **Administrateur**. La connexion utilisée pour lire JD Edwards doit pouvoir lire les tables de l'Object Librarian et des objets centraux.
 
 ---
 
@@ -658,6 +691,8 @@ La page est visible des rôles qui détiennent son entrée de menu, avec les per
 - Avant les tests, exporter l'onglet **Objets définis par l'utilisateur** sur **Les vôtres** : chaque ligne est un écran à revérifier après la montée de version.
 - Collecter les références croisées dans Nomasx-1 avant de lancer l'analyse : les vagues, **Attend** et les UDO en dépendent.
 - Exporter l'onglet **Objets** pour partager le plan : les dépendances y figurent en colonnes.
+- Pour un comité de pilotage, préférer le **Rapport hebdomadaire (PDF)** à l'export : il dit ce qui a bougé, ce qui est en retard et quand le travail devrait se terminer.
+- Quand l'original d'une copie est faux ou absent, l'indiquer dans **Copie de (votre choix)** : la prochaine analyse l'utilise en priorité. Les objets trouvés par leur seule description méritent une vérification.
 - L'assistant IA connaît la procédure : lui demander de *préparer une montée de version* suffit pour qu'il lance les deux tâches et lise le résultat. Il connaît aussi l'onglet, le filtre et l'objet ouverts sur la page : *Quels objets peut-on commencer maintenant ?* — voir [Assistant IA](../ai-assistant.md).
 
 ---
@@ -667,3 +702,4 @@ La page est visible des rôles qui détiennent son entrée de menu, avec les per
 - [Tâches](../jobs.md) — lancer une tâche depuis le menu de Nomajde.
 - [Tests de non-régression](../tests.md) — vérifier que JD Edwards se comporte toujours de la même façon une fois la montée de version faite.
 - [Références croisées](../cross-reference.md) — où un objet est utilisé, avec **Seulement les applications de l'analyse de montée de version**.
+- [Retour au standard](../development/back-to-standard.md) — les objets modifiés et les copies qui pourraient revenir au standard, et économiser leur reprise.

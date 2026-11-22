@@ -160,6 +160,8 @@ Les titres de colonnes et les listes de valeurs proviennent du dictionnaire de d
 | **Objets des projets OMW** | F98222 | Général. |
 | **Journal OMW** | F98210 | Général. |
 
+À côté du workbench, **Développement → Retour au standard** compare les objets modifiés à ceux d'Oracle et indique le projet OMW qui contient chacun — voir [Retour au standard](../development/back-to-standard.md).
+
 ---
 
 ## Au-delà du standard \{#apply\}

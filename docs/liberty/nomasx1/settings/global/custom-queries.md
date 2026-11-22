@@ -14,7 +14,7 @@ It is also **what lets an application that is not JD Edwards be collected**: the
 
 ## At a glance
 
-<svg viewBox="0 0 1200 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="scqg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="scqg-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,12 +22,12 @@ It is also **what lets an application that is not JD Edwards be collected**: the
     <marker id="scqg-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="274" rx="14" fill="url(#scqg-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="880" height="274" rx="14" fill="url(#scqg-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings - Custom queries</text>
   <rect x="430.0" y="37" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="452.0" y="48.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
   <text x="240" y="65" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.settings_customsql_get</text>
-  <line x1="220" y1="78" x2="980" y2="78" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240" y="92" width="72" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="276.0" y="106.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add row</text>
   <rect x="320" y="92" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -36,55 +36,69 @@ It is also **what lets an application that is not JD Edwards be collected**: the
   <text x="410" y="106.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Search…</text>
   <rect x="558" y="92" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="583.0" y="106.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶ Run</text>
-  <rect x="894" y="92" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="927.0" y="106.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
-  <rect x="825" y="92" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="855.5" y="106.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
-  <rect x="240" y="128" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLLECTION</text>
-  <text x="360" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOL (BLANK = THE APPLICATION'S)</text>
-  <text x="610" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USER (AUDIT)</text>
-  <text x="770" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATE (AUDIT)</text>
-  <rect x="240" y="160" width="720" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Users</text>
-  <text x="360" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">payroll</text>
-  <text x="610" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
-  <text x="770" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
-  <rect x="240" y="190" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Roles</text>
-  <text x="360" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">payroll</text>
-  <text x="610" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
-  <text x="770" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
-  <rect x="240" y="220" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Assignments</text>
-  <text x="360" y="236.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <text x="610" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
-  <text x="770" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
-  <rect x="240" y="250" width="720" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rights</text>
-  <text x="360" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">payroll_dwh</text>
-  <text x="610" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
-  <text x="770" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-15</text>
+  <rect x="1014" y="92" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1047.0" y="106.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
+  <rect x="945" y="92" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="975.5" y="106.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="240" y="128" width="840" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID (ID)</text>
+  <text x="380" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID</text>
+  <text x="490" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLLECTION</text>
+  <text x="590" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POOL (BLANK = THE APPLICATION'S)</text>
+  <text x="840" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USER (AUDIT)</text>
+  <text x="960" y="145.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATE (AUDIT)</text>
+  <rect x="240" y="160" width="840" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <text x="380" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">PAYROLL</text>
+  <text x="490" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Users</text>
+  <text x="590" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">payroll</text>
+  <text x="840" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
+  <text x="960" y="176.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
+  <rect x="240" y="190" width="840" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <text x="380" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">PAYROLL</text>
+  <text x="490" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Roles</text>
+  <text x="590" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">payroll</text>
+  <text x="840" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
+  <text x="960" y="206.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
+  <rect x="240" y="220" width="840" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <text x="380" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">PAYROLL</text>
+  <text x="490" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Assignments</text>
+  <text x="590" y="236.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
+  <text x="840" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
+  <text x="960" y="236.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-14</text>
+  <rect x="240" y="250" width="840" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3</text>
+  <text x="380" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">CRM</text>
+  <text x="490" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rights</text>
+  <text x="590" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">crm_dwh</text>
+  <text x="840" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">admin</text>
+  <text x="960" y="266.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-15</text>
   <rect x="20" y="85" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="100" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add row</text>
   <text x="30" y="113" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one query per collection</text>
   <line x1="200" y1="102.0" x2="240" y2="103" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
-  <rect x="20" y="180" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Collection</text>
-  <text x="30" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Users, Roles, Assignments…</text>
-  <line x1="200" y1="197.0" x2="260" y2="176" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
-  <rect x="1000" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Columns</text>
-  <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application name, query</text>
-  <line x1="1000" y1="57.0" x2="857" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
-  <rect x="1000" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pool</text>
-  <text x="1010" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">blank: the application's</text>
-  <line x1="1000" y1="127.0" x2="620" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
-  <rect x="1000" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit</text>
-  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who changed it, when</text>
-  <line x1="1000" y1="267.0" x2="750" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
+  <rect x="20" y="175" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="190" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application</text>
+  <text x="30" y="203" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its ID, then its name</text>
+  <line x1="200" y1="192.0" x2="260" y2="176" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Collection</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Users, Roles, Assignments…</text>
+  <line x1="200" y1="267.0" x2="500" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
+  <rect x="1120" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Columns</text>
+  <text x="1130" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">codes, query</text>
+  <line x1="1120" y1="57.0" x2="977" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
+  <rect x="1120" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pool</text>
+  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">blank: the application's</text>
+  <line x1="1120" y1="137.0" x2="660" y2="188" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
+  <rect x="1120" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit</text>
+  <text x="1130" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who changed it, when</text>
+  <line x1="1120" y1="257.0" x2="920" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scqg-arrow)"/>
 </svg>
 
 ---
@@ -122,17 +136,18 @@ Any other brace is left as written — a JSON literal or a regular expression in
 
 | Column | What it tells you |
 |---|---|
+| **Application ID** | The application the query is for. It shows twice: its ID (*Application ID (ID)*) and its name. |
 | **Collection** | The collection the query replaces: *Users*, *Roles*, *Assignments*, *Menus* or *Rights*. It shows twice: its code (*Collection (ID)*: `SECURITY_USERS`…) and its label. |
 | **Pool (blank = the application's)** | The pool the query runs on. Blank: the application's pool, set on [Applications](./applications.md). |
 | **User (Audit)** / **Date (Audit)** | Who saved the query last, and when. |
 
-**Columns** also shows the application's name and the query.
+**Columns** also shows the query and the pool's code.
 
 ---
 
 ## Edit dialog
 
-Click **Add row** to declare a query, or click a row to open it. The dialog, **New · Settings - Custom queries**, has three tabs: **Properties**, **Pool** and **Query**. The footer carries **Cancel** and **Save** — plus **Delete** and **Duplicate** on a saved row.
+Click **Add row** to declare a query, or click a row to open it. The dialog — **New · Settings - Custom queries**, or **Edit · Settings - Custom queries** on a saved row — has three tabs: **Properties**, **Pool** and **Query**. The footer carries **Cancel** and **Save** — plus **Delete** and **Duplicate** on a saved row.
 
 <svg viewBox="0 0 1200 322" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -196,7 +211,9 @@ Click **Add row** to declare a query, or click a row to open it. The dialog, **N
 |---|---|
 | **Application ID** | One of the declared applications. The query applies to this one only. |
 | **Collection** | The collection replaced: *Users*, *Roles*, *Assignments*, *Menus* or *Rights*. |
-| **User (Audit)** / **Date (Audit)** | Filled in by Nomasx-1 on save. |
+| **User (Audit)** / **Date (Audit)** | Filled in by Nomasx-1 on save; read-only. |
+
+*Application ID* and *Collection* name the line: they are entered when the line is created and read-only on a saved line — its pool and its query change, and the change is saved. To move a query to another application or collection, duplicate the line (**Duplicate**) and delete the old one.
 
 ### Tab 2 — Pool
 

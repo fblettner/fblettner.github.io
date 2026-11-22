@@ -242,7 +242,7 @@ The contract identity.
 
 ### Tab 2 — Applications
 
-Grid linking the CSI to the applications it covers (*CSI Number*, *Application ID*, with the application's type and database). Add one row per application with **Add row**: an entry here is what makes the contract count for that application in *Subscribed Licenses* and the compliance reports. Hidden on **Add**.
+Grid linking the CSI to the applications it covers (*CSI Number*, *Application ID*, with the application's type and database, read-only: they come from [Applications](../settings/global/applications.md)). On a saved line, *CSI Number* and *Application ID* are read-only. Add one row per application with **Add row**: an entry here is what makes the contract count for that application in *Subscribed Licenses* and the compliance reports. Hidden on **Add**.
 
 ### Tab 3 — Components
 

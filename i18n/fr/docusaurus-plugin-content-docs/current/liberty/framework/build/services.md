@@ -24,7 +24,8 @@ Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. 
 
   <rect x="220" y="20" width="880" height="432" rx="14" fill="url(#svd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="44" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Service</text>
-  <text x="293" y="44" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">· [actions.check_credit]</text>
+  <text x="293" y="44" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">· Contrôler le crédit</text>
+  <text x="446" y="44" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">check_credit</text>
   <rect x="1036" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1047.0" y="44.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
   <rect x="1062" y="30" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -113,20 +114,22 @@ Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. 
   <rect x="800" y="271" width="266" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="810" y="284.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">customer</text>
   <text x="800" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">STOP ON ERROR</text>
-  <text x="936" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">BIND RESULT</text>
+  <text x="936" y="304" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">KEEP THE RESULT</text>
   <rect x="800" y="311" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
   <path d="M802.5,316.5 L804.8,318.8 L808.8,314" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="817" y="320" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">enabled</text>
   <rect x="936" y="311" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
   <path d="M938.5,316.5 L940.8,318.8 L944.8,314" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="953" y="320" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">enabled</text>
-  <text x="800" y="336" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Liaisons de paramètres</text>
+  <text x="800" y="336" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Valeurs passées</text>
   <rect x="800" y="343" width="62" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="810" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">ID ▾</text>
-  <rect x="866" y="343" width="30" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="881.0" y="356.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">src</text>
-  <rect x="900" y="343" width="166" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="910" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">INPUT.customer</text>
+  <rect x="866" y="343" width="34" height="20" rx="5" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="883.0" y="356.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Fixe</text>
+  <rect x="900" y="343" width="58" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="929.0" y="356.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Prise dans</text>
+  <rect x="962" y="343" width="104" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="970" y="356.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Entrée · Client</text>
   <line x1="220" y1="406" x2="1100" y2="406" stroke="#1f2937" strokeWidth="1"/>
   <rect x="922" y="416" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="957.0" y="430.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
@@ -157,8 +160,8 @@ Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. 
   <text x="1130" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">modifiée à côté du flux</text>
   <line x1="1120" y1="107.0" x2="1080" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svd-arrow)"/>
   <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bind result</text>
-  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les étapes suivantes lisent ses lignes</text>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Keep the result</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cochée dès qu'une étape le lit</text>
   <line x1="1120" y1="307.0" x2="1006" y2="316" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#svd-arrow)"/>
   <rect x="1120" y="392" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="407" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistrer</text>
@@ -262,7 +265,7 @@ Accès : **Liberty Next → Logique → Services**, pour les superutilisateurs. 
 
 Chaque ligne donne l'identifiant du service, son libellé, son nombre d'étapes et d'entrées et, une fois le service exposé, les points d'accès qu'il sert (`POST /api/http/<connecteur>/<point d'accès>`). Un clic sur la ligne ouvre son concepteur. Sur une ligne : **Exécuter**, **Exposer**, **Rechercher les usages**, **Rechercher les dépendances**, **Renommer**, **Cloner**, **Supprimer**.
 
-- **Nouveau service** demande un identifiant (`snake_case`) et ouvre le concepteur du nouveau service, vide.
+- **Nouveau service** demande son nom — *Son nom :*, *Clôturer la période* —, en déduit son identifiant (*Son identifiant technique sera cloturer_la_periode.*) et ouvre le concepteur du nouveau service, vide.
 - **Renommer** et **Cloner** demandent le nouvel identifiant ; un renommage met aussi à jour les écrans qui appellent le service.
 - **Supprimer** demande une confirmation : un écran qui appelle encore le service échoue alors au contrôle d'intégrité — d'où l'intérêt de **Rechercher les usages** avant.
 
@@ -270,13 +273,13 @@ Chaque ligne donne l'identifiant du service, son libellé, son nombre d'étapes 
 
 ## Le flux \{#flow\}
 
-Le concepteur s'ouvre sur toute la fenêtre, sous le titre *Service ·* `[actions.<id>]`, dans la vue **Flux** ; **Liste** présente le même service sous forme de formulaire — libellé, description, entrées, puis les étapes, une par ligne, avec **Ajouter une action**. **Enregistrer** écrit le service et recharge la configuration ; **Annuler** avec des modifications en cours propose de les enregistrer, de les abandonner ou de continuer.
+Le concepteur s'ouvre sur toute la fenêtre, sous le titre *Service ·* suivi du libellé du service, puis de son identifiant en petit, dans la vue **Flux** ; **Liste** présente le même service sous forme de formulaire — libellé, description, entrées, puis les étapes, une par ligne, avec **Ajouter une action**. **Enregistrer** écrit le service et recharge la configuration ; **Annuler** avec des modifications en cours propose de les enregistrer, de les abandonner ou de continuer.
 
 Le flux se lit de gauche à droite : **Début**, qui montre les entrées ; une carte par étape ; **Réponse**, qui montre ce que le service retourne. Une **condition** se divise en deux voies, **Vrai** et **Faux** ; une **boucle** ou un **groupe** encadre ses propres étapes. La disposition découle de la structure du service : rien n'est placé à la main. Un flux long continue sur la ligne suivante, et le zoom (− / % / +) est mémorisé sur le poste.
 
-- **Un clic sur une carte** ouvre l'étape dans le panneau latéral, sous le chemin *service › étape* : son **Type**, sa cible — **Connecteur** et **Requête** pour une requête (le crayon ouvre la requête), sinon le point d'accès, la fonction ou le service —, son **Id** et son **Label**, **Stop on error**, **Bind result**, et ses **Liaisons de paramètres** : chaque paramètre de la cible reçoit une valeur littérale ou une source (`INPUT.<nom>`, `<étape>.first_row.<COLONNE>`, une valeur intégrée comme `#LOGIN_USER#`). La corbeille de la carte supprime l'étape.
+- **Un clic sur une carte** ouvre l'étape dans le panneau latéral, sous le chemin *service › étape* : son **Type**, sa cible — **Connecteur** et **Requête** pour une requête (le crayon ouvre la requête), sinon le point d'accès, la fonction ou le service —, son **Id** et son **Label**, **Stop on error**, **Keep the result**, et ses **Valeurs passées** — voir [Valeurs passées](#values). La corbeille de la carte supprime l'étape.
 - **Le + d'un lien** ouvre la liste des types d'étape et ajoute celui choisi à cet endroit.
-- **Sans sélection**, le panneau modifie *Le service* : **Libellé**, **Description**, **Entrées** (**Ajouter une entrée**).
+- **Sans sélection**, le panneau modifie *Le service* : **Libellé**, **Description**, **Entrées** et **Questions asked first** — voir [Entrées et questions](#inputs).
 
 | Étape | Rôle |
 |---|---|
@@ -289,7 +292,28 @@ Le flux se lit de gauche à droite : **Début**, qui montre les entrées ; une c
 | **Message**, **Notification** | Informe l'utilisateur, ou envoie une règle de notification — voir [plus bas](#notification). |
 | **Réponse** | Indique ce que le service retourne. |
 
-Une étape lit les entrées du service par `INPUT.<nom>`, et le résultat d'une étape précédente par l'identifiant de celle-ci — `<étape>.first_row.<COLONNE>`, `<étape>.rows` — à condition que **Bind result** y soit coché. La valeur par défaut d'une entrée (un littéral, ou `#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`) sert quand l'appelant ne la fournit pas.
+### Entrées et questions \{#inputs\}
+
+Les **Entrées** — **Ajouter une entrée** — sont ce que le service reçoit de ce qui l'appelle. Chaque entrée est une carte :
+
+| Champ | Signification |
+|---|---|
+| **Nom** | Le nom sous lequel les étapes la lisent (`SOCIETE`, lue par `INPUT.SOCIETE`). |
+| **Libellé** | Le nom affiché là où le service est appelé (*Société*). |
+| **Valeur par défaut** | Utilisée quand l'appelant n'en donne pas : une valeur, ou une valeur intégrée — l'utilisateur connecté, la date du jour… (`#LOGIN_USER#`, `#SYSDATE#`, `#NOW#`, `#CURRENT_TIME#`, `#LANGUAGE#`). |
+| **À quoi elle sert** | Une phrase sur l'entrée (*La société dont la période est clôturée*). |
+
+**Questions asked first** — **add** — sont les champs que l'utilisateur renseigne avant l'exécution du service, la même liste de champs que les questions du bouton d'un écran : un **Name** sous lequel les étapes lisent la réponse, un **Dictionary item** ou un **Label**, un **Format**, **Required**, une **Default value**…
+
+### Valeurs passées \{#values\}
+
+Sous **Valeurs passées**, chaque paramètre de la cible de l'étape — la requête, le point d'accès, la fonction, le service appelé — reçoit une valeur, soit **Fixe** (écrite là), soit **Prise dans** une liste :
+
+- les entrées du service (*Entrée · Société*) et les réponses à ses questions (*Réponse · …*) ;
+- ce qu'une étape précédente de requête, de point d'accès ou de fonction a renvoyé : *first row of "Rechercher le client"*, complété par une colonne, ou *every row of "…"* ; quand cette étape lit la requête d'un écran, chaque colonne de sa première ligne est proposée à part (*EMAIL — first row of "Rechercher le client"*) ;
+- l'enregistrement, et les valeurs intégrées : l'utilisateur connecté, la date du jour.
+
+Une valeur choisie remplace le contenu du champ. Choisir le résultat d'une étape précédente coche de lui-même **Keep the result** sur cette étape. **+ une valeur à utiliser quand celle-ci est vide** prévoit une valeur de repli quand la source est vide à l'exécution. Dans le service enregistré, une entrée s'écrit `INPUT.<nom>` et le résultat d'une étape précédente `<étape>.first_row.<COLONNE>` ou `<étape>.rows`.
 
 ### L'étape Notification \{#notification\}
 

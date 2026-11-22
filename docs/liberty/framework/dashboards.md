@@ -300,7 +300,7 @@ With **Compare with the previous period** ticked, a KPI runs its query a second 
 
 ## Filters \{#filters\}
 
-A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
+A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional value at opening — the value the dashboard opens on. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
 
 In the editor, each filter says which widgets it reaches — *Reaches: …*, with *not: …* for the others — or *Reaches no widget* when no column carries the dictionary item.
 
@@ -341,7 +341,9 @@ A widget whose query fails becomes an error section; the rest of the export stil
 | **Clone** | Copies the dashboard under a new id. |
 | **Delete** | Removes the dashboard. |
 
-A click on a line, or **Add dashboard**, opens the editor over the whole window. Its title bar names the dashboard (`[dashboards.<app>.<id>]`).
+### Opening the editor \{#open-editor\}
+
+**Add dashboard** first asks for the new dashboard's name (*Its name:*, e.g. *Sales overview*) and makes its id from it (`sales_overview`), shown while it is typed. A click on a line, or the name given, opens the editor over the whole window. Its title bar names the dashboard by its title, followed by its application and its id (*Sales overview* `sales · overview`). A refused save keeps the editor open and lists what to correct — see [A refused save](./configuration/settings-ui.md#refused).
 
 <svg viewBox="0 0 1200 674" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -353,7 +355,8 @@ A click on a line, or **Add dashboard**, opens the editor over the whole window.
 
   <rect x="220" y="20" width="760" height="638" rx="14" fill="url(#dbe-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="14" fontFamily="system-ui, sans-serif">▦</text>
-  <text x="260" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <text x="260" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="360" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · overview</text>
   <rect x="916" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="927.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <rect x="942" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -530,7 +533,7 @@ A click on a line, or **Add dashboard**, opens the editor over the whole window.
 | **Add widget** | Chart, KPI, Table, **Figure**, **List**, **Bars**, **Text**, **Links** or **Jobs**: the widget's dialog opens on that kind, and **Cancel** leaves nothing behind. |
 | The grid | The real widgets, drawn with live data as the dashboard shows them, each under its label. Hovering a card shows its tools: the **grip**, its size (`4 × 1`, columns × rows), **✎** to edit it and the bin to remove it. A card is moved by **drag and drop** — its grip dragged onto another card, a bar showing on which side it will land — and sized by its **bottom-right corner**, in whole columns (1 to 12) and rows (1 to 8). The grip takes the keyboard too: arrows move the card, Shift + arrows size it. |
 | **Period** | **Add a period** / **Remove the period**: **Opens on** (a preset, or *App default (Liberty Next → Administer → App)*), **Date column** or **or dictionary item**, and optional **Date bases** (key, label, date column or dictionary item). |
-| **Filters** | **Add filter**: **Id**, **Label**, **Dictionary key**, then the **Connector**, the **Query**, the **Value column** and the **Label column** that fill the dropdown. Under each filter, *Reaches: …* names the widgets it filters — see [Filters](#filters) —, and an *In the other languages* block gives its label in the other languages. A filter left without an id or a label stops the save: *A filter has no id or no label yet: complete it or remove it.* |
+| **Filters** | **Add filter**: **Id**, **Label**, **Dictionary key**, then the **Connector**, the **Query**, the **Value column** and the **Label column** that fill the dropdown, and **Value at opening** — the value the dashboard opens on (blank: *none: every value*). Under each filter, *Reaches: …* names the widgets it filters — see [Filters](#filters) —, and an *In the other languages* block gives its label in the other languages. A filter left without an id or a label stops the save: *A filter has no id or no label yet: complete it or remove it.* |
 
 The footer counts the widgets and holds **Cancel** and **Save**. Closing the editor with unsaved changes asks whether to save them, discard them or keep editing.
 
@@ -551,7 +554,8 @@ A dashboard reads in the user's language. Every text it shows is given in the ot
   </defs>
 
   <rect x="220" y="20" width="760" height="380" rx="14" fill="url(#dbl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[dashboards.sales.overview]</text>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sales overview</text>
+  <text x="340" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · overview</text>
   <line x1="220" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="84" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TITLE</text>
   <rect x="240" y="89" width="354" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>

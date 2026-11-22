@@ -24,7 +24,8 @@ Quatre types sont disponibles : **barres**, **courbe**, **aire** et **camembert*
 
   <rect x="220" y="20" width="760" height="448" rx="14" fill="url(#che-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">▥</text>
-  <text x="258" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="ui-monospace, monospace">[charts.sales.revenue_by_month]</text>
+  <text x="258" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Revenue by month</text>
+  <text x="370" y="46" fill="#64748b" fontSize="9.5" fontFamily="ui-monospace, monospace">sales · revenue_by_month</text>
   <rect x="916" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="927.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
   <rect x="942" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -146,7 +147,7 @@ Les graphiques sont regroupés par connecteur : les pastilles **Connecteur** en 
 
 ## L'éditeur \{#editor\}
 
-L'éditeur s'ouvre dans une fenêtre qui porte le nom du graphique (`[charts.<connecteur>.<id>]`) et comporte deux onglets, **Général** et **Graphique**. **Annuler** et **Enregistrer** se trouvent dans son pied ; le fermer avec des modifications non enregistrées propose de les enregistrer, de les abandonner ou de continuer à modifier.
+L'éditeur s'ouvre dans une fenêtre qui porte le libellé du graphique, suivi de son connecteur et de son identifiant (*Revenue by month* `sales · revenue_by_month`), et comporte deux onglets, **Général** et **Graphique**. **Annuler** et **Enregistrer** se trouvent dans son pied ; le fermer avec des modifications non enregistrées propose de les enregistrer, de les abandonner ou de continuer à modifier.
 
 ### Général \{#general\}
 
@@ -169,9 +170,10 @@ L'onglet charge un échantillon des lignes de la requête et dessine le graphiqu
 | **Axe X** | La colonne portée par l'axe X — les libellés des parts pour un camembert. |
 | **Séries** | Un bloc par colonne Y : la colonne, une pastille de couleur, **L** / **R** pour placer la série sur l'axe Y de gauche ou de droite, et **✕** pour la retirer. **+** ajoute une série. Un camembert n'utilise que la première série. |
 | **Pivoter par** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. |
+| **Options** | La façon de dessiner le graphique, chaque case montrant ce qu'il fait actuellement : **Empilé** (barres et aires uniquement), **Légende**, **Quadrillage** (sauf secteurs) et **Trier l'axe X**. |
 | **Agréger** | La façon de combiner les lignes de même valeur X : **Somme**, **Moyenne**, **Compte** (compte les lignes, sans tenir compte de la valeur Y), **Min**, **Max**, ou **Aucune (par ligne)** pour conserver chaque ligne — pour une série chronologique dont l'axe X est déjà unique. |
 
-L'axe Y affiche des graduations abrégées (1,2 k, 27,5 M, selon la langue du navigateur) ; l'infobulle donne le chiffre complet. Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. La légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
+L'axe Y affiche des graduations abrégées (1,2 k, 27,5 M, selon la langue du navigateur) ; l'infobulle donne le chiffre complet. Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. Sauf réglage contraire de **Légende**, la légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
 
 L'enregistrement exige une colonne X et au moins une série.
 

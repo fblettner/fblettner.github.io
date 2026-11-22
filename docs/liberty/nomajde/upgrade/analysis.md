@@ -1,7 +1,7 @@
 ---
 title: Prepare for upgrade
 description: "The Prepare for upgrade page of Nomajde: load the object list Oracle publishes for a JD Edwards EnterpriseOne release or update, run the analysis of a path code, and follow on one page what has to be retrofitted, how complex it is, how many days it takes, in which order, who does it and how far it is — with the dependencies, the user defined objects to test again, the objects left in other path codes and Oracle's list."
-keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release, update, UN9, path code, Object Librarian, custom objects, complexity, days, waves, dependencies, cross reference, UDO, user defined objects]
+keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release, update, UN9, path code, Object Librarian, custom objects, complexity, days, waves, dependencies, cross reference, UDO, user defined objects, copy, original, weekly report, PDF]
 ---
 
 # Prepare for upgrade
@@ -25,10 +25,12 @@ keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release,
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PD920 against UN9 · analysed 2026-11-22 — What there is to retrofit for the release…</text>
   <rect x="1005" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
-  <rect x="890" y="34" width="107" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="943.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Run the analysis</text>
-  <rect x="765" y="34" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="823.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Load Oracle's list</text>
+  <rect x="874" y="34" width="123" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="935.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Weekly report (PDF)</text>
+  <rect x="759" y="34" width="107" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="812.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Run the analysis</text>
+  <rect x="634" y="34" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="692.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Load Oracle's list</text>
   <line x1="232" y1="74" x2="1088" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="88" width="114.9" height="52" rx="8" fill="#0d1220" stroke="#4a9eff" strokeWidth="1"/>
   <text x="248.0" y="107" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">86</text>
@@ -192,7 +194,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, upgrade, retrofit, object list, release,
   <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The two jobs</text>
   <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each opens with its values filled</text>
-  <line x1="1120" y1="47.0" x2="943.5" y2="34" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upa-arrow)"/>
+  <line x1="1120" y1="47.0" x2="812.5" y2="34" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upa-arrow)"/>
   <rect x="1120" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">UDOs of yours</text>
   <text x="1130" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to test again after the upgrade</text>
@@ -217,9 +219,10 @@ The heading names the path code, the list it is compared with and the date of th
 |---|---|
 | **Load Oracle's list** | Opens the [job that loads Oracle's object list](#load). |
 | **Run the analysis** | Opens the [analysis job](#build), the path code and the list already filled in. |
+| **Weekly report (PDF)** | Downloads the [weekly report](#weekly-report) of the path code shown, in the language of the page. |
 | **Read again** | Reads the page again — after a run, or after a colleague changed the planning. |
 
-Each button shows only to the users who may run its job. Before the first analysis, the page says so and points to the two steps.
+The two job buttons show only to the users who may run their job; **Weekly report (PDF)** shows once an analysis exists. Before the first analysis, the page says so and points to the two steps.
 
 ### The figures \{#figures\}
 
@@ -506,7 +509,7 @@ A click on a row opens the object in a window, over the list.
   <text x="280" y="382" fill="#64748b" fontSize="6.8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">NOTE</text>
   <rect x="280" y="387" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="290" y="400.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Price rules moved to the new form</text>
-  <text x="280" y="420" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Your complexity and days are applied by the next analysis.</text>
+  <text x="280" y="420" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Your complexity, your days and the original you name are applied by the next analysis.</text>
   <line x1="261" y1="432" x2="939" y2="432" stroke="#1f2937" strokeWidth="1"/>
   <rect x="878" y="440" width="42" height="22" rx="5" fill="url(#upc-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="899.0" y="454.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
@@ -540,14 +543,14 @@ A click on a row opens the object in a window, over the list.
 
 | Part | Content |
 |---|---|
-| **What it is** | The type, the kind, the original of a copy, who changed it last and when. |
+| **What it is** | The type, the kind, who changed it last and when; for a copy, its original, [how it was found](#original) and the other objects it could be a copy of (*could also be*). |
 | **To retrofit** / **No retrofit** | The complexity, the days, the wave, the date Oracle changed it. |
 | **Last used** | The last use and the number of users — or *no use recorded*. |
 | **Waits for**, **Wait for it**, **Uses**, **Used by** | Links: a click opens that object in the same window. |
 | **User defined objects on it** | The UDOs on the object: name, type and, when not delivered by Oracle, the user who created it. |
-| **Planning** | **Status** (To do, In progress, To test, Done, Dropped), **Assigned to**, **Start**, **Finish**, **Module**, **Complexity (yours)**, **Days (yours)**, **Note**. |
+| **Planning** | **Status** (To do, In progress, To test, Done, Dropped), **Assigned to**, **Start**, **Finish**, **Module**, **Complexity (yours)**, **Days (yours)**, **Copy of (your choice)** — for an object that is not a changed standard object nor an audit table —, **Note**. |
 
-**Save** writes the planning; the page is then read again. The planning survives every new analysis. A complexity typed in **Complexity (yours)** replaces the computed one and days typed in **Days (yours)** replace the computed days — both are applied by the next analysis. A user without the right to change the planning sees the fields greyed, with a line that says so.
+**Save** writes the planning; the page is then read again. The planning survives every new analysis. A complexity typed in **Complexity (yours)** replaces the computed one, days typed in **Days (yours)** replace the computed days, and an object named in **Copy of (your choice)** becomes the copy's original — all three are applied by the next analysis. A user without the right to change the planning sees the fields greyed, with a line that says so.
 
 ---
 
@@ -583,6 +586,23 @@ The **Other path codes** tab lists the customer's objects found in another path 
 ## Oracle's list \{#oracle-list\}
 
 The **Oracle's list** tab shows the objects Oracle changes, as loaded from its file. One chip per loaded list, with its number of objects; the list of the analysis is chosen first. Columns: **Object**, **Version**, **Description**, **System code**, **Changed on**, **Yours** — the kind of the object when it is in the customer's analysis — and **As written in the file**. A click on one of the customer's objects opens its window.
+
+---
+
+## Weekly upgrade report \{#weekly-report\}
+
+**Weekly report (PDF)** downloads a document for the steering meeting — **not the list of the objects**, which the page already gives, but what moved and what comes next:
+
+| Section | Content |
+|---|---|
+| **Where the work stands** | Four figures — progress, objects done, days remaining, ready to start —, the objects to retrofit and their days, what is done and dropped; what moved since the last report kept; and a forecast: at the pace of the last four weeks, when the remaining days end. |
+| **This week** | The objects finished and started over the last seven days, by the dates and statuses typed in the planning, then the objects in progress. |
+| **What comes next** | The objects **late** (their finish date has passed), those **due** in the coming days, and those **ready to start** — the ones that unblock the most first; the objects still to do that nobody carries. |
+| **Who carries what** | Per person, then per module: the objects, the days, what is done, the days remaining. |
+| **The remaining work, week after week** | A chart of the days remaining and the days done, from the figures each report keeps. |
+| **What could be left out** | The applications and reports to retrofit that no user ran, and the days they represent. |
+
+Each list stops at twenty lines and counts the rest. The forecast and "what moved" need figures kept from one week to the next: the job [Weekly upgrade report](../jobs.md#report-upgrade) keeps them each time it runs, then mails the document to the developers every Monday. The cover can carry the customer's name when the job makes it.
 
 ---
 
@@ -624,7 +644,7 @@ These need the cross reference and its UDO step collected first in Nomasx-1; run
 |---|---|---|
 | **Audit Trail** | An audit table of the database audit. | No — complexity `Configuration`, 0 day. |
 | **Custom** | An object created by the customer, with no JD Edwards original. | No — `Retrofit not needed`. |
-| **Copied** | A copy of a standard object: its original is found by the application identifier the copy kept. | Yes when Oracle changed **the original** in the list. |
+| **Copied** | A copy of a standard object: its original is found as [said below](#original). | Yes when Oracle changed **the original** in the list. |
 | **Modified** | A standard object changed by the customer. | Yes when Oracle changed it in the list. |
 
 An object Oracle did not change is `Not updated`: nothing to retrofit. For the others, the complexity and the days follow the object type:
@@ -634,6 +654,19 @@ An object Oracle did not change is `Not updated`: nothing to retrofit. For the o
 | Applications, reports | `Hard` | 3 |
 | Business functions | `Medium` | 1 |
 | Everything else | `Easy` | 0.5 |
+
+### How the original of a copy is found \{#original\}
+
+A copy has to be retrofitted when Oracle changes its original, but nothing in JD Edwards says "this object is a copy of that one". The analysis looks for the original the ways a consultant does, the most reliable first, among the standard objects **of the same type**:
+
+| Order | Found by | How |
+|---|---|---|
+| 1 | **Your choice** | The object named in **Copy of (your choice)** — in the [object window](#object), or in the column of the same name on the screen *Upgrade — objects to retrofit* (opened from the Data Explorer model *Upgrade analysis*), where a customer's list can be pasted into the grid. |
+| 2 | **Its application id** | The application id the copy kept from its original. |
+| 3 | **Its name** | The name without the customer's system code: `P554210` is `P4210`, `R5543500` is `R43500`. |
+| 4 | **Its description** | The same description as exactly one standard object of its type — a description too short to mean anything is not used. |
+
+Only an object the customer added can be a copy. The object window says how its original was found — *your choice*, *found by its application id*, *found by its name*, *found by its description* — and, when several objects were met, which others it could be (*could also be*). A choice typed or pasted is applied by the next run of the analysis.
 
 ---
 
@@ -645,7 +678,7 @@ The [Data Explorer](../data-explorer.md) model **Upgrade analysis** gives the to
 
 ## Access \{#access\}
 
-The page shows to the roles that hold its menu entry, with the permissions `page:nomajde:upgrade` and `plugin:nomajde.upgrade_view:*`. Saving the planning needs `sql:nomajde:jde_upg_object_put`; the two buttons need the `job:` permission of their job. The connection used to read JD Edwards needs read access to the Object Librarian tables of the central objects.
+The page shows to the roles that hold its menu entry, with the permissions `page:nomajde:upgrade` and `plugin:nomajde.upgrade_view:*`. Saving the planning needs `sql:nomajde:jde_upg_object_put`; the two job buttons need the `job:` permission of their job, and the weekly report the right to run Nomajde's reports, which the **Developer** and **Administrator** roles hold. The connection used to read JD Edwards needs read access to the Object Librarian tables of the central objects.
 
 ---
 
@@ -658,6 +691,8 @@ The page shows to the roles that hold its menu entry, with the permissions `page
 - Before the tests, export the **User defined objects** tab on **Yours**: each line is a screen to check again after the upgrade.
 - Collect the cross reference in Nomasx-1 before running the analysis: the waves, **Waits for** and the UDOs depend on it.
 - Export the **Objects** tab to share the plan: the dependencies travel as columns.
+- Send the **Weekly report (PDF)** rather than the export to a steering meeting: it says what moved, what is late and when the work should end.
+- When a copy's original is wrong or missing, name it in **Copy of (your choice)**: the next analysis uses it first. The objects found only by their description deserve a look.
 - The AI assistant knows the procedure: ask it to *prepare an upgrade* and it runs the two jobs and reads the result with you. It also knows the tab, the filter and the object open on the page: *Which objects can be started now?* — see [AI assistant](../ai-assistant.md).
 
 ---
@@ -667,3 +702,4 @@ The page shows to the roles that hold its menu entry, with the permissions `page
 - [Jobs](../jobs.md) — running a job from the Nomajde menu.
 - [Non-regression tests](../tests.md) — check that JD Edwards still behaves the same once the upgrade is done.
 - [Cross Reference](../cross-reference.md) — where an object is used, with **Only the applications of the upgrade analysis**.
+- [Back to standard](../development/back-to-standard.md) — which changed objects and copies could go back to the standard, and save their retrofit.

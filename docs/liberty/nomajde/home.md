@@ -202,7 +202,7 @@ Each link opens a menu entry; under its title, one line says what it opens.
 | **JD Edwards data** | [UDC Code](./master-data/udc-codes.md), [Address Book](./master-data/address-book.md), [Companies, Business Units, Chart of Accounts, Item Master, Payment Terms](./master-data/delivered-screens.md) — the setup starts with the payment terms. |
 | **Security Maintenance** | [User Management](./security-maintenance/user-management.md), [Role Management](./security-maintenance/role-management.md), [Role Relationships](./security-maintenance/role-relationships.md), [Environments](./security-maintenance/environments.md), [Security Workbench](./security-maintenance/security-workbench.md), UDO Security. |
 | **Explore** | The [Data Explorer](./data-explorer.md) and *About Nomajde*, the product page. |
-| **Jobs** | The last run of the main jobs — health check, daily synchronisation, tests, upgrade analysis, security re-merge — with their state, their schedule, and **▷** to run one now. |
+| **Jobs** | The last run of the main jobs — health check, platform snapshot, the [platform and weekly upgrade reports](./jobs.md#reports), daily synchronisation, tests, upgrade analysis, security re-merge — with their state, their schedule, and **▷** to run one now. |
 
 Two lines at the bottom say what Nomajde is. **Excel** and **PDF**, next to **↻**, export the page.
 

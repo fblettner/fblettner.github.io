@@ -43,7 +43,7 @@ CREATE TABLE expense_claims (
 
 ### 2. La liste des statuts
 
-**Liberty Next → Données → Dictionnaire → Énumérations** : une énumération `CLAIM_STATUS` avec les valeurs `DRAFT` (Brouillon), `SUBMITTED` (Soumise), `APPROVED` (Validée), `REJECTED` (Refusée). L'entrée `STATUS` reçoit **Rules** `ENUM` et **Rules values** `CLAIM_STATUS` : la grille affiche les libellés et le dialogue une liste.
+**Liberty Next → Données → Dictionnaire → Énumérations** : une énumération `CLAIM_STATUS` avec les valeurs `DRAFT` (Brouillon), `SUBMITTED` (Soumise), `APPROVED` (Validée), `REJECTED` (Refusée). L'entrée `STATUS` reçoit **Kind of field** *A fixed list of values* et **List of values** `CLAIM_STATUS` : la grille affiche les libellés et le dialogue une liste.
 
 ### 3. Une requête par transition
 

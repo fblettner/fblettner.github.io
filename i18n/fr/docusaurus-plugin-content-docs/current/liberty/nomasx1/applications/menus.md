@@ -124,9 +124,9 @@ L'écran sert à *comprendre la navigation* d'une application connectée sous l'
   <text x="1087" y="339" fill="#94a3b8" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">«  ‹  1 2 … 3  ›  »</text>
   <rect x="256" y="225.0" width="159" height="54" rx="7" fill="#111827" stroke="#334155" strokeWidth="1"/>
   <rect x="260" y="231.0" width="151" height="20" rx="4" fill="rgba(74,158,255,0.10)"/>
-  <text x="268" y="245.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Users</text>
+  <text x="268" y="245.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les utilisateurs</text>
   <text x="405" y="245.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
-  <text x="268" y="267.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Display Roles</text>
+  <text x="268" y="267.0" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Afficher les rôles</text>
   <text x="405" y="267.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
   <rect x="215.0" y="376" width="290.0" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="225.0" y="391" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Racine, puis Niveau 1 à 3</text>
@@ -149,7 +149,7 @@ L'écran sert à *comprendre la navigation* d'une application connectée sous l'
   <text x="22" y="226.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ou clic droit sur la ligne</text>
   <line x1="197" y1="215.0" x2="248" y2="215.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mnu-arrow)"/>
   <rect x="12" y="262.0" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="277.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Display Users / Display Roles</text>
+  <text x="22" y="277.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Utilisateurs / rôles</text>
   <text x="22" y="290.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">qui atteint cette entrée de menu</text>
   <line x1="197" y1="279.0" x2="276" y2="279.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mnu-arrow)"/>
   <rect x="1119" y="121" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -202,8 +202,8 @@ Le bouton **···** en début de ligne, ou un clic droit sur la ligne, ouvre so
 
 | Action | Vers où |
 |---|---|
-| **Display Users** | Liste des utilisateurs qui peuvent atteindre la feuille de menu sélectionnée. |
-| **Display Roles** | Liste des rôles qui donnent accès à la feuille de menu sélectionnée. |
+| **Afficher les utilisateurs** | Liste des utilisateurs qui peuvent atteindre l'entrée de menu sélectionnée, avec leur statut, leurs dates de création et de connexion et les indicateurs *Technique (Y/N)*, *Générique (Y/N)* et *Lié (Y/N)* de leurs propriétés. |
+| **Afficher les rôles** | Liste des rôles qui donnent accès à l'entrée de menu sélectionnée. |
 
 ---
 
