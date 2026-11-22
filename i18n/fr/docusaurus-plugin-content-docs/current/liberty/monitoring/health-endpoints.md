@@ -18,7 +18,7 @@ Trois points d'accès, sans jeton.
 
 ## /ready \{#ready\}
 
-Le serveur démarre même si sa base est injoignable — pour qu'un pool puisse être corrigé depuis **Paramètres** — mais `/ready` répond `503` tant que la base n'est pas revenue. Une installation sans pool `default` répond `200` avec `"pool": null`.
+Le serveur démarre même si sa base est injoignable — pour qu'un pool puisse être corrigé depuis **Liberty Next → Administrer → Pools** — mais `/ready` répond `503` tant que la base n'est pas revenue. Une installation sans pool `default` répond `200` avec `"pool": null`.
 
 Les installations Docker l'utilisent comme contrôle de santé du conteneur : un ensemble dont la base est arrêtée apparaît **unhealthy** dans `docker ps` et dans `./liberty status`.
 

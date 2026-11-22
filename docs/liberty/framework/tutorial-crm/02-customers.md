@@ -6,7 +6,7 @@ keywords: [Liberty Next, tutorial, CRM, customers, CRUD wizard, screen, menu, di
 
 # Step 2 — The Customers screen
 
-The `customers` table becomes a screen: a grid with filters, an edit dialog, add and delete. Three places in Settings, in this order: **Connectors** (the queries), **Screens** (the interface), **Menus** (the entry that opens it).
+The `customers` table becomes a screen: a grid with filters, an edit dialog, add and delete. Three Liberty Next pages, in this order: **Connectors** (the queries), **Screens** (the interface), **Menus** (the entry that opens it).
 
 ---
 
@@ -24,9 +24,9 @@ The `customers` table becomes a screen: a grid with filters, an edit dialog, add
   <rect x="240" y="30" width="170" height="300" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <rect x="250" y="44" width="150" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="325.0" y="58.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">crm ▾</text>
-  <text x="254" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Sales</text>
+  <text x="254" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ Sales</text>
   <rect x="250" y="108" width="150" height="24" rx="5" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="268" y="124" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">👥 Customers</text>
+  <text x="268" y="124" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">Customers</text>
   <text x="426" y="52" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Customers</text>
   <rect x="880" y="36" width="80" height="22" rx="5" fill="url(#tu2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="920.0" y="50.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add</text>
@@ -89,7 +89,7 @@ The `customers` table becomes a screen: a grid with filters, an edit dialog, add
 
 ## The queries
 
-1. **Liberty Next → Data → Connectors**, select `crm`, choose **Tables** in the mode bar.
+1. **Liberty Next → Data → Connectors**, select `crm`, pick the **Tables** stage card.
 2. **＋ Add queries → Generate from DB**, pick the `customers` table.
 3. Keep every column, tick **key** on `ID`, keep the four statements. Save.
 
@@ -120,14 +120,14 @@ Each query has its own permission — `sql:crm:customers_get`, `sql:crm:customer
 ## The screen
 
 1. **Liberty Next → Screens → Screens → ＋ Add scope**, pick `crm`: the `crm` chip appears.
-2. **＋ Add screen**, id `customers`, then click the card to open the screen editor.
+2. **＋ Add screen**, id `customers`, then click the card to open the [Screen Designer](../build/screens/overview.md), one stage after the other:
 
 | Tab | Setting |
 |---|---|
-| **General** | Label `Customers`. |
-| **Queries** | Read `customers_get`, update `customers_put`, insert `customers_post`, delete `customers_delete`. |
-| **Columns** | **Import from read query**, then: label each column, hide `ID`, `CREATED_BY`, `CREATED_AT`, `UPDATED_BY` (**hidden**), tick **filter** on `STATUS`, `COUNTRY` and `INDUSTRY`. |
-| **Dialog** | One tab `Details` with `NAME`, `INDUSTRY`, `COUNTRY`, `STATUS`, `PRIMARY_EMAIL`. |
+| **What it is** | Label `Customers`. |
+| **Data** | Read `customers_get`, update `customers_put`, insert `customers_post`, delete `customers_delete`. |
+| **Grid** → **Columns** | **Import from read query**, then: label each column, hide `ID`, `CREATED_BY`, `CREATED_AT`, `UPDATED_BY` (**hidden**), tick **filter** on `STATUS`, `COUNTRY` and `INDUSTRY`. |
+| **Record form** | One tab `Details` with `NAME`, `INDUSTRY`, `COUNTRY`, `STATUS`, `PRIMARY_EMAIL`. |
 
 Save. The labels typed on the columns can later move to the dictionary, which serves every screen — see [Step 3](./03-deals.md).
 
@@ -137,10 +137,10 @@ Save. The labels typed on the columns can later move to the dictionary, which se
 
 1. **Liberty Next → Screens → Menus → + Add scope**, pick `crm`: the app's empty tree appears.
 2. **＋ Folder**: label `Sales`, icon `briefcase`.
-3. On the folder, **＋ Add child**: label `Customers`, type `screen`, target `customers_get`, icon `users`.
+3. On the folder, **＋ Add child**: label `Customers`, type `screen`, target `customers` (the screen), icon `users`.
 4. Save.
 
-`crm` now has a menu: it is an **app**, listed in the app picker at the top of the sidebar (with at least two apps). Its sidebar shows **Sales → Customers**.
+`crm` now has a menu and, with **Show in switcher** on (the default), it is an **app**, listed in the app picker at the top of the sidebar (with at least two apps). Its sidebar shows **Sales → Customers**.
 
 ---
 

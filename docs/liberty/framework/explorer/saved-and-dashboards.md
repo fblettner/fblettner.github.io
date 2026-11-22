@@ -1,6 +1,6 @@
 ---
 title: Saved analyses and dashboards
-description: "Keeping Data Explorer work in Liberty Next: saved analyses, private or shared, with an audience; dashboards of saved analyses with their own period and layout; Excel and PDF export; the analyses and dashboards an app ships."
+description: "Keeping Data Explorer work in Liberty Next: saved analyses, private or shared, with an audience; dashboards of saved analyses with their own period and layout; Excel and PDF export; a menu entry for a shared analysis or dashboard (Add to a menu); the analyses and dashboards an app ships."
 keywords: [Liberty Next, Data Explorer, saved analysis, shared, audience, dashboard, tiles, layout, export, Excel, PDF]
 ---
 
@@ -12,7 +12,7 @@ The mode bar at the top of the explorer has two modes: **Analyses**, the editor 
 
 ## At a glance
 
-<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 420" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="exd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="exd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -20,76 +20,110 @@ The mode bar at the top of the explorer has two modes: **Analyses**, the editor 
     <marker id="exd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="386" rx="14" fill="url(#exd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <rect x="240" y="30" width="185" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="283.5" y="45.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Analyses (3)</text>
-  <rect x="328" y="31" width="96" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="376.0" y="45.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Dashboards (1)</text>
-  <rect x="435" y="31" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="445" y="45.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Sales review ▾</text>
-  <rect x="603" y="31" width="91" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="648.5" y="45.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Edit layout</text>
-  <rect x="700" y="31" width="43" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="721.5" y="45.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="749" y="31" width="48" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="773.0" y="45.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Excel</text>
-  <rect x="803" y="31" width="37" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="821.5" y="45.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
-  <line x1="240" y1="64" x2="960" y2="64" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="88" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">▣</text>
-  <rect x="258" y="74" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="268" y="88.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">This quarter ▾</text>
-  <text x="390" y="88" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">applies to the analyses that have a period field</text>
-  <rect x="780" y="74" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="790" y="88.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Add an analysis… ▾</text>
-  <rect x="240.0" y="104" width="355.0" height="150" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250.0" y="122" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline by stage</text>
-  <text x="585.0" y="122" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✎  ‹ ›  ⤢ 2  ⤡ m  ✕</text>
-  <rect x="280.0" y="198" width="60" height="40" rx="2" fill="#4a9eff" opacity="0.85"/>
-  <text x="310.0" y="250" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Qualified</text>
-  <rect x="390.0" y="178" width="60" height="60" rx="2" fill="#4a9eff" opacity="0.85"/>
-  <text x="420.0" y="250" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Proposal</text>
-  <rect x="500.0" y="138" width="60" height="100" rx="2" fill="#4a9eff" opacity="0.85"/>
-  <text x="530.0" y="250" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Negotiation</text>
-  <rect x="605.0" y="104" width="172.5" height="150" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="615.0" y="122" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">KPI</text>
-  <text x="767.5" y="122" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✎  ‹ ›  ⤢ 1  ⤡ m  ✕</text>
-  <text x="691.25" y="176" fill="#e2e8f0" fontSize="16" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">192 000</text>
-  <text x="691.25" y="196" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Sum of Amount</text>
-  <rect x="787.5" y="104" width="172.5" height="150" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="797.5" y="122" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">By country</text>
-  <text x="950.0" y="122" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✎  ‹ ›  ⤢ 1  ⤡ m  ✕</text>
-  <circle cx="873.75" cy="184" r="42" fill="#4a9eff" opacity="0.85"/>
-  <path d="M 873.75 184 L 873.75 142 A 42 42 0 0 1 906.75 158 Z" fill="#c084fc"/>
-  <rect x="240.0" y="264" width="720.0" height="120" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250.0" y="282" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Won deals by country</text>
-  <text x="950.0" y="282" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✎  ‹ ›  ⤢ 4  ⤡ m  ✕</text>
-  <text x="252.0" y="304" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾  France</text>
-  <text x="948.0" y="304" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">165 000</text>
-  <text x="272.0" y="326" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Negotiation</text>
-  <text x="948.0" y="326" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">120 000</text>
-  <text x="252.0" y="348" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾  Belgium</text>
-  <text x="948.0" y="348" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">27 000</text>
-  <rect x="10" y="30" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dashboards mode</text>
-  <text x="20" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">grids of saved analyses</text>
-  <line x1="210" y1="47.0" x2="240" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
-  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One period</text>
-  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">overrides the tiles' periods</text>
-  <line x1="210" y1="167.0" x2="258" y2="85" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
-  <rect x="10" y="320" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A tile</text>
-  <text x="20" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one analysis in its own view</text>
-  <line x1="210" y1="337.0" x2="240" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
-  <rect x="1000" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Edit layout, export</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tiles; Excel and PDF</text>
-  <line x1="1000" y1="47.0" x2="840" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
-  <rect x="1000" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tile tools</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pencil opens the analysis</text>
-  <line x1="1000" y1="167.0" x2="940" y2="122" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="220" y="20" width="880" height="380" rx="14" fill="url(#exd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="14" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="260" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Data Explorer</text>
+  <text x="260" y="60" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">CRM pipeline — deals, customers, activities</text>
+  <rect x="930" y="31" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="940" y="45.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">crm · CRM pipeline     ▾</text>
+  <rect x="892" y="31" width="30" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="907.0" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+  <rect x="848" y="31" width="39" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="867.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Excel</text>
+  <rect x="766" y="31" width="77" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="804.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Add to a menu</text>
+  <rect x="717" y="31" width="44" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="739.0" y="45.5" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
+  <rect x="663" y="31" width="49" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="687.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save as</text>
+  <rect x="623" y="31" width="35" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="640.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <line x1="221" y1="72" x2="1099" y2="72" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="84" width="198" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="287.0" y="99.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⚗ Analyses (3)</text>
+  <rect x="335" y="85" width="102" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="386.0" y="99.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Dashboards (1)</text>
+  <rect x="446" y="84" width="240" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="456" y="99.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">sales_review  sales · Sales review   ▾</text>
+  <rect x="694" y="84" width="87" height="24" rx="5" fill="url(#exd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="737.5" y="99.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Edit layout</text>
+  <rect x="240" y="118" width="840" height="38" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="127" width="20" height="20" rx="6" fill="#c084fc" fillOpacity="0.15" stroke="#c084fc" strokeWidth="1"/>
+  <text x="260" y="140.5" fill="#c084fc" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="278" y="140.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PERIOD</text>
+  <rect x="370" y="126" width="110" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="425.0" y="140.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▤ This quarter  ▾</text>
+  <text x="490" y="141" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">applies to the analyses that have a period field</text>
+  <rect x="880" y="126" width="190" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="890" y="140.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Add an analysis…                 ▾</text>
+  <rect x="240.0" y="168" width="201.0" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240.0" y="168" width="201.0" height="120" rx="8" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="250.0" y="186" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264.0" y="186" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">KPI</text>
+  <text x="415.0" y="186" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">1 × S</text>
+  <text x="429.0" y="186" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="340.5" y="238" fill="#e2e8f0" fontSize="17" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">192 000</text>
+  <text x="340.5" y="256" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Sum of Amount</text>
+  <path d="M429.0,289 L442.0,289 L442.0,276" fill="none" stroke="#4a9eff" strokeWidth="3"/>
+  <rect x="453.0" y="168" width="414.0" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="463.0" y="186" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="477.0" y="186" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline by stage</text>
+  <text x="841.0" y="186" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">2 × M</text>
+  <text x="855.0" y="186" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <rect x="497.9" y="244.4" width="74.8" height="23.6" rx="2" fill="#4a9eff" fillOpacity="0.85"/>
+  <text x="535.3333333333334" y="279" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Qualified</text>
+  <rect x="622.6" y="231.5" width="74.8" height="36.5" rx="2" fill="#4a9eff" fillOpacity="0.85"/>
+  <text x="660.0" y="279" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Proposal</text>
+  <rect x="747.3" y="212.0" width="74.8" height="56.0" rx="2" fill="#4a9eff" fillOpacity="0.85"/>
+  <text x="784.6666666666667" y="279" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Negotiation</text>
+  <rect x="879.0" y="168" width="201.0" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="889.0" y="186" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="903.0" y="186" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">By country</text>
+  <text x="1054.0" y="186" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">1 × M</text>
+  <text x="1068.0" y="186" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <circle cx="979.5" cy="238" r="30" fill="none" stroke="#4a9eff" strokeWidth="14"/>
+  <path d="M979.5,208 A30,30 0 0,1 1008.0,228.7" fill="none" stroke="#c084fc" strokeWidth="14"/>
+  <rect x="240.0" y="300" width="840.0" height="86" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250.0" y="318" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="264.0" y="318" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Won deals by country</text>
+  <text x="1054.0" y="318" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">4 × S</text>
+  <text x="1068.0" y="318" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="254.0" y="342" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">▾ France</text>
+  <text x="1066.0" y="342" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="ui-monospace, monospace">165 000</text>
+  <text x="254.0" y="362" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">    Negotiation</text>
+  <text x="1066.0" y="362" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">120 000</text>
+  <rect x="20" y="92" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="107" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dashboards mode</text>
+  <text x="30" y="120" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">grids of saved analyses</text>
+  <line x1="200" y1="109.0" x2="378" y2="108" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One period</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">for the tiles with a period field</text>
+  <line x1="200" y1="167.0" x2="370" y2="137" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="20" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Grip: drag to move</text>
+  <text x="30" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">arrows move, Shift + arrows size</text>
+  <line x1="200" y1="257.0" x2="252.0" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Corner: drag to size</text>
+  <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">1–4 columns · S / M / L</text>
+  <line x1="200" y1="347.0" x2="442.0" y2="289" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="1140" y="30" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save, export, menu</text>
+  <text x="1150" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the whole dashboard</text>
+  <line x1="1140" y1="47.0" x2="907.0" y2="31" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="1140" y="84" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Edit layout</text>
+  <text x="1150" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">move, size, add, remove</text>
+  <line x1="1140" y1="101.0" x2="781" y2="96" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="1140" y="160" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add an analysis…</text>
+  <text x="1150" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a tile per saved analysis</text>
+  <line x1="1140" y1="177.0" x2="1070" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
+  <rect x="1140" y="250" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Size, remove</text>
+  <text x="1150" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">columns × height · 🗑</text>
+  <line x1="1140" y1="267.0" x2="1050.0" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#exd-arrow)"/>
 </svg>
 
 ---
@@ -103,6 +137,7 @@ In **Analyses** mode, the picker lists the saved analyses of the model, grouped 
 | **Save** | Saves the current analysis — rows, measures, filters, period, view, calculated fields. |
 | **Save as** | Saves a copy under a new name, always private to start with. |
 | **Delete** | Shown to the owner of the analysis and to superusers. |
+| **Add to a menu** | Publishes the analysis as a menu entry — see [below](#menu). |
 | **Excel**, **PDF** | Export — see [below](#export). |
 
 The save window asks for:
@@ -125,7 +160,22 @@ In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, e
 - **The period** at the top applies to every tile whose analysis has a period field; the others keep theirs.
 - **Edit layout** lays the tiles out like a dashboard's cards: a tile moves by drag and drop — its grip, a bar showing where it lands — and is sized by its corner, in whole columns (1 to 4) and the closest of the three heights (`2 × M`). The grip takes the keyboard too: arrows move, Shift + arrows size. **Add an analysis…** adds a tile.
 - **The pencil** of a tile opens its analysis in the editor; a drill from a tile does the same, with the clicked values as filters.
-- **Save**, **Save as**, **Delete** work as for analyses. A tile whose analysis was deleted says so.
+- In view mode a tile shows its title and its pencil; in **Edit layout**, its grip, its size (`1 × S`) and a bin to remove it.
+- **Save**, **Save as**, **Delete**, **Add to a menu**, **Excel** and **PDF**, in the page header, work as for analyses. A tile whose analysis was deleted says so.
+
+---
+
+## Add to a menu \{#menu\}
+
+On a saved analysis or dashboard, **Add to a menu** publishes it as an entry of an application's menu. The button is shown to superusers only: the menus are configuration. The window *Add “…” to a menu* asks for:
+
+| Field | Use |
+|---|---|
+| **Menu of** | The application whose menu receives the entry. |
+| **Folder** | A folder of that menu; *At the top of the menu* when none is picked. |
+| **Label in the menu** | The entry's label — the analysis's name to start with. |
+
+**Add to the menu** adds the entry. One click on it opens the explorer on that analysis — its result at once, the definition one click away — or on that dashboard. The entry is shown to the users who may use the model. A private analysis cannot be published: the window asks to share it first (**Save**, *Visible to everyone*), and **Add to the menu** stays disabled until then. An entry whose analysis or dashboard was deleted, or is no longer shared, says so when it is opened.
 
 ---
 

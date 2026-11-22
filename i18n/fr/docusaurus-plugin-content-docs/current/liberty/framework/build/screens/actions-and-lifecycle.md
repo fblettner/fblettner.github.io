@@ -8,39 +8,142 @@ keywords: [Liberty Next, actions, on_load, on_save, on_cancel, on_insert, on_upd
 
 Un écran doté d'une grille et d'un dialogue couvre le circuit standard de lecture et d'écriture. Les **actions** et les **hooks** ajoutent tout le reste : exécuter une requête depuis un bouton, ouvrir une autre vue depuis une ligne, appeler une API ou un plugin après un enregistrement, rafraîchir la grille après une suppression.
 
-Ils se règlent dans les onglets **Actions** et **Menu de ligne** de l'éditeur d'écran, avec partout la même forme d'action.
+Ils se règlent à l'étape **Actions** du [Concepteur d'écran](./overview.md#designer), dans ses deux sections **Actions** et **Menu de ligne**, avec partout la même forme d'action. **Actions** présente les hooks et les boutons de barre d'outils en groupes repliés, chacun avec son nombre ; un groupe s'ouvre sur ses actions, une par ligne (identifiant, type, libellé, nombre d'étapes), avec **Ajouter une action** dessous. **Menu de ligne** liste de la même façon les entrées du menu contextuel de la ligne.
 
 ---
 
 ## Moments de déclenchement \{#groups\}
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 632" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="al-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="acl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="acl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="acl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="acl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="420" rx="14" fill="url(#al-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran · crm.customers · Actions</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="88" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HOOKS DE DIALOGUE — déclenchés quand le formulaire est ouvert</text>
-  <rect x="40" y="100" width="920" height="100" rx="8" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="56" y="122" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_load</text>
-  <text x="56" y="138" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">S'exécute juste après le chargement des données de la ligne — utile pour rafraîchir un lookup ou précharger des lignes liées.</text>
-  <text x="56" y="160" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_save</text>
-  <text x="56" y="176" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">S'exécute après le succès de la mise à jour/insertion principale du dialogue — pour enchaîner d'autres écritures sur la même ligne.</text>
-
-  <text x="40" y="220" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BARRE D'OUTILS — boutons au-dessus du tableau</text>
-  <rect x="40" y="232" width="920" height="80" rx="8" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="56" y="254" fill="#c084fc" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">actions</text>
-  <text x="56" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">S'exécutent sans contexte de ligne — une saisie préalable peut demander des valeurs.</text>
-  <text x="56" y="290" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">＋ Ajouter une action de barre d'outils</text>
-
-  <text x="40" y="332" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HOOKS DE LIGNE — déclenchés après mutation d'une ligne</text>
-  <rect x="40" y="344" width="920" height="80" rx="8" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="56" y="366" fill="#22c55e" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_insert</text>
-  <text x="56" y="380" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Après l'insertion d'une ligne (Enregistrer du dialogue ou Enregistrer en ligne de la grille).</text>
-  <text x="56" y="396" fill="#22c55e" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_update · on_delete</text>
-  <text x="56" y="410" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Après une modification / une suppression. Les param_binds lisent la ligne créée / supprimée.</text>
+  <rect x="220" y="20" width="880" height="596" rx="14" fill="url(#acl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Concepteur d'écran ·</text>
+  <text x="367.648" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1011" y="32" width="69" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1045.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <rect x="981" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="993.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QU'IL EST</text>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Clients</text>
+  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DONNÉES</text>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 requête(s) d'enregistrem…</text>
+  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRILLE</text>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 colonne(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filtre(s) · 1 vue(s)</text>
+  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHE</text>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 onglet(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 champ(s)</text>
+  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="rgba(168,85,247,0.12)" stroke="#c084fc" strokeWidth="1.2"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 action(s) de barre d…</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 dans le menu de ligne ·…</text>
+  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SORTIE</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">l'export de la grille</text>
+  <rect x="238" y="146" width="148" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="239" y="147" width="57" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="267.5" y="160.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
+  <line x1="297" y1="151" x2="297" y2="163" stroke="#334155" strokeWidth="1"/>
+  <text x="341.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Menu de ligne</text>
+  <text x="238" y="192" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Hooks du dialogue — déclenchés quand le formulaire est ouvert (on_load / on_save / on_cancel)</text>
+  <rect x="238" y="200" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="216.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="216.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À l'ouverture (chaîne d'actions)</text>
+  <text x="1070" y="216.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="231" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="247.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="247.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À la sauvegarde (chaîne d'actions)</text>
+  <text x="1070" y="247.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="238" y="262" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="278.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="278.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À l'annulation (chaîne d'actions)</text>
+  <text x="1070" y="278.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <text x="238" y="309" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Barre d'outils — boutons au-dessus du tableau (s'exécutent indépendamment, sans contexte de ligne)</text>
+  <rect x="238" y="317" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="333.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="264" y="333.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Actions de l'écran</text>
+  <text x="1070" y="333.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="250" y="346" width="820" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="367" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="278" y="361" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">export_selection</text>
+  <text x="373.296" y="361" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">run_query · Exporter la sélection</text>
+  <text x="278" y="374" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">1 étape</text>
+  <text x="1060" y="367" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="250" y="386" width="118" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="309.0" y="400.5" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une action</text>
+  <text x="238" y="432" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Hooks de ligne — déclenchés après l'insertion / mise à jour / suppression d'une ligne</text>
+  <rect x="238" y="440" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="456.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="456.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À l'insertion (hook de ligne)</text>
+  <text x="1070" y="456.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="471" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="487.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="487.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À la mise à jour (hook de ligne)</text>
+  <text x="1070" y="487.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="502" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="518.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="518.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À la suppression (hook de ligne)</text>
+  <text x="1070" y="518.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="533" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="549.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="549.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">À la duplication (hook de ligne)</text>
+  <text x="1070" y="549.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <line x1="220" y1="574" x2="1100" y2="574" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="990" y="584" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1036.0" y="598.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="911" y="584" width="71" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="946.5" y="598.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux sections</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Actions · Menu de ligne</text>
+  <line x1="200" y1="157.0" x2="238" y2="157" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="227" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="242" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Hooks du dialogue</text>
+  <text x="30" y="255" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouverture · sauvegarde · annulation</text>
+  <line x1="200" y1="244.0" x2="238" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="313" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="328" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons de la barre</text>
+  <text x="30" y="341" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sans contexte de ligne</text>
+  <line x1="200" y1="330.0" x2="238" y2="330" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="467" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="482" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Hooks de ligne</text>
+  <text x="30" y="495" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">après une écriture, grille ou dialogue</text>
+  <line x1="200" y1="484.0" x2="238" y2="484" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="227" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="242" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nombre par liste</text>
+  <text x="1130" y="255" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic ouvre la liste</text>
+  <line x1="1120" y1="244.0" x2="1074" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="346" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="361" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une action par ligne</text>
+  <text x="1130" y="374" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">id · type · libellé ; › pour modifier</text>
+  <line x1="1120" y1="363.0" x2="1064" y2="363" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="529" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="544" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">À la duplication</text>
+  <text x="1130" y="557" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à la place de l'insertion</text>
+  <line x1="1120" y1="546.0" x2="1074" y2="546" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
 </svg>
 
 | Groupe | Listes | Déclenchement | `source` lit dans |
@@ -51,11 +154,11 @@ Ils se règlent dans les onglets **Actions** et **Menu de ligne** de l'éditeur 
 | **Barre d'outils** | `actions` | Chaque entrée est un bouton au-dessus de la grille. | Aucune ligne ; valeurs saisies dans `INPUT.<nom>`. |
 | **Hooks de ligne** | `on_insert`, `on_update`, `on_delete` | Après le succès de l'écriture — depuis le dialogue ou la saisie en grille. | La ligne créée, ou la ligne supprimée. |
 | | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
-| **Menu de ligne** *(onglet dédié)* | `row_menu` | Chaque entrée est un élément du menu d'une ligne : clic droit, ou poignée ⋯ en début de ligne. | La ligne cliquée. |
+| **Menu de ligne** *(section dédiée)* | `row_menu` | Chaque entrée est un élément du menu d'une ligne : clic droit, ou poignée ⋯ en début de ligne. | La ligne cliquée. |
 
 Un hook exécute sa liste dans l'ordre et s'arrête à la première erreur, sauf si une action a **stop_on_error** désactivé. Une entrée de barre d'outils ou de menu de ligne correspond à une seule action : pour enchaîner plusieurs étapes depuis un même bouton, passer par une `chain`.
 
-Pour un clic simple sur une ligne, utiliser les réglages de **clic sur une ligne** de l'onglet Général (`row_click_screen` avec `row_click_binds`, ou `row_click_route`).
+Pour un clic simple sur une ligne, utiliser les réglages de **clic sur une ligne** de l'étape *Ce qu'il est* (`row_click_screen` avec `row_click_binds`, ou `row_click_route`).
 
 ---
 
@@ -96,7 +199,7 @@ Un écran doté d'actions de menu de ligne affiche une petite poignée au début
 - avec plusieurs actions, la poignée (**⋯**, *Actions de la ligne*) ouvre le même menu que le clic droit ;
 - avec une seule action `navigate`, la poignée (une flèche de retour) la déclenche aussitôt — son infobulle reprend le libellé de l'action.
 
-**Cellules en lien.** Le réglage **drill** d'une colonne (Liberty Next → Écrans → Écrans, colonne, groupe *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
+**Cellules en lien.** Le réglage **drill** d'une colonne (Liberty Next → Écrans → Écrans, étape *Grille*, colonne, onglet *Display*) désigne une action `navigate` du menu de ligne : la valeur s'affiche comme un lien qui la déclenche pour la ligne — le code client ouvre le client, sans menu à ouvrir. Un écran dont le menu de ligne ne compte qu'une action `navigate` le fait de lui-même sur sa première colonne clé. Un nom d'action inconnu est refusé au chargement de la configuration.
 
 **Où s'ouvre la cible.** Par défaut, une action `navigate` ouvre sa cible dans un nouvel onglet. Avec **Les navigations s'ouvrent dans l'onglet courant** dans [Liberty Next → Administrer → App](../settings-app.md#display), elle s'ouvre en panneau dans l'onglet courant, par-dessus la grille : un fil d'Ariane nomme chaque niveau, **Retour** revient au précédent, et la grille d'origine conserve ses lignes et ses filtres. Une navigation depuis le panneau s'imbrique de la même façon. Une action peut en décider elle-même avec `inline = true` (panneau) ou `inline = false` (nouvel onglet), dans `screens.toml`.
 
@@ -188,13 +291,13 @@ L'écran **deals** s'ouvre avec ses filtres alimentés par les liaisons.
 
 ### Renseigner les colonnes d'audit
 
-Pour des colonnes `CREATED_BY` / `CREATED_AT`, aucun hook n'est nécessaire : les règles `LOGIN` et `SYSDATE` du dictionnaire, ou les jetons `{{LOGIN}}` / `{{SYSTIMESTAMP}}` dans la requête d'insertion, les renseignent côté serveur — voir [Dictionnaire → Règles](../../dictionary.md#rules). Pour historiser chaque écriture dans une table, renseigner `audit_table` dans l'onglet Général.
+Pour des colonnes `CREATED_BY` / `CREATED_AT`, aucun hook n'est nécessaire : les règles `LOGIN` et `SYSDATE` du dictionnaire, ou les jetons `{{LOGIN}}` / `{{SYSTIMESTAMP}}` dans la requête d'insertion, les renseignent côté serveur — voir [Dictionnaire → Règles](../../dictionary.md#rules). Pour historiser chaque écriture dans une table, renseigner `audit_table` à l'étape *Ce qu'il est*.
 
 ---
 
 ## Enregistrement
 
-Les onglets Actions et Menu de ligne modifient les listes de l'écran ; **Enregistrer** dans l'éditeur d'écran les écrit avec le reste de l'écran et recharge la configuration — le clic suivant exécute la nouvelle version.
+Les sections Actions et Menu de ligne modifient les listes de l'écran ; **Enregistrer** dans le Concepteur d'écran les écrit avec le reste de l'écran et recharge la configuration — le clic suivant exécute la nouvelle version.
 
 ---
 

@@ -39,7 +39,7 @@ A permission is a colon-separated string — `sql:sales:orders_get`, `api:crm:ge
 | Call an API endpoint | `api:<connector>:<endpoint>`. |
 | See a menu entry | The permission of what the entry runs, or an explicit `menu:` allow; a `menu:` or `dashboard:` deny hides it. |
 | Use the assistant | `ai:chat`; the assistant's queries are filtered by the data scope. |
-| Settings, Monitoring, Nomaflow, change packages | **Superuser** only. |
+| The Liberty Next pages, Monitoring, Nomaflow, change packages | **Superuser** only. |
 
 A deny wins over an allow, across all of a user's roles; superusers pass every check and every data scope.
 
@@ -53,7 +53,7 @@ A sign-in gives an access token (one hour) and a refresh token (14 days). Each r
 
 ## Secrets \{#secrets\}
 
-Pool passwords, API credentials, the licence key, the AI key, the OIDC secret and the SMTP password are encrypted when saved from Settings. The master key that encrypts them comes from the environment and must never change on an existing install. See [Encrypted secrets](./encrypted-secrets.md).
+Pool passwords, API credentials, the licence key, the AI key, the OIDC secret and the SMTP password are encrypted when saved from the Liberty Next pages. The master key that encrypts them comes from the environment and must never change on an existing install. See [Encrypted secrets](./encrypted-secrets.md).
 
 ---
 

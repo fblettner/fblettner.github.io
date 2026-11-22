@@ -8,39 +8,142 @@ keywords: [Liberty Next, actions, on_load, on_save, on_cancel, on_insert, on_upd
 
 A screen with a grid and a dialog covers the standard read and write flow. **Actions** and **lifecycle hooks** add everything else: run a query from a button, open another view from a row, call an API or a plugin after a save, refresh the grid after a delete.
 
-They are set in the **Actions** and **Row menu** tabs of the screen editor, with the same action shapes everywhere.
+They are set on the **Actions** stage of the [Screen Designer](./overview.md#designer), in its two sections **Actions** and **Row menu**, with the same action shapes everywhere. **Actions** lists the hooks and toolbar buttons as folded groups, each with its count; a group opens on its actions, one per line (id, type, label, number of steps), with **Add action** below. **Row menu** lists the entries of the row's context menu the same way.
 
 ---
 
 ## Where actions fire \{#groups\}
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 632" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="al-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="acl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="acl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="acl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="acl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="420" rx="14" fill="url(#al-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer · crm.customers · Actions</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="88" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIALOG HOOKS — fire while the form is open</text>
-  <rect x="40" y="100" width="920" height="100" rx="8" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="56" y="122" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_load</text>
-  <text x="56" y="138" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Runs right after the row's data is loaded — useful for refreshing a lookup or prefetching related rows.</text>
-  <text x="56" y="160" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_save</text>
-  <text x="56" y="176" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Runs after the dialog's main update/insert succeeds — chain extra writes on the same row.</text>
-
-  <text x="40" y="220" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOOLBAR — buttons above the table</text>
-  <rect x="40" y="232" width="920" height="80" rx="8" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="56" y="254" fill="#c084fc" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">actions</text>
-  <text x="56" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Run without row context — a prompt can ask the user for values first.</text>
-  <text x="56" y="290" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">＋ Add toolbar action</text>
-
-  <text x="40" y="332" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ROW HOOKS — fire after a row is mutated</text>
-  <rect x="40" y="344" width="920" height="80" rx="8" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="56" y="366" fill="#22c55e" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_insert</text>
-  <text x="56" y="380" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">After a row is inserted (dialog Save or inline grid Save).</text>
-  <text x="56" y="396" fill="#22c55e" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">on_update · on_delete</text>
-  <text x="56" y="410" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">After an edit / a delete. ParamBinds resolve against the new / deleted row's values.</text>
+  <rect x="220" y="20" width="880" height="596" rx="14" fill="url(#acl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
+  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="999.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA</text>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
+  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 column(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filter(s) · 1 view(s)</text>
+  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD FORM</text>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 tab(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 field(s)</text>
+  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="rgba(168,85,247,0.12)" stroke="#c084fc" strokeWidth="1.2"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 toolbar action(s)</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 in the row menu · 1 on s…</text>
+  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#acl-flow)"/>
+  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTPUT</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">the grid's own export</text>
+  <rect x="238" y="146" width="123" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="239" y="147" width="57" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="267.5" y="160.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Actions</text>
+  <line x1="297" y1="151" x2="297" y2="163" stroke="#334155" strokeWidth="1"/>
+  <text x="329.0" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Row menu</text>
+  <text x="238" y="192" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Dialog hooks — fire while the form is open (on_load / on_save / on_cancel)</text>
+  <rect x="238" y="200" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="216.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="216.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On load (action chain)</text>
+  <text x="1070" y="216.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="231" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="247.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="247.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On save (action chain)</text>
+  <text x="1070" y="247.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="238" y="262" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="278.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="278.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On cancel (action chain)</text>
+  <text x="1070" y="278.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <text x="238" y="309" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Toolbar — buttons above the table (run independently, no row context)</text>
+  <rect x="238" y="317" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="333.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="264" y="333.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Screen actions</text>
+  <text x="1070" y="333.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="250" y="346" width="820" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="367" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="278" y="361" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">export_selection</text>
+  <text x="373.296" y="361" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">run_query · Export selection</text>
+  <text x="278" y="374" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">1 step</text>
+  <text x="1060" y="367" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="250" y="386" width="79" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="289.5" y="400.5" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add action</text>
+  <text x="238" y="432" fill="#64748b" fontSize="8.2" fontFamily="system-ui, sans-serif">Row hooks — fire after a row is inserted / updated / deleted</text>
+  <rect x="238" y="440" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="456.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="456.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On insert (row hook)</text>
+  <text x="1070" y="456.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="471" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="487.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="487.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On update (row hook)</text>
+  <text x="1070" y="487.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="502" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="518.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="518.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On delete (row hook)</text>
+  <text x="1070" y="518.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="238" y="533" width="844" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="549.3" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="264" y="549.3" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">On duplicate (row hook)</text>
+  <text x="1070" y="549.3" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <line x1="220" y1="574" x2="1100" y2="574" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1027" y="584" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1054.5" y="598.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="954" y="584" width="65" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="986.5" y="598.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Two sections</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Actions · Row menu</text>
+  <line x1="200" y1="157.0" x2="238" y2="157" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="227" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="242" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dialog hooks</text>
+  <text x="30" y="255" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">load · save · cancel</text>
+  <line x1="200" y1="244.0" x2="238" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="313" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="328" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toolbar buttons</text>
+  <text x="30" y="341" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">no row context</text>
+  <line x1="200" y1="330.0" x2="238" y2="330" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="20" y="467" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="482" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row hooks</text>
+  <text x="30" y="495" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">after a write, grid or dialog</text>
+  <line x1="200" y1="484.0" x2="238" y2="484" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="227" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="242" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Count per list</text>
+  <text x="1130" y="255" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a click opens the list</text>
+  <line x1="1120" y1="244.0" x2="1074" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="346" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="361" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One action per line</text>
+  <text x="1130" y="374" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">id · type · label; › to edit</text>
+  <line x1="1120" y1="363.0" x2="1064" y2="363" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
+  <rect x="1120" y="529" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="544" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">On duplicate</text>
+  <text x="1130" y="557" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">instead of on insert</text>
+  <line x1="1120" y1="546.0" x2="1074" y2="546" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acl-arrow)"/>
 </svg>
 
 | Group | Lists | When they fire | `source` reads from |
@@ -51,11 +154,11 @@ They are set in the **Actions** and **Row menu** tabs of the screen editor, with
 | **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
 | **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
 | | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
-| **Row menu** *(own tab)* | `row_menu` | Each entry is a menu item on a row: right-click, or the ⋯ handle at the start of the row. | The clicked row. |
+| **Row menu** *(own section)* | `row_menu` | Each entry is a menu item on a row: right-click, or the ⋯ handle at the start of the row. | The clicked row. |
 
 Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
 
-For a left click on a row, use the **row-click** settings of the General tab (`row_click_screen` with `row_click_binds`, or `row_click_route`).
+For a left click on a row, use the **row-click** settings of the *What it is* stage (`row_click_screen` with `row_click_binds`, or `row_click_route`).
 
 ---
 
@@ -96,7 +199,7 @@ A screen with row-menu actions shows a small handle at the start of every row, s
 - with several actions, the handle (**⋯**, *Row actions*) opens the same menu as the right-click;
 - with a single `navigate` action, the handle (a return arrow) fires it at once — its tooltip is the action's label.
 
-**Link cells.** A column's **drill** setting (Liberty Next → Screens → Screens, column, *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
+**Link cells.** A column's **drill** setting (Liberty Next → Screens → Screens, stage *Grid*, column, tab *Display*) names a `navigate` action of the row menu: the value shows as a link that fires it for the row — the customer code opens the customer, with no menu to open. A screen whose row menu holds a single `navigate` action does it by itself on its first key column. A wrong action name is refused when the configuration loads.
 
 **Where the target opens.** By default, a `navigate` action opens its target in a new tab. With **Drill-downs open inside the current tab** in [Liberty Next → Administer → App](../settings-app.md#display), it opens as a panel inside the current tab, over the grid: a breadcrumb names each level, **Back** returns to the one before, and the grid behind keeps its rows and filters. A drill from the panel nests the same way. An action decides for itself with `inline = true` (panel) or `inline = false` (new tab), set in `screens.toml`.
 
@@ -188,13 +291,13 @@ The **deals** screen opens with its filters seeded from the binds.
 
 ### Stamp audit columns
 
-For `CREATED_BY` / `CREATED_AT` columns, no hook is needed: the dictionary rules `LOGIN` and `SYSDATE`, or the `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens in the insert query, fill them on the server — see [Dictionary → Rules](../../dictionary.md#rules). To log every write in a history table, set `audit_table` on the General tab.
+For `CREATED_BY` / `CREATED_AT` columns, no hook is needed: the dictionary rules `LOGIN` and `SYSDATE`, or the `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens in the insert query, fill them on the server — see [Dictionary → Rules](../../dictionary.md#rules). To log every write in a history table, set `audit_table` on the *What it is* stage.
 
 ---
 
 ## Saving
 
-The Actions and Row menu tabs edit the screen's lists; the screen editor's **Save** writes them with the rest of the screen and reloads the configuration — the next click runs the new version.
+The Actions and Row menu sections edit the screen's lists; the Screen Designer's **Save** writes them with the rest of the screen and reloads the configuration — the next click runs the new version.
 
 ---
 

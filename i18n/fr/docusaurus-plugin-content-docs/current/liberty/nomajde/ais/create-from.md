@@ -16,104 +16,102 @@ Accès : **Liberty Next → Données → Connecteurs**, connecteur `ais_connecti
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 398" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 610" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="cfr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="cfr-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="cfr-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="cfr-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="cfa-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cfa-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cfa-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cfa-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="358" rx="14" fill="url(#cfr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Créer un point d'accès à partir du serveur</text>
-  <rect x="240" y="60" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="74.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">A JDE application (its list and its record) ▾</text>
-  <text x="240" y="104" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECHERCHER</text>
-  <rect x="240" y="110" width="250" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="124.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">address book</text>
-  <rect x="496" y="110" width="66" height="22" rx="5" fill="url(#cfr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="529.0" y="124.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Chercher</text>
-  <text x="240" y="150" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">3 trouvés — choisissez-en un</text>
-  <rect x="240" y="158" width="330" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="250" y="172.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">P01012</text>
-  <text x="316" y="172.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book</text>
-  <rect x="240" y="184" width="330" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="198.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">P0101</text>
-  <text x="316" y="198.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book Revisions</text>
-  <rect x="240" y="210" width="330" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="224.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">P01111</text>
-  <text x="316" y="224.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book - Who's Who</text>
-  <rect x="240" y="244" width="330" height="62" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="252" y="262" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">P01012 — Address Book.</text>
-  <text x="252" y="278" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Its list is W01012B (Work With Addresses, 9 columns);</text>
-  <text x="252" y="292" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">a record is edited in W01012A (Address Book Revision).</text>
-  <rect x="592" y="60" width="368" height="300" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="606" y="82" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT TO CREATE</text>
-  <rect x="606" y="88" width="340" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="616" y="102.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The endpoints and a screen on them ▾</text>
-  <text x="606" y="132" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IDENTIFIES A RECORD</text>
-  <rect x="606" y="141" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M608.5,146.5 L610.8,148.8 L614.8,144" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="623" y="150" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">AN8</text>
-  <rect x="652.12" y="141" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="669.12" y="150" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">ALPH</text>
-  <rect x="703.28" y="141" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="720.28" y="150" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">AT1</text>
-  <text x="606" y="178" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE FIELDS A RECORD IS EDITED WITH</text>
-  <rect x="606" y="187" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M608.5,192.5 L610.8,194.8 L614.8,190" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="623" y="196" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">ALPH</text>
-  <rect x="690" y="187" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M692.5,192.5 L694.8,194.8 L698.8,190" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="707" y="196" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">AT1</text>
-  <rect x="774" y="187" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M776.5,192.5 L778.8,194.8 L782.8,190" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="791" y="196" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">TAX</text>
-  <rect x="858" y="187" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="875" y="196" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">MLNM</text>
-  <rect x="606" y="207" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M608.5,212.5 L610.8,214.8 L614.8,210" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="623" y="216" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">ADD1</text>
-  <rect x="690" y="207" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M692.5,212.5 L694.8,214.8 L698.8,210" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="707" y="216" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">CTY1</text>
-  <rect x="774" y="207" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="791" y="216" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">ADDZ</text>
-  <rect x="858" y="207" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="875" y="216" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">PH1</text>
-  <text x="606" y="248" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VERSION OF THE APPLICATION</text>
-  <rect x="606" y="254" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="616" y="268.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">ZJDE0001</text>
-  <rect x="782" y="324" width="59" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="811.5" y="338.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
-  <rect x="850" y="324" width="91" height="22" rx="5" fill="url(#cfr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="895.5" y="338.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Créer l'écran</text>
-  <text x="240" y="332" fill="#94a3b8" fontSize="8.8" fontFamily="system-ui, sans-serif">Ensuite : application, identifiant de l'écran,</text>
-  <text x="240" y="346" fill="#94a3b8" fontSize="8.8" fontFamily="system-ui, sans-serif">titre, ajout au menu — créés en une passe.</text>
-  <rect x="20" y="50" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Point de départ</text>
-  <text x="30" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application, formulaire, table, état…</text>
-  <line x1="200" y1="67.0" x2="240" y2="71" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
-  <rect x="20" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · Rechercher</text>
-  <text x="30" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par nom ou description</text>
-  <line x1="200" y1="147.0" x2="240" y2="169" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
-  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui a été trouvé</text>
-  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la liste et le formulaire</text>
-  <line x1="200" y1="267.0" x2="240" y2="275" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
-  <rect x="1000" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">2 · Répondre</text>
-  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce qu'un opérateur connaît</text>
-  <line x1="1000" y1="77.0" x2="946" y2="99" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
-  <rect x="1000" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La clé</text>
-  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">retrouvée avant toute modification</text>
-  <line x1="1000" y1="177.0" x2="772" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
-  <rect x="1000" y="310" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="325" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">3 · Créer</text>
-  <text x="1010" y="338" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">points d'accès et écran ensemble</text>
-  <line x1="1000" y1="327.0" x2="941" y2="335" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfr-arrow)"/>
+  <rect x="260" y="20" width="680" height="570" rx="14" fill="url(#cfa-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="280" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Créer un point d’accès à partir du serveur</text>
+  <line x1="272" y1="58" x2="928" y2="58" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="280" y="70" width="640" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="85.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">A JDE application (its list and its record)  ▾</text>
+  <text x="280" y="110" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">The easy way: pick an application (P01012). Its list and the form a record is edited in are found, and the endpoints</text>
+  <text x="280" y="122" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">that read, add, change and delete a record are built together — with a screen on them if you want.</text>
+  <text x="280" y="146" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECHERCHER</text>
+  <rect x="280" y="152" width="560" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="166.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">P01012</text>
+  <rect x="848" y="152" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="884.0" y="166.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌕ Chercher</text>
+  <text x="280" y="192" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 TROUVÉS — CHOISISSEZ-EN UN</text>
+  <rect x="280" y="198" width="640" height="19" fill="rgba(74,158,255,0.16)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="211" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">P01012</text>
+  <text x="360" y="211" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Address Book</text>
+  <rect x="280" y="217" width="640" height="19" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="230" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">P01012BR</text>
+  <text x="360" y="230" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Address Book Additional Information - Brazil</text>
+  <rect x="280" y="236" width="640" height="19" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="249" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">P01012D</text>
+  <text x="360" y="249" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Address Book Translations</text>
+  <rect x="280" y="255" width="640" height="19" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="268" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">P01012SS</text>
+  <text x="360" y="268" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Self Service - Update Address Book Record</text>
+  <text x="280" y="290" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">P01012 — Address Book. Its list is W01012B (Work With Addresses, 6 columns); a record is edited in W01012A (Address Book</text>
+  <text x="280" y="302" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Revision). Without any filter this list shows nothing on your JDE: the screen will ask for one (a search type, a number…).</text>
+  <text x="280" y="322" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT TO CREATE</text>
+  <rect x="280" y="327" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="340.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">The endpoints and a screen on them  ▾</text>
+  <text x="280" y="360" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IDENTIFIES A RECORD</text>
+  <rect x="280" y="365" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="378.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <rect x="286" y="368" width="110" height="14" rx="7.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="341.0" y="378.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Address Number (AN8) ×</text>
+  <text x="280" y="398" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE FIELDS A RECORD IS EDITED WITH (IN W01012A)</text>
+  <rect x="280" y="403" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="416.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <rect x="286" y="406" width="110" height="14" rx="7.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="341.0" y="416.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Address Number (AN8) ×</text>
+  <rect x="400" y="406" width="106" height="14" rx="7.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="453.0" y="416.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Name - Alpha (ALPH) ×</text>
+  <rect x="510" y="406" width="97" height="14" rx="7.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="558.5" y="416.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Search Type (AT1) ×</text>
+  <rect x="611" y="406" width="76" height="14" rx="7.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="649.0" y="416.2" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tax ID (TAX) ×</text>
+  <text x="280" y="436" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE LIST</text>
+  <rect x="280" y="441" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="454.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">W01012B · Work With Addresses · find / browse  ▾</text>
+  <text x="280" y="474" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE FORM A RECORD IS EDITED IN</text>
+  <rect x="280" y="479" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="492.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">W01012A · Address Book Revision · fix / inspect  ▾</text>
+  <text x="280" y="512" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VERSION OF THE APPLICATION</text>
+  <rect x="280" y="517" width="640" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="530.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ZJDE0001</text>
+  <line x1="272" y1="550" x2="928" y2="550" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="778" y="560" width="142" height="22" rx="5" fill="url(#cfa-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="849.0" y="574.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✦ Créer le point d’accès</text>
+  <rect x="715" y="560" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="743.5" y="574.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="20" y="70" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Créer à partir de</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application, écran, table, état…</text>
+  <line x1="240" y1="87.0" x2="280" y2="82" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="20" y="150" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · Rechercher</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par nom ou partie de description</text>
+  <line x1="240" y1="167.0" x2="280" y2="163" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="20" y="230" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui a été trouvé</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la liste, l'écran qui modifie</text>
+  <line x1="240" y1="247.0" x2="280" y2="287" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="1000" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">2 · Répondre</text>
+  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce qu'un opérateur sait</text>
+  <line x1="1000" y1="317.0" x2="920" y2="337" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La clé</text>
+  <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">trouvée avant tout changement</text>
+  <line x1="1000" y1="377.0" x2="920" y2="375" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="1000" y="420" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Champs à remplir</text>
+  <text x="1010" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chacun devient une variable</text>
+  <line x1="1000" y1="437.0" x2="920" y2="413" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
+  <rect x="1000" y="550" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="565" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">3 · Créer</text>
+  <text x="1010" y="578" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">puis la boîte de l'écran</text>
+  <line x1="1000" y1="567.0" x2="880" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cfa-arrow)"/>
 </svg>
 
 ---

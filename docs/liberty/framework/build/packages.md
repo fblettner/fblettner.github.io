@@ -14,6 +14,141 @@ This is the standard *staging → production* path. It's also the right tool for
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1320 510" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pkgb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pkgb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pkgb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pkgb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="470" rx="14" fill="url(#pkgb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Package</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236.0" y="74" width="276.0" height="40" rx="8" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <rect x="245.0" y="84" width="20" height="20" rx="5" fill="#4a9eff" fillOpacity="0.18"/>
+  <circle cx="255.0" cy="94" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="272.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Build package</text>
+  <text x="272.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Pick screens and their dependencies, download a zip</text>
+  <rect x="522.0" y="74" width="276.0" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="531.0" y="84" width="20" height="20" rx="5" fill="#c084fc" fillOpacity="0.18"/>
+  <circle cx="541.0" cy="94" r="4" fill="none" stroke="#c084fc" strokeWidth="1.4"/>
+  <text x="558.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Import package</text>
+  <text x="558.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Apply a package zip to this instance</text>
+  <rect x="808.0" y="74" width="276.0" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="817.0" y="84" width="20" height="20" rx="5" fill="#fb923c" fillOpacity="0.18"/>
+  <circle cx="827.0" cy="94" r="4" fill="none" stroke="#fb923c" strokeWidth="1.4"/>
+  <text x="844.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Promotion</text>
+  <text x="844.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Target instances and the promotions applied</text>
+  <rect x="999" y="126" width="85" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1041.5" y="141.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">➚ Promote to…</text>
+  <rect x="883" y="126" width="110" height="24" rx="5" fill="url(#pkgb-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="938.0" y="141.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⤓ Download ZIP (6)</text>
+  <rect x="812" y="126" width="65" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="844.5" y="141.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Clear (1)</text>
+  <rect x="236" y="126" width="564" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="246" y="141.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Filter seeds</text>
+  <text x="250" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SEEDS</text>
+  <text x="287.5" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 1 selected</text>
+  <text x="640.0" y="182" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">select all</text>
+  <line x1="236" y1="192" x2="654.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="212" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SCREENS · 1/24</text>
+  <text x="640.0" y="212" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">select all</text>
+  <text x="250" y="230" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">CRM</text>
+  <rect x="258" y="244" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="253" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="253" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">contacts</text>
+  <text x="335.12" y="253" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Contacts</text>
+  <rect x="246" y="262" width="398.0" height="22" rx="5" fill="rgba(255,255,255,0.05)"/>
+  <rect x="258" y="268" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M260.5,273.5 L262.8,275.8 L266.8,271" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="275" y="277" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="277" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="341.01" y="277" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Customers</text>
+  <rect x="258" y="292" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="301" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="301" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="323.34" y="301" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Orders</text>
+  <rect x="258" y="316" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="325" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="325" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">products</text>
+  <text x="335.12" y="325" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Products</text>
+  <text x="250" y="344" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">MENU ITEMS · 0/18</text>
+  <text x="250" y="366" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">DASHBOARDS · 0/3</text>
+  <text x="250" y="388" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">NOMAFLOW JOBS · 0/6</text>
+  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SHARED ACTIONS · 0/4</text>
+  <text x="680.0" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DEPENDENCIES</text>
+  <text x="761.6" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 6/8 will be packaged</text>
+  <line x1="666.0" y1="192" x2="1084.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
+  <text x="680.0" y="212" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">SCREENS · 1/1</text>
+  <text x="1070.0" y="212" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">deselect all</text>
+  <rect x="688.0" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,230.5 L692.8,232.8 L696.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="234" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers</text>
+  <text x="680.0" y="252" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">CONNECTORS · 0/1</text>
+  <text x="1070.0" y="252" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">select all</text>
+  <rect x="688.0" y="265" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="705.0" y="274" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="680.0" y="292" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">POOLS · 0/1</text>
+  <text x="1070.0" y="292" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">select all</text>
+  <rect x="688.0" y="305" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="705.0" y="314" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="680.0" y="332" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">QUERIES · 3/3</text>
+  <text x="1070.0" y="332" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">deselect all</text>
+  <rect x="688.0" y="345" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,350.5 L692.8,352.8 L696.8,348" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="354" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers_get</text>
+  <rect x="688.0" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,370.5 L692.8,372.8 L696.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="374" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers_put</text>
+  <rect x="688.0" y="385" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,390.5 L692.8,392.8 L696.8,388" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="394" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.lookup_country</text>
+  <text x="680.0" y="412" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">DICTIONARY ENTRIES · 2/2</text>
+  <text x="1070.0" y="412" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">deselect all</text>
+  <rect x="688.0" y="425" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,430.5 L692.8,432.8 L696.8,428" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="434" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.CUSTOMER_ID</text>
+  <rect x="688.0" y="445" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,450.5 L692.8,452.8 L696.8,448" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="454" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.COUNTRY</text>
+  <rect x="236" y="162" width="418.0" height="314" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="666.0" y="162" width="418.0" height="314" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three views</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">build, import, promotion</text>
+  <line x1="200" y1="77.0" x2="236" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filter, then select all</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">only the matching seeds</text>
+  <line x1="200" y1="167.0" x2="236" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tick a seed</text>
+  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">screen, menu item, dashboard…</text>
+  <line x1="200" y1="287.0" x2="252" y2="273" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Other kinds of seeds</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">models, jobs, rules, actions, AI</text>
+  <line x1="200" y1="417.0" x2="250" y2="366" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">ZIP or promotion</text>
+  <text x="1130" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">count of what is ticked</text>
+  <line x1="1120" y1="57.0" x2="943" y2="126" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The closure</text>
+  <text x="1130" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">every dependency reached</text>
+  <line x1="1120" y1="217.0" x2="1084.0" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Unticked by default</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">connectors and pools</text>
+  <line x1="1120" y1="317.0" x2="1084.0" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+</svg>
+
+---
+
 ## When to use which
 
 | Situation | Use |
@@ -36,7 +171,7 @@ The left panel lists every **seed candidate** on the install — screens, menu i
 
 ### Picking seeds
 
-Three sections in the left panel:
+The left panel groups the candidates by kind, each group with its count of ticked items (`SCREENS · 1/24`):
 
 | Section | Drawn from |
 |---|---|
@@ -49,13 +184,13 @@ Three sections in the left panel:
 | **Shared actions** | The actions reused by several screens. |
 | **Assistant (starters, playbooks)** | What an application ships for the AI assistant — one entry per application. |
 
-A search box at the top filters the visible list by name / label / scope. The per-section *select all* tick respects the filter — narrow first (e.g. type `audit`), then tick *select all* to grab only the matching screens.
+**Filter seeds**, above the panels, filters the visible list by name / label / scope. The per-section *select all* respects the filter — narrow first (e.g. type `audit`), then tick *select all* to grab only the matching screens.
 
 The seed picker is **bulk-friendly**: hold the filter at a customer name, tick *select all* and you've staged a per-customer slice. No need to click each screen one by one.
 
 ### What the dependency walker does
 
-The moment you tick any seed, the right panel kicks off the walker (`POST /admin/find-dependencies` on the backend). For every seed, the walker resolves:
+The moment you tick any seed — the **Download ZIP (n)** and **Promote to…** buttons then count what is ticked —, the right panel kicks off the walker (`POST /admin/find-dependencies` on the backend). For every seed, the walker resolves:
 
 | Kind | What's pulled |
 |---|---|
@@ -74,7 +209,7 @@ The Dependencies panel pre-ticks every dep **except** three kinds:
 |---|---|
 | **Connectors** | The target install almost always already has its own connector with the right pool / credentials. Shipping the source's connector would clobber the target's secrets. |
 | **Pools** | Same — pools carry DB credentials. The target's pool is the one you want. |
-| **API endpoints** | Same — endpoints carry auth headers / Bearer tokens specific to the source install's wiring. |
+| **API endpoints** | Same — endpoints carry auth headers / Bearer tokens specific to the source install's wiring. An endpoint a screen reads its rows from, or saves through, is the screen's data: it is ticked like the screen's queries, and an endpoint served by a shared action brings that action with it. |
 
 This makes the typical "promote screens between envs" workflow safe out of the box: nothing that carries secrets ships unless you opt in. Tick the *Connectors* group manually only when the target genuinely has none — typically a brand-new install or a per-customer staging spin-up.
 
@@ -214,7 +349,7 @@ What travels is merged with care:
 - a **job** that already exists on the target keeps its schedule, enabled flag, timezone, presets, alerts, retry, log level and timeout; a new job arrives disabled;
 - the package is built from the files as written: unset values and `${VAR}` references travel as they are.
 
-If the reload fails after a successful apply, the file changes are kept on disk; run *Reload config (at the top of any Liberty Next editor page)* once the underlying issue is fixed.
+If the reload fails after a successful apply, the file changes are kept on disk; run **Reload config**, at the top of the Liberty Next pages, once the underlying issue is fixed.
 
 ---
 
@@ -275,7 +410,7 @@ Liberty also exposes a dedicated **Find dependencies** modal from any screen / m
 | Bundled `connectors.toml` (default-excluded) without checking pool names match the target. | Target's pools change unexpectedly; pre-existing queries error at next reload. | Leave connectors / pools default-excluded unless the target is brand-new. Or rename pools on the source before bundling. |
 | Built from a source with unresolved references (broken rename / deleted query). | MANIFEST.md lists items under *Missing references*. | Fix on the source (rename / delete / restore) and rebuild. The target won't get the broken references — but it also won't get the screens / queries that referenced them. |
 | A warning says the package holds values this instance cannot decrypt. | The source and the target use different master keys. | Set those values again on the target after the import, or share the master key. |
-| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Reload config (at the top of any Liberty Next editor page)* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
+| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via **Reload config**, at the top of the Liberty Next pages, once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
 
 ---
 

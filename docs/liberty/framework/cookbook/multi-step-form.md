@@ -71,7 +71,7 @@ The `AND STATUS = …` guard makes a transition from the wrong state change noth
 
 ### 4. The transition buttons
 
-In the screen editor, **Row menu** tab, one entry per transition:
+In the Screen Designer, **Actions** stage, **Row menu** section, one entry per transition:
 
 ```toml
 [[screens.expenses.expense_claims.row_menu]]
@@ -105,7 +105,7 @@ On the columns (Edit and Filter tabs of the inspector):
 | `DECIDED_BY`, `DECIDED_AT` | `visible_when` STATUS = `APPROVED`, `REJECTED`; `disabled` |
 | `REJECT_REASON` | `visible_when` STATUS = `REJECTED`; `disabled` |
 
-And on the **General** tab, `editable_when` STATUS = `DRAFT`: once submitted, the claim opens read-only and only the row-menu transitions change it. See [Form conditions](../form-conditions.md).
+And in the **What it is** stage, `editable_when` STATUS = `DRAFT`: once submitted, the claim opens read-only and only the row-menu transitions change it. See [Form conditions](../form-conditions.md).
 
 ### 7. Notifications
 

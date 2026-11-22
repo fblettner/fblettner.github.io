@@ -1,12 +1,12 @@
 ---
 title: La démo des ventes
-description: "L'application Sales demo livrée avec Liberty Next : des lignes de facture chargées depuis Excel par période, la validation et la clôture des périodes, un tableau de bord d'accueil, l'explorateur de données et ses analyses prêtes à l'emploi, les questions de départ de l'assistant IA, une synthèse mensuelle envoyée par Nomaflow, et trois utilisateurs de démonstration qui voient des lignes différentes — chaque fonction construite depuis les Paramètres, sans code."
+description: "L'application Sales demo livrée avec Liberty Next : des lignes de facture chargées depuis Excel par période, la validation et la clôture des périodes, un tableau de bord d'accueil, l'explorateur de données et ses analyses prêtes à l'emploi, les questions de départ de l'assistant IA, une synthèse mensuelle envoyée par Nomaflow, et trois utilisateurs de démonstration qui voient des lignes différentes — chaque fonction construite dans les pages Liberty Next, sans code."
 keywords: [Liberty Next, démo, démo des ventes, nomademo, application d'exemple, tableau de bord, explorateur de données, chargement de fichier, clôture de période, périmètre de données, synthèse, assistant IA]
 ---
 
 # La démo des ventes
 
-**Sales demo** est une petite application livrée avec Liberty Next pour montrer, sur un sujet cohérent, ce que le framework fait sans code : des lignes de facture mensuelles chargées depuis Excel, des périodes validées puis clôturées, un tableau de bord d'accueil, l'analyse libre dans l'explorateur de données, l'assistant IA, une synthèse envoyée chaque mois par e-mail, et des utilisateurs limités à leur propre société. Tout y est configuration — connecteur, dictionnaire, écrans, menus, tableaux de bord, modèle, tâches — consultable et modifiable dans les Paramètres.
+**Sales demo** est une petite application livrée avec Liberty Next pour montrer, sur un sujet cohérent, ce que le framework fait sans code : des lignes de facture mensuelles chargées depuis Excel, des périodes validées puis clôturées, un tableau de bord d'accueil, l'analyse libre dans l'explorateur de données, l'assistant IA, une synthèse envoyée chaque mois par e-mail, et des utilisateurs limités à leur propre société. Tout y est configuration — connecteur, dictionnaire, écrans, menus, tableaux de bord, modèle, tâches — consultable et modifiable dans les pages Liberty Next — le [Studio](./studio.md) la présente sous forme de carte.
 
 C'est une vitrine, pas un produit : l'ouvrir pour voir une fonction en action, et reprendre ce qui convient dans sa propre application.
 
@@ -35,7 +35,11 @@ C'est une vitrine, pas un produit : l'ouvrir pour voir une fonction en action, e
   <text x="268" y="254" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sociétés</text>
   <text x="268" y="280" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Clients</text>
   <text x="254" y="306" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Import</text>
-  <text x="268" y="332" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Charger les fichiers d'exemple</text>
+  <text x="268" y="326" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Fichier articles</text>
+  <text x="268" y="342" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Fichier sociétés</text>
+  <text x="268" y="358" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Fichier ventes (un mois)</text>
+  <text x="268" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Recalculer les périodes</text>
+  <text x="268" y="390" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Charger les fichiers d'exemple</text>
   <rect x="464" y="40" width="506" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="476" y="48" width="93" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="522.5" y="60.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Tableau de bord</text>
@@ -74,7 +78,7 @@ C'est une vitrine, pas un produit : l'ouvrir pour voir une fonction en action, e
   <line x1="210" y1="347.0" x2="268" y2="334" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
   <rect x="1000" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une app, chaque fonction</text>
-  <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">construite par les Paramètres</text>
+  <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">construite dans Liberty Next</text>
   <line x1="1000" y1="57.0" x2="970" y2="66" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
   <rect x="1000" y="330" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois utilisateurs</text>

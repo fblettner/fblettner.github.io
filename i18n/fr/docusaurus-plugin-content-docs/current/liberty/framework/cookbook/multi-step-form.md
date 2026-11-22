@@ -71,7 +71,7 @@ La garde `AND STATUS = …` fait qu'une transition depuis un mauvais état ne mo
 
 ### 4. Les boutons de transition
 
-Dans l'éditeur d'écran, onglet **Menu de ligne**, une entrée par transition :
+Dans le Concepteur d'écran, étape **Actions**, section **Menu de ligne**, une entrée par transition :
 
 ```toml
 [[screens.expenses.expense_claims.row_menu]]
@@ -105,7 +105,7 @@ Sur les colonnes (onglets Edit et Filter de l'inspecteur) :
 | `DECIDED_BY`, `DECIDED_AT` | `visible_when` STATUS = `APPROVED`, `REJECTED` ; `disabled` |
 | `REJECT_REASON` | `visible_when` STATUS = `REJECTED` ; `disabled` |
 
-Et dans l'onglet **Général**, `editable_when` STATUS = `DRAFT` : une fois soumise, la note s'ouvre en lecture seule et seules les transitions du menu de ligne la font évoluer. Voir [Conditions de formulaire](../form-conditions.md).
+Et dans l'étape **Ce qu'il est**, `editable_when` STATUS = `DRAFT` : une fois soumise, la note s'ouvre en lecture seule et seules les transitions du menu de ligne la font évoluer. Voir [Conditions de formulaire](../form-conditions.md).
 
 ### 7. Les notifications
 

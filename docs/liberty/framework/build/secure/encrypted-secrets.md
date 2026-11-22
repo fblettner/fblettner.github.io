@@ -1,12 +1,12 @@
 ---
 title: Encrypted secrets
-description: "How Liberty Next stores pool passwords, API credentials, the licence key, the AI key, the OIDC client secret and the SMTP password: encrypted as ENC: values on every save from Settings, with the install's master key."
-keywords: [Liberty Next, encrypted secrets, "ENC:", master key, pool password, API token, Settings, liberty-crypto]
+description: "How Liberty Next stores pool passwords, API credentials, the licence key, the AI key, the OIDC client secret and the SMTP password: encrypted as ENC: values on every save from the Liberty Next pages, with the install's master key."
+keywords: [Liberty Next, encrypted secrets, "ENC:", master key, pool password, API token, Liberty Next pages, liberty-crypto]
 ---
 
 # Encrypted secrets
 
-Every secret field of Settings is encrypted when it is saved and written to the configuration file as `ENC:…`. The server decrypts it when it loads the file, with the install's **master key**.
+Every secret field of the Liberty Next pages is encrypted when it is saved and written to the configuration file as `ENC:…`. The server decrypts it when it loads the file, with the install's **master key**.
 
 <svg viewBox="0 0 1200 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -51,13 +51,13 @@ Every secret field of Settings is encrypted when it is saved and written to the 
   <line x1="210" y1="277.0" x2="250" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sec-arrow)"/>
 </svg>
 
-| Field | Settings |
+| Field | Page |
 |---|---|
 | Pool password | Liberty Next → Administer → Pools |
 | API connector credentials (password, token, client secret) | Liberty Next → Data → Connectors |
 | Licence key, Anthropic API key, OIDC client secret, SMTP password | Liberty Next → Administer → App |
 
-A secret field is a masked input with an eye to show its content. There is nothing to switch on: a value saved from Settings is always encrypted, and the save is refused when the server has no master key.
+A secret field is a masked input — the pool's password with an eye to show its content. There is nothing to switch on: a value saved from these pages is always encrypted, and the save is refused when the server has no master key.
 
 To give a secret from the environment instead, write `${VARIABLE}` in the file; to write an `ENC:` value by hand, use `liberty-crypto encrypt`. The details — the key, its derivation, `<NAME>_FILE` secrets — are on [Encryption & secrets](../../configuration/encryption-secrets.md).
 

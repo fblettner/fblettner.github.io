@@ -1,12 +1,12 @@
 ---
 title: Dialog builder
-description: "The Visual Builder — a three-column Figma-style canvas (Palette / Canvas / Inspector) where you drag fields onto tabs, set properties, wire lookups and add per-tab actions."
+description: "The record form of a Liberty Next screen, built in the Screen Designer — three panels (Add a field / Dialog / Inspector) where you add fields to tabs, set their column settings, choose the tab types and add per-tab actions."
 keywords: [Liberty Framework, dialog builder, visual builder, ScreenVisualBuilder, palette, canvas, inspector, tabs, fields, drag-drop]
 ---
 
 # Dialog builder
 
-The **Dialog** tab of the Screen Designer opens the **Visual Builder** — a WYSIWYG editor for the add/edit form. The data model is the same `ScreenDialog` shape stored in `screens.toml`, but instead of editing TOML you drag fields onto tabs and tune properties in a side inspector.
+The **Record form** stage of the Screen Designer opens the **visual builder** — a WYSIWYG editor for the add/edit form. The data model is the same `ScreenDialog` shape stored in `screens.toml`, but instead of editing TOML you add fields to tabs and tune them in a side inspector.
 
 A screen without a dialog still works as a read-only / grid-edit table. Build a dialog when the user needs a full form to add or edit rows.
 
@@ -14,106 +14,212 @@ A screen without a dialog still works as a read-only / grid-edit table. Build a 
 
 ## Three-column layout
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 574" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="vb-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="dlb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dlb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dlb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dlb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="420" rx="14" fill="url(#vb-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer · crm.customers · Dialog</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="78" width="220" height="350" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="100" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PALETTE</text>
-  <rect x="56" y="112" width="80" height="22" rx="4" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
-  <text x="96" y="127" fill="#0b1220" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Dictionary</text>
-  <rect x="142" y="112" width="80" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="182" y="127" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
-  <rect x="56" y="144" width="186" height="22" rx="4" fill="rgba(0,0,0,0.30)" stroke="#334155"/>
-  <text x="68" y="159" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">🔎 Search…</text>
-  <rect x="56" y="176" width="186" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
-  <text x="68" y="194" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">＋ CUSTOMER_ID</text>
-  <rect x="56" y="208" width="186" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
-  <text x="68" y="226" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">＋ NAME</text>
-  <rect x="56" y="240" width="186" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
-  <text x="68" y="258" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">＋ EMAIL</text>
-  <rect x="56" y="272" width="186" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
-  <text x="68" y="290" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">＋ STATUS</text>
-  <rect x="56" y="304" width="186" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
-  <text x="68" y="322" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">＋ REGION_CODE</text>
-
-  <rect x="272" y="78" width="450" height="350" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="288" y="100" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CANVAS</text>
-  <rect x="288" y="112" width="76" height="24" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
-  <text x="326" y="129" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <rect x="370" y="112" width="76" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="408" y="129" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Address</text>
-  <rect x="452" y="112" width="60" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="482" y="129" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add tab</text>
-
-  <rect x="288" y="148" width="200" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="298" y="166" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <text x="298" y="180" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">[key · disabled in edit]</text>
-  <rect x="494" y="148" width="200" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="504" y="166" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">NAME</text>
-  <text x="504" y="180" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">[required]</text>
-
-  <rect x="288" y="196" width="200" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="298" y="214" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">EMAIL</text>
-  <text x="298" y="228" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">[format=email]</text>
-  <rect x="494" y="196" width="200" height="40" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeDasharray="3,3"/>
-  <text x="594" y="220" fill="#64748b" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">drop a field here</text>
-
-  <rect x="288" y="244" width="406" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="298" y="262" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">STATUS</text>
-  <text x="298" y="276" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">[ENUM · colspan=2]</text>
-
-  <rect x="288" y="304" width="200" height="40" rx="6" fill="rgba(255,255,255,0.10)" stroke="rgba(192,132,252,0.60)" strokeWidth="2"/>
-  <text x="298" y="322" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">REGION_CODE</text>
-  <text x="298" y="336" fill="#c084fc" fontSize="9" fontFamily="system-ui, sans-serif">[selected — see Inspector →]</text>
-
-  <text x="288" y="372" fill="#94a3b8" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HIDDEN ON THIS TAB</text>
-  <rect x="288" y="380" width="406" height="36" rx="6" fill="rgba(0,0,0,0.20)" stroke="#1f2937" strokeDasharray="3,3"/>
-  <text x="491" y="402" fill="#64748b" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">CREATED_AT (hidden=true)</text>
-
-  <rect x="734" y="78" width="226" height="350" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="750" y="100" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INSPECTOR · REGION_CODE</text>
-  <text x="750" y="124" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">dd</text>
-  <rect x="784" y="114" width="160" height="20" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="794" y="128" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">REGION_CODE</text>
-  <text x="750" y="148" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">colspan</text>
-  <rect x="784" y="138" width="50" height="20" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="809" y="152" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">1</text>
-  <text x="750" y="172" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">required</text>
-  <rect x="784" y="162" width="16" height="16" rx="3" fill="rgba(34,197,94,0.30)" stroke="rgba(34,197,94,0.60)"/>
-  <text x="750" y="196" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">hidden</text>
-  <rect x="784" y="186" width="16" height="16" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="750" y="220" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">disabled</text>
-  <rect x="784" y="210" width="16" height="16" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-
-  <line x1="750" y1="244" x2="944" y2="244" stroke="#1f2937"/>
-  <text x="750" y="262" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOOKUP PARAM BINDS</text>
-  <text x="750" y="284" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">:APP_ID ← APP_ID</text>
-  <text x="750" y="304" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">＋ Add binding</text>
-
-  <line x1="750" y1="326" x2="944" y2="326" stroke="#1f2937"/>
-  <text x="750" y="344" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONDITIONAL RULES</text>
-  <text x="750" y="362" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">visible_when: (none)</text>
-  <text x="750" y="378" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">required_when: (none)</text>
-  <text x="750" y="394" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">disabled_when: (none)</text>
-  <text x="750" y="416" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">＋ Add condition</text>
+  <rect x="220" y="20" width="880" height="538" rx="14" fill="url(#dlb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
+  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="999.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#dlb-flow)"/>
+  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA</text>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
+  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#dlb-flow)"/>
+  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 column(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filter(s) · 1 view(s)</text>
+  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#dlb-flow)"/>
+  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeWidth="1.2"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD FORM</text>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 tab(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 field(s)</text>
+  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#dlb-flow)"/>
+  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 toolbar action(s)</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 in the row menu · 1 on s…</text>
+  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#dlb-flow)"/>
+  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTPUT</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">the grid's own export</text>
+  <rect x="988" y="144" width="94" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1035.0" y="158.5" fill="#f87171" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete dialog</text>
+  <rect x="238" y="174" width="190" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="192" fill="#94a3b8" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ADD A FIELD</text>
+  <text x="416" y="192" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">‹</text>
+  <rect x="248" y="202" width="125" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="249" y="203" width="67" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="282.5" y="215.5" fill="#4a9eff" fontSize="8.2" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Dictionary</text>
+  <line x1="317" y1="207" x2="317" y2="217" stroke="#334155" strokeWidth="1"/>
+  <text x="345.0" y="215.5" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="248" y="230" width="170" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="257" y="242.3" fill="#475569" fontSize="8.2" fontFamily="system-ui, sans-serif">⌕ filter…</text>
+  <text x="254" y="268" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="268" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">ACTIVE</text>
+  <text x="414" y="268" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Active</text>
+  <text x="254" y="290" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="290" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">ADDRESS</text>
+  <text x="414" y="290" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Address</text>
+  <text x="254" y="312" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="312" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">CITY</text>
+  <text x="414" y="312" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">City</text>
+  <text x="254" y="334" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="334" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">COUNTRY</text>
+  <text x="414" y="334" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Country</text>
+  <text x="254" y="356" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="356" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">CREDIT_LIMIT</text>
+  <text x="414" y="356" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Credit limit</text>
+  <text x="254" y="378" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="378" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <text x="414" y="378" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="254" y="400" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="400" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">EMAIL</text>
+  <text x="414" y="400" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">E-mail</text>
+  <text x="254" y="422" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="422" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">NAME</text>
+  <text x="414" y="422" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Name</text>
+  <text x="254" y="444" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">⚿</text>
+  <text x="266" y="444" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">STATUS</text>
+  <text x="414" y="444" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">Status</text>
+  <text x="248" y="478" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">Click an item to add it to the current tab.</text>
+  <rect x="440" y="174" width="410" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="452" y="192" fill="#94a3b8" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIALOG</text>
+  <text x="838" y="192" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">cols: 2 · fields: 4</text>
+  <rect x="452" y="202" width="80" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="492.0" y="216.5" fill="#4a9eff" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">≋ General · 4</text>
+  <rect x="536" y="202" width="80" height="22" rx="5" fill="transparent" stroke="transparent" strokeWidth="1"/>
+  <text x="576.0" y="216.5" fill="#cbd5e1" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">≋ Address · 4</text>
+  <rect x="620" y="202" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="650.5" y="216.5" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add tab</text>
+  <line x1="452" y1="232" x2="838" y2="232" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="452" y="240" width="386" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="462" y="256" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="system-ui, sans-serif">›  Tab settings</text>
+  <rect x="798" y="244.5" width="30" height="15" rx="4" fill="rgba(255,255,255,0.05)" stroke="#475569" strokeWidth="1"/>
+  <text x="813.0" y="255.3" fill="#94a3b8" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">form</text>
+  <rect x="452.0" y="274" width="188.0" height="66" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="462.0" y="290" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">#  Customer</text>
+  <rect x="462.0" y="297" width="168.0" height="18" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="470.0" y="309.5" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">123</text>
+  <text x="462.0" y="330" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <rect x="522.56" y="320" width="25" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
+  <text x="535.06" y="330.8" fill="#4ade80" fontSize="7.4" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">key</text>
+  <rect x="650.0" y="274" width="188.0" height="66" rx="7" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="660.0" y="290" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">≡  Name</text>
+  <rect x="660.0" y="297" width="168.0" height="18" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="668.0" y="309.5" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">…</text>
+  <text x="660.0" y="330" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">NAME</text>
+  <rect x="452.0" y="348" width="188.0" height="66" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="462.0" y="364" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">≡  Country</text>
+  <rect x="462.0" y="371" width="168.0" height="18" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="470.0" y="383.5" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">…</text>
+  <text x="462.0" y="404" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">COUNTRY</text>
+  <rect x="650.0" y="348" width="188.0" height="66" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="660.0" y="364" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">⌕  Status</text>
+  <rect x="660.0" y="371" width="168.0" height="18" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="668.0" y="383.5" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">lookup: get_status</text>
+  <text x="660.0" y="404" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">STATUS</text>
+  <rect x="452" y="422" width="188.0" height="30" rx="7" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="546.0" y="441" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add field</text>
+  <rect x="862" y="174" width="220" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="874" y="192" fill="#94a3b8" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">INSPECTOR</text>
+  <text x="1070" y="192" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">›</text>
+  <text x="874" y="210" fill="#4a9eff" fontSize="8.4" fontFamily="system-ui, sans-serif">Dialog title</text>
+  <text x="932.448" y="210" fill="#e2e8f0" fontSize="8.4" fontFamily="system-ui, sans-serif">›  NAME</text>
+  <line x1="872" y1="218" x2="1072" y2="218" stroke="#1f2937" strokeWidth="1"/>
+  <text x="874" y="234" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="system-ui, sans-serif">▤  NAME</text>
+  <text x="874" y="248" fill="#64748b" fontSize="7.6" fontFamily="system-ui, sans-serif">This field renders its column.</text>
+  <line x1="872" y1="258" x2="1072" y2="258" stroke="#1f2937" strokeWidth="1"/>
+  <text x="874" y="274" fill="#e2e8f0" fontSize="8.6" fontWeight="700" fontFamily="system-ui, sans-serif">≋  Column configuration</text>
+  <rect x="872" y="282" width="50" height="19" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="897.0" y="294.8" fill="#4a9eff" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <text x="951.0" y="294.8" fill="#94a3b8" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">Display</text>
+  <text x="1003.0" y="294.8" fill="#94a3b8" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">Filter</text>
+  <text x="892.5" y="317.8" fill="#94a3b8" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">Rules</text>
+  <text x="935.5" y="317.8" fill="#94a3b8" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit</text>
+  <text x="985.0" y="317.8" fill="#94a3b8" fontSize="7.8" textAnchor="middle" fontFamily="system-ui, sans-serif">Defaults</text>
+  <text x="874" y="342" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">NAME ∗</text>
+  <rect x="874" y="347" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="361.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">NAME</text>
+  <text x="874" y="386" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DD</text>
+  <rect x="874" y="391" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="883" y="405.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">(default)</text>
+  <text x="1058" y="405.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="874" y="430" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="874" y="439" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="891" y="448" fill="#cbd5e1" fontSize="8.4" fontFamily="system-ui, sans-serif">disabled</text>
+  <line x1="220" y1="516" x2="1100" y2="516" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1027" y="526" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1054.5" y="540.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="954" y="526" width="65" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="986.5" y="540.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="20" y="178" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="193" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tabs of the form</text>
+  <text x="30" y="206" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ Add tab; drag a card across</text>
+  <line x1="200" y1="195.0" x2="454" y2="213" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="20" y="232" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="247" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tab settings</text>
+  <text x="30" y="260" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label, type, columns, tab actions</text>
+  <line x1="200" y1="249.0" x2="454" y2="256" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="20" y="304" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="319" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add a field</text>
+  <text x="30" y="332" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dictionary entries or columns</text>
+  <line x1="200" y1="321.0" x2="250" y2="324" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="20" y="404" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="419" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click to add</text>
+  <text x="30" y="432" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to the current tab</text>
+  <line x1="200" y1="421.0" x2="254" y2="434" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Delete dialog</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">back to a grid-only screen</text>
+  <line x1="1120" y1="177.0" x2="1070" y2="174" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="1120" y="204" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="219" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Inspector</text>
+  <text x="1130" y="232" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the picked field and its column</text>
+  <line x1="1120" y1="221.0" x2="1072" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="1120" y="284" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="299" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Same settings as the grid</text>
+  <text x="1130" y="312" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Display ▸ Colspan for the span</text>
+  <line x1="1120" y1="301.0" x2="1072" y2="292" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
+  <rect x="1120" y="424" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="439" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Selected card</text>
+  <text x="1130" y="452" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its column opens on the right</text>
+  <line x1="1120" y1="441.0" x2="858" y2="314" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dlb-arrow)"/>
 </svg>
 
 | Region | What it does |
 |---|---|
-| **Palette** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A search box narrows the list. Click an entry to add a field card on the canvas; drag an entry to drop it at a specific position. |
-| **Canvas** *(center)* | The dialog's tabs strip across the top + the field grid below. Click a tab to switch; *＋ Add tab* adds one. Each field card shows the field name + a one-line summary of its key flags. The selected card has a coloured border; the inspector on the right reflects it. A separate **HIDDEN** group at the bottom collects fields with `hidden = true`. |
-| **Inspector** *(right)* | The properties of the selected field (or a per-tab action editor when a tab action is selected — mutually exclusive). It shows the field and its **Column configuration** — see Step 3. |
+| **Add a field** *(left)* | Source of new fields. Two sub-tabs: **Dictionary** (every entry available on the current connector scope) and **Columns** (every column the read query returns). A filter narrows the list; a click on an entry adds a field card to the current tab. The panel folds away with its arrow. |
+| **Dialog** *(center)* | The tabs strip across the top — each tab with its field count, **＋ Add tab** at the end — then **Tab settings** (folded: tab label, tab type, columns, tab actions) and the field cards. Each card shows the label, a preview of the input (a number, a date, a lookup and its query…), the column name and its *key* mark; the picked card has a blue border. The header counts the grid's columns and the tab's fields. A **Hidden fields** group at the bottom collects the fields with `hidden = true`. |
+| **Inspector** *(right)* | The picked field and its **Column configuration** — see Step 3 —, or, with no field picked, the dialog's title and its events. It folds away with its arrow. |
+
+**Delete dialog**, above the panels, removes the whole form: the screen becomes a read-only or grid-edit table again.
 
 ---
 
 ## Building from scratch
 
-### Step 1 — Open the Dialog tab
+### Step 1 — Open the Record form stage
 
 The first time, the canvas is empty with a *Create dialog* button. Click it to seed `dialog.tabs = [{id: 'general', label: 'General', fields: []}]` and reveal the three-column layout.
 
@@ -123,10 +229,10 @@ Two ways:
 
 | Method | When |
 |---|---|
-| **Click a Dictionary entry / column in the Palette** | Adds a field card at the end of the current tab's grid. |
-| **Drag a Dictionary entry / column onto the Canvas** | Drops the field card where you released it — useful to insert mid-grid. |
+| **Click a Dictionary entry or a column in Add a field** | Adds a field card at the end of the current tab. A dictionary entry pre-fills `dd`, so the field picks up the entry's rule; a column adds a plain field bound to the read query. |
+| **Click + Add field at the end of the tab** | Asks for the field name (a column of the read query) and adds it. |
 
-The added field becomes the selected card; the Inspector switches to its properties. Set `colspan` to widen it (the grid is by default 2 columns; a `colspan = 2` field fills the row).
+The added field becomes the selected card; the Inspector switches to it. Drag a card to put it elsewhere in the grid. Set `colspan` to widen it (the grid is by default 2 columns; a `colspan = 2` field fills the row).
 
 ### Step 3 — Tune the field properties
 
@@ -134,15 +240,17 @@ A dialog field displays a screen column, and the column carries every behaviour.
 
 | Section | What it holds |
 |---|---|
+| **Breadcrumb** | *Dialog title › FIELD* — a click on *Dialog title* goes back to the dialog's own settings. |
 | **Field** | The field's name and, with several form tabs, the **Tab** it sits on. |
-| **Column configuration** | The column's full editor — the same as in the Columns tab: label, format, dictionary entry (`dd`), rule and lookup binds, required / read-only flags, conditions, defaults, and the field's span on the dialog grid (**Display ▸ Colspan**). A change applies to the grid as well. |
-| **Events** | The hooks wired on the screen, by event, for information. |
+| **Column configuration** | The column's full editor — the same as in Grid → Columns: label, format, dictionary entry (`dd`), rule and lookup binds, required / read-only flags, conditions, defaults, and the field's span on the dialog grid (**Display ▸ Colspan**). A change applies to the grid as well. |
+| **Events** | The hooks wired on the screen, by event, for information — they are edited on the **Actions** stage. |
+| **Delete field** | Removes the field from the tab; the column stays on the screen. |
 
 See [Columns](./columns.md) for each setting and [Conditional fields](./conditional-fields.md) for the conditions.
 
 ### Step 4 — Add tabs
 
-Click **＋ Add tab** above the canvas. The new tab is empty; drag fields in from the Palette. Common tab patterns:
+Click **＋ Add tab** at the end of the tab strip; it asks for the tab's id. The new tab is empty; add fields from **Add a field**. Common tab patterns:
 
 | Tab name | What's on it |
 |---|---|
@@ -151,7 +259,7 @@ Click **＋ Add tab** above the canvas. The new tab is empty; drag fields in fro
 | **Notes** | Free-text fields. |
 | **Address** | A group of related fields (street, city, postcode, country). |
 
-Two flags on each tab control visibility per mode:
+Two flags on each tab (in `screens.toml`) control visibility per mode:
 
 | Flag | Effect |
 |---|---|
@@ -168,7 +276,7 @@ Two ways:
 
 | Method | Effect |
 |---|---|
-| Tick **hidden** in the column configuration (Display). | The card moves to the **HIDDEN** group at the bottom of the canvas. The field still binds at save time. |
+| Tick **hidden** in the column configuration (Display). | The card moves to the **Hidden fields** group at the bottom of the Dialog panel. The field still binds at save time. |
 | Delete the field from the tab. | The field is removed from the dialog entirely. The column is still on the screen; it just doesn't surface in the form. |
 
 The "hide but keep" pattern is useful for technical columns the dialog must submit (e.g. an audit timestamp) but the user shouldn't see.
@@ -191,7 +299,7 @@ The visual builder shows the same tab strip for all three — switching to a `ne
 
 ## Per-tab actions
 
-Each tab can carry its own action list — buttons that fire from inside the tab footer. Common patterns:
+Each tab can carry its own action list — buttons shown inside the tab, set under **Tab settings → Tab actions** (**Add action**). Common patterns:
 
 | Pattern | Why per-tab |
 |---|---|
@@ -207,7 +315,7 @@ See [Actions and lifecycle](./actions-and-lifecycle.md) for the full action type
 
 ## Dialog title
 
-The dialog's title sits at the top of the modal when it opens. Set it once in the Inspector's **Dialog** section (below the field properties when no field is selected). Blank → falls back to the screen's `label`, then to `id`.
+The dialog's title sits at the top of the modal when it opens. Set it in the Inspector when no field is picked, under **Dialog title**; blank falls back to the screen's `label` (*Falls back to the screen label*), then to `id`. Below it, **Events** lists the hooks wired on the screen, for information.
 
 ---
 

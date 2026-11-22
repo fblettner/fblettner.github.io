@@ -128,8 +128,11 @@ liberty-apps/
 │   ├── screens.toml          ← grids and dialogs
 │   ├── charts.toml           ← saved charts
 │   ├── dashboards.toml       ← dashboards
-│   ├── actions.toml          ← shared actions
-│   └── theme.toml            ← colours and branding
+│   ├── actions.toml          ← services (shared actions)
+│   ├── explorer.toml         ← Data Explorer models shipped with the apps
+│   ├── ai.toml               ← starter questions and playbooks for the AI assistant
+│   ├── theme.toml            ← colours and branding
+│   └── tests/                ← test suites, one file per suite
 │
 ├── plugins/                  ← Python packages (functions called by steps and actions)
 │   ├── <package>/            ← one folder per package, with __init__.py
@@ -147,7 +150,10 @@ liberty-apps/
 | `config/screens.toml` | *Screens → Screens* | Grids + dialogs + per-field conditions. |
 | `config/dashboards.toml` | *Insight → Dashboards* | KPI, chart and table widgets. |
 | `config/charts.toml` | *Insight → Charts* | Chart definitions referenced by dashboards. |
-| `config/actions.toml` | *Logic → Services* | Shared actions called by screens. |
+| `config/actions.toml` | *Logic → Services* | Services called by screens, jobs and endpoints. |
+| `config/explorer.toml` | *Insight → Explorer* | Explorer models and their bundled analyses. |
+| `config/ai.toml` | *Logic → AI* | Starter questions and playbooks the apps ship. |
+| `config/tests/<suite>.toml` | *Logic → Tests* | Test cases, packaged and delivered with the app. |
 | `config/theme.toml` | *Administer → Theme* | Colours and branding. |
 | `plugins/nomaflow/jobs.toml` | Nomaflow → *Jobs* | The job catalogue. |
 | `plugins/*/*.py` | Developer | Custom step callables — exposed to the framework via `sys.path`. |

@@ -1,79 +1,211 @@
 ---
 title: Columns
-description: "The Columns tab — set each column's display title, format, dictionary reference, edit rule, default and filtering once; both the grid and the dialog use them."
+description: "The columns of a Liberty Next screen, in the Screen Designer (Grid → Columns) — set each column's display title, format, dictionary reference, edit rule, default and filtering once; both the grid and the dialog use them."
 keywords: [Liberty Framework, columns, ColumnHint, dictionary, format, lookup, filter, hidden, key, default]
 ---
 
 # Columns
 
-The **Columns** tab is where you set per-column metadata: how the column renders in the grid, how it appears in the dialog form, whether it filters, whether it's required, whether it's part of the row's primary key. Set each column once — both surfaces (grid and dialog) use the same configuration.
+**Grid → Columns**, in the [Screen Designer](./overview.md#designer), is where you set per-column metadata: how the column renders in the grid, how it appears in the dialog form, whether it filters, whether it's required, whether it's part of the row's primary key. Set each column once — both surfaces (grid and dialog) use the same configuration.
 
 ---
 
-## The Columns tab at a glance
+## The columns at a glance
 
-<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 550" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="col-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="scol-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="scol-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="scol-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="scol-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="360" rx="14" fill="url(#col-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer · crm.customers · Columns</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="88" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Configure each column once — display title, format, default value, filtering, edit rules. Both the grid and the dialog use these.</text>
-
-  <rect x="40" y="108" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="128" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-  <text x="220" y="128" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Customer id</text>
-  <text x="360" y="128" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">dd=CUSTOMER_ID</text>
-  <rect x="560" y="116" width="36" height="18" rx="3" fill="rgba(251,146,60,0.20)"/>
-  <text x="578" y="129" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">KEY</text>
-  <rect x="600" y="116" width="48" height="18" rx="3" fill="rgba(192,132,252,0.20)"/>
-  <text x="624" y="129" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">FILTER</text>
-  <text x="918" y="128" fill="#4a9eff" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">drill in →</text>
-
-  <rect x="40" y="148" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="168" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">NAME</text>
-  <text x="220" y="168" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Name</text>
-  <text x="360" y="168" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">width=240</text>
-  <rect x="500" y="156" width="56" height="18" rx="3" fill="rgba(34,197,94,0.20)"/>
-  <text x="528" y="169" fill="#22c55e" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">REQUIRED</text>
-  <text x="918" y="168" fill="#4a9eff" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">drill in →</text>
-
-  <rect x="40" y="188" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="208" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">REGION_CODE</text>
-  <text x="220" y="208" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Region</text>
-  <text x="360" y="208" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">rules=LOOKUP · get_regions</text>
-  <text x="918" y="208" fill="#4a9eff" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">drill in →</text>
-
-  <rect x="40" y="228" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="248" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">STATUS</text>
-  <text x="220" y="248" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Status</text>
-  <text x="360" y="248" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">rules=ENUM · STATUS_CODES</text>
-  <rect x="560" y="236" width="48" height="18" rx="3" fill="rgba(192,132,252,0.20)"/>
-  <text x="584" y="249" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">FILTER</text>
-  <text x="918" y="248" fill="#4a9eff" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">drill in →</text>
-
-  <rect x="40" y="268" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="288" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CREATED_AT</text>
-  <text x="220" y="288" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Created</text>
-  <text x="360" y="288" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">format=date</text>
-  <rect x="540" y="276" width="56" height="18" rx="3" fill="rgba(100,116,139,0.20)"/>
-  <text x="568" y="289" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DISABLED</text>
-  <text x="918" y="288" fill="#4a9eff" fontSize="10" textAnchor="end" fontFamily="system-ui, sans-serif">drill in →</text>
-
-  <rect x="40" y="308" width="920" height="56" rx="8" fill="rgba(0,0,0,0.20)" stroke="#1f2937" strokeDasharray="3,3"/>
-  <text x="160" y="332" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">＋ Add column hint</text>
-  <text x="500" y="350" fill="#64748b" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns the read query returns but not hinted here keep the discovery order and the dictionary defaults.</text>
+  <rect x="220" y="20" width="880" height="514" rx="14" fill="url(#scol-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
+  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="999.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
+  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA</text>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
+  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
+  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeWidth="1.2"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 column(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filter(s) · 1 view(s)</text>
+  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
+  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD FORM</text>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 tab(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 field(s)</text>
+  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
+  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 toolbar action(s)</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 in the row menu · 1 on s…</text>
+  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#scol-flow)"/>
+  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTPUT</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">the grid's own export</text>
+  <rect x="238" y="146" width="167" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="239" y="147" width="57" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="267.5" y="160.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <line x1="297" y1="151" x2="297" y2="163" stroke="#334155" strokeWidth="1"/>
+  <text x="321.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
+  <line x1="346" y1="151" x2="346" y2="163" stroke="#334155" strokeWidth="1"/>
+  <text x="375.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Summary</text>
+  <rect x="238" y="180" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="247" y="200" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="194" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <text x="260" y="206" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Customer</text>
+  <rect x="472" y="188.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
+  <text x="492.0" y="199.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filter</text>
+  <rect x="442" y="188.5" width="26" height="15" rx="4" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="455.0" y="199.3" fill="#4a9eff" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">key</text>
+  <text x="526" y="200" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="218" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="247" y="238" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="232" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">NAME</text>
+  <text x="260" y="244" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Name</text>
+  <rect x="463" y="226.5" width="49" height="15" rx="4" fill="rgba(168,85,247,0.15)" stroke="rgba(168,85,247,0.45)" strokeWidth="1"/>
+  <text x="487.5" y="237.3" fill="#c084fc" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">required</text>
+  <rect x="419" y="226.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
+  <text x="439.0" y="237.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filter</text>
+  <text x="526" y="238" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="256" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="247" y="276" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="270" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">COUNTRY</text>
+  <text x="260" y="282" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Country</text>
+  <rect x="472" y="264.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
+  <text x="492.0" y="275.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filter</text>
+  <text x="526" y="276" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="294" width="300" height="32" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="247" y="314" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="308" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">STATUS</text>
+  <text x="260" y="320" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Status</text>
+  <rect x="472" y="302.5" width="40" height="15" rx="4" fill="rgba(50,215,75,0.12)" stroke="rgba(50,215,75,0.45)" strokeWidth="1"/>
+  <text x="492.0" y="313.3" fill="#4ade80" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">filter</text>
+  <text x="526" y="314" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="332" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="247" y="352" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="346" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">CREDIT_LIMIT</text>
+  <text x="260" y="358" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Credit limit</text>
+  <rect x="458" y="340.5" width="54" height="15" rx="4" fill="rgba(255,159,10,0.12)" stroke="rgba(255,159,10,0.45)" strokeWidth="1"/>
+  <text x="485.0" y="351.3" fill="#fb923c" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">sensitive</text>
+  <text x="526" y="352" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="370" width="300" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="247" y="390" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="260" y="384" fill="#e2e8f0" fontSize="8.6" fontFamily="ui-monospace, monospace">UPDATED_AT</text>
+  <text x="260" y="396" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Updated at</text>
+  <rect x="472" y="378.5" width="40" height="15" rx="4" fill="rgba(255,255,255,0.05)" stroke="#475569" strokeWidth="1"/>
+  <text x="492.0" y="389.3" fill="#94a3b8" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">hidden</text>
+  <text x="526" y="390" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="238" y="410" width="86" height="20" rx="5" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="248" y="423.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ Add a column</text>
+  <rect x="554" y="180" width="528" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="564" y="190" width="508" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="574" y="206" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
+  <text x="588" y="206" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">STATUS</text>
+  <text x="590.5" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="621" y="222" width="53" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="647.5" y="236.3" fill="#4a9eff" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Display</text>
+  <text x="702.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Filter</text>
+  <text x="752.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Rules</text>
+  <text x="797.5" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit</text>
+  <text x="850.0" y="236.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Defaults</text>
+  <line x1="564" y1="250" x2="1072" y2="250" stroke="#1f2937" strokeWidth="1"/>
+  <text x="566" y="266" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <rect x="566" y="271" width="504" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="566" y="305" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Display title in the grid header and the dialog field.</text>
+  <text x="566" y="322" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HIDDEN</text>
+  <rect x="566" y="331" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="583" y="340" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">disabled</text>
+  <text x="566" y="362" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FORMAT</text>
+  <rect x="566" y="367" width="504" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="575" y="381.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">(default)</text>
+  <text x="1058" y="381.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="566" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ALIGN</text>
+  <rect x="566" y="411" width="247" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="575" y="425.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">(default)</text>
+  <text x="801" y="425.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="823" y="406" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WIDTH</text>
+  <rect x="823" y="411" width="247" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="566" y="450" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WRAP · CARD · COLSPAN · DRILL …</text>
+  <line x1="220" y1="492" x2="1100" y2="492" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1027" y="502" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1054.5" y="516.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="954" y="502" width="65" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="986.5" y="516.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="20" y="82" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six stages, as a flow</text>
+  <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each card says what it holds</text>
+  <line x1="200" y1="99.0" x2="238" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="20" y="188" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="203" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The columns, as a list</text>
+  <text x="30" y="216" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">drag ⠿ to reorder, ✕ to remove</text>
+  <line x1="200" y1="205.0" x2="244" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Marks worth seeing</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">key, filter, required, hidden…</text>
+  <line x1="200" y1="317.0" x2="478" y2="348" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add a column</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from the read query</text>
+  <line x1="200" y1="417.0" x2="244" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections of the stage</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Columns · Views · Summary</text>
+  <line x1="1120" y1="177.0" x2="420" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six tabs of settings</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">General · Display · Filter · Rules…</text>
+  <line x1="1120" y1="227.0" x2="879" y2="233" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="1120" y="280" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Display in the grid</text>
+  <text x="1130" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label, hidden, format, width…</text>
+  <line x1="1120" y1="297.0" x2="1070" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="1120" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Blank = inherited</text>
+  <text x="1130" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from the dictionary entry</text>
+  <line x1="1120" y1="367.0" x2="1070" y2="372" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
+  <rect x="1120" y="484" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="499" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save this screen only</text>
+  <text x="1130" y="512" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Cancel asks on unsaved changes</text>
+  <line x1="1120" y1="501.0" x2="1040" y2="514" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#scol-arrow)"/>
 </svg>
 
-The list shows one row per **ColumnHint** entry. Click a row to drill into its full editor — the inline summary covers the most-used fields, the full editor covers every flag.
+The list shows one line per column (**ColumnHint**) with its marks; a click on a line opens its settings beside the list, in six tabs:
+
+| Tab | Holds |
+|---|---|
+| **General** | `name`, `dd`, `key`, `sensitive`, `group` (the related one-to-one table the column is written to). |
+| **Display** | `label`, `hidden`, `format`, `align`, `width`, `wrap`, `params_of`, the card setting, the span in the record form, the drill link. |
+| **Filter** | `filter`, `filter_period`, `filter_from`, `visible_when`. |
+| **Rules** | `rules`, `rules_values`, `rules_when` — and the lookup settings when the rule is a lookup. |
+| **Edit** | `required`, `required_when`, `disabled`, `disabled_when`, `disable_on_add`, `disable_on_edit`, `justify` (how the written value is padded — blank inherits the dictionary). |
+| **Defaults** | `default`, `default_when`, `write_when`. |
+
+A list setting (a condition, a cascading filter) opens in the same panel; the breadcrumb at the top leads back to the column.
 
 ---
 
 ## Field by field
 
-Every column hint carries the same shape. Drilling into a column reveals five groups of fields.
+Every column hint carries the same shape. The fields are described below by purpose.
 
 ### Identity
 
@@ -166,7 +298,7 @@ ColumnHint.rules_values → DD entry.rule_values
 
 This means a column named `USR_ID` on a screen automatically reads its label, format, lookup rule and lookup id from the dictionary entry `USR_ID` (or whatever you set `dd` to). The screen overrides only when **this** screen needs different behaviour from the rest.
 
-The Columns tab is therefore mostly **empty** for well-dictionary'd installs — entries only appear when there's something to override.
+The column list is therefore mostly **empty** for well-dictionary'd installs — entries only appear when there's something to override.
 
 ---
 

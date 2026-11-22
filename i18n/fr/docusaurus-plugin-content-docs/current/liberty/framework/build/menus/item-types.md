@@ -12,7 +12,7 @@ Sept types de feuilles :
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
-| **`screen`** | Un écran conçu. | La requête de lecture de l'écran, choisie parmi les écrans conçus. | Le connecteur qui le possède. Vide = le connecteur de l'application. |
+| **`screen`** | Un écran conçu. | L'identifiant de l'écran, choisi parmi les écrans de l'application. | En général vide — le connecteur de l'écran l'exécute. |
 | **`query`** | La même vue en grille, choisie parmi les requêtes brutes. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = le connecteur de l'application. |
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | `<app>.<id>` du tableau de bord. | Ne doit pas être renseigné (l'application figure dans la cible). |
@@ -26,7 +26,7 @@ Cette page détaille chacun avec des exemples concrets.
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 490" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="mit-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="mit-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -34,76 +34,100 @@ Cette page détaille chacun avec des exemples concrets.
     <marker id="mit-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="320" rx="14" fill="url(#mit-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres · Menus</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="74" width="300" height="240" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="256" y="100" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ 📁 Ventes</text>
-  <text x="274" y="130" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">👥 Clients</text>
-  <text x="274" y="160" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📈 Affaires</text>
-  <rect x="246" y="174" width="288" height="24" rx="5" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="256" y="190" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">📊 Pipeline</text>
-  <text x="256" y="220" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">⚙ Nomaflow</text>
-  <text x="560" y="92" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Inspecteur</text>
-  <text x="560" y="119" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">label</text>
-  <rect x="640" y="104" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="118.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Pipeline</text>
-  <text x="560" y="151" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">type</text>
-  <rect x="640" y="136" width="230" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="755.0" y="150.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">dashboard ▾</text>
-  <text x="560" y="183" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">target</text>
-  <rect x="640" y="168" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="182.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">crm.pipeline ▾</text>
-  <text x="560" y="215" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">connector</text>
-  <rect x="640" y="200" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="214.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">—</text>
-  <text x="560" y="247" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">icon</text>
-  <rect x="640" y="232" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="246.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">barchart ▾</text>
-  <rect x="640" y="160" width="0.1" height="0.1" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="560" y="290" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">screen · query · endpoint · dashboard · page</text>
-  <rect x="10" y="180" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une entrée</text>
-  <text x="20" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les dossiers n'ont pas de type</text>
-  <line x1="210" y1="197.0" x2="256" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
-  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cinq types</text>
-  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce qu'ouvre l'entrée</text>
-  <line x1="1000" y1="137.0" x2="870" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
-  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">target</text>
-  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&lt;app&gt;.&lt;id&gt; pour un tableau</text>
-  <line x1="1000" y1="207.0" x2="870" y2="179" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="360" y="20" width="600" height="450" rx="14" fill="url(#mit-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="380" y="40" width="560" height="410" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="394" y="62" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="441.16" y="62" fill="#94a3b8" fontSize="8.6" fontFamily="ui-monospace, monospace">customers</text>
+  <rect x="789" y="50" width="139" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="858.5" y="63.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⑃ Rechercher les dépendances</text>
+  <rect x="668" y="50" width="117" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="726.5" y="63.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⑂ Rechercher les usages</text>
+  <rect x="615" y="50" width="49" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="639.5" y="63.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Cloner</text>
+  <rect x="571" y="52.5" width="36" height="15" rx="4" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="589.0" y="63.3" fill="#4a9eff" fontSize="7.8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">écran</text>
+  <line x1="380" y1="78" x2="940" y2="78" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="392" y="88" width="53" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="418.5" y="102.3" fill="#4a9eff" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <text x="478.0" y="102.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
+  <text x="549.5" y="102.3" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
+  <line x1="392" y1="116" x2="928" y2="116" stroke="#1f2937" strokeWidth="1"/>
+  <text x="392" y="130" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ICON</text>
+  <rect x="392" y="135" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="401" y="149.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">users</text>
+  <text x="392" y="172" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TYPE</text>
+  <rect x="392" y="177" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="401" y="191.5" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">screen</text>
+  <text x="439.736" y="191.5" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Screen (designed view)</text>
+  <rect x="392" y="202" width="536" height="140" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="396" y="206" width="528" height="20" rx="4" fill="rgba(74,158,255,0.14)" stroke="transparent" strokeWidth="1"/>
+  <text x="404" y="220" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">screen</text>
+  <text x="480" y="220" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Screen (designed view)</text>
+  <text x="404" y="242" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">query</text>
+  <text x="480" y="242" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Query (raw table view)</text>
+  <text x="404" y="264" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">endpoint</text>
+  <text x="480" y="264" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Endpoint (API call)</text>
+  <text x="404" y="286" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">dashboard</text>
+  <text x="480" y="286" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Dashboard (widget grid)</text>
+  <text x="404" y="308" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">page</text>
+  <text x="480" y="308" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Page (frontend route)</text>
+  <text x="404" y="330" fill="#e2e8f0" fontSize="8.8" fontFamily="ui-monospace, monospace">job</text>
+  <text x="480" y="330" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Job (run it, follow its log)</text>
+  <text x="392" y="362" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
+  <rect x="392" y="367" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="401" y="381.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">(default)</text>
+  <text x="916" y="381.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="392" y="404" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TARGET</text>
+  <rect x="392" y="409" width="536" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="401" y="423.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">customers  Clients</text>
+  <text x="916" y="423.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="20" y="171" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="186" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Type</text>
+  <text x="30" y="199" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vide = dossier</text>
+  <line x1="200" y1="188.0" x2="392" y2="188" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="20" y="232" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="247" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Les types de feuilles</text>
+  <text x="30" y="260" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écran, requête, point d'accès…</text>
+  <line x1="200" y1="249.0" x2="392" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="20" y="403" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="418" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cible</text>
+  <text x="30" y="431" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">listée selon le type choisi</text>
+  <line x1="200" y1="420.0" x2="392" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="1120" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Entrée choisie</text>
+  <text x="1130" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">son type en pastille</text>
+  <line x1="1120" y1="77.0" x2="605" y2="63" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="1120" y="306" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="321" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">job</text>
+  <text x="1130" y="334" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une tâche Nomaflow à lancer</text>
+  <line x1="1120" y1="323.0" x2="680" y2="326" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="1120" y="370" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="385" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connecteur</text>
+  <text x="1130" y="398" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête / point d'accès ; vide = l'app</text>
+  <line x1="1120" y1="387.0" x2="928" y2="386" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
 </svg>
 
 ---
 
 ## `screen` et `query` — ouvrir un écran
 
-`screen` et `query` ouvrent la même vue : la cible est une requête de lecture et, si un écran est conçu pour elle, c'est cet écran qui s'ouvre ; sinon les lignes de la requête s'affichent dans une grille simple. Ils ne diffèrent que par ce que propose la liste *Target* de l'Inspecteur — les écrans conçus pour `screen`, toutes les requêtes pour `query`.
+Les deux types de feuilles les plus courants. Ils ouvrent une grille, mais pas depuis la même cible :
 
-Le type de feuille le plus courant. L'élément de menu pointe vers une requête SELECT ; le framework trouve l'écran associé à cette requête (voir [Créer un écran depuis une requête](../screens/create-from-query.md)) et l'ouvre en TableView.
+- **`screen`** ouvre un écran conçu. La cible est l'**identifiant de l'écran** (`customers`), dans l'application du menu : l'écran s'ouvre avec ses propres colonnes, filtres, vues et fiche — même quand un autre écran lit la même requête. La liste *Target* de l'Inspecteur propose les écrans de l'application, chacun avec son libellé et son identifiant.
+- **`query`** ouvre les lignes d'une requête. La cible est le **nom de la requête** (`customers_get`) : la liste propose la requête de lecture de chaque table (`<table>_get`, libellée par la table) et les requêtes autonomes. Si un écran est conçu sur cette requête, ses réglages de colonnes s'appliquent ; sinon les lignes s'affichent dans une grille simple.
 
 ### Champs
 
 | Champ | Notes |
 |---|---|
-| **`type`** | `query`. |
-| **`target`** | Le nom de la requête — `customers_get`, `security_users_get`. La liste déroulante est alimentée par les requêtes valides du connecteur choisi. |
-| **`connector`** | Le connecteur qui possède la requête. Vide = l'application du menu (cas le plus courant). À renseigner explicitement uniquement quand on lit depuis un autre connecteur. |
-| **`params`** | Optionnel. Lie des valeurs aux paramètres `:placeholder` de la requête. L'utilisateur ouvre l'écran avec ces valeurs déjà liées — par exemple une feuille *Mes tickets ouverts* avec `params = { OWNER = "#LOGIN_USER#", STATUS = "OPEN" }`. |
+| **`type`** | `screen` ou `query`. |
+| **`target`** | `screen` : l'identifiant de l'écran — `customers`, `security_users`. `query` : le nom de la requête — `customers_get`. La liste déroulante présente les cibles valides pour le type et le connecteur choisis. |
+| **`connector`** | `query` : le connecteur qui possède la requête ; vide = l'application du menu (cas le plus courant). `screen` : en général vide — le connecteur de l'écran exécute ses requêtes. |
+| **`params`** | Optionnel. Valeurs fixes des paramètres `:placeholder` de la requête — par exemple une feuille *Mes tickets ouverts* avec `params = { OWNER = "#LOGIN_USER#", STATUS = "OPEN" }`. |
 
-### Comment l'écran est résolu
+### Qui voit la feuille
 
-Le runtime cherche l'écran dont le `read_query` correspond au `target` du menu :
-
-```
-feuille de menu → écran avec read_query = <target> sur le connecteur <connector>
-```
-
-Quand plusieurs écrans partagent le même `read_query` (rare), le premier trouvé l'emporte.
-
-Si aucun écran n'est enregistré pour cette requête, l'élément de menu s'ouvre quand même — le runtime affiche un TableView par défaut avec les colonnes de la requête. Utile pour des requêtes ad hoc qui ne justifient pas une définition d'écran complète.
+Une feuille `screen` s'affiche pour qui peut exécuter la requête de lecture de l'écran sur le connecteur de l'écran (`sql:<connecteur>:<requête de lecture>`) ; une feuille `query`, pour qui peut exécuter la requête elle-même. Les `roles` de l'entrée la restreignent encore — voir [Permissions et rôles](./permissions-and-roles.md).
 
 ### Exemple
 
@@ -114,11 +138,11 @@ parent = "pipeline"
 label = "Customers"
 l.fr = "Clients"
 icon = "users"
-type = "query"
-target = "customers_get"
+type = "screen"
+target = "customers"
 ```
 
-Ouvre l'écran `crm.customers` (l'écran dont `read_query = customers_get`).
+Ouvre l'écran `customers` de l'application `crm`.
 
 ```toml
 [[menus.crm.items]]
@@ -131,7 +155,7 @@ target = "tickets_get"
 params = { OWNER = "#LOGIN_USER#", STATUS = "OPEN" }
 ```
 
-Même écran `tickets_get`, mais l'utilisateur atterrit sur une vue pré-filtrée limitée à ses propres tickets ouverts. Le jeton `#LOGIN_USER#` se résout depuis le JWT — voir [Liaison des paramètres](../queries/parameter-binding.md).
+Ouvre les lignes de `tickets_get`, avec l'écran conçu sur cette requête, limitées aux tickets ouverts de l'utilisateur. Le jeton `#LOGIN_USER#` se résout depuis le JWT — voir [Liaison des paramètres](../queries/parameter-binding.md).
 
 ---
 
@@ -224,7 +248,20 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 
 ### L'explorateur de données \{#explorer\}
 
-`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer.
+`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application ; l'entrée s'affiche pour qui peut utiliser l'un des modèles de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer ; l'entrée demande `explorer:<app>:<model>`.
+
+Une analyse ou un tableau de bord de l'explorateur, enregistré et partagé, se place dans un menu depuis l'explorateur lui-même, avec **Ajouter à un menu** (application, dossier, libellé) — voir [Ajouter à un menu](../../explorer/saved-and-dashboards.md#menu). L'entrée créée est une feuille `page` dont la cible est :
+
+| Cible | Ouvre |
+|---|---|
+| `/explorer/<app>/<model>/a/<id>` | L'analyse enregistrée `<id>`, son résultat d'emblée. |
+| `/explorer/<app>/<model>/d/<id>` | Le tableau de bord d'explorateur `<id>`. |
+
+Comme un lien vers le modèle, elle s'affiche pour qui peut utiliser le modèle (`explorer:<app>:<model>`).
+
+### Une page livrée par une application \{#app-page\}
+
+`/app/<app>/<page>` ouvre une page qu'une application livre avec ses plugins — une structure à parcourir, un parcours guidé, tout ce qui n'est ni une grille ni une fiche. L'entrée demande la permission `page:<app>:<page>`. Voir [Plugins → Les pages d'une application](../../apps/plugins.md#pages).
 
 ### Quand l'utiliser
 
@@ -359,7 +396,9 @@ Dans l'Inspecteur, passer le `type` de `query` à `dashboard` efface `connector`
 | Une requête qui n'a pas encore d'écran conçu. | `query`. |
 | Un appel API personnalisé en écriture ou en lecture seule. | `endpoint`. |
 | Une page de graphiques et de KPI. | `dashboard`. |
-| Une fonctionnalité React écrite à la main (style Nomaflow). | `page`. |
+| Une fonctionnalité React écrite à la main (style Nomaflow), ou une page livrée par une application. | `page`. |
+| Une tâche Nomaflow que les utilisateurs lancent eux-mêmes (fichier, paramètres, journal). | `job`. |
+| Une autre application, dans un nouvel onglet du navigateur. | `url`. |
 
 En cas de doute, commencer par `screen` — la plupart des pages destinées aux utilisateurs sont des listes. Passer à `dashboard` quand la mise en page comprend plusieurs graphiques ; recourir à `endpoint` uniquement pour des opérations API qui ne tiennent pas dans un écran ; réserver `page` au React personnalisé.
 

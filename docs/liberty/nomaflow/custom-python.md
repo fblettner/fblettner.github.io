@@ -88,7 +88,7 @@ Then `logging.getLogger(__name__)` in any module of the package writes to the ru
 ## Failing and cancelling \{#errors\}
 
 - Let exceptions out: the step fails with the message, the job's **Retry policy** applies, the following steps are skipped. Raise `StepFailed("…")` (from `liberty.jobs.steps.base`) for a clearer message.
-- **Cancel** on the job's card cancels an `async` function at its next `await`. A plain `def` cannot be interrupted: the run is marked cancelled, the function finishes on its own.
+- **Cancel** on the job's line cancels an `async` function at its next `await`. A plain `def` cannot be interrupted: the run is marked cancelled, the function finishes on its own.
 
 ---
 

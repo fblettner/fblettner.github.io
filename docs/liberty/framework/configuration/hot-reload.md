@@ -20,7 +20,7 @@ Requests in progress finish with the configuration they started with; the next o
 
 ## The file watcher \{#watcher\}
 
-With **Hot reload** on in **Liberty Next → Administer → App** — the default — the server watches its configuration files and reloads the part concerned a moment after a file changes (a save from Settings, an edit on the server, a `git pull`):
+With **Hot-reload config TOML files on change** ticked in **Liberty Next → Administer → App → Server** — the default — the server watches its configuration files and reloads the part concerned a moment after a file changes (a save from the Liberty Next pages, an edit on the server, a `git pull`):
 
 | File | Reloaded |
 |---|---|

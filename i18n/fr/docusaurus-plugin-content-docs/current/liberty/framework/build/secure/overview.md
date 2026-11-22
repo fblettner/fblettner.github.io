@@ -39,7 +39,7 @@ Une permission est une chaîne séparée par des deux-points — `sql:sales:orde
 | Appeler un endpoint d'API | `api:<connecteur>:<endpoint>`. |
 | Voir une entrée de menu | La permission de ce qu'ouvre l'entrée, ou une autorisation `menu:` explicite ; un refus `menu:` ou `dashboard:` la masque. |
 | Utiliser l'assistant | `ai:chat` ; les requêtes de l'assistant sont filtrées par le périmètre de données. |
-| Paramètres, Surveillance, Nomaflow, paquets de modifications | **Superutilisateur** uniquement. |
+| Les pages Liberty Next, Surveillance, Nomaflow, paquets de modifications | **Superutilisateur** uniquement. |
 
 Un refus l'emporte sur une autorisation, sur l'ensemble des rôles d'un utilisateur ; les superutilisateurs passent tous les contrôles et tous les périmètres de données.
 
@@ -53,7 +53,7 @@ Une connexion donne un jeton d'accès (une heure) et un jeton de rafraîchisseme
 
 ## Secrets \{#secrets\}
 
-Les mots de passe des pools, les identifiants d'API, la clé de licence, la clé de l'IA, le secret OIDC et le mot de passe SMTP sont chiffrés à l'enregistrement depuis les Paramètres. La clé maître qui les chiffre vient de l'environnement et ne doit jamais changer sur une installation existante. Voir [Secrets chiffrés](./encrypted-secrets.md).
+Les mots de passe des pools, les identifiants d'API, la clé de licence, la clé de l'IA, le secret OIDC et le mot de passe SMTP sont chiffrés à l'enregistrement depuis les pages Liberty Next. La clé maître qui les chiffre vient de l'environnement et ne doit jamais changer sur une installation existante. Voir [Secrets chiffrés](./encrypted-secrets.md).
 
 ---
 

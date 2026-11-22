@@ -21,11 +21,21 @@ The **Jobs** folder, at the bottom of the Nomasx-1 menu, lets the compliance tea
 
 **Applications** — each entry offers the applications as checkboxes, with **All**: the job runs once per application ticked, one after the other. The two reports also ask for the **Language**, `fr` or `en`.
 
-After a collection, **Last Refresh** and the *Data freshness* list of the [Audit synthesis](./audit-synthesis.md) show the new date.
+After a collection, **Last Refresh** and the *Data freshness* list of the [Audit synthesis](./audit-synthesis.md) show the new date. On **Last Refresh**, the lines are grouped by module, and a click on a line opens the run that collected it.
 
 :::info[JDE-specific]
 The collections read JD Edwards EnterpriseOne. For another source system, the collection is the one its connector provides.
+
+The effective rights include the access paths of the user defined objects: a composite page gives the applications and reports its tiles open, the forms its panes show and the tasks of its menu; an E1 page gives the applications and reports its content calls. The other user defined objects — orchestrations, service requests, notifications… — give no access path. The rights, the segregation-of-duties conflicts and the licence figures that follow from them take these paths into account. Which pages are read depends on the **E1 Composite** and **E1 Pages** flags of the [application](./settings/global/applications.md): switching one on or off changes these figures at the next collection.
 :::
+
+---
+
+## What a collection reads \{#steps\}
+
+The two collection entries run the same job with a different set of steps: **Collect security and SoD** leaves the licence steps out, **Collect licences** leaves the security and SoD steps out. Neither reads the directory (LDAP), the activity log, the Oracle database properties, the cross reference of the JD Edwards objects or the inventory of the user defined objects. The operators collect the first three with the job's *Everything* preset in Nomaflow, or on its schedule; the cross reference and the inventory of the user defined objects (step `JDE_UDO`) come from the [`nomasx1-xref`](../nomaflow/bundled-jobs.md#nomasx1-xref) job, which Nomajde's cross reference and upgrade analysis read. Until the directory is read, the directory checks of the [Security review](./security-review.md) say *No directory collected*.
+
+A step that fails does not stop the others: the run goes on and ends failed, naming the step.
 
 ---
 

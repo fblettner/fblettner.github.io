@@ -128,8 +128,11 @@ liberty-apps/
 │   ├── screens.toml          ← grilles et dialogues
 │   ├── charts.toml           ← graphiques enregistrés
 │   ├── dashboards.toml       ← tableaux de bord
-│   ├── actions.toml          ← actions partagées
-│   └── theme.toml            ← couleurs et identité visuelle
+│   ├── actions.toml          ← services (actions partagées)
+│   ├── explorer.toml         ← modèles de l'explorateur livrés avec les applications
+│   ├── ai.toml               ← questions de départ et procédures de l'assistant IA
+│   ├── theme.toml            ← couleurs et identité visuelle
+│   └── tests/                ← suites de tests, un fichier par suite
 │
 ├── plugins/                  ← packages Python (fonctions appelées par les étapes et les actions)
 │   ├── <package>/            ← un dossier par package, avec __init__.py
@@ -141,14 +144,17 @@ liberty-apps/
 
 | Fichier | Édité par | Notes |
 |---|---|---|
-| `config/connectors.toml` | Paramètres → *Connecteurs* | Détient le registre des pools plus chaque connecteur. |
-| `config/dictionary.toml` | Paramètres → *Dictionnaire* | Métadonnées par colonne réutilisées par les écrans et les graphiques. |
-| `config/menus.toml` | Paramètres → *Menus* | Une racine par app, hiérarchie dossier/feuille optionnelle. |
-| `config/screens.toml` | Paramètres → *Écrans* | Grilles + dialogues + conditions par champ. |
-| `config/dashboards.toml` | Paramètres → *Tableaux de bord* | Widgets indicateur, graphique et table. |
-| `config/charts.toml` | Paramètres → *Graphiques* | Définitions de graphiques référencées par les tableaux de bord. |
-| `config/actions.toml` | Paramètres → *Actions* | Actions partagées appelées par les écrans. |
-| `config/theme.toml` | Paramètres → *Thème* | Couleurs et identité visuelle. |
+| `config/connectors.toml` | *Données → Connecteurs* | Détient le registre des pools et tous les connecteurs. |
+| `config/dictionary.toml` | *Données → Dictionnaire* | Métadonnées par colonne réutilisées par les écrans et les graphiques. |
+| `config/menus.toml` | *Écrans → Menus* | Une racine par application, hiérarchie facultative de dossiers et d'entrées. |
+| `config/screens.toml` | *Écrans → Écrans* | Grilles, fiches et conditions par champ. |
+| `config/dashboards.toml` | *Analyse → Tableaux de bord* | Widgets indicateur, graphique et table. |
+| `config/charts.toml` | *Analyse → Graphiques* | Définitions de graphiques référencées par les tableaux de bord. |
+| `config/actions.toml` | *Logique → Services* | Services appelés par les écrans, les tâches et les points d'accès. |
+| `config/explorer.toml` | *Analyse → Explorateur* | Modèles de l'explorateur et leurs analyses livrées. |
+| `config/ai.toml` | *Logique → IA* | Questions de départ et procédures livrées par les applications. |
+| `config/tests/<suite>.toml` | *Logique → Tests* | Cas de test, empaquetés et livrés avec l'application. |
+| `config/theme.toml` | *Administrer → Thème* | Couleurs et identité visuelle. |
 | `plugins/nomaflow/jobs.toml` | Nomaflow → *Tâches* | Le catalogue des tâches. |
 | `plugins/*/*.py` | Développeur | Callables d'étapes personnalisés — chargés par le framework via `sys.path`. |
 

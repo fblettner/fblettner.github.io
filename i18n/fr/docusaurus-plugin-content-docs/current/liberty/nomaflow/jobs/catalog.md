@@ -6,131 +6,169 @@ keywords: [Nomaflow, tâches, catalogue, exécuter, run with parameters, préré
 
 # La page des Tâches
 
-La page **Tâches** présente chaque tâche de `jobs.toml`, une ligne par tâche, groupées par application, avec sa dernière exécution, sa planification et ses actions. Elle est réservée aux superutilisateurs.
+La page **Tâches** présente chaque tâche de `jobs.toml`, une ligne par tâche, groupées par application, avec sa dernière exécution, sa planification et ses actions. Accès : **Exploitation → Tâches**, dans le menu Nomaflow. Les superutilisateurs la voient, ainsi que les rôles qui ont reçu *Suivre les tâches* (`nomaflow:view`) — voir [Administration](../administration.md#permissions).
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 520" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nfj-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="nfj-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nfj-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="nfj-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfjl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfjl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfjl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfjl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="330" rx="14" fill="url(#nfj-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches</text>
-  <rect x="850" y="28" width="110" height="22" rx="5" fill="url(#nfj-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="905.0" y="42.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle tâche</text>
-  <rect x="240" y="60" width="250" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="74.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Rechercher (id, description, étiquette)…</text>
-  <rect x="500" y="60" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="510" y="74.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Toutes les applications ▾</text>
-  <rect x="658" y="60" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="668" y="74.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Tout statut ▾</text>
-  <rect x="776" y="60" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="786" y="74.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Toute étiquette ▾</text>
-  <text x="960" y="75" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">12 sur 31 tâches</text>
-  <text x="244" y="116" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">★ Tâches principales  (2)</text>
-  <line x1="240" y1="124" x2="960" y2="124" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="146" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
-  <text x="420" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Tout collecter pour une application</text>
-  <rect x="620" y="134" width="55" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="647.5" y="145.2" fill="#4ade80" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="696" y="146" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">Manuelle</text>
-  <rect x="782" y="134" width="56" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="810.0" y="145.2" fill="#4a9eff" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">activée</text>
-  <text x="254" y="174" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
-  <text x="420" y="174" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Synchronisation JD Edwards de nuit</text>
-  <rect x="620" y="162" width="43" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="641.5" y="173.2" fill="#f87171" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">FAILED</text>
-  <text x="696" y="174" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
-  <rect x="782" y="162" width="56" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="810.0" y="173.2" fill="#4a9eff" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">activée</text>
-  <text x="244" y="204" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ crm  (2)</text>
-  <line x1="240" y1="212" x2="960" y2="212" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="234" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-daily-pipeline</text>
-  <text x="420" y="234" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Pipeline du jour</text>
-  <rect x="620" y="222" width="55" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="647.5" y="233.2" fill="#4ade80" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="696" y="234" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">0 8 ∗ ∗ mon-fri</text>
-  <rect x="782" y="222" width="56" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="810.0" y="233.2" fill="#4a9eff" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">activée</text>
-  <text x="254" y="262" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-archive</text>
-  <text x="420" y="262" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Archiver les affaires closes</text>
-  <rect x="620" y="250" width="51" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="645.5" y="261.2" fill="#fb923c" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">CANCELED</text>
-  <text x="696" y="262" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">Manuelle</text>
-  <rect x="782" y="250" width="56" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="810.0" y="261.2" fill="#94a3b8" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">désactivée</text>
-  <text x="244" y="292" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸ Framework  (8)</text>
-  <line x1="240" y1="300" x2="960" y2="300" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="842" y="132" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="853.0" y="145.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
-  <rect x="868" y="132" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="879.0" y="145.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
-  <rect x="894" y="132" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="905.0" y="145.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
-  <rect x="920" y="132" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="931.0" y="145.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
-  <rect x="946" y="132" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="957.0" y="145.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="842" y="160" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="853.0" y="173.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
-  <rect x="868" y="160" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="879.0" y="173.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
-  <rect x="894" y="160" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="905.0" y="173.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
-  <rect x="920" y="160" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="931.0" y="173.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
-  <rect x="946" y="160" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="957.0" y="173.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="842" y="220" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="853.0" y="233.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
-  <rect x="868" y="220" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="879.0" y="233.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
-  <rect x="894" y="220" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="905.0" y="233.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
-  <rect x="920" y="220" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="931.0" y="233.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
-  <rect x="946" y="220" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="957.0" y="233.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="842" y="248" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="853.0" y="261.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
-  <rect x="868" y="248" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="879.0" y="261.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
-  <rect x="894" y="248" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="905.0" y="261.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
-  <rect x="920" y="248" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="931.0" y="261.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
-  <rect x="946" y="248" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="957.0" y="261.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
-  <rect x="10" y="52" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="67" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recherche et filtres</text>
-  <text x="20" y="80" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">gardés par le navigateur</text>
-  <line x1="210" y1="69.0" x2="240" y2="71" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
-  <rect x="10" y="112" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="127" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches principales</text>
-  <text x="20" y="140" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les tâches étiquetées main</text>
-  <line x1="210" y1="129.0" x2="244" y2="112" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
-  <rect x="10" y="210" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un groupe par application</text>
-  <text x="20" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic replie</text>
-  <line x1="210" y1="227.0" x2="244" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
-  <rect x="1000" y="100" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dernière exécution</text>
-  <text x="1010" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic l'ouvre</text>
-  <line x1="1000" y1="117.0" x2="650" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
-  <rect x="1000" y="180" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activer / désactiver</text>
-  <text x="1010" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sans rechargement</text>
-  <line x1="1000" y1="197.0" x2="810" y2="176" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
-  <rect x="1000" y="280" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Actions</text>
-  <text x="1010" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lancer, modifier, cloner…</text>
-  <line x1="1000" y1="297.0" x2="950" y2="268" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfj-arrow)"/>
+  <rect x="220" y="20" width="880" height="480" rx="14" fill="url(#nfjl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">⛓</text>
+  <text x="262" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches</text>
+  <text x="262" y="60" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">nomaflow — tâches ETL planifiées</text>
+  <line x1="220" y1="74" x2="1100" y2="74" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="86" width="111" height="22" rx="5" fill="url(#nfjl-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="295.5" y="100.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle tâche</text>
+  <rect x="359" y="86" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="392.0" y="100.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Planning</text>
+  <rect x="433" y="86" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="474.5" y="100.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger</text>
+  <rect x="240" y="120" width="300" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="135.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕  Chercher une tâche (id, description, étiquette)…</text>
+  <rect x="550" y="120" width="150" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="560" y="135.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Toutes les applications</text>
+  <text x="688" y="136" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="708" y="120" width="130" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="718" y="135.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Tout statut</text>
+  <text x="826" y="136" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="846" y="120" width="120" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="856" y="135.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Toute étiquette</text>
+  <text x="954" y="136" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="1080" y="136" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">9 sur 9 tâches</text>
+  <rect x="240" y="156" width="840" height="26" rx="7" fill="rgba(168,85,247,0.05)" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="173" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="266" y="173" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="282" y="173" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Rétention de l'historique des exécutions</text>
+  <text x="495.6" y="173" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· 30d · cap 100/job · every 60 min</text>
+  <rect x="240" y="188" width="840" height="26" rx="7" fill="rgba(168,85,247,0.05)" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="205" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="266" y="205" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">⏰</text>
+  <text x="282" y="205" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Planifications manquées</text>
+  <text x="409.92" y="205" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· tolérance 10 min · toutes les 5 min</text>
+  <rect x="877.44" y="194" width="192.56" height="14" rx="3" fill="none" stroke="#334155" strokeWidth="1"/>
+  <text x="973.72" y="204" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="ui-monospace, monospace">contrôlé il y a 2 min · 0 manquée(s)</text>
+  <rect x="240" y="226" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="244" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="268" y="244" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">☆</text>
+  <text x="284" y="244" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches principales</text>
+  <text x="394.8" y="244" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">2</text>
+  <rect x="240" y="254" width="840" height="30" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="273" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-daily-sync</text>
+  <text x="440" y="273" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Copie nocturne des tables du CRM</text>
+  <rect x="658" y="261" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="687.0" y="272.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <text x="750" y="273" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <rect x="860" y="260" width="72" height="18" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="896" y="272.5" fill="#4a9eff" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">activée</text>
+  <text x="942" y="273" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="273" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="273" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="273" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="273" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="284" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="303" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">sales-monthly-load</text>
+  <text x="440" y="303" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Fichier de ventes mensuel vers la table de faits</text>
+  <rect x="658" y="291" width="43" height="16" rx="3" fill="#f87171" fillOpacity="0.12" stroke="#f87171" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="679.5" y="302.5" fill="#f87171" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">FAILED</text>
+  <text x="750" y="303" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Manuelle</text>
+  <rect x="860" y="290" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="302.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="303" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="303" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="303" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="303" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="303" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="324" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="342" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="268" y="342" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="294.8" y="342" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">3</text>
+  <rect x="240" y="352" width="840" height="30" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="371" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-archive</text>
+  <text x="440" y="371" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Archiver les affaires clôturées</text>
+  <rect x="658" y="359" width="53" height="16" rx="3" fill="#fb923c" fillOpacity="0.12" stroke="#fb923c" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="684.5" y="370.5" fill="#fb923c" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">CANCELED</text>
+  <text x="750" y="371" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Manuelle</text>
+  <rect x="860" y="358" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="370.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="371" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="371" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="371" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="371" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="371" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="382" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="401" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-daily-sync</text>
+  <text x="440" y="401" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Copie nocturne des tables du CRM</text>
+  <rect x="658" y="389" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="687.0" y="400.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <text x="750" y="401" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <rect x="860" y="388" width="72" height="18" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="896" y="400.5" fill="#4a9eff" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">activée</text>
+  <text x="942" y="401" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="401" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="401" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="401" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="401" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="412" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="431" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-stalled-deals</text>
+  <text x="440" y="431" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Signaler les affaires sans nouvelles</text>
+  <rect x="658" y="419" width="48" height="16" rx="3" fill="#4a9eff" fillOpacity="0.12" stroke="#4a9eff" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="682.0" y="430.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">RUNNING</text>
+  <text x="750" y="431" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 8 ∗ ∗ mon-fri</text>
+  <rect x="860" y="418" width="72" height="18" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="896" y="430.5" fill="#4a9eff" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">activée</text>
+  <text x="942" y="431" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="431" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="431" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="431" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="431" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="452" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="470" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="268" y="470" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Framework</text>
+  <text x="328.4" y="470" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">4</text>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouvelle tâche · Planning · Recharger</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'éditeur, la vue jour par jour</text>
+  <line x1="200" y1="87.0" x2="240" y2="97" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="20" y="132" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="147" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recherche et filtres</text>
+  <text x="30" y="160" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">gardés dans le navigateur</text>
+  <line x1="200" y1="149.0" x2="240" y2="132" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="20" y="196" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux politiques communes</text>
+  <text x="30" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rétention, planifications manquées</text>
+  <line x1="200" y1="213.0" x2="240" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches principales d'abord</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les tâches étiquetées main</text>
+  <line x1="200" y1="267.0" x2="240" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un groupe par application</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic le replie</text>
+  <line x1="200" y1="397.0" x2="240" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="20" y="450" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Framework en dernier</text>
+  <text x="30" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les tâches sans application</text>
+  <line x1="200" y1="467.0" x2="240" y2="466" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="1120" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dernière exécution</text>
+  <text x="1130" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic ouvre son détail</text>
+  <line x1="1120" y1="253.0" x2="710" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="1120" y="320" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">activée / désactivée</text>
+  <text x="1130" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bascule le planning de la tâche</text>
+  <line x1="1120" y1="337.0" x2="932" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
+  <rect x="1120" y="410" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="425" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Actions</text>
+  <text x="1130" y="438" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">exécuter, modifier, cloner, exporter, supprimer</text>
+  <line x1="1120" y1="427.0" x2="1030" y2="372" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfjl-arrow)"/>
 </svg>
 
 ---
@@ -143,7 +181,9 @@ La page **Tâches** présente chaque tâche de `jobs.toml`, une ligne par tâche
 | **Toutes les applications**, **Tout statut**, **Toute étiquette** | Restreignent la liste. Statut : *Activées*, *Désactivées*, *Planifiées (activées avec une prochaine exécution)*, *En cours*, *Dernière exécution en échec*. |
 | **Effacer** | Remet à zéro la recherche et les filtres. |
 | *N sur M tâches* | Le nombre de tâches retenues par les filtres. |
-| **+ Nouvelle tâche** | Ouvre l'éditeur de tâche — voir [Créer une tâche](./create.md). |
+| **Nouvelle tâche** | Ouvre l'éditeur de tâche — voir [Créer une tâche](./create.md). |
+| **Planning** | Ouvre la vue jour par jour des planifications — voir [Planifications](./schedules.md#schedule-view). |
+| **Recharger** | Relit la liste. |
 
 La recherche et les filtres sont conservés par le navigateur d'une visite à l'autre. Deux panneaux repliés regroupent les règles communes à toutes les tâches : **Rétention de l'historique** ([Administration](../administration.md#retention)) et **Planifications manquées** ([Planifications](./schedules.md#missed)).
 

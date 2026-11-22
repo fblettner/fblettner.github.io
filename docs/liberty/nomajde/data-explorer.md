@@ -1,6 +1,6 @@
 ---
 title: Data Explorer
-description: "Free analysis of the JD Edwards EnterpriseOne security and development data in the Nomajde Data Explorer: the Security and Development models, their shipped analyses and dashboard, the models shipped by the JDE presets, and the data dictionary labels."
+description: "Free analysis of the JD Edwards EnterpriseOne security, development and upgrade data in the Nomajde Data Explorer: the Security, Development and Upgrade analysis models, their shipped analyses and dashboard, the models shipped by the JDE presets, and the data dictionary labels."
 keywords: [Nomajde, Data Explorer, JD Edwards, JDE, security, users, roles, security records, UDO security, environments, Object Librarian, presets, data dictionary]
 ---
 
@@ -27,6 +27,14 @@ The users (F0092) with their address book name, their role relationships (F95921
 The Object Librarian (F9860): the objects per type and per product code.
 
 **Analyses**: *Objects by type*, *Objects by product code*.
+
+---
+
+## Upgrade analysis \{#upgrade\}
+
+The objects of the [upgrade analysis](./upgrade/analysis.md): kind, retrofit, complexity, days, module, assignee, status, usage.
+
+**Analyses**: *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*.
 
 ---
 

@@ -84,7 +84,7 @@ La commande génère les secrets, démarre l'ensemble, attend qu'il réponde et 
 
 Ensuite, dans cet ordre et seulement si besoin :
 
-1. **Licence** — *Liberty Next → Administrer → App → License* : coller la clé reçue.
+1. **Licence** — *Liberty Next → Administrer → App → Licence* : coller la clé reçue.
 2. **Applications sous licence** — `./liberty apps liberty_apps-<version>-py3-none-any.whl` ([Applications sous licence](./deploy-prebuilt-apps.md)).
 3. **HTTPS** — `./liberty ssl letsencrypt --domain liberty.example.com --email ops@example.com` ([HTTPS et Traefik](./traefik.md)).
 

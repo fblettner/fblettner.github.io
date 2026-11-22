@@ -18,41 +18,110 @@ The **segregation-of-duties** sections build on the SoD conflict refresh (the *S
 
 ## At a glance
 
-<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 668" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="sox-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="nxrepsox-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nxrepsox-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nxrepsox-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nxrepsox-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="32" width="920" height="256" rx="14" fill="url(#sox-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="60" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Reports</text>
-  <line x1="40" y1="76" x2="960" y2="76" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="92" width="300" height="176" rx="10" fill="rgba(192,132,252,0.06)" stroke="rgba(192,132,252,0.30)" strokeWidth="1.2"/>
-  <text x="78" y="120" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Security &amp; SoD Assessment</text>
-  <text x="78" y="142" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">SOX-driven security-posture review</text>
-  <text x="78" y="156" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">for one application.</text>
-  <rect x="78" y="174" width="60" height="20" rx="10" fill="rgba(148,163,184,0.12)" stroke="#334155" strokeWidth="1"/>
-  <text x="108" y="188" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">PDF</text>
-  <rect x="146" y="174" width="84" height="20" rx="10" fill="rgba(148,163,184,0.12)" stroke="#334155" strokeWidth="1"/>
-  <text x="188" y="188" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">markdown</text>
-
-  <text x="392" y="116" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PARAMETERS</text>
-  <rect x="392" y="126" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="141" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Application</text>
-  <text x="924" y="141" fill="#f87171" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">required</text>
-  <rect x="392" y="152" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="167" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Target connector · Schema</text>
-  <text x="924" y="167" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">nomasx1 · public</text>
-  <rect x="392" y="178" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="193" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Language · Dormancy window (days)</text>
-  <text x="924" y="193" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">en · 90</text>
-  <rect x="392" y="204" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="219" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Report date label · Client name</text>
-  <text x="924" y="219" fill="#64748b" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">optional</text>
-
-  <rect x="392" y="236" width="92" height="26" rx="6" fill="rgba(192,132,252,0.16)" stroke="rgba(192,132,252,0.45)" strokeWidth="1.2"/>
-  <text x="438" y="253" fill="#d8b4fe" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Run &amp; download</text>
-  <rect x="492" y="236" width="70" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="527" y="253" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Format</text>
+  <rect x="220" y="20" width="880" height="628" rx="14" fill="url(#nxrepsox-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Reports</text>
+  <rect x="240" y="36" width="26" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Run a report and download the result as PDF or markdown.</text>
+  <rect x="1000" y="40" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1040.0" y="54.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Reload</text>
+  <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1004" y="88" width="76" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="1042.0" y="99.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">2 reports</text>
+  <rect x="240" y="112" width="840" height="56" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="134" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit Licences JD Edwards</text>
+  <text x="404.8" y="134" fill="#64748b" fontSize="8.3" fontFamily="ui-monospace, monospace">nomasx1:audit-licences</text>
+  <text x="254" y="154" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Compliance + optimisation analysis for one apps_id… Available in French or English.</text>
+  <rect x="1004" y="122" width="62" height="22" rx="5" fill="url(#nxrepsox-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1035.0" y="136.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="240" y="176" width="840" height="56" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="198" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Security &amp; Segregation of Duties Assessment</text>
+  <text x="507.616" y="198" fill="#64748b" fontSize="8.3" fontFamily="ui-monospace, monospace">nomasx1:security-sox</text>
+  <text x="254" y="218" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Security &amp; SoD review for one apps_id… Available in English or French.</text>
+  <rect x="1004" y="186" width="62" height="22" rx="5" fill="url(#nxrepsox-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1035.0" y="200.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="370" y="200" width="580" height="436" rx="12" fill="#111827" stroke="#334155" strokeWidth="1.4"/>
+  <text x="388" y="224" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Security &amp; Segregation of Duties Assessment</text>
+  <line x1="370" y1="236" x2="950" y2="236" stroke="#1f2937" strokeWidth="1"/>
+  <text x="388" y="254" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Security &amp; SoD review for one apps_id… Available in English or French.</text>
+  <text x="388" y="272" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TARGET CONNECTOR</text>
+  <rect x="388" y="278" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="292.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">nomasx1</text>
+  <text x="922" y="292.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="312" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHEMA</text>
+  <rect x="388" y="318" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="332.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">public</text>
+  <text x="922" y="332.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="352" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION &#42;</text>
+  <rect x="388" y="358" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="372.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Select…</text>
+  <text x="922" y="372.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="392" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LANGUAGE</text>
+  <rect x="388" y="398" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="412.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">en  English</text>
+  <text x="922" y="412.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="432" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DORMANCY WINDOW (DAYS)</text>
+  <rect x="388" y="438" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="452.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">90</text>
+  <text x="388" y="472" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REPORT DATE LABEL</text>
+  <rect x="388" y="478" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="492.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="388" y="512" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT NAME</text>
+  <rect x="388" y="518" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="532.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="388" y="552" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FORMAT</text>
+  <rect x="388" y="558" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="572.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PDF</text>
+  <text x="488" y="572.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <line x1="370" y1="598" x2="950" y2="598" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="828" y="608" width="104" height="24" rx="5" fill="url(#nxrepsox-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="880.0" y="623.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⤓ Run &amp; download</text>
+  <rect x="758" y="608" width="62" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="789.0" y="623.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="20" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The reports</text>
+  <text x="30" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one card per report, ▷ Run</text>
+  <line x1="200" y1="147.0" x2="240" y2="140" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="1120" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <text x="1130" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the parameters</text>
+  <line x1="1120" y1="147.0" x2="1035" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="20" y="352" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="367" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application (required)</text>
+  <text x="30" y="380" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">picked by name</text>
+  <line x1="200" y1="369.0" x2="388" y2="375" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="20" y="272" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="287" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector · schema</text>
+  <text x="30" y="300" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">where the Nomasx-1 tables are</text>
+  <line x1="200" y1="289.0" x2="388" y2="295" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="1120" y="392" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="407" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
+  <text x="1130" y="420" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">English by default</text>
+  <line x1="1120" y1="409.0" x2="932" y2="415" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="1120" y="439" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="454" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dormancy window</text>
+  <text x="1130" y="467" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">90 days by default</text>
+  <line x1="1120" y1="456.0" x2="932" y2="455" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="1120" y="512" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="527" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cover page</text>
+  <text x="1130" y="540" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">date label, client name</text>
+  <line x1="1120" y1="529.0" x2="932" y2="535" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="20" y="559" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="574" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Format</text>
+  <text x="30" y="587" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">PDF or markdown</text>
+  <line x1="200" y1="576.0" x2="388" y2="575" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
+  <rect x="1120" y="588" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="603" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Run &amp; download</text>
+  <text x="1130" y="616" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the file comes back to the browser</text>
+  <line x1="1120" y1="605.0" x2="920" y2="620" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepsox-arrow)"/>
 </svg>
 
 ---
@@ -112,7 +181,7 @@ The matrix itself — processes, activities, objects, risks and the incompatible
 
 ## Running the report
 
-The report lives under **Reports** in the Nomasx-1 sidebar, on the framework's *Run a report and download the result as PDF or markdown* page. Pick **Security & SoD Assessment** from the list, fill the parameters, choose a **Format**, then **Run & download**.
+The report lives under **Reports** in the Nomasx-1 menu: one card per report, with its description. **Run** on the **Security & Segregation of Duties Assessment** card opens its parameters; fill them, choose a **Format**, then **Run & download**.
 
 | Parameter | Required | Default | What it sets |
 |---|---|---|---|

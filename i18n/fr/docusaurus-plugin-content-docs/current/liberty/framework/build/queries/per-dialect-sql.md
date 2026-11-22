@@ -14,7 +14,7 @@ Liberty permet à une seule requête de porter un **SQL par dialecte** sans dupl
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 334" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 328" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="pds-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="pds-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,36 +22,68 @@ Liberty permet à une seule requête de porter un **SQL par dialecte** sans dupl
     <marker id="pds-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="304" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">monthly_revenue · sql</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="86" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">default (required)</text>
-  <rect x="240" y="94" width="680" height="60" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="128" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SELECT date_trunc('month', invoice_date) AS M, SUM(total) …</text>
-  <text x="240" y="182" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">oracle</text>
-  <rect x="240" y="190" width="680" height="60" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="224" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SELECT TRUNC(invoice_date, 'MM') AS M, SUM(total) …</text>
-  <text x="936" y="224" fill="#94a3b8" fontSize="13" fontFamily="system-ui, sans-serif">×</text>
-  <rect x="240" y="274" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="288.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">dialect (ex. oracle)</text>
-  <rect x="450" y="274" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="477.5" y="288.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">single</text>
-  <rect x="10" y="100" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default</text>
-  <text x="20" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">utilisée sans variante</text>
-  <line x1="210" y1="117.0" x2="240" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
-  <rect x="1000" y="160" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une variante</text>
-  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">choisie selon le dialecte</text>
-  <line x1="1000" y1="177.0" x2="920" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
-  <rect x="10" y="280" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter un dialecte</text>
-  <text x="20" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le saisir, Entrée</text>
-  <line x1="210" y1="297.0" x2="240" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
-  <rect x="1000" y="290" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">single</text>
-  <text x="1010" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">retour à une instruction</text>
-  <line x1="1000" y1="307.0" x2="510" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="220" y="14" width="880" height="280" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="30" width="200" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="243" y="35" width="14" height="14" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="263" y="45.5" fill="#4a9eff" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QUE C'EST</text>
+  <text x="343.88800000000003" y="45.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">MONTHLY_REVENUE</text>
+  <line x1="437" y1="42" x2="447" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#pds-flow)"/>
+  <rect x="448" y="30" width="232" height="24" rx="12" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <rect x="455" y="35" width="14" height="14" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="475" y="45.5" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INSTRUCTION</text>
+  <text x="550.064" y="45.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">SELECT · default, oracle</text>
+  <line x1="681" y1="42" x2="691" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#pds-flow)"/>
+  <rect x="692" y="30" width="190" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="699" y="35" width="14" height="14" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="719" y="45.5" fill="#fb923c" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
+  <text x="788.24" y="45.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2 déclaré(s)</text>
+  <text x="236" y="76" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SQL ∗</text>
+  <text x="236" y="96" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">default (required)</text>
+  <rect x="236" y="104" width="62" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="267.0" y="117.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">&#123;&#125; Jeton</text>
+  <rect x="956" y="104" width="70" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="991.0" y="117.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✦ Assistant</text>
+  <rect x="1032" y="104" width="52" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1058.0" y="117.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Tester</text>
+  <rect x="236" y="130" width="848" height="29" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="146" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="260" y="146" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">SELECT date_trunc('month', invoice_date) AS M, SUM(total) FROM invoices GROUP BY 1</text>
+  <text x="236" y="181" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">oracle</text>
+  <rect x="236" y="189" width="62" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="267.0" y="202.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">&#123;&#125; Jeton</text>
+  <rect x="922" y="189" width="70" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="957.0" y="202.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✦ Assistant</text>
+  <rect x="998" y="189" width="52" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1024.0" y="202.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Tester</text>
+  <rect x="236" y="215" width="814" height="29" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="231" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="260" y="231" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">SELECT TRUNC(invoice_date, 'MM') AS M, SUM(total) FROM invoices GROUP BY TRUNC(invoice_date, 'MM')</text>
+  <rect x="1060" y="215" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1072.0" y="230" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="236" y="256" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="246" y="271.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">dialect (e.g. oracle)</text>
+  <rect x="444" y="257" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="470.0" y="271.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">single</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">utilisée sans variante adaptée</text>
+  <line x1="200" y1="113.0" x2="236" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter un dialecte</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le saisir, puis Entrée</text>
+  <line x1="200" y1="267.0" x2="236" y2="268" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1120" y="161" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="176" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Retirer une variante</text>
+  <text x="1130" y="189" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la croix à côté</text>
+  <line x1="1120" y1="178.0" x2="1072" y2="215" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1120" y="207" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="222" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une variante</text>
+  <text x="1130" y="235" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">choisie selon le type du pool</text>
+  <line x1="1120" y1="224.0" x2="1048" y2="231" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1120" y="278" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="293" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">single</text>
+  <text x="1130" y="306" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">retour à une seule instruction</text>
+  <line x1="1120" y1="295.0" x2="486" y2="269" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
 </svg>
 
 ---
@@ -86,7 +118,7 @@ Indexée par **nom de backend SQLAlchemy**. Le moteur lit le dialecte du pool au
 
 ## Clés de dialecte supportées
 
-Les chaînes de dialecte proviennent de SQLAlchemy. Les valeurs comprises par Liberty sont celles déclarées dans l'énumération **Datasource Type** de la page Pools :
+Les chaînes de dialecte proviennent de SQLAlchemy. Le dialecte d'un pool suit son **Type de base** (étape *Base de données* de la page Pools) — ou, pour une URL saisie à la main, le schéma de l'URL :
 
 | Clé | Base |
 |---|---|
@@ -110,7 +142,7 @@ Le validateur impose deux règles sur la map :
 
 ## L'éditeur
 
-Dans l'éditeur de requête (**Liberty Next → Données → Connecteurs**, vue Tables, Requêtes, Séquences ou Lookups), le champ **sql** est un éditeur SQL unique :
+Dans l'éditeur de requête (**Liberty Next → Données → Connecteurs**, section Tables, Requêtes, Séquences ou Lookups, étape **Instruction**), le champ **SQL** est un éditeur SQL unique :
 
 1. **+ per-dialect variants** le transforme en liste de variantes, en commençant par `default (required)`, qui reprend le SQL en place.
 2. Un nom de dialecte (`oracle`, `postgresql`, `mssql`…) saisi dans le champ **dialect**, suivi d'Entrée, ajoute un éditeur pour cette variante.
@@ -222,7 +254,7 @@ Mêmes paramètres `:placeholder` sur les deux variantes — les liaisons foncti
 
 ## Comment le moteur choisit
 
-Au moment de l'exécution, le moteur lit le **dialecte du pool** (déclaré dans *Liberty Next → Administrer → Pools → \<pool> → Datasource type*) et :
+Au moment de l'exécution, le moteur lit le **dialecte du pool** (son **Type de base**, dans *Liberty Next → Administrer → Pools → \<pool> → Base de données*) et :
 
 1. Cherche la clé de dialecte dans la map `sql`.
 2. Retombe sur `default` quand aucune variante spécifique ne correspond.

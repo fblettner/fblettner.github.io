@@ -17,8 +17,8 @@ This is the recommended path for any table that already exists. Skip it only whe
 The wizard is reached from **Liberty Next → Data → Connectors**:
 
 1. Pick a connector in the left list.
-2. Switch the right pane's mode bar to **Tables**.
-3. In the **Tables** view, click **＋ Add queries** at the top-right.
+2. Pick the **Tables** stage card.
+3. Click **＋ Add queries** in the connector's header.
 4. A choice modal opens. Pick **Generate from DB**.
 
 The wizard then walks the connector's pool (`GET /api/sql/<connector>/_schemas`) and presents the schemas it found.
@@ -27,87 +27,142 @@ The wizard then walks the connector's pool (`GET /api/sql/<connector>/_schemas`)
 
 ## The wizard layout
 
-<svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 580" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="cw-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="cw-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cw-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="cw-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="cw-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="500" rx="14" fill="url(#cw-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Generate table from DB · [connectors.crm]</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="86" fill="#94a3b8" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · SCHEMA</text>
-  <rect x="40" y="92" width="280" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="52" y="109" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">public ▾</text>
-
-  <text x="340" y="86" fill="#94a3b8" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · NAME FILTER</text>
-  <rect x="340" y="92" width="280" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="352" y="109" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">customers%</text>
-
-  <text x="640" y="86" fill="#94a3b8" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · TABLE</text>
-  <rect x="640" y="92" width="300" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="652" y="109" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">customers ▾</text>
-
-  <rect x="40" y="138" width="450" height="270" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="58" y="158" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · COLUMNS · 7 / 9</text>
-  <rect x="58" y="170" width="200" height="22" rx="4" fill="rgba(74,158,255,0.08)"/>
-  <text x="76" y="184" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ customer_id</text>
-  <text x="200" y="184" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">INT4</text>
-  <rect x="270" y="170" width="50" height="20" rx="3" fill="rgba(251,146,60,0.20)"/>
-  <text x="295" y="184" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">KEY</text>
-
-  <text x="76" y="208" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ name</text>
-  <text x="200" y="208" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">VARCHAR(120)</text>
-  <text x="76" y="226" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ email</text>
-  <text x="200" y="226" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">VARCHAR(255)</text>
-  <text x="76" y="244" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ created_at</text>
-  <text x="200" y="244" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">TIMESTAMP</text>
-  <text x="76" y="262" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ owner_id</text>
-  <text x="200" y="262" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">INT4</text>
-  <text x="76" y="280" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ status</text>
-  <text x="200" y="280" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">VARCHAR(20)</text>
-  <text x="76" y="298" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">☑ region</text>
-  <text x="200" y="298" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">VARCHAR(60)</text>
-  <text x="76" y="316" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">☐ notes_blob</text>
-  <text x="200" y="316" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">BLOB</text>
-  <text x="76" y="334" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">☐ search_vector</text>
-  <text x="200" y="334" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">TSVECTOR</text>
-
-  <text x="58" y="368" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">5 · QUERIES TO EMIT</text>
-  <rect x="58" y="376" width="80" height="22" rx="4" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="98" y="391" fill="#22c55e" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="ui-monospace, monospace">☑ SELECT</text>
-  <rect x="144" y="376" width="80" height="22" rx="4" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="184" y="391" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">☑ UPDATE</text>
-  <rect x="230" y="376" width="80" height="22" rx="4" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="270" y="391" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">☑ INSERT</text>
-  <rect x="316" y="376" width="80" height="22" rx="4" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.40)"/>
-  <text x="356" y="391" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">☑ DELETE</text>
-
-  <rect x="510" y="138" width="450" height="270" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="528" y="158" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">6 · LIVE PREVIEW</text>
-  <rect x="528" y="170" width="40" height="18" rx="3" fill="rgba(34,197,94,0.20)"/>
-  <text x="548" y="183" fill="#22c55e" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">GET</text>
-  <text x="578" y="183" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">customers_get</text>
-  <text x="528" y="202" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SELECT</text>
-  <text x="528" y="216" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">  customer_id, name, email,</text>
-  <text x="528" y="230" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">  created_at, owner_id, status,</text>
-  <text x="528" y="244" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">  region</text>
-  <text x="528" y="258" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">FROM public.customers</text>
-
-  <rect x="528" y="278" width="40" height="18" rx="3" fill="rgba(34,197,94,0.20)"/>
-  <text x="548" y="291" fill="#22c55e" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">PUT</text>
-  <text x="578" y="291" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">customers_put</text>
-  <text x="528" y="310" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">UPDATE public.customers</text>
-  <text x="528" y="324" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">SET NAME = :NAME, EMAIL = :EMAIL,</text>
-  <text x="528" y="338" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    CREATED_AT = :CREATED_AT,</text>
-  <text x="528" y="352" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    OWNER_ID = :OWNER_ID,</text>
-  <text x="528" y="366" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">    STATUS = :STATUS, REGION = :REGION</text>
-  <text x="528" y="380" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">WHERE CUSTOMER_ID = :CUSTOMER_ID_ORIGINAL</text>
-
-  <line x1="20" y1="430" x2="980" y2="430" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="780" y="450" width="80" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="820" y="468" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
-  <rect x="870" y="450" width="80" height="28" rx="6" fill="#4a9eff" opacity="0.9"/>
-  <text x="910" y="468" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="230" y="22" width="860" height="538" rx="14" fill="url(#cw-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="246" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Generate table from DB</text>
+  <text x="411.84000000000003" y="48" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">· [connectors.crm]</text>
+  <line x1="230" y1="62" x2="1090" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="246" y="82" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLE NAME FILTER</text>
+  <rect x="246" y="88" width="828" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="255" y="102.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">cust%</text>
+  <text x="246" y="124" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLE</text>
+  <rect x="246" y="130" width="828" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="255" y="144.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="1060" y="144.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="246" y="166" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE NAME (QUERIES BECOME &lt;BASE&gt;_GET / _PUT / _POST / _DELETE)</text>
+  <rect x="246" y="172" width="828" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="255" y="186.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="246" y="214" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLUMNS  (6 / 7 included · 1 key)</text>
+  <rect x="246" y="222" width="828" height="108" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="256.0" y="233" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M258.5,238.5 L260.8,240.8 L264.8,236" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="273.0" y="242" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="274.0" y="242" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">customer_id</text>
+  <text x="343.38" y="242" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">INTEGER</text>
+  <rect x="606.0" y="233" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M608.5,238.5 L610.8,240.8 L614.8,236" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="623.0" y="242" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="624.0" y="242" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="670.0" y="233" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,238.5 L674.8,240.8 L678.8,236" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687.0" y="242" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="688.0" y="242" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">name</text>
+  <text x="718.32" y="242" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">VARCHAR(120)</text>
+  <rect x="1020.0" y="233" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="1037.0" y="242" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="1038.0" y="242" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="256.0" y="257" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M258.5,262.5 L260.8,264.8 L264.8,260" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="273.0" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="274.0" y="266" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">email</text>
+  <text x="309.9" y="266" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">VARCHAR(255)</text>
+  <rect x="606.0" y="257" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="623.0" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="624.0" y="266" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="670.0" y="257" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,262.5 L674.8,264.8 L678.8,260" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687.0" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="688.0" y="266" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">status</text>
+  <text x="729.48" y="266" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">VARCHAR(20)</text>
+  <rect x="1020.0" y="257" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="1037.0" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="1038.0" y="266" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="256.0" y="281" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M258.5,286.5 L260.8,288.8 L264.8,284" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="273.0" y="290" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="274.0" y="290" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">region</text>
+  <text x="315.48" y="290" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">VARCHAR(60)</text>
+  <rect x="606.0" y="281" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="623.0" y="290" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="624.0" y="290" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="670.0" y="281" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,286.5 L674.8,288.8 L678.8,284" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687.0" y="290" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="688.0" y="290" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">created_at</text>
+  <text x="751.8" y="290" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">TIMESTAMP</text>
+  <rect x="1020.0" y="281" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="1037.0" y="290" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="1038.0" y="290" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <rect x="256.0" y="305" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="273.0" y="314" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="274.0" y="314" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">notes_blob</text>
+  <text x="337.8" y="314" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">BYTEA</text>
+  <rect x="606.0" y="305" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="623.0" y="314" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="624.0" y="314" fill="#fb923c" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <text x="246" y="350" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHICH QUERIES TO EMIT</text>
+  <rect x="246" y="358" width="99" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="254" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M256.5,370.5 L258.8,372.8 L262.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="271" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">SELECT (_get)</text>
+  <rect x="353" y="358" width="99" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="361" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M363.5,370.5 L365.8,372.8 L369.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="378" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">UPDATE (_put)</text>
+  <rect x="460" y="358" width="104" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="468" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M470.5,370.5 L472.8,372.8 L476.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="485" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">INSERT (_post)</text>
+  <rect x="572" y="358" width="114" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="580" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M582.5,370.5 L584.8,372.8 L588.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="597" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">DELETE (_delete)</text>
+  <rect x="246" y="394" width="828" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="256" y="404" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="278.0" y="415.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="316" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">customers_get</text>
+  <rect x="256" y="428" width="808" height="44" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="270" y="444" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="280" y="444" fill="#7dd3fc" fontSize="9" fontFamily="ui-monospace, monospace">SELECT CUSTOMER_ID, NAME, EMAIL, STATUS, REGION, CREATED_AT</text>
+  <text x="270" y="459" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
+  <text x="280" y="459" fill="#7dd3fc" fontSize="9" fontFamily="ui-monospace, monospace">FROM public.customers</text>
+  <text x="256" y="506" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">… then UPDATE customers_put, INSERT customers_post, DELETE customers_delete — each editable.</text>
+  <line x1="230" y1="518" x2="1090" y2="518" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="890" y="528" width="84" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="932.0" y="542.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="982" y="528" width="92" height="22" rx="5" fill="url(#cw-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1028.0" y="542.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="20" y="80" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filter, then table</text>
+  <text x="30" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">LIKE pattern, read on the pool</text>
+  <line x1="200" y1="97.0" x2="246" y2="117" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
+  <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Include a column</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in SELECT and INSERT</text>
+  <line x1="200" y1="253.0" x2="256" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
+  <rect x="20" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Queries to emit</text>
+  <text x="30" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">SELECT is required</text>
+  <line x1="200" y1="377.0" x2="246" y2="370" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
+  <rect x="1120" y="160" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Base name</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&lt;base&gt;_get / _put / _post / _delete</text>
+  <line x1="1120" y1="177.0" x2="1074" y2="183" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
+  <rect x="1120" y="230" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">KEY</text>
+  <text x="1130" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">drives the WHERE of UPDATE / DELETE</text>
+  <line x1="1120" y1="247.0" x2="1040.0" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
+  <rect x="1120" y="420" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Generated SQL</text>
+  <text x="1130" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one editor per query</text>
+  <line x1="1120" y1="437.0" x2="1064" y2="450" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cw-arrow)"/>
 </svg>
 
 ---
@@ -120,9 +175,9 @@ The wizard fetches schemas lazily — the initial open just lists names, the per
 
 ---
 
-## Step 2 — Filter table names (optional)
+## Step 2 — Filter table names
 
-A SQL `LIKE` pattern (`customers%`, `F00%`) typed in the **Name filter** box narrows the table list **server-side**, before the per-table column introspection runs. For pools with thousands of tables this is the difference between a snappy picker and a sluggish one.
+The **Table** list fills once a filter is typed (*Type a filter to list tables*): a SQL `LIKE` pattern (`customers%`, `F00%`, `%` for all) typed in the **Table name filter** box narrows the table list **server-side**, before the per-table column introspection runs. For pools with thousands of tables this is the difference between a snappy picker and a sluggish one.
 
 The filter is debounced — type freely; the fetch fires ~350 ms after you stop.
 
@@ -137,7 +192,7 @@ Once you pick a table, the wizard pulls its columns and pre-fills two sets:
 | **Include** | Every column is ticked. |
 | **Key** | Every column the database marks as `NOT NULL` is ticked. |
 
-These are guesses — uncheck the columns you don't want surfaced (BLOBs, audit columns, computed fields) and confirm the keys.
+These are guesses — uncheck the columns you don't want surfaced (BLOBs, audit columns, computed fields) and confirm the keys. The **Base name** (*queries become `<base>_get / _put / _post / _delete`*) is filled from the table's name; change it to name the queries differently. The **Columns** heading counts what is included and how many keys are ticked.
 
 ---
 
@@ -149,7 +204,7 @@ Each row in the **Columns** list carries:
 |---|---|
 | **Include checkbox** | When unticked, the column is dropped from `_get`'s `SELECT` and from `_post`'s `INSERT`. The dialog will not see it. |
 | **Column name + type** | Read-only — comes from the live database. |
-| **KEY toggle** | Pinned to the right. When ticked, this column drives the `_put`'s `WHERE` clause (with `:NAME_ORIGINAL`) and the `_delete`'s `WHERE` clause. |
+| **KEY checkbox** | Beside each column. When ticked, this column drives the `_put`'s `WHERE` clause (with `:NAME_ORIGINAL`) and the `_delete`'s `WHERE` clause. |
 
 A row with **at least one** key is required for UPDATE / DELETE to emit anything. The wizard refuses to save without one.
 
@@ -157,7 +212,7 @@ A row with **at least one** key is required for UPDATE / DELETE to emit anything
 
 ## Step 5 — Pick which queries to emit
 
-Four checkboxes — **SELECT (`_get`)**, **UPDATE (`_put`)**, **INSERT (`_post`)**, **DELETE (`_delete`)**. Tick the ones the table needs.
+Four checkboxes under **Which queries to emit** — **SELECT (`_get`)**, **UPDATE (`_put`)**, **INSERT (`_post`)**, **DELETE (`_delete`)**. Tick the ones the table needs.
 
 | Pattern | Tick |
 |---|---|
@@ -172,7 +227,7 @@ The **SELECT** query is always emitted — at the very least the screen needs to
 
 ## Step 6 — Read the preview, override if needed
 
-The right column shows the generated SQL for every ticked CRUD slot, live. Edit any preview directly — your edit wins over the auto-gen until you change the column / key selection again, which restores the generated version.
+Under the choices, one editor per ticked CRUD slot shows the generated SQL, live, with its **Token** menu. Edit any preview directly — your edit wins over the auto-gen until you change the column / key selection again, which restores the generated version.
 
 ### The four shapes
 

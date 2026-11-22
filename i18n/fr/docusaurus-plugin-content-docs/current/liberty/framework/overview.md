@@ -47,7 +47,7 @@ Quand un besoin que le framework ne couvre pas apparaît (un widget sur mesure, 
 C'est **moins intéressant** pour :
 
 - Les applications grand public destinées au public (l'UX du framework est orientée opérateur).
-- Les applications mobiles (la SPA fonctionne sur mobile mais n'est pas pensée mobile-first).
+- Les applications mobiles natives (les applications s'utilisent dans le navigateur d'un téléphone ou d'une tablette, avec une disposition adaptée à l'écran — voir [Téléphone et tablette](./mobile.md) —, mais il n'existe pas d'application à installer depuis un magasin).
 - Les sites marketing ponctuels ou la gestion de contenu — il existe des outils plus simples.
 
 ---
@@ -73,7 +73,7 @@ Tout ce que fait le framework se compose à partir de cinq concepts :
 
 | Concept | Ce que c'est | Ce qu'il résout |
 |---|---|---|
-| **[Pool](./connectors.md#pools)** | Une connexion à une base de données (une URL SQLAlchemy + des identifiants). | « Comment j'atteins ces données ? » |
+| **[Pool](./connectors.md#pools)** | Une connexion à une base de données : son type, son hôte, son port et sa base, et le compte qui s'y connecte. | « Comment j'atteins ces données ? » |
 | **[Connecteur](./connectors.md)** | Un ensemble nommé de requêtes / endpoints au-dessus d'un pool. | « Quelles questions je veux poser à cette source ? » |
 | **[Écran](./build/screens/overview.md)** | Une grille + un dialogue d'édition au-dessus des requêtes d'un connecteur. | « Comment je laisse une personne consulter et modifier ça ? » |
 | **[Tableau de bord](./dashboards.md)** | Une mise en page de KPI et de graphiques sur les mêmes requêtes. | « Comment je résume ça pour quelqu'un qui veut juste l'essentiel ? » |
@@ -82,6 +82,8 @@ Tout ce que fait le framework se compose à partir de cinq concepts :
 Autour de ces cinq concepts, les couches de support : le [dictionnaire](./dictionary.md) pour les libellés et les formats, l'[authentification et les rôles](./build/secure/sign-in.md) pour qui-voit-quoi, les [jobs](../nomaflow/overview.md) pour le travail planifié, l'[assistant IA](./ai-assistant.md) pour l'accès en langage naturel, les [plugins](./apps/plugins.md) pour du Python personnalisé.
 
 Chaque page de concept de ce site s'ouvre par **ce que c'est, pourquoi il existe, quand on en crée un, comment il s'imbrique avec les autres**. Une fois ces cinq pages lues, la surface du framework est pour l'essentiel cartographiée.
+
+Dans l'application elle-même, **Liberty Next → Vue d'ensemble** liste les applications de l'installation et les huit étapes de construction d'une application, et le **Studio** présente une application sous forme de carte — son menu, ses écrans, les données qu'ils utilisent et les services qu'ils appellent — où chaque élément se modifie sur place. Voir [Vue d'ensemble et Studio](./studio.md).
 
 ---
 
@@ -111,7 +113,7 @@ Pour une lecture de bout en bout, la section **[Installation](../installation/ov
 |---|---|
 | [Installation](../installation/overview.md) | Installer le framework, créer une première application, comprendre la structure des fichiers. |
 | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) | Parcours CRM complet, de bout en bout. |
-| [Configuration](./configuration/settings-ui.md) | Interface Paramètres, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés au repos. |
+| [Configuration](./configuration/settings-ui.md) | L'espace Liberty Next, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés au repos. |
 | [Concepts](./connectors.md) | Les cinq primitives du framework + liaison des paramètres et conditions de formulaire, chacune avec une intro « Quoi / Pourquoi / Quand ». |
 | [Authentification](./build/secure/sign-in.md) | Utilisateurs locaux, OIDC, JWT, rôles, permissions, clés de licence. |
 | [Apps et Plugins](./apps/overview.md) | Organisation multi-apps, plugins Python personnalisés, internationalisation. |
@@ -144,4 +146,5 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async avec asyncpg (PostgreSQL) + oracledb 
 | **Voir d'abord ce qui est possible** | [Cas d'usage](./what-you-can-build.md). |
 | **Installer le framework** | [Installation](../installation/overview.md). |
 | **Comprendre les concepts d'abord** | [Concepts → Connecteurs](./connectors.md) est l'entrée naturelle. |
-| **Chercher un champ précis** | [Interface Paramètres](./configuration/settings-ui.md) liste chaque éditeur ; chaque page de Concepts renvoie vers l'éditeur pertinent. |
+| **Voir une application dans son ensemble** | [Vue d'ensemble et Studio](./studio.md). |
+| **Chercher un champ précis** | [L'espace Liberty Next](./configuration/settings-ui.md) liste chaque éditeur ; chaque page de Concepts renvoie vers l'éditeur pertinent. |

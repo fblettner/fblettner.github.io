@@ -1,12 +1,12 @@
 ---
 title: The sales demo
-description: "The Sales demo application shipped with Liberty Next: invoice lines loaded from Excel by period, period validation and closing, a home dashboard, the Data Explorer with ready-made analyses, the AI assistant's starter questions, a monthly digest e-mailed by Nomaflow, and three demo users who see different rows — every feature built from the Settings, without code."
+description: "The Sales demo application shipped with Liberty Next: invoice lines loaded from Excel by period, period validation and closing, a home dashboard, the Data Explorer with ready-made analyses, the AI assistant's starter questions, a monthly digest e-mailed by Nomaflow, and three demo users who see different rows — every feature built in the Liberty Next pages, without code."
 keywords: [Liberty Next, demo, sales demo, nomademo, example application, dashboard, Data Explorer, file load, period closing, data scope, digest, AI assistant]
 ---
 
 # The sales demo
 
-**Sales demo** is a small application shipped with Liberty Next to show, on one coherent subject, what the framework does without code: monthly invoice lines loaded from Excel, periods validated then closed, a home dashboard, free analysis in the Data Explorer, the AI assistant, a digest e-mailed every month, and users who see only their own company. Everything in it is configuration — connector, dictionary, screens, menus, dashboards, model, jobs — readable and editable in the Settings.
+**Sales demo** is a small application shipped with Liberty Next to show, on one coherent subject, what the framework does without code: monthly invoice lines loaded from Excel, periods validated then closed, a home dashboard, free analysis in the Data Explorer, the AI assistant, a digest e-mailed every month, and users who see only their own company. Everything in it is configuration — connector, dictionary, screens, menus, dashboards, model, jobs — readable and editable in the Liberty Next pages — the [Studio](./studio.md) shows it as a map.
 
 It is a showcase, not a product: open it to see a feature at work, copy what fits into an application of your own.
 
@@ -35,7 +35,11 @@ It is a showcase, not a product: open it to see a feature at work, copy what fit
   <text x="268" y="254" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Companies</text>
   <text x="268" y="280" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Customers</text>
   <text x="254" y="306" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Import</text>
-  <text x="268" y="332" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Load the sample files</text>
+  <text x="268" y="326" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Items file</text>
+  <text x="268" y="342" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Companies file</text>
+  <text x="268" y="358" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Sales file (one month)</text>
+  <text x="268" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Refresh periods</text>
+  <text x="268" y="390" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Load the sample files</text>
   <rect x="464" y="40" width="506" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="476" y="48" width="63" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="507.5" y="60.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Dashboard</text>
@@ -74,7 +78,7 @@ It is a showcase, not a product: open it to see a feature at work, copy what fit
   <line x1="210" y1="347.0" x2="268" y2="334" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
   <rect x="1000" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One app, every feature</text>
-  <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">built from Settings only</text>
+  <text x="1010" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">built in Liberty Next only</text>
   <line x1="1000" y1="57.0" x2="970" y2="66" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dmo-arrow)"/>
   <rect x="1000" y="330" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three demo users</text>

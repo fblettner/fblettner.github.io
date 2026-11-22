@@ -1,68 +1,130 @@
 ---
 title: Clé de licence
-description: "La clé de licence de Liberty Next : ce qu'elle active (Nomasx-1, Nomajde), où la coller (Liberty Next → Administrer → App → License), comment la vérifier (liberty-license, /api/license), ce qui se passe sans elle, et comment la remplacer avant son expiration."
+description: "La clé de licence de Liberty Next : ce qu'elle active (Nomasx-1, Nomajde), où la coller (Liberty Next → Administrer → App → Licence), comment la vérifier (liberty-license, /api/license), ce qui se passe sans elle, et comment la remplacer avant son expiration."
 keywords: [Liberty Next, licence, clé de licence, Nomasx-1, Nomajde, Paramètres App, liberty-license, api license, expiration, mode restreint]
 ---
 
 # Clé de licence
 
-Le framework est libre d'utilisation. Les applications sous licence — **Nomasx-1** et **Nomajde** — sont activées par une clé de licence fournie par Nomana-IT.
+Les applications sous licence — **Nomasx-1** et **Nomajde** — sont activées par une clé de licence fournie par Nomana-IT.
+
+Liberty Next est lui-même publié sous **Business Source License 1.1** : code source disponible, libre de lecture, de modification et de fork, et d'exploitation en production pour sa propre organisation et les applications construites dessus — ces applications, leur configuration et leurs plugins restent à leur auteur. Vendre Liberty Next lui-même, ou une version modifiée, ou le proposer en service hébergé payant demande l'accord écrit de Nomana-IT. Chaque version passe sous licence GNU AGPL v3 ou ultérieure quatre ans après sa sortie. Les applications de Nomana-IT sont des produits distincts, sous leurs propres conditions.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 584" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="lic-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="lic-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="lic-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="lic-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="slic-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="slic-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="slic-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="slic-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="280" rx="14" fill="url(#lic-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres · App</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="74" width="720" height="26" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="252" y="91" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾  License</text>
-  <rect x="850" y="78" width="68" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="884.0" y="90.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">configured</text>
-  <text x="260" y="130" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">License key</text>
-  <rect x="390" y="116" width="430" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="130.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">••••••••••••••••••••••••••••••••</text>
-  <text x="832" y="131" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">👁</text>
-  <rect x="260" y="152" width="680" height="96" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="276" y="176" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">Client</text>
-  <text x="400" y="176" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">ACME</text>
-  <text x="276" y="200" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">Produits</text>
-  <text x="400" y="200" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">Nomasx-1 · Nomajde</text>
-  <text x="276" y="224" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">Expire le</text>
-  <text x="400" y="224" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">31/12/2027</text>
-  <rect x="860" y="262" width="80" height="22" rx="5" fill="url(#lic-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="900.0" y="276.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="10" y="74" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Section License</text>
-  <text x="20" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">état dans l'en-tête</text>
-  <line x1="210" y1="91.0" x2="240" y2="87" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lic-arrow)"/>
-  <rect x="10" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Coller la clé</text>
-  <text x="20" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chiffrée à l'enregistrement</text>
-  <line x1="210" y1="187.0" x2="390" y2="127" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lic-arrow)"/>
-  <rect x="1000" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qu'elle couvre</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">client, produits, échéance</text>
-  <line x1="1000" y1="167.0" x2="940" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lic-arrow)"/>
-  <rect x="1000" y="250" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appliquée aussitôt</text>
-  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sans redémarrage</text>
-  <line x1="1000" y1="267.0" x2="940" y2="273" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lic-arrow)"/>
+  <rect x="220" y="20" width="880" height="544" rx="14" fill="url(#slic-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">App</text>
+  <rect x="953" y="28" width="131" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1018.5" y="42.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Recharger la config</text>
+  <rect x="869" y="28" width="78" height="22" rx="5" fill="url(#slic-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="908.0" y="42.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="780" y="28" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="821.5" y="42.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Abandonner</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <text x="236" y="78" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Les réglages de l'installation (app.toml). Les secrets sont chiffrés dans le fichier ; un redémarrage est demandé quand il en faut un.</text>
+  <text x="246" y="104" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">L'installation</text>
+  <rect x="242" y="112" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="125" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="123" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Serveur</text>
+  <text x="268" y="133" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">ACME ERP · :8000 · info</text>
+  <rect x="242" y="142" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="155" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="153" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Affichage</text>
+  <text x="268" y="163" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">fr · Ce mois-ci · 50</text>
+  <rect x="242" y="172" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="185" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="183" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Adresses externes</text>
+  <text x="268" y="193" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">JDE_WEB</text>
+  <rect x="242" y="202" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="215" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="213" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Charte des PDF</text>
+  <text x="268" y="223" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">valeurs du framework</text>
+  <rect x="242" y="232" width="238" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <circle cx="256" cy="245" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="243" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Licence</text>
+  <text x="268" y="253" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">configurée</text>
+  <text x="246" y="278" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">La connexion</text>
+  <rect x="242" y="286" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="299" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="297" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Connexion</text>
+  <text x="268" y="307" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Fichier (auth.toml) · redémarrer après un c…</text>
+  <rect x="242" y="316" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="329" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">OpenID Connect (SSO)</text>
+  <text x="268" y="337" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">désactivé</text>
+  <text x="246" y="362" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est activé</text>
+  <rect x="242" y="370" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="383" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="381" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Assistant IA</text>
+  <text x="268" y="391" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">claude-sonnet-4-5</text>
+  <rect x="242" y="400" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="413" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="411" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Notifications (e-mail)</text>
+  <text x="268" y="421" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">pas de SMTP — portail seulement</text>
+  <rect x="242" y="430" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="443" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="441" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">nomaflow</text>
+  <text x="268" y="451" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">default · redémarrer après un changement</text>
+  <rect x="242" y="460" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="473" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="471" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Paquets de changements</text>
+  <text x="268" y="481" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">default · redémarrer après un changement</text>
+  <text x="246" y="506" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">L'exploitation</text>
+  <rect x="242" y="514" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="527" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="525" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Journal du serveur</text>
+  <text x="268" y="535" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">text · 10 MB × 5 · redémarrer après un chan…</text>
+  <rect x="236" y="86" width="250" height="464" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="106" fill="#e2e8f0" fontSize="9.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LICENCE</text>
+  <text x="1070" y="106" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">configurée</text>
+  <line x1="498" y1="118" x2="1084" y2="118" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="136" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">JWT signé par l'éditeur qui déverrouille les applications sous licence. Vide → mode « restreint ».</text>
+  <text x="512" y="148" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Chiffré au repos avec la clé maîtresse de l'installation.</text>
+  <text x="512" y="166" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLÉ DE LICENCE</text>
+  <rect x="512" y="172" width="558" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="187.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</text>
+  <text x="1056" y="188" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">◉</text>
+  <text x="512" y="214" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Une installation sous licence signale une fois par jour le nom de cet environnement, sa version</text>
+  <text x="512" y="226" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">et son nombre de comptes actifs — rien d'autre (tâche liberty-usage-report).</text>
+  <text x="512" y="242" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ADRESSE DU RAPPORT D’USAGE</text>
+  <rect x="512" y="248" width="558" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="263.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">https://lms.example.com/api/usage</text>
+  <text x="512" y="286" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">vide = rien n’est envoyé</text>
+  <rect x="498" y="86" width="586" height="214" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Section Licence</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">son état sur la ligne</text>
+  <line x1="200" y1="247.0" x2="242" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#slic-arrow)"/>
+  <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">appliqué aussitôt, sans redémarrage</text>
+  <line x1="1120" y1="47.0" x2="899" y2="50" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#slic-arrow)"/>
+  <rect x="1120" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Coller la clé</text>
+  <text x="1130" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">masquée, œil pour l'afficher</text>
+  <line x1="1120" y1="167.0" x2="1070" y2="184" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#slic-arrow)"/>
+  <rect x="1120" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rapport d'usage</text>
+  <text x="1130" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vide = rien n'est envoyé</text>
+  <line x1="1120" y1="277.0" x2="1070" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#slic-arrow)"/>
 </svg>
 
 ---
 
 ## Installer la clé \{#install\}
 
-Se connecter avec un superutilisateur, ouvrir **Liberty Next → Administrer → App → License**, coller la clé dans **License key** et enregistrer. La clé est chiffrée avec la clé maître de l'installation, et les applications sous licence se chargent aussitôt — sans redémarrage.
+Se connecter avec un superutilisateur, ouvrir **Liberty Next → Administrer → App → Licence**, coller la clé dans **Clé de licence** et enregistrer. La clé est chiffrée avec la clé maître de l'installation, et les applications sous licence se chargent aussitôt — sans redémarrage.
 
 Avant de la coller, la clé peut être vérifiée sur le serveur : `liberty-license verify <clé>` (avec Docker : `docker exec -u liberty liberty-next liberty-license verify <clé>`).
 
@@ -72,7 +134,7 @@ Avant de la coller, la clé peut être vérifiée sur le serveur : `liberty-lice
 
 | Où | Affiche |
 |---|---|
-| L'en-tête de la section **License** | *configured*, ou *not set — restricted mode*. |
+| La ligne **Licence** de la page App, et l'en-tête de sa section | *configurée*, ou *absente — mode restreint*. |
 | `liberty-license status` | Validité, produits couverts, date d'expiration de la clé configurée. |
 | `GET /api/license` | `{mode, customer, plan, apps, expires_at, error}`. |
 | `GET /info` | `license.mode` : `full` ou `restricted`. |
@@ -106,6 +168,6 @@ Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mod
 
 ## Remplacer la clé \{#replace\}
 
-Noter la date d'expiration à l'installation de la clé. Avant l'échéance, coller la nouvelle clé dans **Liberty Next → Administrer → App → License** et enregistrer : elle s'applique aussitôt.
+Noter la date d'expiration à l'installation de la clé. Avant l'échéance, coller la nouvelle clé dans **Liberty Next → Administrer → App → Licence** et enregistrer : elle s'applique aussitôt.
 
-La clé peut aussi venir de la variable d'environnement `LIBERTY_LICENSE_KEY`, pour les installations qui gardent leurs secrets dans un orchestrateur ; les Paramètres affichent alors la référence telle quelle.
+La clé peut aussi venir de la variable d'environnement `LIBERTY_LICENSE_KEY`, pour les installations qui gardent leurs secrets dans un orchestrateur ; la page App affiche alors la référence telle quelle.

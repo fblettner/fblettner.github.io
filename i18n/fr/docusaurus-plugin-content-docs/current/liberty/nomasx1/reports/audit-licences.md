@@ -18,41 +18,103 @@ Ce rapport cible une application **JD Edwards EnterpriseOne** et son socle techn
 
 ## En un coup d'œil
 
-<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 628" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="rpt-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="nxrepaud-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nxrepaud-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nxrepaud-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nxrepaud-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="32" width="920" height="256" rx="14" fill="url(#rpt-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="60" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Rapports</text>
-  <line x1="40" y1="76" x2="960" y2="76" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="92" width="300" height="176" rx="10" fill="rgba(56,189,248,0.06)" stroke="rgba(56,189,248,0.30)" strokeWidth="1.2"/>
-  <text x="78" y="120" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Audit Licences JD Edwards</text>
-  <text x="78" y="142" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Analyse de conformité + optimisation</text>
-  <text x="78" y="156" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">pour une application.</text>
-  <rect x="78" y="174" width="60" height="20" rx="10" fill="rgba(148,163,184,0.12)" stroke="#334155" strokeWidth="1"/>
-  <text x="108" y="188" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">PDF</text>
-  <rect x="146" y="174" width="84" height="20" rx="10" fill="rgba(148,163,184,0.12)" stroke="#334155" strokeWidth="1"/>
-  <text x="188" y="188" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace">markdown</text>
-
-  <text x="392" y="116" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
-  <rect x="392" y="126" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="141" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Application</text>
-  <text x="924" y="141" fill="#f87171" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">requis</text>
-  <rect x="392" y="152" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="167" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Connecteur cible</text>
-  <text x="924" y="167" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">nomasx1</text>
-  <rect x="392" y="178" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="193" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Schéma</text>
-  <text x="924" y="193" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">public</text>
-  <rect x="392" y="204" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="404" y="219" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Libellé de date d'audit · Nom du client</text>
-  <text x="924" y="219" fill="#64748b" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">facultatif</text>
-
-  <rect x="392" y="236" width="92" height="26" rx="6" fill="rgba(56,189,248,0.16)" stroke="rgba(56,189,248,0.45)" strokeWidth="1.2"/>
-  <text x="438" y="253" fill="#7dd3fc" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Exécuter et télécharger</text>
-  <rect x="492" y="236" width="70" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="527" y="253" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Format</text>
+  <rect x="220" y="20" width="880" height="588" rx="14" fill="url(#nxrepaud-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Rapports</text>
+  <rect x="240" y="36" width="26" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Exécuter un rapport et télécharger le résultat en PDF ou markdown.</text>
+  <rect x="1000" y="40" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1040.0" y="54.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger</text>
+  <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1004" y="88" width="76" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="1042.0" y="99.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">2 rapports</text>
+  <rect x="240" y="112" width="840" height="56" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="134" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Audit Licences JD Edwards</text>
+  <text x="404.8" y="134" fill="#64748b" fontSize="8.3" fontFamily="ui-monospace, monospace">nomasx1:audit-licences</text>
+  <text x="254" y="154" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Compliance + optimisation analysis for one apps_id… Available in French or English.</text>
+  <rect x="986" y="122" width="80" height="22" rx="5" fill="url(#nxrepaud-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1026.0" y="136.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <rect x="240" y="176" width="840" height="56" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="198" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Security &amp; Segregation of Duties Assessment</text>
+  <text x="507.616" y="198" fill="#64748b" fontSize="8.3" fontFamily="ui-monospace, monospace">nomasx1:security-sox</text>
+  <text x="254" y="218" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Security &amp; SoD review for one apps_id… Available in English or French.</text>
+  <rect x="986" y="186" width="80" height="22" rx="5" fill="url(#nxrepaud-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1026.0" y="200.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <rect x="370" y="200" width="580" height="396" rx="12" fill="#111827" stroke="#334155" strokeWidth="1.4"/>
+  <text x="388" y="224" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Audit Licences JD Edwards</text>
+  <line x1="370" y1="236" x2="950" y2="236" stroke="#1f2937" strokeWidth="1"/>
+  <text x="388" y="254" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Compliance + optimisation analysis for one apps_id… Available in French or English.</text>
+  <text x="388" y="272" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TARGET CONNECTOR</text>
+  <rect x="388" y="278" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="292.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">nomasx1</text>
+  <text x="922" y="292.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="312" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHEMA</text>
+  <rect x="388" y="318" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="332.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">public</text>
+  <text x="922" y="332.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="352" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION &#42;</text>
+  <rect x="388" y="358" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="372.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Sélectionner…</text>
+  <text x="922" y="372.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="392" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LANGUAGE</text>
+  <rect x="388" y="398" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="412.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">fr  Français</text>
+  <text x="922" y="412.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="388" y="432" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AUDIT DATE LABEL</text>
+  <rect x="388" y="438" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="452.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="388" y="472" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT NAME</text>
+  <rect x="388" y="478" width="544" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="492.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="388" y="512" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FORMAT</text>
+  <rect x="388" y="518" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="398" y="532.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PDF</text>
+  <text x="488" y="532.5" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">▾</text>
+  <line x1="370" y1="558" x2="950" y2="558" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="782" y="568" width="150" height="24" rx="5" fill="url(#nxrepaud-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="857.0" y="583.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⤓ Exécuter et télécharger</text>
+  <rect x="712" y="568" width="62" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="743.0" y="583.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="20" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Les rapports</text>
+  <text x="30" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une carte par rapport, ▷ Exécuter</text>
+  <line x1="200" y1="147.0" x2="240" y2="140" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="1120" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <text x="1130" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre les paramètres</text>
+  <line x1="1120" y1="147.0" x2="1035" y2="132" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="20" y="352" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="367" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Application (obligatoire)</text>
+  <text x="30" y="380" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">choisie par son nom</text>
+  <line x1="200" y1="369.0" x2="388" y2="375" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="20" y="272" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="287" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connecteur · schéma</text>
+  <text x="30" y="300" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">où sont les tables Nomasx-1</text>
+  <line x1="200" y1="289.0" x2="388" y2="295" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="1120" y="392" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="407" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Langue</text>
+  <text x="1130" y="420" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">français par défaut</text>
+  <line x1="1120" y1="409.0" x2="932" y2="415" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="1120" y="472" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="487" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Page de garde</text>
+  <text x="1130" y="500" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">libellé de date, nom du client</text>
+  <line x1="1120" y1="489.0" x2="932" y2="495" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="20" y="519" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="534" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Format</text>
+  <text x="30" y="547" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">PDF ou markdown</text>
+  <line x1="200" y1="536.0" x2="388" y2="535" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
+  <rect x="1120" y="548" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="563" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécuter et télécharger</text>
+  <text x="1130" y="576" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le fichier revient au navigateur</text>
+  <line x1="1120" y1="565.0" x2="920" y2="580" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxrepaud-arrow)"/>
 </svg>
 
 ---
@@ -61,7 +123,7 @@ Ce rapport cible une application **JD Edwards EnterpriseOne** et son socle techn
 
 Un document confidentiel, aux couleurs de la marque, d'environ trente à quarante pages — PDF pour le comité de pilotage, Markdown quand on veut l'éditer ou l'intégrer. La couverture porte le titre *Audit Licences JD Edwards – \{client\}*, le sous-titre *Analyse de conformité et plan d'optimisation des licences Oracle*, et un bloc **Client / Date / Auteur / Version** ; chaque page est marquée *Confidentiel* en pied.
 
-Le rapport est généré **en français par défaut** (langue de travail de l'audit) ; basculer le paramètre **Langue** sur `English` pour un livrable entièrement anglais.
+Le rapport est généré **en français par défaut** (langue de travail de l'audit) ; basculer le paramètre **Language** sur `English` pour un livrable entièrement anglais.
 
 C'est un document **interne** de conformité et d'optimisation — la base de vos propres décisions et de la préparation d'un renouvellement de contrat, pas une déclaration à remettre à l'éditeur.
 
@@ -115,18 +177,18 @@ C'est ce qui fait passer l'audit d'un instantané de conformité à un levier d'
 
 ## Exécuter le rapport
 
-Le rapport se trouve sous **Rapports** dans la barre latérale de Nomasx-1, sur la page *Exécuter un rapport et télécharger le résultat en PDF ou markdown.* du framework. Choisir **Audit Licences JD Edwards** dans la liste, renseigner les paramètres, choisir un **Format**, puis **Exécuter et télécharger**.
+Le rapport se trouve sous **Rapports** dans le menu de Nomasx-1 : une carte par rapport, avec sa description. **Exécuter** sur la carte **Audit Licences JD Edwards** ouvre ses paramètres ; les renseigner, choisir un **Format**, puis **Exécuter et télécharger**.
 
 | Paramètre | Requis | Valeur par défaut | Ce qu'il définit |
 |---|---|---|---|
-| **Application** | Oui | — | L'application à auditer. Choisie **par son nom** dans le registre des applications (*Configuration → Global → Applications*) — le formulaire résout le nom en `apps_id` sous-jacent. |
-| **Connecteur cible** | Non | `nomasx1` | Liste déroulante des connecteurs SQL de l'installation. |
-| **Schéma** | Non | `public` | Liste déroulante des schémas du connecteur cible retenu. |
-| **Langue** | Non | `Français` | Langue du rapport — `Français` ou `English`. |
-| **Libellé de date d'audit** | Non | mois + année en cours | Le libellé imprimé sur la page de couverture (ex. *Mai 2026*). |
-| **Nom du client** | Non | le nom de l'application | Le nom du client sur la page de couverture. |
+| **Application** | Oui | — | L'application à auditer. Choisie **par son nom** dans le registre des applications (*Paramètres → Global → Applications*) — le formulaire résout le nom en `apps_id` sous-jacent. |
+| **Target connector** | Non | `nomasx1` | Liste déroulante des connecteurs SQL de l'installation. |
+| **Schema** | Non | `public` | Liste déroulante des schémas du connecteur cible retenu. |
+| **Language** | Non | `Français` | Langue du rapport — `Français` ou `English`. |
+| **Audit date label** | Non | mois + année en cours | Le libellé imprimé sur la page de couverture (ex. *Mai 2026*). |
+| **Client name** | Non | le nom de l'application | Le nom du client sur la page de couverture. |
 
-Chaque liste déroulante se résout côté serveur sur des catalogues vivants — *Application* sur le registre des applications, *Connecteur cible* sur les connecteurs SQL configurés et *Schéma* sur les schémas du connecteur retenu. Les cascades font que changer de connecteur ré-affiche ses propres schémas.
+Chaque liste déroulante se résout côté serveur sur des catalogues vivants — *Application* sur le registre des applications, *Target connector* sur les connecteurs SQL configurés et *Schema* sur les schémas du connecteur retenu. Les cascades font que changer de connecteur ré-affiche ses propres schémas.
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` quand on veut éditer ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
@@ -152,6 +214,6 @@ Une exécution sur une application sans usage collecté produit tout de même le
 ## Conseils et bonnes pratiques
 
 - **Exécutez-le après une collecte fraîche.** L'audit est un instantané des tables courantes — planifiez-le juste après la collecte nocturne pour que les chiffres collent à la réalité.
-- **Renseignez le *Libellé de date d'audit* et le *Nom du client*** pour une page de couverture prête à transmettre à l'extérieur ; laissez-les vides pour un brouillon interne.
+- **Renseigner *Audit date label* et *Client name*** pour une page de couverture prête à transmettre à l'extérieur ; les laisser vides pour un brouillon interne.
 - **Utilisez *markdown* pour itérer, *PDF* pour livrer.** La sortie Markdown reprend le même contenu sans la mise en forme de couverture, pratique pour relire avant l'export final.
 - **Lisez-le à côté des écrans sources.** Chaque chiffre remonte à un écran — *Object Usage Tracking*, *Conflits*, *Licences* — pour qu'un relecteur puisse descendre de l'audit vers les données vivantes.

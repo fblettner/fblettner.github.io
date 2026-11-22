@@ -77,35 +77,139 @@ To change the billing fields, edit the `billing_address` screen: every dialog th
 
 A `nested_table` tab embeds another screen's TableView inline. No new fields — the entire grid + dialog of the target screen renders inside the tab, scoped to the parent's key.
 
-<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 574" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="nt-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="nst-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nst-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nst-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nst-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="280" rx="14" fill="url(#nt-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Inspector · Tab "Deals" · type=nested_table</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">connector</text>
-  <rect x="200" y="80" width="320" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="95" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">(parent's connector — crm)</text>
-
-  <text x="40" y="122" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">screen *</text>
-  <rect x="200" y="110" width="320" height="22" rx="4" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="210" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">deals ▾</text>
-
-  <line x1="20" y1="148" x2="980" y2="148" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="170" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAM BINDS (parent → nested screen's read_query)</text>
-
-  <rect x="40" y="180" width="920" height="40" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="200" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">:CUSTOMER_ID</text>
-  <text x="180" y="200" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">←  parent column</text>
-  <text x="320" y="200" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
-
-  <text x="56" y="230" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">＋ Add binding</text>
-
-  <line x1="20" y1="250" x2="980" y2="250" stroke="#1f2937" strokeWidth="1"/>
-  <text x="40" y="272" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">A nested-table tab embeds another screen's TableView — its rows / columns come from that screen, not from this tab. No fields to configure here.</text>
+  <rect x="220" y="20" width="880" height="538" rx="14" fill="url(#nst-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screen Designer ·</text>
+  <text x="349.1008" y="46" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">[screens.crm.customers]</text>
+  <rect x="1017" y="32" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="987" y="32" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="999.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤡</text>
+  <line x1="220" y1="64" x2="1100" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="246.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="266.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
+  <text x="246.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="367.0" y1="106.0" x2="380.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#nst-flow)"/>
+  <rect x="381.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="389.0" y="86" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="409.0" y="97" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA</text>
+  <text x="389.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">customers_get</text>
+  <text x="389.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 save query(ies)</text>
+  <line x1="510.0" y1="106.0" x2="523.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#nst-flow)"/>
+  <rect x="524.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="532.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="552.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
+  <text x="532.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">6 column(s)</text>
+  <text x="532.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">3 filter(s) · 1 view(s)</text>
+  <line x1="653.0" y1="106.0" x2="666.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#nst-flow)"/>
+  <rect x="667.0" y="78" width="129.0" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="#4ade80" strokeWidth="1.2"/>
+  <rect x="675.0" y="86" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="695.0" y="97" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RECORD FORM</text>
+  <text x="675.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 tab(s)</text>
+  <text x="675.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">8 field(s)</text>
+  <line x1="796.0" y1="106.0" x2="809.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#nst-flow)"/>
+  <rect x="810.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="818.0" y="86" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="838.0" y="97" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="818.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">1 toolbar action(s)</text>
+  <text x="818.0" y="125" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">2 in the row menu · 1 on s…</text>
+  <line x1="939.0" y1="106.0" x2="952.0" y2="106.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#nst-flow)"/>
+  <rect x="953.0" y="78" width="129.0" height="56" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="961.0" y="86" width="14" height="14" rx="3" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="981.0" y="97" fill="#fb923c" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTPUT</text>
+  <text x="961.0" y="113" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">the grid's own export</text>
+  <rect x="238" y="174" width="632" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="192" fill="#94a3b8" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIALOG</text>
+  <text x="858" y="192" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">cols: 2 · fields: 0</text>
+  <rect x="250" y="202" width="80" height="22" rx="5" fill="transparent" stroke="transparent" strokeWidth="1"/>
+  <text x="290.0" y="216.5" fill="#cbd5e1" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">≋ General · 6</text>
+  <rect x="334" y="202" width="51" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="359.5" y="216.5" fill="#4a9eff" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">≋ Deals</text>
+  <rect x="389" y="202" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="419.5" y="216.5" fill="#94a3b8" fontSize="8.6" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add tab</text>
+  <line x1="250" y1="232" x2="858" y2="232" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="240" width="608" height="228" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="260" y="256" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="system-ui, sans-serif">▾  Tab settings</text>
+  <rect x="778" y="244.5" width="68" height="15" rx="4" fill="rgba(255,255,255,0.05)" stroke="#475569" strokeWidth="1"/>
+  <text x="812.0" y="255.3" fill="#94a3b8" fontSize="7.6" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">nested_table</text>
+  <text x="262" y="278" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAB LABEL</text>
+  <rect x="262" y="283" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="271" y="297.3" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Deals</text>
+  <text x="414" y="278" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TAB TYPE</text>
+  <rect x="414" y="283" width="432" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="423" y="297.3" fill="#cbd5e1" fontSize="8.4" fontFamily="system-ui, sans-serif">nested_table  Nested table — an inline related-rows TableView</text>
+  <text x="834" y="297.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="262" y="322" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TARGET SCREEN ∗</text>
+  <rect x="262" y="327" width="286.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="271" y="341.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">deals  Deals</text>
+  <text x="536.0" y="341.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="560.0" y="322" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
+  <rect x="560.0" y="327" width="286.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="569.0" y="341.3" fill="#cbd5e1" fontSize="8.6" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="834.0" y="341.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="262" y="366" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PARAMETER BINDINGS — PARENT COLUMN → NESTED QUERY PARAM</text>
+  <rect x="262" y="372" width="584" height="60" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="270" y="379" width="266.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="279" y="393.3" fill="#cbd5e1" fontSize="8.4" fontFamily="system-ui, sans-serif">CUSTOMER_ID  Customer</text>
+  <text x="524.0" y="393.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="544.0" y="394" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">→</text>
+  <rect x="558.0" y="379" width="252.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="567.0" y="393.3" fill="#cbd5e1" fontSize="8.4" fontFamily="system-ui, sans-serif">CUSTOMER_ID</text>
+  <text x="798.0" y="393.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="820" y="379" width="20" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="830.0" y="393.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <rect x="270" y="406" width="83" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="311.5" y="419.5" fill="#94a3b8" fontSize="8.4" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add binding</text>
+  <text x="262" y="450" fill="#e2e8f0" fontSize="8.6" fontWeight="700" fontFamily="system-ui, sans-serif">Tab actions</text>
+  <rect x="328.976" y="439" width="77" height="19" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="367.476" y="452.0" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add action</text>
+  <text x="252" y="490" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">A nested-table tab embeds another screen's TableView — its rows and columns come from that screen.</text>
+  <rect x="882" y="174" width="200" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="894" y="192" fill="#94a3b8" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">INSPECTOR</text>
+  <text x="894" y="210" fill="#e2e8f0" fontSize="8.4" fontFamily="system-ui, sans-serif">Dialog title</text>
+  <line x1="892" y1="218" x2="1072" y2="218" stroke="#1f2937" strokeWidth="1"/>
+  <text x="894" y="244" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Pick a field on the canvas</text>
+  <text x="894" y="256" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">to edit its properties.</text>
+  <line x1="220" y1="516" x2="1100" y2="516" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1027" y="526" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1054.5" y="540.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="954" y="526" width="65" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="986.5" y="540.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
+  <rect x="20" y="144" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="159" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A tab per related set</text>
+  <text x="30" y="172" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ Add tab, then its type</text>
+  <line x1="200" y1="161.0" x2="334" y2="213" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
+  <rect x="20" y="310" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="325" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Target screen</text>
+  <text x="30" y="338" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its grid, dialog and row menu</text>
+  <line x1="200" y1="327.0" x2="262" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Parameter bindings</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">parent column → :param</text>
+  <line x1="200" y1="397.0" x2="270" y2="390" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
+  <rect x="20" y="436" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="451" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tab actions</text>
+  <text x="30" y="464" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">buttons inside this tab</text>
+  <line x1="200" y1="453.0" x2="262" y2="447" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
+  <rect x="1120" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tab type</text>
+  <text x="1130" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">form · nested_form · nested_table</text>
+  <line x1="1120" y1="287.0" x2="840" y2="294" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
+  <rect x="1120" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector</text>
+  <text x="1130" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">blank = the parent's</text>
+  <line x1="1120" y1="377.0" x2="830" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nst-arrow)"/>
 </svg>
+
+In the Screen Designer, stage **Record form**: **＋ Add tab**, then open **Tab settings** and choose **Tab type** = *Nested table*. The panel then asks for the **Target screen**, its **Connector** and the **Parameter bindings — parent column → nested query param** (**Add binding** for each); **Tab actions** add buttons inside the tab.
 
 ### Fields
 

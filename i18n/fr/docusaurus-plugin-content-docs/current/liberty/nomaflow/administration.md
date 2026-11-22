@@ -25,13 +25,13 @@ Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur
   <text x="256" y="62" fill="#4a9eff" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Serveur Liberty Next (un processus)</text>
   <rect x="260" y="80" width="130" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="325.0" y="105.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Planificateur</text>
-  <text x="325.0" y="120.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">cron · presets</text>
+  <text x="325.0" y="120.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">cron · préréglages</text>
   <rect x="410" y="80" width="130" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="475.0" y="105.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Exécuteur</text>
   <text x="475.0" y="120.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">étapes, reprises</text>
   <rect x="560" y="80" width="120" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="620.0" y="105.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Pages Tâches</text>
-  <text x="620.0" y="120.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">superuser</text>
+  <text x="620.0" y="120.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">nomaflow:view · nomaflow:edit</text>
   <line x1="390" y1="108" x2="410" y2="108" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#nad-flow)"/>
   <rect x="260" y="170" width="200" height="70" rx="8" fill="rgba(168,85,247,0.10)" stroke="rgba(168,85,247,0.50)" strokeWidth="1.2"/>
   <text x="360.0" y="202.0" fill="#c084fc" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Historique</text>

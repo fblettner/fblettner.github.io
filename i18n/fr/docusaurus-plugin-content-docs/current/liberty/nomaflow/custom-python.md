@@ -88,7 +88,7 @@ Ensuite, `logging.getLogger(__name__)` dans n'importe quel module du paquet écr
 ## Échec et annulation \{#errors\}
 
 - Laisser passer les exceptions : l'étape échoue avec le message, la **Politique de réessai** de la tâche s'applique, les étapes suivantes sont sautées. Lever `StepFailed("…")` (de `liberty.jobs.steps.base`) donne un message plus clair.
-- **Annuler** sur la carte de la tâche annule une fonction `async` à son prochain `await`. Un simple `def` ne peut pas être interrompu : l'exécution est marquée annulée, la fonction se termine d'elle-même.
+- **Annuler** sur la ligne de la tâche annule une fonction `async` à son prochain `await`. Un simple `def` ne peut pas être interrompu : l'exécution est marquée annulée, la fonction se termine d'elle-même.
 
 ---
 

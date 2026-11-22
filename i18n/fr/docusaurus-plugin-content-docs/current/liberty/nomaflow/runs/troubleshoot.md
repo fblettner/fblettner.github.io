@@ -33,7 +33,7 @@ Regarder les **Lignes affectées** et le détail de l'étape, puis relancer en `
 
 ## Une exécution reste RUNNING \{#hangs\}
 
-Une étape attend quelque chose de lent — une table verrouillée, une API distante, une longue synchronisation. Chaque étape s'arrête à son `timeout_seconds`, la tâche au sien (4 heures par défaut). **Annuler** sur la carte de la tâche l'arrête plus tôt.
+Une étape attend quelque chose de lent — une table verrouillée, une API distante, une longue synchronisation. Chaque étape s'arrête à son `timeout_seconds`, la tâche au sien (4 heures par défaut). **Annuler** sur la ligne de la tâche l'arrête plus tôt.
 
 ---
 
@@ -47,7 +47,7 @@ Les étapes SQL, HTTP, de chargement de fichier et les fonctions Python `async` 
 
 | Vérification | Correction |
 |---|---|
-| La carte affiche **désactivée** ou **Manuelle** | Activer la tâche, ou lui donner une planification. |
+| La ligne de la tâche affiche **désactivée** ou **Manuelle** | Activer la tâche, ou lui donner une planification. |
 | Le jour est faux | Le planificateur numérote les jours de la semaine à partir de 0 = lundi. Écrire `mon-fri`, pas `1-5` — voir [Planifications](../jobs/schedules.md#cron). |
 | L'aperçu **Prochaines exécutions** n'est pas celui attendu | Corriger le cron ou le fuseau horaire. |
 | Le serveur était arrêté à ce moment-là | L'exécution est enregistrée **MISSED** ; la lancer à la main. |
@@ -56,7 +56,7 @@ Les étapes SQL, HTTP, de chargement de fichier et les fonctions Python `async` 
 
 ## La tâche n'apparaît pas dans la liste \{#missing\}
 
-`jobs.toml` a été modifié à la main et n'est plus valide : le journal du serveur indique l'erreur. Une clé absente du schéma est refusée — vérifier l'orthographe avec [Étapes](../steps.md) et [Créer une tâche](../jobs/create.md#toml-only). Après correction du fichier, **Recharger la config (en haut de toute page d'édition de Liberty Next)**.
+`jobs.toml` a été modifié à la main et n'est plus valide : le journal du serveur indique l'erreur. Une clé absente du schéma est refusée — vérifier l'orthographe avec [Étapes](../steps.md) et [Créer une tâche](../jobs/create.md#toml-only). Après correction du fichier, recharger la configuration (**Recharger la config** en haut des pages d'édition de Liberty Next), puis **Recharger** dans la page des Tâches.
 
 ---
 
@@ -68,4 +68,4 @@ Le niveau de journal de l'exécution est `WARNING`, ou un plugin Python écrit d
 
 ## 403 sur la page des Tâches \{#forbidden\}
 
-Les pages Nomaflow et leur API sont réservées aux superutilisateurs.
+Les pages Tâches, Planning et Exécutions demandent *Suivre les tâches* (`nomaflow:view`) ; créer ou modifier une tâche demande *Créer et modifier les tâches* (`nomaflow:edit`) ; les politiques de rétention et de planifications manquées restent aux superutilisateurs. Voir [Administration](../administration.md#permissions).

@@ -14,114 +14,168 @@ The same UI manages both identity backends (TOML / DB) and both identity sources
 
 ## The Users tab
 
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="us-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="accu-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="accu-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="accu-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="accu-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#us-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Access</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="78" width="80" height="26" rx="6" fill="rgba(74,158,255,0.30)" stroke="rgba(74,158,255,0.60)"/>
-  <text x="80" y="95" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">👤 Users</text>
-  <rect x="128" y="78" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="168" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">🛡 Roles</text>
-  <rect x="880" y="78" width="80" height="26" rx="6" fill="#4a9eff" opacity="0.9"/>
-  <text x="920" y="95" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add user</text>
-
-  <rect x="40" y="118" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="140" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">admin</text>
-  <text x="56" y="158" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Admin User · admin@corp.local · local</text>
-  <rect x="800" y="130" width="64" height="22" rx="4" fill="rgba(251,146,60,0.18)" stroke="rgba(251,146,60,0.40)"/>
-  <text x="832" y="145" fill="#fb923c" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">superuser</text>
-  <rect x="870" y="130" width="80" height="22" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="910" y="145" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">admin</text>
-
-  <rect x="40" y="182" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="204" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">alice</text>
-  <text x="56" y="222" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Alice Martin · alice.martin@corp.local · oidc</text>
-  <rect x="800" y="194" width="80" height="22" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="840" y="209" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">analyst</text>
-  <rect x="886" y="194" width="64" height="22" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="918" y="209" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">reporter</text>
-
-  <rect x="40" y="246" width="920" height="56" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="268" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">bob</text>
-  <text x="56" y="286" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Bob Dupont · bob@corp.local · local</text>
-  <rect x="828" y="258" width="60" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.40)"/>
-  <text x="858" y="273" fill="#ef4444" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">inactive</text>
-  <rect x="894" y="258" width="56" height="22" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="922" y="273" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">reader</text>
-
-  <rect x="40" y="310" width="920" height="48" rx="8" fill="rgba(0,0,0,0.20)" stroke="#1f2937" strokeDasharray="3,3"/>
-  <text x="500" y="338" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Click a row to open the User editor.</text>
+  <rect x="220" y="20" width="760" height="360" rx="14" fill="url(#accu-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Access</text>
+  <rect x="865" y="28" width="99" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="914.5" y="42.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Reload config</text>
+  <line x1="220" y1="60" x2="980" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236.0" y="74" width="359.0" height="40" rx="8" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <rect x="245.0" y="84" width="20" height="20" rx="5" fill="#4a9eff" fillOpacity="0.18"/>
+  <circle cx="255.0" cy="94" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="272.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Users</text>
+  <text x="272.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Accounts, their roles and attributes</text>
+  <rect x="605.0" y="74" width="359.0" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="614.0" y="84" width="20" height="20" rx="5" fill="#c084fc" fillOpacity="0.18"/>
+  <circle cx="624.0" cy="94" r="4" fill="none" stroke="#c084fc" strokeWidth="1.4"/>
+  <text x="641.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Roles</text>
+  <text x="641.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">What each role may open and the data it sees</text>
+  <rect x="889" y="124" width="75" height="22" rx="5" fill="url(#accu-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="926.5" y="138.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add user</text>
+  <rect x="244" y="164" width="712" height="44" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="262" cy="186" r="6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="278" y="182" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">admin — Admin User</text>
+  <rect x="278" y="189" width="58" height="15" rx="7.5" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="307.0" y="199.7" fill="#fb923c" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">superuser</text>
+  <rect x="244" y="214" width="712" height="44" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="262" cy="236" r="6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="278" y="232" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">jdoe — John Doe</text>
+  <rect x="278" y="239" width="40" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="298.0" y="249.7" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">sales</text>
+  <rect x="323" y="239" width="44" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="345.0" y="249.7" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">reader</text>
+  <text x="374" y="250" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">company=00001,00050</text>
+  <rect x="244" y="264" width="712" height="44" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="262" cy="286" r="6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="278" y="282" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">asmith — Ann Smith</text>
+  <rect x="278" y="289" width="49" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="302.5" y="299.7" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">auditor</text>
+  <rect x="244" y="314" width="712" height="44" rx="7" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="262" cy="336" r="6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="278" y="332" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">bmartin — Bob Martin</text>
+  <rect x="278" y="339" width="53" height="15" rx="7.5" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="304.5" y="349.7" fill="#f87171" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">inactive</text>
+  <rect x="336" y="339" width="44" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="358.0" y="349.7" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">reader</text>
+  <rect x="236" y="156" width="728" height="210" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Users · Roles</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">two cards at the top</text>
+  <line x1="200" y1="87.0" x2="236" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accu-arrow)"/>
+  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A click on a row</text>
+  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the user</text>
+  <line x1="200" y1="217.0" x2="244" y2="236" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accu-arrow)"/>
+  <rect x="20" y="320" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Inactive</text>
+  <text x="30" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cannot sign in</text>
+  <line x1="200" y1="337.0" x2="278" y2="346" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accu-arrow)"/>
+  <rect x="1000" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add user</text>
+  <text x="1010" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a local account</text>
+  <line x1="1000" y1="147.0" x2="964" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accu-arrow)"/>
+  <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Roles, attributes</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">under the name</text>
+  <line x1="1000" y1="247.0" x2="494" y2="246" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accu-arrow)"/>
 </svg>
 
-Each card shows the username (monospace), full name, email, provider (local / oidc), the status chips and the assigned roles.
+Each line shows the username and the full name, then the chips — inactive, superuser, the assigned roles — and the data-scope attributes (`company=00001,00050`). A click on a line opens the user.
 
 | Chip | Meaning |
 |---|---|
 | **superuser** (orange) | `is_superuser = true` — bypasses every permission check. |
 | **inactive** (red) | `is_active = false` — the user can't sign in. Their existing sessions stop on next token refresh. |
 | **No roles** (muted) | No roles assigned and not a superuser — the user signs in but sees nothing. |
-| **Role names** (purple) | Each assigned role, one chip per role. |
+| **Role names** (blue) | Each assigned role, one chip per role. |
 
 ---
 
 ## Add a local user
 
-Click **＋ Add user**. The User editor opens with every field empty.
+Click **＋ Add user**. The **Add user** dialog opens with every field empty: Username, then Full name and Email side by side, Roles, Data-scope attributes, the **Active** and **superuser** boxes, Password and **Ask for a new password at the next sign-in**.
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 442" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="ue-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="accd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="accd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="accd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="accd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="420" rx="14" fill="url(#ue-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Add user</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Username *</text>
-  <rect x="200" y="80" width="500" height="24" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="96" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">alice</text>
-
-  <text x="40" y="124" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Full name</text>
-  <text x="40" y="138" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">(optional)</text>
-  <rect x="200" y="116" width="500" height="24" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="132" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">Alice Martin</text>
-
-  <text x="40" y="160" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Email</text>
-  <text x="40" y="174" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">(optional)</text>
-  <rect x="200" y="152" width="500" height="24" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="168" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">alice@corp.local</text>
-
-  <text x="40" y="196" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Password *</text>
-  <text x="40" y="210" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">(8+ chars)</text>
-  <rect x="200" y="188" width="500" height="24" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="204" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">••••••••••</text>
-
-  <text x="40" y="240" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Roles</text>
-  <rect x="200" y="224" width="500" height="46" rx="6" fill="rgba(0,0,0,0.30)" stroke="#334155"/>
-  <rect x="210" y="232" width="64" height="20" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="242" y="246" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">analyst ✕</text>
-  <rect x="282" y="232" width="64" height="20" rx="4" fill="rgba(192,132,252,0.15)" stroke="rgba(192,132,252,0.40)"/>
-  <text x="314" y="246" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">reporter ✕</text>
-  <rect x="354" y="232" width="160" height="20" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="364" y="246" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Pick a role…</text>
-
-  <text x="40" y="294" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Active</text>
-  <rect x="200" y="282" width="20" height="20" rx="3" fill="rgba(34,197,94,0.30)" stroke="rgba(34,197,94,0.60)"/>
-  <text x="210" y="297" fill="#22c55e" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
-  <text x="234" y="296" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">the user can sign in</text>
-
-  <text x="40" y="326" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Superuser</text>
-  <rect x="200" y="314" width="20" height="20" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="234" y="328" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">bypasses every permission check</text>
-
-  <line x1="20" y1="364" x2="980" y2="364" stroke="#1f2937"/>
-  <rect x="780" y="380" width="80" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="820" y="400" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
-  <rect x="868" y="380" width="80" height="32" rx="6" fill="#4a9eff"/>
-  <text x="908" y="400" fill="#0b1220" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="280" y="20" width="640" height="402" rx="14" fill="url(#accd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="300" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Add user</text>
+  <line x1="280" y1="66" x2="920" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="300" y="86" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USERNAME</text>
+  <rect x="300" y="92" width="600" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="310" y="106.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="300" y="132" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FULL NAME</text>
+  <rect x="300" y="138" width="294.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="310" y="152.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">John Doe</text>
+  <text x="606.0" y="132" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
+  <rect x="606.0" y="138" width="294.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="616.0" y="152.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">jdoe@example.com</text>
+  <text x="300" y="178" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ROLES</text>
+  <rect x="300" y="187" width="56" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="328.0" y="199.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">sales  ×</text>
+  <rect x="362" y="184" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="372" y="198.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">Add role</text>
+  <text x="530" y="198.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="300" y="224" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATA-SCOPE ATTRIBUTES</text>
+  <rect x="300" y="230" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="310" y="244.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">company</text>
+  <rect x="416" y="230" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="426" y="244.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">00001</text>
+  <rect x="562" y="230" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="574.0" y="244.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
+  <rect x="300" y="258" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="310" y="272.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">Add an attribute…</text>
+  <text x="508" y="272.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="300" y="289" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M302.5,294.5 L304.8,296.8 L308.8,292" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="317" y="298" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Active</text>
+  <rect x="366.92" y="289" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="383.92" y="298" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">superuser</text>
+  <text x="300" y="316" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PASSWORD</text>
+  <rect x="300" y="322" width="600" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="310" y="336.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">••••••••••</text>
+  <text x="886" y="337" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">◉</text>
+  <rect x="300" y="351" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M302.5,356.5 L304.8,358.8 L308.8,354" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="317" y="360" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Ask for a new password at the next sign-in (the password given here is a temporary one)</text>
+  <line x1="280" y1="376" x2="920" y2="376" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="770" y="388" width="64" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="802.0" y="402.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="840" y="388" width="64" height="22" rx="5" fill="url(#accd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="872.0" y="402.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="40" y="110" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="50" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Identity</text>
+  <text x="50" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">username, full name, e-mail</text>
+  <line x1="240" y1="127.0" x2="300" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accd-arrow)"/>
+  <rect x="40" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="50" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Roles</text>
+  <text x="50" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">picked from the list</text>
+  <line x1="240" y1="217.0" x2="300" y2="195" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accd-arrow)"/>
+  <rect x="40" y="290" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="50" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Data-scope attributes</text>
+  <text x="50" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">feed the roles' row rules</text>
+  <line x1="240" y1="307.0" x2="300" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accd-arrow)"/>
+  <rect x="960" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="970" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Active, superuser</text>
+  <text x="970" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sign in; every permission</text>
+  <line x1="960" y1="317.0" x2="448.92" y2="294" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accd-arrow)"/>
+  <rect x="960" y="380" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="970" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Temporary password</text>
+  <text x="970" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">changed at the next sign-in</text>
+  <line x1="960" y1="397.0" x2="900" y2="356" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#accd-arrow)"/>
 </svg>
 
 ### Fields
@@ -162,8 +216,8 @@ Click any user row to open the editor with their current values:
 | **Full name** / **Email** | yes | Update freely. |
 | **Password** | yes (local users only) | Leave blank to keep the current password. Typing a new one (8+ chars) sets it on Save. |
 | **Roles** | yes | Add / remove chips. |
-| **Active** | yes | Toggle to deactivate. |
-| **Superuser** | yes | Toggle to grant / revoke superuser. |
+| **Active** | yes | Untick to deactivate. |
+| **Superuser** | yes | Tick or untick to grant or revoke superuser. |
 | **Data-scope attributes** | yes | See [below](#attributes). |
 
 Saves go through `PATCH /admin/access/users/{username}` for the property updates and `POST /admin/access/users/{username}/password` if a new password was typed.
@@ -203,7 +257,7 @@ OIDC users land in the Users list **after their first sign-in** — Liberty auto
 | **Password** | no | The IdP holds the password. The field is disabled or rejected with HTTP 400. |
 | **Roles** | yes | This is the main reason operators visit OIDC users — to assign roles. |
 | **Active** | yes | When off, sign-in is rejected even with valid OIDC tokens. |
-| **Superuser** | yes | Toggle to grant the bypass. |
+| **Superuser** | yes | Tick to grant the bypass. |
 
 The standard onboarding sequence:
 
@@ -219,7 +273,7 @@ For installs that want to pre-create OIDC users with roles already attached, scr
 
 ## Deactivating a user \{#deactivate\}
 
-Users are not deleted: to take someone out, switch **Active** off and save. They can no longer sign in; their current session ends when its access token expires (one hour at most), since the renewal is refused. Roles, attributes and history are kept, and switching **Active** back on restores the account as it was.
+Users are not deleted: to take someone out, untick **Active** and save. They can no longer sign in; their current session ends when its access token expires (one hour at most), since the renewal is refused. Roles, attributes and history are kept, and ticking **Active** again restores the account as it was.
 
 ---
 
@@ -252,7 +306,7 @@ With SMTP configured, users can also reset it themselves — [Forgot password?](
 
 ### Revoke an account immediately
 
-1. Toggle **Active** off and save.
+1. Untick **Active** and save.
 2. If you can't tolerate the up-to-1-hour delay until their current access token expires, rotate the JWT signing secret (`LIBERTY_JWT_SECRET`) and restart. Every existing token is invalidated — a heavy hammer but the only **immediate** revocation Liberty offers.
 
 ---

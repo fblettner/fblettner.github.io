@@ -77,7 +77,7 @@ keywords: [Nomaflow, scheduler, jobs, runs, ETL, cron, file load, Liberty Next]
 | The framework database | The run history. |
 | Encrypted secrets | Pool passwords; other secrets written as `${VARIABLE}` in `jobs.toml`. |
 | Notifications | Telling people about failed, missed or long runs. |
-| Superuser access | The Jobs pages and their API are reserved to superusers. |
+| Access | Superusers, and the roles granted *Follow the jobs* (`nomaflow:view`), *Create and edit jobs* (`nomaflow:edit`) or a job (`job:<id>`) — see [Administration](./administration.md#permissions). |
 
 ---
 

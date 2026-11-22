@@ -139,7 +139,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Insight',
-      link: {type: 'generated-index', slug: '/liberty/insight', description: 'Liberty Next → Insight: dashboards and charts, and the Data Explorer.'},
+      link: {type: 'generated-index', slug: '/liberty/insight', description: 'Liberty Next → Insight: dashboards and charts, the Data Explorer and report templates.'},
       items: [
         {
           type: 'category',
@@ -161,6 +161,7 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/explorer/saved-and-dashboards',
           ],
         },
+        'liberty/framework/report-templates',
       ],
     },
     {
@@ -321,6 +322,7 @@ const sidebars: SidebarsConfig = {
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications', description: 'Per-application views: menus, rights, conflicts, activity log and Object Usage Tracking.'},
       items: [
         'liberty/nomasx1/applications/menus',
+        'liberty/nomasx1/applications/objects',
         {
           type: 'category',
           label: 'Rights',
@@ -358,6 +360,7 @@ const sidebars: SidebarsConfig = {
             'liberty/nomasx1/applications/out/objects',
           ],
         },
+        'liberty/nomasx1/applications/employees',
       ],
     },
     {
@@ -400,10 +403,12 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Global',
-          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/global', description: 'Global registry: applications and per-application custom SQL.'},
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/global', description: 'Global registry: applications, per-application custom SQL, JD Edwards settings and LDAP settings.'},
           items: [
             'liberty/nomasx1/settings/global/applications',
             'liberty/nomasx1/settings/global/custom-queries',
+            'liberty/nomasx1/settings/global/jd-edwards',
+            'liberty/nomasx1/settings/global/ldap',
           ],
         },
         {
@@ -466,6 +471,8 @@ const sidebars: SidebarsConfig = {
     'liberty/nomajde/overview',
     'liberty/nomajde/home',
     'liberty/nomajde/data-explorer',
+    'liberty/nomajde/cross-reference',
+    'liberty/nomajde/upgrade/analysis',
     {
       type: 'category',
       label: 'Master Data',
@@ -489,14 +496,9 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Monitoring',
-      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/server-manager'],
+      items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/server-manager'],
     },
     'liberty/nomajde/jobs',
-    {
-      type: 'category',
-      label: 'Upgrade',
-      items: ['liberty/nomajde/upgrade/analysis'],
-    },
     'liberty/nomajde/tests',
     {
       type: 'category',

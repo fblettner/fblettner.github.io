@@ -135,6 +135,19 @@ Ces cinq services sont marqués comme **modifiant des données**. Trois paramèt
 
 ---
 
+## Plusieurs formulaires dans une session \{#flow\}
+
+Un seul appel à un formulaire suffit pour le lire, ou pour le remplir et appuyer sur un bouton. Il ne suffit plus quand l'action suivante dépend de la réponse du formulaire. Pour ce cas, Nomajde propose deux étapes de tâche et actions d'écran qui gardent les formulaires ouverts dans **une seule session JD Edwards** — et qui ferment toujours les formulaires et la session, erreur comprise :
+
+| Étape | Effet |
+|---|---|
+| **Un enchaînement de formulaires** (`j_ais_form_flow`) | Une liste d'étapes — le formulaire à ouvrir, les champs et filtres à remplir, la ligne à sélectionner, les lignes à ajouter ou à modifier, les boutons à presser —, chacune avec ce qu'elle attend : un nombre de lignes, le formulaire au premier plan, aucune erreur. Une étape non satisfaite arrête l'enchaînement avant que la suivante n'agisse. Plusieurs lignes ajoutées dans une même étape forment une seule transaction : un document et ses lignes. |
+| **Une ligne d'une grille** (`j_ais_grid_row`) | Ajoute, modifie ou supprime une ligne de la grille d'un formulaire, recherchée d'abord : rien n'est fait si la recherche ne trouve pas exactement une ligne — aucune, pour un ajout. |
+
+Les points d'accès que [Créer à partir de…](./create-from.md#guarantees) construit pour une modification ou une suppression par un formulaire fonctionnent de la même façon.
+
+---
+
 ## Où un service s'utilise \{#use\}
 
 | Depuis | Comment |

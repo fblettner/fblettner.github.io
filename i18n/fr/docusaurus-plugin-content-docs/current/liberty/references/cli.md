@@ -6,7 +6,7 @@ keywords: [Liberty Next, CLI, liberty-admin, liberty-ops, liberty, liberty-conne
 
 # Référence des commandes CLI
 
-L'essentiel de l'administration se fait dans **Paramètres**. Les outils en ligne de commande couvrent ce qui doit fonctionner sans l'application web : le premier démarrage, un mot de passe perdu, une configuration scriptée, l'exploitation.
+L'essentiel de l'administration se fait dans les pages **Liberty Next**. Les outils en ligne de commande couvrent ce qui doit fonctionner sans l'application web : le premier démarrage, un mot de passe perdu, une configuration scriptée, l'exploitation.
 
 | Outil | Rôle |
 |---|---|
@@ -107,7 +107,7 @@ Exécute les connecteurs sans l'application web — pratique pour tester un pool
 
 ## liberty-crypto \{#liberty-crypto\}
 
-Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l'installation. **Paramètres** chiffre de lui-même ce qu'il enregistre ; cet outil sert pour une valeur écrite à la main dans un fichier TOML.
+Chiffre des valeurs pour les fichiers de configuration avec la clé maître de l'installation. Les pages Liberty Next chiffrent d'elles-mêmes ce qu'elles enregistrent ; cet outil sert pour une valeur écrite à la main dans un fichier TOML.
 
 | Commande | Effet |
 |---|---|
@@ -122,7 +122,7 @@ La clé vient de `LIBERTY_MASTER_KEY` ; `--master-key` et `--config` la remplace
 
 | Commande | Effet |
 |---|---|
-| `liberty-license status` | Vérifie la clé configurée dans **Liberty Next → Administrer → App → License** : validité, produits couverts, expiration. |
+| `liberty-license status` | Vérifie la clé configurée dans **Liberty Next → Administrer → App → Licence** : validité, produits couverts, expiration. |
 | `liberty-license verify [CLÉ]` | Vérifie une clé passée en argument ou sur l'entrée standard, avant de la coller. |
 
 `--config` désigne un autre `app.toml`. Voir [Clé de licence](../framework/build/secure/license-key.md).

@@ -8,67 +8,82 @@ keywords: [Liberty Next, conditions de formulaire, visible_when, required_when, 
 
 Une colonne d'écran peut réagir à la valeur d'un autre champ de la même ligne : n'apparaître que pour un type d'enregistrement, devenir obligatoire, se verrouiller, prendre une valeur imposée, changer de liste de valeurs ou ne pas être écrite du tout. L'écran lui-même peut placer des lignes entières en lecture seule. Tous ces réglages reposent sur la même forme de condition.
 
-La mise en œuvre pas à pas dans l'éditeur d'écran est décrite dans [Écrans → Champs conditionnels](./build/screens/conditional-fields.md).
+La mise en œuvre pas à pas dans le Concepteur d'écran est décrite dans [Écrans → Champs conditionnels](./build/screens/conditional-fields.md).
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="cnd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="cnd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="cnd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="cnd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="fcd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="fcd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="fcd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="fcd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="260" y="14" width="680" height="360" rx="14" fill="url(#cnd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="280" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Facture 00001-1042</text>
-  <line x1="280" y1="62" x2="920" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <text x="280" y="95" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Statut</text>
-  <rect x="480" y="80" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="94.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Annulée ▾</text>
-  <text x="280" y="137" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Motif d'annulation ∗</text>
-  <rect x="480" y="122" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="136.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Commande en double</text>
-  <text x="280" y="179" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Mode de paiement</text>
-  <rect x="480" y="164" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="178.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Virement ▾</text>
-  <text x="280" y="221" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">IBAN</text>
-  <rect x="480" y="206" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="220.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">FR76 0000 0000 0000 0000 0000 000</text>
-  <text x="280" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Plafond de crédit</text>
-  <rect x="480" y="248" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="262.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0</text>
-  <text x="890" y="263" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
-  <text x="280" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">N° de facture</text>
-  <rect x="480" y="290" width="420" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="304.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">00001-1042</text>
-  <text x="890" y="305" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">🔒</text>
-  <rect x="750" y="340" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="785.0" y="354.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
-  <rect x="830" y="340" width="80" height="22" rx="5" fill="url(#cnd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="870.0" y="354.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="10" y="100" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">required_when</text>
-  <text x="20" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → obligatoire</text>
-  <line x1="240" y1="117.0" x2="280" y2="136" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
-  <rect x="10" y="200" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">visible_when</text>
-  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">affiché si PAYMENT_METHOD = TRANSFER</text>
-  <line x1="240" y1="217.0" x2="280" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
-  <rect x="10" y="300" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">disable_on_edit</text>
-  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clé verrouillée après création</text>
-  <line x1="240" y1="317.0" x2="280" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
-  <rect x="970" y="220" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="980" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default_when</text>
-  <text x="980" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → 0, verrouillé</text>
-  <line x1="970" y1="237.0" x2="920" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
-  <rect x="970" y="80" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="980" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">editable_when</text>
-  <text x="980" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur l'écran : ligne en lecture seule</text>
-  <line x1="970" y1="97.0" x2="920" y2="46" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cnd-arrow)"/>
+  <rect x="220" y="20" width="880" height="306" rx="14" fill="url(#fcd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Factures</text>
+  <rect x="1054" y="32" width="26" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1067.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="238.0" y="86" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">STATUT</text>
+  <rect x="238.0" y="94" width="416.0" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248.0" y="112" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">Annulée</text>
+  <text x="640.0" y="112" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="666.0" y="86" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MOTIF D'ANNULATION ∗</text>
+  <rect x="666.0" y="94" width="416.0" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="676.0" y="112" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">Commande en double</text>
+  <text x="238.0" y="148" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MODE DE PAIEMENT</text>
+  <rect x="238.0" y="156" width="416.0" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="248.0" y="174" fill="#e2e8f0" fontSize="9.2" fontFamily="system-ui, sans-serif">Virement</text>
+  <text x="640.0" y="174" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="666.0" y="148" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">IBAN</text>
+  <rect x="666.0" y="156" width="416.0" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="676.0" y="174" fill="#e2e8f0" fontSize="9.2" fontFamily="ui-monospace, monospace">FR76 0000 0000 0000 0000 0000 000</text>
+  <text x="238.0" y="210" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ENCOURS AUTORISÉ</text>
+  <rect x="238.0" y="218" width="416.0" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="248.0" y="236" fill="#64748b" fontSize="9.2" fontFamily="ui-monospace, monospace">0</text>
+  <text x="666.0" y="210" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">N° DE FACTURE</text>
+  <rect x="666.0" y="218" width="416.0" height="28" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="676.0" y="236" fill="#64748b" fontSize="9.2" fontFamily="ui-monospace, monospace">00001-1042</text>
+  <line x1="220" y1="274" x2="1100" y2="274" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1005" y="286" width="77" height="24" rx="5" fill="url(#fcd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1043.5" y="301.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="932" y="286" width="67" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="965.5" y="301.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
+  <rect x="849" y="286" width="77" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="887.5" y="301.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Dupliquer</text>
+  <rect x="776" y="286" width="67" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="809.5" y="301.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="20" y="89" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="104" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">STATUS décide</text>
+  <text x="30" y="117" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lu par required_ et default_when</text>
+  <line x1="200" y1="106.0" x2="238.0" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="20" y="151" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="166" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PAYMENT_METHOD décide</text>
+  <text x="30" y="179" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lu par le visible_when de l'IBAN</text>
+  <line x1="200" y1="168.0" x2="238.0" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="20" y="213" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="228" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default_when</text>
+  <text x="30" y="241" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → 0, verrouillé</text>
+  <line x1="200" y1="230.0" x2="238.0" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="1120" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">editable_when</text>
+  <text x="1130" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur l'écran : ligne entière figée</text>
+  <line x1="1120" y1="43.0" x2="980" y2="48" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="1120" y="89" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="104" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">required_when</text>
+  <text x="1130" y="117" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">STATUS = CANCELLED → obligatoire ∗</text>
+  <line x1="1120" y1="106.0" x2="1082" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="1120" y="151" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="166" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">visible_when</text>
+  <text x="1130" y="179" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">IBAN seulement pour un virement</text>
+  <line x1="1120" y1="168.0" x2="1082" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
+  <rect x="1120" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">disable_on_edit</text>
+  <text x="1130" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clé verrouillée une fois créée</text>
+  <line x1="1120" y1="237.0" x2="1082" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fcd-arrow)"/>
 </svg>
 
 ---
@@ -84,7 +99,7 @@ Une condition désigne un **champ** de la même ligne et la **valeur** attendue 
 
 Un réglage porte une liste de conditions : **toutes** doivent être remplies (ET). Les valeurs se comparent comme du texte, sans les espaces de début et de fin : un code complété par des espaces reste reconnu. Les noms de champs se comparent sans tenir compte de la casse.
 
-Dans l'éditeur d'écran, chaque réglage est une liste dans l'inspecteur de la colonne : une ligne par condition, le champ étant choisi parmi les colonnes de l'écran.
+Dans le Concepteur d'écran, chaque réglage est une liste rattachée à la colonne : **+ add** ouvre une condition, dont le champ (**Field**) se choisit parmi les colonnes de l'écran et dont la valeur (**Value**) peut être multiple.
 
 ---
 
@@ -108,7 +123,7 @@ Un réglage fixe et sa version conditionnelle se combinent simplement : liste `_
 
 ## Réglage de l'écran — `editable_when` \{#editable-when\}
 
-Défini dans l'onglet **Général** de l'éditeur d'écran, `editable_when` indique quand une ligne **existante** peut être modifiée ou supprimée :
+Défini à l'étape **Ce qu'il est** du Concepteur d'écran, `editable_when` indique quand une ligne **existante** peut être modifiée ou supprimée :
 
 ```toml
 editable_when = [{ field = "PERIOD_STATUS", value = ["OPEN", "VALIDATED"] }]
@@ -134,6 +149,6 @@ Les champs de la fenêtre de saisie d'une action acceptent `visible_when`, `requ
 
 ## Pour aller plus loin
 
-- [Écrans → Champs conditionnels](./build/screens/conditional-fields.md) — les mettre en place dans l'éditeur d'écran, avec des exemples.
+- [Écrans → Champs conditionnels](./build/screens/conditional-fields.md) — les mettre en place dans le Concepteur d'écran, avec des exemples.
 - [Écrans → Colonnes](./build/screens/columns.md) — les autres réglages d'une colonne.
 - [Dictionnaire](./dictionary.md) — les règles héritées par une colonne.

@@ -58,7 +58,7 @@ Sur l'écran, donner aux quatre colonnes un libellé (entrées du dictionnaire) 
 
 ### 4. Conserver chaque écriture — `audit_table`
 
-Dans l'onglet **Général** de l'écran, renseigner **audit_table** avec `AUD_CUSTOMERS`. Dès lors, chaque insertion, mise à jour ou suppression faite depuis l'écran écrit aussi une ligne dans `AUD_CUSTOMERS` :
+Dans l'étape **Ce qu'il est** de l'écran, renseigner **audit_table** avec `AUD_CUSTOMERS`. Dès lors, chaque insertion, mise à jour ou suppression faite depuis l'écran écrit aussi une ligne dans `AUD_CUSTOMERS` :
 
 | Colonne | Contenu |
 |---|---|

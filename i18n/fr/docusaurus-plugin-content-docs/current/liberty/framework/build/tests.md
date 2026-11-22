@@ -14,7 +14,7 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 500" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="tst-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="tst-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,90 +22,136 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
     <marker id="tst-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="384" rx="14" fill="url(#tst-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tests</text>
-  <rect x="240" y="60" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="281.5" y="74.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <rect x="329" y="60" width="89" height="22" rx="5" fill="url(#tst-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="373.5" y="74.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Jouer ce cas</text>
-  <rect x="424" y="60" width="100" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="474.0" y="74.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Jouer la suite</text>
-  <rect x="530" y="60" width="156" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="608.0" y="74.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer la référence</text>
-  <rect x="698" y="66" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="715" y="75" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">aussi les cas qui écrivent</text>
-  <rect x="240" y="96" width="168" height="290" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="250" y="106" width="148" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="324.0" y="120.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle suite</text>
-  <text x="252" y="148" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">orders</text>
-  <circle cx="258" cy="173" r="4" fill="#4ade80"/>
-  <text x="268" y="176.5" fill="#cbd5e1" fontSize="8.2" fontFamily="ui-monospace, monospace">list-has-columns</text>
-  <rect x="246" y="188" width="156" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <circle cx="258" cy="199" r="4" fill="#fb923c"/>
-  <text x="268" y="202.5" fill="#cbd5e1" fontSize="8.2" fontFamily="ui-monospace, monospace">create-then-cancel</text>
-  <circle cx="258" cy="225" r="4" fill="#4ade80"/>
-  <text x="268" y="228.5" fill="#cbd5e1" fontSize="8.2" fontFamily="ui-monospace, monospace">unknown-id-refused</text>
-  <circle cx="258" cy="251" r="4" fill="#f87171"/>
-  <text x="268" y="254.5" fill="#cbd5e1" fontSize="8.2" fontFamily="ui-monospace, monospace">price-is-computed</text>
-  <text x="258" y="282" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">+ Nouveau cas</text>
-  <rect x="420" y="96" width="330" height="290" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="432" y="154" width="150" height="24" rx="12.0" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="507.0" y="169.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">create-then-cancel</text>
-  <line x1="507" y1="178" x2="507" y2="200" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tst-flow)"/>
-  <rect x="432" y="202" width="150" height="52" rx="8" fill="rgba(255,255,255,0.03)" stroke="#4ade80" strokeWidth="1.2"/>
-  <text x="442" y="217" fill="#4ade80" fontSize="7.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ORDER_CREATE</text>
-  <text x="442" y="232" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">create</text>
-  <text x="442" y="245" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">fonctionne · 1 ligne(s)</text>
-  <line x1="507" y1="254" x2="507" y2="276" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tst-flow)"/>
-  <circle cx="507" cy="264" r="7" fill="#0f172a" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="507" y="267.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <rect x="432" y="278" width="150" height="52" rx="8" fill="rgba(255,255,255,0.03)" stroke="#fb923c" strokeWidth="1.2"/>
-  <text x="442" y="293" fill="#fb923c" fontSize="7.5" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ORDER_CANCEL</text>
-  <text x="442" y="308" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">cleanup</text>
-  <text x="442" y="321" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">fonctionne</text>
-  <line x1="507" y1="330" x2="507" y2="352" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tst-flow)"/>
-  <rect x="477" y="354" width="60" height="24" rx="12.0" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="507.0" y="369.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Fin</text>
-  <text x="600" y="226" fill="#4ade80" fontSize="8.5" fontFamily="system-ui, sans-serif">réussi</text>
-  <text x="600" y="302" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">modifié : diffère</text>
-  <text x="600" y="315" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">de la référence</text>
-  <rect x="762" y="96" width="198" height="290" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="774" y="116" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">L'ÉTAPE</text>
-  <text x="774" y="138" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POINT D'ACCÈS APPELÉ</text>
-  <rect x="774" y="144" width="174" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="784" y="158.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">order_create ▾</text>
-  <text x="774" y="186" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
-  <rect x="774" y="192" width="174" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="784" y="206.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER   1001</text>
-  <text x="774" y="234" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QUI EST ATTENDU</text>
-  <rect x="774" y="240" width="174" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="861.0" y="254.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Remplir depuis la réponse</text>
-  <text x="774" y="282" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">L'appel</text>
-  <text x="948" y="282" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">doit fonctionner</text>
-  <text x="774" y="300" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lignes, au moins</text>
-  <text x="948" y="300" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
-  <text x="774" y="318" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">La première ligne contient</text>
-  <text x="774" y="334" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">STATUS = OPEN</text>
+  <rect x="220" y="20" width="880" height="456" rx="14" fill="url(#tst-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="12" fontFamily="system-ui, sans-serif">⛉</text>
+  <text x="258" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tests</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="72" width="180" height="384" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="82" width="160" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="326.0" y="96.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle suite</text>
+  <text x="248" y="124" fill="#94a3b8" fontSize="7.5" fontWeight="700" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">COMMANDES — À NE PAS CASSER</text>
+  <rect x="244" y="134" width="164" height="22" rx="5" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <circle cx="256" cy="145" r="4.5" fill="none" stroke="#4ade80" strokeWidth="1.4"/>
+  <text x="267" y="148.5" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">La liste des commandes a…</text>
+  <circle cx="256" cy="171" r="4.5" fill="none" stroke="#fb923c" strokeWidth="1.4"/>
+  <text x="267" y="174.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Une commande est créée…</text>
+  <circle cx="256" cy="197" r="4.5" fill="none" stroke="#4ade80" strokeWidth="1.4"/>
+  <text x="267" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Un id inconnu est refusé</text>
+  <circle cx="256" cy="223" r="4.5" fill="none" stroke="#f87171" strokeWidth="1.4"/>
+  <text x="267" y="226.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Le prix est calculé</text>
+  <text x="252" y="252" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ Nouveau cas</text>
+  <rect x="428" y="72" width="74" height="20" rx="5" fill="url(#tst-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="465.0" y="85.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="507" y="72" width="88" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="551.0" y="85.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Jouer ce cas</text>
+  <rect x="600" y="72" width="98" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="649.0" y="85.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Jouer la suite</text>
+  <rect x="428" y="97" width="145" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="500.5" y="110.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⚑ Enregistrer la référence</text>
+  <rect x="585" y="102" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="602" y="111" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">aussi les cas qui écrivent</text>
+  <rect x="428" y="122" width="107" height="20" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="481.5" y="135.5" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer la suite</text>
+  <rect x="428" y="150" width="340" height="306" rx="8" fill="#0b1020" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="680" y="160" width="78" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="691" y="174" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">−</text>
+  <text x="719" y="173.5" fill="#cbd5e1" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">100%</text>
+  <text x="747" y="174" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="446" y="183" width="230" height="26" rx="13.0" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="458" y="199.5" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="472" y="199.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">La liste des commandes a ses colonnes</text>
+  <line x1="436" y1="260" x2="454" y2="260" stroke="#475569" strokeWidth="1"/>
+  <circle cx="444" cy="260" r="6" fill="#0d1220" stroke="#475569" strokeWidth="1"/>
+  <text x="444" y="263.3" fill="#94a3b8" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="454" y="235" width="140" height="50" rx="8" fill="#111827" stroke="#4a9eff" strokeWidth="1.6"/>
+  <circle cx="469" cy="248" r="4.5" fill="none" stroke="#4ade80" strokeWidth="1.3"/>
+  <text x="479" y="252" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIST_ORDERS</text>
+  <text x="464" y="267" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">liste</text>
+  <text x="464" y="278" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">3 valeur(s)</text>
+  <line x1="594" y1="260" x2="618" y2="260" stroke="#475569" strokeWidth="1"/>
+  <circle cx="606" cy="260" r="6" fill="#0d1220" stroke="#475569" strokeWidth="1"/>
+  <text x="606" y="263.3" fill="#94a3b8" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="618" y="235" width="130" height="50" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <circle cx="633" cy="248" r="4.5" fill="none" stroke="#4ade80" strokeWidth="1.3"/>
+  <text x="643" y="252" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GET_ORDER</text>
+  <text x="628" y="267" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">1re commande</text>
+  <text x="628" y="278" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">2 valeur(s)</text>
+  <line x1="436" y1="330" x2="454" y2="330" stroke="#475569" strokeWidth="1"/>
+  <circle cx="444" cy="330" r="6" fill="#0d1220" stroke="#475569" strokeWidth="1"/>
+  <text x="444" y="333.3" fill="#94a3b8" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="454" y="317" width="64" height="26" rx="13.0" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="466" y="333.5" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">⚑</text>
+  <text x="480" y="333.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Fin</text>
+  <rect x="780" y="72" width="304" height="384" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="794" y="94" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">L'étape</text>
+  <text x="794" y="114" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">NOM</text>
+  <text x="935.0" y="114" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">POINT D'ACCÈS APPELÉ</text>
+  <rect x="794" y="119" width="135.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="804" y="132.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">liste</text>
+  <rect x="935.0" y="119" width="135.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="945.0" y="132.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">list_orders ▾</text>
+  <text x="794" y="158" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
+  <rect x="794" y="163" width="276" height="34" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="802" y="177" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Société</text>
+  <rect x="860" y="168" width="70" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="870" y="180.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="1062" y="192" fill="#64748b" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">En texte</text>
+  <text x="794" y="222" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est attendu</text>
+  <rect x="932" y="209" width="142" height="19" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1003.0" y="222.0" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">✧ Remplir depuis la réponse</text>
+  <text x="794" y="246" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">L'APPEL</text>
+  <rect x="794" y="251" width="110" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="804" y="264.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">doit fonctionner ▾</text>
+  <text x="794.0" y="290" fill="#64748b" fontSize="7" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">LIGNES, AU MOINS</text>
+  <rect x="794.0" y="295" width="88.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="804.0" y="308.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">1</text>
+  <text x="888.0" y="290" fill="#64748b" fontSize="7" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">LIGNES, EXACTEMENT</text>
+  <rect x="888.0" y="295" width="88.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="898.0" y="308.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="982.0" y="290" fill="#64748b" fontSize="7" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">LIGNES, AU PLUS</text>
+  <rect x="982.0" y="295" width="88.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="992.0" y="308.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="794" y="334" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">LA PREMIÈRE LIGNE CONTIENT</text>
+  <rect x="794" y="339" width="276" height="34" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="802" y="353" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">STATUS = OPEN</text>
+  <text x="802" y="367" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">+ Ajouter une ligne</text>
+  <rect x="794" y="385" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="811" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Jouée même après un échec (un nettoyage)</text>
+  <text x="794" y="416" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">▸ Avancé — valeurs gardées, chemins dans la réponse brute</text>
+  <rect x="794" y="428" width="98" height="19" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="843.0" y="441.0" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer l'étape</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Suites et cas</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chacun avec son dernier résultat</text>
+  <line x1="200" y1="113.0" x2="250" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
   <rect x="20" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Suites et cas</text>
-  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avec leur dernier résultat</text>
-  <line x1="200" y1="237.0" x2="240" y2="226" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
-  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un cas est un flux</text>
-  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une carte par appel</text>
-  <line x1="200" y1="157.0" x2="432" y2="162" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce que vérifie le cas</text>
+  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">son dernier résultat en tête</text>
+  <line x1="200" y1="237.0" x2="446" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
   <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le + ajoute une étape</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à cet endroit</text>
-  <line x1="200" y1="317.0" x2="500" y2="264" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
-  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistrer la référence</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avant le changement</text>
-  <line x1="1000" y1="47.0" x2="676" y2="60" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
-  <rect x="1000" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Remplir depuis la réponse</text>
-  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">propose ce qu'il faut attendre</text>
-  <line x1="1000" y1="257.0" x2="948" y2="251" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le + d'un lien</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">insère une étape vide</text>
+  <line x1="200" y1="317.0" x2="440" y2="264" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une carte par appel</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colorée selon son dernier résultat</text>
+  <line x1="200" y1="397.0" x2="488" y2="286" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="1120" y="58" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="73" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Jouer · Enregistrer</text>
+  <text x="1130" y="86" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">contrôler, ou garder une référence</text>
+  <line x1="1120" y1="75.0" x2="640" y2="72" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="1120" y="196" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Remplir depuis la réponse</text>
+  <text x="1130" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">joue l'appel et propose</text>
+  <line x1="1120" y1="213.0" x2="1070" y2="218" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="1120" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est attendu</text>
+  <text x="1130" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fonctionne ou refusé, lignes, valeurs</text>
+  <line x1="1120" y1="287.0" x2="1070" y2="305" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
+  <rect x="1120" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une étape de nettoyage</text>
+  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">jouée même après un échec</text>
+  <line x1="1120" y1="397.0" x2="1044" y2="390" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tst-arrow)"/>
 </svg>
 
 ---
@@ -118,20 +164,23 @@ Accès : **Liberty Next → Logique → Tests**. Les résultats dans le temps se
 | **Cas** | Une vérification — *La liste des clients a toujours ses colonnes*. **Nouveau cas**, sous la suite. |
 | **Étape** | Un appel à un point d'accès du connecteur de la suite, avec ce qui est attendu. |
 
-La colonne de gauche liste les suites et leurs cas, chacun avec l'icône de son dernier résultat. Le centre dessine le cas choisi : un début, une carte par étape — son point d'accès, son nom, un résumé de ce qu'elle attend, **colorée selon son dernier résultat** — et une fin. Le panneau de droite modifie l'élément choisi.
+La colonne de gauche liste les suites — **Nouvelle suite** en tête — et sous chacune ses cas, chacun avec l'icône de son dernier résultat, puis **Nouveau cas**. Le centre porte les boutons de la suite (**Enregistrer**, **Jouer ce cas**, **Jouer la suite**, **Enregistrer la référence**, **aussi les cas qui écrivent**, **Supprimer la suite**) au-dessus du cas choisi, dessiné comme un flux : au début, ce que vérifie le cas avec son dernier résultat ; une carte par étape — son point d'accès, son nom, un résumé de ce qu'elle attend, **colorée selon son dernier résultat** — ; **Fin**. Le flux a son zoom et se poursuit sur la ligne suivante quand il est long. Le panneau de droite modifie l'élément choisi : le cas, ou une étape.
 
 ### Le cas \{#case\}
 
 | Champ | Signification |
 |---|---|
 | **Identifiant** | L'identifiant du cas dans sa suite. |
+| **Connecteur de la suite** | Le connecteur d'API dont les étapes appellent les points d'accès. |
 | **Ce qu'il vérifie** | La phrase affichée dans les listes et les résultats. |
 | **Ce cas modifie des données : joué seulement quand l'exécution l'autorise** | À cocher si une étape écrit. |
-| **Dernières exécutions** | Les huit dernières exécutions du cas ; une exécution enregistrée porte la mention *référence*. |
+| **Dernières exécutions** | Les huit dernières exécutions du cas — résultat, date et heure ; une exécution enregistrée porte la mention *référence*. |
+
+**Supprimer le cas** se trouve sous la liste.
 
 ### Une étape \{#step\}
 
-Le **+** d'un lien ajoute une étape à cet endroit ; un clic sur une carte l'ouvre.
+Le **+** d'un lien insère une étape vide à cet endroit — *pas encore de point d'accès* tant qu'aucun n'est choisi ; un clic sur une carte l'ouvre. **Supprimer l'étape** se trouve au bas de son panneau.
 
 | Champ | Signification |
 |---|---|
@@ -158,7 +207,7 @@ Le **+** d'un lien ajoute une étape à cet endroit ; un clic sur une carte l'ou
 | **Enregistrer la référence** | Joue la suite et garde, pour les cas réussis, ce que leurs étapes gardent : la référence à laquelle les prochaines exécutions sont comparées. |
 | **aussi les cas qui écrivent** | Autorise, pour cette exécution, les cas marqués comme modifiant des données. |
 
-Une exécution enregistre d'abord les modifications en cours, puis donne son bilan : *N réussi(s) · N en échec · N modifié(s) · N ignoré(s)*.
+Une exécution enregistre d'abord les modifications en cours, puis donne son bilan : *N réussi(s) · N en échec · N modifié(s) · N ignoré(s)*. Les icônes des cas et les couleurs des cartes suivent aussitôt.
 
 | Résultat | Couleur | Signification |
 |---|---|---|
@@ -194,7 +243,7 @@ Les tests ont leurs propres permissions, dans les règles *Au-delà des menus* d
 | `tests:run` | **Jouer les tests (et les voir)** | Jouer un cas ou une suite, enregistrer la référence, remplir depuis la réponse. |
 | `tests:edit` | **Écrire les tests : suites, cas, étapes (et les jouer)** | Créer, modifier et supprimer des suites, des cas et des étapes. |
 
-Une équipe fonctionnelle peut donc être propriétaire de ses tests sans être administratrice.
+Une équipe fonctionnelle peut donc être propriétaire de ses tests sans être administratrice. La page n'affiche que les boutons permis : sans `tests:edit`, ni **Enregistrer**, ni boutons de création ou de suppression, et une ligne l'indique — *Vous pouvez jouer ces tests, pas les modifier* ; sans `tests:run` non plus, ni **Jouer**, ni **Enregistrer la référence**, ni **Remplir depuis la réponse** — *Vous pouvez lire ces tests, pas les jouer ni les modifier*.
 
 ---
 

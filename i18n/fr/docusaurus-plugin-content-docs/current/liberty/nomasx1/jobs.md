@@ -21,11 +21,21 @@ Le dossier **Tâches**, en bas du menu de Nomasx-1, permet à l'équipe conformi
 
 **Applications** — chaque entrée propose les applications en cases à cocher, avec **Tout** : la tâche s'exécute une fois par application cochée, l'une après l'autre. Les deux rapports demandent aussi la **langue**, `fr` ou `en`.
 
-Après une collecte, **Dernière collecte** et la liste *Fraîcheur des données* de la [synthèse d'audit](./audit-synthesis.md) affichent la nouvelle date.
+Après une collecte, **Dernière collecte** et la liste *Fraîcheur des données* de la [synthèse d'audit](./audit-synthesis.md) affichent la nouvelle date. Dans **Dernière collecte**, les lignes sont groupées par module, et un clic sur une ligne ouvre l'exécution qui l'a collectée.
 
 :::info[Spécifique à JDE]
 Les collectes lisent JD Edwards EnterpriseOne. Pour un autre système source, la collecte est celle que fournit son connecteur.
+
+Les droits effectifs comprennent les chemins d'accès des objets définis par l'utilisateur (UDO) : une page composite donne les applications et états que ses tuiles ouvrent, les formulaires affichés dans ses volets et les tâches de son menu ; une page E1 donne les applications et états que son contenu appelle. Les autres objets définis par l'utilisateur — orchestrations, demandes de service, notifications… — ne donnent aucun chemin d'accès. Les droits, les conflits de séparation des tâches et les chiffres de licences qui en découlent tiennent compte de ces chemins. Les pages lues dépendent des indicateurs **E1 Composite** et **E1 Pages** de l'[application](./settings/global/applications.md) : en activer ou en désactiver un modifie ces chiffres à la collecte suivante.
 :::
+
+---
+
+## Ce que lit une collecte \{#steps\}
+
+Les deux entrées de collecte lancent la même tâche avec un jeu d'étapes différent : **Collecter la sécurité et la SoD** écarte les étapes de licences, **Collecter les licences** écarte celles de sécurité et de SoD. Aucune des deux ne lit l'annuaire (LDAP), le journal d'activité, les propriétés de la base Oracle, la référence croisée des objets JD Edwards ni l'inventaire des objets définis par l'utilisateur. Les exploitants collectent les trois premiers avec le préréglage *Everything* de la tâche dans Nomaflow, ou par sa planification ; la référence croisée et l'inventaire des objets définis par l'utilisateur (étape `JDE_UDO`) viennent de la tâche [`nomasx1-xref`](../nomaflow/bundled-jobs.md#nomasx1-xref), que lisent les références croisées et l'analyse de montée de version de Nomajde. Tant que l'annuaire n'est pas lu, les contrôles d'annuaire de la [revue de sécurité](./security-review.md) affichent *Aucun annuaire collecté*.
+
+Une étape en échec n'arrête pas les autres : l'exécution continue et se termine en échec en nommant l'étape.
 
 ---
 

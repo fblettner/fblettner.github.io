@@ -1,7 +1,7 @@
 ---
 title: App settings
 description: "Liberty Next → Administer → App: every setting of the install, section by section — App (name, address, sub-path, language, UI defaults, hot reload, Oracle thick mode), Server log, Sign-in, Nomaflow, Change packages, License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding, and the read-only Deployment values — what each field does, which secrets are encrypted, and what needs a restart."
-keywords: [Liberty Next, Settings App, server log, sign-in, tokens, login throttle, nomaflow, change packages, sub-path, base path, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
+keywords: [Liberty Next, App settings, server log, sign-in, tokens, login throttle, nomaflow, change packages, sub-path, base path, license, AI assistant, notifications, SMTP, OpenID Connect, SSO, PDF branding, default period, page size, Oracle thick]
 ---
 
 # App settings
@@ -14,83 +14,136 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 
 ## At a glance
 
-<svg viewBox="0 0 1200 530" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 584" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="sap-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="sap-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="sap-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="sap-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="sapp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sapp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sapp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sapp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="506" rx="14" fill="url(#sap-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · App</text>
-  <rect x="880" y="28" width="80" height="22" rx="5" fill="url(#sap-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="920.0" y="42.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="74" width="720" height="26" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="252" y="91" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▾  App</text>
-  <rect x="840" y="78" width="78" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="879.0" y="90.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Liberty Next</text>
-  <text x="260" y="125" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Name</text>
-  <rect x="450" y="110" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="124.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Liberty Next</text>
-  <text x="260" y="155" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Host · Port</text>
-  <rect x="450" y="140" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="154.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">0.0.0.0 · 8000</text>
-  <text x="260" y="185" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Log level</text>
-  <rect x="450" y="170" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="184.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">info ▾</text>
-  <text x="260" y="215" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Default language</text>
-  <rect x="450" y="200" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="214.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">fr ▾</text>
-  <text x="260" y="245" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Default period (dashboards)</text>
-  <rect x="450" y="230" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="244.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">This month ▾</text>
-  <text x="260" y="275" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Grid page size</text>
-  <rect x="450" y="260" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="274.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">50</text>
-  <text x="260" y="305" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Dashboard cache (seconds)</text>
-  <rect x="450" y="290" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="460" y="304.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">60</text>
-  <rect x="260" y="323" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M262.5,328.5 L264.8,330.8 L268.8,326" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="277" y="332" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Hot reload</text>
-  <rect x="420" y="323" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="437" y="332" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Oracle thick mode</text>
-  <rect x="240" y="350" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="366" fill="#cbd5e1" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸  License</text>
-  <rect x="862" y="353" width="68" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="896.0" y="365.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">configured</text>
-  <rect x="240" y="380" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="396" fill="#cbd5e1" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸  AI Assistant</text>
-  <rect x="862" y="383" width="68" height="18" rx="9.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="896.0" y="395.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">no API key</text>
-  <rect x="240" y="410" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="426" fill="#cbd5e1" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸  Notifications (email)</text>
-  <rect x="832" y="413" width="98" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="881.0" y="425.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">smtp.example.com</text>
-  <rect x="240" y="440" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="456" fill="#cbd5e1" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸  OpenID Connect (SSO)</text>
-  <rect x="872" y="443" width="58" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="901.0" y="455.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">disabled</text>
-  <rect x="240" y="470" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="486" fill="#cbd5e1" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▸  PDF branding</text>
-  <rect x="10" y="74" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Six sections</text>
-  <text x="20" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each folds, with a summary</text>
-  <line x1="210" y1="91.0" x2="240" y2="87" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sap-arrow)"/>
-  <rect x="10" y="200" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">App section</text>
-  <text x="20" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">name, address, language…</text>
-  <line x1="210" y1="217.0" x2="260" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sap-arrow)"/>
-  <rect x="1000" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One Save</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">most changes apply at once</text>
-  <line x1="1000" y1="47.0" x2="960" y2="39" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sap-arrow)"/>
-  <rect x="1000" y="330" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Status chips</text>
-  <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">licence, AI key, SMTP, SSO</text>
-  <line x1="1000" y1="347.0" x2="940" y2="363" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sap-arrow)"/>
+  <rect x="220" y="20" width="880" height="544" rx="14" fill="url(#sapp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">App</text>
+  <rect x="985" y="28" width="99" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1034.5" y="42.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Reload config</text>
+  <rect x="938" y="28" width="41" height="22" rx="5" fill="url(#sapp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="958.5" y="42.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="865" y="28" width="67" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="898.5" y="42.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Discard</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <text x="236" y="78" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">The installation's settings (app.toml). Secrets are encrypted in the file; a restart is asked for when one is needed.</text>
+  <text x="246" y="104" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">The installation</text>
+  <rect x="242" y="112" width="238" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <circle cx="256" cy="125" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="123" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Server</text>
+  <text x="268" y="133" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">ACME ERP · :8000 · info</text>
+  <rect x="242" y="142" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="155" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="153" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Display</text>
+  <text x="268" y="163" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">en · This month · 50</text>
+  <rect x="242" y="172" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="185" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="183" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">External addresses</text>
+  <text x="268" y="193" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">JDE_WEB</text>
+  <rect x="242" y="202" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="215" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="213" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">PDF branding</text>
+  <text x="268" y="223" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">framework defaults</text>
+  <rect x="242" y="232" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="245" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="243" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">License</text>
+  <text x="268" y="253" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">configured</text>
+  <text x="246" y="278" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">Signing in</text>
+  <rect x="242" y="286" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="299" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="297" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Sign-in</text>
+  <text x="268" y="307" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">File (auth.toml) · restart after a change</text>
+  <rect x="242" y="316" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="329" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">OpenID Connect (SSO)</text>
+  <text x="268" y="337" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">disabled</text>
+  <text x="246" y="362" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">What is switched on</text>
+  <rect x="242" y="370" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="383" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="381" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">AI Assistant</text>
+  <text x="268" y="391" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">claude-sonnet-4-5</text>
+  <rect x="242" y="400" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="413" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="411" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Notifications (email)</text>
+  <text x="268" y="421" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">no SMTP — portal only</text>
+  <rect x="242" y="430" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="443" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="441" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">nomaflow</text>
+  <text x="268" y="451" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">default · restart after a change</text>
+  <rect x="242" y="460" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="473" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="471" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Change packages</text>
+  <text x="268" y="481" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">default · restart after a change</text>
+  <text x="246" y="506" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">Running it</text>
+  <rect x="242" y="514" width="238" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <circle cx="256" cy="527" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="268" y="525" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Server log</text>
+  <text x="268" y="535" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">text · 10 MB × 5 · restart after a change</text>
+  <rect x="236" y="86" width="250" height="464" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="106" fill="#e2e8f0" fontSize="9.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SERVER</text>
+  <text x="1070" y="106" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">ACME ERP · :8000 · info</text>
+  <line x1="498" y1="118" x2="1084" y2="118" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="136" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APP NAME</text>
+  <rect x="512" y="142" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="156.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME ERP</text>
+  <text x="798.0" y="136" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVIRONMENT</text>
+  <rect x="798.0" y="142" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="808.0" y="156.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">production</text>
+  <text x="798.0" y="176" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">production, test… — named in the licence usage report</text>
+  <text x="512" y="192" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BIND HOST</text>
+  <rect x="512" y="198" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="212.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">0.0.0.0</text>
+  <text x="798.0" y="192" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
+  <rect x="798.0" y="198" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="808.0" y="212.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">8000</text>
+  <text x="512" y="238" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOG LEVEL</text>
+  <rect x="512" y="244" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="258.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">info</text>
+  <text x="772.0" y="258.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="512" y="275" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M514.5,280.5 L516.8,282.8 L520.8,278" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="529" y="284" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Hot-reload config TOML files on change</text>
+  <rect x="512" y="295" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="529" y="304" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Oracle thick mode (python-oracledb OCI — required for Native Network Encryption / NNE)</text>
+  <text x="512" y="324" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SUB-PATH BEHIND A REVERSE PROXY</text>
+  <rect x="512" y="330" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="344.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">/liberty</text>
+  <text x="512" y="364" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">e.g. /liberty; blank = the site root — restart</text>
+  <text x="798.0" y="324" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PUBLIC ADDRESS</text>
+  <rect x="798.0" y="330" width="272.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="808.0" y="344.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">https://erp.example.com</text>
+  <text x="798.0" y="364" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">password-reset links, MCP sign-in; blank = the browser's</text>
+  <rect x="498" y="86" width="586" height="298" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four groups</text>
+  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in the order of a setup</text>
+  <line x1="200" y1="127.0" x2="242" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One line per section</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with its state</text>
+  <line x1="200" y1="267.0" x2="242" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
+  <rect x="20" y="420" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Restart needed</text>
+  <text x="30" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">said on the line</text>
+  <line x1="200" y1="437.0" x2="242" y2="527" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
+  <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save, Discard</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in the page header</text>
+  <line x1="1120" y1="47.0" x2="968" y2="50" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
+  <rect x="1120" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The picked section</text>
+  <text x="1130" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one grid, label above</text>
+  <line x1="1120" y1="167.0" x2="1084" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
+  <rect x="1120" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Help under the field</text>
+  <text x="1130" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the former parentheses</text>
+  <line x1="1120" y1="347.0" x2="1070.0" y2="366" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sapp-arrow)"/>
 </svg>
 
 ---
@@ -117,7 +170,7 @@ Secret fields — the licence key, the Anthropic API key, the SMTP password, the
 | **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
 | **Dashboard cache (seconds, 0 = none)** | How long a reopened dashboard reuses its widgets' results (default 60). |
 | **Several tabs at once (off: one page at a time)** | On by default. Off: opening a page replaces the current one. |
-| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the Settings, Monitoring and run tabs stay. |
+| **Close the tabs when switching application** | Off by default. On: picking another application in the switcher closes the tabs of the other applications; the tabs of the Liberty Next pages, of Monitoring and of the runs stay. |
 | **Tabs at most** | 5 by default (1 to 50). When the limit is reached, opening a page closes the oldest tab. |
 | **Drill-downs open inside the current tab (…)** | Off by default. On: a row's drill-down opens as a panel inside the current tab, with a breadcrumb and **Back**, unless the action itself decides — see [Actions](./screens/actions-and-lifecycle.md#drill). |
 
@@ -234,7 +287,7 @@ See [AI assistant](../ai-assistant.md), and [Data sent to Anthropic](../ai-data-
 
 | Field | Notes |
 |---|---|
-| **Enabled** | Shows the OIDC button on the sign-in page. |
+| **Enabled** | Makes **Sign in with OIDC**, always on the sign-in page, lead to the provider; off, the button answers 404. |
 | **Discovery URL** | The provider's `.well-known/openid-configuration`. |
 | **Client ID**, **Client secret**, **Scopes** | As registered at the provider (`openid email profile` by default). |
 | **Username claim**, **Email claim**, **Name claim** | Which ID-token claims fill the user (`preferred_username`, `email`, `name`). |
@@ -254,7 +307,7 @@ The cover and page settings of the PDF reports: author, primary colours, cover t
 
 ## Deployment (read-only) \{#deployment\}
 
-The last section lists the values set by the installation, not from this page — the value in force and why: the master key and the JWT secret, only *set* or *not set*, which come from the environment; the token signing algorithm; the location of each configuration file, which follows the install's layout.
+The last section, shown only when the installation sets values outside this page, lists them — the value in force and why: the master key and the JWT secret, only *set* or *not set*, which come from the environment; the token signing algorithm; the location of each configuration file, which follows the install's layout.
 
 ---
 

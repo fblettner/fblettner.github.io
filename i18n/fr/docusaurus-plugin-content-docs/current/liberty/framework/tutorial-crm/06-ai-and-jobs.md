@@ -40,7 +40,7 @@ Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questio
   <rect x="634" y="100" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="662.5" y="114.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run now</text>
   <rect x="620" y="180" width="340" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="634" y="202" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">🔔 Notifications</text>
+  <text x="634" y="202" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Notifications</text>
   <rect x="634" y="214" width="312" height="40" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="644" y="238" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 affaires sans nouvelles depuis 14 jours</text>
   <rect x="10" y="100" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -140,7 +140,7 @@ L'équipe commerciale la trouve chaque matin dans la cloche. Un filtre sur `STAL
 
 ## Bilan
 
-Un CRM complet construit depuis les Paramètres :
+Un CRM complet construit dans les pages Liberty Next :
 
 - **Des écrans** — Clients, Affaires, et les Activités de chaque affaire.
 - **Un tableau de bord** — le pipeline avec indicateurs, graphique et dernières activités.

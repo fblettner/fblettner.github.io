@@ -1,6 +1,6 @@
 ---
 title: Excel export
-description: "Recipe — export a screen to Excel: the grid's Export menu (current view, Excel or CSV, visible or all columns), and configured workbooks from the screen's Export tab — several sheets, one file per group, built on the server."
+description: "Recipe — export a screen to Excel: the grid's Export menu (current view, Excel or CSV, visible or all columns), and configured workbooks from the screen's Output stage — several sheets, one file per group, built on the server."
 keywords: [Liberty Next, cookbook, Excel, export, XLSX, CSV, workbook, sheets, split_by, screen]
 ---
 
@@ -15,7 +15,7 @@ Users want the data of a screen in Excel — to work on it offline, to hand it t
 | Level | Setting | Result |
 |---|---|---|
 | **The grid's export** | Nothing — every grid has it. | The current view as `.xlsx` or `.csv`. |
-| **Configured workbooks** | The screen's **Export** tab. | One or several `.xlsx` files with several sheets, built on the server. |
+| **Configured workbooks** | The screen's **Output** stage. | One or several `.xlsx` files with several sheets, built on the server. |
 
 ## The grid's export
 
@@ -27,7 +27,7 @@ The export covers the rows the grid has loaded: raise the screen's row cap, or n
 
 ## Configured workbooks
 
-For a structured report — several sheets, one file per department — set the screen's **Export** tab. An **Export workbooks** button then appears above the grid; the server builds the files and the browser downloads them (a `.zip` when there are several).
+For a structured report — several sheets, one file per department — set the screen's **Output** stage. An **Export workbooks** button then appears above the grid; the server builds the files and the browser downloads them (a `.zip` when there are several).
 
 | Setting | Effect |
 |---|---|
@@ -68,5 +68,5 @@ The button produces a `.zip` with one workbook per department, each with an *Emp
 ## What's next
 
 - [Bulk import](./bulk-import.md) — load the exported layout back.
-- [Screens](../build/screens/overview.md) — the Export tab among the others.
+- [Screens](../build/screens/overview.md) — the Output stage among the others.
 - [REST API](../../references/rest-api.md) — `POST /api/screens/{app}/{id}/export` builds the workbooks.

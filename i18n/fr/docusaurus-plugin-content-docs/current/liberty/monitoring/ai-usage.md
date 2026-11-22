@@ -12,199 +12,288 @@ keywords: [Liberty Next, surveillance, usage de l'IA, assistant IA, jetons, cach
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 594" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 713" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="aiu-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="aiu-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="aiu-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="aiu-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="monai-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="monai-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="monai-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="monai-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="554" rx="14" fill="url(#aiu-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Surveillance</text>
-  <rect x="240" y="62" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="276.0" y="76.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">En direct</text>
-  <rect x="318" y="62" width="122" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="379.0" y="76.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Journal du serveur</text>
-  <rect x="446" y="62" width="94" height="22" rx="5" fill="url(#aiu-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="493.0" y="76.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Usage de l'IA</text>
-  <rect x="546" y="62" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="582.0" y="76.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Rétention</text>
-  <rect x="830" y="62" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="840" y="76.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">30 derniers jours ▾</text>
-  <text x="240" y="108" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Enregistré : qui, modèle, jetons, outils — jamais la question, la réponse ni une ligne. Conservé 90 jours.</text>
-  <rect x="240.0" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252.0" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUESTIONS</text>
-  <text x="252.0" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">412</text>
-  <rect x="343.7142857142857" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="355.7142857142857" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UTILISATEURS</text>
-  <text x="355.7142857142857" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">18</text>
-  <rect x="447.42857142857144" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="459.42857142857144" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COÛT</text>
-  <text x="459.42857142857144" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">38,20 $</text>
-  <text x="459.42857142857144" y="176" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">estimé, prix public</text>
-  <rect x="551.1428571428571" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="563.1428571428571" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JETONS ENTRÉE</text>
-  <text x="563.1428571428571" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">9,6 M</text>
-  <text x="563.1428571428571" y="176" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">71 % du cache</text>
-  <rect x="654.8571428571429" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="666.8571428571429" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JETONS SORTIE</text>
-  <text x="666.8571428571429" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">184 k</text>
-  <rect x="758.5714285714286" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="770.5714285714286" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPELS D'OUTILS</text>
-  <text x="770.5714285714286" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">1 038</text>
-  <text x="770.5714285714286" y="176" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">12 en échec</text>
-  <rect x="862.2857142857142" y="120" width="97.71428571428571" height="66" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="874.2857142857142" y="138" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODIFICATIONS</text>
-  <text x="874.2857142857142" y="164" fill="#e2e8f0" fontSize="17" fontWeight="700" fontFamily="system-ui, sans-serif">9</text>
-  <text x="874.2857142857142" y="176" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">par l'assistant</text>
-  <text x="240" y="212" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PAR UTILISATEUR</text>
-  <rect x="240" y="220" width="354.0" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UTILISATEUR</text>
-  <text x="350" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUESTIONS</text>
-  <text x="422" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENTRÉE</text>
-  <text x="492" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COÛT</text>
-  <rect x="240" y="248" width="354.0" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="262.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
-  <text x="350" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">148</text>
-  <text x="422" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3,4 M</text>
-  <text x="492" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">14,10 $</text>
-  <rect x="240" y="274" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="288.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">bruno</text>
-  <text x="350" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">96</text>
-  <text x="422" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,1 M</text>
-  <text x="492" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">9,85 $</text>
-  <text x="606.0" y="212" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PAR CANAL</text>
-  <rect x="606.0" y="220" width="354.0" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CANAL</text>
-  <text x="752.0" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENTRÉES</text>
-  <text x="814.0" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ÉCHECS</text>
-  <text x="872.0" y="235.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COÛT</text>
-  <rect x="606.0" y="248" width="354.0" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="262.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">Chat Liberty</text>
-  <text x="752.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">412</text>
-  <text x="814.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">5</text>
-  <text x="872.0" y="262.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">38,20 $</text>
-  <rect x="606.0" y="274" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="288.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">Client externe (MCP)</text>
-  <text x="752.0" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">236</text>
-  <text x="814.0" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">6</text>
-  <text x="872.0" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">—</text>
-  <text x="240" y="318" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PAR OUTIL</text>
-  <rect x="240" y="326" width="354.0" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTIL</text>
-  <text x="374" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPELS</text>
-  <text x="434" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ÉCHECS</text>
-  <text x="494" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DURÉE MOY.</text>
-  <rect x="240" y="354" width="354.0" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">sql_query</text>
-  <text x="374" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">522</text>
-  <text x="434" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">7</text>
-  <text x="494" y="368.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1,2 s</text>
-  <rect x="240" y="380" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="394.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">explorer_query</text>
-  <text x="374" y="394.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">301</text>
-  <text x="434" y="394.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3</text>
-  <text x="494" y="394.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">0,9 s</text>
-  <text x="606.0" y="318" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MODIFICATIONS FAITES PAR L'ASSISTANT</text>
-  <rect x="606.0" y="326" width="354.0" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUAND</text>
-  <text x="692.0" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UTILISATEUR</text>
-  <text x="776.0" y="341.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUOI</text>
-  <rect x="606.0" y="354" width="354.0" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="368.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">19/11 10:44</text>
-  <text x="692.0" y="368.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">alice</text>
-  <text x="776.0" y="368.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">screen_write update sales/orders</text>
-  <rect x="606.0" y="380" width="354.0" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="616.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">19/11 09:12</text>
-  <text x="692.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">bruno</text>
-  <text x="776.0" y="394.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">job_run load_prices</text>
-  <text x="240" y="424" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DERNIÈRE ACTIVITÉ</text>
-  <rect x="849" y="403" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="866" y="412" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Échecs seulement</text>
-  <rect x="707" y="409" width="130" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="717" y="422.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Tous les canaux ▾</text>
-  <rect x="240" y="432" width="720" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif"></text>
-  <text x="272" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUAND</text>
-  <text x="364" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UTILISATEUR</text>
-  <text x="448" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION</text>
-  <text x="532" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODÈLE</text>
-  <text x="682" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OUTILS</text>
-  <text x="754" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DURÉE</text>
-  <text x="814" y="447.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ISSUE</text>
-  <rect x="240" y="460" width="720" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="474.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">›</text>
-  <text x="272" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">19/11 10:44</text>
-  <text x="364" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
-  <text x="448" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">sales</text>
-  <text x="532" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Carte appliquée</text>
-  <text x="682" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1</text>
-  <text x="754" y="474.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">0,4 s</text>
-  <rect x="814" y="463.0" width="60" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="844.0" y="474.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Appliquée</text>
-  <rect x="240" y="486" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="500.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">›</text>
-  <text x="272" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">19/11 10:42</text>
-  <text x="364" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">alice</text>
-  <text x="448" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">sales</text>
-  <text x="532" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">claude-opus-5-5</text>
-  <text x="682" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">3</text>
-  <text x="754" y="500.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">8,1 s</text>
-  <rect x="814" y="489.0" width="51" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="839.5" y="500.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Répondu</text>
-  <rect x="240" y="512" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="526.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">⌄</text>
-  <text x="272" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">19/11 10:37</text>
-  <text x="364" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">bruno</text>
-  <text x="448" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="532" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Client externe (MCP)</text>
-  <text x="682" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">4</text>
-  <text x="754" y="526.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,6 s</text>
-  <rect x="814" y="515.0" width="65" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="846.5" y="526.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1 en échec</text>
-  <rect x="240" y="538" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="552.5" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">›</text>
-  <text x="272" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">19/11 10:31</text>
-  <text x="364" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">chloe</text>
-  <text x="448" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">crm</text>
-  <text x="532" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">claude-opus-5-5</text>
-  <text x="682" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">5</text>
-  <text x="754" y="552.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">14,6 s</text>
-  <rect x="814" y="541.0" width="89" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="858.5" y="552.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Limite de tours</text>
-  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Usage de l'IA</text>
-  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une vue de la page Surveillance</text>
-  <line x1="200" y1="93.0" x2="476" y2="89" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un clic sur un utilisateur</text>
-  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtre la liste du bas</text>
-  <line x1="200" y1="253.0" x2="250" y2="259" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="20" y="506" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="521" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une série d'appels MCP</text>
-  <text x="30" y="534" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne, ses appels au dépliage</text>
-  <line x1="200" y1="523.0" x2="244" y2="523" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="1000" y="56" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période</text>
-  <text x="1010" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7, 30 ou 90 jours</text>
-  <line x1="1000" y1="73.0" x2="960" y2="73" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="1000" y="136" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="151" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Coût estimé</text>
-  <text x="1010" y="164" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">USD, les questions du chat</text>
-  <line x1="1000" y1="153.0" x2="962" y2="153" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="1000" y="232" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="247" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Canaux</text>
-  <text x="1010" y="260" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic filtre la liste du bas</text>
-  <line x1="1000" y1="249.0" x2="962" y2="259" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="1000" y="348" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="363" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Qui a modifié quoi</text>
-  <text x="1010" y="376" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écran, clé, tâche</text>
-  <line x1="1000" y1="365.0" x2="962" y2="365" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
-  <rect x="1000" y="402" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="417" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres</text>
-  <text x="1010" y="430" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un canal, les échecs</text>
-  <line x1="1000" y1="419.0" x2="962" y2="419" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aiu-arrow)"/>
+  <rect x="220" y="20" width="880" height="673" rx="14" fill="url(#monai-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Surveillance</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236.0" y="74" width="204.5" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="245.0" y="84" width="20" height="20" rx="5" fill="#4ade80" fillOpacity="0.18"/>
+  <circle cx="255.0" cy="94" r="4" fill="none" stroke="#4ade80" strokeWidth="1.4"/>
+  <text x="272.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En direct</text>
+  <text x="272.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Utilisateurs connectés, verrous, p…</text>
+  <rect x="450.5" y="74" width="204.5" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="459.5" y="84" width="20" height="20" rx="5" fill="#4a9eff" fillOpacity="0.18"/>
+  <circle cx="469.5" cy="94" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="486.5" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Journal du serveur</text>
+  <text x="486.5" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Le fichier journal : recherche, ex…</text>
+  <rect x="665.0" y="74" width="204.5" height="40" rx="8" fill="rgba(74,158,255,0.08)" stroke="#c084fc" strokeWidth="1.2"/>
+  <rect x="674.0" y="84" width="20" height="20" rx="5" fill="#c084fc" fillOpacity="0.18"/>
+  <circle cx="684.0" cy="94" r="4" fill="none" stroke="#c084fc" strokeWidth="1.4"/>
+  <text x="701.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Usage de l’IA</text>
+  <text x="701.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Qui utilise l’assistant, les jeton…</text>
+  <rect x="879.5" y="74" width="204.5" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="888.5" y="84" width="20" height="20" rx="5" fill="#fb923c" fillOpacity="0.18"/>
+  <circle cx="898.5" cy="94" r="4" fill="none" stroke="#fb923c" strokeWidth="1.4"/>
+  <text x="915.5" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rétention</text>
+  <text x="915.5" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Ce que garde chaque stockage, sa t…</text>
+  <rect x="236" y="126" width="140" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="246" y="141.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">30 derniers jours</text>
+  <text x="364" y="141.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="386" y="142" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Enregistré : qui, modèle, jetons, outils — jamais la question, la réponse ni une ligne. Conservé 90 jours.</text>
+  <rect x="1014" y="126" width="70" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1049.0" y="141.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Recharger</text>
+  <rect x="236.0" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="246.0" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">412</text>
+  <text x="246.0" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Questions</text>
+  <rect x="358.2857142857143" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="368.2857142857143" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">18</text>
+  <text x="368.2857142857143" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Utilisateurs</text>
+  <rect x="480.57142857142856" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="490.57142857142856" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">38,20 $</text>
+  <text x="490.57142857142856" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Coût estimé, au prix</text>
+  <text x="490.57142857142856" y="205" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">public</text>
+  <rect x="602.8571428571429" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="612.8571428571429" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">9.60 M</text>
+  <text x="612.8571428571429" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Jetons en entrée · 71 %</text>
+  <text x="612.8571428571429" y="205" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">depuis le cache</text>
+  <rect x="725.1428571428571" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="735.1428571428571" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">184 k</text>
+  <text x="735.1428571428571" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Jetons en sortie</text>
+  <rect x="847.4285714285714" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="857.4285714285714" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">1038</text>
+  <text x="857.4285714285714" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Appels d’outils · 12 en</text>
+  <text x="857.4285714285714" y="205" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">échec</text>
+  <rect x="969.7142857142858" y="160" width="114.28571428571429" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="979.7142857142858" y="182" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">9</text>
+  <text x="979.7142857142858" y="195" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Modifications faites</text>
+  <text x="979.7142857142858" y="205" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">par l’assistant</text>
+  <text x="248" y="242" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par utilisateur</text>
+  <text x="248" y="260" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Utilisateur</text>
+  <text x="390" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Questions</text>
+  <text x="444" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Entrée</text>
+  <text x="496" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Cache</text>
+  <text x="548" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Sortie</text>
+  <text x="598" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Coût</text>
+  <line x1="236" y1="266" x2="654.0" y2="266" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="280" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="390" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">148</text>
+  <text x="444" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">3.40 M</text>
+  <text x="496" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">72 %</text>
+  <text x="548" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">61 k</text>
+  <text x="598" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">14,10 $</text>
+  <line x1="242" y1="286" x2="648.0" y2="286" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="300" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="390" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">96</text>
+  <text x="444" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">2.10 M</text>
+  <text x="496" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">68 %</text>
+  <text x="548" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">44 k</text>
+  <text x="598" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">9,85 $</text>
+  <line x1="242" y1="306" x2="648.0" y2="306" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="224" width="418.0" height="88" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="242" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par jour</text>
+  <text x="678.0" y="260" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Jour</text>
+  <text x="820.0" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Questions</text>
+  <text x="874.0" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Entrée</text>
+  <text x="926.0" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Cache</text>
+  <text x="978.0" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Sortie</text>
+  <text x="1028.0" y="260" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Coût</text>
+  <line x1="666.0" y1="266" x2="1084.0" y2="266" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="280" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-21</text>
+  <text x="820.0" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">42</text>
+  <text x="874.0" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1.10 M</text>
+  <text x="926.0" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">80 %</text>
+  <text x="978.0" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">20 k</text>
+  <text x="1028.0" y="280" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">4,17 $</text>
+  <line x1="672.0" y1="286" x2="1078.0" y2="286" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="300" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-20</text>
+  <text x="820.0" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">89</text>
+  <text x="874.0" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1.90 M</text>
+  <text x="926.0" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">82 %</text>
+  <text x="978.0" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">28 k</text>
+  <text x="1028.0" y="300" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">7,64 $</text>
+  <line x1="672.0" y1="306" x2="1078.0" y2="306" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="666.0" y="224" width="418.0" height="88" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="340" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par modèle</text>
+  <text x="312.52" y="340" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">les questions du chat</text>
+  <text x="248" y="358" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Modèle</text>
+  <text x="390" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Questions</text>
+  <text x="444" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Entrée</text>
+  <text x="496" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Cache</text>
+  <text x="548" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Sortie</text>
+  <text x="598" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Coût</text>
+  <line x1="236" y1="364" x2="654.0" y2="364" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="378" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">claude-sonnet-4-5</text>
+  <text x="390" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">380</text>
+  <text x="444" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">8.90 M</text>
+  <text x="496" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">71 %</text>
+  <text x="548" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">170 k</text>
+  <text x="598" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">36,90 $</text>
+  <line x1="242" y1="384" x2="648.0" y2="384" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="322" width="418.0" height="68" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="340" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par canal</text>
+  <text x="678.0" y="358" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Canal</text>
+  <text x="864.0" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Entrées</text>
+  <text x="926.0" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Appels</text>
+  <text x="976.0" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Échecs</text>
+  <text x="1026.0" y="358" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Coût</text>
+  <line x1="666.0" y1="364" x2="1084.0" y2="364" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="378" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">Chat Liberty</text>
+  <text x="864.0" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">412</text>
+  <text x="926.0" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">802</text>
+  <text x="976.0" y="378" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">5</text>
+  <text x="1026.0" y="378" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">38,20 $</text>
+  <line x1="672.0" y1="384" x2="1078.0" y2="384" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="398" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">Client externe (MCP)</text>
+  <text x="864.0" y="398" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">236</text>
+  <text x="926.0" y="398" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">236</text>
+  <text x="976.0" y="398" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">6</text>
+  <text x="1026.0" y="398" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="672.0" y1="404" x2="1078.0" y2="404" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="666.0" y="322" width="418.0" height="88" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="438" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par outil</text>
+  <text x="248" y="456" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Outil</text>
+  <text x="414" y="456" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Appels</text>
+  <text x="466" y="456" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Échecs</text>
+  <text x="546" y="456" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Durée moy.</text>
+  <text x="616" y="456" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Taille moy.</text>
+  <line x1="236" y1="462" x2="654.0" y2="462" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="476" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">sql_query</text>
+  <text x="414" y="476" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">522</text>
+  <text x="466" y="476" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">7</text>
+  <text x="546" y="476" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1.2 s</text>
+  <text x="616" y="476" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">8.2 k</text>
+  <line x1="242" y1="482" x2="648.0" y2="482" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="496" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">explorer_query</text>
+  <text x="414" y="496" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">301</text>
+  <text x="466" y="496" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">3</text>
+  <text x="546" y="496" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0.9 s</text>
+  <text x="616" y="496" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1.6 k</text>
+  <line x1="242" y1="502" x2="648.0" y2="502" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="420" width="418.0" height="88" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="438" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifications faites par l’assistant</text>
+  <text x="678.0" y="456" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Quand</text>
+  <text x="752.0" y="456" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Utilisateur</text>
+  <text x="812.0" y="456" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Canal</text>
+  <text x="892.0" y="456" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Quoi</text>
+  <line x1="666.0" y1="462" x2="1084.0" y2="462" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="476" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 10:44</text>
+  <text x="752.0" y="476" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="812.0" y="476" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Carte appliquée</text>
+  <text x="892.0" y="476" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">screen_write crm/orders</text>
+  <line x1="672.0" y1="482" x2="1078.0" y2="482" stroke="#1f2937" strokeWidth="1"/>
+  <text x="678.0" y="496" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 09:12</text>
+  <text x="752.0" y="496" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="812.0" y="496" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">MCP</text>
+  <text x="892.0" y="496" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">job_run load_prices</text>
+  <line x1="672.0" y1="502" x2="1078.0" y2="502" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="666.0" y="420" width="418.0" height="88" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="538" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Dernière activité</text>
+  <rect x="830" y="526" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="840" y="540.5" fill="#475569" fontSize="8.5" fontFamily="system-ui, sans-serif">Tous les canaux</text>
+  <text x="958" y="540.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <rect x="984" y="532" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="1001" y="541" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Échecs seulement</text>
+  <text x="248" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="262" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Quand</text>
+  <text x="352" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Utilisateur</text>
+  <text x="414" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Application</text>
+  <text x="484" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Modèle</text>
+  <text x="682" y="562" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Entrée</text>
+  <text x="738" y="562" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Appels</text>
+  <text x="794" y="562" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Durée</text>
+  <text x="800" y="562" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Issue</text>
+  <line x1="236" y1="568" x2="1084" y2="568" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 10:44</text>
+  <text x="352" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="414" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="484" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Carte appliquée</text>
+  <text x="682" y="583" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
+  <text x="738" y="583" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <text x="794" y="583" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0.4 s</text>
+  <text x="800" y="583" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Appliquée</text>
+  <line x1="242" y1="589" x2="1078" y2="589" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 10:42</text>
+  <text x="352" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="414" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="484" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">claude-sonnet-4-5</text>
+  <text x="682" y="604" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">57 k</text>
+  <text x="738" y="604" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">3</text>
+  <text x="794" y="604" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">8.1 s</text>
+  <text x="800" y="604" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Répondu</text>
+  <line x1="242" y1="610" x2="1078" y2="610" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="625" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="262" y="625" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 10:37</text>
+  <text x="352" y="625" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="414" y="625" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="484" y="625" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Client externe (MCP)</text>
+  <text x="682" y="625" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
+  <text x="738" y="625" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">4</text>
+  <text x="794" y="625" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">2.6 s</text>
+  <text x="800" y="625" fill="#f87171" fontSize="8.5" fontFamily="system-ui, sans-serif">1 en échec</text>
+  <line x1="242" y1="631" x2="1078" y2="631" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"> </text>
+  <text x="262" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="352" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="414" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="484" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">sql_query  orders_get · 210 ms</text>
+  <text x="682" y="646" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif"></text>
+  <text x="738" y="646" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif"></text>
+  <text x="794" y="646" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif"></text>
+  <text x="800" y="646" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <line x1="242" y1="652" x2="1078" y2="652" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">11/21 10:31</text>
+  <text x="352" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="414" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="484" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">claude-sonnet-4-5</text>
+  <text x="682" y="667" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">43 k</text>
+  <text x="738" y="667" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">5</text>
+  <text x="794" y="667" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">14.6 s</text>
+  <text x="800" y="667" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Limite de tours</text>
+  <line x1="242" y1="673" x2="1078" y2="673" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="518" width="848" height="161" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Usage de l’IA</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une vue de la Surveillance</text>
+  <line x1="200" y1="77.0" x2="236" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7, 30 ou 90 jours</text>
+  <line x1="200" y1="167.0" x2="236" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic sur un utilisateur</text>
+  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">restreint la dernière activité</text>
+  <line x1="200" y1="307.0" x2="236" y2="280" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une série d'appels MCP</text>
+  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne, ses appels à l'ouverture</text>
+  <line x1="200" y1="577.0" x2="248" y2="621" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="1120" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sept chiffres</text>
+  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">coût estimé en dollars</text>
+  <line x1="1120" y1="137.0" x2="1084" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Canaux</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic filtre la liste</text>
+  <line x1="1120" y1="317.0" x2="1084" y2="378" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="1120" y="410" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="425" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Qui a modifié quoi</text>
+  <text x="1130" y="438" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écran, enregistrement, tâche</text>
+  <line x1="1120" y1="427.0" x2="1084" y2="476" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
+  <rect x="1120" y="520" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="535" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres</text>
+  <text x="1130" y="548" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un canal, les échecs</text>
+  <line x1="1120" y1="537.0" x2="1084" y2="537" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monai-arrow)"/>
 </svg>
 
 ---
@@ -227,7 +316,7 @@ Trois **canaux** alimentent l'enregistrement :
 
 ## La période en chiffres \{#figures\}
 
-La période est **7 derniers jours**, **30 derniers jours** (par défaut) ou **90 derniers jours**.
+La période est **7 derniers jours**, **30 derniers jours** (par défaut) ou **90 derniers jours**, choisie en haut à gauche ; à côté, une ligne rappelle ce qui est enregistré et la durée de conservation, et **Recharger** relit les chiffres.
 
 | Tuile | Contenu |
 |---|---|

@@ -78,6 +78,7 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `GET` | `/api/charts`, `/api/charts/{chart_id}` | Saved charts. |
 | `GET` | `/api/menus`, `/api/menus/{app}` | Menu trees, pruned to what the caller may open. |
 | `GET` | `/api/theme` | Branding and UI defaults (public). |
+| `GET` | `/api/pages`, `/api/pages/{app}/{page}` | The pages an application ships, and one page's module — each asks `page:<app>:<page>`. |
 | `GET` / `PUT` / `DELETE` | `/api/views/{kind}` | Saved grid views. |
 
 ---
@@ -101,6 +102,8 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 |---|---|---|
 | `GET` | `/ai/tools` | The assistant's tool catalogue. |
 | `POST` | `/ai/chat` | Send the conversation (`{messages, model?}`); the answer streams back. Requires `ai:chat`. |
+| `POST` | `/ai/attachments` | A file attached to a question. |
+| `POST` | `/ai/screen-write`, `/ai/screen-write-many`, `/ai/screen-action`, `/ai/job-run`, `/ai/api-run` | Apply a card of the drawer: a record written through its screen (one or several), an action, a job run, an API endpoint that changes data. Requires `ai:write` and the permission of what is run. |
 | — | `/mcp` | The MCP endpoint: the assistant's tools for an external client, with `Authorization: Bearer <personal access token>`. See [Connect Claude (MCP)](../framework/mcp.md). |
 | `POST` | `/mcp/files?job=<id>&filename=<name>` | A file sent by the Claude Desktop extension for a job that loads one: it lands in the job's upload area, nothing runs. Personal access token; requires `ai:write`, `job:<id>` and **Allow changes over MCP**. |
 | `GET` | `/admin/ai-usage` | The assistant's usage over a period (`days`, `username`, `channel`, `failed`, `limit`). Superusers. See [AI usage](../monitoring/ai-usage.md). |
@@ -120,6 +123,8 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | Packages | `/admin/find-dependencies`, `/admin/build-package`, `/admin/import-package`, `/admin/clone-with-deps`, `/admin/delete-with-deps` | Packages and dependency-aware clone and delete. |
 | Change packages | `/admin/changesets…` | See [Change packages](../nomaflow/change-packages.md#api-contract). |
 | Notifications | `POST /admin/notify/test` | Send a test through the channels. |
+| Server log | `/admin/logs` (`GET`), `/admin/logs/export`, `/admin/logs/download`, `/admin/logs/levels` (`GET` / `POST`) | Search, export and download the server log; the level of each module. See [Server log](../monitoring/server-log.md). |
+| Retention | `/admin/retention` (`GET`), `/admin/retention/{store}/run` (`POST`, `dry_run=true` by default) | Every store's policy and size; preview or purge one. See [Retention](../monitoring/retention.md). |
 
 ---
 

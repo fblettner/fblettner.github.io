@@ -12,92 +12,131 @@ The framework's own pages — the editors of the configuration, the administrati
 
 ## At a glance
 
-<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 514" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="wks-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="wks-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="wks-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="wks-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="lws-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="lws-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="lws-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="lws-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="432" rx="14" fill="url(#wks-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <rect x="236" y="36" width="330" height="406" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="248" y="46" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="258" y="60.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Liberty Next ▾</text>
-  <text x="250" y="90" fill="#4a9eff" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Overview</text>
-  <text x="250" y="110" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Build</text>
-  <text x="262" y="126" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Studio</text>
-  <text x="262" y="141" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Assistant</text>
-  <text x="250" y="168" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Data</text>
-  <text x="262" y="184" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Connectors</text>
-  <text x="262" y="199" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Dictionary</text>
-  <text x="250" y="226" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Screens</text>
-  <text x="262" y="242" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Screens</text>
-  <text x="262" y="257" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Menus</text>
-  <text x="250" y="284" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Logic</text>
-  <text x="262" y="300" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Services</text>
-  <text x="262" y="315" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Tests</text>
-  <text x="262" y="330" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Notifications</text>
-  <text x="262" y="345" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">AI</text>
-  <text x="250" y="372" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Insight</text>
-  <text x="262" y="388" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Dashboards</text>
-  <text x="262" y="403" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Charts</text>
-  <text x="262" y="418" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Explorer</text>
-  <text x="262" y="433" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Report templates</text>
-  <text x="412" y="110" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Administer</text>
-  <text x="424" y="126" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">App</text>
-  <text x="424" y="141" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Pools</text>
-  <text x="424" y="156" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Access</text>
-  <text x="424" y="171" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Theme</text>
-  <text x="412" y="198" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Operate</text>
-  <text x="424" y="214" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Test results</text>
-  <text x="424" y="229" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Monitoring</text>
-  <text x="424" y="244" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Jobs</text>
-  <text x="412" y="271" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Deploy</text>
-  <text x="424" y="287" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Integrity</text>
-  <text x="424" y="302" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Package</text>
-  <text x="424" y="317" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Changes</text>
-  <text x="424" y="332" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">History</text>
-  <text x="412" y="359" fill="#e2e8f0" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">▾ Document</text>
-  <text x="424" y="375" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Developer reference</text>
-  <text x="424" y="390" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Documentation reports</text>
-  <text x="424" y="405" fill="#94a3b8" fontSize="8.6" fontFamily="system-ui, sans-serif">Release notes</text>
-  <rect x="580" y="36" width="384" height="400" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="596" y="62" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Screens</text>
-  <rect x="684" y="48" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="711.5" y="62.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
-  <rect x="745" y="48" width="41" height="22" rx="5" fill="url(#wks-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="765.5" y="62.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="792" y="48" width="93" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="838.5" y="62.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Reload config</text>
-  <rect x="596" y="186" width="352" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="608" y="203" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">crm · customers</text>
-  <rect x="596" y="218" width="352" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="608" y="235" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">crm · deals</text>
+  <rect x="220" y="20" width="880" height="474" rx="14" fill="url(#lws-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="232" y="32" width="210" height="450" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="246" y="56" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next</text>
+  <rect x="242" y="68" width="190" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="82.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Liberty Next</text>
+  <text x="420" y="82.5" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="246" y="112" fill="#64748b" fontSize="8" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIBERTY NEXT</text>
+  <text x="262" y="132" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Overview</text>
+  <text x="246" y="156" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="156" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Build</text>
+  <text x="246" y="180" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="180" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Data</text>
+  <text x="246" y="204" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="204" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Screens</text>
+  <text x="246" y="228" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="228" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Logic</text>
+  <text x="246" y="252" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="252" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Insight</text>
+  <rect x="240" y="261" width="194" height="22" rx="5" fill="rgba(255,255,255,0.05)"/>
+  <text x="246" y="276" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="262" y="276" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Administer</text>
+  <rect x="258" y="285" width="174" height="22" rx="5" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="276" y="300" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">App</text>
+  <text x="276" y="323" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Pools</text>
+  <text x="276" y="346" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Access</text>
+  <text x="276" y="369" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Theme</text>
+  <text x="246" y="394" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="394" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Operate</text>
+  <text x="246" y="418" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="418" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Deploy</text>
+  <text x="246" y="442" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="262" y="442" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Document</text>
+  <line x1="442" y1="220" x2="442" y2="280" stroke="#4a9eff" strokeWidth="2"/>
+  <rect x="948" y="32" width="24" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="960.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">EN</text>
+  <rect x="976" y="32" width="24" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="988.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">FR</text>
+  <rect x="1004" y="32" width="24" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1016.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">◐</text>
+  <rect x="1032" y="32" width="24" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1044.0" y="47.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <rect x="1060" y="32" width="24" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1072.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⏻</text>
+  <rect x="456" y="32" width="70" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="491.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">App  ✕</text>
+  <rect x="472" y="78" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="494" y="90" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">App</text>
+  <rect x="973" y="74" width="99" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1022.5" y="88.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Reload config</text>
+  <rect x="926" y="74" width="41" height="22" rx="5" fill="url(#lws-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="946.5" y="88.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="853" y="74" width="67" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="886.5" y="88.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Discard</text>
+  <line x1="456" y1="106" x2="1088" y2="106" stroke="#1f2937" strokeWidth="1"/>
+  <text x="478" y="140" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">The installation</text>
+  <rect x="474" y="148" width="188" height="24" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="484" y="164" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Server</text>
+  <rect x="474" y="176" width="188" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="484" y="192" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Display</text>
+  <rect x="474" y="204" width="188" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="484" y="220" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">License</text>
+  <text x="478" y="242" fill="#94a3b8" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">Signing in</text>
+  <rect x="474" y="250" width="188" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="484" y="266" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Sign-in</text>
+  <rect x="474" y="278" width="188" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="484" y="294" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">OpenID Connect (SSO)</text>
+  <rect x="468" y="120" width="200" height="192" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="680" y="120" width="396" height="192" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="694" y="140" fill="#e2e8f0" fontSize="9.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SERVER</text>
+  <line x1="680" y1="150" x2="1076" y2="150" stroke="#1f2937" strokeWidth="1"/>
+  <text x="694" y="168" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APP NAME</text>
+  <rect x="694" y="174" width="177.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="704" y="188.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME ERP</text>
+  <text x="885.0" y="168" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVIRONMENT</text>
+  <rect x="885.0" y="174" width="177.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="895.0" y="188.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">production</text>
+  <text x="694" y="216" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BIND HOST</text>
+  <rect x="694" y="222" width="177.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="704" y="236.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">0.0.0.0</text>
+  <text x="885.0" y="216" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
+  <rect x="885.0" y="222" width="177.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="895.0" y="236.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">8000</text>
+  <rect x="694" y="271" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M696.5,276.5 L698.8,278.8 L702.8,274" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="711" y="280" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Hot-reload config TOML files on change</text>
   <rect x="20" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The app picker</text>
   <text x="30" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Liberty Next, after the apps</text>
-  <line x1="200" y1="57.0" x2="248" y2="57" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
-  <rect x="20" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Build → Insight</text>
-  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the order an app is built in</text>
-  <line x1="200" y1="127.0" x2="250" y2="107" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
-  <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Overview first</text>
-  <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the apps and the path</text>
-  <line x1="200" y1="347.0" x2="250" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
-  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Header buttons</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the same place on every page</text>
-  <line x1="1000" y1="47.0" x2="885" y2="59" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
-  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Administer, Operate</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the install and its runs</text>
-  <line x1="1000" y1="167.0" x2="562" y2="107" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
-  <rect x="1000" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deploy, Document</text>
-  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">check, deliver, reference</text>
-  <line x1="1000" y1="317.0" x2="562" y2="268" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#wks-arrow)"/>
+  <line x1="200" y1="57.0" x2="242" y2="79" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="20" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Overview first</text>
+  <text x="30" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the apps and the way to build one</text>
+  <line x1="200" y1="147.0" x2="258" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Build → Insight</text>
+  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the order an app is built in</text>
+  <line x1="200" y1="227.0" x2="258" y2="224" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Administer, Operate…</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the install, its runs, delivery</text>
+  <line x1="200" y1="317.0" x2="258" y2="272" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="20" y="410" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="425" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deploy, Document</text>
+  <text x="30" y="438" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">check, deliver, reference</text>
+  <line x1="200" y1="427.0" x2="258" y2="438" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="1120" y="20" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="35" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The framework's pages</text>
+  <text x="1130" y="48" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from any app; Back to &lt;app&gt;</text>
+  <line x1="1120" y1="37.0" x2="1044" y2="44" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="1120" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Header buttons</text>
+  <text x="1130" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Discard, Save, Reload config</text>
+  <line x1="1120" y1="127.0" x2="956" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">List, then the picked item</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the same frame everywhere</text>
+  <line x1="1120" y1="317.0" x2="1076" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lws-arrow)"/>
 </svg>
 
 ---
@@ -130,7 +169,7 @@ The menu opens on **Overview** and then follows the order an application is buil
 | | **AI** | What each application ships for the AI assistant: starter questions and playbooks. | [AI assistant](../ai-assistant.md#settings-ai) |
 | **Insight** | **Dashboards**, **Charts** | Dashboards and their cards; saved charts. | [Dashboards](../dashboards.md), [Charts](../charts.md) |
 | | **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
-| | **Report templates** | The report templates written by the operators; the PDF branding of the install is under App. | — |
+| | **Report templates** | The report templates written by the operators; the PDF branding of the install is under App. | [Report templates](../report-templates.md) |
 | **Administer** | **App** | Every setting of the install, in four groups: the installation, signing in, what is switched on, running it. | [App settings](../build/settings-app.md) |
 | | **Pools** | Database connections: address, account, schemas, database links, tuning — with **Test connection**. | [Connectors](../connectors.md) |
 | | **Access** | Users and roles. | [Users](../build/secure/users.md), [Roles and permissions](../build/secure/roles-and-permissions.md) |
@@ -149,45 +188,13 @@ Each page has its own address — `/liberty/screens`, `/liberty/app`… —, so 
 
 The editors share the same frame: the list on the left with a line that says what each item is, the picked item beside it, and the page's buttons — **Discard**, **Save**, the *Add* of the page, **Reload config** — in the page header, always at the same place. What is drawn is drawn the same way everywhere: a screen as six stages, a table as its read and write statements, a pool, an endpoint, a job and a service as flows of cards, with the picked card edited beside the flow. In the sidebar, the menu's right edge is dragged to resize it.
 
----|---|---|
-| **Assistant** | Opens the AI assistant. | [AI assistant](../ai-assistant.md) |
-| **Connectors** | Queries, tables, sequences and lookups of SQL connectors; endpoints of API connectors; connector settings. | [Connectors](../connectors.md), [Queries](../build/queries/overview.md) |
-| **Dictionary** | Entries, enums, lookups, sequences. | [Dictionary](../dictionary.md) |
-| **Screens** | Grids, dialogs, tabs, actions — the Screen Designer. | [Screens](../build/screens/overview.md) |
-| **Menus** | The sidebar tree of each application. | [Menus](../build/menus/overview.md) |
-| **Actions** | Shared actions reused by screens. | [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) |
-| **Charts** | Saved charts. | [Charts](../charts.md) |
-| **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
-| **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
-| **Report templates** | The report templates written by the operators; the PDF branding of the install is under App. | — |
-| **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
-| **AI** | What each application ships for the AI assistant: starter questions and playbooks. | [AI assistant](../ai-assistant.md#settings-ai) |
-| **Integrity** | The cross-checks of the whole configuration. | — |
-
-**Administer** — the install:
-
-| Page | Edits | See |
-|---|---|---|
-| **App** | Every setting of the install: application, server log, sign-in, Nomaflow, change packages, licence, AI assistant, notifications, OpenID Connect, PDF branding. | [App settings](../build/settings-app.md) |
-| **Pools** | Database connections: address, credentials, size, schema and DB-link maps. | [Connectors](../connectors.md) |
-| **Access** | Users and roles. | [Users](../build/secure/users.md), [Roles and permissions](../build/secure/roles-and-permissions.md) |
-| **Theme** | Colours and branding. | — |
-
-**Operate** — **Monitoring** ([The Monitoring page](../../monitoring/dashboard.md)) and **Jobs**, the Nomaflow jobs ([Jobs](../../nomaflow/jobs/catalog.md)).
-
-**Deploy** — **Package** ([Packages](../build/packages.md)), **Changes** ([Change packages](../../nomaflow/change-packages.md)), **History** ([Configuration history](./config-history.md)).
-
-**Document** — the [Developer reference](./developer-reference.md), the [Documentation reports](./documentation-reports.md) and the **Release notes** of the running version.
-
-Each page has its own address — `/liberty/screens`, `/liberty/app`… —, so a page can be bookmarked or sent as a link. The former addresses of the Settings page and of the Nomaflow Package, Changes and Integrity pages lead to the new pages.
-
 ---
 
 ## Saving \{#save\}
 
 1. **Save** sends the edited configuration; the server validates it against its model and refuses an invalid one with the reason.
 2. The file is written. A version of the previous content is kept in **Deploy → History**.
-3. The change is applied: at once when the server watches its files (**Hot reload** in Administer → App, the default), or with **Reload config** otherwise.
+3. The change is applied: at once when the server watches its files (**Hot-reload config TOML files on change** in Administer → App → Server, the default), or with **Reload config** otherwise.
 
 **Reload config**, at the top of every editor page, re-reads every configuration file into the running server — *Reloaded — 12 connectors, 340 dictionary entries, 4 apps.* A reload rebuilds the connectors from the new files; if they fail, the previous configuration stays active. The pools are not reloaded by the file watcher, so that a running query never loses its connection: after changing a pool, use **Reload config**.
 

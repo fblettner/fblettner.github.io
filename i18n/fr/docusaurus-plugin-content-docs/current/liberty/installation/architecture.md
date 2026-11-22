@@ -12,7 +12,7 @@ Une installation Liberty Next comporte toujours les mêmes éléments. Docker ou
 |---|---|
 | **Le serveur** | Un seul processus Python : l'application web, l'API REST, le planificateur de tâches Nomaflow et les mises à jour en temps réel (Socket.IO), sur un même port. |
 | **La base du framework** | Historique des exécutions Nomaflow, vues de grille enregistrées, packages de modifications, notifications, historique des mises à jour — ainsi que les utilisateurs et les rôles quand ils sont gérés en base plutôt que dans `auth.toml`. |
-| **La configuration** | Des fichiers TOML : pools, connecteurs, dictionnaire, menus, écrans, tableaux de bord, graphiques, règles de notification, tâches Nomaflow, paramètres de l'application. Tout ce qui est enregistré dans **Paramètres** y est écrit. |
+| **La configuration** | Des fichiers TOML : pools, connecteurs, dictionnaire, menus, écrans, tableaux de bord, graphiques, règles de notification, tâches Nomaflow, paramètres de l'application. Tout ce qui est enregistré depuis les pages **Liberty Next** y est écrit. |
 | **Les applications sous licence** *(facultatif)* | Nomasx-1, Nomajde et leurs tâches : fichiers de configuration, code Python (`plugins/`) et données de référence, livrés dans un seul wheel. |
 | **Deux secrets** | La clé maître, qui chiffre les mots de passe stockés dans la configuration, et la clé qui signe les sessions. |
 
@@ -45,7 +45,7 @@ Les données affichées par les applications restent dans **leurs** bases d'orig
   <text x="664" y="172" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">un seul processus</text>
   <rect x="256" y="186" width="200" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="356.0" y="208.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Application web</text>
-  <text x="356.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">écrans, tableaux de bord, Paramètres</text>
+  <text x="356.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">écrans, tableaux de bord, pages Liberty Next</text>
   <rect x="468" y="186" width="200" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="568.0" y="208.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">API</text>
   <text x="568.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">/api · /admin · /auth</text>
@@ -64,7 +64,7 @@ Les données affichées par les applications restent dans **leurs** bases d'orig
   <line x1="345" y1="350" x2="345" y2="390" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#arch-flow)"/>
   <rect x="470" y="390" width="210" height="60" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
   <text x="575.0" y="417.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Configuration</text>
-  <text x="575.0" y="432.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">TOML enregistrés par Paramètres</text>
+  <text x="575.0" y="432.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">TOML enregistrés par les pages Liberty Next</text>
   <text x="575" y="468" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">volume liberty-config · ./apps</text>
   <line x1="575" y1="350" x2="575" y2="390" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#arch-flow)"/>
   <rect x="720" y="330" width="220" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
@@ -175,7 +175,7 @@ L'installation Docker les génère tous deux dans `release/.env` (mode `0600`) ;
 3. *Docker uniquement :* `liberty-admin init-db` crée les tables manquantes du framework et, au tout premier démarrage, l'utilisateur `admin`. Sur une installation Python, cette commande est lancée une fois à la main.
 4. Les tables du framework sont comparées à la version du code : une colonne manquante est ajoutée et enregistrée dans **Liberty Next → Déployer → Historique → Upgrades**.
 5. Les migrations de schéma en attente des applications sous licence sont signalées dans le journal ; la mise à jour ou `migrate` les applique (avec Docker, aussi au démarrage si `LIBERTY_AUTO_MIGRATE=1`).
-6. Le serveur répond, même si la base du framework est encore injoignable — pour qu'un pool puisse être corrigé depuis **Paramètres**. `/ready` indique quand la base répond.
+6. Le serveur répond, même si la base du framework est encore injoignable — pour qu'un pool puisse être corrigé depuis **Liberty Next → Administrer → Pools**. `/ready` indique quand la base répond.
 
 ---
 

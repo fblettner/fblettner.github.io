@@ -62,7 +62,7 @@ url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
 password = "${REPORTING_PASSWORD}"
 ```
 
-Les Paramètres affichent une telle référence telle qu'elle est écrite. Pour un champ secret (un mot de passe, une clé), enregistrer une nouvelle valeur depuis les Paramètres remplace la référence par une valeur chiffrée `ENC:`.
+Les pages Liberty Next affichent une telle référence telle qu'elle est écrite. Pour un champ secret (un mot de passe, une clé), enregistrer une nouvelle valeur depuis ces pages remplace la référence par une valeur chiffrée `ENC:`.
 
 ---
 

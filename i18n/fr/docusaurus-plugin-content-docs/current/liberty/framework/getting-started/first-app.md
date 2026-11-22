@@ -72,7 +72,7 @@ INSERT INTO tasks (id, title, status, due_date) VALUES
 ## Étape 2 — Le connecteur et ses requêtes \{#connector\}
 
 1. **Liberty Next → Données → Connecteurs → ＋ Connecteur** : nom `tasks`, type **SQL**, pool `default`. Enregistrer.
-2. Avec `tasks` sélectionné, choisir **Tables** dans la barre de modes, puis **＋ Ajouter des requêtes → Générer depuis la BDD**.
+2. Avec `tasks` sélectionné, choisir la carte d'étape **Tables**, puis **＋ Ajouter des requêtes → Générer depuis la BDD**.
 3. Dans l'assistant CRUD, choisir la table `tasks`, garder toutes les colonnes, cocher **clé** sur `ID` et conserver les quatre instructions (SELECT, UPDATE, INSERT, DELETE).
 4. Enregistrer. Le connecteur contient désormais `tasks_get`, `tasks_put`, `tasks_post` et `tasks_delete` :
 
@@ -88,23 +88,23 @@ Les colonnes sont lues dans la base à l'exécution de la requête ; rien d'autr
 ## Étape 3 — L'écran \{#screen\}
 
 1. **Liberty Next → Écrans → Écrans → ＋ Ajouter une portée**, choisir `tasks` : la pastille `tasks` apparaît.
-2. **＋ Ajouter un écran**, identifiant `tasks`. Cliquer sur la nouvelle carte pour ouvrir l'éditeur d'écran.
-3. Onglet **Général** : libellé `Tâches` ; cocher **Editable** pour la saisie dans la grille.
-4. Onglet **Requêtes** : lecture `tasks_get`, mise à jour `tasks_put`, insertion `tasks_post`, suppression `tasks_delete`.
-5. Onglet **Dialogue** : glisser les colonnes sur le formulaire.
+2. **＋ Ajouter un écran**, identifiant `tasks`. Un clic sur la nouvelle carte ouvre le [Concepteur d'écran](../build/screens/overview.md) sur ses étapes — *Ce qu'il est*, *Données*, *Grille*, *Fiche*, *Actions*, *Sortie*.
+3. **Ce qu'il est** : libellé `Tâches`.
+4. **Données** : **Remplir depuis une table** `tasks` renseigne les quatre requêtes d'un coup — lecture `tasks_get`, mise à jour `tasks_put`, insertion `tasks_post`, suppression `tasks_delete`.
+5. **Fiche** : placer les colonnes sur le formulaire.
 6. **Enregistrer**.
 
-Les colonnes de la grille viennent de la requête de lecture ; leurs libellés et formats, du [dictionnaire](../dictionary.md) quand des entrées existent (son bouton **Scan a table** les propose). L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les étapes 2 et 3 en une fois pour une table.
+Les colonnes de la grille viennent de la requête de lecture ; leurs libellés et formats, du [dictionnaire](../dictionary.md) quand des entrées existent (son bouton **Analyser une table** les propose). L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les étapes 2 et 3 en une fois pour une table.
 
 ---
 
 ## Étape 4 — L'entrée de menu \{#menu\}
 
 1. **Liberty Next → Écrans → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
-2. **＋ Élément**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
+2. **＋ Élément**, puis dans l'inspecteur : libellé `Tâches`, icône `table`, type `screen`, cible `tasks` (l'écran de l'étape 3).
 3. Enregistrer.
 
-Maintenant doté d'un menu, `tasks` est une application : il apparaît dans le sélecteur d'application, et son menu latéral affiche **Tâches**. Un clic ouvre la grille : une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide. Voir [Construire l'arbre](../build/menus/build-the-tree.md) et [Transformer un connecteur en application](../build/menus/make-connector-an-app.md).
+Doté d'un menu, et avec **Afficher dans le sélecteur** activé dans les paramètres du connecteur, `tasks` devient une application : il apparaît dans le sélecteur d'applications, et son menu latéral affiche **Tâches**. Un clic ouvre la grille : une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide. Voir [Construire l'arbre](../build/menus/build-the-tree.md) et [Transformer un connecteur en application](../build/menus/make-connector-an-app.md).
 
 ---
 
@@ -113,7 +113,7 @@ Maintenant doté d'un menu, `tasks` est une application : il apparaît dans le s
 - **Un pool** — la connexion à la base.
 - **Un connecteur** — les quatre requêtes sur la table.
 - **Un écran** — la grille et le dialogue sur ces requêtes.
-- **Un menu** — l'entrée qui ouvre l'écran, et qui fait du connecteur une application.
+- **Un menu** — l'entrée qui ouvre l'écran ; avec **Afficher dans le sélecteur** activé, il fait du connecteur une application.
 
 Chaque enregistrement s'est appliqué sans redémarrage. Le pool et le connecteur sont enregistrés dans `connectors.toml`, l'écran dans `screens.toml`, le menu dans `menus.toml`.
 

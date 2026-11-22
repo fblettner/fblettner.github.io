@@ -1,6 +1,6 @@
 ---
 title: Export Excel
-description: "Recette — exporter un écran vers Excel : le menu Exporter de la grille (vue courante, Excel ou CSV, colonnes visibles ou toutes), et les classeurs configurés dans l'onglet Export de l'écran — plusieurs feuilles, un fichier par groupe, construits par le serveur."
+description: "Recette — exporter un écran vers Excel : le menu Exporter de la grille (vue courante, Excel ou CSV, colonnes visibles ou toutes), et les classeurs configurés à l'étape Sortie de l'écran — plusieurs feuilles, un fichier par groupe, construits par le serveur."
 keywords: [Liberty Next, cookbook, Excel, export, XLSX, CSV, classeur, feuilles, split_by, écran]
 ---
 
@@ -15,7 +15,7 @@ Les utilisateurs veulent les données d'un écran dans Excel — pour les retrav
 | Niveau | Réglage | Résultat |
 |---|---|---|
 | **L'export de la grille** | Aucun — toute grille le propose. | La vue courante en `.xlsx` ou `.csv`. |
-| **Les classeurs configurés** | L'onglet **Export** de l'écran. | Un ou plusieurs fichiers `.xlsx` à plusieurs feuilles, construits par le serveur. |
+| **Les classeurs configurés** | L'étape **Sortie** de l'écran. | Un ou plusieurs fichiers `.xlsx` à plusieurs feuilles, construits par le serveur. |
 
 ## L'export de la grille
 
@@ -27,7 +27,7 @@ L'export porte sur les lignes chargées par la grille : pour un fichier complet,
 
 ## Les classeurs configurés
 
-Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'onglet **Export** de l'écran. Un bouton **Export workbooks** apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
+Pour un rapport structuré — plusieurs feuilles, un fichier par service —, renseigner l'étape **Sortie** de l'écran. Un bouton **Export workbooks** apparaît alors au-dessus de la grille ; le serveur construit les fichiers et le navigateur les télécharge (dans un `.zip` quand il y en a plusieurs).
 
 | Réglage | Effet |
 |---|---|
@@ -68,5 +68,5 @@ Le bouton produit un `.zip` contenant un classeur par service, chacun avec une f
 ## Pour aller plus loin
 
 - [Import en masse](./bulk-import.md) — recharger la disposition exportée.
-- [Écrans](../build/screens/overview.md) — l'onglet Export parmi les autres.
+- [Écrans](../build/screens/overview.md) — l'étape Sortie parmi les autres.
 - [API REST](../../references/rest-api.md) — `POST /api/screens/{app}/{id}/export` construit les classeurs.

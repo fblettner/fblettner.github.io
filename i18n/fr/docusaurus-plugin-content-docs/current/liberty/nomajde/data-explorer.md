@@ -1,6 +1,6 @@
 ---
 title: Explorateur de données
-description: "L'analyse libre des données de sécurité et de développement de JD Edwards EnterpriseOne dans l'explorateur de données de Nomajde : les modèles Sécurité et Développement, leurs analyses et leur tableau de bord livrés, les modèles fournis par les préréglages JDE, et les libellés du dictionnaire de données."
+description: "L'analyse libre des données de sécurité, de développement et de montée de version de JD Edwards EnterpriseOne dans l'explorateur de données de Nomajde : les modèles Sécurité, Développement et Upgrade analysis, leurs analyses et leur tableau de bord livrés, les modèles fournis par les préréglages JDE, et les libellés du dictionnaire de données."
 keywords: [Nomajde, explorateur de données, JD Edwards, JDE, sécurité, utilisateurs, rôles, enregistrements de sécurité, sécurité UDO, environnements, Object Librarian, préréglages, dictionnaire de données]
 ---
 
@@ -27,6 +27,14 @@ Les utilisateurs (F0092) avec leur nom du carnet d'adresses, leurs relations de 
 L'Object Librarian (F9860) : les objets par type et par code produit.
 
 **Analyses** : *Objects by type*, *Objects by product code*.
+
+---
+
+## Analyse de montée de version \{#upgrade\}
+
+Le modèle **Upgrade analysis** porte les objets de l'[analyse de montée de version](./upgrade/analysis.md) : nature, reprise, complexité, jours, module, personne affectée, statut, utilisation.
+
+**Analyses** : *Retrofit by complexity and object type*, *Days of retrofit by complexity and object type*, *Days of retrofit by assignee and module*, *The customer's objects by kind*.
 
 ---
 

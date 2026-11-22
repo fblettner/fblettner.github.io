@@ -6,7 +6,7 @@ keywords: [Liberty Next, cas d'usage, applications d'administration, tableaux de
 
 # Cas d'usage
 
-Liberty Next assemble quelques briques — connecteurs et requêtes, écrans, menus, tableaux de bord, tâches, rôles — configurées depuis les Paramètres. Cette page présente ce que les équipes construisent avec elles, ce sur quoi chaque cas s'appuie et le point de départ conseillé.
+Liberty Next assemble quelques briques — connecteurs et requêtes, écrans, menus, tableaux de bord, tâches, rôles — configurées dans les pages Liberty Next. Cette page présente ce que les équipes construisent avec elles, ce sur quoi chaque cas s'appuie et le point de départ conseillé.
 
 La démarche reste toujours la même : **connecter la base, écrire les requêtes, construire les écrans, organiser le menu, définir les rôles**.
 

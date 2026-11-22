@@ -58,7 +58,7 @@ On the screen, give the four columns labels (dictionary entries) and a datetime 
 
 ### 4. Keep every write — `audit_table`
 
-On the screen's **General** tab, set **audit_table** to `AUD_CUSTOMERS`. From then on, each insert, update or delete made through the screen also writes a row into `AUD_CUSTOMERS`:
+In the screen's **What it is** stage, set **audit_table** to `AUD_CUSTOMERS`. From then on, each insert, update or delete made through the screen also writes a row into `AUD_CUSTOMERS`:
 
 | Column | Content |
 |---|---|

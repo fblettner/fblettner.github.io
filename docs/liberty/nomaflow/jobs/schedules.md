@@ -60,80 +60,119 @@ The **Schedule (cron)** field of the job editor offers ready-made choices — **
 
 **Operations → Schedule**, in the Nomaflow menu, shows what runs when, day by day.
 
-<svg viewBox="0 0 1200 430" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 504" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nfs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="nfs-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nfs-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="nfs-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfsc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfsc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfsc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfsc-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="420" rx="14" fill="url(#nfs-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Schedule</text>
-  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">What runs when, day by day</text>
-  <text x="240" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">6</text>
-  <text x="262" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">in the next 24 h</text>
-  <text x="400" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">9</text>
-  <text x="422" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">active schedules</text>
-  <text x="560" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">2</text>
-  <text x="582" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">switched off</text>
-  <text x="720" y="90" fill="#e2e8f0" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">14</text>
-  <text x="742" y="90" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">by hand only</text>
-  <text x="240" y="120" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">UPCOMING (9)</text>
-  <text x="240" y="146" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Today</text>
-  <rect x="240" y="154" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="175" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">14:00</text>
-  <text x="310" y="175" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-hourly-refresh</text>
-  <text x="580" y="170" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every hour at :00</text>
-  <text x="580" y="182" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 ∗ ∗ ∗ ∗</text>
-  <rect x="870" y="163" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="896.5" y="174.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="240" y="212" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Tomorrow</text>
-  <rect x="240" y="220" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="241" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">02:00</text>
-  <text x="310" y="241" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
-  <text x="580" y="236" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every day at 02:00</text>
-  <text x="580" y="248" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
-  <rect x="870" y="229" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="896.5" y="240.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <rect x="240" y="258" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="279" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">06:00</text>
-  <text x="310" y="279" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
-  <rect x="465" y="267" width="85" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
-  <text x="507.5" y="278.2" fill="#c084fc" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Security and SoD</text>
-  <text x="580" y="274" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every day at 06:00</text>
-  <text x="580" y="286" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
-  <rect x="870" y="267" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="896.5" y="278.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <rect x="240" y="296" width="720" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="317" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">08:00</text>
-  <text x="310" y="317" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">crm-daily-pipeline</text>
-  <text x="580" y="312" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Monday to Friday at 08:00</text>
-  <text x="580" y="324" fill="#64748b" fontSize="7.5" fontFamily="ui-monospace, monospace">0 8 ∗ ∗ mon-fri</text>
-  <rect x="870" y="305" width="53" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="896.5" y="316.2" fill="#4ade80" fontSize="7" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="240" y="356" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHEDULED BUT SWITCHED OFF (2)</text>
-  <text x="240" y="378" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">▸ RUN BY HAND ONLY (14)</text>
-  <rect x="10" y="74" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">At a glance</text>
-  <text x="20" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">next 24 h, active, off, manual</text>
-  <line x1="210" y1="91.0" x2="240" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
-  <rect x="10" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Day by day</text>
-  <text x="20" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each schedule at its next run</text>
-  <line x1="210" y1="187.0" x2="240" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
-  <rect x="1000" y="180" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In words</text>
-  <text x="1010" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the cron below</text>
-  <line x1="1000" y1="197.0" x2="690" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
-  <rect x="10" y="267" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="282" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Preset schedules</text>
-  <text x="20" y="295" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the preset's name</text>
-  <line x1="210" y1="284.0" x2="510" y2="284" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
-  <rect x="10" y="380" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">By hand only</text>
-  <text x="20" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">folded away</text>
-  <line x1="210" y1="397.0" x2="240" y2="374" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfs-arrow)"/>
+  <rect x="220" y="20" width="880" height="464" rx="14" fill="url(#nfsc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="262" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Schedule</text>
+  <text x="262" y="60" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">What runs when, day by day</text>
+  <line x1="220" y1="74" x2="1100" y2="74" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="86" width="116" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">6</text>
+  <text x="262.16" y="103" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">in the next 24 h</text>
+  <rect x="364" y="86" width="116" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="374" y="103" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">9</text>
+  <text x="386.16" y="103" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">active schedules</text>
+  <rect x="488" y="86" width="96" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="103" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">2</text>
+  <text x="510.16" y="103" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">switched off</text>
+  <rect x="592" y="86" width="102" height="26" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="602" y="103" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">14</text>
+  <text x="620.32" y="103" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">by hand only</text>
+  <rect x="1004" y="87" width="76" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1042.0" y="102.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Reload</text>
+  <text x="240" y="134" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">UPCOMING (5)</text>
+  <rect x="240" y="144" width="840" height="22" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="159" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Today</text>
+  <rect x="240" y="166" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="188" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">14:00</text>
+  <text x="340" y="188" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-hourly-refresh</text>
+  <text x="650" y="182" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every hour at :00</text>
+  <text x="650" y="195" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">0 ∗ ∗ ∗ ∗</text>
+  <text x="860" y="188" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">in 1h</text>
+  <rect x="960" y="176" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="989.0" y="187.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <rect x="240" y="208" width="840" height="22" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Tomorrow</text>
+  <rect x="240" y="230" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="252" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">02:00</text>
+  <text x="340" y="252" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-daily-sync</text>
+  <text x="650" y="246" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every day at 02:00</text>
+  <text x="650" y="259" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">0 2 ∗ ∗ ∗</text>
+  <text x="860" y="252" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">in 13h</text>
+  <rect x="960" y="240" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="989.0" y="251.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <rect x="240" y="266" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="288" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">06:00</text>
+  <text x="340" y="288" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">sales-load</text>
+  <rect x="403.8" y="276" width="44" height="16" rx="8" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.4)" strokeWidth="1"/>
+  <text x="425.8" y="287.5" fill="#c084fc" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Stores</text>
+  <text x="650" y="282" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every day at 06:00</text>
+  <text x="650" y="295" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">0 6 ∗ ∗ ∗</text>
+  <text x="860" y="288" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">in 17h</text>
+  <rect x="960" y="276" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="989.0" y="287.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <rect x="240" y="302" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="324" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">08:00</text>
+  <text x="340" y="324" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-stalled-deals</text>
+  <text x="650" y="318" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Monday to Friday at 08:00</text>
+  <text x="650" y="331" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">0 8 ∗ ∗ mon-fri</text>
+  <text x="860" y="324" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">in 19h</text>
+  <rect x="960" y="312" width="43" height="16" rx="3" fill="#f87171" fillOpacity="0.12" stroke="#f87171" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="981.5" y="323.5" fill="#f87171" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">FAILED</text>
+  <text x="240" y="360" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHEDULED BUT SWITCHED OFF (2)</text>
+  <rect x="240" y="370" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="392" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">—</text>
+  <text x="340" y="392" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">crm-archive</text>
+  <text x="650" y="386" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">on day 1 of each month at 06:00</text>
+  <text x="650" y="399" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
+  <rect x="860" y="380" width="70" height="16" rx="3" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="895" y="391.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">disabled</text>
+  <text x="962" y="392" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <rect x="240" y="406" width="840" height="36" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="428" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">—</text>
+  <text x="340" y="428" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">ldap-import</text>
+  <text x="650" y="422" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">every 15 minutes</text>
+  <text x="650" y="435" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">∗/15 ∗ ∗ ∗ ∗</text>
+  <rect x="860" y="416" width="70" height="16" rx="3" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="895" y="427.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">disabled</text>
+  <rect x="960" y="416" width="53" height="16" rx="3" fill="#fb923c" fillOpacity="0.12" stroke="#fb923c" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="986.5" y="427.5" fill="#fb923c" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">CANCELED</text>
+  <text x="242" y="464" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">›  RUN BY HAND ONLY (14)</text>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">At a glance</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">next 24 h, active, off, by hand</text>
+  <line x1="200" y1="87.0" x2="240" y2="99" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Day by day</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each schedule at its next run</text>
+  <line x1="200" y1="177.0" x2="250" y2="184" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Preset schedules</text>
+  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the preset's name beside the job</text>
+  <line x1="200" y1="307.0" x2="425.8" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Switched off</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">set but disabled</text>
+  <line x1="200" y1="417.0" x2="250" y2="388" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="20" y="450" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">By hand only</text>
+  <text x="30" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">folded; a job opens its editor</text>
+  <line x1="200" y1="467.0" x2="242" y2="460" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In words</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the cron under it</text>
+  <line x1="1120" y1="177.0" x2="780" y2="246" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
+  <rect x="1120" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">When, and the last run</text>
+  <text x="1130" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a click opens the job</text>
+  <line x1="1120" y1="277.0" x2="1010" y2="248" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfsc-arrow)"/>
 </svg>
 
 | Part | Content |

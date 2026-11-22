@@ -6,7 +6,7 @@ keywords: [Liberty Next, tutoriel, CRM, mise en place, tables, pool, connecteur,
 
 # Étape 1 — Mise en place du projet CRM
 
-Ce tutoriel construit une petite application de **gestion de la relation client** sur Liberty Next, en six étapes : écrans, listes de valeurs, tableau de bord, rôles, assistant IA et tâche planifiée. Tout se fait depuis les Paramètres.
+Ce tutoriel construit une petite application de **gestion de la relation client** sur Liberty Next, en six étapes : écrans, listes de valeurs, tableau de bord, rôles, assistant IA et tâche planifiée. Tout se fait dans les pages Liberty Next.
 
 Cette première étape prépare la base de données et crée le connecteur `crm`.
 
@@ -98,7 +98,7 @@ Cette première étape prépare la base de données et crée le connecteur `crm`
 | Besoin | Raison |
 |---|---|
 | **Liberty Next installé** | Voir [Installation](../../installation/overview.md). |
-| **Un compte superutilisateur** | Les Paramètres sont réservés aux superutilisateurs. |
+| **Un compte superutilisateur** | Les pages Liberty Next sont réservées aux superutilisateurs. |
 | **Un client SQL** | Pour créer les tables — `psql`, DBeaver, ou tout client connecté à la base du pool `default`. |
 
 Le pool `default` pointe vers la base PostgreSQL fournie sur une installation Docker, ou vers un fichier SQLite local sur une installation Python sans PostgreSQL. Le SQL ci-dessous est écrit pour PostgreSQL ; sous SQLite, remplacer `SERIAL` par `INTEGER`.

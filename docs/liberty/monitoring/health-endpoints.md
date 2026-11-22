@@ -18,7 +18,7 @@ Three endpoints, none of which needs a token.
 
 ## /ready \{#ready\}
 
-The server starts even when its database is unreachable — so that a pool can be fixed from **Settings** — but `/ready` answers `503` until the database is back. An install without a `default` pool answers `200` with `"pool": null`.
+The server starts even when its database is unreachable — so that a pool can be fixed from **Liberty Next → Administer → Pools** — but `/ready` answers `503` until the database is back. An install without a `default` pool answers `200` with `"pool": null`.
 
 The Docker layouts use it as the container healthcheck: a stack whose database is down shows **unhealthy** in `docker ps` and in `./liberty status`.
 

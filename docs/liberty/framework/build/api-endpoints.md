@@ -8,13 +8,13 @@ keywords: [Liberty Next, API connector, endpoint, REST, parameters, Create from,
 
 An **endpoint** is one named call of an API connector: *submit this report*, *read these customers*, *create an order*. Once declared it is used everywhere without a line of code — as the source of a [screen](./screens/api-screens.md), in a screen action, a [service](./services.md), a job step, a [test](./tests.md), by the AI assistant, or by an outside caller — and each endpoint has **its own permission**.
 
-Access: **Liberty Next → Data → Connectors**, an API connector, tab **Endpoints**.
+Access: **Liberty Next → Data → Connectors**, an API connector, stage card **Endpoints**.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1200 386" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 576" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="epe-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="epe-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,89 +22,164 @@ Access: **Liberty Next → Data → Connectors**, an API connector, tab **Endpoi
     <marker id="epe-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="346" rx="14" fill="url(#epe-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Endpoints</text>
-  <rect x="240" y="60" width="100" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="290.0" y="74.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add endpoint</text>
-  <rect x="346" y="60" width="89" height="22" rx="5" fill="url(#epe-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="390.5" y="74.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Create from…</text>
-  <rect x="441" y="60" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="499.5" y="74.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Check 4 generated</text>
-  <rect x="780" y="60" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="790" y="74.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Search…</text>
-  <rect x="240" y="96" width="720" height="30" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="250" y="102" width="38" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="269.0" y="114.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">POST</text>
-  <text x="298" y="115" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">order_create</text>
-  <text x="390" y="115" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">· Create an order</text>
-  <rect x="540" y="102" width="78" height="18" rx="9.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="579.0" y="114.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">changes data</text>
-  <rect x="240" y="140" width="164" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
-  <text x="322.0" y="160.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">What it is</text>
-  <text x="322.0" y="175.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Create an order</text>
-  <line x1="404" y1="163" x2="420" y2="163" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#epe-flow)"/>
-  <rect x="422" y="140" width="164" height="46" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="504.0" y="160.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Inputs</text>
-  <text x="504.0" y="175.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">3 parameter(s)</text>
-  <line x1="586" y1="163" x2="602" y2="163" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#epe-flow)"/>
-  <rect x="604" y="140" width="164" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
-  <text x="686.0" y="160.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">The call</text>
-  <text x="686.0" y="175.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">POST /orders</text>
-  <line x1="768" y1="163" x2="784" y2="163" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#epe-flow)"/>
-  <rect x="786" y="140" width="164" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
-  <text x="868.0" y="160.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">The answer</text>
-  <text x="868.0" y="175.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">rows at data.lines</text>
-  <rect x="240" y="202" width="720" height="150" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="222" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">INPUTS</text>
-  <rect x="250" y="232" width="280" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="260" y="246.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">CUSTOMER</text>
-  <text x="340" y="246.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customer</text>
-  <text x="410" y="246.5" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace"></text>
-  <rect x="452" y="235" width="53" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
-  <text x="478.5" y="246.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Required</text>
-  <rect x="250" y="258" width="280" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="260" y="272.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">CURRENCY</text>
-  <text x="340" y="272.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Currency</text>
-  <text x="410" y="272.5" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">= EUR</text>
-  <rect x="250" y="284" width="280" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="260" y="298.5" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace">LINES</text>
-  <text x="340" y="298.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lines</text>
-  <text x="410" y="298.5" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">= []</text>
-  <rect x="452" y="287" width="53" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
-  <text x="478.5" y="298.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Required</text>
-  <text x="550" y="242" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXAMPLE</text>
-  <rect x="550" y="248" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="560" y="262.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">USD</text>
-  <text x="686" y="242" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ALLOWED VALUES</text>
-  <rect x="686" y="248" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="696" y="262.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">EUR, USD, GBP</text>
-  <text x="550" y="292" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HELP — WHAT TO PUT IN IT</text>
-  <rect x="550" y="298" width="296" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="560" y="312.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The currency of the order (ISO code).</text>
-  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Alphabetical, searchable</text>
-  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">groups fold under a heading</text>
-  <line x1="200" y1="77.0" x2="240" y2="111" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
-  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four stages</text>
-  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each card says what it holds</text>
-  <line x1="200" y1="167.0" x2="240" y2="163" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
-  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A parameter is a line</text>
-  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opened to edit it</text>
-  <line x1="200" y1="287.0" x2="250" y2="269" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
-  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Create from…</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">written from the server</text>
-  <line x1="1000" y1="47.0" x2="425" y2="60" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
-  <rect x="1000" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Changes data</text>
-  <text x="1010" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the assistant asks first</text>
-  <line x1="1000" y1="113.0" x2="618" y2="111" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
-  <rect x="1000" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A closed list</text>
-  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a dropdown, checked on call</text>
-  <line x1="1000" y1="267.0" x2="846" y2="259" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="220" y="14" width="880" height="544" rx="14" fill="url(#epe-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="30" width="130" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="243" y="35" width="14" height="14" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="263" y="45.5" fill="#4a9eff" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTION</text>
+  <line x1="367" y1="42" x2="378" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="379" y="30" width="130" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="386" y="35" width="14" height="14" rx="4" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1"/>
+  <text x="406" y="45.5" fill="#c084fc" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AUTHENTICATION</text>
+  <line x1="510" y1="42" x2="521" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="522" y="30" width="130" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="529" y="35" width="14" height="14" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="549" y="45.5" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENVIRONMENTS</text>
+  <line x1="653" y1="42" x2="664" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="665" y="30" width="130" height="24" rx="12" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <rect x="672" y="35" width="14" height="14" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="692" y="45.5" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENDPOINTS</text>
+  <text x="755.416" y="45.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">12</text>
+  <line x1="796" y1="42" x2="807" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="808" y="30" width="130" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="815" y="35" width="14" height="14" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="835" y="45.5" fill="#fb923c" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WEBHOOKS</text>
+  <line x1="939" y1="42" x2="950" y2="42" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="951" y="30" width="130" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="958" y="35" width="14" height="14" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="978" y="45.5" fill="#fb923c" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <rect x="236" y="66" width="100" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="286.0" y="80.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add endpoint</text>
+  <rect x="342" y="66" width="100" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="392.0" y="80.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✦ Create from…</text>
+  <rect x="448" y="66" width="128" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="512.0" y="80.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⟳ Check 2 generated</text>
+  <rect x="582" y="66" width="100" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="632.0" y="80.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">› 3 generators</text>
+  <rect x="236" y="96" width="848" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="246" y="111.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Search…</text>
+  <rect x="236" y="128" width="848" height="30" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="264" y="135" width="29" height="16" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="278.5" y="146.5" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">GET</text>
+  <text x="305" y="147" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">customers_list</text>
+  <text x="399.8" y="147" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">· Customers</text>
+  <text x="1042" y="147" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">⤢</text>
+  <text x="1064" y="147" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="236" y="164" width="848" height="30" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="183" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="264" y="171" width="35" height="16" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="281.5" y="182.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">POST</text>
+  <text x="311" y="183" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">order_create</text>
+  <text x="393.4" y="183" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">· Create an order</text>
+  <rect x="489.08" y="172" width="71" height="15" rx="7.5" fill="none" stroke="#fb923c" strokeWidth="1"/>
+  <text x="524.5799999999999" y="183" fill="#fb923c" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">changes data</text>
+  <text x="1042" y="183" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">⤢</text>
+  <text x="1064" y="183" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="246" y="202" width="240" height="300" rx="8" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1" strokeDasharray="1 5"/>
+  <rect x="404" y="210" width="74" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="441" y="224" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">–  100%  +</text>
+  <rect x="260" y="238" width="200" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="269" y="247" width="15" height="15" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="290" y="258" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHAT IT IS</text>
+  <text x="270" y="276" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Create an order</text>
+  <line x1="360" y1="287" x2="360" y2="299" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="260" y="300" width="200" height="48" rx="8" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="269" y="309" width="15" height="15" rx="4" fill="rgba(168,85,247,0.10)" stroke="#c084fc" strokeWidth="1"/>
+  <text x="290" y="320" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INPUTS</text>
+  <text x="270" y="338" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">3 parameter(s)</text>
+  <line x1="360" y1="349" x2="360" y2="361" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="260" y="362" width="200" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="269" y="371" width="15" height="15" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="290" y="382" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE CALL</text>
+  <text x="270" y="400" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">POST /orders</text>
+  <line x1="360" y1="411" x2="360" y2="423" stroke="#475569" strokeWidth="1" markerEnd="url(#epe-flow)"/>
+  <rect x="260" y="424" width="200" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="269" y="433" width="15" height="15" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="290" y="444" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">THE ANSWER</text>
+  <text x="270" y="462" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">the whole answer</text>
+  <rect x="500" y="202" width="574" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="222" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">PARAMETERS — declare &#123;&#123;placeholder&#125;&#125; variables used in URL / headers / body</text>
+  <line x1="512" y1="230" x2="1062" y2="230" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="512" y="238" width="550" height="166" rx="6" fill="rgba(255,255,255,0.02)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="522" y="255" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="536" y="255" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">CUSTOMER</text>
+  <text x="591.12" y="255" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="1048" y="255" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="524" y="276" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NAME</text>
+  <rect x="524" y="282" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="533" y="295.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER</text>
+  <text x="792.0" y="276" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <rect x="792.0" y="282" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="801.0" y="295.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="524" y="314" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEFAULT VALUE</text>
+  <rect x="524" y="320" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="792.0" y="314" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXAMPLE</text>
+  <rect x="792.0" y="320" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="801.0" y="333.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">00001</text>
+  <text x="524" y="352" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">HELP — WHAT TO PUT IN IT</text>
+  <rect x="524" y="358" width="526" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="533" y="371.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">The customer number, as in the customer list.</text>
+  <rect x="524" y="387" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M526.5,392.5 L528.8,394.8 L532.8,390" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="541" y="396" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Required</text>
+  <text x="644" y="396" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Allowed values (separated by commas): —</text>
+  <rect x="512" y="412" width="550" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="429" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="536" y="429" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">CURRENCY</text>
+  <text x="591.12" y="429" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Currency</text>
+  <text x="1034" y="429" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">= EUR</text>
+  <text x="1048" y="429" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="512" y="444" width="550" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="522" y="461" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="536" y="461" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">LINES</text>
+  <text x="573.45" y="461" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lines (JSON)</text>
+  <text x="1048" y="461" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="512" y="478" width="97" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="560.5" y="492.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add parameter</text>
+  <rect x="236" y="512" width="848" height="30" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="248" y="531" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="264" y="519" width="29" height="16" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="278.5" y="530.5" fill="#c084fc" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">ACT</text>
+  <text x="305" y="531" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">order_check</text>
+  <text x="381.2" y="531" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">· Check an order</text>
+  <text x="1042" y="531" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">⤢</text>
+  <text x="1064" y="531" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector stages, folded</text>
+  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Endpoints picked</text>
+  <line x1="200" y1="43.0" x2="236" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="20" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sorted and searchable</text>
+  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">method, name, label, tag</text>
+  <line x1="200" y1="127.0" x2="264" y2="143" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four stages</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the picked one's fields beside</text>
+  <line x1="200" y1="317.0" x2="260" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="20" y="502" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="517" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">ACT · FN</text>
+  <text x="30" y="530" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">served by a service / a function</text>
+  <line x1="200" y1="519.0" x2="276" y2="527" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="1120" y="56" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Create from…</text>
+  <text x="1130" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">written from the server</text>
+  <line x1="1120" y1="73.0" x2="392" y2="70" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="1120" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Changes data</text>
+  <text x="1130" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the assistant asks first</text>
+  <line x1="1120" y1="167.0" x2="560.0799999999999" y2="179" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="1120" y="196" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Over the whole window</text>
+  <text x="1130" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">same editor, same draft</text>
+  <line x1="1120" y1="213.0" x2="1046" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="1120" y="320" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A parameter, opened</text>
+  <text x="1130" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">help and example for the form</text>
+  <line x1="1120" y1="337.0" x2="1044" y2="378" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
+  <rect x="1120" y="430" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="445" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A parameter is a line</text>
+  <text x="1130" y="458" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">name, label, default</text>
+  <line x1="1120" y1="447.0" x2="1062" y2="425" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epe-arrow)"/>
 </svg>
 
 ---
@@ -113,21 +188,22 @@ Access: **Liberty Next → Data → Connectors**, an API connector, tab **Endpoi
 
 The endpoints are listed in alphabetical order, with a search box once there are more than five (name, label, path, method, description, group). Endpoints that share a **group** sit under its heading, which folds and shows their number.
 
-Each card starts with a pill — the HTTP method, **FN** for an endpoint [served by a function](#function), **ACT** for one [served by a service](#service) — then the name, the label, and the tag **changes data** where it applies.
+Each line starts with a pill — the HTTP method, **FN** for an endpoint [served by a function](#function), **ACT** for one [served by a service](#service) — then the name, the label, and the tag **changes data** where it applies. A click on the line opens the endpoint under it; the **⤢** icon at the end of the line opens the same editor over the whole window (*Open over the whole window*), for an endpoint with a long body or many parameters — it edits the same draft, which **Save** on the Connectors page writes.
 
 | Button | Does |
 |---|---|
 | **Add endpoint** | Asks for a name and opens a blank endpoint. |
 | **Create from…** | Writes an endpoint from what the server describes — see [below](#create-from). Shown when the connector has generators. |
-| **Check N generated** | Asks the server again for each generated endpoint and lists those that no longer match. |
+| **Check N generated** | Shown when the connector holds generated endpoints: asks the server again for each of them and lists those that no longer match. |
+| **N generators** | Unfolds the generators the connector declares — an id, what it creates, the plugin function, a description — to edit them or **Add a generator**. |
 
-The **Test** tab runs any endpoint against the connector as it is on the page, without saving: its parameters as fields, then the result.
+The **Test** stage card runs an endpoint against the connector as it is on the page, without saving: pick the **Endpoint**, fill its **Parameters** (the help and the example under each field), **Run**, read the **Result**. On a connector without endpoints yet, **Test connection** checks the address and the authentication.
 
 ---
 
 ## The four stages \{#stages\}
 
-An endpoint is drawn as four cards — **What it is → Inputs → The call → The answer** — each saying what it holds; the fields of the picked stage are beside it.
+An endpoint opens as a flow of four cards, one under the other on a canvas that zooms (**–** / **+**) — **What it is → Inputs → The call → The answer** — each saying what it holds: the label, the number of parameters, `POST /orders` (or the function or the service that serves it), where the rows are. The fields of the picked card are beside the flow.
 
 ### What it is \{#what\}
 
@@ -136,7 +212,7 @@ An endpoint is drawn as four cards — **What it is → Inputs → The call → 
 | **Name**, **Label**, **Description** | The identifier used by actions and permissions, the short label of the lists, one sentence of description. |
 | **Changes data** | Tick it when the call submits, creates or runs something — see [Endpoints that change data](#writable). |
 | **Group** | The heading the endpoint is listed under. Display only. |
-| **Created from** | For a generated endpoint, what it was created from, with **Refresh from the server**. |
+| **Created from** | For a generated endpoint, what it was created from, with **Modify…** and **Refresh from the server** — see [below](#create-from). |
 
 ### Inputs \{#inputs\}
 
@@ -161,7 +237,7 @@ Instead of an HTTP call, the endpoint can be **Served by a function** or **Serve
 | Field | Meaning |
 |---|---|
 | **Rows** | Where the list of records is in the answer. With it, a screen can read the endpoint as it reads a query. |
-| **Columns** | Column name = key of a record (`AN8=z_AN8_19`): the columns, in order, named so that the dictionary recognises them. |
+| **Columns** | One line per column — the **Column** and the **Key in a row** it is read from (`AN8` ← `z_AN8_19`): the columns, in order, named so that the dictionary recognises them. **Columns from an answer** calls the endpoint once with its parameters' examples and offers the keys of its first row: a click adds one. |
 | **Column titles** | Where the answer gives each key its title — the label of a column neither the screen nor the dictionary names. |
 | **Row limit parameter** | The parameter that carries the maximum number of rows: a screen fills it from its own *Max rows*. |
 | **"More rows" flag** | Where the server says there is more than it returned: the screen then says the result is truncated. |
@@ -177,13 +253,71 @@ A path may end with a filter on the items of a list — `result.errors[errorLeve
 
 A generic endpoint — *run any report*, with JSON for whatever depends on the report — is hard to fill. When the application behind the connector provides **generators**, **Create from…** writes a dedicated endpoint instead:
 
+<svg viewBox="0 0 1320 378" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="epc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="epc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="epc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="epc-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="260" y="26" width="800" height="332" rx="14" fill="url(#epc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="276" y="50" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Create an endpoint from the server</text>
+  <line x1="260" y1="64" x2="1060" y2="64" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="276" y="76" width="768" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="286" y="92.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">A JDE application (its list and its record)</text>
+  <text x="1030" y="93" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="276" y="122" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The generator says in a sentence what it builds.</text>
+  <text x="276" y="148" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FIND</text>
+  <rect x="276" y="156" width="680" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="286" y="172.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">P01012</text>
+  <rect x="964" y="158" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1004.0" y="172.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⌕ Search</text>
+  <text x="276" y="202" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 FOUND — PICK ONE</text>
+  <rect x="276" y="210" width="768" height="26" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="288" y="227" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">P01012</text>
+  <text x="360" y="227" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book</text>
+  <rect x="276" y="238" width="768" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="288" y="255" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">P01012D</text>
+  <text x="360" y="255" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book Translations</text>
+  <rect x="276" y="266" width="768" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="288" y="283" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">P0101</text>
+  <text x="360" y="283" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Address Book Revisions</text>
+  <line x1="260" y1="308" x2="1060" y2="308" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="810" y="320" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="850.0" y="334.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="900" y="320" width="144" height="22" rx="5" fill="url(#epc-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="972.0" y="334.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✦ Create the endpoint</text>
+  <rect x="20" y="76" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A generator</text>
+  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">declared by the connector's app</text>
+  <line x1="220" y1="93.0" x2="276" y2="89" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epc-arrow)"/>
+  <rect x="20" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Find the object</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on the server, as saved</text>
+  <line x1="220" y1="177.0" x2="276" y2="169" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epc-arrow)"/>
+  <rect x="20" y="240" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pick one</text>
+  <text x="30" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">then answer its questions</text>
+  <line x1="220" y1="257.0" x2="276" y2="223" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epc-arrow)"/>
+  <rect x="1100" y="294" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1110" y="309" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Create</text>
+  <text x="1110" y="322" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">added unsaved, opened for review</text>
+  <line x1="1100" y1="311.0" x2="1044" y2="331" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epc-arrow)"/>
+</svg>
+
 1. **Find** the object on the server.
 2. **Answer** a few questions — which columns, which options.
 3. **Create the endpoint**: one named parameter per input, with its label, its help and its default. It is added unsaved and opened for review.
 
 A generator can also build several endpoints at once, or a **whole screen**: the dialog then asks for the application, the screen identifier, its title and whether to add it to the menu, and creates the endpoints and the screen in one validated pass — nothing is written when anything is invalid. An endpoint that already exists is kept as it is and used by the new screen, unless **Replace the N endpoint(s) that already exist** is ticked.
 
-A generated endpoint remembers what it was created from. **Refresh from the server** builds it again and shows what changes before applying it: the address, the body and the parameters follow the server; the name, the label, the description and what was written on a parameter that stays are kept.
+A generated endpoint remembers what it was created from (**Created from**, in *What it is*):
+
+- **Modify…** reopens the dialog on what it was built from, with its choices as they were — tick a column, a field, a filter. What the generator builds is merged into the endpoint: the differences are listed first (*See what changes*), the name, the label and the parameter texts are kept, and an application's read, add, change and delete endpoints follow together.
+- **Refresh from the server** builds it again from the same request and shows what changes before applying it: the address, the body and the parameters follow the server; the name, the label, the description and what was written on a parameter that stays are kept.
+
+Nothing is saved until **Save** on the Connectors page.
 
 The generators of the JD Edwards AIS connector are described in [Nomajde — Create from…](../../nomajde/ais/create-from.md).
 

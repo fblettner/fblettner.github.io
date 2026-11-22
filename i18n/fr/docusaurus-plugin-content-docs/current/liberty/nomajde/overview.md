@@ -1,7 +1,7 @@
 ---
 title: Nomajde — L'application compagnon de JD Edwards
-description: "Nomajde s'installe à côté de JD Edwards EnterpriseOne et regroupe le travail quotidien — données maîtres, sécurité, reporting, supervision — sur une série de grilles avec édition en ligne. SQL et AIS API combinés, pas de navigation fat-client, pas d'export manuel."
-keywords: [Nomajde, JD Edwards, JDE, EnterpriseOne, security workbench, gestion des utilisateurs, gestion des rôles, UDC, BIP, supervision, AIS, compagnon JDE]
+description: "Nomajde s'installe à côté de JD Edwards EnterpriseOne et regroupe le travail quotidien — données de base, sécurité, références croisées, montée de version, supervision — sur une série de grilles et de pages. SQL et AIS API combinés, pas de navigation fat-client, pas d'export manuel."
+keywords: [Nomajde, JD Edwards, JDE, EnterpriseOne, security workbench, gestion des utilisateurs, gestion des rôles, UDC, références croisées, montée de version, Server Manager, performance, supervision, AIS, compagnon JDE]
 hide_table_of_contents: false
 ---
 
@@ -14,7 +14,7 @@ import Link from '@docusaurus/Link';
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(251,146,60,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>JD Edwards EnterpriseOne · Application compagnon</div>
   <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Le travail JD Edwards,<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #fb923c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>sur une grille filtrable.</span></h2>
-  <p style={{fontSize: '16px', lineHeight: '1.6', maxWidth: '780px', margin: '0 0 24px', opacity: 0.92}}>Nomajde est le compagnon quotidien de JD Edwards EnterpriseOne. Il regroupe sur un ensemble réduit de grilles modifiables en ligne ce que JDE répartit habituellement sur plusieurs formulaires — master utilisateur, description des rôles, security workbench, environnements, tables UDC, transactions, planification BIP. Chaque modification est écrite dans JDE en direct : <b>SQL</b> sur les tables de sécurité et les tables maîtres pour la majorité des actions, <b>appels REST AIS</b> pour celles que JDE n'accepte que par cette voie (réinitialisation de mot de passe, provisionnement du compte de sécurité). Aucune copie intermédiaire, aucun traitement nocturne à attendre.</p>
+  <p style={{fontSize: '16px', lineHeight: '1.6', maxWidth: '780px', margin: '0 0 24px', opacity: 0.92}}>Nomajde est le compagnon quotidien de JD Edwards EnterpriseOne. Il regroupe sur un ensemble réduit de grilles modifiables en ligne ce que JDE répartit habituellement sur plusieurs formulaires — master utilisateur, description des rôles, security workbench, environnements, tables UDC, références croisées, serveurs, montée de version. Chaque modification est écrite dans JDE en direct : <b>SQL</b> sur les tables de sécurité et les tables maîtres pour la majorité des actions, <b>appels REST AIS</b> pour celles que JDE n'accepte que par cette voie (réinitialisation de mot de passe, provisionnement du compte de sécurité). Aucune copie intermédiaire, aucun traitement nocturne à attendre.</p>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px'}}>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(74,158,255,0.16)', border: '1px solid rgba(74,158,255,0.45)', fontSize: '12px', fontWeight: 700, color: '#4a9eff'}}>Données JDE en direct · SQL + API AIS</span>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(251,146,60,0.14)', border: '1px solid rgba(251,146,60,0.42)', fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>Édition sur grille · upload Excel en masse</span>
@@ -32,7 +32,7 @@ import Link from '@docusaurus/Link';
 
 ## Le problème que Nomajde résout
 
-JD Edwards est un produit profond. La plupart des tâches quotidiennes — ajouter un utilisateur, rattacher un rôle, modifier une valeur UDC, planifier un état BIP — demandent de naviguer entre cinq ou six formulaires, parfois entre le fat client et le web client. Les opérateurs finissent le travail ; ils y passent deux fois le temps nécessaire.
+JD Edwards est un produit profond. La plupart des tâches quotidiennes — ajouter un utilisateur, rattacher un rôle, savoir où une table est utilisée, contrôler un serveur — demandent de naviguer entre cinq ou six formulaires, parfois entre le fat client et le web client. Les opérateurs finissent le travail ; ils y passent deux fois le temps nécessaire.
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', margin: '24px 0'}}>
   <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(248,113,113,0.3)', background: 'rgba(248,113,113,0.04)'}}>
@@ -42,17 +42,17 @@ JD Edwards est un produit profond. La plupart des tâches quotidiennes — ajout
   </div>
   <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(251,146,60,0.3)', background: 'rgba(251,146,60,0.04)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#fb923c', fontWeight: 700, marginBottom: '8px'}}>Édition en masse douloureuse</div>
-    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Impossible de modifier 200 valeurs UDC d'un coup</div>
-    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Les formulaires JDE éditent une ligne à la fois. Quand l'intégrateur livre un nouveau module avec 200 valeurs UDC, l'opérateur les saisit à la main — ou bricole un script SQL en espérant que rien ne casse.</div>
+    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Impossible d'ajouter 200 enregistrements de sécurité d'un coup</div>
+    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Les formulaires JDE éditent une ligne à la fois. Quand un déploiement apporte 200 enregistrements de sécurité ou relations de rôles, l'opérateur les saisit à la main — ou bricole un script SQL en espérant que rien ne casse.</div>
   </div>
   <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#22c55e', fontWeight: 700, marginBottom: '8px'}}>Reporting en marge</div>
-    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Les runs BIP ne laissent aucune trace</div>
-    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Planifier un état BIP passe par le planificateur JDE, la sortie atterrit là où la file d'impression l'a déposée, et l'audit du « qui a lancé quoi, quand » repose sur la mémoire de l'opérateur.</div>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#22c55e', fontWeight: 700, marginBottom: '8px'}}>Des montées de version à l'aveugle</div>
+    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Que touche une nouvelle version ?</div>
+    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Quels objets spécifiques un ESU ou une version modifie, ce qui les utilise, qui les lance encore : la réponse se trouve d'ordinaire dans un classeur reconstruit à la main à chaque montée de version.</div>
   </div>
 </div>
 
-Nomajde remplace le ping-pong d'écrans par une page par sujet, l'édition ligne à ligne par l'édition sur grille et l'upload Excel, et la trace inexistante par un historique de chaque run et de chaque modification.
+Nomajde remplace le ping-pong d'écrans par une page par sujet, l'édition ligne à ligne par l'édition sur grille et l'upload Excel, et le classeur fait main par une analyse de montée de version construite à partir de JD Edwards lui-même.
 
 ---
 
@@ -74,8 +74,8 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
         <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>token · provisionnement · mot de passe</div>
       </div>
       <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)'}}>
-        <div style={{fontSize: '12px', fontWeight: 700, color: '#22c55e'}}>Planificateur BIP</div>
-        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>planifier · archiver · renvoyer</div>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#22c55e'}}>Server Manager</div>
+        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>instances · mesures · caches</div>
       </div>
       <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.06)'}}>
         <div style={{fontSize: '12px', fontWeight: 700, color: '#c084fc'}}>JDE Object Librarian</div>
@@ -99,12 +99,12 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
         <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>utilisateurs · rôles · workbench</div>
       </div>
       <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
-        <div style={{fontSize: '11px', fontWeight: 700}}>Transactions</div>
-        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>AP · AR · GL</div>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Supervision</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>serveurs · performance</div>
       </div>
       <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
-        <div style={{fontSize: '11px', fontWeight: 700}}>Reporting</div>
-        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>BIP · archive</div>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Montée de version</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>reprise · références croisées</div>
       </div>
     </div>
   </div>
@@ -140,7 +140,7 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
   </div>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.05)'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#22c55e'}}>Édition en masse</div>
-    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Upload Excel sur chaque écran modifiable — UDC, security workbench, relations de rôles, environnements. Charger un déploiement en quelques minutes.</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Import Excel sur les écrans de sécurité modifiables — utilisateurs, rôles, relations de rôles, environnements, security workbench, sécurité UDO. Charger un déploiement en quelques minutes.</div>
   </div>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.05)'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#c084fc'}}>Audit tracé</div>
@@ -162,9 +162,9 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
     <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#4a9eff', fontWeight: 800, marginBottom: '8px'}}>01 · Données maîtres</div>
     <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>UDC, Address Book, GL — éditables en masse</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
-      <li>Types UDC et valeurs UDC — une grille par sujet, avec upload Excel pour les chargements de déploiement.</li>
-      <li>Address Book, clients, fournisseurs, articles, comptes GL — même forme, même édition sur grille.</li>
-      <li>Les contrôles de champs obligatoires que JDE applique à la sauvegarde sont appliqués ici aussi — aucune ligne incomplète n'atteint JDE.</li>
+      <li>Types UDC et valeurs UDC — chaque type et chaque valeur dans une grille avec recherche, filtres et export Excel.</li>
+      <li>Carnet d'adresses, clients et fournisseurs — des grilles en consultation, avec leurs onglets liés et <i>Open in JDE</i>.</li>
+      <li>Articles, sociétés et comptes, tables de paramétrage, projets OMW — des modules prêts à appliquer depuis Liberty Next, lus dans les tables de JDE.</li>
     </ul>
   </div>
 
@@ -180,13 +180,13 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
   </div>
 
   <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(34,197,94,0.35)', background: 'linear-gradient(165deg, rgba(34,197,94,0.10), rgba(34,197,94,0.02))'}}>
-    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#22c55e', fontWeight: 800, marginBottom: '8px'}}>03 · Transactions & Reporting</div>
-    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>AP, AR, GL — et l'archive BIP</div>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#22c55e', fontWeight: 800, marginBottom: '8px'}}>03 · Développement & montée de version</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>Qui utilise quoi, et ce que coûte une version</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
-      <li>Grilles AP, AR, GL — filtrer sur chaque colonne (société, fournisseur, document, montant, date), drill vers le détail.</li>
-      <li>Planifier des états BIP depuis un formulaire unique — choisir le programme, la version, la sélection de données, l'heure de run.</li>
-      <li>La sortie générée (PDF ou XML) est archivée à côté du run. Télécharger, envoyer par courriel, renvoyer en un clic.</li>
-      <li>Chaque run BIP est tracé — qui l'a planifié, quand il a tourné, ce qu'il a produit.</li>
+      <li>Références croisées — ce que contient une application, un état, une table ou un UDO, et où il est utilisé, avec sa dernière utilisation.</li>
+      <li>Analyse de montée de version — les objets à reprendre pour une version, leur complexité, les jours, l'ordre des travaux, les UDO à retester.</li>
+      <li>Tests de non-régression joués par AIS — une référence enregistrée avant un changement, comparée après.</li>
+      <li>Créer à partir de… — des points d'accès et des écrans complets construits à partir d'une application JD Edwards, enregistrés par ses propres formulaires.</li>
     </ul>
   </div>
 
@@ -197,6 +197,7 @@ Une application web installée à côté de JD Edwards qui lit ses données en d
       <li>Les serveurs enterprise, web et AIS contrôlés par Server Manager toutes les cinq minutes — état, santé, contrôles en échec.</li>
       <li>La disponibilité sur 24 heures de chaque instance sur la vue d'ensemble, les instances en défaut en tête.</li>
       <li>Un contrôle en échec déclenche les alertes de la tâche ; une instance en échec peut être arrêtée automatiquement.</li>
+      <li>Server Manager en direct, conseils de Performance, Analyse de la plateforme et Audit de la base de données — ce qui ralentit la plateforme, et par où commencer.</li>
     </ul>
   </div>
 
@@ -212,12 +213,13 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 |---|---|
 | **Vue d'ensemble** | La [page d'accueil](./home.md) : ce que fait Nomajde, les chiffres en direct de l'instance JD Edwards, les points d'entrée de chaque domaine. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité et de développement, et des modèles fournis par les préréglages JD Edwards. |
-| **Données de base** | Types et codes UDC — chaque grille permet le filtre, le tri, la modification en ligne et l'import Excel —, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
+| **Références croisées** | [Ce que contient un objet JD Edwards et où il est utilisé](./cross-reference.md) : applications, états, données, vues, tables, structures de données, fonctions métier, UDO. |
+| **Montée de version** | [Une seule page pour toute l'analyse de montée de version](./upgrade/analysis.md) : ce qu'il faut reprendre pour une version, avec quelle complexité, en combien de jours, dans quel ordre et où en est le travail — à partir de la liste d'objets d'Oracle et des objets du client, avec les objets définis par l'utilisateur à retester. |
+| **Données de base** | [Types UDC](./master-data/udc-types.md) et [codes UDC](./master-data/udc-codes.md), des grilles en consultation avec recherche, et le [carnet d'adresses](./master-data/address-book.md) : carnet d'adresses, clients et fournisseurs, en consultation, avec Open in JDE. |
 | **Gestion des utilisateurs** | Gestion des Utilisateurs, User Preferences, Affectations Rôles, Role Relationships, Environments, Security Workbench, UDO Security. Le catalogue de sécurité JD Edwards condensé en quelques écrans modifiables en grille. |
-| **Développement** | Object Librarian, Data Dictionary et Références croisées, en lecture. |
-| **Supervision** | [Contrôle de santé JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. [Server Manager](./monitoring/server-manager.md) : six écrans lus en direct sur la console — instances, utilisateurs connectés, serveurs d'entreprise, processus, fonctions métier, mémoire Java. |
+| **Développement** | Object Librarian et Data Dictionary, en lecture. |
+| **Supervision** | [Contrôle de santé JDE](./monitoring/jde-servers.md) : les vérifications des serveurs JD Edwards sur une période, et l'historique de chacun. [Performance](./monitoring/performance.md), [Analyse de la plateforme](./monitoring/platform-analysis.md) et [Audit de la base de données](./monitoring/database-audit.md) : la plateforme lue en direct, sous forme de conseils et d'analyses. [Server Manager](./monitoring/server-manager.md) : sept écrans lus en direct sur la console — instances, utilisateurs connectés, serveurs d'entreprise, processus, fonctions métier, serveurs web et AIS, caches JDBj. |
 | **Tâches** | [Refusionner la sécurité, rafraîchir le dictionnaire de données, vérifier les serveurs JDE](./jobs.md), avec un journal en direct. |
-| **Montée de version** | [Analyse de montée de version](./upgrade/analysis.md) : ce qu'il faut reprendre pour une version, avec quelle complexité et en combien de jours — à partir de la liste d'objets d'Oracle et des objets du client. |
 | **Tests** | [Tests de non-régression](./tests.md) joués par AIS : enregistrer une référence avant un changement, comparer après. |
 | **Services JD Edwards (AIS)** | Le [catalogue de services AIS](./ais/services.md) et [Créer à partir de…](./ais/create-from.md) : un point d'accès ou un écran complet à partir d'une application, d'un formulaire, d'une table, d'un état, d'une fonction métier ou d'une orchestration JD Edwards. |
 
@@ -228,25 +230,17 @@ Le menu suit le travail, de la page d'accueil aux tâches de maintenance.
 | Rôle | Pourquoi on ouvre Nomajde |
 |---|---|
 | **Administrateur sécurité JDE** | Les cinq écrans de Maintenance sécurité — ajouter un utilisateur, rattacher un rôle, exécuter Importer la sécurité sur un clone, parcourir la grille security workbench. |
-| **Opérateur AP / AR** | La grille de transactions — factures ouvertes inter-sociétés et inter-environnements sur une page, avec filtres en masse et drill. |
-| **Référent données maîtres** | Maintenance Address Book, clients, fournisseurs avec contrôles de champs obligatoires ; types et valeurs UDC pour le catalogue. |
-| **Analyste reporting** | Un formulaire unique pour planifier BIP, l'archive des runs passés, la distribution par courriel. |
-| **Ingénieur ops** | [Contrôle de santé JDE](./monitoring/jde-servers.md) et [Server Manager](./monitoring/server-manager.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle. |
+| **Développeur JDE** | [Références croisées](./cross-reference.md) — ce qu'une modification atteint avant de la faire : les applications, les états et les UDO qui utilisent une table, une vue ou une fonction. |
+| **Référent données de base** | Carnet d'adresses, clients et fournisseurs ; types et valeurs UDC pour le catalogue. |
+| **Ingénieur ops** | [Contrôle de santé JDE](./monitoring/jde-servers.md) et [Server Manager](./monitoring/server-manager.md) — la santé de chaque serveur enterprise, web et AIS, sa disponibilité sur 24 heures, les alertes du contrôle ; [Performance](./monitoring/performance.md) pour ce qui ralentit la plateforme. |
 | **Chef de projet de montée de version** | [Analyse de montée de version](./upgrade/analysis.md) — les objets à reprendre, les jours par type et par personne, le suivi des travaux. |
 | **Testeur fonctionnel** | [Tests de non-régression](./tests.md) — les cas qui doivent continuer de fonctionner, joués avant et après un ESU ou une version d'outils. |
 | **Développeur d'intégration** | [Créer à partir de…](./ais/create-from.md) — un écran Liberty sur un formulaire JD Edwards, sans écrire un appel. |
 
 ---
 
-## Les rôles dans Nomajde
+## Qui voit quoi \{#roles\}
 
-L'application embarque quatre rôles.
+Nomajde n'embarque pas de rôles propres : les accès sont accordés par les rôles de la plateforme. Un rôle détient les entrées de menu qu'il ouvre, les pages (Références croisées, Performance, Analyse de la plateforme, Audit de la base de données), les tâches qu'il peut lancer et les services JD Edwards qu'il peut appeler — chaque point d'accès AIS ou Server Manager a sa propre permission.
 
-| Rôle | Ce qu'il accorde |
-|---|---|
-| **Viewer** | Lit chaque écran, exécute les rapports, aucune modification. |
-| **Operator** | Tout ce que fait un Viewer, plus les modifications AP / AR / données maîtres et la planification de rapports. |
-| **Security** | Tout ce que fait un Operator, plus la section Maintenance sécurité (Utilisateurs, Rôles, Relations de rôles, Environnements, Security Workbench). |
-| **Administrator** | Tout ce qui précède, plus la configuration des environnements, l'endpoint AIS et la rétention de l'archive. |
-
-Un déploiement typique sépare **Operator** de **Security** — la personne qui traite les transactions n'est pas celle qui gère les droits d'accès.
+Un déploiement typique sépare les personnes qui entretiennent les données de base de celles qui gèrent les droits d'accès, et réserve à quelques-uns les services qui modifient JD Edwards ou la plateforme.

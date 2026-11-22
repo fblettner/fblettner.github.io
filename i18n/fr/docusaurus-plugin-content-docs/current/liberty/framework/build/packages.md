@@ -1,16 +1,151 @@
 ---
 title: Packages
-description: "Transporter la configuration d'une installation Liberty vers une autre avec la page Paquet : choisir comme amorces des écrans, entrées de menu, tableaux de bord, modèles de l'explorateur, tâches, règles de notification, actions partagées ou contenus de l'assistant ; le résolveur de dépendances parcourt tout ce qu'ils atteignent et le paquet est exporté en ZIP — ou promu directement vers une autre instance. Sur la cible, l'import est d'abord présenté élément par élément, avec le détail des champs, avant d'être appliqué."
-keywords: [Liberty Framework, package, export, import, aperçu, promotion, instance cible, déploiement, ZIP, clôture de dépendances, amorces, merge, overwrite, replace all, override, secrets chiffrés, build-package, import-package]
+description: "Transporter la configuration d'une installation Liberty vers une autre avec la page Paquet : choisir comme points de départ des écrans, entrées de menu, tableaux de bord, modèles de l'explorateur, tâches, règles de notification, actions partagées ou contenus de l'assistant ; le résolveur de dépendances parcourt tout ce qu'ils atteignent et le paquet est exporté en ZIP — ou promu directement vers une autre instance. Sur la cible, l'import est d'abord présenté élément par élément, avec le détail des champs, avant d'être appliqué."
+keywords: [Liberty Framework, package, export, import, aperçu, promotion, instance cible, déploiement, ZIP, clôture de dépendances, points de départ, merge, overwrite, replace all, override, secrets chiffrés, build-package, import-package]
 ---
 
 # Packages
 
-La page **Paquet** (*Liberty Next → Déployer → Paquet*) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, présente ce qu'il changerait, puis l'applique à la configuration active — suivi d'un rechargement automatique. Une fois une instance cible déclarée, le paquet peut aussi lui être **promu** directement, sans manipuler le ZIP.
+La page **Paquet** (*Liberty Next → Déployer → Paquet*) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *points de départ*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, présente ce qu'il changerait, puis l'applique à la configuration active — suivi d'un rechargement automatique. Une fois une instance cible déclarée, le paquet peut aussi lui être **promu** directement, sans manipuler le ZIP.
 
 La page propose trois vues, choisies dans des cartes en haut de page : **Construire un paquet**, **Importer un paquet** et **Promotion**. Elle est réservée aux superutilisateurs.
 
 C'est le parcours standard *préproduction → production*. C'est aussi l'outil adapté à la réutilisation inter-clients : construire un package « starter » d'écrans sélectionnés, le remettre à une nouvelle installation, l'appliquer avec `replace_all`, et c'est terminé.
+
+---
+
+## Vue d'ensemble
+
+<svg viewBox="0 0 1320 510" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pkgb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pkgb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pkgb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pkgb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="470" rx="14" fill="url(#pkgb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="236" y="32" width="14" height="14" rx="3" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="258" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paquet</text>
+  <line x1="220" y1="60" x2="1100" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236.0" y="74" width="276.0" height="40" rx="8" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <rect x="245.0" y="84" width="20" height="20" rx="5" fill="#4a9eff" fillOpacity="0.18"/>
+  <circle cx="255.0" cy="94" r="4" fill="none" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="272.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Construire un paquet</text>
+  <text x="272.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Choisir des écrans et leurs dépendances, télécharg…</text>
+  <rect x="522.0" y="74" width="276.0" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="531.0" y="84" width="20" height="20" rx="5" fill="#c084fc" fillOpacity="0.18"/>
+  <circle cx="541.0" cy="94" r="4" fill="none" stroke="#c084fc" strokeWidth="1.4"/>
+  <text x="558.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Importer un paquet</text>
+  <text x="558.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Appliquer un paquet zip à cette instance</text>
+  <rect x="808.0" y="74" width="276.0" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <rect x="817.0" y="84" width="20" height="20" rx="5" fill="#fb923c" fillOpacity="0.18"/>
+  <circle cx="827.0" cy="94" r="4" fill="none" stroke="#fb923c" strokeWidth="1.4"/>
+  <text x="844.0" y="91" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Promotion</text>
+  <text x="844.0" y="104" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Instances cibles et promotions appliquées</text>
+  <rect x="974" y="126" width="110" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1029.0" y="141.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">➚ Promouvoir vers…</text>
+  <rect x="828" y="126" width="140" height="24" rx="5" fill="url(#pkgb-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="898.0" y="141.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⤓ Télécharger le ZIP (6)</text>
+  <rect x="747" y="126" width="75" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="784.5" y="141.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Effacer (1)</text>
+  <rect x="236" y="126" width="499" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="246" y="141.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Filtrer les points de départ</text>
+  <text x="250" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">POINTS DE DÉPART</text>
+  <text x="356.8" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 1 sélectionné(s)</text>
+  <text x="640.0" y="182" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">tout sélectionner</text>
+  <line x1="236" y1="192" x2="654.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="212" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ÉCRANS · 1/24</text>
+  <text x="640.0" y="212" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout sélectionner</text>
+  <text x="250" y="230" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">CRM</text>
+  <rect x="258" y="244" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="253" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="253" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">contacts</text>
+  <text x="335.12" y="253" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Contacts</text>
+  <rect x="246" y="262" width="398.0" height="22" rx="5" fill="rgba(255,255,255,0.05)"/>
+  <rect x="258" y="268" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M260.5,273.5 L262.8,275.8 L266.8,271" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="275" y="277" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="277" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="341.01" y="277" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Clients</text>
+  <rect x="258" y="292" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="301" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="301" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="323.34" y="301" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Commandes</text>
+  <rect x="258" y="316" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="275" y="325" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif"></text>
+  <text x="278" y="325" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">products</text>
+  <text x="335.12" y="325" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">— Produits</text>
+  <text x="250" y="344" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ENTRÉES DE MENU · 0/18</text>
+  <text x="250" y="366" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">TABLEAUX DE BORD · 0/3</text>
+  <text x="250" y="388" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">TÂCHES NOMAFLOW · 0/6</text>
+  <text x="250" y="410" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ACTIONS PARTAGÉES · 0/4</text>
+  <text x="680.0" y="182" fill="#e2e8f0" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DÉPENDANCES</text>
+  <text x="755.3" y="182" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">· 6/8 sera inclus dans le paquet</text>
+  <line x1="666.0" y1="192" x2="1084.0" y2="192" stroke="#1f2937" strokeWidth="1"/>
+  <text x="680.0" y="212" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ÉCRANS · 1/1</text>
+  <text x="1070.0" y="212" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout désélectionner</text>
+  <rect x="688.0" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,230.5 L692.8,232.8 L696.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="234" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers</text>
+  <text x="680.0" y="252" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">CONNECTEURS · 0/1</text>
+  <text x="1070.0" y="252" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout sélectionner</text>
+  <rect x="688.0" y="265" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="705.0" y="274" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="680.0" y="292" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">POOLS · 0/1</text>
+  <text x="1070.0" y="292" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout sélectionner</text>
+  <rect x="688.0" y="305" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="705.0" y="314" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="680.0" y="332" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">REQUÊTES · 3/3</text>
+  <text x="1070.0" y="332" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout désélectionner</text>
+  <rect x="688.0" y="345" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,350.5 L692.8,352.8 L696.8,348" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="354" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers_get</text>
+  <rect x="688.0" y="365" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,370.5 L692.8,372.8 L696.8,368" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="374" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.customers_put</text>
+  <rect x="688.0" y="385" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,390.5 L692.8,392.8 L696.8,388" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="394" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.lookup_country</text>
+  <text x="680.0" y="412" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ÉLÉMENTS DU DICTIONNAIRE · 2/2</text>
+  <text x="1070.0" y="412" fill="#4a9eff" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">tout désélectionner</text>
+  <rect x="688.0" y="425" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,430.5 L692.8,432.8 L696.8,428" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="434" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.CUSTOMER_ID</text>
+  <rect x="688.0" y="445" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M690.5,450.5 L692.8,452.8 L696.8,448" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="705.0" y="454" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">crm.COUNTRY</text>
+  <rect x="236" y="162" width="418.0" height="314" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="666.0" y="162" width="418.0" height="314" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois vues</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">construire, importer, promotion</text>
+  <line x1="200" y1="77.0" x2="236" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtrer, puis tout cocher</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement ce qui correspond</text>
+  <line x1="200" y1="167.0" x2="236" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cocher un point de départ</text>
+  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écran, entrée de menu…</text>
+  <line x1="200" y1="287.0" x2="252" y2="273" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Autres points de départ</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">modèles, tâches, règles, IA</text>
+  <line x1="200" y1="417.0" x2="250" y2="366" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">ZIP ou promotion</text>
+  <text x="1130" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nombre d'éléments cochés</text>
+  <line x1="1120" y1="57.0" x2="888" y2="126" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La fermeture</text>
+  <text x="1130" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque dépendance atteinte</text>
+  <line x1="1120" y1="217.0" x2="1084.0" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Décochés par défaut</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">connecteurs et pools</text>
+  <line x1="1120" y1="317.0" x2="1084.0" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pkgb-arrow)"/>
+</svg>
 
 ---
 
@@ -23,7 +158,7 @@ C'est le parcours standard *préproduction → production*. C'est aussi l'outil 
 | Ajouter quelques nouveaux écrans à une installation client existante sans toucher à ses modifications. | Construire, appliquer avec `merge`. |
 | Livrer une nouvelle version d'une application maintenue par l'éditeur quand le client a des modifications locales sur quelques écrans. | Construire, appliquer avec `overwrite` — les entités marquées `override = true` sur la cible sont préservées automatiquement. |
 | Promouvoir des écrans en production en une étape, sans ZIP. | **Promouvoir vers…** dans Construire — voir [Promotion](#promotion). |
-| Promouvoir une tâche Nomaflow entre environnements. | La choisir comme amorce sous *Tâches nomaflow*, ou utiliser l'icône **Exporter** sur la ligne de la tâche, dans la page des Tâches. |
+| Promouvoir une tâche Nomaflow entre environnements. | La choisir comme point de départ sous *Tâches nomaflow*, ou utiliser l'icône **Exporter** sur la ligne de la tâche, dans la page des Tâches. |
 | Livrer un lot complet sous licence (Nomasx-1 + plugins Nomajde + configuration). | Pas par ce biais. Utiliser l'installeur wheel **`liberty-apps`** — voir [Installation → Deploy prebuilt apps](../../installation/deploy-prebuilt-apps.md). |
 
 L'écran Package livre de la **configuration déclarative** — des fichiers TOML. Il ne livre ni code Python, ni JAR Java, ni packages de plugins, ni contenu de base de données. Pour cela, l'installeur wheel est le canal canonique.
@@ -32,11 +167,11 @@ L'écran Package livre de la **configuration déclarative** — des fichiers TOM
 
 ## La vue Construire
 
-Le panneau de gauche liste chaque **candidat amorce** de l'installation — écrans, entrées de menu, tableaux de bord. Le panneau de droite affiche la **clôture de dépendances** de tout ce qui est coché à gauche.
+Le panneau de gauche liste chaque **point de départ** possible de l'installation — écrans, entrées de menu, tableaux de bord. Le panneau de droite affiche la **clôture de dépendances** de tout ce qui est coché à gauche.
 
-### Choisir les amorces
+### Choisir les points de départ
 
-Trois sections dans le panneau de gauche :
+Le panneau de gauche regroupe les candidats par type, chaque groupe avec le nombre d'éléments cochés (`ÉCRANS · 1/24`) :
 
 | Section | Source |
 |---|---|
@@ -49,13 +184,13 @@ Trois sections dans le panneau de gauche :
 | **Actions partagées** | Les actions réutilisées par plusieurs écrans. |
 | **Assistant (questions, procédures)** | Ce qu'une application livre pour l'assistant IA — une entrée par application. |
 
-Un champ de recherche en haut filtre la liste visible par nom / libellé / portée. La case *select all* par section respecte le filtre — réduire d'abord (par exemple en saisissant `audit`), puis cocher *select all* pour ne prendre que les écrans correspondants.
+**Filtrer les points de départ**, au-dessus des panneaux, filtre la liste visible par nom / libellé / portée. Le lien *tout sélectionner* de chaque section respecte le filtre — réduire d'abord (par exemple en saisissant `audit`), puis cliquer *tout sélectionner* pour ne prendre que les écrans correspondants.
 
-Le sélecteur d'amorces est **adapté aux opérations en masse** : maintenir le filtre sur un nom de client, cocher *select all* et une tranche par client est préparée. Inutile de cliquer chaque écran un par un.
+Le choix des points de départ est **adapté aux opérations en masse** : garder le filtre sur un nom de client, cliquer *tout sélectionner*, et la sélection propre à ce client est prête. Inutile de cliquer chaque écran un par un.
 
 ### Ce que fait le résolveur de dépendances
 
-Dès qu'une amorce est cochée, le panneau de droite déclenche le résolveur (`POST /admin/find-dependencies` côté serveur). Pour chaque amorce, le résolveur retrouve :
+Dès qu'un point de départ est coché — les boutons **Télécharger le ZIP (n)** et **Promouvoir vers…** comptent alors ce qui est coché —, le panneau de droite déclenche le résolveur (`POST /admin/find-dependencies` côté serveur). Pour chaque point de départ, le résolveur retrouve :
 
 | Type | Ce qui est rapatrié |
 |---|---|
@@ -68,17 +203,17 @@ La clôture est **récursive mais bornée** (profondeur par défaut = 50). Les c
 
 ### Les types exclus par défaut
 
-Le panneau Dependencies pré-coche chaque dépendance **sauf** trois types :
+Le panneau **Dépendances** pré-coche chaque dépendance **sauf** trois types :
 
 | Type | Pourquoi exclu par défaut |
 |---|---|
-| **Connectors** | L'installation cible possède presque toujours déjà son propre connecteur avec le bon pool et les bonnes informations d'identification. Livrer le connecteur de la source écraserait les secrets de la cible. |
+| **Connecteurs** | L'installation cible possède presque toujours déjà son propre connecteur avec le bon pool et les bonnes informations d'identification. Livrer le connecteur de la source écraserait les secrets de la cible. |
 | **Pools** | Idem — les pools portent les informations d'identification de la base. C'est le pool de la cible qu'il faut conserver. |
-| **API endpoints** | Idem — les endpoints portent des en-têtes d'authentification / jetons Bearer propres au câblage de l'installation source. |
+| **Points d'accès API** | Idem — les points d'accès portent des en-têtes d'authentification / jetons Bearer propres au câblage de l'installation source. Un point d'accès dont un écran lit ses lignes, ou par lequel il enregistre, fait partie des données de l'écran : il est coché comme les requêtes de l'écran, et un point d'accès servi par une action partagée emporte cette action. |
 
-Cela rend sûr d'emblée le scénario typique « promouvoir des écrans entre environnements » : rien qui porte des secrets n'est livré sans accord explicite. Cocher manuellement le groupe *Connectors* uniquement quand la cible n'en a réellement aucun — typiquement une installation toute neuve ou une préproduction par client à monter de zéro.
+Cela rend sûr d'emblée le scénario typique « promouvoir des écrans entre environnements » : rien qui porte des secrets n'est livré sans accord explicite. Cocher manuellement le groupe *Connecteurs* uniquement quand la cible n'en a réellement aucun — typiquement une installation toute neuve ou une préproduction par client à monter de zéro.
 
-L'interface mémorise les cases cochées par dépendance ; les bascules *select all* / *deselect all* au niveau du groupe rendent peu coûteux le fait d'activer ou de désactiver tous les connecteurs d'un coup.
+L'interface mémorise les cases cochées par dépendance ; les liens *tout sélectionner* / *tout désélectionner* au niveau du groupe rendent peu coûteux le fait d'activer ou de désactiver tous les connecteurs d'un coup.
 
 ### Construire le ZIP
 
@@ -97,7 +232,7 @@ Plus un fichier toujours présent :
 
 | Fichier | Ce qu'il contient |
 |---|---|
-| **`MANIFEST.md`** | Résumé lisible — ce que contient le ZIP, les amorces, les compteurs par type, les variables d'environnement `${VAR}` référencées par le package (et que l'opérateur doit définir sur la cible), les références manquantes (clôture non résolue — généralement une coquille ou un renommage obsolète sur la source) et les consignes destinées à l'opérateur. |
+| **`MANIFEST.md`** | Résumé lisible — ce que contient le ZIP, les points de départ, les compteurs par type, les variables d'environnement `${VAR}` référencées par le package (et que l'opérateur doit définir sur la cible), les références manquantes (clôture non résolue — généralement une coquille ou un renommage obsolète sur la source) et les consignes destinées à l'opérateur. |
 
 Le MANIFEST est le premier élément à ouvrir sur la cible avant d'appliquer — il indique ce à quoi s'attendre et ce qui reste à câbler manuellement (variables d'environnement, secrets, clé maître).
 
@@ -214,7 +349,7 @@ Ce qui voyage est fusionné avec soin :
 - une **tâche** qui existe déjà sur la cible garde sa planification, son activation, son fuseau horaire, ses préréglages, ses alertes, ses réessais, son niveau de journal et son délai ; une nouvelle tâche arrive désactivée ;
 - le paquet est construit à partir des fichiers tels qu'écrits : les valeurs non renseignées et les références `${VAR}` voyagent telles quelles.
 
-Si le rechargement échoue après une application réussie, les modifications de fichiers restent sur disque ; lancer *Recharger la config (en haut de toute page d'édition de Liberty Next)* une fois la cause corrigée.
+Si le rechargement échoue après une application réussie, les modifications de fichiers restent sur disque ; lancer **Recharger la config**, en haut des pages Liberty Next, une fois la cause corrigée.
 
 ---
 
@@ -275,7 +410,7 @@ Liberty propose également une fenêtre modale dédiée **Find dependencies** de
 | Inclusion de `connectors.toml` (exclu par défaut) sans vérifier que les noms de pool correspondent à la cible. | Les pools de la cible changent à l'improviste ; les requêtes préexistantes échouent au prochain rechargement. | Laisser les connecteurs / pools exclus par défaut tant que la cible n'est pas toute neuve. Ou renommer les pools sur la source avant le regroupement. |
 | Construction depuis une source aux références non résolues (renommage cassé / requête supprimée). | MANIFEST.md liste des éléments sous *Missing references*. | Corriger sur la source (renommer / supprimer / restaurer) et reconstruire. La cible ne recevra pas les références cassées — mais elle ne recevra pas non plus les écrans / requêtes qui les référençaient. |
 | Un avertissement signale des valeurs que cette instance ne sait pas déchiffrer. | La source et la cible utilisent des clés maîtres différentes. | Ressaisir ces valeurs sur la cible après l'import, ou partager la clé maître. |
-| L'import a réussi mais `Appliqué et rechargé` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Recharger la config (en haut de toute page d'édition de Liberty Next)* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
+| L'import a réussi mais `Appliqué et rechargé` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via **Recharger la config**, en haut des pages Liberty Next, une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
 
 ---
 

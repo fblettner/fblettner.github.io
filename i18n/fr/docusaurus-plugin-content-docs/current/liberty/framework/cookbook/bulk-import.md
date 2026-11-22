@@ -21,7 +21,7 @@ Un fichier de plusieurs centaines de lignes — clients rencontrés sur un salon
 
 ### 1. Activer l'import
 
-Dans l'éditeur d'écran, onglet **Général**, cocher **uploadable**. L'écran doit avoir une requête d'insertion (et une requête de mise à jour pour modifier les lignes existantes). Les utilisateurs autorisés à insérer voient un bouton **Importer** au-dessus de la grille.
+Dans le Concepteur d'écran, étape **Ce qu'il est**, cocher **uploadable**. L'écran doit avoir une requête d'insertion (et une requête de mise à jour pour modifier les lignes existantes). Les utilisateurs autorisés à insérer voient un bouton **Importer** au-dessus de la grille.
 
 ### 2. Préparer le fichier
 

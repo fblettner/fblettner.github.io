@@ -20,7 +20,7 @@ Chacun est détaillé ci-dessous avec ses cas d'usage.
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="clq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="clq-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -28,61 +28,77 @@ Chacun est détaillé ci-dessous avec ses cas d'usage.
     <marker id="clq-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="320" rx="14" fill="url(#clq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">monthly_revenue</text>
-  <rect x="240" y="56" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="273.0" y="70.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">← Retour</text>
-  <rect x="312" y="56" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="353.5" y="70.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Find usages</text>
-  <rect x="401" y="56" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="434.0" y="70.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
-  <rect x="473" y="56" width="106" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="526.0" y="70.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Changer le type</text>
-  <rect x="585" y="56" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="618.0" y="70.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Déplacer</text>
-  <rect x="657" y="56" width="55" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="684.5" y="70.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
-  <rect x="718" y="56" width="72" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="754.0" y="70.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
-  <line x1="240" y1="92" x2="960" y2="92" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="104" width="720" height="80" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="126" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SELECT date_trunc('month', invoice_date) AS MONTH,</text>
-  <text x="254" y="146" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">       SUM(total) AS REVENUE FROM invoices GROUP BY 1</text>
-  <rect x="380" y="196" width="440" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="396" y="220" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Cloner la requête</text>
-  <text x="396" y="242" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Nouveau nom pour la copie de « monthly_revenue » :</text>
-  <rect x="396" y="252" width="408" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="406" y="266.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">monthly_revenue_copy</text>
-  <rect x="640" y="284" width="76" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="678.0" y="298.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
-  <rect x="724" y="284" width="80" height="22" rx="5" fill="url(#clq-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="764.0" y="298.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
-  <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons de la requête</text>
-  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">renommer, déplacer, cloner…</text>
-  <line x1="210" y1="67.0" x2="240" y2="67" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
-  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cloner</text>
-  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">même SQL, params, variantes</text>
-  <line x1="1000" y1="137.0" x2="618" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
-  <rect x="1000" y="230" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouveau nom</text>
-  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&lt;nom&gt;_copy proposé</text>
-  <line x1="1000" y1="247.0" x2="804" y2="263" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
+  <rect x="220" y="14" width="880" height="330" rx="14" fill="url(#clq-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="248" y="34" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="279.0" y="48.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">← retour</text>
+  <text x="320" y="49" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">monthly_revenue</text>
+  <rect x="248" y="64" width="125" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="310.5" y="78.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rechercher les usages</text>
+  <rect x="378" y="64" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="408.0" y="78.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Renommer</text>
+  <rect x="443" y="64" width="95" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="490.5" y="78.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Changer le type</text>
+  <rect x="543" y="64" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="573.0" y="78.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Déplacer</text>
+  <rect x="608" y="64" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="633.0" y="78.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
+  <rect x="248" y="92" width="65" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="280.5" y="106.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="248" y="128" width="200" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="255" y="133" width="14" height="14" rx="4" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="275" y="143.5" fill="#4a9eff" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QUE C'EST</text>
+  <text x="355.88800000000003" y="143.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">MONTHLY_REVENUE</text>
+  <line x1="449" y1="140" x2="459" y2="140" stroke="#475569" strokeWidth="1" markerEnd="url(#clq-flow)"/>
+  <rect x="460" y="128" width="150" height="24" rx="12" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <rect x="467" y="133" width="14" height="14" rx="4" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="487" y="143.5" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INSTRUCTION</text>
+  <text x="562.064" y="143.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">SELECT</text>
+  <line x1="611" y1="140" x2="621" y2="140" stroke="#475569" strokeWidth="1" markerEnd="url(#clq-flow)"/>
+  <rect x="622" y="128" width="190" height="24" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="629" y="133" width="14" height="14" rx="4" fill="rgba(255,159,10,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="649" y="143.5" fill="#fb923c" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
+  <text x="718.24" y="143.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">aucun déclaré</text>
+  <rect x="248" y="166" width="824" height="44" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="182" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="272" y="182" fill="#7dd3fc" fontSize="9" fontFamily="ui-monospace, monospace">SELECT date_trunc('month', invoice_date) AS MONTH,</text>
+  <text x="262" y="197" fill="#475569" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
+  <text x="272" y="197" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">       SUM(total) AS REVENUE FROM invoices GROUP BY 1</text>
+  <rect x="450" y="170" width="420" height="150" rx="10" fill="#111827" stroke="#334155" strokeWidth="1.2"/>
+  <text x="466" y="196" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="system-ui, sans-serif">Cloner</text>
+  <line x1="450" y1="210" x2="870" y2="210" stroke="#1f2937" strokeWidth="1"/>
+  <text x="466" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Nom de la copie :</text>
+  <rect x="466" y="244" width="388" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="476" y="260.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">monthly_revenue_copy</text>
+  <rect x="720" y="284" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="755.0" y="298.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="798" y="284" width="56" height="22" rx="5" fill="url(#clq-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="826.0" y="298.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Cloner</text>
+  <rect x="20" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons de la requête</text>
+  <text x="30" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">renommer, déplacer, cloner…</text>
+  <line x1="200" y1="57.0" x2="248" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
+  <rect x="1120" y="14" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="29" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cloner</text>
+  <text x="1130" y="42" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">même SQL, paramètres, variantes</text>
+  <line x1="1120" y1="31.0" x2="633.0" y2="64" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
+  <rect x="1120" y="240" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouveau nom</text>
+  <text x="1130" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&lt;nom&gt;_copy proposé</text>
+  <line x1="1120" y1="257.0" x2="854" y2="257" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#clq-arrow)"/>
 </svg>
 
 ---
 
 ## Duplication par requête
 
-Un bouton *Cloner* se trouve en haut à droite de l'éditeur de requête unique (vues Requêtes, Séquences et Lookups). Le clic :
+**Cloner** fait partie des boutons de l'en-tête de l'éditeur de requête (sections Requêtes, Séquences et Lookups), avec Rechercher les usages, Renommer, Changer le type, Déplacer et Supprimer. Le clic :
 
-1. Demande un nouveau nom (par défaut `<original>_copy`).
+1. Ouvre la fenêtre *Cloner* — *Nom de la copie :*, `<original>_copy` proposé.
 2. Copie en profondeur la requête — seul le nom diffère ; SQL, params, `writable`, `label`, `description`, map SQL par dialecte, chaque champ imbriqué est cloné en JSON et indépendant.
 3. Ajoute la copie à la liste des requêtes du connecteur.
 4. Sélectionne la copie, prête à être modifiée.
 
-La page est alors modifiée — appuyez sur **Enregistrer** dans la barre d'outils du haut pour persister.
+La page porte alors des modifications non enregistrées : **Enregistrer**, dans l'en-tête de la page, les écrit.
 
 ### Quand l'utiliser
 
@@ -105,9 +121,9 @@ Pour **reporter** les références sur la copie, il faut un Renommer, pas une Du
 
 ## Dupliquer une table
 
-Quand le volet droit est en mode **Tables**, chaque ligne porte une icône *Cloner* (l'icône de copie à droite des badges d'emplacement CRUD). Le clic :
+Dans la section **Tables**, chaque ligne porte une icône *Cloner* (l'icône de copie à droite des badges d'emplacement CRUD) ; une table ouverte a la même icône parmi ses actions. Le clic :
 
-1. Demande un nouveau nom de base (par défaut `<base>_copy`).
+1. Demande le nom de la copie (`<base>_copy` proposé).
 2. Copie en profondeur **chaque emplacement CRUD** de la table — `<base>_get` → `<copy>_get`, `<base>_put` → `<copy>_put`, etc. Seuls les emplacements présents sont dupliqués (une table en lecture seule avec seulement `_get` produit une seule copie de requête).
 3. Ajoute les copies à la liste des requêtes.
 4. Sélectionne le nouveau nom de base dans la liste Tables.
@@ -128,7 +144,7 @@ La duplication est une copie ponctuelle — les éditions futures de l'original 
 
 La plus grosse des trois. Accessible depuis :
 
-- Le bouton **Cloner** dans l'onglet *Paramètres* du volet droit quand un connecteur de classe Applications est sélectionné, ou
+- Le bouton **Cloner** de l'en-tête du connecteur sélectionné (avec Rechercher les usages, Renommer et Supprimer), ou
 - Ce même bouton Dupliquer pour n'importe quel connecteur — la fenêtre permet de choisir lequel dupliquer.
 
 La fenêtre demande trois valeurs :

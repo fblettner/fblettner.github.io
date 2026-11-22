@@ -78,6 +78,7 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | `GET` | `/api/charts`, `/api/charts/{chart_id}` | Les graphiques enregistrés. |
 | `GET` | `/api/menus`, `/api/menus/{app}` | Les arborescences de menus, réduites à ce que l'appelant peut ouvrir. |
 | `GET` | `/api/theme` | Habillage et valeurs par défaut de l'interface (public). |
+| `GET` | `/api/pages`, `/api/pages/{app}/{page}` | Les pages livrées par une application, et le module d'une page — chacune demande `page:<app>:<page>`. |
 | `GET` / `PUT` / `DELETE` | `/api/views/{kind}` | Les vues de grille enregistrées. |
 
 ---
@@ -101,6 +102,8 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 |---|---|---|
 | `GET` | `/ai/tools` | Le catalogue d'outils de l'assistant. |
 | `POST` | `/ai/chat` | Envoie la conversation (`{messages, model?}`) ; la réponse revient en flux. Demande `ai:chat`. |
+| `POST` | `/ai/attachments` | Un fichier joint à une question. |
+| `POST` | `/ai/screen-write`, `/ai/screen-write-many`, `/ai/screen-action`, `/ai/job-run`, `/ai/api-run` | Applique une carte du panneau : un enregistrement écrit par son écran (un ou plusieurs), une action, une tâche lancée, un point d'accès API qui modifie des données. Demande `ai:write` et la permission de ce qui est exécuté. |
 | — | `/mcp` | Le point d'accès MCP : les outils de l'assistant pour un client externe, avec `Authorization: Bearer <jeton d'accès personnel>`. Voir [Connecter Claude (MCP)](../framework/mcp.md). |
 | `POST` | `/mcp/files?job=<id>&filename=<nom>` | Un fichier envoyé par l'extension Claude Desktop pour une tâche qui en charge un : il arrive dans la zone de dépôt de la tâche, rien ne s'exécute. Jeton d'accès personnel ; demande `ai:write`, `job:<id>` et **Autoriser les modifications en MCP**. |
 | `GET` | `/admin/ai-usage` | L'usage de l'assistant sur une période (`days`, `username`, `channel`, `failed`, `limit`). Superutilisateurs. Voir [Usage de l'IA](../monitoring/ai-usage.md). |
@@ -120,6 +123,8 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | Packages | `/admin/find-dependencies`, `/admin/build-package`, `/admin/import-package`, `/admin/clone-with-deps`, `/admin/delete-with-deps` | Packages, clonage et suppression tenant compte des dépendances. |
 | Packages de modifications | `/admin/changesets…` | Voir [Paquets de modifications](../nomaflow/change-packages.md#api-contract). |
 | Notifications | `POST /admin/notify/test` | Envoie un test par les canaux. |
+| Journal du serveur | `/admin/logs` (`GET`), `/admin/logs/export`, `/admin/logs/download`, `/admin/logs/levels` (`GET` / `POST`) | Rechercher, exporter et télécharger le journal du serveur ; le niveau de chaque module. Voir [Journal du serveur](../monitoring/server-log.md). |
+| Rétention | `/admin/retention` (`GET`), `/admin/retention/{store}/run` (`POST`, `dry_run=true` par défaut) | La politique et la taille de chaque stockage ; aperçu ou purge de l'un d'eux. Voir [Rétention](../monitoring/retention.md). |
 
 ---
 

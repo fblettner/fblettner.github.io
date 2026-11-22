@@ -6,7 +6,7 @@ keywords: [Liberty Next, CLI, liberty-admin, liberty-ops, liberty, liberty-conne
 
 # CLI reference
 
-Most administration is done in **Settings**. The command-line tools cover what has to work without the web application — the first start, a lost password, scripted set-up, operations.
+Most administration is done in the **Liberty Next** pages. The command-line tools cover what has to work without the web application — the first start, a lost password, scripted set-up, operations.
 
 | Tool | Purpose |
 |---|---|
@@ -107,7 +107,7 @@ Runs connectors without the web application — handy to test a pool or a query 
 
 ## liberty-crypto \{#liberty-crypto\}
 
-Encrypts values for the configuration files with the install's master key. **Settings** encrypts on its own what it saves; this tool is for a value written by hand in a TOML file.
+Encrypts values for the configuration files with the install's master key. The Liberty Next pages encrypt on their own what they save; this tool is for a value written by hand in a TOML file.
 
 | Command | Effect |
 |---|---|

@@ -20,7 +20,7 @@ Les requêtes en cours se terminent avec la configuration de leur démarrage ; l
 
 ## La surveillance des fichiers \{#watcher\}
 
-Avec **Hot reload** activé dans **Liberty Next → Administrer → App** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les Paramètres, une modification sur le serveur, un `git pull`) :
+Avec **Recharger à chaud les fichiers TOML de configuration quand ils changent** coché dans **Liberty Next → Administrer → App → Serveur** — la valeur par défaut — le serveur surveille ses fichiers de configuration et recharge la partie concernée peu après la modification d'un fichier (un enregistrement depuis les pages Liberty Next, une modification sur le serveur, un `git pull`) :
 
 | Fichier | Rechargé |
 |---|---|

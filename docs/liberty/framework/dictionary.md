@@ -22,7 +22,7 @@ It is edited from **Liberty Next → Data → Dictionary**, which holds five kin
 
 ## At a glance
 
-<svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 520" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="dic-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="dic-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -30,110 +30,147 @@ It is edited from **Liberty Next → Data → Dictionary**, which holds five kin
     <marker id="dic-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="410" rx="14" fill="url(#dic-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="45" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Scope:</text>
-  <rect x="286" y="32" width="48" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="310.0" y="44.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Shared</text>
-  <rect x="340" y="32" width="43" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="361.5" y="44.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">sales</text>
-  <rect x="391" y="29" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="403.0" y="43.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <rect x="650" y="29" width="89" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="694.5" y="43.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Scan a table</text>
-  <rect x="745" y="29" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="772.5" y="43.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
-  <rect x="806" y="29" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="836.5" y="43.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
-  <rect x="873" y="29" width="44" height="22" rx="5" fill="url(#dic-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="895.0" y="43.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="240" y="64" width="326" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="241" y="65" width="61" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="271.5" y="79.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Entries</text>
-  <line x1="303" y1="69" x2="303" y2="83" stroke="#334155" strokeWidth="1"/>
-  <text x="329.0" y="79.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Enums</text>
-  <line x1="355" y1="69" x2="355" y2="83" stroke="#334155" strokeWidth="1"/>
-  <text x="386.5" y="79.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lookups</text>
-  <line x1="418" y1="69" x2="418" y2="83" stroke="#334155" strokeWidth="1"/>
-  <text x="455.0" y="79.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Sequences</text>
-  <line x1="492" y1="69" x2="492" y2="83" stroke="#334155" strokeWidth="1"/>
-  <text x="529.0" y="79.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Framework</text>
-  <rect x="870" y="64" width="90" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="915.0" y="78.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add entry</text>
-  <line x1="240" y1="98" x2="960" y2="98" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="108" width="220" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="250" y="116" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="260" y="130.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">filter 4…</text>
-  <rect x="246" y="144" width="208" height="40" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="256" y="158" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_STATUS</text>
-  <text x="256" y="174" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Customer status</text>
-  <text x="256" y="202" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">DUE_DATE</text>
-  <text x="256" y="218" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Due date</text>
-  <text x="256" y="246" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">INVOICE_AMOUNT</text>
-  <text x="256" y="262" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Invoice amount</text>
-  <text x="256" y="290" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">IS_ACTIVE</text>
-  <text x="256" y="306" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Active</text>
-  <rect x="388" y="278" width="58" height="18" rx="9.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="417.0" y="290.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">override</text>
-  <text x="476" y="122" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">CUSTOMER_STATUS</text>
-  <rect x="736" y="108" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="777.5" y="122.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Find usages</text>
-  <rect x="825" y="108" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="852.5" y="122.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Rename</text>
-  <rect x="886" y="108" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="911.0" y="122.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Clone</text>
-  <rect x="476" y="138" width="268" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="507.5" y="153.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <rect x="540" y="139" width="44" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="562.0" y="153.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Rule</text>
-  <line x1="585" y1="143" x2="585" y2="157" stroke="#334155" strokeWidth="1"/>
-  <text x="630.5" y="153.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
-  <line x1="676" y1="143" x2="676" y2="157" stroke="#334155" strokeWidth="1"/>
-  <text x="710.0" y="153.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
-  <text x="476" y="193" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Rules</text>
-  <rect x="596" y="178" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="192.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">LOOKUP ▾</text>
-  <text x="476" y="225" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Rules values</text>
-  <rect x="596" y="210" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="224.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">CUSTOMER_STATUSES ▾</text>
-  <text x="476" y="257" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">False value</text>
-  <rect x="596" y="242" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="256.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"> </text>
-  <text x="476" y="289" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Default</text>
-  <rect x="596" y="274" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="288.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">A</text>
-  <text x="476" y="321" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Justify</text>
-  <rect x="596" y="306" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="320.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">— ▾</text>
-  <text x="476" y="353" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Size</text>
-  <rect x="596" y="338" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="352.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"> </text>
-  <text x="476" y="385" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Lookup params</text>
-  <rect x="596" y="370" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="606" y="384.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">TYPE = CUSTOMER</text>
-  <rect x="10" y="30" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scope</text>
-  <text x="20" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shared, or one per connector</text>
-  <line x1="210" y1="47.0" x2="290" y2="38" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
-  <rect x="10" y="120" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five tabs</text>
-  <text x="20" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entries, enums, lookups…</text>
-  <line x1="210" y1="137.0" x2="240" y2="76" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
-  <rect x="10" y="250" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Entry keys</text>
-  <text x="20" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label shown underneath</text>
-  <line x1="210" y1="267.0" x2="250" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
-  <rect x="1000" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toolbar</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">scan a table, export, save</text>
-  <line x1="1000" y1="47.0" x2="944" y2="38" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
-  <rect x="1000" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rule tab</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rule, its value, default</text>
-  <line x1="1000" y1="167.0" x2="740" y2="150" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
-  <rect x="1000" y="330" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lookup params</text>
-  <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values for the query's :params</text>
-  <line x1="1000" y1="347.0" x2="928" y2="381" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="220" y="10" width="880" height="492" rx="14" fill="url(#dic-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="238" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Dictionary</text>
+  <rect x="717" y="32" width="89" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="761.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Scan a table</text>
+  <rect x="812" y="32" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="839.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
+  <rect x="873" y="32" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="903.5" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
+  <rect x="940" y="32" width="44" height="22" rx="5" fill="url(#dic-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="962.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="990" y="32" width="94" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1037.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Reload config</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="238" y="96" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Connector:</text>
+  <rect x="298" y="82" width="50" height="22" rx="11" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="323.0" y="97" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Shared</text>
+  <rect x="354" y="82" width="35" height="22" rx="11" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="371.5" y="97" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">crm</text>
+  <rect x="395" y="82" width="45" height="22" rx="11" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="417.5" y="97" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">sales</text>
+  <rect x="446" y="82" width="77" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="484.5" y="96.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add scope</text>
+  <rect x="238" y="116" width="87" height="24" rx="5" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="281.5" y="132" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Entries  128</text>
+  <text x="362.0" y="132" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Enums  4</text>
+  <text x="437.5" y="132" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Lookups  6</text>
+  <text x="523.5" y="132" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Sequences  2</text>
+  <text x="614.5" y="132" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Framework  0</text>
+  <rect x="999" y="117" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1040.5" y="131.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add entry</text>
+  <line x1="238" y1="148" x2="1082" y2="148" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238" y="158" width="250" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="166" width="234" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="180.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕  filter 128…</text>
+  <rect x="246" y="196" width="234" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="212" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_ID</text>
+  <text x="256" y="226" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Customer number</text>
+  <rect x="428" y="208" width="40" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="448.0" y="219.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">number</text>
+  <rect x="246" y="242" width="234" height="40" rx="6" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="256" y="258" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_STATUS</text>
+  <text x="256" y="272" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Customer status</text>
+  <rect x="428" y="254" width="40" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="448.0" y="265.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">LOOKUP</text>
+  <rect x="246" y="288" width="234" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="304" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">DUE_DATE</text>
+  <text x="256" y="318" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Due date</text>
+  <rect x="437" y="300" width="31" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="452.5" y="311.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">date</text>
+  <rect x="246" y="334" width="234" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="350" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">IS_ACTIVE</text>
+  <text x="256" y="364" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Active</text>
+  <rect x="423" y="346" width="45" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="445.5" y="357.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">BOOLEAN</text>
+  <rect x="374" y="346" width="45" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="396.5" y="357.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">boolean</text>
+  <rect x="246" y="380" width="234" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="396" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">UPDATED_BY</text>
+  <text x="256" y="410" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Updated by</text>
+  <rect x="432" y="392" width="36" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="450.0" y="403.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">LOGIN</text>
+  <rect x="246" y="426" width="234" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="256" y="442" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">UPDATED_AT</text>
+  <text x="256" y="456" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Updated at</text>
+  <rect x="423" y="438" width="45" height="16" rx="8.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="445.5" y="449.2" fill="#c084fc" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SYSDATE</text>
+  <rect x="388" y="438" width="31" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="403.5" y="449.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">date</text>
+  <rect x="500" y="158" width="582" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="180" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">[connectors.crm.entries.CUSTOMER_STATUS]</text>
+  <rect x="512" y="190" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="558.0" y="204.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Find usages  3</text>
+  <rect x="609" y="190" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="635.0" y="204.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rename</text>
+  <rect x="666" y="190" width="47" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="689.5" y="204.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Clone</text>
+  <rect x="718" y="190" width="52" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="744.0" y="204.5" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
+  <text x="542.5" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="577" y="222" width="45" height="24" rx="5" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="599.5" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rule</text>
+  <text x="669.5" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Translations</text>
+  <text x="750.0" y="238" fill="#cbd5e1" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
+  <line x1="512" y1="252" x2="1070" y2="252" stroke="#1f2937" strokeWidth="1"/>
+  <text x="512" y="270" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RULES</text>
+  <rect x="512" y="276" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="290.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">LOOKUP  Lookup</text>
+  <text x="771.0" y="290.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="797.0" y="270" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RULES VALUES</text>
+  <rect x="797.0" y="276" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="806.0" y="290.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">CUSTOMER_STATUSES</text>
+  <text x="1056.0" y="290.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="512" y="312" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FALSE VALUE</text>
+  <rect x="512" y="318" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="797.0" y="312" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEFAULT</text>
+  <rect x="797.0" y="318" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="806.0" y="332.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">A</text>
+  <text x="512" y="354" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JUSTIFY</text>
+  <rect x="512" y="360" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="374.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">(default)</text>
+  <text x="771.0" y="374.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="797.0" y="354" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SIZE</text>
+  <rect x="797.0" y="360" width="273.0" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="398" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SENSITIVE</text>
+  <rect x="512" y="409" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="529" y="418" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">disabled</text>
+  <text x="512" y="436" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LOOKUP PARAMS</text>
+  <rect x="512" y="442" width="558" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="521" y="456.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">TYPE = CUSTOMER</text>
+  <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scopes</text>
+  <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shared, or one per connector</text>
+  <line x1="200" y1="83.0" x2="238" y2="93" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="20" y="114" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="129" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five tabs</text>
+  <text x="30" y="142" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with their counts</text>
+  <line x1="200" y1="131.0" x2="238" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="20" y="162" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="177" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filter</text>
+  <text x="30" y="190" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">name, label, format or rule</text>
+  <line x1="200" y1="179.0" x2="246" y2="177" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="20" y="236" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">An entry's line</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">its format and its rule</text>
+  <line x1="200" y1="253.0" x2="246" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="1120" y="34" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="49" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Page buttons</text>
+  <text x="1130" y="62" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">scan, export, save</text>
+  <line x1="1120" y1="51.0" x2="1084" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="1120" y="180" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Record bar</text>
+  <text x="1130" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">usages, rename, clone, delete</text>
+  <line x1="1120" y1="197.0" x2="1070" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="1120" y="250" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rule tab</text>
+  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rule, its value, default…</text>
+  <line x1="1120" y1="267.0" x2="622" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
+  <rect x="1120" y="430" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="445" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lookup params</text>
+  <text x="1130" y="458" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values for the lookup's :params</text>
+  <line x1="1120" y1="447.0" x2="1070" y2="453" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dic-arrow)"/>
 </svg>
 
 ---
@@ -146,10 +183,10 @@ Each kind has its tab — **Entries**, **Enums**, **Lookups**, **Sequences**, **
 
 ## Scopes \{#scopes\}
 
-The **Scope** chips at the top choose which part of the dictionary is shown:
+The **Connector:** chips at the top choose which part of the dictionary is shown:
 
 - **Shared** — the entries every connector can use.
-- **One scope per connector** — entries, enums, lookups and sequences that only that connector's queries see. The **+** button adds a scope for an existing connector.
+- **One scope per connector** — entries, enums, lookups and sequences that only that connector's queries see. **＋ Add scope** adds a scope for an existing connector.
 
 A query of the `sales` connector looks for an entry in the `sales` scope first, then in the shared scope. Two applications can therefore define the same key (`STATUS`) differently without clashing. The **Framework** tab is shared only.
 
@@ -165,19 +202,20 @@ On a screen, a column can also switch off the rule it inherits by setting the ru
 
 ## Entries \{#entries\}
 
-The left-hand list shows each entry's key with its label underneath, and a filter field. Entry keys are written in upper case. The form on the right is split into tabs:
+The left-hand list shows each entry's key with its label underneath, and a filter field. Entry keys are written in upper case. The picked entry opens on the right under its full name (`[connectors.crm.entries.CUSTOMER_STATUS]`), its form split into tabs:
 
 | Tab | Field | Effect |
 |---|---|---|
 | General | **Label** | The default label, used when no translation matches the user's language. |
 | General | **Format** | How the value is displayed and entered — see [Formats](#formats). |
+| General | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
 | Rule | **Rules** | The rule applied to the item — see [Rules](#rules). |
 | Rule | **Rules values** | The rule's argument: the true value for `BOOLEAN`, the enum for `ENUM`, the lookup for `LOOKUP`, the sequence for `SEQUENCE`. The list changes with the rule. |
 | Rule | **False value** | `BOOLEAN` only: the value written when the box is unticked. Blank infers it from the true value (`Y` → `N`, `1` → `0`, `true` → `false`); any other true value writes NULL. |
 | Rule | **Default** | The initial value when a new row is added. |
 | Rule | **Justify** | For fixed-width character columns: `right_blank` (right-aligned, padded with spaces) or `right_zero` (right-aligned, padded with zeros). Applied to the written values and to the keys of the WHERE clause. Blank = left-aligned. |
 | Rule | **Size** | The stored width of the item, used with **Justify** when the physical column is wider. |
-| Rule | **Decimals** | For `jdenumber`, the implied decimal places of the stored integer; for the other numeric formats, the places shown (0 to 9). |
+| Rule | **Sensitive** | Marks the item as sensitive data — see [Sensitive data](#sensitive). |
 | Rule | **Lookup params** | Fixed values for the `:params` of the lookup's query (e.g. `TYPE = CUSTOMER`). The keys offered are the parameters the lookup declares. |
 | Translations | one line per language | The label in that language. |
 | Advanced | **Override** | Marks the entry as a local customisation: an upgrade package does not overwrite it. |
@@ -235,11 +273,6 @@ A rule applies to every write whose query binds the column:
 | `ID` | `SEQUENCE` | When the database does not number the rows itself. |
 
 The `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens written in the insert and update queries are the simplest way to stamp these columns — see [Audit trail](./cookbook/audit-trail.md).
-
----|---|
-| `CREATED_BY`, `UPDATED_BY` | `LOGIN` |
-| `CREATED_AT`, `UPDATED_AT` | `SYSDATE` |
-| `ID` | `SEQUENCE` (when the database does not number the rows itself) |
 
 These columns need not appear in the form: the server fills them on every write, and the browser cannot change the user name.
 

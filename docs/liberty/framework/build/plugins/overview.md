@@ -71,7 +71,7 @@ The plugin pattern is what makes Liberty extensible without forking. Three prope
 |---|---|
 | **On disk, on `sys.path`** | Standard Python import path. No registration call, no decorator, no metadata file. Drop a `.py` in the right folder, reference it by name. |
 | **Lives in a separate repo** | The framework ships open-source; your plugin can be proprietary, customer-specific, full of internal SQL templates. The two repos move independently. |
-| **Importable from any framework subsystem** | Nomaflow `python` steps are the main consumer today, but anything that takes a callable string can resolve into your plugin — future custom screen actions, custom dictionary rules, etc. |
+| **Importable from any framework subsystem** | Nomaflow `python` steps, a screen's `call_plugin` action, an API endpoint **Served by a function**, a connector's generators (**Create from…**) and the pages an application ships all resolve a callable string into your plugin. |
 
 The split is intentional: **the open framework gives you primitives; the plugin holds your business logic**.
 
@@ -120,7 +120,7 @@ At startup, the framework runs `_ensure_plugins_on_sys_path()`:
 
 After that, `import myapp.security` works anywhere in the framework's process — including from `importlib.import_module("myapp.security")`, which is what the `python` step executor calls under the hood.
 
-The mechanism is **standard Python imports** — no plugin manifest, no registration, no manifest-driven discovery. If the file is on `sys.path` and importable, the framework can call it.
+The mechanism is **standard Python imports** — no plugin manifest, no registration. If the file is on `sys.path` and importable, the framework can call it. To fill their pickers, the editors (a `python` step's callable, an endpoint's *Served by a function*) read the plugin files and list the top-level functions whose name starts with `j_`, with the first line of their docstring; an endpoint can only name such a function.
 
 ---
 
@@ -136,6 +136,7 @@ A plugin is a normal Python package. Common content:
 | `queries/` | Static SQL files loaded at module-import time. |
 | `data/` | CSV / JSON reference data shipped with the plugin. |
 | `tests/` | Plugin's own test suite. Run separately from the framework's tests. |
+| `<app>/pages/<page>.js` | A page the application ships, built as one JavaScript module — see [Plugins → Pages an application ships](../../apps/plugins.md#pages). |
 
 You can structure the package any way Python allows — submodules, subpackages, nested folders. The framework doesn't care, as long as your `python` step callables reference a valid import path.
 

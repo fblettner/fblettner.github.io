@@ -6,7 +6,7 @@ keywords: [Liberty Next, use cases, admin apps, dashboards, ERP, JD Edwards, int
 
 # What you can build
 
-Liberty Next combines a few building blocks — connectors and their queries, screens, menus, dashboards, jobs, roles — configured from Settings. This page lists what teams build with them, what each case relies on, and where to start.
+Liberty Next combines a few building blocks — connectors and their queries, screens, menus, dashboards, jobs, roles — configured in the Liberty Next pages. This page lists what teams build with them, what each case relies on, and where to start.
 
 The pattern is always the same: **connect the database, write the queries, build the screens, organise the menu, set the roles**.
 

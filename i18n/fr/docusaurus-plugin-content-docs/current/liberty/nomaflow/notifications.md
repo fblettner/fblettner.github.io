@@ -12,128 +12,155 @@ Une notification prévient quelqu'un qu'un événement s'est produit : une péri
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="ntf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="ntf-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="ntf-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="ntf-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfnt-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfnt-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfnt-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfnt-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="10" width="780" height="520" rx="14" fill="url(#ntf-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <rect x="230" y="20" width="210" height="500" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="242" y="32" width="78" height="22" rx="5" fill="url(#ntf-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="281.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add rule</text>
-  <rect x="240" y="70" width="190" height="52" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="250" y="88" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">period_closed</text>
-  <text x="250" y="102" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">screen · insert, update</text>
-  <text x="250" y="115" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">portal email</text>
-  <rect x="240" y="132" width="190" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="150" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">job_failed</text>
-  <text x="250" y="164" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">job</text>
-  <text x="250" y="177" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">email</text>
-  <rect x="240" y="194" width="190" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="212" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">ask_review</text>
-  <text x="250" y="226" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">fired by a screen action</text>
-  <text x="250" y="239" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">portal</text>
-  <rect x="450" y="20" width="540" height="500" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="464" y="42" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">[notifications.period_closed]</text>
-  <text x="464" y="66" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Rule id</text>
-  <rect x="464" y="72" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="86.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">period_closed</text>
-  <text x="630" y="66" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Label</text>
-  <rect x="630" y="72" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="640" y="86.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Période clôturée</text>
-  <rect x="830" y="78" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M832.5,83.5 L834.8,85.8 L838.8,81" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="847" y="87" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Enabled</text>
-  <text x="464" y="118" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TRIGGER</text>
-  <rect x="464" y="124" width="295" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="465" y="125" width="100" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="515.0" y="139.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">A screen event</text>
-  <line x1="566" y1="129" x2="566" y2="143" stroke="#334155" strokeWidth="1"/>
-  <text x="608.5" y="139.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">A job event</text>
-  <line x1="651" y1="129" x2="651" y2="143" stroke="#334155" strokeWidth="1"/>
-  <text x="705.0" y="139.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">A screen action</text>
-  <text x="464" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">App</text>
-  <rect x="464" y="172" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="186.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">sales ▾</text>
-  <text x="600" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Screen</text>
-  <rect x="600" y="172" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="610" y="186.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">period_status ▾</text>
-  <text x="770" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Events</text>
-  <rect x="770" y="177" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="787" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">insert</text>
-  <rect x="830" y="177" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M832.5,182.5 L834.8,184.8 L838.8,180" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="847" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">update</text>
-  <rect x="895" y="177" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="912" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">delete</text>
-  <text x="464" y="214" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Only when the written row has (AND)</text>
-  <rect x="464" y="220" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="234.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">STATUS</text>
-  <rect x="594" y="220" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="604" y="234.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">closed</text>
-  <text x="464" y="262" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DELIVERY</text>
-  <rect x="464" y="273" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M466.5,278.5 L468.8,280.8 L472.8,276" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="481" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">portal</text>
-  <rect x="530" y="273" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M532.5,278.5 L534.8,280.8 L538.8,276" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="547" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">email</text>
-  <rect x="590" y="273" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="607" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">action</text>
-  <text x="464" y="304" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Recipients</text>
-  <rect x="464" y="310" width="103" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="515.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">role: controllers</text>
-  <rect x="580" y="310" width="73" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="616.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">user: alice</text>
-  <rect x="664" y="310" width="149" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="738.5" y="322.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">email: finance@example.com</text>
-  <text x="464" y="350" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MESSAGE</text>
-  <text x="464" y="368" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Subject</text>
-  <rect x="464" y="374" width="500" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="388.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Période &#123;PERIOD&#125; clôturée par &#123;USER&#125;</text>
-  <text x="464" y="412" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Body</text>
-  <rect x="464" y="418" width="500" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="432.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Société &#123;COMPANY&#125; : la période passe en lecture seule.</text>
-  <text x="464" y="456" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Link (a route the notification opens)</text>
-  <rect x="464" y="462" width="260" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="474" y="476.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">/screen/sales/period_status</text>
-  <rect x="750" y="488" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="791.5" y="502.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Send a test</text>
-  <rect x="850" y="488" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="877.5" y="502.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
-  <rect x="916" y="488" width="44" height="22" rx="5" fill="url(#ntf-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="938.0" y="502.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
-  <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Règles</text>
-  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">déclencheur · canaux</text>
-  <line x1="210" y1="77.0" x2="240" y2="96" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="10" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois déclencheurs</text>
-  <text x="20" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écriture, tâche, action</text>
-  <line x1="210" y1="177.0" x2="464" y2="136" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="10" y="240" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Condition sur la ligne</text>
-  <text x="20" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">champ = valeur, cumulées</text>
-  <line x1="210" y1="257.0" x2="464" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="1010" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1020" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Canaux</text>
-  <text x="1020" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cloche, e-mail, requête</text>
-  <line x1="1010" y1="277.0" x2="640" y2="278" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="1010" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1020" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Destinataires</text>
-  <text x="1020" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">user:, role:, email:</text>
-  <line x1="1010" y1="347.0" x2="850" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="1010" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1020" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Variables</text>
-  <text x="1020" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;COLONNE&#125;, &#123;USER&#125;, &#123;JOB&#125;…</text>
-  <line x1="1010" y1="417.0" x2="964" y2="386" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
-  <rect x="520" y="556" width="230" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="530" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Envoyer un test</text>
-  <text x="530" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">valeurs d'exemple, sans enregistrer</text>
-  <line x1="750" y1="573.0" x2="780" y2="512" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ntf-arrow)"/>
+  <rect x="220" y="20" width="880" height="580" rx="14" fill="url(#nfnt-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="260" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Notifications</text>
+  <rect x="951" y="32" width="129" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1015.5" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger la config</text>
+  <rect x="824" y="32" width="119" height="24" rx="5" fill="url(#nfnt-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="883.5" y="47.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une règle</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="80" width="230" height="500" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="90" width="214" height="44" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="260" y="107" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="274" y="107" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">job_failed</text>
+  <text x="274" y="123" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">tâche ∗ · failure, missed</text>
+  <rect x="419" y="96" width="35" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="426" y="107.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="248" y="142" width="214" height="44" rx="7" fill="transparent" stroke="#1f2937" strokeWidth="1"/>
+  <text x="260" y="159" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="274" y="159" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">period_closed</text>
+  <text x="274" y="175" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">sales.period_status · update · when</text>
+  <rect x="419" y="148" width="35" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="426" y="159.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="377" y="148" width="39" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="384" y="159.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="248" y="194" width="214" height="44" rx="7" fill="transparent" stroke="#1f2937" strokeWidth="1"/>
+  <text x="260" y="211" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="274" y="211" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">ask_review</text>
+  <text x="274" y="227" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">déclenchée par une action d'écran</text>
+  <rect x="415" y="200" width="39" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="422" y="211.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="482" y="80" width="598" height="500" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="496" y="101" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="512" y="101" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">[notifications.job_failed]</text>
+  <line x1="482" y1="112" x2="1080" y2="112" stroke="#1f2937" strokeWidth="1"/>
+  <text x="496" y="128" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ID DE LA RÈGLE</text>
+  <rect x="496" y="133" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="147.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">job_failed</text>
+  <text x="686" y="128" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIBELLÉ</text>
+  <rect x="686" y="133" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="696" y="147.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Une tâche a échoué ou a été manquée</text>
+  <rect x="900" y="139" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M902.5,144.5 L904.8,146.8 L908.8,142" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="917" y="148" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Activée</text>
+  <text x="496" y="178" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Déclencheur</text>
+  <rect x="496" y="184" width="351" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="555.5" y="198.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Un événement d'écran</text>
+  <rect x="616" y="185" width="121" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="676.5" y="198.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Un événement de tâche</text>
+  <line x1="738" y1="189" x2="738" y2="201" stroke="#334155" strokeWidth="1"/>
+  <text x="792.5" y="198.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Une action d'écran</text>
+  <text x="496" y="224" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TÂCHES (VIDE = TOUTES)</text>
+  <rect x="496" y="229" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="243.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Ajouter une tâche…</text>
+  <text x="710" y="224" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ÉVÉNEMENTS</text>
+  <rect x="710" y="235" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M712.5,240.5 L714.8,242.8 L718.8,238" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="727" y="244" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">failure</text>
+  <rect x="772.32" y="235" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="789.32" y="244" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">succeeded</text>
+  <rect x="844.1600000000001" y="235" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="861.1600000000001" y="244" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">canceled</text>
+  <rect x="710" y="253" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M712.5,258.5 L714.8,260.8 L718.8,256" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="727" y="262" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">missed</text>
+  <rect x="767.56" y="253" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="784.56" y="262" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">long_run</text>
+  <rect x="834.64" y="253" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="851.64" y="262" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">late</text>
+  <text x="496" y="288" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SEUIL D'EXÉCUTION LONGUE (MINUTES)</text>
+  <rect x="496" y="293" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="307.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="496" y="338" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Remise</text>
+  <rect x="496" y="347" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="513" y="356" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="557.24" y="347" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M559.74,352.5 L562.04,354.8 L566.04,350" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="574.24" y="356" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="613.44" y="347" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="630.44" y="356" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">action</text>
+  <text x="496" y="380" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DESTINATAIRES</text>
+  <rect x="496" y="388" width="61" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="503" y="399.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" fontFamily="system-ui, sans-serif">role:ops ✕</text>
+  <rect x="565" y="385" width="133" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="566" y="386" width="41" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="586.5" y="398.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">role</text>
+  <line x1="608" y1="390" x2="608" y2="400" stroke="#334155" strokeWidth="1"/>
+  <text x="629.5" y="398.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">user</text>
+  <line x1="651" y1="390" x2="651" y2="400" stroke="#334155" strokeWidth="1"/>
+  <text x="674.5" y="398.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="706" y="385" width="360" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="716" y="398.5" fill="#475569" fontSize="8.5" fontFamily="system-ui, sans-serif">Choisir ou saisir…</text>
+  <text x="496" y="426" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Message</text>
+  <text x="496" y="442" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">OBJET</text>
+  <rect x="496" y="447" width="538" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="461.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;JOB&#125;: &#123;STATE&#125;</text>
+  <rect x="1040" y="447" width="24" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="1052.0" y="461" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">&#123; &#125;</text>
+  <text x="496" y="486" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CORPS</text>
+  <rect x="496" y="491" width="538" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="505.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;ERROR&#125;</text>
+  <rect x="1040" y="491" width="24" height="20" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="1052.0" y="505" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">&#123; &#125;</text>
+  <text x="496" y="530" fill="#64748b" fontSize="7.5" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIEN (UNE ROUTE QUE LA NOTIFICATION OUVRE)</text>
+  <rect x="496" y="535" width="538" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="506" y="549.5" fill="#475569" fontSize="9.5" fontFamily="ui-monospace, monospace">/nomaflow/runs</text>
+  <line x1="482" y1="566" x2="1080" y2="566" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="496" y="572" width="74" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="533.0" y="585.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Supprimer</text>
+  <rect x="576" y="572" width="102" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="627.0" y="585.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">➤ Envoyer un test</text>
+  <rect x="987" y="572" width="79" height="20" rx="5" fill="url(#nfnt-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1026.5" y="585.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="922" y="572" width="59" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="951.5" y="585.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="20" y="90" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Règles</text>
+  <text x="30" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">déclencheur · canaux</text>
+  <line x1="200" y1="107.0" x2="248" y2="112" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois déclencheurs</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écriture, tâche, action d'écran</text>
+  <line x1="200" y1="267.0" x2="496" y2="195" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="20" y="584" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="599" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Envoyer un test</text>
+  <text x="30" y="612" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">valeurs d'exemple, sans enregistrer</text>
+  <line x1="200" y1="601.0" x2="627.0" y2="593" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="1120" y="72" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="87" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une règle</text>
+  <text x="1130" y="100" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dans l'en-tête de la page</text>
+  <line x1="1120" y1="89.0" x2="931" y2="57" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="1120" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Événements de tâche</text>
+  <text x="1130" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">failure, missed, long_run, late…</text>
+  <line x1="1120" y1="247.0" x2="1066" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="1120" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Destinataires</text>
+  <text x="1130" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rôle, utilisateur ou e-mail</text>
+  <line x1="1120" y1="377.0" x2="1066" y2="395" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
+  <rect x="1120" y="450" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Marqueurs</text>
+  <text x="1130" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;JOB&#125;, &#123;STATE&#125;, &#123;ERROR&#125;…</text>
+  <line x1="1120" y1="467.0" x2="1066" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfnt-arrow)"/>
 </svg>
 
 ---
@@ -149,18 +176,17 @@ Chaque utilisateur ne voit que ses propres notifications.
 
 ## Le compte e-mail \{#smtp\}
 
-Les e-mails passent par le serveur SMTP défini dans **Liberty Next → Administrer → App → Notifications (email)** :
+Les e-mails passent par le serveur SMTP défini dans **Liberty Next → Administrer → App → Notifications (e-mail)** :
 
 | Champ | Défaut | Remarques |
 |---|---|---|
-| Notifications enabled | activé | Désactivé : aucune règle ne se déclenche. |
-| SMTP host, Port | —, `587` | Sans hôte, seule la cloche fonctionne. |
-| Encryption | STARTTLS | *STARTTLS (usually port 587)*, *SSL / implicit TLS (usually port 465)* ou *None*. Changer d'option règle le port habituel. |
-| Timeout (s) | `20` | |
-| User, Password | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
-| From address | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
-
-| Keep read notifications (days, 0 = forever) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
+| Notifications activées | activé | Désactivé : aucune règle ne se déclenche. |
+| Hôte SMTP, Port | —, `587` | Sans hôte, seule la cloche fonctionne. |
+| Chiffrement | STARTTLS | *STARTTLS (en général port 587)*, *SSL / TLS implicite (en général port 465)* ou *Aucun (connexion en clair)*. Changer d'option règle le port habituel. |
+| Délai (s) | `20` | |
+| Utilisateur, Mot de passe | — | Le mot de passe est chiffré avec la clé maître de l'installation. |
+| Adresse d'expédition | l'utilisateur | Reprend le nom d'utilisateur s'il est vide. |
+| Conserver les notifications lues (jours, 0 = toujours) | `90` | Les notifications lues plus anciennes sont purgées, au démarrage puis toutes les six heures. Les notifications non lues sont conservées. |
 
 Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
@@ -168,7 +194,9 @@ Les e-mails sont en texte brut : l'objet, le corps, puis le lien de la règle.
 
 ## Règles \{#rules\}
 
-Les règles se modifient dans **Liberty Next → Logique → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Send a test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
+Les règles se modifient dans **Liberty Next → Logique → Notifications** et s'enregistrent dans `notifications.toml` — une modification s'applique sans redémarrage. **Envoyer un test** envoie la règle en cours de modification, même non enregistrée, avec des valeurs d'exemple à ses destinataires.
+
+Les règles sont listées à gauche, chacune avec son déclencheur et ses canaux ; **Ajouter une règle** se trouve dans l'en-tête de la page. Sans aucune règle, la page indique *Pas encore de règle : « Ajouter une règle », en haut, crée la première.*
 
 ### Déclencheurs
 
@@ -198,7 +226,7 @@ Un canal en échec est journalisé et n'arrête pas les autres. L'envoi se fait 
 | `role:controllers` | Chaque utilisateur actif titulaire du rôle. |
 | `email:finance@example.com` | Une adresse — e-mail uniquement. |
 
-Dans l'éditeur, choisir les utilisateurs et les rôles dans la liste, ou saisir une adresse. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
+Dans l'éditeur, choisir **role**, **user** ou **email** à côté du champ, puis le rôle ou l'utilisateur dans la liste, ou saisir une adresse ; chaque destinataire devient une pastille, retirée par sa ✕. Une entrée sans préfixe qui contient `@` est traitée comme une adresse ; toute autre est ignorée et consignée dans le journal.
 
 ### Variables
 
@@ -236,7 +264,7 @@ body = "{ERROR}"
 
 ## Depuis une étape de tâche \{#notify-step\}
 
-Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Voir [Étapes → Notification](./steps.md#notify).
+Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Ses destinataires prennent les mêmes formes, plus `user:{USER}` : la personne qui a lancé l'exécution, écartée quand c'est une planification qui l'a lancée. Voir [Étapes → Notification](./steps.md#notify).
 
 ---
 
@@ -258,5 +286,5 @@ En cas d'échec, chaque destinataire reçoit une notification *Job &lt;id&gt; fa
 
 - Commencer par une règle : `failure` et `missed` sur toutes les tâches, vers le rôle d'exploitation.
 - Préférer les rôles aux utilisateurs nommés : la règle suit les changements d'équipe.
-- Utiliser **Send a test** après avoir modifié le compte SMTP.
+- Utiliser **Envoyer un test** après avoir modifié le compte SMTP.
 - Réserver la cloche à ce qui demande une action ; envoyer le reste par e-mail à une boîte partagée.

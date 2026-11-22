@@ -1,6 +1,6 @@
 ---
 title: Plugins
-description: "Le code Python spécifique appelé par Liberty Next — emplacement des packages de plugins, appel d'une fonction module:fonction par une étape Nomaflow python ou par l'action call_plugin d'un écran, arguments injectés (connectors, ctx, settings, changesets), interrogation des connecteurs et valeur de retour."
+description: "Le code spécifique qu'une application apporte à Liberty Next — emplacement des packages de plugins, appel d'une fonction module:fonction par une étape Nomaflow python, l'action call_plugin d'un écran ou un point d'accès d'API, arguments injectés (connectors, ctx, settings, changesets), interrogation des connecteurs et valeur de retour ; et les pages livrées par une application."
 keywords: [Liberty Next, plugins, Python, callable, module:fonction, étape python, call_plugin, connectors, RunContext, StepResult, op_kwargs]
 ---
 
@@ -8,12 +8,17 @@ keywords: [Liberty Next, plugins, Python, callable, module:fonction, étape pyth
 
 Tout se configure dans Liberty Next, à une exception près : les **plugins**, des fonctions Python ordinaires pour ce qu'une requête ou un appel d'API ne sait pas exprimer — une transformation, un enchaînement d'appels propre à un système source, une intégration.
 
-Une fonction de plugin se désigne par `"package.module:fonction"` depuis deux endroits :
+Une fonction de plugin se désigne par `"package.module:fonction"` depuis ces endroits :
 
 | Appelant | Réglage |
 |---|---|
 | Une étape Nomaflow **`python`** | `callable` et `op_kwargs` sur l'étape — voir [Étapes](../../nomaflow/steps.md). |
 | Une action d'écran **`call_plugin`** | `callable` et `param_binds` sur l'action — voir [Actions et cycle de vie](../build/screens/actions-and-lifecycle.md#types). |
+| Un **point d'accès d'API** | **Servi par une fonction** : la fonction répond à la place d'un appel HTTP — voir [Points d'accès d'API](../build/api-endpoints.md#function). |
+| Un **générateur** d'un connecteur API | **Créer à partir de…** dans la liste des points d'accès — voir [Points d'accès d'API](../build/api-endpoints.md#create-from). |
+| Une **page** livrée par une application | Son `call(…)` — voir [plus bas](#pages). |
+
+Les listes des éditeurs proposent les fonctions de premier niveau de `plugins/` dont le nom commence par `j_`, avec la première ligne de leur docstring ; un point d'accès ne peut désigner qu'une telle fonction.
 
 Les pages pratiques se trouvent sous [Logique → Plugins](../build/plugins/overview.md) : [Écrire un callable](../build/plugins/write-a-callable.md), [Primitives ETL](../build/plugins/etl-primitives.md), [Déployer et déboguer](../build/plugins/deploy-and-debug.md). Cette page en donne la synthèse.
 
@@ -87,6 +92,27 @@ Depuis une action d'écran, la valeur de retour est conservée dans le contexte 
 ### Synchrone ou asynchrone
 
 Une fonction `async def` est attendue ; une fonction `def` ordinaire s'exécute dans un thread. Un thread ne peut pas être interrompu : l'annulation marque l'exécution comme annulée, mais la fonction continue jusqu'à son terme — un traitement long s'écrit donc de préférence en `async`. Une exception fait échouer l'étape (et déclenche ses nouvelles tentatives) ; `StepFailed` donne un message plus clair. Les messages journalisés via `register_namespace` apparaissent dans le journal de l'exécution — voir [Écrire un callable](../build/plugins/write-a-callable.md).
+
+---
+
+## Les pages d'une application \{#pages\}
+
+Un écran configuré, c'est une grille et une fiche. Ce qui n'est ni l'une ni l'autre — une structure à parcourir, un parcours guidé — une application le livre sous forme de **page** : un module JavaScript compilé par page, dans son dossier de plugins.
+
+```text
+plugins/
+└── crm/
+    └── pages/
+        └── pipeline.js     ← s'ouvre sur /app/crm/pipeline
+```
+
+- Une entrée de menu de type `page` dont la cible est `/app/<app>/<page>` l'ouvre dans un onglet — voir [Types d'éléments](../build/menus/item-types.md#app-page).
+- La permission est `page:<app>:<page>`, demandée aussi à l'entrée de menu ; l'éditeur de rôles la connaît.
+- L'export par défaut du module est une fonction qui reçoit ce dont sont faites les pages du framework — React, les composants partagés, la grille partagée (recherche, filtres, tri, regroupement, colonnes, export, vues enregistrées), le client d'API, le thème, la langue de l'interface — et renvoie le composant à afficher. La page n'importe rien : elle a donc l'apparence du reste de l'application.
+- La grille partagée (`Grid`) reçoit les colonnes et les lignes de la page. Avec une fonction `detail`, une ligne peut être dépliée : chaque ligne reçoit un chevron, et ce que renvoie la fonction s'affiche sous la ligne — les dépendances d'un objet, une liste imbriquée.
+- Le contrat porte sa `version` : `detail` demande la version 3 ou plus, ce qu'une page qui en dépend peut vérifier au préalable.
+- `call('module:j_fonction', { … })` exécute une fonction de l'application et renvoie sa réponse ; l'appelant doit détenir `plugin:<cette référence>`.
+- La page s'exécute dans la session de l'utilisateur : elle ne lit que ce que les permissions de celui-ci autorisent l'API à renvoyer.
 
 ---
 

@@ -71,7 +71,7 @@ Le modèle des plugins est ce qui rend Liberty extensible sans fork. Trois propr
 |---|---|
 | **Sur disque, sur `sys.path`** | Chemin d'import Python standard. Pas d'appel d'enregistrement, pas de décorateur, pas de fichier de métadonnées. Déposer un `.py` dans le bon dossier, le référencer par son nom. |
 | **Se trouve dans un dépôt séparé** | Le framework est livré open-source ; un plugin peut être propriétaire, spécifique à un client, plein de modèles SQL internes. Les deux dépôts évoluent indépendamment. |
-| **Importable depuis n'importe quel sous-système** | Les étapes `python` de Nomaflow sont aujourd'hui le principal consommateur, mais tout point du framework qui prend une chaîne de callable peut résoudre vers un plugin — futures actions d'écrans personnalisées, règles de dictionnaire personnalisées, etc. |
+| **Importable depuis n'importe quel sous-système** | Les étapes `python` de Nomaflow, l'action `call_plugin` d'un écran, un point d'accès d'API **Servi par une fonction**, les générateurs d'un connecteur (**Créer à partir de…**) et les pages livrées par une application résolvent tous une chaîne de callable vers le plugin. |
 
 La séparation est volontaire : **le framework ouvert apporte les primitives ; le plugin porte la logique métier**.
 
@@ -120,7 +120,7 @@ Au démarrage, le framework exécute `_ensure_plugins_on_sys_path()` :
 
 Ensuite, `import myapp.security` fonctionne partout dans le processus du framework — y compris depuis `importlib.import_module("myapp.security")`, ce que l'exécuteur d'étape `python` appelle en interne.
 
-Le mécanisme repose sur les **imports Python standard** — pas de manifeste de plugin, pas d'enregistrement, pas de découverte pilotée par manifeste. Si le fichier est sur `sys.path` et importable, le framework peut l'appeler.
+Le mécanisme repose sur les **imports Python standard** — pas de manifeste de plugin, pas d'enregistrement. Si le fichier est sur `sys.path` et importable, le framework peut l'appeler. Pour remplir leurs listes, les éditeurs (le callable d'une étape `python`, le *Servi par une fonction* d'un point d'accès) lisent les fichiers du plugin et proposent les fonctions de premier niveau dont le nom commence par `j_`, avec la première ligne de leur docstring ; un point d'accès ne peut désigner qu'une telle fonction.
 
 ---
 
@@ -136,6 +136,7 @@ Un plugin est un package Python normal. Contenu courant :
 | `queries/` | Fichiers SQL statiques chargés à l'import du module. |
 | `data/` | Données de référence CSV / JSON livrées avec le plugin. |
 | `tests/` | Suite de tests propre au plugin. Exécutée séparément des tests du framework. |
+| `<app>/pages/<page>.js` | Une page livrée par l'application, compilée en un module JavaScript — voir [Plugins → Les pages d'une application](../../apps/plugins.md#pages). |
 
 Le package peut être structuré comme Python le permet — sous-modules, sous-packages, dossiers imbriqués. Le framework ne s'en préoccupe pas, du moment que les callables des étapes `python` référencent un chemin d'import valide.
 

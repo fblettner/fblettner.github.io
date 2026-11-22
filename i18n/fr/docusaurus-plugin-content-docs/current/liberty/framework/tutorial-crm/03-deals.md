@@ -110,7 +110,7 @@ Enregistrer le dictionnaire. Voir [Dictionnaire](../dictionary.md) et [Séquence
 
 1. **Connecteurs → crm → Tables → ＋ Ajouter des requêtes → Générer depuis la BDD**, table `deals`, clé `ID`. Comme à l'étape 2, retirer `ID` de `deals_post`, et ajouter `UPDATED_AT = {{SYSTIMESTAMP}}` à `deals_put`.
 2. **Écrans**, pastille `crm`, **＋ Ajouter un écran** `deals` : libellé `Affaires`, les quatre requêtes, **Importer depuis la requête de lecture** dans Colonnes, un onglet de dialogue `Affaire` avec `CUSTOMER_ID`, `NAME`, `STAGE`, `AMOUNT`, `CLOSE_DATE`, `OWNER`.
-3. **Menus**, sous *Ventes* : une entrée `Affaires`, type `screen`, cible `deals_get`, icône `trendingup`.
+3. **Menus**, sous *Ventes* : une entrée `Affaires`, type `screen`, cible `deals` (l'écran), icône `trendingup`.
 
 La grille affiche le nom du client et le libellé de l'étape ; le dialogue les propose dans des listes avec recherche. Cocher **filter** sur `STAGE` et `CUSTOMER_ID` pour filtrer la grille sur ces colonnes.
 
@@ -133,7 +133,7 @@ VALUES (:DEAL_ID, :KIND, :NOTES, :HAPPENED_AT, {{LOGIN}})
 
 ### L'onglet
 
-Dans l'écran `deals`, onglet **Dialogue**, **＋ Ajouter un onglet**, puis dans **Paramètres de l'onglet** :
+Dans l'écran `deals`, étape **Fiche**, **＋ Ajouter un onglet**, puis dans **Paramètres de l'onglet** :
 
 | Réglage | Valeur |
 |---|---|

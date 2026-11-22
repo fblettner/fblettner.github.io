@@ -13,39 +13,55 @@ Un utilisateur se connecte à Liberty par l'un de ces deux chemins :
 | **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie auprès des utilisateurs enregistrés et émet un JWT. |
 | **OIDC** | L'utilisateur clique sur *Se connecter avec OIDC*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
 
-Les deux peuvent coexister — une seule installation propose les deux boutons sur l'écran de connexion, et chacun choisit celui qui s'applique.
+Les deux peuvent coexister — l'écran de connexion porte les deux boutons, et chacun choisit celui qui le concerne.
 
 ---
 
 ## L'écran de connexion
 
-<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 344" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="si-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="login-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="login-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="login-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="login-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="320" rx="14" fill="url(#si-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="500" y="60" fill="#e2e8f0" fontSize="14" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter à Liberty</text>
 
-  <text x="300" y="100" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Nom d'utilisateur</text>
-  <rect x="300" y="110" width="400" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="312" y="130" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">alice</text>
-
-  <text x="300" y="158" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Mot de passe</text>
-  <rect x="300" y="168" width="400" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="312" y="188" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">••••••••••</text>
-
-  <rect x="300" y="216" width="400" height="36" rx="6" fill="#4a9eff"/>
-  <text x="500" y="238" fill="#0b1220" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter</text>
-
-  <line x1="300" y1="276" x2="430" y2="276" stroke="#334155"/>
-  <text x="500" y="282" fill="#64748b" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">ou</text>
-  <line x1="570" y1="276" x2="700" y2="276" stroke="#334155"/>
-
-  <rect x="300" y="296" width="400" height="36" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="500" y="318" fill="#cbd5e1" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter avec Keycloak</text>
+  <rect x="440" y="20" width="320" height="304" rx="14" fill="url(#login-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="464" y="58" fill="#4a9eff" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next</text>
+  <text x="464" y="76" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">framework low-code</text>
+  <text x="464" y="102" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IDENTIFIANT</text>
+  <rect x="464" y="108" width="272" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="122.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="464" y="152" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MOT DE PASSE</text>
+  <rect x="464" y="158" width="272" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="173.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">••••••••••</text>
+  <rect x="464" y="194" width="272" height="28" rx="5" fill="url(#login-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="600.0" y="211.5" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter</text>
+  <text x="600.0" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Mot de passe oublié ?</text>
+  <rect x="464" y="252" width="272" height="28" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="600.0" y="269.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Se connecter avec OIDC</text>
+  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">OIDC doit être activé dans config/app.toml ; sinon</text>
+  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">ce bouton renvoie une 404.</text>
+  <rect x="160" y="40" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le nom de l'application</text>
+  <text x="170" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Nom de l'application, sinon Liberty Next</text>
+  <line x1="360" y1="57.0" x2="440" y2="54" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="160" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Compte local</text>
+  <text x="170" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">identifiant et mot de passe</text>
+  <line x1="360" y1="177.0" x2="464" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="840" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="850" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Mot de passe oublié ?</text>
+  <text x="850" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seulement si l'e-mail est configuré</text>
+  <line x1="840" y1="187.0" x2="660.0" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="840" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="850" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Authentification unique</text>
+  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vers le fournisseur OIDC</text>
+  <line x1="840" y1="277.0" x2="736" y2="266" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
 </svg>
 
-Quand l'OIDC est configuré, un second bouton apparaît sous le formulaire local. Quand l'OIDC n'est pas configuré, seul le formulaire local s'affiche.
+L'écran affiche le nom de l'application (**Nom de l'application**, sinon *Liberty Next*), le formulaire local, puis **Se connecter avec OIDC** et une ligne rappelant que l'OIDC doit être activé. Le bouton OIDC est toujours présent : tant que l'OIDC n'est pas activé, il mène à une page d'erreur (404). **Mot de passe oublié ?** apparaît sous **Se connecter** seulement si les notifications par e-mail sont configurées — voir [Utilisateurs → Mot de passe oublié](./users.md#forgot).
 
 
 ---
@@ -84,15 +100,15 @@ L'OIDC se règle dans **Liberty Next → Administrer → App → OpenID Connect 
 
 | Champ | Requis | Remarques |
 |---|---|---|
-| **Enabled** | oui | Affiche ou masque le bouton **Se connecter avec OIDC**. |
-| **Discovery URL** | oui | L'URL `.well-known/openid-configuration` du fournisseur. |
-| **Client ID** | oui | L'identifiant client déclaré chez le fournisseur. |
-| **Client secret** | oui | Chiffré à l'enregistrement. |
+| **Activé** | oui | Fait mener **Se connecter avec OIDC** au fournisseur ; désactivé, le bouton renvoie une 404. |
+| **URL de découverte** | oui | L'URL `.well-known/openid-configuration` du fournisseur. |
+| **ID client** | oui | L'identifiant client déclaré chez le fournisseur. |
+| **Secret client** | oui | Chiffré à l'enregistrement. |
 | **Scopes** | oui | Au moins `openid` ; `email` et `profile` apportent ces claims (`openid email profile` par défaut). |
-| **Username claim** | non | Le claim qui devient le nom d'utilisateur Liberty (`preferred_username` par défaut ; puis `email`, puis `sub` s'il manque). |
-| **Email claim**, **Name claim** | non | Les claims qui renseignent l'adresse e-mail et le nom complet. |
-| **Redirect URL override (proxy)** | non | Uniquement derrière un proxy inverse qui réécrit l'hôte. |
-| **Frontend redirect** | non | Uniquement pour une interface qui gère elle-même les jetons. |
+| **Revendication identifiant** | non | Le claim qui devient le nom d'utilisateur Liberty (`preferred_username` par défaut ; puis `email`, puis `sub` s'il manque). |
+| **Revendication e-mail**, **Revendication nom** | non | Les claims qui renseignent l'adresse e-mail et le nom complet. |
+| **URL de redirection (proxy)** | non | Uniquement derrière un proxy inverse qui réécrit l'hôte. |
+| **Redirection frontend** | non | Uniquement pour une interface qui gère elle-même les jetons. |
 
 Voir [Paramètres de l'application → OpenID Connect](../settings-app.md#section-4--openid-connect-sso).
 
@@ -184,10 +200,10 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 | Erreur | Symptôme | Correction |
 |---|---|---|
 | L'URL de redirection déclarée chez le fournisseur diffère de celle de Liberty. | La connexion renvoie `redirect_uri_mismatch`. | Enregistrer l'URL exacte envoyée par Liberty — schéma et port compris. |
-| La **Discovery URL** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
-| Le **Username claim** est absent du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
+| L'**URL de découverte** renvoie 404 ou du HTML. | La connexion échoue au démarrage avec une erreur de config. | Vérifier l'URL — la plupart des fournisseurs ajoutent `/.well-known/openid-configuration` à une URL de base ; Liberty attend le chemin complet. |
+| La **Revendication identifiant** est absente du jeton. | La première connexion échoue avec « no username ». | Soit changer le claim pour un que l'IdP émet réellement (`email` convient à la plupart), soit configurer l'IdP pour qu'il émette le claim attendu. |
 | Un utilisateur OIDC se connecte mais voit une application vide. | Comportement attendu — les utilisateurs OIDC arrivent sans rôle. | L'opérateur attribue les rôles via *Liberty Next → Administrer → Accès → Utilisateurs*. |
-| OIDC configuré mais non activé. | Le bouton OIDC n'apparaît pas. | Cocher **Enabled**. |
+| OIDC configuré mais non activé. | **Se connecter avec OIDC** mène à une page 404. | Cocher **Activé**. |
 
 ---
 

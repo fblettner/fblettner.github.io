@@ -1,12 +1,12 @@
 ---
 title: Secrets chiffrés
-description: "Comment Liberty Next stocke les mots de passe des pools, les identifiants d'API, la clé de licence, la clé de l'IA, le secret client OIDC et le mot de passe SMTP : chiffrés en valeurs ENC: à chaque enregistrement depuis les Paramètres, avec la clé maître de l'installation."
-keywords: [Liberty Next, secrets chiffrés, "ENC:", clé maître, mot de passe de pool, jeton d'API, Paramètres, liberty-crypto]
+description: "Comment Liberty Next stocke les mots de passe des pools, les identifiants d'API, la clé de licence, la clé de l'IA, le secret client OIDC et le mot de passe SMTP : chiffrés en valeurs ENC: à chaque enregistrement depuis les pages Liberty Next, avec la clé maître de l'installation."
+keywords: [Liberty Next, secrets chiffrés, "ENC:", clé maître, mot de passe de pool, jeton d'API, pages Liberty Next, liberty-crypto]
 ---
 
 # Secrets chiffrés
 
-Chaque champ secret des Paramètres est chiffré à l'enregistrement et écrit dans le fichier de configuration sous la forme `ENC:…`. Le serveur le déchiffre au chargement du fichier, avec la **clé maître** de l'installation.
+Chaque champ secret des pages Liberty Next est chiffré à l'enregistrement et écrit dans le fichier de configuration sous la forme `ENC:…`. Le serveur le déchiffre au chargement du fichier, avec la **clé maître** de l'installation.
 
 <svg viewBox="0 0 1200 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -51,13 +51,13 @@ Chaque champ secret des Paramètres est chiffré à l'enregistrement et écrit d
   <line x1="210" y1="277.0" x2="250" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sec-arrow)"/>
 </svg>
 
-| Champ | Paramètres |
+| Champ | Page |
 |---|---|
 | Mot de passe d'un pool | Liberty Next → Administrer → Pools |
 | Identifiants d'un connecteur API (mot de passe, jeton, secret client) | Liberty Next → Données → Connecteurs |
 | Clé de licence, clé d'API Anthropic, secret client OIDC, mot de passe SMTP | Liberty Next → Administrer → App |
 
-Un champ secret est une saisie masquée avec un œil pour en afficher le contenu. Rien à activer : une valeur enregistrée depuis les Paramètres est toujours chiffrée, et l'enregistrement est refusé quand le serveur n'a pas de clé maître.
+Un champ secret est une saisie masquée — le mot de passe d'un pool avec un œil pour en afficher le contenu. Rien à activer : une valeur enregistrée depuis ces pages est toujours chiffrée, et l'enregistrement est refusé quand le serveur n'a pas de clé maître.
 
 Pour fournir un secret par l'environnement, écrire `${VARIABLE}` dans le fichier ; pour écrire une valeur `ENC:` à la main, utiliser `liberty-crypto encrypt`. Les détails — la clé, sa dérivation, les secrets `<NOM>_FILE` — se trouvent dans [Chiffrement et secrets](../../configuration/encryption-secrets.md).
 

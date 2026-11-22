@@ -1,112 +1,125 @@
 ---
-title: UDC Codes
-description: "User Defined Codes — the individual values inside each UDC type, with inline grid editing for bulk maintenance."
+title: UDC Code
+description: "Master Data → UDC → UDC Code in Nomajde: the values of every JD Edwards EnterpriseOne User Defined Code type (F0005) in one searchable grid — code, descriptions, special handling, hard-coded flag — with advanced filters and Excel export."
 keywords: [Nomajde, UDC, User Defined Codes, JD Edwards, F0005, master data, code values]
 ---
 
-# UDC Codes
+# UDC Code
 
-The **UDC Codes** screen lists the values that belong to a UDC type — the actual codes the JDE forms validate against. One line per `(Product Code, UDC Type, Code Value)`.
-
-Where the JDE form lets you enter one code at a time, this grid shows them all together and supports inline editing on every column.
+**Master Data → UDC → UDC Code** lists the values of the JD Edwards UDC types (F0005): the codes the JD Edwards forms check against, one row per product code, UDC type and code.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 280" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 296" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="udcc-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="udcc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="udcc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="udcc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="udcc-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="40" width="920" height="220" rx="14" fill="url(#udcc-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomajde · Master Data · UDC Codes</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="880" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PROD.</text>
-  <text x="140" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">TYPE</text>
-  <text x="220" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">VALUE</text>
-  <text x="340" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">DESCRIPTION 1</text>
-  <text x="620" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">DESCRIPTION 2</text>
-  <text x="820" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">HARD-CODED</text>
-
-  <rect x="60" y="132" width="880" height="26" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">00</text>
-  <text x="140" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">CN</text>
-  <text x="220" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">FR</text>
-  <text x="340" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">France</text>
-  <text x="620" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">EU member state</text>
-  <text x="845" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">N</text>
-
-  <rect x="60" y="164" width="880" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">00</text>
-  <text x="140" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">CN</text>
-  <text x="220" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">DE</text>
-  <text x="340" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Germany</text>
-  <text x="620" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">EU member state</text>
-  <text x="845" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">N</text>
-
-  <rect x="60" y="196" width="880" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">00</text>
-  <text x="140" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">CN</text>
-  <text x="220" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">US</text>
-  <text x="340" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">United States</text>
-  <text x="620" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">North America</text>
-  <text x="845" y="213" fill="#fb923c" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Y</text>
-
-  <text x="60" y="252" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">3 of 217 values · UDC type CN · Country Codes</text>
+  <rect x="220" y="20" width="760" height="272" rx="14" fill="url(#udcc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">User Defined Code</text>
+  <rect x="240" y="60" width="720" height="22" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="75" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">› Advanced filters</text>
+  <text x="240" y="100" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">56,727 rows · 1,050 ms</text>
+  <rect x="240" y="108" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="122.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="396" y="108" width="47" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="419.5" y="122.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="900" y="108" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="930.0" y="122.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
+  <rect x="840" y="108" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="867.5" y="122.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="790" y="108" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="812.5" y="122.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Group</text>
+  <rect x="730" y="108" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="757.5" y="122.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filters</text>
+  <rect x="680" y="108" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="702.5" y="122.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
+  <rect x="240" y="140" width="720" height="116" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="140" width="720" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">PRODUCT CODE (ID)</text>
+  <text x="360" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">PRODUCT CODE</text>
+  <text x="500" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">USER DEFINED CODES (ID)</text>
+  <text x="650" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">USER DEFINED CODES</text>
+  <text x="770" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">USER DEFINED CODE</text>
+  <text x="890" y="155.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">DESCRIPTION</text>
+  <text x="250" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">01</text>
+  <text x="360" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Address Book</text>
+  <text x="500" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ST</text>
+  <text x="650" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Search Type</text>
+  <text x="770" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">C</text>
+  <text x="890" y="178.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Customers</text>
+  <line x1="241" y1="186" x2="959" y2="186" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">01</text>
+  <text x="360" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Address Book</text>
+  <text x="500" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ST</text>
+  <text x="650" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Search Type</text>
+  <text x="770" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">E</text>
+  <text x="890" y="200.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Employees</text>
+  <line x1="241" y1="208" x2="959" y2="208" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">01</text>
+  <text x="360" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Address Book</text>
+  <text x="500" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ST</text>
+  <text x="650" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Search Type</text>
+  <text x="770" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">V</text>
+  <text x="890" y="222.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Suppliers</text>
+  <line x1="241" y1="230" x2="959" y2="230" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">00</text>
+  <text x="360" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Foundation Environment</text>
+  <text x="500" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">CN</text>
+  <text x="650" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Country Codes</text>
+  <text x="770" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">FR</text>
+  <text x="890" y="244.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">France</text>
+  <line x1="241" y1="252" x2="959" y2="252" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="272" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">Rows per page 50 · Showing 1–50 of …</text>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced filters</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">product code, type…, then Run</text>
+  <line x1="200" y1="77.0" x2="250" y2="71" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#udcc-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Code and its label</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">(ID) = the stored value</text>
+  <line x1="200" y1="187.0" x2="250" y2="152" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#udcc-arrow)"/>
+  <rect x="1000" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export</text>
+  <text x="1010" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Excel of the rows shown</text>
+  <line x1="1000" y1="117.0" x2="940" y2="119" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#udcc-arrow)"/>
+  <rect x="1000" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read-only list</text>
+  <text x="1010" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">no add, no edit here</text>
+  <line x1="1000" y1="217.0" x2="920" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#udcc-arrow)"/>
 </svg>
 
 ---
 
-## Goal of the view
+## The grid \{#grid\}
 
-For each value inside a UDC type:
+The screen is a read-only list: every value of every type on one grid, with search, sort, filters and export — where the JD Edwards form shows one type at a time. A value is added or changed in JD Edwards.
 
-- **All values in one grid.** The JDE form opens the type, then paginates the values one row at a time. Here every value is on one page — filter by Description, sort by Value, click a row to edit.
-- **Two descriptions per code.** *Description 1* is the short label used on most JDE screens; *Description 2* carries the longer or contextual label. Both can be edited.
-- **Hard-coded flag.** A value flagged *hard-coded* is one that JDE programs check explicitly in their source code — deleting or renaming it breaks behaviour. The flag is read-only in practice; treat hard-coded codes as system-managed.
-
----
-
-## Columns
-
-| Column | Source | What it tells you |
+| Column | Source | Content |
 |---|---|---|
-| **Product Code** | `DRSY` — JDE system code. | The functional area. |
-| **UDC Type** | `DRRT` — UDC type identifier. | The group the value belongs to. |
-| **Code Value** | `DRKY` — code itself. | The value JDE forms compare against. |
-| **Description 1** | `DRDL01` — main label. | Short label used in lists and lookups. |
-| **Description 2** | `DRDL02` — secondary label. | Long or contextual label. |
-| **Special Handling** | `DRSPHD` — flag. | Used by JDE programs that branch on the value. |
-| **Hard-coded** | `DRHRDC` — `Y` / `N`. | `Y` marks codes JDE relies on in source code — do not edit. |
-| **Last update** | `DRUPMJ` — Julian date. | When the value was last changed. |
-
-Internal columns kept on the row but hidden: UDC-only flag, audit user, program, job and timestamp.
+| **Product code (ID)**, **Product code** | `DRSY` | The system code of the type, and its name. |
+| **User defined codes (ID)**, **User defined codes** | `DRRT` | The UDC type, and its title. |
+| **User defined code** | `DRKY` | The code itself. |
+| **Description**, second description | `DRDL01`, `DRDL02` | The short label shown in the forms and lookups, and the second line. |
+| Special handling | `DRSPHD` | A value some JD Edwards programs branch on. |
+| Hard coded | `DRHRDC` | `Y` when JD Edwards programs test the value in their code. |
+| Date updated | `DRUPMJ` | When the value was last changed. |
 
 ---
 
-## Edit dialog
+## Tips & best practices \{#tips\}
 
-Click **Add** in the toolbar to register a new value, or click the edit icon on a row to update one. The dialog has the three identifying fields plus the descriptions and flags.
-
-| Field | What to enter |
-|---|---|
-| **Product Code** | Inherited from the calling UDC Type — read-only when opened by drill-down. |
-| **UDC Type** | Same — read-only when opened by drill-down. |
-| **Code Value** | The value itself. Must be unique within the `(Product, Type)` pair. |
-| **Description 1** | Short label shown wherever JDE displays the code. |
-| **Description 2** | Long label — typically the audit-friendly variant. |
-| **Special Handling** | Optional flag — fill only when the deployment guidelines mention it. |
-| **Hard-coded** | Leave `N` for business-managed codes; `Y` is reserved for JDE-managed values. |
-
-Save writes back to JDE; the row appears in the grid immediately and is usable by the calling forms on the next refresh.
+- Filter on **Product code** and **User defined codes** in the advanced filters before **Run**: the table holds tens of thousands of rows.
+- A value marked hard coded is tested by JD Edwards' own programs: it is changed with care, in JD Edwards.
+- **Export** gives the values as an Excel file — handy to compare two environments or to review a list with the business.
 
 ---
 
-## Tips & best practices
+## Related
 
-- **Open from *UDC Types*** rather than from the menu — the Product / Type filter is pre-set, so the grid shows only the values you want.
-- **Use *Description 1* as the short label, *Description 2* for the long form.** JDE programs read both; keeping them consistent avoids audit confusion.
-- **Never edit a hard-coded value.** `Y` in the *Hard-coded* column means a JDE program tests the value against a literal — renaming it changes behaviour silently.
-- **For mass loads**, use the Excel export, edit it offline, then re-import via the upload action — much faster than typing each row.
+- [UDC Types](./udc-types.md) — the catalogue of the types.

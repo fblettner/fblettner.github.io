@@ -33,7 +33,7 @@ Look at **Rows affected** and at the step's details, then rerun at `DEBUG`: the 
 
 ## A run stays RUNNING \{#hangs\}
 
-A step waits on something slow — a locked table, a remote API, a long sync. Each step stops at its `timeout_seconds`, the job at its own (4 hours by default). **Cancel** on the job's card stops it sooner.
+A step waits on something slow — a locked table, a remote API, a long sync. Each step stops at its `timeout_seconds`, the job at its own (4 hours by default). **Cancel** on the job's line stops it sooner.
 
 ---
 
@@ -47,7 +47,7 @@ SQL, HTTP, file-load and `async` Python steps stop at once. A Python function wr
 
 | Check | Fix |
 |---|---|
-| The card shows **disabled** or **Manual only** | Switch the job on, or give it a schedule. |
+| The job's line shows **disabled** or **Manual only** | Switch the job on, or give it a schedule. |
 | The day is wrong | The scheduler counts the days of the week from 0 = Monday. Write `mon-fri`, not `1-5` — see [Schedules](../jobs/schedules.md#cron). |
 | The **Next runs** preview is not what was expected | Fix the cron or the timezone. |
 | The server was down at that time | The run is recorded **MISSED**; run it by hand. |
@@ -56,7 +56,7 @@ SQL, HTTP, file-load and `async` Python steps stop at once. A Python function wr
 
 ## The job is missing from the list \{#missing\}
 
-`jobs.toml` was edited by hand and no longer validates: the server log names the error. A key not in the schema is refused — check the spelling against [Steps](../steps.md) and [Create a job](../jobs/create.md#toml-only). After fixing the file, **Reload config (at the top of any Liberty Next editor page)**.
+`jobs.toml` was edited by hand and no longer validates: the server log names the error. A key not in the schema is refused — check the spelling against [Steps](../steps.md) and [Create a job](../jobs/create.md#toml-only). After fixing the file, reload the configuration (**Reload config** at the top of the Liberty Next editor pages), then **Reload** on the Jobs page.
 
 ---
 
@@ -68,4 +68,4 @@ The run's log level is `WARNING`, or a Python plugin logs under a namespace that
 
 ## 403 on the Jobs page \{#forbidden\}
 
-The Nomaflow pages and their API are reserved to superusers.
+The Jobs, Schedule and Job Runs pages need *Follow the jobs* (`nomaflow:view`); creating or changing a job needs *Create and edit jobs* (`nomaflow:edit`); the retention and missed-schedule policies stay with the superusers. See [Administration](../administration.md#permissions).

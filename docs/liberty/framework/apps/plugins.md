@@ -1,6 +1,6 @@
 ---
 title: Plugins
-description: "Custom Python code called by Liberty Next — where plugin packages live, how a Nomaflow python step and a screen's call_plugin action call a module:function, what the framework injects (connectors, ctx, settings, changesets), how to query connectors and what to return."
+description: "Custom code an application brings to Liberty Next — where plugin packages live, how a Nomaflow python step, a screen's call_plugin action and an API endpoint call a module:function, what the framework injects (connectors, ctx, settings, changesets), how to query connectors and what to return; and the pages an application ships."
 keywords: [Liberty Next, plugins, custom Python, callable, module:function, python step, call_plugin, connectors, RunContext, StepResult, op_kwargs]
 ---
 
@@ -8,12 +8,17 @@ keywords: [Liberty Next, plugins, custom Python, callable, module:function, pyth
 
 Everything in Liberty Next is configured, except one thing: **plugins**, plain Python functions for what a query or an API call cannot express — a transformation, a call sequence specific to a source system, an integration.
 
-A plugin function is referenced as `"package.module:function"` from two places:
+A plugin function is referenced as `"package.module:function"` from these places:
 
 | Caller | Setting |
 |---|---|
 | A Nomaflow **`python`** step | `callable` and `op_kwargs` on the step — see [Step types](../../nomaflow/steps.md). |
 | A screen action **`call_plugin`** | `callable` and `param_binds` on the action — see [Actions and lifecycle](../build/screens/actions-and-lifecycle.md#types). |
+| An **API endpoint** | **Served by a function**: the function answers instead of an HTTP call — see [API endpoints](../build/api-endpoints.md#function). |
+| A **generator** of an API connector | **Create from…** in the endpoint list — see [API endpoints](../build/api-endpoints.md#create-from). |
+| A **page** an application ships | Its `call(…)` — see [below](#pages). |
+
+The lists of the editors offer the top-level functions of `plugins/` whose name starts with `j_`, with the first line of their docstring; an endpoint can only name such a function.
 
 The task pages are under [Logic → Plugins](../build/plugins/overview.md): [Write a callable](../build/plugins/write-a-callable.md), [ETL primitives](../build/plugins/etl-primitives.md), [Deploy and debug](../build/plugins/deploy-and-debug.md). This page is the summary.
 
@@ -87,6 +92,27 @@ From a screen action, the return value is kept in the chain's context when the a
 ### Sync or async
 
 An `async def` function is awaited; a plain `def` runs in a worker thread. A thread cannot be interrupted: cancelling the run marks it cancelled, but the function goes on until it returns — long work is better written `async`. Raising an exception fails the step (and triggers its retries); `StepFailed` gives a clearer message. Messages logged through `register_namespace` appear in the run's log — see [Write a callable](../build/plugins/write-a-callable.md).
+
+---
+
+## Pages an application ships \{#pages\}
+
+A configured screen is a grid and a form. What is neither — a structure to browse, a guided flow — an application ships as a **page**: one built JavaScript module per page, in its plugin folder.
+
+```text
+plugins/
+└── crm/
+    └── pages/
+        └── pipeline.js     ← opens at /app/crm/pipeline
+```
+
+- A menu entry of type `page` with the target `/app/<app>/<page>` opens it in a tab — see [Item types](../build/menus/item-types.md#app-page).
+- The permission is `page:<app>:<page>`, asked of the menu entry too; the role editor knows it.
+- The module's default export is a function that receives what the framework's own pages are made of — React, the shared components, the shared grid (search, filters, sort, grouping, columns, export, saved views), the API client, the theme, the interface language — and returns the component to draw. The page imports nothing, so it looks like the rest of the application.
+- The shared grid (`Grid`) takes the page's columns and rows. With a `detail` function, a row can be opened: every row gets a chevron, and what the function returns is drawn under the row — an object's dependencies, a nested list.
+- The contract carries its `version`: `detail` needs version 3 or later, which a page that relies on it can check first.
+- `call('module:j_function', { … })` runs a function of the application and returns its answer; the caller needs `plugin:<that reference>`.
+- The page runs in the user's session: it reads only what that user's permissions let the API answer.
 
 ---
 

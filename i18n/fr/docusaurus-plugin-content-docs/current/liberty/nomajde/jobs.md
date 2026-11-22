@@ -36,7 +36,7 @@ Lance immédiatement le contrôle de santé des serveurs JD Edwards au travers d
 
 ## Montée de version et tests \{#upgrade-tests\}
 
-Trois autres tâches se trouvent dans leur propre dossier du menu : **Montée de version → Charger une liste d'objets Oracle** et **Montée de version → Construire l'analyse** — voir [Analyse de montée de version](./upgrade/analysis.md) —, et **Tests → Lancer les tests** — voir [Tests de non-régression](./tests.md#job).
+Les deux tâches de l'analyse de montée de version se lancent depuis la page **Montée de version**, avec **Charger la liste d'Oracle** et **Lancer l'analyse** — voir [Analyse de montée de version](./upgrade/analysis.md#steps). **Tests → Lancer les tests** se trouve dans le dossier Tests du menu — voir [Tests de non-régression](./tests.md#job).
 
 ---
 
@@ -47,9 +47,9 @@ Deux tâches accèdent à JD Edwards au travers de son serveur AIS (connecteur `
 | Tâche | Rôle | Paramètres demandés au lancement |
 |---|---|---|
 | [`nomajde-ais-report`](../nomaflow/bundled-jobs.md#nomajde-ais-report) | Lance un état JD Edwards (UBE) et attend sa fin ; l'exécution échoue si l'état se termine en erreur ou reste en cours au-delà du délai. | **État**, **Version** (`XJDE0001` par défaut), **File d'attente**, **Options de traitement (JSON)**. |
-| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exporte une table ou une vue métier dans un fichier xlsx de l'exécution, avec les titres de colonnes d'AIS en en-tête ; le fichier se télécharge depuis le détail de l'exécution. | **Table** ou **Vue métier**, **Colonnes**, **Conditions (JSON)**, **Lignes max** (`5000` par défaut). |
+| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exporte une table ou une vue métier dans un fichier xlsx de l'exécution, avec les titres de colonnes d'AIS en en-tête ; le fichier est envoyé à la personne qui a lancé l'exécution et reste téléchargeable depuis le détail de l'exécution. | **Table** ou **Vue métier**, **Colonnes**, **Conditions (JSON)**, **Lignes max** (`5000` par défaut). |
 
-Les mêmes appels AIS — et quelques autres : comptage de lignes, appel d'une fonction métier, exécution d'une orchestration, démarrage ou arrêt du planificateur — sont disponibles comme étapes Python d'une tâche et comme actions d'écran : voir [les étapes AIS](../nomaflow/bundled-jobs.md#ais-steps).
+Les mêmes appels AIS — et quelques autres : comptage de lignes, appel d'une fonction métier, exécution d'une orchestration, démarrage ou arrêt du planificateur — sont disponibles comme étapes Python d'une tâche et comme actions d'écran : voir [les étapes AIS](../nomaflow/bundled-jobs.md#ais-steps). Deux d'entre elles gardent plusieurs formulaires ouverts dans une seule session JD Edwards — un enchaînement de formulaires, une ligne d'une grille : voir [Plusieurs formulaires dans une session](./ais/services.md#flow).
 
 ---
 

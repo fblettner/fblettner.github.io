@@ -12,105 +12,125 @@ The **Address Book** folder, under **Master Data**, shows the JD Edwards Enterpr
 
 ## At a glance
 
-<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 434" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="adb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="adb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="adb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="adb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="ab-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ab-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ab-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="ab-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="446" rx="14" fill="url(#adb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Address Book</text>
-  <text x="240" y="66" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Address Number</text>
-  <rect x="240" y="70" width="102" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="83.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <text x="350" y="66" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Alpha Name</text>
-  <rect x="350" y="70" width="142" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="360" y="83.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <text x="500" y="66" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Search Type</text>
-  <rect x="500" y="70" width="112" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="510" y="83.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <text x="620" y="66" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Business Unit</text>
-  <rect x="620" y="70" width="112" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="630" y="83.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif"></text>
-  <rect x="240" y="104" width="720" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="119.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ADDRESS</text>
-  <text x="330" y="119.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ALPHA NAME</text>
-  <text x="550" y="119.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEARCH TYPE</text>
-  <text x="660" y="119.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LONG ADDRESS</text>
-  <text x="790" y="119.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BUSINESS UNIT</text>
-  <rect x="240" y="132" width="720" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="147.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›  4242</text>
-  <text x="330" y="147.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME Industries</text>
-  <text x="550" y="147.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">C — Customer</text>
-  <text x="660" y="147.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME01</text>
-  <text x="790" y="147.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">M30</text>
-  <rect x="240" y="160" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="175.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›  4243</text>
-  <text x="330" y="175.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
-  <text x="550" y="175.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">V — Supplier</text>
-  <text x="660" y="175.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">BETA01</text>
-  <text x="790" y="175.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">M30</text>
-  <rect x="240" y="188" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="203.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">›  4244</text>
-  <text x="330" y="203.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Gamma SA</text>
-  <text x="550" y="203.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">C — Customer</text>
-  <text x="660" y="203.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">GAMMA01</text>
-  <text x="790" y="203.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">M40</text>
-  <rect x="340" y="152" width="140" height="30" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="352" y="171" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">Open in JDE ↗</text>
-  <rect x="240" y="236" width="720" height="210" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="256" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">ACME Industries · 4242</text>
-  <rect x="870" y="245" width="58" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="899.0" y="256.2" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">view only</text>
-  <rect x="254" y="266" width="554" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="282.5" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <line x1="311" y1="271" x2="311" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="334.5" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Flags</text>
-  <line x1="358" y1="271" x2="358" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="403.0" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Category codes</text>
-  <line x1="448" y1="271" x2="448" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="500.0" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Related addresses</text>
-  <rect x="553" y="267" width="64" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="585.0" y="281.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Who's Who</text>
-  <line x1="618" y1="271" x2="618" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="651.0" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Addresses</text>
-  <line x1="684" y1="271" x2="684" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="715.0" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Customer</text>
-  <line x1="746" y1="271" x2="746" y2="285" stroke="#334155" strokeWidth="1"/>
-  <text x="777.0" y="281.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Supplier</text>
-  <rect x="254" y="300" width="692" height="22" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="264" y="314.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LINE</text>
-  <text x="324" y="314.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">WHO'S WHO</text>
-  <text x="554" y="314.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PHONE</text>
-  <text x="714" y="314.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
-  <rect x="254" y="326" width="692" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="264" y="341.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">0</text>
-  <text x="324" y="341.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME Industries</text>
-  <text x="554" y="341.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">+33 1 23 45 67 89</text>
-  <text x="714" y="341.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">contact@acme.example</text>
-  <rect x="254" y="354" width="692" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="264" y="369.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">1</text>
-  <text x="324" y="369.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Jane Doe</text>
-  <text x="554" y="369.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">+33 1 23 45 67 90</text>
-  <text x="714" y="369.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jane.doe@acme.example</text>
-  <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filters</text>
-  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">number, name, type, unit</text>
-  <line x1="210" y1="77.0" x2="240" y2="80" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#adb-arrow)"/>
-  <rect x="10" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row menu</text>
-  <text x="20" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Open in JDE: P01012</text>
-  <line x1="210" y1="187.0" x2="340" y2="172" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#adb-arrow)"/>
-  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Detail tabs</text>
-  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">contacts, addresses, customer, supplier</text>
-  <line x1="210" y1="317.0" x2="254" y2="280" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#adb-arrow)"/>
-  <rect x="1000" y="230" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read-only</text>
-  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">changes are made in JDE</text>
-  <line x1="1000" y1="247.0" x2="920" y2="253" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#adb-arrow)"/>
+  <rect x="220" y="20" width="760" height="394" rx="14" fill="url(#ab-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Address Book (F0101)</text>
+  <rect x="240" y="60" width="720" height="20" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="74" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">› Advanced filters</text>
+  <rect x="240" y="90" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="104.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="396" y="90" width="47" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="419.5" y="104.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="900" y="90" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="930.0" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
+  <rect x="840" y="90" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="867.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="790" y="90" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="812.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Group</text>
+  <rect x="730" y="90" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="757.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filters</text>
+  <rect x="680" y="90" width="45" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="702.5" y="104.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
+  <rect x="240" y="122" width="720" height="116" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="122" width="720" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="372" y="137.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" textAnchor="end" fontFamily="ui-monospace, monospace">ADDRESS NUMBER</text>
+  <text x="386" y="137.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">ALPHA NAME</text>
+  <text x="576" y="137.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">SEARCH TYPE</text>
+  <text x="696" y="137.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">TAX ID</text>
+  <text x="806" y="137.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">BUSINESS UNIT</text>
+  <rect x="246" y="150" width="14" height="14" rx="3" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="253" y="160" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↳</text>
+  <text x="372" y="160.5" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">4242</text>
+  <text x="386" y="160.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME Industries</text>
+  <text x="576" y="160.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">C — Customer</text>
+  <text x="696" y="160.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR001</text>
+  <text x="806" y="160.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">M30</text>
+  <line x1="241" y1="168" x2="959" y2="168" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="172" width="14" height="14" rx="3" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="253" y="182" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↳</text>
+  <text x="372" y="182.5" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">4243</text>
+  <text x="386" y="182.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Beta SARL</text>
+  <text x="576" y="182.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">V — Supplier</text>
+  <text x="696" y="182.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">FR002</text>
+  <text x="806" y="182.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">M30</text>
+  <line x1="241" y1="190" x2="959" y2="190" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="194" width="14" height="14" rx="3" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="253" y="204" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↳</text>
+  <text x="372" y="204.5" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">4244</text>
+  <text x="386" y="204.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Gamma SA</text>
+  <text x="576" y="204.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">C — Customer</text>
+  <text x="696" y="204.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace"></text>
+  <text x="806" y="204.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">M40</text>
+  <line x1="241" y1="212" x2="959" y2="212" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="216" width="14" height="14" rx="3" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="253" y="226" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↳</text>
+  <text x="372" y="226.5" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">4245</text>
+  <text x="386" y="226.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Delta Logistics</text>
+  <text x="576" y="226.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">V — Supplier</text>
+  <text x="696" y="226.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace"></text>
+  <text x="806" y="226.5" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">M40</text>
+  <line x1="241" y1="234" x2="959" y2="234" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="222" y="158" width="756" height="250" fill="#020617" fillOpacity="0.55"/>
+  <rect x="340" y="168" width="560" height="226" rx="10" fill="#111827" stroke="#334155" strokeWidth="1.2"/>
+  <text x="356" y="190" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · Address Book</text>
+  <line x1="341" y1="202" x2="899" y2="202" stroke="#1f2937" strokeWidth="1"/>
+  <text x="356" y="220" fill="#e2e8f0" fontSize="8.2" fontWeight="700" fontFamily="system-ui, sans-serif">General</text>
+  <rect x="354" y="225" width="36" height="2" fill="#4a9eff"/>
+  <text x="404.144" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Flags</text>
+  <text x="443.104" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Category codes</text>
+  <text x="523.3919999999999" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Related addresses</text>
+  <text x="617.4559999999999" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Who's Who</text>
+  <text x="674.7839999999999" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Addresses</text>
+  <text x="732.1119999999999" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="784.8479999999998" y="220" fill="#94a3b8" fontSize="8.2" fontFamily="system-ui, sans-serif">Supplier</text>
+  <text x="356.0" y="244" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ADDRESS NUMBER</text>
+  <rect x="356.0" y="249" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="366.0" y="262.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">4242</text>
+  <text x="626.0" y="244" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LONG ADDRESS NUMBER</text>
+  <rect x="626.0" y="249" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="636.0" y="262.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">ACME01</text>
+  <text x="356.0" y="284" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ALPHA NAME</text>
+  <rect x="356.0" y="289" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="366.0" y="302.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">ACME Industries</text>
+  <text x="626.0" y="284" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEARCH TYPE</text>
+  <rect x="626.0" y="289" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="636.0" y="302.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">C — Customer</text>
+  <text x="356.0" y="324" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TAX ID</text>
+  <rect x="356.0" y="329" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="366.0" y="342.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">FR001</text>
+  <text x="626.0" y="324" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BUSINESS UNIT</text>
+  <rect x="626.0" y="329" width="258.0" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="636.0" y="342.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">M30</text>
+  <line x1="341" y1="364" x2="899" y2="364" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="824" y="370" width="62" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="855.0" y="382.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">× Cancel</text>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced filters</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">then Run</text>
+  <line x1="200" y1="77.0" x2="250" y2="70" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ab-arrow)"/>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row menu</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Open in JDE</text>
+  <line x1="200" y1="157.0" x2="253" y2="157" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ab-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A row opens a dialog</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">eight tabs</text>
+  <line x1="200" y1="277.0" x2="356" y2="218" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ab-arrow)"/>
+  <rect x="1000" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read-only</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">changes are made in JDE</text>
+  <line x1="1000" y1="137.0" x2="860" y2="378" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ab-arrow)"/>
+  <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Related tabs</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Who's Who, addresses, customer…</text>
+  <line x1="1000" y1="247.0" x2="810" y2="218" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ab-arrow)"/>
 </svg>
 
 ---

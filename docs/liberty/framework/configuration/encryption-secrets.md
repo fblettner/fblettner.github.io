@@ -1,6 +1,6 @@
 ---
 title: Encryption & secrets
-description: "How Liberty Next keeps secrets out of its configuration files in clear: ENC: values encrypted with the master key, secret fields encrypted on every save from Settings, ${VARIABLE} references, liberty-crypto, and what to do with the master key."
+description: "How Liberty Next keeps secrets out of its configuration files in clear: ENC: values encrypted with the master key, secret fields encrypted on every save from the Liberty Next pages, ${VARIABLE} references, liberty-crypto, and what to do with the master key."
 keywords: [Liberty Next, encryption, secrets, "ENC:", master key, LIBERTY_MASTER_KEY, AES-256-GCM, liberty-crypto, environment variables]
 ---
 
@@ -12,7 +12,7 @@ Passwords and keys in the configuration files are stored encrypted, as `ENC:…`
 
 ## What is encrypted \{#what\}
 
-Every secret field is encrypted when it is saved from Settings:
+Every secret field is encrypted when it is saved from the Liberty Next pages:
 
 | Where | Field |
 |---|---|
@@ -20,7 +20,7 @@ Every secret field is encrypted when it is saved from Settings:
 | Liberty Next → Data → Connectors (API connectors) | Credentials, tokens, client secrets. |
 | Liberty Next → Administer → App | The licence key, the AI key, the OpenID Connect client secret, the SMTP password. |
 
-The field is a masked input with an eye to show its content. Saving a new value always writes it encrypted; without a master key the save is refused.
+The field is a masked input — the pool's password with an eye to show its content. Saving a new value always writes it encrypted; without a master key the save is refused.
 
 ---
 
@@ -38,7 +38,7 @@ The master key comes from the environment variable `LIBERTY_MASTER_KEY`. The key
 
 | Way | When |
 |---|---|
-| `${VARIABLE}` in the file | The secret comes from the environment or a secrets manager. Settings shows the reference as it is. |
+| `${VARIABLE}` in the file | The secret comes from the environment or a secrets manager. The Liberty Next pages show the reference as it is. |
 | `<NAME>_FILE` | For `LIBERTY_*`, `POSTGRES_*` and `PGADMIN_*` variables: the value is read from a file (Docker, Swarm or Kubernetes secrets). |
 | `liberty-crypto encrypt` | To write an `ENC:` value by hand in a file: `liberty-crypto encrypt` reads the value on its standard input and prints `ENC:…`. See [CLI](../../references/cli.md#liberty-crypto). |
 

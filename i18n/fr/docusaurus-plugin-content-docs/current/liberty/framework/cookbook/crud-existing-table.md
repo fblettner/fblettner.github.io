@@ -53,20 +53,20 @@ Autre solution : donner aux entrées `UPDATED_BY` / `UPDATED_AT` du dictionnaire
 
 ### 3. Construire l'écran
 
-**Liberty Next → Écrans → Écrans**, pastille du connecteur (**＋ Ajouter une portée** la première fois), **＋ Ajouter un écran** `products`, puis dans l'éditeur d'écran :
+**Liberty Next → Écrans → Écrans**, pastille du connecteur (**＋ Ajouter une portée** la première fois), **＋ Ajouter un écran** `products`, puis dans le Concepteur d'écran, étape par étape :
 
 | Onglet | Réglage |
 |---|---|
-| **Général** | Libellé `Produits` ; **Editable** pour la saisie dans la grille ; **uploadable** pour l'import Excel / CSV. |
-| **Requêtes** | Lecture `products_get`, mise à jour `products_put`, insertion `products_post`, suppression `products_delete`. |
-| **Colonnes** | Libellés, formats, largeurs, filtres. |
-| **Dialogue** | Glisser les colonnes sur le formulaire. |
+| **Ce qu'il est** | Libellé `Produits` ; **Editable** pour la saisie dans la grille ; **uploadable** pour l'import Excel / CSV. |
+| **Données** | Lecture `products_get`, mise à jour `products_put`, insertion `products_post`, suppression `products_delete`. |
+| **Grille** → **Colonnes** | Libellés, formats, largeurs, filtres. |
+| **Fiche** | Glisser les colonnes sur le formulaire. |
 
 L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les étapes 2 et 3 en une fois.
 
 ### 4. Ajouter l'entrée de menu
 
-**Liberty Next → Écrans → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
+**Liberty Next → Écrans → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Élément** : libellé `Produits`, type `screen`, cible `products` (l'écran). Enregistrer.
 
 ## Résultat
 
@@ -77,8 +77,8 @@ Un clic sur *Produits* ouvre la grille : tri et filtres par colonne, regroupemen
 | Besoin | Moyen |
 |---|---|
 | **Libellés et listes de valeurs** | Des entrées du dictionnaire sur les colonnes, avec une règle `ENUM` ou `LOOKUP` — voir [Dictionnaire](../dictionary.md). |
-| **Lecture seule pour certains utilisateurs** | N'accorder à leur rôle que la permission de la requête de lecture : les écritures sont refusées. Pour un écran en lecture seule pour tous, cocher **Read-only** dans l'onglet Général. |
-| **Export Excel** | L'onglet **Export** de l'écran — voir [Export Excel](./excel-export.md). |
+| **Lecture seule pour certains utilisateurs** | N'accorder à leur rôle que la permission de la requête de lecture : les écritures sont refusées. Pour un écran en lecture seule pour tous, cocher **Read-only** dans l'étape **Ce qu'il est**. |
+| **Export Excel** | L'étape **Sortie** de l'écran — voir [Export Excel](./excel-export.md). |
 | **Lignes liées dans le dialogue** | Un onglet `nested_table` — voir [Onglets imbriqués](../build/screens/nested-tabs.md). |
 | **Chargement en masse depuis un fichier** | Voir [Import en masse](./bulk-import.md). |
 

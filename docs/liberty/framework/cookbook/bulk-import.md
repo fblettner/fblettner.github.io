@@ -21,7 +21,7 @@ A file with hundreds of rows — customers from a trade show, products from a su
 
 ### 1. Enable the import
 
-In the screen editor, **General** tab, tick **uploadable**. The screen must have an insert query (and an update query to update existing rows). Users who may insert see an **Import** button above the grid.
+In the Screen Designer, **What it is** stage, tick **uploadable**. The screen must have an insert query (and an update query to update existing rows). Users who may insert see an **Import** button above the grid.
 
 ### 2. Prepare the file
 

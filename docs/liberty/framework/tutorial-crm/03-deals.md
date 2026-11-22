@@ -110,7 +110,7 @@ Save the dictionary. See [Dictionary](../dictionary.md) and [Sequences and looku
 
 1. **Connectors → crm → Tables → ＋ Add queries → Generate from DB**, table `deals`, key `ID`. As in Step 2, remove `ID` from `deals_post`, and add `UPDATED_AT = {{SYSTIMESTAMP}}` to `deals_put`.
 2. **Screens**, chip `crm`, **＋ Add screen** `deals`: label `Deals`, the four queries, **Import from read query** in Columns, a dialog tab `Deal` with `CUSTOMER_ID`, `NAME`, `STAGE`, `AMOUNT`, `CLOSE_DATE`, `OWNER`.
-3. **Menus**, under *Sales*: an entry `Deals`, type `screen`, target `deals_get`, icon `trendingup`.
+3. **Menus**, under *Sales*: an entry `Deals`, type `screen`, target `deals` (the screen), icon `trendingup`.
 
 The grid shows the customer's name and the stage's label; the dialog offers both as searchable lists. Tick **filter** on `STAGE` and `CUSTOMER_ID` to filter the grid by them.
 
@@ -133,7 +133,7 @@ VALUES (:DEAL_ID, :KIND, :NOTES, :HAPPENED_AT, {{LOGIN}})
 
 ### The tab
 
-In the `deals` screen, **Dialog** tab, **＋ Add tab**, then in **Tab settings**:
+In the `deals` screen, **Record form** stage, **＋ Add tab**, then in **Tab settings**:
 
 | Setting | Value |
 |---|---|

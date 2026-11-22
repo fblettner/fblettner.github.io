@@ -8,13 +8,13 @@ keywords: [Liberty Next, mobile, phone, tablet, responsive, grid as cards, drawe
 
 An application built with Liberty Next is used as it is on a phone and a tablet: nothing is designed twice. The layout follows the width of the screen; on a desktop nothing changes for a mouse.
 
-The builders — the Studio, the designers — and the authoring of an Explorer analysis remain desktop layouts.
+The Studio stacks its columns one under the other, its panel below them; the designers and the authoring of an Explorer analysis remain desktop layouts.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="mob-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="mob-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,75 +22,135 @@ The builders — the Studio, the designers — and the authoring of an Explorer 
     <marker id="mob-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="480" y="24" width="240" height="424" rx="26" fill="url(#mob-g-card)" stroke="#334155" strokeWidth="2"/>
-  <rect x="496" y="44" width="26" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="509.0" y="58.5" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">☰</text>
-  <text x="532" y="59" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Customers</text>
-  <rect x="496" y="76" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="506" y="90.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Search…</text>
-  <rect x="652" y="76" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="678.0" y="90.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filters</text>
-  <rect x="494" y="110" width="212" height="132" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="506" y="132" fill="#4a9eff" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">1001</text>
-  <text x="554" y="132" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">ACME</text>
-  <text x="694" y="132" fill="#94a3b8" fontSize="13" textAnchor="end" fontFamily="system-ui, sans-serif">⋮</text>
-  <text x="506" y="154" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">City</text>
-  <text x="694" y="154" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">Lyon</text>
-  <text x="506" y="172" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Status</text>
-  <text x="694" y="172" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">Open</text>
-  <text x="506" y="190" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Sales rep</text>
-  <text x="694" y="190" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">M. Dupont</text>
-  <text x="506" y="208" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Credit limit</text>
-  <text x="694" y="208" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">50 000</text>
-  <rect x="506" y="218" width="27" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="519.5" y="229.2" fill="#94a3b8" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+3</text>
-  <rect x="494" y="252" width="212" height="132" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="506" y="274" fill="#4a9eff" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">1002</text>
-  <text x="554" y="274" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Beta SARL</text>
-  <text x="694" y="274" fill="#94a3b8" fontSize="13" textAnchor="end" fontFamily="system-ui, sans-serif">⋮</text>
-  <text x="506" y="296" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">City</text>
-  <text x="694" y="296" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">Nantes</text>
-  <text x="506" y="314" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Status</text>
-  <text x="694" y="314" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">On hold</text>
-  <text x="506" y="332" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Sales rep</text>
-  <text x="694" y="332" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">A. Martin</text>
-  <text x="506" y="350" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Credit limit</text>
-  <text x="694" y="350" fill="#cbd5e1" fontSize="9.5" textAnchor="end" fontFamily="system-ui, sans-serif">20 000</text>
-  <rect x="506" y="360" width="27" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="519.5" y="371.2" fill="#94a3b8" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+3</text>
-  <text x="600.0" y="412" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Showing 1–50 of 312</text>
-  <rect x="550" y="420" width="26" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="563.0" y="432.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">‹</text>
-  <rect x="624" y="420" width="26" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="637.0" y="432.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
-  <rect x="250" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="260" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The menu is a drawer</text>
-  <text x="260" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opened by this button</text>
-  <line x1="440" y1="57.0" x2="496" y2="55" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="250" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="260" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The card's heading</text>
-  <text x="260" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the first two columns</text>
-  <line x1="440" y1="137.0" x2="506" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="250" y="200" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="260" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four lines</text>
-  <text x="260" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label · value, blanks skipped</text>
-  <line x1="440" y1="217.0" x2="506" y2="172" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="250" y="300" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="260" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">+N opens the rest</text>
-  <text x="260" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the other columns</text>
-  <line x1="440" y1="317.0" x2="506" y2="226" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="760" y="70" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="770" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Search and filters</text>
-  <text x="770" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the filter panel, full width</text>
-  <line x1="760" y1="87.0" x2="704" y2="87" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="760" y="150" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="770" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Row actions</text>
-  <text x="770" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the same menu as on a desktop</text>
-  <line x1="760" y1="167.0" x2="698" y2="128" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
-  <rect x="760" y="390" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="770" y="405" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The pager</text>
-  <text x="770" y="418" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">counts the whole result</text>
-  <line x1="760" y1="407.0" x2="670" y2="408" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="470" y="20" width="260" height="640" rx="26" fill="url(#mob-g-card)" stroke="#334155" strokeWidth="2"/>
+  <rect x="482" y="38" width="28" height="26" rx="7" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <line x1="490" y1="45.0" x2="502" y2="45.0" stroke="#e2e8f0" strokeWidth="1.5"/>
+  <line x1="490" y1="50.5" x2="502" y2="50.5" stroke="#e2e8f0" strokeWidth="1.5"/>
+  <line x1="490" y1="56.0" x2="502" y2="56.0" stroke="#e2e8f0" strokeWidth="1.5"/>
+  <rect x="522" y="36" width="196" height="30" rx="10" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="538" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">EN</text>
+  <text x="560" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">☾</text>
+  <text x="582" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="604" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="626" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">♢</text>
+  <text x="648" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">☺</text>
+  <text x="670" y="55" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⇥</text>
+  <rect x="692" y="40" width="22" height="22" rx="6" fill="rgba(168,85,247,0.2)" stroke="#c084fc" strokeWidth="1"/>
+  <text x="703" y="55" fill="#c084fc" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✦</text>
+  <rect x="482" y="74" width="120" height="28" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="490" y="82" width="4.5" height="4.5" rx="1" fill="none" stroke="#94a3b8" strokeWidth="1.1"/>
+  <rect x="490" y="88" width="4.5" height="4.5" rx="1" fill="none" stroke="#94a3b8" strokeWidth="1.1"/>
+  <rect x="496" y="82" width="4.5" height="4.5" rx="1" fill="none" stroke="#94a3b8" strokeWidth="1.1"/>
+  <rect x="496" y="88" width="4.5" height="4.5" rx="1" fill="none" stroke="#94a3b8" strokeWidth="1.1"/>
+  <text x="506" y="85" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="506" y="96" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="592" y="92" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
+  <line x1="472" y1="108" x2="728" y2="108" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="482" y="116" width="236" height="530" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="492" y="128" width="4.5" height="4.5" rx="1" fill="none" stroke="#4a9eff" strokeWidth="1.1"/>
+  <rect x="492" y="134" width="4.5" height="4.5" rx="1" fill="none" stroke="#4a9eff" strokeWidth="1.1"/>
+  <rect x="498" y="128" width="4.5" height="4.5" rx="1" fill="none" stroke="#4a9eff" strokeWidth="1.1"/>
+  <rect x="498" y="134" width="4.5" height="4.5" rx="1" fill="none" stroke="#4a9eff" strokeWidth="1.1"/>
+  <text x="510" y="138" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Customers</text>
+  <line x1="482" y1="150" x2="718" y2="150" stroke="#1f2937" strokeWidth="1"/>
+  <text x="492" y="168" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">312 rows · 42 ms</text>
+  <rect x="626" y="157" width="82" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="627" y="158" width="40.0" height="16" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="646.5" y="169" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Table</text>
+  <text x="687.5" y="169" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Chart</text>
+  <rect x="492" y="184" width="59" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="521.5" y="197.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add row</text>
+  <rect x="556" y="184" width="59" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="585.5" y="197.5" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Bulk edit</text>
+  <rect x="620" y="184" width="47" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="643.5" y="197.5" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Import</text>
+  <rect x="492" y="212" width="150" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="502" y="225.5" fill="#475569" fontSize="7.5" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="648" y="212" width="60" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="678.0" y="225.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Run</text>
+  <rect x="492" y="240" width="100" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="502" y="253.5" fill="#475569" fontSize="7" fontFamily="system-ui, sans-serif">Max rows  default</text>
+  <rect x="598" y="240" width="24" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="610.0" y="253.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <rect x="626" y="240" width="24" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="638.0" y="253.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⊞</text>
+  <rect x="654" y="240" width="24" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="666.0" y="253.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▥</text>
+  <rect x="682" y="240" width="26" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="695.0" y="253.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩ ▾</text>
+  <rect x="488" y="270" width="224" height="296" rx="8" fill="none" stroke="#1f2937" strokeWidth="1"/>
+  <text x="500" y="294" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="539.4" y="294" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="500" y="314" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CITY</text>
+  <text x="700" y="314" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Lyon</text>
+  <text x="500" y="332" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <text x="700" y="332" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Open</text>
+  <text x="500" y="350" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">SALES REP</text>
+  <text x="700" y="350" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="500" y="368" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CREDIT LIMIT</text>
+  <text x="700" y="368" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">50 000</text>
+  <rect x="672" y="382" width="28" height="15" rx="7.5" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="686.0" y="392.7" fill="#94a3b8" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+3</text>
+  <line x1="488" y1="414" x2="712" y2="414" stroke="#1f2937" strokeWidth="1"/>
+  <text x="500" y="440" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">00002</text>
+  <text x="539.4" y="440" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Beta SARL</text>
+  <text x="500" y="460" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CITY</text>
+  <text x="700" y="460" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Nantes</text>
+  <text x="500" y="478" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <text x="700" y="478" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">On hold</text>
+  <text x="500" y="496" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">SALES REP</text>
+  <text x="700" y="496" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="500" y="514" fill="#64748b" fontSize="7" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CREDIT LIMIT</text>
+  <text x="700" y="514" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">20 000</text>
+  <rect x="672" y="528" width="28" height="15" rx="7.5" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="686.0" y="538.7" fill="#94a3b8" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+3</text>
+  <text x="492" y="594" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Rows per page</text>
+  <rect x="552" y="582" width="52" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="562" y="594.5" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">50   ▾</text>
+  <text x="708" y="594" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">Showing 1–50 of 312</text>
+  <text x="503" y="621.5" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">«</text>
+  <text x="529" y="621.5" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">‹</text>
+  <rect x="544" y="608" width="22" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="555" y="621.5" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
+  <text x="581" y="621.5" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">2</text>
+  <text x="607" y="621.5" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
+  <text x="633" y="621.5" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">»</text>
+  <rect x="250" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="260" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The menu is a drawer</text>
+  <text x="260" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opened by the Menu button</text>
+  <line x1="440" y1="47.0" x2="482" y2="51" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="250" y="90" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="260" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tabs in their own row</text>
+  <text x="260" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">they scroll sideways</text>
+  <line x1="440" y1="107.0" x2="482" y2="88" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="250" y="290" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="260" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The card's heading</text>
+  <text x="260" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the first two columns</text>
+  <line x1="440" y1="307.0" x2="500" y2="290" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="250" y="350" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="260" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four lines</text>
+  <text x="260" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label · value, blanks skipped</text>
+  <line x1="440" y1="367.0" x2="500" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="250" y="560" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="260" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The pager</text>
+  <text x="260" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rows per page, whole count</text>
+  <line x1="440" y1="577.0" x2="492" y2="592" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="760" y="30" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Header buttons</text>
+  <text x="770" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a row of their own, above the tabs</text>
+  <line x1="760" y1="47.0" x2="688" y2="51" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="760" y="176" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="191" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toolbar and search</text>
+  <text x="770" y="204" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Add row · Bulk edit · Import · Run</text>
+  <line x1="760" y1="193.0" x2="708" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="760" y="236" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Icon-only controls</text>
+  <text x="770" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">views · group · columns · export</text>
+  <line x1="760" y1="253.0" x2="706" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
+  <rect x="760" y="380" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">+N opens the rest</text>
+  <text x="770" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the other columns of the row</text>
+  <line x1="760" y1="397.0" x2="700" y2="390" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mob-arrow)"/>
 </svg>
 
 ---
@@ -112,7 +172,7 @@ Below 768 px:
 
 A card has a **heading** — the first two columns, side by side and larger — then four lines *label · value*; **+N** opens the rest. A blank value gives no line, and a field shown as a code and its label is one line.
 
-The search, the pager, the row menu (**Row actions**) and **Bulk edit** are there. Sorting and the header filters are wide-screen gestures: use the filter panel.
+The search, the pager, the row menu (**Row actions**) and **Bulk edit** are there; the views, grouping, columns and export controls keep only their icon. Sorting and the header's filter row are wide-screen gestures: the filters set on a wider window still apply, and **Clear filters** stays to remove them.
 
 ### Choosing what a card shows \{#card-setting\}
 

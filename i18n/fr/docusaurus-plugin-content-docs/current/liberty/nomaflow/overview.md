@@ -77,7 +77,7 @@ keywords: [Nomaflow, planificateur, tâches, exécutions, ETL, cron, chargement 
 | La base du framework | L'historique des exécutions. |
 | Les secrets chiffrés | Les mots de passe des pools ; les autres secrets s'écrivent `${VARIABLE}` dans `jobs.toml`. |
 | Les notifications | Prévenir des exécutions en échec, manquées ou longues. |
-| L'accès superutilisateur | Les pages des Tâches et leur API sont réservées aux superutilisateurs. |
+| Les accès | Les superutilisateurs, et les rôles qui ont reçu *Suivre les tâches* (`nomaflow:view`), *Créer et modifier les tâches* (`nomaflow:edit`) ou une tâche (`job:<id>`) — voir [Administration](./administration.md#permissions). |
 
 ---
 

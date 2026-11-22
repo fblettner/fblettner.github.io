@@ -53,20 +53,20 @@ Or give the `UPDATED_BY` / `UPDATED_AT` dictionary entries the `LOGIN` / `SYSDAT
 
 ### 3. Build the screen
 
-**Liberty Next → Screens → Screens**, the connector's chip (**＋ Add scope** the first time), **＋ Add screen** `products`, then in the screen editor:
+**Liberty Next → Screens → Screens**, the connector's chip (**＋ Add scope** the first time), **＋ Add screen** `products`, then in the Screen Designer, stage by stage:
 
 | Tab | Setting |
 |---|---|
-| **General** | Label `Products`; **Editable** for in-grid editing; **uploadable** for Excel / CSV import. |
-| **Queries** | Read `products_get`, update `products_put`, insert `products_post`, delete `products_delete`. |
-| **Columns** | Labels, formats, widths, filters. |
-| **Dialog** | Drag the columns onto the form. |
+| **What it is** | Label `Products`; **Editable** for in-grid editing; **uploadable** for Excel / CSV import. |
+| **Data** | Read `products_get`, update `products_put`, insert `products_post`, delete `products_delete`. |
+| **Grid** → **Columns** | Labels, formats, widths, filters. |
+| **Record form** | Drag the columns onto the form. |
 
 The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3 in one pass.
 
 ### 4. Add the menu entry
 
-**Liberty Next → Screens → Menus**, the connector's chip (**+ Add scope** the first time), **＋ Item**: label `Products`, type `screen`, target `products_get`. Save.
+**Liberty Next → Screens → Menus**, the connector's chip (**+ Add scope** the first time), **＋ Item**: label `Products`, type `screen`, target `products` (the screen). Save.
 
 ## Result
 
@@ -77,8 +77,8 @@ Clicking *Products* opens the grid: sort and filter by column, group, save views
 | Need | How |
 |---|---|
 | **Labels and lists of values** | Dictionary entries on the columns, with an `ENUM` or `LOOKUP` rule — see [Dictionary](../dictionary.md). |
-| **Read-only for some users** | Give their role only the read query's permission: writes are refused. To make the screen read-only for everyone, tick **Read-only** on the General tab. |
-| **Excel export** | The screen's **Export** tab — see [Excel export](./excel-export.md). |
+| **Read-only for some users** | Give their role only the read query's permission: writes are refused. To make the screen read-only for everyone, tick **Read-only** in the **What it is** stage. |
+| **Excel export** | The screen's **Output** stage — see [Excel export](./excel-export.md). |
 | **Related rows inside the dialog** | A `nested_table` tab — see [Nested tabs](../build/screens/nested-tabs.md). |
 | **Bulk loading from a file** | See [Bulk import](./bulk-import.md). |
 

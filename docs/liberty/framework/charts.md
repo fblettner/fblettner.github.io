@@ -14,86 +14,123 @@ Four types are available: **bar**, **line**, **area** and **pie**.
 
 ## At a glance
 
-<svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 482" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="cht-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="cht-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="cht-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="cht-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="che-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="che-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="che-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="che-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="400" rx="14" fill="url(#cht-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">[charts.sales.revenue_by_month]</text>
-  <rect x="240" y="58" width="115" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="271.5" y="73.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
-  <rect x="304" y="59" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="329.0" y="73.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Chart</text>
-  <text x="240" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Chart</text>
-  <rect x="240" y="106" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Line ▾</text>
-  <text x="366" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">X axis</text>
-  <rect x="366" y="106" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="376" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">MONTH ▾</text>
-  <text x="502" y="100" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Series</text>
-  <rect x="502" y="106" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="512" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">REVENUE ▾</text>
-  <rect x="616" y="109" width="16" height="16" rx="3" fill="#4a9eff"/>
-  <rect x="636" y="106" width="22" height="22" rx="5" fill="url(#cht-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="647.0" y="120.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
-  <rect x="660" y="106" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="671.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
-  <rect x="690" y="106" width="100" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="700" y="120.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">MARGIN ▾</text>
-  <rect x="794" y="109" width="16" height="16" rx="3" fill="#22c55e"/>
-  <rect x="814" y="106" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="825.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
-  <rect x="838" y="106" width="22" height="22" rx="5" fill="url(#cht-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="849.0" y="120.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
-  <rect x="868" y="106" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="880.0" y="120.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <text x="240" y="152" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Aggregate</text>
-  <rect x="240" y="158" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="172.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Sum ▾</text>
-  <rect x="240" y="196" width="720" height="200" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <line x1="280" y1="230" x2="920" y2="230" stroke="#1f2937" strokeWidth="1"/>
-  <line x1="280" y1="270" x2="920" y2="270" stroke="#1f2937" strokeWidth="1"/>
-  <line x1="280" y1="310" x2="920" y2="310" stroke="#1f2937" strokeWidth="1"/>
-  <line x1="280" y1="350" x2="920" y2="350" stroke="#1f2937" strokeWidth="1"/>
-  <polyline points="333,330 440,310 547,325 653,285 760,260 867,272" fill="none" stroke="#4a9eff" strokeWidth="2.5"/>
-  <polyline points="333,300 440,290 547,312 653,270 760,262 867,280" fill="none" stroke="#22c55e" strokeWidth="2.5"/>
-  <text x="333.3333333333333" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">05</text>
-  <text x="440.0" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">06</text>
-  <text x="546.6666666666667" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">07</text>
-  <text x="653.3333333333333" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">08</text>
-  <text x="760.0" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">09</text>
-  <text x="866.6666666666666" y="368" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">10</text>
-  <rect x="10" y="50" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Two tabs</text>
-  <text x="20" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">data source, then the chart</text>
-  <line x1="210" y1="67.0" x2="240" y2="70" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
-  <rect x="10" y="140" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Type and X axis</text>
-  <text x="20" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bar, line, area, pie</text>
-  <line x1="210" y1="157.0" x2="240" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
-  <rect x="10" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aggregate</text>
-  <text x="20" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rows sharing the same X</text>
-  <line x1="210" y1="277.0" x2="240" y2="170" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
-  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One line per series</text>
-  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">column, colour, left/right axis</text>
-  <line x1="1000" y1="77.0" x2="780" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
-  <rect x="1000" y="250" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live preview</text>
-  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sample of the query's rows</text>
-  <line x1="1000" y1="267.0" x2="960" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#cht-arrow)"/>
+  <rect x="220" y="20" width="760" height="448" rx="14" fill="url(#che-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">▥</text>
+  <text x="258" y="46" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="ui-monospace, monospace">[charts.sales.revenue_by_month]</text>
+  <rect x="916" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="927.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <rect x="942" y="32" width="22" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="953.0" y="45.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <line x1="221" y1="62" x2="979" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="244" y="84" fill="#94a3b8" fontSize="10.5" fontFamily="system-ui, sans-serif">☰  General</text>
+  <text x="328.8" y="84" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">▥  Chart</text>
+  <line x1="324.8" y1="95" x2="381.84000000000003" y2="95" stroke="#4a9eff" strokeWidth="2"/>
+  <line x1="221" y1="96" x2="979" y2="96" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="116" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHART</text>
+  <rect x="240" y="122" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="136.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Line              ▾</text>
+  <text x="380" y="116" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">X AXIS</text>
+  <rect x="380" y="122" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="390" y="136.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">MONTH            ▾</text>
+  <text x="520" y="116" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PIVOT BY</text>
+  <rect x="520" y="122" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="530" y="136.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">One series per value  ▾</text>
+  <text x="240" y="164" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SERIES</text>
+  <rect x="240" y="170" width="460" height="36" rx="6" fill="none" stroke="#334155" strokeWidth="1.2" strokeDasharray="4 3"/>
+  <rect x="248" y="175" width="210" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="253" y="179" width="104" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="263" y="191.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">REVENUE        ▾</text>
+  <rect x="364" y="181" width="14" height="14" rx="3" fill="#4a9eff"/>
+  <rect x="384" y="179" width="18" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="393.0" y="191.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
+  <rect x="406" y="179" width="18" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="415.0" y="191.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
+  <text x="440" y="192" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="464" y="175" width="210" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="469" y="179" width="104" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="479" y="191.5" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">MARGIN        ▾</text>
+  <rect x="580" y="181" width="14" height="14" rx="3" fill="#4ade80"/>
+  <rect x="600" y="179" width="18" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="609.0" y="191.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">L</text>
+  <rect x="622" y="179" width="18" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="631.0" y="191.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">R</text>
+  <text x="656" y="192" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="688" y="193" fill="#94a3b8" fontSize="13" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <text x="714" y="164" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">AGGREGATE</text>
+  <rect x="714" y="170" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="724" y="184.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Sum              ▾</text>
+  <rect x="240" y="216" width="720" height="196" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <line x1="280" y1="236.0" x2="940" y2="236.0" stroke="#1f2937" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="274" y="239.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">120k</text>
+  <line x1="280" y1="271.0" x2="940" y2="271.0" stroke="#1f2937" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="274" y="274.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">90k</text>
+  <line x1="280" y1="306.0" x2="940" y2="306.0" stroke="#1f2937" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="274" y="309.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">60k</text>
+  <line x1="280" y1="341.0" x2="940" y2="341.0" stroke="#1f2937" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="274" y="344.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">30k</text>
+  <line x1="280" y1="376.0" x2="940" y2="376.0" stroke="#1f2937" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="274" y="379.0" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <text x="946" y="239.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">40%</text>
+  <text x="946" y="274.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">30%</text>
+  <text x="946" y="309.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">20%</text>
+  <text x="946" y="344.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">10%</text>
+  <text x="946" y="379.0" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">0%</text>
+  <polyline points="300.0,316.0 424.0,304.0 548.0,310.0 672.0,278.0 796.0,256.0 920.0,264.0" fill="none" stroke="#4a9eff" strokeWidth="2"/>
+  <polyline points="300.0,296.0 424.0,290.0 548.0,306.0 672.0,284.0 796.0,272.0 920.0,280.0" fill="none" stroke="#4ade80" strokeWidth="2"/>
+  <text x="300.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">05</text>
+  <text x="424.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">06</text>
+  <text x="548.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">07</text>
+  <text x="672.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">08</text>
+  <text x="796.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">09</text>
+  <text x="920.0" y="390" fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">10</text>
+  <circle cx="530.0" cy="402" r="3.5" fill="#4ade80"/>
+  <text x="537.0" y="405" fill="#4ade80" fontSize="8.5" fontFamily="system-ui, sans-serif">MARGIN</text>
+  <circle cx="600.0" cy="402" r="3.5" fill="#4a9eff"/>
+  <text x="607.0" y="405" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">REVENUE</text>
+  <line x1="221" y1="424" x2="979" y2="424" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="896" y="434" width="64" height="22" rx="5" fill="url(#che-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="928.0" y="448.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="826" y="434" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="857.0" y="448.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Two tabs</text>
+  <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">General: id, label, query</text>
+  <line x1="200" y1="83.0" x2="244" y2="84" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
+  <rect x="20" y="126" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="141" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Type, X axis, pivot</text>
+  <text x="30" y="154" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bar, line, area, pie</text>
+  <line x1="200" y1="143.0" x2="240" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
+  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live preview</text>
+  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a sample of the query's rows</text>
+  <line x1="200" y1="287.0" x2="280" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
+  <rect x="1000" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One block per series</text>
+  <text x="1010" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colour · L / R axis · ✕</text>
+  <line x1="1000" y1="117.0" x2="415" y2="179" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
+  <rect x="1000" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aggregate</text>
+  <text x="1010" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rows sharing the same X</text>
+  <line x1="1000" y1="187.0" x2="844" y2="181" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
+  <rect x="1000" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Second Y axis</text>
+  <text x="1010" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">as soon as a series is on R</text>
+  <line x1="1000" y1="267.0" x2="950" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#che-arrow)"/>
 </svg>
 
 ---
 
 ## Liberty Next → Insight → Charts \{#list\}
 
-Charts are grouped by connector: the **scope** chips at the top pick a connector, and **Add a connector scope** opens a new one. The list shows each chart of the scope with its label, its id and an *override* badge when it is marked as a local customisation. Each row has:
+Charts are grouped by connector: the **Connector** chips at the top pick one, **Add scope** adds a connector that has no chart yet, and **Filter…** narrows the list. Each line shows the chart's id, its label, then its query, its type and its X column (`sales.revenue_get · line · x: MONTH`), with an *override* badge when it is marked as a local customisation. **Add chart** and **Reload config** are in the page header. Each line has:
 
 | Button | Effect |
 |---|---|
@@ -103,13 +140,13 @@ Charts are grouped by connector: the **scope** chips at the top pick a connector
 | **Clone** | Copies the chart under a new id. |
 | **Delete** | Removes the chart. |
 
-**Add chart** opens the editor for a new chart in the current scope; clicking a row opens it for editing.
+**Add chart** opens the editor for a new chart in the current scope; clicking a line opens it for editing.
 
 ---
 
 ## The editor \{#editor\}
 
-The editor has two tabs.
+The editor opens in a window titled by the chart (`[charts.<connector>.<id>]`) and has two tabs, **General** and **Chart**. **Cancel** and **Save** are in its footer; closing it with unsaved changes asks whether to save them, discard them or keep editing.
 
 ### General \{#general\}
 
@@ -129,7 +166,7 @@ The tab loads a sample of the query's rows and draws the chart as it is set:
 |---|---|
 | **Chart** | The type: bar, line, area or pie. |
 | **X axis** | The column along the X axis — the slice labels on a pie. |
-| **Series** | One line per Y column: the column, a colour swatch, and **L** / **R** to put the series on the left or the right Y axis. **+** adds a series. A pie uses the first series only. |
+| **Series** | One block per Y column: the column, a colour swatch, **L** / **R** to put the series on the left or the right Y axis, and **✕** to remove it. **+** adds a series. A pie uses the first series only. |
 | **Pivot by** | Optional, not on a pie. A column whose distinct values become the series: one series per value (a process, a status), each the aggregate of the first Y column. A query returning *refresh date · process · lines* gives one bar per refresh, stacked by process, without pivoting in SQL. |
 | **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 

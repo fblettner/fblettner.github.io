@@ -472,7 +472,7 @@
     "description": "The label for category 'Global' in sidebar 'nomasx1Sidebar'"
   },
   "sidebar.nomasx1Sidebar.category.Global.link.generated-index.description": {
-    "message": "Registre global : applications et SQL personnalisé par application.",
+    "message": "Registre global : applications, SQL personnalisé par application, réglages JD Edwards et LDAP.",
     "description": "The generated-index page description for category 'Global' in sidebar 'nomasx1Sidebar'"
   },
   "sidebar.nomasx1Sidebar.category.Segregation of Duties": {
@@ -664,12 +664,8 @@
     "description": "The label for category 'Insight' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Insight.link.generated-index.description": {
-    "message": "Liberty Next → Analyse : tableaux de bord et graphiques, et l'explorateur de données.",
+    "message": "Liberty Next → Analyse : tableaux de bord et graphiques, explorateur de données et modèles de rapport.",
     "description": "The generated-index page description for category 'Insight' in sidebar 'libertySidebar'"
-  },
-  "sidebar.nomajdeSidebar.category.Upgrade": {
-    "message": "Montée de version",
-    "description": "The label for category 'Upgrade' in sidebar 'nomajdeSidebar'"
   },
   "sidebar.nomajdeSidebar.category.JD Edwards services (AIS)": {
     "message": "Services JD Edwards (AIS)",

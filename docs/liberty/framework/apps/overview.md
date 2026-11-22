@@ -6,7 +6,7 @@ keywords: [Liberty Next, app, app picker, connector, menu, show_in_switcher, hom
 
 # Apps
 
-In Liberty Next, an **app** is a **connector that has a menu**: its name appears in the app picker at the top of the sidebar, and picking it shows its menu. There is no separate app object to create — the connector is the app.
+In Liberty Next, an **app** is a **connector that has a menu and is shown in the app switcher** (**Show in switcher**, on by default): its name appears in the app picker at the top of the sidebar, and picking it shows its menu. There is no separate app object to create — the connector is the app. The [Overview](../studio.md#overview) page lists the apps of the installation, and the [Studio](../studio.md#studio) shows each one as a map of its menu, screens, data and services.
 
 ---
 
@@ -31,10 +31,10 @@ In Liberty Next, an **app** is a **connector that has a menu**: its name appears
   <text x="254" y="190" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Pool</text>
   <rect x="252" y="196" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="262" y="210.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Default ▾</text>
-  <text x="260" y="250" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📊 Pipeline</text>
-  <text x="260" y="276" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Sales</text>
-  <text x="260" y="302" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">   👥 Customers</text>
-  <text x="260" y="328" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">   📈 Deals</text>
+  <text x="260" y="250" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Pipeline</text>
+  <text x="260" y="276" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ Sales</text>
+  <text x="274" y="302" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="274" y="328" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Deals</text>
   <rect x="480" y="30" width="480" height="380" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="496" y="56" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline</text>
   <rect x="496" y="72" width="144" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -90,7 +90,7 @@ Everything an app shows is filed under its connector's name:
 | Charts | Liberty Next → Insight → Charts, the connector's scope | `[charts.<app>.<id>]` |
 | Dashboards | Liberty Next → Insight → Dashboards, the app | `[dashboards.<app>.<id>]` — a menu item opens it with the target `<app>.<id>`. |
 
-Shared actions have a single namespace. Nomaflow jobs are not tied to an app.
+Services have a single namespace. Nomaflow jobs are not tied to an app.
 
 ---
 
@@ -130,13 +130,13 @@ The [Screen Creation Assistant](../build/screen-assistant.md) chains steps 1 to 
 
 ## Ready-made apps \{#ready-made\}
 
-**Nomasx-1** and **Nomajde** are delivered as ready-made apps with their Nomaflow jobs. They are installed and upgraded as described in [Deploy the licensed apps](../../installation/deploy-prebuilt-apps.md). Their screens, menus and dictionary are visible and editable in Settings like any app; an entry marked **override** keeps local changes through upgrades.
+**Nomasx-1** and **Nomajde** are delivered as ready-made apps with their Nomaflow jobs. They are installed and upgraded as described in [Deploy the licensed apps](../../installation/deploy-prebuilt-apps.md). Their screens, menus and dictionary are visible and editable in Liberty Next like any app; an entry marked **override** keeps local changes through upgrades.
 
 ---
 
 ## Who sees an app \{#access\}
 
-An app appears for a user when its menu has items that user may open. Roles decide which menu items, screens and queries each user reaches — see [Roles & permissions](../build/secure/roles-and-permissions.md) and [Menus → Permissions and roles](../build/menus/permissions-and-roles.md).
+An app appears for a user when it is shown in the switcher and its menu has items that user may open. Roles decide which menu items, screens and queries each user reaches — see [Roles & permissions](../build/secure/roles-and-permissions.md) and [Menus → Permissions and roles](../build/menus/permissions-and-roles.md).
 
 ---
 

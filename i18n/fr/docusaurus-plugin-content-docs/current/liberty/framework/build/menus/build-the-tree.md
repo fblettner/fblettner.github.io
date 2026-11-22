@@ -14,61 +14,111 @@ Le modèle est une **liste plate d'éléments reliés par `parent`** — mais l'
 
 ## La barre d'outils
 
-Au-dessus de l'arbre :
+Dans l'en-tête de la page :
 
 | Bouton | Rôle |
 |---|---|
 | **＋ Dossier** | Ajoute un dossier au premier niveau. Le dossier est le seul type d'élément sans `type`. |
-| **＋ Élément** | Ajoute une feuille au premier niveau — définir son type et sa cible dans l'Inspecteur. Pour l'ajouter sous un dossier, utiliser le **＋ Ajouter un enfant** de la ligne. |
-| **⎘ Dupliquer** | Duplique l'élément sélectionné (sous-arborescence incluse). Demande un nouvel id. Désactivé tant que rien n'est sélectionné. |
-| **🔗 Rechercher les usages** | Ouvre une boîte de dialogue qui liste chaque endroit où cet élément de menu est référencé (par exemple le champ `home` d'un autre connecteur). Utile avant un renommage ou une suppression. Désactivé tant que rien n'est sélectionné. |
+| **＋ Élément** | Ajoute une feuille au premier niveau — son type et sa cible se règlent dans le panneau de droite. Pour l'ajouter sous un dossier, utiliser le **＋** de la ligne (*Ajouter un enfant*). |
+| **Abandonner** / **Enregistrer** | Annulent ou écrivent tout le menu. |
+| **Recharger la config** | Relit les fichiers de configuration. |
 
-La barre de portée au-dessus de la barre d'outils porte les boutons *Annuler* / *Enregistrer* qui valent pour toute la page — identique à toutes les pages Paramètres.
+Sur le panneau de l'entrée choisie, à côté de son type :
+
+| Bouton | Rôle |
+|---|---|
+| **Cloner** | Duplique l'entrée (sous-arborescence incluse). Demande un nouvel identifiant. |
+| **Rechercher les usages** | Liste chaque endroit où cette entrée de menu est référencée (par exemple le champ `home` d'un autre connecteur). Utile avant un renommage ou une suppression. |
+| **Rechercher les dépendances** | Liste ce dont l'entrée dépend — son connecteur et sa cible (un écran, une requête, un point d'accès, un tableau de bord ou une tâche) — et, de proche en proche, ce dont ceux-ci dépendent. |
 
 ---
 
 ## Les lignes de l'arbre
 
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 340" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="tr-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="mbt-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="mbt-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="mbt-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="mbt-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#tr-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres · Menus · [menus.crm] · arbre</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="78" width="920" height="32" rx="6" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="56" y="98" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">🔎 Filtrer 7 éléments…</text>
-
-  <rect x="40" y="118" width="920" height="30" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="56" y="138" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">▾ 🛡 Sécurité <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  security</tspan></text>
-
-  <rect x="40" y="154" width="920" height="30" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
-  <text x="76" y="174" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">📄 Utilisateurs <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  security.users</tspan></text>
-  <rect x="760" y="158" width="22" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
-  <text x="771" y="173" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">↑</text>
-  <rect x="784" y="158" width="22" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
-  <text x="795" y="173" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">↓</text>
-  <rect x="808" y="158" width="22" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
-  <text x="819" y="173" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">→</text>
-  <rect x="832" y="158" width="22" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
-  <text x="843" y="173" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">←</text>
-  <rect x="856" y="158" width="22" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
-  <text x="867" y="173" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋</text>
-  <rect x="880" y="158" width="22" height="22" rx="3" fill="rgba(239,68,68,0.10)"/>
-  <text x="891" y="173" fill="#ef4444" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
-
-  <rect x="40" y="190" width="920" height="30" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="76" y="210" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">📄 Rôles <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  security.roles</tspan></text>
-
-  <rect x="40" y="226" width="920" height="30" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="56" y="246" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">▾ 💼 Pipeline <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  pipeline</tspan></text>
-
-  <rect x="40" y="262" width="920" height="30" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="76" y="282" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">📄 Clients <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  pipeline.customers</tspan></text>
-
-  <rect x="40" y="298" width="920" height="30" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="76" y="318" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">📊 Tableau de bord des affaires <tspan fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">  pipeline.deals_dashboard</tspan></text>
+  <rect x="400" y="20" width="520" height="300" rx="12" fill="url(#mbt-g-card)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="420" y="46" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="439.876" y="46" fill="#94a3b8" fontSize="8.4" fontFamily="system-ui, sans-serif">· 9 éléments</text>
+  <rect x="420" y="54" width="480" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="429" y="68.3" fill="#475569" fontSize="8.6" fontFamily="system-ui, sans-serif">⌕ filtrer 9…</text>
+  <text x="442" y="99" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="454" y="99" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▣</text>
+  <text x="468" y="99" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Vue d'ensemble</text>
+  <text x="898" y="99" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">overview</text>
+  <text x="442" y="127" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="454" y="127" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▭</text>
+  <text x="468" y="127" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Data Explorer</text>
+  <text x="898" y="127" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">explorer</text>
+  <text x="430" y="155" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="442" y="155" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="454" y="155" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▱</text>
+  <text x="468" y="155" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Ventes</text>
+  <text x="898" y="155" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">sales</text>
+  <text x="458" y="183" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="470" y="183" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="484" y="183" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="898" y="183" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">customers</text>
+  <line x1="456" y1="191" x2="896" y2="191" stroke="#4a9eff" strokeWidth="2"/>
+  <rect x="418" y="196" width="484" height="24" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="458" y="211" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="470" y="211" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="484" y="211" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Affaires</text>
+  <rect x="750" y="199" width="150" height="18" rx="4" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="763" y="211.5" fill="#475569" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↑</text>
+  <text x="788" y="211.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↓</text>
+  <text x="813" y="211.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">→</text>
+  <text x="838" y="211.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">←</text>
+  <text x="863" y="211.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <text x="888" y="211.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <text x="458" y="239" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="470" y="239" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="484" y="239" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Commandes ouvertes</text>
+  <text x="898" y="239" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">open_orders</text>
+  <text x="430" y="267" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">›</text>
+  <text x="442" y="267" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="454" y="267" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▱</text>
+  <text x="468" y="267" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Rapports</text>
+  <text x="898" y="267" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">reports</text>
+  <text x="430" y="295" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">›</text>
+  <text x="442" y="295" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⠿</text>
+  <text x="454" y="295" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">▱</text>
+  <text x="468" y="295" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Import</text>
+  <text x="898" y="295" fill="#94a3b8" fontSize="8.4" textAnchor="end" fontFamily="ui-monospace, monospace">import</text>
+  <rect x="20" y="40" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtre</text>
+  <text x="30" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par id ou libellé ; sans glisser</text>
+  <line x1="200" y1="57.0" x2="422" y2="66" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dossier ▾ ouvert / › fermé</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">double-clic pour basculer</text>
+  <line x1="200" y1="137.0" x2="430" y2="151" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="20" y="190" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ligne de dépôt</text>
+  <text x="30" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">où la ligne glissée arrive</text>
+  <line x1="200" y1="207.0" x2="460" y2="191" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Poignée ⠿</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">glisser la ligne (et sa branche)</text>
+  <line x1="200" y1="277.0" x2="452" y2="263" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="1120" y="50" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="65" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Id, en chasse fixe</text>
+  <text x="1130" y="78" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">remplacé par les actions au survol</text>
+  <line x1="1120" y1="67.0" x2="896" y2="123" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="1120" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">↑ ↓ → ←</text>
+  <text x="1130" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">déplacer, indenter, désindenter</text>
+  <line x1="1120" y1="157.0" x2="800" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
+  <rect x="1120" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">+ enfant · 🗑 supprimer</text>
+  <text x="1130" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un dossier part avec sa branche</text>
+  <line x1="1120" y1="237.0" x2="885" y2="210" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mbt-arrow)"/>
 </svg>
 
 Chaque ligne porte :
@@ -76,8 +126,8 @@ Chaque ligne porte :
 | Élément | Ce qu'il montre |
 |---|---|
 | Indentation | Profondeur visuelle — chaque niveau ajoute 16 pixels. |
-| Chevron | ▾ pour un dossier déplié, ▸ pour replié. |
-| Icône | L'`icon` de l'élément (l'une des [icônes du menu latéral](./translations-and-icons.md#icons)). Les dossiers retombent sur une icône de dossier ; les feuilles sur une icône de fichier. |
+| Chevron | ▾ pour un dossier déplié, ▸ pour replié ; un double clic sur la ligne du dossier le bascule aussi. |
+| Icône | Le type de l'entrée : un dossier ouvert ou fermé, un écran, un tableau de bord, une tâche, une requête, un point d'accès, une page. L'`icon` propre à l'élément est celle que dessine le menu latéral de l'application. |
 | Libellé | Le champ `label`. |
 | Id | Monospace, atténué, après le libellé. S'estompe au survol pour laisser place aux actions. |
 | Actions par ligne (au survol) | *Monter* (↑), *Descendre* (↓), *Indenter* (→), *Désindenter* (←), *Ajouter un enfant* (＋), *Supprimer* (🗑). |
@@ -147,7 +197,7 @@ Le bouton **Enregistrer** au niveau de la page valide tout le menu (ids uniques,
 
 ## Le formulaire de l'Inspecteur
 
-Cliquer une ligne → l'Inspecteur à droite charge un formulaire pour l'élément sélectionné. Les champs s'adaptent au `type` :
+Cliquer une ligne → le panneau de droite charge le formulaire de l'entrée, en trois onglets — **General** (`id`, `label`, `icon`, `type`, `connector`, `target`), **Advanced** (`parent`, `params`, `roles`, `override`) et **Translations** (`l`). Les champs s'adaptent au `type` :
 
 | Champ | Toujours affiché | Notes |
 |---|---|---|
@@ -171,15 +221,15 @@ Les modifications sont **vives en mémoire** — la ligne de l'arbre se met à j
 Renommer un `id` est plus engageant que les autres champs parce que chaque référence doit être mise à jour :
 
 1. **Enfants** : les références `parent` de l'arbre sont mises à jour automatiquement.
-2. **Entre fichiers** : le champ `home` d'un connecteur, ou un élément d'un autre menu qui référence celui-ci, n'est pas mis à jour. Utiliser **Rechercher les usages** (le bouton de la barre d'outils) avant de renommer pour voir chaque endroit qui référence l'élément.
+2. **Entre fichiers** : le champ `home` d'un connecteur, ou un élément d'un autre menu qui référence celui-ci, n'est pas mis à jour. Utiliser **Rechercher les usages** (sur le panneau de l'entrée) avant de renommer pour voir chaque endroit qui référence l'élément.
 
-Pour un renommage lourd, le schéma sûr est **Rechercher les usages → Dupliquer → corriger les références → supprimer l'ancien** — le nouvel id peut prendre le relais pendant la mise à jour de chaque référence.
+Pour un renommage lourd, le schéma sûr est **Rechercher les usages → Cloner → corriger les références → supprimer l'ancien** — le nouvel id peut prendre le relais pendant la mise à jour de chaque référence.
 
 ---
 
 ## Dupliquer un élément
 
-Le bouton **⎘ Dupliquer** de la barre d'outils duplique l'élément sélectionné :
+**Cloner**, sur le panneau de l'entrée choisie, la duplique :
 
 - Toute la sous-arborescence est dupliquée (un dossier avec des enfants duplique chaque descendant).
 - Les nouveaux ids sont demandés via une boîte de dialogue — la valeur par défaut est l'ancien id avec un suffixe.

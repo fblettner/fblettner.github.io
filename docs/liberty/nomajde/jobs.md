@@ -36,7 +36,7 @@ Runs the health check of the JD Edwards servers through Server Manager at once, 
 
 ## Upgrade and tests \{#upgrade-tests\}
 
-Three more jobs sit in their own folders of the menu: **Upgrade → Load an object list from Oracle** and **Upgrade → Build the analysis** — see [Upgrade analysis](./upgrade/analysis.md) —, and **Tests → Run the tests** — see [Non-regression tests](./tests.md#job).
+The two jobs of the upgrade analysis are started from the **Upgrade** page, with **Load Oracle's list** and **Run the analysis** — see [Upgrade analysis](./upgrade/analysis.md#steps). **Tests → Run the tests** sits in the Tests folder of the menu — see [Non-regression tests](./tests.md#job).
 
 ---
 
@@ -47,9 +47,9 @@ Two jobs reach JD Edwards through its AIS server (connector `ais_connection`). T
 | Job | What it does | Parameters asked at launch |
 |---|---|---|
 | [`nomajde-ais-report`](../nomaflow/bundled-jobs.md#nomajde-ais-report) | Runs a JD Edwards report (UBE) and waits until it is done; the run fails when the report ends in error or is still running after the time limit. | **Report**, **Version** (`XJDE0001` by default), **Queue**, **Processing options (JSON)**. |
-| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exports a table or a business view to an xlsx file of the run, with AIS's column titles as headers; the file is downloaded from the run detail. | **Table** or **Business view**, **Columns**, **Conditions (JSON)**, **Max rows** (`5000` by default). |
+| [`nomajde-ais-export`](../nomaflow/bundled-jobs.md#nomajde-ais-export) | Exports a table or a business view to an xlsx file of the run, with AIS's column titles as headers; the file is sent to whoever started the run and stays downloadable from the run detail. | **Table** or **Business view**, **Columns**, **Conditions (JSON)**, **Max rows** (`5000` by default). |
 
-The same AIS calls — and a few more: count rows, call a business function, run an orchestration, start or stop the scheduler — are available as Python steps of a job and as screen actions: see [the AIS steps](../nomaflow/bundled-jobs.md#ais-steps).
+The same AIS calls — and a few more: count rows, call a business function, run an orchestration, start or stop the scheduler — are available as Python steps of a job and as screen actions: see [the AIS steps](../nomaflow/bundled-jobs.md#ais-steps). Two of them keep several forms open in one JD Edwards session — a flow over several forms, one row of a grid: see [Several forms in one session](./ais/services.md#flow).
 
 ---
 

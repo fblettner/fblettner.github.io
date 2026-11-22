@@ -1,6 +1,6 @@
 ---
 title: Tâches livrées
-description: "Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de synchronisation, de collecte, de rapport et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Catalogue → ▶ Exécuter, planification via le planificateur standard ou déclenchement depuis la CI."
+description: "Le catalogue de tâches Nomaflow fourni avec le wheel liberty-apps — tâches d'installation, de préchargement, de synchronisation, de collecte, de rapport et d'audit qui pilotent Nomasx-1 et Nomajde sans qu'aucune ligne de TOML ne soit écrite par l'opérateur. Lancement depuis Nomaflow → Exploitation → Tâches → Exécuter, planification via le planificateur standard ou déclenchement depuis la CI."
 keywords: [Nomaflow, tâches livrées, jobs.toml, Nomasx-1, Nomajde, liberty-apps, préchargement, installation, rafraîchissement, synchronisation, SoD, audit trail, LDAP, deploy-databases, init-schema, security, license]
 ---
 
@@ -26,79 +26,129 @@ Toutes les tâches livrées arrivent avec **`enabled = false`** — elles appara
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 330" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 448" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="bjb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="bjb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="bjb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="bjb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="nfbj-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfbj-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfbj-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfbj-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="298" rx="14" fill="url(#bjb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomaflow · Tâches</text>
-  <rect x="760" y="28" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="770" y="42.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Filtrer…</text>
-  <rect x="878" y="28" width="90" height="22" rx="5" fill="url(#bjb-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="923.0" y="42.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New job</text>
-  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="74" width="355" height="102" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
-  <text x="252" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">F0004, F0005, F92… → nomajde</text>
-  <rect x="252" y="122" width="68" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="286.0" y="134.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">30 2 ∗ ∗ ∗</text>
-  <text x="580" y="94" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">○ off</text>
-  <rect x="252" y="146" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="280.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run now</text>
-  <rect x="315" y="146" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="373.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
-  <rect x="605" y="74" width="355" height="102" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="617" y="94" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
-  <text x="617" y="112" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">toutes les collectes → nomasx1</text>
-  <rect x="617" y="122" width="48" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="641.0" y="134.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">manual</text>
-  <text x="945" y="94" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">○ off</text>
-  <rect x="617" y="146" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="645.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run now</text>
-  <rect x="680" y="146" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="738.5" y="160.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
-  <rect x="240" y="186" width="355" height="102" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="206" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-audit-trail-1</text>
-  <text x="252" y="224" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">audit trail capture</text>
-  <rect x="252" y="234" width="78" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="291.0" y="246.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">∗/15 ∗ ∗ ∗ ∗</text>
-  <text x="580" y="206" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">○ off</text>
-  <rect x="252" y="258" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="280.5" y="272.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run now</text>
-  <rect x="315" y="258" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="373.5" y="272.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
-  <rect x="605" y="186" width="355" height="102" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="617" y="206" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">config-versions-purge</text>
-  <text x="617" y="224" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">20 versions · 90 days</text>
-  <rect x="617" y="234" width="63" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="648.5" y="246.2" fill="#94a3b8" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">0 3 ∗ ∗ ∗</text>
-  <rect x="688" y="234" width="63" height="18" rx="9.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="719.5" y="246.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCEEDED</text>
-  <text x="945" y="206" fill="#4ade80" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">● on</text>
-  <rect x="617" y="258" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="645.5" y="272.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run now</text>
-  <rect x="680" y="258" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="738.5" y="272.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Run with parameters</text>
-  <rect x="10" y="90" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches livrées</text>
-  <text x="20" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">du wheel liberty-apps</text>
-  <line x1="210" y1="107.0" x2="240" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#bjb-arrow)"/>
-  <rect x="1000" y="90" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Désactivées en général</text>
-  <text x="1010" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à activer une fois raccordées</text>
-  <line x1="1000" y1="107.0" x2="950" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#bjb-arrow)"/>
-  <rect x="1000" y="230" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activée</text>
-  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">config-versions-purge, 3 h</text>
-  <line x1="1000" y1="247.0" x2="950" y2="206" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#bjb-arrow)"/>
-  <rect x="10" y="240" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Run with parameters</text>
-  <text x="20" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">surcharger une fois</text>
-  <line x1="210" y1="257.0" x2="340" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#bjb-arrow)"/>
+  <rect x="220" y="20" width="880" height="408" rx="14" fill="url(#nfbj-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">⛓</text>
+  <text x="262" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches</text>
+  <text x="262" y="60" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">nomaflow — tâches ETL planifiées</text>
+  <line x1="220" y1="74" x2="1100" y2="74" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="90" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="108" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="268" y="108" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">☆</text>
+  <text x="284" y="108" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches principales</text>
+  <text x="394.8" y="108" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">4</text>
+  <rect x="240" y="118" width="840" height="30" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="137" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">nomajde-daily-sync</text>
+  <text x="440" y="137" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Synchro quotidienne des tables de contrôle JDE</text>
+  <text x="660" y="137" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <text x="750" y="137" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">30 2 ∗ ∗ ∗</text>
+  <rect x="860" y="124" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="136.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="137" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="137" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="137" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="137" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="137" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="148" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="167" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-collect-all</text>
+  <text x="440" y="167" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Collecter tout pour une application</text>
+  <text x="660" y="167" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <text x="750" y="167" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Manuelle</text>
+  <rect x="860" y="154" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="166.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="167" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="167" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="167" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="167" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="167" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="178" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="197" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-report-licences</text>
+  <text x="440" y="197" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Rapport mensuel d'audit des licences (PDF)</text>
+  <text x="660" y="197" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <text x="750" y="197" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
+  <rect x="860" y="184" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="196.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="197" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="197" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="197" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="197" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="197" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="208" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="227" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1-report-security-sox</text>
+  <text x="440" y="227" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Évaluation mensuelle sécurité et SoD (PDF)</text>
+  <text x="660" y="227" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <text x="750" y="227" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 6 1 ∗ ∗</text>
+  <rect x="860" y="214" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="226.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="227" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="227" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="227" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="227" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="227" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="248" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="266" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="268" y="266" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">nomasx1</text>
+  <text x="317.2" y="266" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">15</text>
+  <rect x="240" y="284" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="302" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="268" y="302" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">nomajde</text>
+  <text x="317.2" y="302" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">9</text>
+  <rect x="240" y="320" width="840" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="338" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="268" y="338" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Framework</text>
+  <text x="328.4" y="338" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">2</text>
+  <rect x="240" y="348" width="840" height="30" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="367" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">config-versions-purge</text>
+  <text x="440" y="367" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Purger les anciennes versions de configuration</text>
+  <rect x="658" y="355" width="58" height="16" rx="3" fill="#4ade80" fillOpacity="0.12" stroke="#4ade80" strokeOpacity="0.55" strokeWidth="1"/>
+  <text x="687.0" y="366.5" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">SUCCEEDED</text>
+  <text x="750" y="367" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">0 3 ∗ ∗ ∗</text>
+  <rect x="860" y="354" width="72" height="18" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="896" y="366.5" fill="#4a9eff" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">activée</text>
+  <text x="942" y="367" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="367" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="367" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="367" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="367" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="240" y="378" width="840" height="30" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="397" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">deploy-databases</text>
+  <text x="440" y="397" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Création des bases au premier déploiement</text>
+  <text x="660" y="397" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <text x="750" y="397" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Manuelle</text>
+  <rect x="860" y="384" width="72" height="18" rx="4" fill="transparent" stroke="#334155" strokeWidth="1"/>
+  <text x="896" y="396.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">désactivée</text>
+  <text x="942" y="397" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="966" y="397" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎</text>
+  <text x="990" y="397" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉</text>
+  <text x="1014" y="397" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩</text>
+  <text x="1038" y="397" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâches livrées</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issues du paquet liberty-apps</text>
+  <line x1="200" y1="117.0" x2="252" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfbj-arrow)"/>
+  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un groupe par application</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Nomasx-1, Nomajde, démo…</text>
+  <line x1="200" y1="247.0" x2="240" y2="298" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfbj-arrow)"/>
+  <rect x="1120" y="110" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Désactivées</text>
+  <text x="1130" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à activer une fois l'installation prête</text>
+  <line x1="1120" y1="127.0" x2="932" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfbj-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécuter</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre Exécuter avec des paramètres</text>
+  <line x1="1120" y1="227.0" x2="942" y2="165" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfbj-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une tâche du framework, active</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">config-versions-purge, 03:00</text>
+  <line x1="1120" y1="317.0" x2="896" y2="363" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfbj-arrow)"/>
 </svg>
 
 ---
@@ -131,7 +181,7 @@ La plupart des tâches du bundle partagent la même forme de paramètres sous `[
 |---|---|---|
 | `apps_id` | `10` | Identifiant de l'application Nomasx-1 ciblée par la tâche. À surcharger en mode multi-tenant sur plusieurs applications `nomasx1`. |
 | `source_connector` | variable | Connecteur de **lecture** — `jdedwards`, `unused` (pour les tâches sans lecture amont), `oracle-target` (pour les tâches d'introspection BDD). |
-| `target_connector` | `nomasx1` | Connecteur d'**écriture**. À surcharger pour une installation parallèle (`nomasx1b`). |
+| `target_connector` | `nomasx1` | Connecteur d'**écriture**. À surcharger pour une installation parallèle (`nomasx1-clone`). |
 | `target_schema` | `nomasx1` | Nom du schéma à l'intérieur du connecteur cible. |
 
 Surcharges à l'exécution : **Exécuter**, sur la ligne de la tâche, ouvre *Exécuter avec des paramètres*. Surcharges par planification : les définir sur le bloc `[[jobs.schedules]]` dans le `jobs.toml` de surcharge.
@@ -166,7 +216,7 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 
 ### `nomasx1-init-db` \{#nomasx1-init-db\}
 
-**Mise en place unique d'un déploiement Nomasx-1 parallèle.** Clone la configuration de l'application `nomasx1` existante sous un nouveau nom (par exemple `nomasx1b`) — refuse si la cible existe déjà — et provisionne une base parallèle. Sert à l'hébergement multi-tenant (une installation Liberty servant deux jeux de données client indépendants).
+**Mise en place unique d'un déploiement Nomasx-1 parallèle.** Clone la configuration de l'application `nomasx1` existante sous un nouveau nom (`nomasx1-clone`) — refuse si la cible existe déjà — et crée le schéma Nomasx-1 sur la base de cette application clonée. Sert à l'hébergement multi-tenant (une installation Liberty servant deux jeux de données client indépendants).
 
 | Étape | Appelable |
 |---|---|
@@ -178,9 +228,9 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 | Clé | Défaut | Description |
 |---|---|---|
 | `source_app` | `nomasx1` | Application à cloner. |
-| `new_app` | `nomasx1b` | Nom de la nouvelle application. Deviendra le nom du menu, des écrans et du connecteur. |
-| `new_pool` | `nomasx1b` | Nom du nouveau pool à câbler sous le connecteur cloné. |
-| `target_connector` *(étape init-schema)* | `nomasx1b` | Identique à `new_app` par convention. |
+| `new_app` | `nomasx1-clone` | Nom de la nouvelle application. Deviendra le nom du menu, des écrans et du connecteur. |
+| `new_pool` | `nomasx1-clone` | Nom du nouveau pool à câbler sous le connecteur cloné. |
+| `target_connector` *(étape init-schema)* | `nomasx1-clone` | Le connecteur de l'application clonée : à garder identique à `new_app`. |
 
 **Quand l'exécuter** — une fois par instance Nomasx-1 supplémentaire. Pour les **mises à niveau récurrentes du schéma** après modification des modèles Python, utiliser plutôt `nomasx1-init-schema-1` (ci-dessous) — il saute l'étape de clonage.
 
@@ -218,7 +268,7 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 |---|---|---|
 | `target_connector` | `nomasx1` | Base à mettre à niveau. |
 
-**Quand l'exécuter** — après chaque mise à niveau du wheel livrant des deltas de schéma (les notes de version le préciseront). À combiner avec une sauvegarde de la base ; les migrations alembic sont uniquement progressives.
+**Quand l'exécuter** — la mise à niveau du serveur (`./liberty upgrade`, ou `liberty-admin migrate` — voir la [CLI](../references/cli.md)) applique les mêmes migrations après chaque mise à niveau du framework ou des applications ; la tâche permet de les lancer depuis Nomaflow, par exemple quand une version ajoute une table comme l'inventaire des objets définis par l'utilisateur. À combiner avec une sauvegarde de la base ; les migrations ne vont que dans un sens.
 
 ---
 
@@ -414,7 +464,7 @@ L'exécution échoue si l'état se termine en erreur. Le journal indique le num�
 
 ### `nomajde-ais-export` \{#nomajde-ais-export\}
 
-**Export d'une table ou d'une vue métier JD Edwards dans un fichier xlsx.** L'étape `nomajde.ais_steps:j_ais_export` parcourt la table ou la vue au travers d'AIS et écrit `<exécution>-<nom>.xlsx` parmi les fichiers de l'exécution, avec les titres de colonnes d'AIS en en-tête. Le fichier se télécharge depuis le détail de l'exécution ; pour l'envoyer par e-mail, ajouter une étape `notify` avec `attach = ["*"]`.
+**Export d'une table ou d'une vue métier JD Edwards dans un fichier xlsx.** L'étape `nomajde.ais_steps:j_ais_export` parcourt la table ou la vue au travers d'AIS et écrit `<exécution>-<nom>.xlsx` parmi les fichiers de l'exécution, avec les titres de colonnes d'AIS en en-tête. Le fichier se télécharge depuis le détail de l'exécution, et une étape `send` l'envoie à la personne qui a lancé l'exécution — dans le portail, et par e-mail si le compte a une adresse. Une exécution planifiée n'a pas de demandeur : ajouter alors des destinataires à l'étape `send`.
 
 | Paramètre | Valeur par défaut | Rôle |
 |---|---|---|
@@ -438,8 +488,53 @@ Les points d'entrée de `nomajde.ais_steps` figurent dans le sélecteur de fonct
 | `j_ais_bsfn` | Appelle une fonction métier avec ses paramètres ; renvoie ses valeurs de sortie. |
 | `j_ais_orchestration` | Exécute une orchestration avec ses entrées ; renvoie sa réponse. |
 | `j_ais_scheduler` | Démarre ou arrête le planificateur JD Edwards d'un environnement (`action = start` / `stop`). |
+| `j_ais_form_flow` | Enchaîne des étapes sur des formulaires JD Edwards dans une même session : la première ouvre un formulaire, les suivantes agissent sur ce formulaire ou sur celui du dessus ; `{{name}}` dans une étape est remplacé par la valeur de `values`. Renvoie les champs et les lignes du dernier formulaire, et l'état après chaque étape. |
+| `j_ais_grid_row` | Ajoute, modifie ou supprime **une** ligne de la grille d'un formulaire (`operation = add` / `change` / `delete`). La ligne est d'abord recherchée (`find`, sur la ligne de filtre) : rien n'est fait si la recherche ne trouve pas exactement une ligne — aucune, pour un ajout. `cells` donne les valeurs de la grille ; les boutons sont les identifiants de contrôle du formulaire. |
+| `j_ais_record` | Ajoute, modifie ou supprime **un** enregistrement d'une application dont la liste ouvre un autre formulaire de saisie : l'enregistrement est trouvé dans le formulaire de liste, ouvert par son bouton, puis `edit_form` est rempli (`fields`) et enregistré. Rien n'est fait si la recherche ne trouve pas exactement un enregistrement ; `on_warning = refuse` n'enregistre rien en cas d'avertissement. |
+| `j_ais_tests` | Joue une suite de tests de non-régression — l'étape de la tâche [`nomajde-jde-tests`](#nomajde-jde-tests). |
 
-Conditions, options de traitement, paramètres et entrées se donnent sous forme de tables TOML dans la tâche, ou de texte JSON quand ils sont saisis dans **Exécuter avec des paramètres** ou dans les paramètres d'une action. Un texte vide signifie *non renseigné*. En cas d'erreur AIS, l'étape échoue avec le message d'AIS lui-même.
+Conditions, options de traitement, paramètres, entrées, étapes et valeurs de champs se donnent sous forme de tables TOML dans la tâche, ou de texte JSON quand ils sont saisis dans **Exécuter avec des paramètres** ou dans les paramètres d'une action. Un texte vide signifie *non renseigné*. En cas d'erreur AIS, l'étape échoue avec le message d'AIS lui-même.
+
+---
+
+### `nomajde-jde-tests` \{#nomajde-jde-tests\}
+
+**Joue une suite de tests sur JD Edwards** et échoue quand un cas échoue ou diffère de la référence. Étape `tests` — `nomajde.ais_steps:j_ais_tests`, par le connecteur `ais_connection`.
+
+| Paramètre | Défaut | Rôle |
+|---|---|---|
+| `suite` | `smoke` | La suite à jouer — une liste des suites dans **Exécuter avec des paramètres**. |
+| `mode` | `compare` | `compare` avec la référence, ou `record` pour l'enregistrer. |
+| `only` | vide | Seulement ces cas (identifiants séparés par des virgules) ; vide = tous. |
+| `allow_writes` | `no` | `yes` joue les cas qui écrivent dans JD Edwards ; sinon ils sont ignorés. |
+| `fail_on_change` | `true` | Un cas qui diffère de la référence fait échouer l'exécution. |
+
+Livrée désactivée, sans planification. Voir [Nomajde → Tests](../nomajde/tests.md#job).
+
+---
+
+### `nomajde-upgrade-load-release` et `nomajde-upgrade-collect` \{#nomajde-upgrade\}
+
+Les deux étapes de l'[analyse de montée de version](../nomajde/upgrade/analysis.md#steps) ; JD Edwards est seulement lu.
+
+| Tâche | Étapes | Rôle |
+|---|---|---|
+| `nomajde-upgrade-load-release` | `tables` (crée les tables absentes), `load` (`file_load`), `dates` | Charge la liste des objets d'une release ou d'une mise à jour publiée par Oracle — le fichier Excel d'Oracle — sous un nom (`release`, par exemple `UN9`). Une liste rechargée sous le même nom remplace la précédente. Le fichier est fourni au lancement. |
+| `nomajde-upgrade-collect` | `collect` | Lit les objets du client sur un path code, les compare à une liste d'objets et indique ce qu'il faut reprendre, avec la difficulté et le nombre de jours. Les décisions prises sur un objet sont conservées d'une exécution à l'autre. |
+
+Paramètres de `nomajde-upgrade-collect` :
+
+| Paramètre | Défaut | Dans **Exécuter avec des paramètres** | Rôle |
+|---|---|---|---|
+| `path_code` | `PD920` | *Path code de départ de la montée de version* | Le path code lu. |
+| `release` | vide | *Liste d'objets à comparer (son nom ; vide = aucune)* | La liste d'objets chargée par `nomajde-upgrade-load-release`. |
+| `current_release` | vide | *Liste d'objets déjà en place chez le client (optionnel : seul ce qui a changé après compte)* | Un objet ne compte alors comme modifié que si Oracle l'a changé après cette liste. |
+| `central_objects` | vide | *Schéma des objets centraux, s'il diffère de celui du pool (PD920)* | Le schéma des objets centraux du path code. |
+| `nomasx1_apps_id` | vide | *JDE de nomasx1 à lire : utilisation conservée, références croisées, UDO (vide : le seul)* | L'application Nomasx-1 qui porte le même JD Edwards — utile seulement quand Nomasx-1 en contient plusieurs. |
+| `nomasx1_connector` | `nomasx1` | — | La base Nomasx-1 ; vide = Nomasx-1 n'est pas lu. |
+| `usage` | `true` | — | La dernière utilisation d'un objet est la plus récente connue d'Object Usage Tracking, des travaux soumis et de l'utilisation conservée par Nomasx-1. |
+| `cross_reference` | `true` | — | Les liens entre les objets du client viennent des références croisées de JD Edwards **et** de celles que construit Nomasx-1 ([`nomasx1-xref`](#nomasx1-xref)). |
+| `udos` | `true` | — | Les objets définis par l'utilisateur (UDO) posés sur un objet touché par la montée de version, ou qui l'utilisent, sont listés et comptés sur chaque objet — l'inventaire écrit par l'étape `JDE_UDO` de Nomasx-1. |
 
 ---
 
@@ -458,7 +553,8 @@ Conditions, options de traitement, paramètres et entrées se donnent sous forme
 | Annuaire | `SECURITY_LDAP` — le LDAP / Active Directory défini dans *Paramètres → LDAP* | Non |
 | Journal d'activité | `SECURITY_ACTIVITY_LOG` | Non |
 | Base Oracle | `DB_ORA_PROPERTIES`, `DB_ORA_OPTIONS`, `DB_ORA_FEATURES`, `DB_ORA_PARTITIONS`, `DB_ORA_LICENSES` | Non |
-| Références croisées | `JDE_XREF_APPS` | Non |
+| Références croisées | `JDE_XREF_APPS`, `JDE_XREF_REPORTS`, `JDE_XREF_SPECS` — applications, états, vues métier | Non |
+| Objets définis par l'utilisateur | `JDE_UDO` — l'inventaire des objets définis par l'utilisateur (F9860W, F9861W) et ce que chacun nomme — pages composites, pages E1, orchestrations et leurs étapes, demandes de service, notifications, dispositions CafeOne, états One View, recherches, processus, extensions d'écran, listes de surveillance ; demande **JDE_UDO_OL** dans *Paramètres → Global → JD Edwards* | Non |
 | Vues | `REFRESH_VIEWS` | Oui |
 
 **Préréglages**
@@ -467,7 +563,9 @@ Conditions, options de traitement, paramètres et entrées se donnent sous forme
 |---|---|
 | **Security and SoD** | La sécurité et la séparation des tâches — les étapes de licences et d'OUT désactivées. |
 | **Licences** | Les licences et l'OUT — les étapes de sécurité et de SoD désactivées. |
-| **Everything** | Toutes les étapes, y compris l'annuaire, le journal d'activité, la base et les références croisées. |
+| **Everything** | Toutes les étapes, y compris l'annuaire, le journal d'activité, la base et les références croisées des applications (`JDE_XREF_APPS`) ; les autres étapes de références croisées et `JDE_UDO` restent désactivées — la tâche [`nomasx1-xref`](#nomasx1-xref) les exécute. |
+
+**Pages composites et pages E1** — pour les applications cochées *E1 Composite* / *E1 Pages*, `SECURITY_MENUS` lit tout ce qu'une page composite ou une page E1 permet d'exécuter : l'application ou l'état qu'ouvre une tuile, les formulaires affichés dans ses volets, les tâches placées sous le menu d'une page d'accueil, les applications et les états cités par le code d'une page E1. Ces chemins d'accès comptent dans les droits, la séparation des tâches et les chiffres de licences de la collecte.
 
 **Applications** — la tâche propose les applications de *Nomasx-1 → Paramètres → Global → Applications* en cases à cocher, avec **Tout**. Elle s'exécute une fois par application cochée, l'une après l'autre. Dans une planification ou un préréglage, `apps_id = "all"` collecte toutes les applications à chaque déclenchement.
 
@@ -587,6 +685,31 @@ Enregistre le nombre de lignes de valeurs écrites.
 
 ---
 
+### `nomasx1-xref` et `nomasx1-xref-object` \{#nomasx1-xref\}
+
+**Les références croisées des objets JD Edwards** — applications, rapports, vues, tables, structures, fonctions, règles d'événement — écrites dans la base de Nomasx-1.
+
+| Tâche | Étapes | Rôle |
+|---|---|---|
+| `nomasx1-xref` | `JDE_XREF_APPS`, `JDE_XREF_REPORTS`, `JDE_XREF_SPECS`, `JDE_UDO` | Construit les références croisées : ce que JD Edwards a modifié depuis la dernière exécution (`object_id = changed`, par défaut) ou tout (`all`). |
+| `nomasx1-xref-object` | `JDE_XREF_OBJECT` | Relit un seul objet (`object_id`, obligatoire : `P01012`, `R0006P`, `F0101`…) — quelques secondes. |
+
+Les deux demandent la source JD Edwards (`apps_id`, une liste des applications de Nomasx-1) dans **Exécuter avec des paramètres**. Livrées désactivées, sans planification.
+
+---
+
+### `nomajde-dictionary-refresh` \{#nomajde-dictionary-refresh\}
+
+**Crée les entrées de dictionnaire qui manquent aux modèles d'exploration de Nomajde**, à partir du dictionnaire de données JD Edwards (description, type, décimales, table UDC associée), une lecture par table ; les connecteurs sont reconstruits à la fin pour que les libellés s'affichent aussitôt. `models` (une liste des modèles ; vide = tous) limite le traitement. Étape `refresh` — `liberty.jobs.dictionary:refresh_model_dictionary`.
+
+---
+
+### Les tâches de la démo des ventes \{#nomademo\}
+
+Les tâches `nomademo-*` (création des tables, chargement des fichiers d'articles, de sociétés et de ventes, rafraîchissement des périodes, chargement des fichiers d'exemple, création des comptes de démonstration, rapport mensuel) servent l'application de démonstration — voir [La démo des ventes](../framework/demo-app.md#loads).
+
+---
+
 ### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
 
 **Diagnostic : extraction de la définition brute d'un objet JD Edwards.** Écrit dans des fichiers le XML OMW décompressé des écrans de l'objet (F98751) et les textes qu'ils référencent (F98750), pour en examiner la structure brute — par exemple un onglet ou un identifiant de contrôle manquant. En lecture seule : rien n'est écrit dans la base cible.
@@ -619,6 +742,8 @@ Enregistre le nombre de lignes de valeurs écrites.
 Enregistre le nombre de versions supprimées. Deux tentatives au total en cas d'échec.
 
 **Planification** — **activée**, tous les jours à 3 h (Europe/Paris).
+
+La taille des versions conservées, un aperçu à blanc de ce que la tâche supprimerait et une purge immédiate se trouvent dans [Surveillance → Rétention](../monitoring/retention.md#stores), avec les autres stockages du serveur.
 
 ---
 

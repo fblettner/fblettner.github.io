@@ -72,7 +72,7 @@ INSERT INTO tasks (id, title, status, due_date) VALUES
 ## Step 2 — The connector and its queries \{#connector\}
 
 1. **Liberty Next → Data → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
-2. With `tasks` selected, choose **Tables** in the mode bar, then **＋ Add queries → Generate from DB**.
+2. With `tasks` selected, pick the **Tables** stage card, then **＋ Add queries → Generate from DB**.
 3. In the CRUD wizard, pick the `tasks` table, keep every column, tick **key** on `ID`, and keep the four statements (SELECT, UPDATE, INSERT, DELETE).
 4. Save. The connector now holds `tasks_get`, `tasks_put`, `tasks_post` and `tasks_delete`:
 
@@ -88,10 +88,10 @@ The columns are read from the database when the query runs; nothing else needs d
 ## Step 3 — The screen \{#screen\}
 
 1. **Liberty Next → Screens → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
-2. **＋ Add screen**, id `tasks`. Click the new card to open the screen editor.
-3. **General** tab: label `Tasks`; check **Editable** for in-grid editing.
-4. **Queries** tab: read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
-5. **Dialog** tab: drag the columns onto the form.
+2. **＋ Add screen**, id `tasks`. Click the new card: the [Screen Designer](../build/screens/overview.md) opens on its stages — *What it is*, *Data*, *Grid*, *Record form*, *Actions*, *Output*.
+3. **What it is**: label `Tasks`.
+4. **Data**: **Fill from table** `tasks` sets the four queries at once — read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
+5. **Record form**: place the columns on the form.
 6. **Save**.
 
 The grid columns come from the read query; their labels and formats from the [dictionary](../dictionary.md) when entries exist (its **Scan a table** button proposes them). The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3 in one pass for a table.
@@ -101,10 +101,10 @@ The grid columns come from the read query; their labels and formats from the [di
 ## Step 4 — The menu entry \{#menu\}
 
 1. **Liberty Next → Screens → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
-2. **＋ Item**, then in the inspector: label `Tasks`, type `screen`, target `tasks_get` (the screen built on it), icon `table`.
+2. **＋ Item**, then in the inspector: label `Tasks`, icon `table`, type `screen`, target `tasks` (the screen of step 3).
 3. Save.
 
-Since `tasks` now has a menu, it is an app: it appears in the app picker, and its sidebar shows **Tasks**. A click opens the grid: a row opens the edit dialog, **＋ Add** an empty one. See [Build the tree](../build/menus/build-the-tree.md) and [Make a connector an app](../build/menus/make-connector-an-app.md).
+With a menu, and **Show in switcher** on in the connector's settings, `tasks` is an app: it appears in the app picker, and its sidebar shows **Tasks**. A click opens the grid: a row opens the edit dialog, **＋ Add** an empty one. See [Build the tree](../build/menus/build-the-tree.md) and [Make a connector an app](../build/menus/make-connector-an-app.md).
 
 ---
 
@@ -113,7 +113,7 @@ Since `tasks` now has a menu, it is an app: it appears in the app picker, and it
 - **A pool** — the database connection.
 - **A connector** — the four queries on the table.
 - **A screen** — the grid and the dialog on these queries.
-- **A menu** — the entry that opens the screen, which makes the connector an app.
+- **A menu** — the entry that opens the screen; with **Show in switcher** on, it makes the connector an app.
 
 Every save was applied without a restart. The pool and the connector are stored in `connectors.toml`, the screen in `screens.toml`, the menu in `menus.toml`.
 

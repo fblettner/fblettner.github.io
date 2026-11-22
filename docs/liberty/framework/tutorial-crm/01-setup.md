@@ -6,7 +6,7 @@ keywords: [Liberty Next, tutorial, CRM, setup, tables, pool, connector, getting 
 
 # Step 1 — Set up the CRM project
 
-This tutorial builds a small **customer relationship management** app on Liberty Next, in six steps: screens, lists of values, a dashboard, roles, the AI assistant and a scheduled job. Everything is done from Settings.
+This tutorial builds a small **customer relationship management** app on Liberty Next, in six steps: screens, lists of values, a dashboard, roles, the AI assistant and a scheduled job. Everything is done in the Liberty Next pages.
 
 This first step prepares the database and creates the `crm` connector.
 
@@ -98,7 +98,7 @@ This first step prepares the database and creates the `crm` connector.
 | Need | Why |
 |---|---|
 | **Liberty Next installed** | See [Installation](../../installation/overview.md). |
-| **A superuser account** | Settings is reserved to superusers. |
+| **A superuser account** | The Liberty Next pages are reserved to superusers. |
 | **A SQL client** | To create the tables — `psql`, DBeaver, or any client connected to the database of the `default` pool. |
 
 The `default` pool points at the bundled PostgreSQL database on a Docker install, or at a local SQLite file on a Python install without PostgreSQL. The SQL below is written for PostgreSQL; on SQLite, replace `SERIAL` with `INTEGER`.

@@ -6,7 +6,7 @@ keywords: [Liberty Next, tutoriel, CRM, clients, assistant CRUD, écran, menu, d
 
 # Étape 2 — L'écran Clients
 
-La table `customers` devient un écran : une grille avec filtres, un dialogue de modification, l'ajout et la suppression. Trois endroits des Paramètres, dans cet ordre : **Connecteurs** (les requêtes), **Écrans** (l'interface), **Menus** (l'entrée qui l'ouvre).
+La table `customers` devient un écran : une grille avec filtres, un dialogue de modification, l'ajout et la suppression. Trois pages Liberty Next, dans cet ordre : **Connecteurs** (les requêtes), **Écrans** (l'interface), **Menus** (l'entrée qui l'ouvre).
 
 ---
 
@@ -24,9 +24,9 @@ La table `customers` devient un écran : une grille avec filtres, un dialogue de
   <rect x="240" y="30" width="170" height="300" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <rect x="250" y="44" width="150" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="325.0" y="58.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">crm ▾</text>
-  <text x="254" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Ventes</text>
+  <text x="254" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ Ventes</text>
   <rect x="250" y="108" width="150" height="24" rx="5" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="268" y="124" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">👥 Clients</text>
+  <text x="268" y="124" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">Clients</text>
   <text x="426" y="52" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Clients</text>
   <rect x="880" y="36" width="80" height="22" rx="5" fill="url(#tu2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="920.0" y="50.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter</text>
@@ -89,7 +89,7 @@ La table `customers` devient un écran : une grille avec filtres, un dialogue de
 
 ## Les requêtes
 
-1. **Liberty Next → Données → Connecteurs**, sélectionner `crm`, choisir **Tables** dans la barre de modes.
+1. **Liberty Next → Données → Connecteurs**, sélectionner `crm`, choisir la carte d'étape **Tables**.
 2. **＋ Ajouter des requêtes → Générer depuis la BDD**, choisir la table `customers`.
 3. Garder toutes les colonnes, cocher **clé** sur `ID`, conserver les quatre instructions. Enregistrer.
 
@@ -120,14 +120,14 @@ Chaque requête a sa propre permission — `sql:crm:customers_get`, `sql:crm:cus
 ## L'écran
 
 1. **Liberty Next → Écrans → Écrans → ＋ Ajouter une portée**, choisir `crm` : la pastille `crm` apparaît.
-2. **＋ Ajouter un écran**, identifiant `customers`, puis cliquer sur la carte pour ouvrir l'éditeur d'écran.
+2. **＋ Ajouter un écran**, identifiant `customers`, puis cliquer sur la carte pour ouvrir le [Concepteur d'écran](../build/screens/overview.md), étape par étape :
 
 | Onglet | Réglage |
 |---|---|
-| **Général** | Libellé `Clients`. |
-| **Requêtes** | Lecture `customers_get`, mise à jour `customers_put`, insertion `customers_post`, suppression `customers_delete`. |
-| **Colonnes** | **Importer depuis la requête de lecture**, puis : donner un libellé à chaque colonne, masquer `ID`, `CREATED_BY`, `CREATED_AT`, `UPDATED_BY` (**hidden**), cocher **filter** sur `STATUS`, `COUNTRY` et `INDUSTRY`. |
-| **Dialogue** | Un onglet `Détails` avec `NAME`, `INDUSTRY`, `COUNTRY`, `STATUS`, `PRIMARY_EMAIL`. |
+| **Ce qu'il est** | Libellé `Clients`. |
+| **Données** | Lecture `customers_get`, mise à jour `customers_put`, insertion `customers_post`, suppression `customers_delete`. |
+| **Grille** → **Colonnes** | **Importer depuis la requête de lecture**, puis : donner un libellé à chaque colonne, masquer `ID`, `CREATED_BY`, `CREATED_AT`, `UPDATED_BY` (**hidden**), cocher **filter** sur `STATUS`, `COUNTRY` et `INDUSTRY`. |
+| **Fiche** | Un onglet `Détails` avec `NAME`, `INDUSTRY`, `COUNTRY`, `STATUS`, `PRIMARY_EMAIL`. |
 
 Enregistrer. Les libellés saisis sur les colonnes pourront ensuite passer dans le dictionnaire, qui sert tous les écrans — voir l'[étape 3](./03-deals.md).
 
@@ -137,10 +137,10 @@ Enregistrer. Les libellés saisis sur les colonnes pourront ensuite passer dans 
 
 1. **Liberty Next → Écrans → Menus → + Ajouter une portée**, choisir `crm` : l'arborescence vide de l'application apparaît.
 2. **＋ Dossier** : libellé `Ventes`, icône `briefcase`.
-3. Sur le dossier, **Ajouter un enfant** : libellé `Clients`, type `screen`, cible `customers_get`, icône `users`.
+3. Sur le dossier, **Ajouter un enfant** : libellé `Clients`, type `screen`, cible `customers` (l'écran), icône `users`.
 4. Enregistrer.
 
-`crm` a désormais un menu : c'est une **application**, proposée dans le sélecteur d'application en haut du menu latéral (à partir de deux applications). Son menu affiche **Ventes → Clients**.
+`crm` a désormais un menu et, avec **Afficher dans le sélecteur** activé (par défaut), c'est une **application**, proposée dans le sélecteur d'application en haut du menu latéral (à partir de deux applications). Son menu affiche **Ventes → Clients**.
 
 ---
 

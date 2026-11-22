@@ -1,6 +1,6 @@
 ---
 title: Chiffrement et secrets
-description: "Comment Liberty Next évite de garder des secrets en clair dans ses fichiers de configuration : valeurs ENC: chiffrées avec la clé maître, champs secrets chiffrés à chaque enregistrement depuis les Paramètres, références ${VARIABLE}, liberty-crypto, et la conduite à tenir avec la clé maître."
+description: "Comment Liberty Next évite de garder des secrets en clair dans ses fichiers de configuration : valeurs ENC: chiffrées avec la clé maître, champs secrets chiffrés à chaque enregistrement depuis les pages Liberty Next, références ${VARIABLE}, liberty-crypto, et la conduite à tenir avec la clé maître."
 keywords: [Liberty Next, chiffrement, secrets, "ENC:", clé maître, LIBERTY_MASTER_KEY, AES-256-GCM, liberty-crypto, variables d'environnement]
 ---
 
@@ -12,7 +12,7 @@ Les mots de passe et les clés des fichiers de configuration sont stockés chiff
 
 ## Ce qui est chiffré \{#what\}
 
-Chaque champ secret est chiffré à l'enregistrement depuis les Paramètres :
+Chaque champ secret est chiffré à l'enregistrement depuis les pages Liberty Next :
 
 | Où | Champ |
 |---|---|
@@ -20,7 +20,7 @@ Chaque champ secret est chiffré à l'enregistrement depuis les Paramètres :
 | Liberty Next → Données → Connecteurs (connecteurs API) | Identifiants, jetons, secrets client. |
 | Liberty Next → Administrer → App | La clé de licence, la clé de l'IA, le secret client OpenID Connect, le mot de passe SMTP. |
 
-Le champ est une saisie masquée avec un œil pour en afficher le contenu. Une nouvelle valeur est toujours écrite chiffrée ; sans clé maître, l'enregistrement est refusé.
+Le champ est une saisie masquée — le mot de passe d'un pool avec un œil pour en afficher le contenu. Une nouvelle valeur est toujours écrite chiffrée ; sans clé maître, l'enregistrement est refusé.
 
 ---
 
@@ -38,7 +38,7 @@ La clé maître vient de la variable d'environnement `LIBERTY_MASTER_KEY`. La cl
 
 | Façon | Quand |
 |---|---|
-| `${VARIABLE}` dans le fichier | Le secret vient de l'environnement ou d'un gestionnaire de secrets. Les Paramètres affichent la référence telle quelle. |
+| `${VARIABLE}` dans le fichier | Le secret vient de l'environnement ou d'un gestionnaire de secrets. Les pages Liberty Next affichent la référence telle quelle. |
 | `<NOM>_FILE` | Pour les variables `LIBERTY_*`, `POSTGRES_*` et `PGADMIN_*` : la valeur est lue dans un fichier (secrets Docker, Swarm ou Kubernetes). |
 | `liberty-crypto encrypt` | Pour écrire à la main une valeur `ENC:` dans un fichier : `liberty-crypto encrypt` lit la valeur sur son entrée standard et affiche `ENC:…`. Voir [CLI](../../references/cli.md#liberty-crypto). |
 

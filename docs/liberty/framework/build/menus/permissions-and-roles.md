@@ -79,7 +79,7 @@ Every leaf is gated by the permission of its target:
 | `screen`, `query` | `sql:<connector>:<target>` (the query's permission). |
 | `endpoint` | `api:<connector>:<target>` (the endpoint's permission). |
 | `dashboard` | The permission of at least one of its data widgets, or `dashboard:<id>` — see [below](#gating). |
-| `page` | The page's own: `explorer:<app>:<model>` for the Data Explorer, `nomaflow:view` for the Nomaflow pages, none for the others. |
+| `page` | The page's own: `explorer:<app>:<model>` for the Data Explorer, `page:<app>:<page>` for a page an application ships, `nomaflow:view` for the Nomaflow pages, `tests:view` for the Tests pages, none for the others. |
 
 An explicit `menu:<app>:<id>` allow in a role also shows the leaf, even without the target's permission; a `menu:` deny always hides it. The role editor writes these strings when an entry is allowed or denied on its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md).
 
@@ -261,7 +261,7 @@ An entry is shown for what the user may open through it:
 | `screen` | The user holds the `sql:` permission of the screen's read query. |
 | `query`, `endpoint` | The user holds `sql:<connector>:<target>` / `api:<connector>:<target>`. |
 | `dashboard` | The user can read at least one of its data widgets, or holds `dashboard:<id>`. A dashboard of texts and links only is shown to everyone. |
-| `page` | Data Explorer: the user may use a model of the application (`explorer:<app>:<model>`). Nomaflow pages: `nomaflow:view`. Any other page: everyone. |
+| `page` | Data Explorer, or an analysis or dashboard of it: the user may use the model (`explorer:<app>:<model>`). A page an application ships (`/app/<app>/<page>`): `page:<app>:<page>`. Nomaflow pages: `nomaflow:view`. Tests pages: `tests:view`. Any other page: everyone. |
 | `job` | The user holds `job:<id>`. |
 | `url` | Everyone. |
 

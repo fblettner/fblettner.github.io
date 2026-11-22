@@ -62,7 +62,7 @@ url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
 password = "${REPORTING_PASSWORD}"
 ```
 
-Settings shows such a reference as it is written. For a secret field (a password, a key), saving a new value from Settings replaces the reference with an encrypted `ENC:` value.
+The Liberty Next pages show such a reference as it is written. For a secret field (a password, a key), saving a new value from those pages replaces the reference with an encrypted `ENC:` value.
 
 ---
 

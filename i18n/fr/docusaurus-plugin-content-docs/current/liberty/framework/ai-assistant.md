@@ -6,7 +6,7 @@ keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de p
 
 # Assistant IA
 
-**Assistant**, à droite de la barre du haut (et en bas du menu latéral), ouvre un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
+**Assistant**, à droite de la barre du haut (réduit à son icône sur un écran étroit), ouvre à droite de la page un panneau où les utilisateurs interrogent leurs données en langage courant. L'assistant répond en lançant les requêtes des connecteurs, avec les droits de l'utilisateur.
 
 ---
 
@@ -14,111 +14,112 @@ keywords: [Liberty Next, assistant IA, Anthropic, Claude, ai:chat, contexte de p
 
 <svg viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="aid-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="aid-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="aid-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="aid-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="aia-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="aia-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="aia-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="aia-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="14" width="760" height="492" rx="14" fill="url(#aid-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="44" fill="#64748b" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes de vente</text>
-  <rect x="240" y="60" width="164" height="420" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="246" y="68" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="82" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
-  <rect x="246" y="94" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="108" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
-  <rect x="246" y="120" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="134" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Gamma SA</text>
-  <rect x="246" y="146" width="152" height="20" rx="4" fill="rgba(74,158,255,0.18)"/>
-  <text x="252" y="160" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
-  <rect x="246" y="172" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="186" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Delta Ltd</text>
-  <rect x="246" y="198" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="212" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
-  <rect x="246" y="224" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="238" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
-  <rect x="246" y="250" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="264" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Gamma SA</text>
-  <rect x="246" y="276" width="152" height="20" rx="4" fill="none"/>
-  <text x="252" y="290" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Delta Ltd</text>
-  <rect x="420" y="24" width="360" height="470" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="434" y="46" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">✦ Assistant IA</text>
-  <rect x="590" y="32" width="92" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="690" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="701.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↺</text>
-  <text x="600" y="46.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sonnet 5.5 ▾</text>
-  <rect x="718" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="729.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
-  <rect x="746" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="757.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
-  <line x1="420" y1="62" x2="780" y2="62" stroke="#1f2937" strokeWidth="1"/>
-  <text x="434" y="80" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Page :</text>
-  <rect x="470" y="69" width="246" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="593.0" y="80.2" fill="#4a9eff" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Lignes de vente · filtres : 2 · la ligne cliquée  ×</text>
-  <rect x="434" y="96" width="300" height="58" rx="8" fill="#1e293b"/>
-  <text x="444" y="114" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Bonjour ! Je réponds à partir de la</text>
-  <text x="444" y="127" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">configuration de cette installation et de</text>
-  <text x="444" y="140" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">ses données. Choisissez une suggestion.</text>
-  <rect x="500" y="166" width="266" height="24" rx="8" fill="rgba(74,158,255,0.18)"/>
-  <text x="510" y="182" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">Somme des quantités de ces lignes par unité</text>
-  <rect x="434" y="200" width="320" height="96" rx="8" fill="#1e293b"/>
-  <text x="444" y="218" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">▸ 2 appels d'outil</text>
-  <rect x="444" y="226" width="300" height="18" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="454" y="238.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UNITÉ</text>
-  <text x="594" y="238.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUANTITÉ</text>
-  <rect x="444" y="248" width="300" height="18" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="454" y="260.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">North</text>
-  <text x="594" y="260.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">12 400</text>
-  <rect x="444" y="270" width="300" height="18" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="454" y="282.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">South</text>
-  <text x="594" y="282.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">8 150</text>
-  <rect x="434" y="308" width="170" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="519.0" y="320.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Quelle société a le plus vendu ?</text>
-  <rect x="434" y="332" width="132" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="500.0" y="344.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Comparer au mois dernier</text>
-  <line x1="420" y1="368" x2="780" y2="368" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="434" y="378" width="46" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="457.0" y="390.2" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Ventes</text>
-  <rect x="500" y="378" width="56" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="528.0" y="390.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Périodes</text>
-  <rect x="434" y="402" width="222" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="545.0" y="414.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Quelle BU a le plus vendu le mois dernier ?</text>
-  <rect x="434" y="432" width="332" height="48" rx="8" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="444" y="452" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Tapez un message…</text>
-  <rect x="736" y="452" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <path d="M743,466 l6,-6 a2.6,2.6 0 0 1 3.7,3.7 l-6.6,6.6 a1.5,1.5 0 0 1 -2.1,-2.1 l5.6,-5.6" fill="none" stroke="#94a3b8" strokeWidth="1.2"/>
-  <rect x="1000" y="12" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="27" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choix du modèle</text>
-  <text x="1010" y="40" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">quand plusieurs sont permis</text>
-  <line x1="1000" y1="29.0" x2="686" y2="38" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="66" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contexte de page</text>
-  <text x="1010" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">× arrête l'envoi</text>
-  <line x1="1000" y1="83.0" x2="750" y2="77" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="196" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appels d'outil</text>
-  <text x="1010" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">repliés sur une ligne</text>
-  <line x1="1000" y1="213.0" x2="520" y2="215" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="300" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Relances</text>
-  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic envoie la question</text>
-  <line x1="1000" y1="317.0" x2="650" y2="317" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="384" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="399" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Questions de départ</text>
-  <text x="1010" y="412" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par rubrique, app ou écran</text>
-  <line x1="1000" y1="401.0" x2="550" y2="387" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Conversations et notes</text>
-  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reprendre, supprimer</text>
-  <line x1="1000" y1="137.0" x2="706" y2="55" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="1000" y="446" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="461" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Joindre un fichier</text>
-  <text x="1010" y="474" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">image, PDF, tableur, texte</text>
-  <line x1="1000" y1="463.0" x2="762" y2="463" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
-  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La ligne cliquée</text>
-  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">part avec la question</text>
-  <line x1="210" y1="167.0" x2="246" y2="158" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aid-arrow)"/>
+  <rect x="220" y="20" width="760" height="480" rx="14" fill="url(#aia-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#64748b" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Commandes</text>
+  <text x="240" y="64" fill="#475569" fontSize="8.5" fontFamily="ui-monospace, monospace">sales.orders_get</text>
+  <text x="250" y="92" fill="#475569" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">COMMANDE</text>
+  <text x="360" y="92" fill="#475569" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">CLIENT</text>
+  <text x="470" y="92" fill="#475569" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">STATUT</text>
+  <rect x="240" y="104" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="120" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00001</text>
+  <text x="360" y="120" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="470" y="120" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">CLOSED</text>
+  <rect x="240" y="132" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="148" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00002</text>
+  <text x="360" y="148" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
+  <text x="470" y="148" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">OPEN</text>
+  <rect x="240" y="160" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="176" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00003</text>
+  <text x="360" y="176" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Gamma SA</text>
+  <text x="470" y="176" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">CLOSED</text>
+  <rect x="240" y="188" width="330" height="24" rx="4" fill="rgba(74,158,255,0.16)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="250" y="204" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">00004</text>
+  <text x="360" y="204" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="470" y="204" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">OPEN</text>
+  <rect x="240" y="216" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="232" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00005</text>
+  <text x="360" y="232" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Delta Ltd</text>
+  <text x="470" y="232" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">OPEN</text>
+  <rect x="240" y="244" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="260" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00006</text>
+  <text x="360" y="260" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
+  <text x="470" y="260" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">CLOSED</text>
+  <rect x="240" y="272" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="288" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00007</text>
+  <text x="360" y="288" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="470" y="288" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">OPEN</text>
+  <rect x="240" y="300" width="330" height="24" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="316" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">00008</text>
+  <text x="360" y="316" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Gamma SA</text>
+  <text x="470" y="316" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">CLOSED</text>
+  <rect x="600" y="26" width="372" height="468" rx="10" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="616" y="46" fill="#c084fc" fontSize="12" fontFamily="system-ui, sans-serif">✦</text>
+  <text x="634" y="46" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Assistant</text>
+  <rect x="886" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="897.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⟲</text>
+  <rect x="912" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="923.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="938" y="32" width="22" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="949.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <line x1="600" y1="62" x2="972" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="614" y="80" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Page :</text>
+  <text x="648.56" y="80" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">orders · filtres : 2 · la ligne cliquée</text>
+  <text x="956" y="80" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <line x1="600" y1="92" x2="972" y2="92" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="727.36" y="104" width="230.64000000000001" height="26" rx="8" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.4)" strokeWidth="1"/>
+  <text x="739.36" y="121" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Total des commandes ouvertes de ce client</text>
+  <rect x="614" y="140" width="312" height="128" rx="8" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="626" y="158" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">› 2 appel(s) d'outil</text>
+  <text x="626" y="178" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">ACME a 3 commandes ouvertes :</text>
+  <rect x="626" y="186" width="288" height="20" rx="4" fill="rgba(255,255,255,0.04)"/>
+  <text x="634" y="200" fill="#cbd5e1" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">COMMANDE</text>
+  <text x="800" y="200" fill="#cbd5e1" fontSize="8" fontWeight="700" fontFamily="system-ui, sans-serif">MONTANT</text>
+  <text x="634" y="220" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">00004</text>
+  <text x="800" y="220" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">12 400,00</text>
+  <text x="634" y="238" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">00007</text>
+  <text x="800" y="238" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">8 150,00</text>
+  <text x="626" y="255" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Total : 20 550,00</text>
+  <rect x="614" y="280" width="169.56" height="22" rx="11" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="625" y="294.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Laquelle est la plus ancienne ?</text>
+  <rect x="614" y="308" width="136.24" height="22" rx="11" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="625" y="322.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Comparer au mois dernier</text>
+  <line x1="600" y1="446" x2="972" y2="446" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="614" y="458" width="28" height="30" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="628.0" y="476.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">📎</text>
+  <rect x="648" y="458" width="272" height="30" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="658" y="477" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Tapez un message… (Entrée pour envoyer…)</text>
+  <rect x="926" y="458" width="32" height="30" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="942.0" y="476.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <rect x="20" y="194" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="209" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La ligne cliquée</text>
+  <text x="30" y="222" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">accompagne la question</text>
+  <line x1="200" y1="211.0" x2="240" y2="204" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
+  <rect x="20" y="456" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="471" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Joindre un fichier</text>
+  <text x="30" y="484" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">image, PDF, tableur, texte</text>
+  <line x1="200" y1="473.0" x2="614" y2="473" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
+  <rect x="1000" y="24" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="39" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Conversations et notes</text>
+  <text x="1010" y="52" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">puis nouvelle conversation, fermer</text>
+  <line x1="1000" y1="41.0" x2="960" y2="40" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
+  <rect x="1000" y="72" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="87" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contexte de la page</text>
+  <text x="1010" y="100" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">× arrête de l'envoyer</text>
+  <line x1="1000" y1="89.0" x2="956" y2="78" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
+  <rect x="1000" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appels d'outils</text>
+  <text x="1010" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">repliés sur une ligne</text>
+  <line x1="1000" y1="157.0" x2="720" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
+  <rect x="1000" y="280" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Questions de relance</text>
+  <text x="1010" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic envoie la question</text>
+  <line x1="1000" y1="297.0" x2="783.56" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aia-arrow)"/>
 </svg>
 
 ---
@@ -174,7 +175,7 @@ Tant qu'un écran de données est l'onglet actif, chaque message emporte ce que 
 
 Sur la page de l'**explorateur de données**, le contexte est le modèle et l'analyse en cours (entité, lignes, mesures, période) ou l'analyse enregistrée ouverte : *Enregistre ceci comme analyse* ou *Fais un tableau de bord de ces analyses* se comprennent sans autre précision.
 
-Une pastille sous l'en-tête du panneau montre ce qui est envoyé — *Page : Lignes de vente · filtres : 2 · la ligne cliquée*. Son **×** suspend l'envoi de la page tant que l'utilisateur y reste. Le contexte est limité à 4 000 caractères.
+Une ligne sous l'en-tête du panneau montre ce qui est envoyé — *Page : orders · filtres : 2 · la ligne cliquée*, avec l'identifiant de l'écran. Son **×** suspend l'envoi de la page tant que l'utilisateur y reste. Le contexte est limité à 4 000 caractères.
 
 ---
 
@@ -258,7 +259,95 @@ Une **procédure** est un mode opératoire pas à pas qu'une application livre p
 
 ## Liberty Next → Logique → IA \{#settings-ai\}
 
-**Liberty Next → Logique → IA** modifie ce que chaque application livre pour l'assistant. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
+<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="aip-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="aip-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="aip-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="aip-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="432" rx="14" fill="url(#aip-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="12" fontFamily="system-ui, sans-serif">✦</text>
+  <text x="258" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">IA</text>
+  <rect x="839" y="31" width="121" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="899.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger la config</text>
+  <rect x="759" y="31" width="74" height="22" rx="5" fill="url(#aip-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="796.0" y="45.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="674" y="31" width="79" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="713.5" y="45.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↺ Abandonner</text>
+  <line x1="220" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="88" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Application :</text>
+  <rect x="313.52" y="76" width="22" height="20" rx="10.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="324.52" y="89.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">∗</text>
+  <rect x="341.52" y="76" width="32" height="20" rx="10.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="357.52" y="89.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">crm</text>
+  <rect x="379.52" y="76" width="41" height="20" rx="10.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="400.02" y="89.2" fill="#4a9eff" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">sales</text>
+  <rect x="426.52" y="76" width="117" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="485.02" y="89.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une portée</text>
+  <text x="240" y="114" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Ce que l'application livre pour l'assistant : des questions de départ pour l'application et pour ses écrans.</text>
+  <rect x="240" y="124" width="720" height="82" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="142" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✦ Questions de départ partout dans sales</text>
+  <text x="254" y="160" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Combien de commandes ouvertes par société ce mois-ci ?</text>
+  <text x="944" y="160" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="254" y="176" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Quels clients n'ont pas commandé depuis juin ?</text>
+  <text x="944" y="176" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <rect x="254" y="182" width="652" height="18" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="194.5" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Une question que l'utilisateur peut cliquer…</text>
+  <rect x="240" y="216" width="720" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="234" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">▤ Questions de départ par écran</text>
+  <rect x="820" y="222" width="124" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="830" y="235.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ un écran… ▾</text>
+  <text x="254" y="260" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">orders</text>
+  <text x="300" y="260" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">— Commandes</text>
+  <text x="254" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Quelle commande de cette liste est la plus ancienne ?</text>
+  <rect x="240" y="296" width="720" height="74" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="314" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Procédures</text>
+  <rect x="319.2" y="302" width="125" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="381.7" y="314.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une procédure</text>
+  <text x="254" y="340" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">close_period — Clôturer une période</text>
+  <text x="254" y="354" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Quand la période comptable d'une société est clôturée.</text>
+  <rect x="840" y="334" width="57" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="868.5" y="346.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier</text>
+  <rect x="894" y="334" width="62" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="925.0" y="346.5" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="240" y="380" width="720" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="398" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Outils</text>
+  <rect x="297.92" y="386" width="102" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="348.92" y="398.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter un outil</text>
+  <text x="254" y="422" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Aucun outil pour l'instant.</text>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une portée par application</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">∗ = partout</text>
+  <line x1="200" y1="87.0" x2="321.52" y2="97" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Questions de l'application</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">proposées partout dans celle-ci</text>
+  <line x1="200" y1="167.0" x2="254" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Par écran</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le lieu le plus précis l'emporte</text>
+  <line x1="200" y1="267.0" x2="254" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Procédures</text>
+  <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">choisies d'après leur titre</text>
+  <line x1="200" y1="347.0" x2="254" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="28" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="43" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Abandonner · Enregistrer</text>
+  <text x="1010" y="56" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'enregistrement recharge</text>
+  <line x1="1000" y1="45.0" x2="960" y2="42" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="72" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="87" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une portée</text>
+  <text x="1010" y="100" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une autre application</text>
+  <line x1="1000" y1="89.0" x2="543.52" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+  <rect x="1000" y="386" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="401" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Outils</text>
+  <text x="1010" y="414" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fonctions de plugin, en lecture</text>
+  <line x1="1000" y1="403.0" x2="960" y2="404" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aip-arrow)"/>
+</svg>
+
+**Liberty Next → Logique → IA** modifie ce que chaque application livre pour l'assistant ; **Abandonner** et **Enregistrer** se trouvent dans l'en-tête de la page. La ligne **Application** liste les applications qui en ont déjà, plus `*` pour partout ; **Ajouter une portée** en choisit une autre. Pour chacune :
 
 | Partie | Contenu |
 |---|---|

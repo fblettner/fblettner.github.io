@@ -148,11 +148,11 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
       </div>
       <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(192,132,252,0.45)', background: 'rgba(192,132,252,0.07)'}}>
         <div style={{fontSize: '12px', fontWeight: 700, color: '#c084fc'}}>Exports Excel</div>
-        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>par département · par appli</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>chaque grille · chaque tableau de bord</div>
       </div>
       <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(251,146,60,0.45)', background: 'rgba(251,146,60,0.07)'}}>
-        <div style={{fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>Piste de validation</div>
-        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>exceptions · approbations</div>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>Rapports d'audit</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>PDF · mensuel par e-mail</div>
       </div>
     </div>
   </div>
@@ -170,7 +170,7 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
   </div>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.05)'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#c084fc'}}>Prêt pour l'audit</div>
-    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Chaque grille s'exporte en Excel, chaque exception laisse une piste de validation, chaque changement de la matrice SoD est tracé.</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Chaque grille et chaque tableau de bord s'exportent en Excel, les deux rapports d'audit sortent en PDF, et chaque collecte est datée dans Dernière collecte.</div>
   </div>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(251,146,60,0.35)', background: 'rgba(251,146,60,0.05)'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#fb923c'}}>On-premise</div>
@@ -189,7 +189,7 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
     <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>Qui a accès, et est-ce encore utile ?</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
       <li>Liste maître des utilisateurs avec création, dernière connexion, dernière activité et attributs ERP.</li>
-      <li>Affectations de rôles avec dates d'effet et d'expiration — expiré-mais-toujours-actif remonte en rouge.</li>
+      <li>Affectations de rôles avec dates d'effet et d'expiration — les affectations expirées sont comptées dans la Revue de sécurité.</li>
       <li>Réconciliation LDAP / AD — chaque compte ERP est rapproché de l'annuaire.</li>
       <li>Doublons, comptes dormants, comptes sans rôle — détectés automatiquement.</li>
     </ul>
@@ -219,7 +219,7 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
 
   <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(248,113,113,0.35)', background: 'linear-gradient(165deg, rgba(248,113,113,0.10), rgba(248,113,113,0.02))'}}>
     <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#f87171', fontWeight: 800, marginBottom: '8px'}}>04 · Séparation des tâches</div>
-    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>Où sont les conflits — et qui les a clôturés ?</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>Où sont les conflits — et lesquels ont été exercés ?</div>
     <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
       <li>Matrice SoD éditable — risques ERP prédéfinis plus vos propres ajouts.</li>
       <li>Modèle processus / activité / risque — conflits décrits en langage métier, pas en couples de rôles bruts.</li>
@@ -234,106 +234,235 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
 
 ## Un aperçu de ce qu'on voit
 
-La photographie côté licence, une ligne par base × composant, avec un indicateur vert / rouge issu des scripts de collecte — le tableau de bord qu'un responsable licence ouvre avant chaque renouvellement.
+**Licences → Oracle** : les composants Oracle requis par chaque base, groupés par application, avec un indicateur vert / rouge issu des scripts de collecte — l'écran qu'un responsable licences ouvre avant chaque renouvellement.
 
-<svg viewBox="0 0 1000 280" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '20px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 420" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="nx1-glance-card-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="nxsor-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nxsor-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nxsor-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nxsor-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="40" width="920" height="220" rx="14" fill="url(#nx1-glance-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Licences · Oracle</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="880" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CATÉGORIE</text>
-  <text x="360" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">COMPOSANT</text>
-  <text x="700" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">REQUIS</text>
-  <text x="820" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">APP.</text>
-
-  <rect x="60" y="128" width="880" height="22" rx="4" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Database Enterprise Management</text>
-  <text x="360" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Diagnostics Pack</text>
-  <circle cx="720" cy="139" r="5" fill="#22c55e"/>
-  <text x="820" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
-
-  <rect x="60" y="152" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Database</text>
-  <text x="360" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition</text>
-  <circle cx="720" cy="163" r="5" fill="#22c55e"/>
-  <text x="820" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
-
-  <rect x="60" y="176" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
-  <text x="360" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Active Data Guard</text>
-  <circle cx="720" cy="187" r="5" fill="#ef4444"/>
-  <text x="820" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
-
-  <rect x="60" y="200" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
-  <text x="360" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Partitioning</text>
-  <circle cx="720" cy="211" r="5" fill="#22c55e"/>
-  <text x="820" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
-
-  <rect x="60" y="224" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="239" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
-  <text x="360" y="239" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Real Application Clusters</text>
-  <circle cx="720" cy="235" r="5" fill="#ef4444"/>
-  <text x="820" y="239" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+  <rect x="220" y="20" width="880" height="380" rx="14" fill="url(#nxsor-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">License - Required (ORACLE)</text>
+  <rect x="454.1416" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="476.1416" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.license_oracle_required_get</text>
+  <line x1="220" y1="88" x2="1100" y2="88" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="100" width="840" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="115.5" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">›  ⛉  Filtres avancés</text>
+  <text x="240" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">16 lignes · 11,3 ms</text>
+  <rect x="952" y="134" width="142" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="953" y="135" width="64" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="985.0" y="147.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Tableau</text>
+  <line x1="1018" y1="139" x2="1018" y2="149" stroke="#334155" strokeWidth="1"/>
+  <text x="1056.0" y="147.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Graphique</text>
+  <rect x="240" y="162" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="176.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
+  <rect x="418" y="162" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="458.0" y="176.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <rect x="628" y="162" width="112" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="638" y="176.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Lignes max  défaut</text>
+  <rect x="746" y="162" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="767.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Vues</text>
+  <rect x="794" y="162" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="822.5" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filtres</text>
+  <rect x="857" y="162" width="77" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="895.5" y="176.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Grouper (1)</text>
+  <rect x="940" y="162" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="971.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
+  <rect x="1008" y="162" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1044.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Exporter ▾</text>
+  <rect x="240" y="194" width="840" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">NOM DE L'APPLICATION</text>
+  <text x="362" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">CATÉGORIE</text>
+  <text x="558" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COMPOSANT</text>
+  <text x="710" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">LICENCE REQUISE</text>
+  <rect x="240" y="220" width="840" height="22" fill="rgba(255,255,255,0.03)"/>
+  <text x="252" y="234.5" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="system-ui, sans-serif">▾ 1 - ERP-PROD  (16)</text>
+  <rect x="240" y="243" width="840" height="22" fill="#0d1220"/>
+  <text x="250" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace"></text>
+  <text x="362" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Database Enterprise Management</text>
+  <text x="558" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Diagnostics Pack</text>
+  <circle cx="722" cy="254.0" r="3.2" fill="#f87171"/>
+  <rect x="240" y="266" width="840" height="22" fill="rgba(255,255,255,0.015)"/>
+  <text x="250" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace"></text>
+  <text x="362" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Database Enterprise Management</text>
+  <text x="558" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Tuning Pack</text>
+  <circle cx="722" cy="277.0" r="3.2" fill="#f87171"/>
+  <rect x="240" y="289" width="840" height="22" fill="#0d1220"/>
+  <text x="250" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace"></text>
+  <text x="362" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Oracle Database</text>
+  <text x="558" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition</text>
+  <circle cx="722" cy="300.0" r="3.2" fill="#4ade80"/>
+  <rect x="240" y="312" width="840" height="22" fill="rgba(255,255,255,0.015)"/>
+  <text x="250" y="326.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace"></text>
+  <text x="362" y="326.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="558" y="326.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Partitioning</text>
+  <circle cx="722" cy="323.0" r="3.2" fill="#4ade80"/>
+  <rect x="240" y="335" width="840" height="22" fill="#0d1220"/>
+  <text x="250" y="349.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace"></text>
+  <text x="362" y="349.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="558" y="349.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Real Application Clusters</text>
+  <circle cx="722" cy="346.0" r="3.2" fill="#f87171"/>
+  <text x="240" y="380" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Lignes par page</text>
+  <rect x="321.4" y="368" width="52" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="331.4" y="381.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">50  ▾</text>
+  <text x="385.4" y="380" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Affichage 1–17 sur 17 · 16 lignes au total</text>
+  <rect x="992" y="368" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1001.0" y="381.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">«</text>
+  <rect x="1014" y="368" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1023.0" y="381.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">‹</text>
+  <rect x="1036" y="368" width="18" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1045.0" y="381.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="1058" y="368" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1067.0" y="381.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Groupé par application</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un bloc par base</text>
+  <line x1="200" y1="247.0" x2="260" y2="251" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsor-arrow)"/>
+  <rect x="1120" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Grouper (1)</text>
+  <text x="1130" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le regroupement d'ouverture</text>
+  <line x1="1120" y1="167.0" x2="895.5" y2="184" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsor-arrow)"/>
+  <rect x="1120" y="280" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Licence requise</text>
+  <text x="1130" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vert = utilisée sur la base</text>
+  <line x1="1120" y1="297.0" x2="728" y2="289" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsor-arrow)"/>
 </svg>
 
-Un deuxième exemple : une synthèse de Séparation des tâches par utilisateur, conflits classés par sévérité et conflits prouvés repérés.
+Un deuxième exemple : **Applications → Conflits → Synthèse**, les conflits de séparation des tâches par processus et par risque, avec le menu de ligne qui mène aux utilisateurs, rôles, objets et détails de chacun.
 
-<svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '20px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 374" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="nx1-sod-card-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="nxsso-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nxsso-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nxsso-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nxsso-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="40" y="40" width="920" height="180" rx="14" fill="url(#nx1-sod-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Applications · Conflits · Synthèse par utilisateur</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="880" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">UTILISATEUR</text>
-  <text x="220" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PROCESSUS</text>
-  <text x="430" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">RISQUE</text>
-  <text x="700" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">SÉVÉRITÉ</text>
-  <text x="830" y="115" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PROUVÉ</text>
-
-  <rect x="60" y="128" width="880" height="22" rx="4" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">DUPONT.J</text>
-  <text x="220" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Procure-to-Pay</text>
-  <text x="430" y="143" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Créer fournisseur & poster paiement</text>
-  <rect x="700" y="132" width="60" height="14" rx="3" fill="rgba(248,113,113,0.18)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
-  <text x="730" y="143" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Élevée</text>
-  <circle cx="855" cy="139" r="5" fill="#f87171"/>
-
-  <rect x="60" y="152" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">MARTIN.S</text>
-  <text x="220" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Order-to-Cash</text>
-  <text x="430" y="167" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Émettre facture & encaisser</text>
-  <rect x="700" y="156" width="60" height="14" rx="3" fill="rgba(251,146,60,0.18)" stroke="rgba(251,146,60,0.40)" strokeWidth="1"/>
-  <text x="730" y="167" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Moyenne</text>
-  <circle cx="855" cy="163" r="5" fill="#64748b"/>
-
-  <rect x="60" y="176" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">GARCIA.L</text>
-  <text x="220" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Record-to-Report</text>
-  <text x="430" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Poster écriture & approuver clôture</text>
-  <rect x="700" y="180" width="60" height="14" rx="3" fill="rgba(248,113,113,0.18)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
-  <text x="730" y="191" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Élevée</text>
-  <circle cx="855" cy="187" r="5" fill="#f87171"/>
+  <rect x="220" y="20" width="880" height="334" rx="14" fill="url(#nxsso-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="58" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">SOD - Summary</text>
+  <rect x="348.5608" y="46" width="44" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="370.5608" y="57.2" fill="#4a9eff" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SELECT</text>
+  <text x="240" y="75" fill="#64748b" fontSize="8.5" fontFamily="ui-monospace, monospace">nomasx1.sod_summary_get</text>
+  <line x1="220" y1="88" x2="1100" y2="88" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="100" width="840" height="24" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="115.5" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">›  ⛉  Filtres avancés</text>
+  <text x="240" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">36 lignes · 7,4 ms</text>
+  <rect x="952" y="134" width="142" height="20" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="953" y="135" width="64" height="18" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="985.0" y="147.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Tableau</text>
+  <line x1="1018" y1="139" x2="1018" y2="149" stroke="#334155" strokeWidth="1"/>
+  <text x="1056.0" y="147.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Graphique</text>
+  <rect x="240" y="162" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="176.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
+  <rect x="418" y="162" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="458.0" y="176.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Exécuter</text>
+  <rect x="648" y="162" width="112" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="658" y="176.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Lignes max  défaut</text>
+  <rect x="766" y="162" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="787.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Vues</text>
+  <rect x="814" y="162" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="842.5" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Filtres</text>
+  <rect x="877" y="162" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="905.5" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Grouper</text>
+  <rect x="940" y="162" width="62" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="971.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Colonnes</text>
+  <rect x="1008" y="162" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1044.0" y="176.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Exporter ▾</text>
+  <rect x="240" y="194" width="840" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="268" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">APPLICATION ID (ID)</text>
+  <text x="375" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">APPLICATION ID</text>
+  <text x="458" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">PROCESS ID (ID)</text>
+  <text x="546" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">PROCESS ID</text>
+  <text x="638" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">RISK ID (ID)</text>
+  <text x="712" y="209.0" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">RISK ID</text>
+  <rect x="240" y="220" width="840" height="22" fill="#0d1220"/>
+  <rect x="245" y="223" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="234.5" fill="#cbd5e1" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <text x="359" y="234.3" fill="#cbd5e1" fontSize="8.8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="375" y="234.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ERP-PROD</text>
+  <text x="458" y="234.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">P2P</text>
+  <text x="546" y="234.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Procure to pay</text>
+  <text x="638" y="234.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">P2P01</text>
+  <text x="712" y="234.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Create a supplier and pay it</text>
+  <rect x="240" y="243" width="840" height="22" fill="rgba(255,255,255,0.015)"/>
+  <rect x="245" y="246" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="257.5" fill="#cbd5e1" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <text x="359" y="257.3" fill="#cbd5e1" fontSize="8.8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="375" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ERP-PROD</text>
+  <text x="458" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">P2P</text>
+  <text x="546" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Procure to pay</text>
+  <text x="638" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">P2P04</text>
+  <text x="712" y="257.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Receive goods and approve the invoice</text>
+  <rect x="240" y="266" width="840" height="22" fill="#0d1220"/>
+  <rect x="245" y="269" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="280.5" fill="#cbd5e1" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <text x="359" y="280.3" fill="#cbd5e1" fontSize="8.8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="375" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ERP-PROD</text>
+  <text x="458" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">O2C</text>
+  <text x="546" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Order to cash</text>
+  <text x="638" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">O2C02</text>
+  <text x="712" y="280.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Change prices and invoice</text>
+  <rect x="240" y="289" width="840" height="22" fill="rgba(255,255,255,0.015)"/>
+  <rect x="245" y="292" width="18" height="16" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="254" y="303.5" fill="#cbd5e1" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⋯</text>
+  <text x="359" y="303.3" fill="#cbd5e1" fontSize="8.8" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="375" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">ERP-PROD</text>
+  <text x="458" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">FIN</text>
+  <text x="546" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Finance</text>
+  <text x="638" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">FIN03</text>
+  <text x="712" y="303.3" fill="#cbd5e1" fontSize="8.8" fontFamily="ui-monospace, monospace">Post and approve journal entries</text>
+  <text x="240" y="334" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Lignes par page</text>
+  <rect x="321.4" y="322" width="52" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="331.4" y="335.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">50  ▾</text>
+  <text x="385.4" y="334" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Affichage 1–36 sur 36</text>
+  <rect x="992" y="322" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1001.0" y="335.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">«</text>
+  <rect x="1014" y="322" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1023.0" y="335.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">‹</text>
+  <rect x="1036" y="322" width="18" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1045.0" y="335.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="1058" y="322" width="18" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1067.0" y="335.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="254" y="242" width="170" height="100" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="266" y="263" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Display Users</text>
+  <text x="414" y="263" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
+  <text x="266" y="285" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Display Roles</text>
+  <text x="414" y="285" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
+  <text x="266" y="307" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Display Objects</text>
+  <text x="414" y="307" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
+  <text x="266" y="329" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Display Details</text>
+  <text x="414" y="329" fill="#64748b" fontSize="8" textAnchor="end" fontFamily="ui-monospace, monospace">navigate</text>
+  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Processus × risque</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issus de la matrice SoD</text>
+  <line x1="200" y1="167.0" x2="556" y2="228" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsso-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Analyse détaillée</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">utilisateurs, rôles, objets, détails</text>
+  <line x1="200" y1="317.0" x2="254" y2="292.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsso-arrow)"/>
+  <rect x="1120" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Risque</text>
+  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la paire incompatible, en clair</text>
+  <line x1="1120" y1="267.0" x2="980" y2="242" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nxsso-arrow)"/>
 </svg>
 
 ---
 
 ## La carte de l'application
 
-La barre latérale découpe le travail quotidien en sept sections plus la zone de configuration.
+Le menu s'ouvre sur les trois tableaux de bord, l'Explorateur de données et les rapports, puis viennent les sections de travail et les paramètres.
 
 | Section | Ce qu'elle couvre |
 |---|---|
 | **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
 | **Séparation des tâches**, **Revue de sécurité** | Deux tableaux de bord sous la Vue d'ensemble : les [conflits](./sod-dashboard.md) — tendance, risques, paires de rôles, conflits avérés — et la [revue des accès](./security-review.md) — douze contrôles et les comptes à revoir d'abord. |
-| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi. |
+| **Rapports** | L'[audit des licences](./reports/audit-licences.md) et l'[évaluation Sécurité & SoD](./reports/security-sox.md), produits pour une application et téléchargés en PDF ou en Markdown. |
+| **Dernière collecte** | La dernière collecte de chaque module par application, groupée par module ; un clic sur une ligne ouvre l'exécution qui l'a produite. |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
 | **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |
@@ -347,7 +476,7 @@ La barre latérale découpe le travail quotidien en sept sections plus la zone d
 
 | Rôle | Pourquoi on ouvre Nomasx-1 |
 |---|---|
-| **Auditeur interne** | La revue SoD trimestrielle — conflits ouverts, validations d'exceptions, tendance dans le temps. |
+| **Auditeur interne** | La revue SoD trimestrielle — conflits ouverts, conflits avérés par l'activité, tendance dans le temps. |
 | **Responsable sécurité** | Le « qui a accès à X » du quotidien — catalogue utilisateurs et rôles, avec comptes dormants et affectations expirées repérés. |
 | **Administrateur sécurité JDE** | Catalogue inter-environnements des utilisateurs et rôles, plus simple que le security workbench JDE, avec édition en masse dans Nomajde quand des changements sont nécessaires. |
 | **Responsable licences** | Réconciliation requis-vs-acquis, preuves issues d'Object Usage Tracking, rapport d'écart financier avant chaque renouvellement. |
@@ -358,13 +487,11 @@ La barre latérale découpe le travail quotidien en sept sections plus la zone d
 
 ## Les rôles dans Nomasx-1
 
-L'application embarque quatre rôles. Ils contrôlent ce que chaque utilisateur voit et peut modifier.
+Nomasx-1 livre deux rôles, créés par une tâche que l'administrateur lance une fois après l'installation, puis après chaque mise à jour :
 
 | Rôle | Ce qu'il accorde |
 |---|---|
-| **Viewer** | Lit chaque écran, exécute les rapports, aucune modification. |
-| **Editor** | Tout ce que fait un Viewer, plus la mise à jour des matrices SoD, la planification des scans, la gestion des notifications. |
-| **Auditor** | Tout ce que fait un Viewer, plus la validation des exceptions. Seul rôle habilité à clôturer un conflit signalé. |
-| **Administrator** | Tout ce qui précède, plus la gestion de la configuration des sources (datasources ERP, comptes Oracle, mappage LDAP / AD). |
+| `nomasx1_auditor` | La lecture de tous les écrans, tableaux de bord et modèles de l'Explorateur, l'assistant IA et l'exécution des deux rapports — sans modification des paramètres. Il reçoit les rapports mensuels. |
+| `nomasx1_admin` | Tout, y compris les paramètres et toutes les tâches Nomasx-1. |
 
-Un déploiement typique sépare **Auditor** d'**Administrator** — le principe que Nomasx-1 fait respecter ailleurs : la personne qui configure l'analyse ne doit pas être celle qui en valide les constats.
+Les rôles s'attribuent dans **Liberty Next → Administrer → Accès**. Un déploiement typique sépare les auditeurs des administrateurs : la personne qui configure l'analyse n'est pas celle qui en examine les constats. Voir [Tâches](./jobs.md#access).

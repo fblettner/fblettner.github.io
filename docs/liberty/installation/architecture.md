@@ -12,7 +12,7 @@ A Liberty Next install always has the same parts. Docker or Python only changes 
 |---|---|
 | **The server** | One Python process: the web application, the REST API, the Nomaflow job scheduler and the live updates (Socket.IO) on the same port. |
 | **The framework database** | Nomaflow run history, saved grid views, change packages, notifications, upgrade history — and users and roles when they are kept in the database rather than in `auth.toml`. |
-| **The configuration** | TOML files: pools, connectors, dictionary, menus, screens, dashboards, charts, notification rules, Nomaflow jobs, application settings. Everything saved in **Settings** is written there. |
+| **The configuration** | TOML files: pools, connectors, dictionary, menus, screens, dashboards, charts, notification rules, Nomaflow jobs, application settings. Everything saved from the **Liberty Next** pages is written there. |
 | **The licensed apps** *(optional)* | Nomasx-1, Nomajde and their jobs: configuration files, Python code (`plugins/`) and reference data, delivered as one wheel. |
 | **Two secrets** | The master key, which encrypts the passwords stored in the configuration, and the key that signs the sessions. |
 
@@ -45,7 +45,7 @@ The data the applications show stays in **your** databases (Oracle, PostgreSQL�
   <text x="664" y="172" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">one process</text>
   <rect x="256" y="186" width="200" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="356.0" y="208.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Web app</text>
-  <text x="356.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">screens, dashboards, Settings</text>
+  <text x="356.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">screens, dashboards, Liberty Next pages</text>
   <rect x="468" y="186" width="200" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
   <text x="568.0" y="208.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">API</text>
   <text x="568.0" y="223.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">/api · /admin · /auth</text>
@@ -64,7 +64,7 @@ The data the applications show stays in **your** databases (Oracle, PostgreSQL�
   <line x1="345" y1="350" x2="345" y2="390" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#arch-flow)"/>
   <rect x="470" y="390" width="210" height="60" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
   <text x="575.0" y="417.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Configuration</text>
-  <text x="575.0" y="432.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">TOML saved by Settings</text>
+  <text x="575.0" y="432.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">TOML saved by the Liberty Next pages</text>
   <text x="575" y="468" fill="#64748b" fontSize="8.5" textAnchor="middle" fontFamily="ui-monospace, monospace">volume liberty-config · ./apps</text>
   <line x1="575" y1="350" x2="575" y2="390" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#arch-flow)"/>
   <rect x="720" y="330" width="220" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
@@ -175,7 +175,7 @@ The Docker installation generates both into `release/.env` (mode `0600`); on a P
 3. *Docker only:* `liberty-admin init-db` creates the framework tables that are missing and, on the very first start, the `admin` user. On a Python install you run it once yourself.
 4. The framework's own tables are compared with the version of the code: a missing column is added and recorded in **Liberty Next → Deploy → History → Upgrades**.
 5. Pending schema migrations of the licensed apps are reported in the log; they are applied by the upgrade or by `migrate` (Docker: also at start-up with `LIBERTY_AUTO_MIGRATE=1`).
-6. The server starts answering, even if the framework database is still unreachable — so that a pool can be fixed from **Settings**. `/ready` says when the database answers.
+6. The server starts answering, even if the framework database is still unreachable — so that a pool can be fixed from **Liberty Next → Administer → Pools**. `/ready` says when the database answers.
 
 ---
 

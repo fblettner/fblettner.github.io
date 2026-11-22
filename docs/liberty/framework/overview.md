@@ -47,7 +47,7 @@ When something the framework doesn't cover comes up (a custom widget, a one-off 
 It's **less interesting** for:
 
 - Public-facing consumer apps (the framework's UX is operator-oriented).
-- Mobile apps (the SPA works on mobile but isn't built mobile-first).
+- Native mobile apps (the applications run in a phone's or a tablet's browser with a layout fitted to the screen — see [Phone and tablet](./mobile.md) — but there is no app to install from a store).
 - One-off marketing sites or content management — there are simpler tools.
 
 ---
@@ -73,7 +73,7 @@ Everything the framework does is composed from five concepts:
 
 | Concept | What it is | What it solves |
 |---|---|---|
-| **[Pool](./connectors.md#pools)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
+| **[Pool](./connectors.md#pools)** | A connection to a database: its type, host, port and database, and the account that signs in. | "How do I reach this data?" |
 | **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
 | **[Screen](./build/screens/overview.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
 | **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |
@@ -82,6 +82,8 @@ Everything the framework does is composed from five concepts:
 Around those five sit the supporting layers: the [dictionary](./dictionary.md) for labels and formats, [authentication & roles](./build/secure/sign-in.md) for who-sees-what, [jobs](../nomaflow/overview.md) for scheduled work, [AI assistant](./ai-assistant.md) for natural-language access, [plugins](./apps/plugins.md) for custom Python.
 
 Every concept page on this site opens with **what it is, why it exists, when you create one, how it fits with the others**. Once you've read those five, the framework's surface is essentially mapped.
+
+In the application itself, **Liberty Next → Overview** lists the applications of the installation and the eight steps an application is built in, and the **Studio** shows one application as a map — its menu, its screens, the data they use and the services they call — where every piece is edited in place. See [Overview and Studio](./studio.md).
 
 ---
 
@@ -144,4 +146,5 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb 
 | **See what's possible first** | [What you can build](./what-you-can-build.md). |
 | **Install the framework** | [Installation](../installation/overview.md). |
 | **Understand the concepts first** | [Concepts → Connectors](./connectors.md) is the natural entry point. |
+| **See an application whole** | [Overview and Studio](./studio.md). |
 | **Look up a specific field** | [The Liberty Next workspace](./configuration/settings-ui.md) lists every editor; each Concepts page references the relevant editor. |

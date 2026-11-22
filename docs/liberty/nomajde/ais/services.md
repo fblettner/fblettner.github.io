@@ -135,6 +135,19 @@ These five are marked as **changing data**. Three parameters depend on the objec
 
 ---
 
+## Several forms in one session \{#flow\}
+
+One call of a form is enough to read it, or to fill it and press a button. It is not enough when the next action depends on what the form answered. For that case Nomajde offers two job steps and screen actions that keep the forms open in **one JD Edwards session** — and always close the forms and the session, an error included:
+
+| Step | Does |
+|---|---|
+| **A flow over several forms** (`j_ais_form_flow`) | A list of steps — the form to open, the fields and filters to fill, the row to select, rows to add or to change, the buttons to press — each with what it expects: a number of rows, the form on top, no error. A step that is not met stops the flow before the next one acts. Several rows added in one step are one transaction: a document and its lines. |
+| **One row of a grid** (`j_ais_grid_row`) | Adds, changes or deletes one row of a form's grid, looked for first: nothing is done unless exactly one row is found — none, for an add. |
+
+The endpoints [Create from…](./create-from.md#guarantees) builds for a change or a delete through a form work the same way.
+
+---
+
 ## Where a service is used \{#use\}
 
 | From | How |

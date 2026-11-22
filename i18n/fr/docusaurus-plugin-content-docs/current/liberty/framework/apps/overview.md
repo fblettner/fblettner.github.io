@@ -6,7 +6,7 @@ keywords: [Liberty Next, application, sélecteur d'application, connecteur, menu
 
 # Applications
 
-Dans Liberty Next, une **application** est un **connecteur doté d'un menu** : son nom apparaît dans le sélecteur d'application en haut du menu latéral, et le choisir affiche son menu. Il n'existe pas d'objet « application » distinct à créer — le connecteur est l'application.
+Dans Liberty Next, une **application** est un **connecteur doté d'un menu et affiché dans le sélecteur** (**Afficher dans le sélecteur**, activé par défaut) : son nom apparaît dans le sélecteur d'application en haut du menu latéral, et le choisir affiche son menu. Il n'existe pas d'objet « application » distinct à créer — le connecteur est l'application. La page [Vue d'ensemble](../studio.md#overview) liste les applications de l'installation, et le [Studio](../studio.md#studio) présente chacune sous forme de carte de son menu, de ses écrans, de ses données et de ses services.
 
 ---
 
@@ -31,10 +31,10 @@ Dans Liberty Next, une **application** est un **connecteur doté d'un menu** : s
   <text x="254" y="190" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Pool</text>
   <rect x="252" y="196" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="262" y="210.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Default ▾</text>
-  <text x="260" y="250" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📊 Pipeline</text>
-  <text x="260" y="276" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Ventes</text>
-  <text x="260" y="302" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">   👥 Clients</text>
-  <text x="260" y="328" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">   📈 Affaires</text>
+  <text x="260" y="250" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Pipeline</text>
+  <text x="260" y="276" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ Ventes</text>
+  <text x="274" y="302" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="274" y="328" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Affaires</text>
   <rect x="480" y="30" width="480" height="380" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="496" y="56" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline</text>
   <rect x="496" y="72" width="144" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -90,7 +90,7 @@ Tout ce qu'affiche une application est rangé sous le nom de son connecteur :
 | Graphiques | Liberty Next → Analyse → Graphiques, portée du connecteur | `[charts.<app>.<id>]` |
 | Tableaux de bord | Liberty Next → Analyse → Tableaux de bord, application | `[dashboards.<app>.<id>]` — une entrée de menu l'ouvre avec la cible `<app>.<id>`. |
 
-Les actions partagées ont un espace de noms unique. Les tâches Nomaflow ne sont rattachées à aucune application.
+Les services ont un espace de noms unique. Les tâches Nomaflow ne sont rattachées à aucune application.
 
 ---
 
@@ -130,13 +130,13 @@ L'[Assistant de création d'écran](../build/screen-assistant.md) enchaîne les 
 
 ## Applications prêtes à l'emploi \{#ready-made\}
 
-**Nomasx-1** et **Nomajde** sont livrées comme applications prêtes à l'emploi, avec leurs tâches Nomaflow. Leur installation et leur mise à jour sont décrites dans [Applications sous licence](../../installation/deploy-prebuilt-apps.md). Leurs écrans, menus et dictionnaire sont visibles et modifiables dans les Paramètres comme ceux de toute application ; un élément marqué **override** conserve les modifications locales au fil des mises à jour.
+**Nomasx-1** et **Nomajde** sont livrées comme applications prêtes à l'emploi, avec leurs tâches Nomaflow. Leur installation et leur mise à jour sont décrites dans [Applications sous licence](../../installation/deploy-prebuilt-apps.md). Leurs écrans, menus et dictionnaire sont visibles et modifiables dans Liberty Next comme ceux de toute application ; un élément marqué **override** conserve les modifications locales au fil des mises à jour.
 
 ---
 
 ## Qui voit une application \{#access\}
 
-Une application apparaît pour un utilisateur dès que son menu contient des entrées que cet utilisateur peut ouvrir. Les rôles déterminent les entrées de menu, les écrans et les requêtes accessibles à chacun — voir [Rôles et permissions](../build/secure/roles-and-permissions.md) et [Menus → Permissions et rôles](../build/menus/permissions-and-roles.md).
+Une application apparaît pour un utilisateur quand elle est affichée dans le sélecteur et que son menu contient des entrées que cet utilisateur peut ouvrir. Les rôles déterminent les entrées de menu, les écrans et les requêtes accessibles à chacun — voir [Rôles et permissions](../build/secure/roles-and-permissions.md) et [Menus → Permissions et rôles](../build/menus/permissions-and-roles.md).
 
 ---
 

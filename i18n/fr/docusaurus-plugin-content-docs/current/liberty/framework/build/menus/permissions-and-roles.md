@@ -79,7 +79,7 @@ Chaque feuille est conditionnée par la permission de sa cible :
 | `screen`, `query` | `sql:<connector>:<target>` (la permission de la requête). |
 | `endpoint` | `api:<connector>:<target>` (la permission de l'endpoint). |
 | `dashboard` | La permission d'au moins un de ses widgets de données, ou `dashboard:<id>` — voir [plus bas](#gating). |
-| `page` | Celle de la page : `explorer:<app>:<modèle>` pour l'explorateur de données, `nomaflow:view` pour les pages Nomaflow, aucune pour les autres. |
+| `page` | Celle de la page : `explorer:<app>:<modèle>` pour l'explorateur de données, `page:<app>:<page>` pour une page livrée par une application, `nomaflow:view` pour les pages Nomaflow, `tests:view` pour les pages de tests, aucune pour les autres. |
 
 Une autorisation explicite `menu:<app>:<id>` dans un rôle affiche aussi la feuille, même sans la permission de la cible ; un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes quand une entrée est autorisée ou refusée sur son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md).
 
@@ -268,7 +268,7 @@ Une entrée est affichée d'après ce que l'utilisateur peut ouvrir par elle :
 | `screen` | L'utilisateur détient la permission `sql:` de la requête de lecture de l'écran. |
 | `query`, `endpoint` | L'utilisateur détient `sql:<connector>:<target>` / `api:<connector>:<target>`. |
 | `dashboard` | L'utilisateur peut lire au moins un de ses widgets de données, ou détient `dashboard:<id>`. Un tableau de bord fait uniquement de textes et de liens est affiché à tous. |
-| `page` | Explorateur de données : l'utilisateur peut utiliser un modèle de l'application (`explorer:<app>:<modèle>`). Pages Nomaflow : `nomaflow:view`. Toute autre page : tout le monde. |
+| `page` | Explorateur de données, ou l'une de ses analyses ou tableaux de bord : l'utilisateur peut utiliser le modèle (`explorer:<app>:<modèle>`). Page livrée par une application (`/app/<app>/<page>`) : `page:<app>:<page>`. Pages Nomaflow : `nomaflow:view`. Pages de tests : `tests:view`. Toute autre page : tout le monde. |
 | `job` | L'utilisateur détient `job:<id>`. |
 | `url` | Tout le monde. |
 

@@ -161,7 +161,7 @@ Une installation de production en une ligne :
   --apps ./liberty_apps-7.0.58-py3-none-any.whl
 ```
 
-La clé de licence n'est pas une option : la coller dans **Liberty Next → Administrer → App → License** une fois connecté.
+La clé de licence n'est pas une option : la coller dans **Liberty Next → Administrer → App → Licence** une fois connecté.
 
 ### Relancer l'installation \{#rerun\}
 

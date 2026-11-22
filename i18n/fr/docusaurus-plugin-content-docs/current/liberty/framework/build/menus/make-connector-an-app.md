@@ -16,9 +16,9 @@ Cette page détaille le câblage des deux côtés : l'indicateur sur le connecte
 
 | Pièce | Où se trouve-t-elle | Requise pour une application ? |
 |---|---|---|
-| **`show_in_switcher`** | Sur le connecteur (Liberty Next → Données → Connecteurs → onglet Paramètres). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur d'applications. |
+| **`show_in_switcher`** | Sur le connecteur (Liberty Next → Données → Connecteurs → étape **Réglages**). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur d'applications. |
 | **`[menus.<connector>]`** | Le fichier de menus (Liberty Next → Écrans → Menus). | Oui — sans menu, le connecteur est traité comme une *source de données*, pas une application. |
-| **`home`** | Sur le connecteur (Liberty Next → Données → Connecteurs → onglet Paramètres). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
+| **`home`** | Sur le connecteur (Liberty Next → Données → Connecteurs → étape **Réglages**). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
 
 Deux effets distincts, déclenchés par des indicateurs différents :
 
@@ -33,50 +33,138 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
 
 ## Où chaque indicateur est défini
 
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="ma-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="mca-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="mca-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="mca-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="mca-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#ma-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Paramètres · Connecteurs · [connectors.crm] · Paramètres</text>
-  <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="40" y="92" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">type</text>
-  <rect x="200" y="80" width="200" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="95" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">sql</text>
-
-  <text x="40" y="122" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">pool</text>
-  <rect x="200" y="110" width="200" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="125" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">default</text>
-
-  <text x="40" y="152" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">licensed</text>
-  <rect x="200" y="142" width="20" height="20" rx="3" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-
-  <line x1="40" y1="180" x2="960" y2="180" stroke="#1f2937"/>
-  <text x="40" y="204" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VISIBILITÉ DANS LE SÉLECTEUR EN HAUT</text>
-
-  <text x="40" y="232" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">show_in_switcher</text>
-  <rect x="200" y="222" width="20" height="20" rx="3" fill="rgba(34,197,94,0.30)" stroke="rgba(34,197,94,0.60)"/>
-  <text x="210" y="237" fill="#22c55e" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
-  <text x="234" y="236" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">afficher ce connecteur comme application dans le sélecteur d'applications</text>
-
-  <text x="40" y="266" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">home</text>
-  <rect x="200" y="256" width="300" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="271" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">pipeline.customers ▾</text>
-  <text x="510" y="270" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">élément d'accueil quand cette application est choisie</text>
-
-  <text x="40" y="296" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">max_rows</text>
-  <rect x="200" y="286" width="100" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="210" y="301" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">(par défaut)</text>
-
-  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Pour une application, créer aussi [menus.crm] depuis Écrans → Menus → + Add scope.</text>
+  <rect x="220" y="20" width="880" height="416" rx="14" fill="url(#mca-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="47" fill="#4a9eff" fontSize="12" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="260" y="47" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Connecteurs</text>
+  <rect x="957" y="33" width="125" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1019.5" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Recharger la config</text>
+  <rect x="876" y="33" width="75" height="22" rx="5" fill="url(#mca-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="913.5" y="47.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="790" y="33" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="830.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↶ Abandonner</text>
+  <rect x="704" y="33" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="744.0" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Connecteur</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="238" y="80" width="220" height="340" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="248" y="90" width="200" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="257" y="103.3" fill="#475569" fontSize="8.4" fontFamily="system-ui, sans-serif">⌕ filtrer 6…</text>
+  <text x="250" y="128" fill="#94a3b8" fontSize="8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">APPLICATIONS</text>
+  <rect x="248" y="136" width="200" height="36" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="258" y="158" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="276" y="151" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="ui-monospace, monospace">crm</text>
+  <text x="276" y="164" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">sql · 12 table(s) · 30 requête(s)</text>
+  <rect x="248" y="178" width="200" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="200" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="276" y="193" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="ui-monospace, monospace">nomasx1</text>
+  <text x="276" y="206" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">sql · 116 table(s) · 33 requête(s)</text>
+  <text x="250" y="234" fill="#94a3b8" fontSize="8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SOURCES DE DONNÉES</text>
+  <rect x="248" y="242" width="200" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="264" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="276" y="257" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="ui-monospace, monospace">default</text>
+  <text x="276" y="270" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">sql</text>
+  <rect x="248" y="284" width="200" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="306" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="276" y="299" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="ui-monospace, monospace">reporting</text>
+  <text x="276" y="312" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">sql · 4 table(s)</text>
+  <rect x="248" y="326" width="200" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="348" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif">◎</text>
+  <text x="276" y="341" fill="#e2e8f0" fontSize="8.8" fontWeight="700" fontFamily="ui-monospace, monospace">helpdesk</text>
+  <text x="276" y="354" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">api · 12 endpoint(s)</text>
+  <rect x="470" y="80" width="612" height="340" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="484" y="102" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">[connectors.crm]</text>
+  <text x="589.2" y="102" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">· sql</text>
+  <rect x="1016" y="90" width="54" height="20" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1043.0" y="103.5" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="954" y="90" width="58" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="983.0" y="103.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Renommer</text>
+  <rect x="901" y="90" width="49" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="925.5" y="103.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Cloner</text>
+  <rect x="780" y="90" width="117" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="838.5" y="103.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⑂ Rechercher les usages</text>
+  <rect x="482.0" y="116" width="106.4" height="44" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <rect x="490.0" y="124" width="14" height="14" rx="3" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="510.0" y="135" fill="#4a9eff" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RÉGLAGES</text>
+  <text x="490.0" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">pool crm</text>
+  <line x1="588.4" y1="138.0" x2="601.4" y2="138.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#mca-flow)"/>
+  <rect x="602.4" y="116" width="106.4" height="44" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="610.4" y="124" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="630.4" y="135" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLES</text>
+  <text x="610.4" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">12 table(s)</text>
+  <line x1="708.8" y1="138.0" x2="721.8" y2="138.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#mca-flow)"/>
+  <rect x="722.8" y="116" width="106.4" height="44" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="730.8" y="124" width="14" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="750.8" y="135" fill="#4ade80" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REQUÊTES</text>
+  <text x="730.8" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">30 requête(s)</text>
+  <line x1="829.2" y1="138.0" x2="842.2" y2="138.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#mca-flow)"/>
+  <rect x="843.2" y="116" width="106.4" height="44" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="851.2" y="124" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="871.2" y="135" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SÉQUENCES</text>
+  <text x="851.2" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">2 séquence(s)</text>
+  <line x1="949.6" y1="138.0" x2="962.6" y2="138.0" stroke="#475569" strokeWidth="1.3" markerEnd="url(#mca-flow)"/>
+  <rect x="963.6" y="116" width="106.4" height="44" rx="8" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <rect x="971.6" y="124" width="14" height="14" rx="3" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="991.6" y="135" fill="#c084fc" fontSize="7.6" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LISTES</text>
+  <text x="971.6" y="151" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">5 liste(s)</text>
+  <text x="482" y="176" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">POOL</text>
+  <rect x="482" y="181" width="588" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="491" y="195.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">crm</text>
+  <text x="1058" y="195.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="482" y="212" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">POOLS</text>
+  <rect x="482" y="217" width="46" height="18" rx="4" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="505" y="229.5" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">+ add</text>
+  <text x="482" y="248" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SHOW IN SWITCHER</text>
+  <rect x="482" y="259" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M484.5,264.5 L486.8,266.8 L490.8,262" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="499" y="268" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">enabled</text>
+  <text x="482" y="282" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Show this connector in the top app switcher.</text>
+  <text x="482" y="294" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME</text>
+  <rect x="482" y="299" width="588" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="491" y="313.3" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">overview  Vue d'ensemble</text>
+  <text x="1058" y="313.3" fill="#64748b" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="482" y="333" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">Landing menu item id when this app is picked.</text>
+  <text x="482" y="344" fill="#94a3b8" fontSize="7.8" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">HOME BY ROLE</text>
+  <rect x="482" y="349" width="46" height="18" rx="4" fill="transparent" stroke="#475569" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="505" y="361.5" fill="#94a3b8" fontSize="8.2" textAnchor="middle" fontFamily="system-ui, sans-serif">+ add</text>
+  <text x="482" y="382" fill="#64748b" fontSize="7.8" fontFamily="system-ui, sans-serif">A landing menu item per role: a user lands on the item of their first role listed here, else on home.</text>
+  <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Applications</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les connecteurs qui ont un menu</text>
+  <line x1="200" y1="137.0" x2="250" y2="126" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
+  <rect x="20" y="264" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="279" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sources de données</text>
+  <text x="30" y="292" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sans menu : pas une application</text>
+  <line x1="200" y1="281.0" x2="250" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
+  <rect x="1120" y="172" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="187" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Étape Réglages</text>
+  <text x="1130" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les réglages de l'application</text>
+  <line x1="1120" y1="189.0" x2="540" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
+  <rect x="1120" y="247" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="262" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Show In Switcher</text>
+  <text x="1130" y="275" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">+ un menu = dans le sélecteur</text>
+  <line x1="1120" y1="264.0" x2="560" y2="264" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entrée d'arrivée de l'app</text>
+  <line x1="1120" y1="317.0" x2="1070" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
+  <rect x="1120" y="368" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Home By Role</text>
+  <text x="1130" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une entrée d'arrivée par rôle</text>
+  <line x1="1120" y1="385.0" x2="530" y2="358" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mca-arrow)"/>
 </svg>
 
 ---
 
 ## Étape 1 — Sur le connecteur
 
-Ouvrir **Liberty Next → Données → Connecteurs**, choisir le connecteur, basculer sur l'onglet **Paramètres**. Les champs pertinents pour « ceci est une application » :
+Ouvrir **Liberty Next → Données → Connecteurs** et choisir le connecteur dans la liste — les connecteurs qui ont un menu sont sous **Applications**, les autres sous **Sources de données**. Son étape **Réglages** s'ouvre en premier. Les champs pertinents pour « ceci est une application » (intitulés **Show In Switcher**, **Home** et **Home By Role** dans le formulaire) :
 
 | Champ | Notes |
 |---|---|

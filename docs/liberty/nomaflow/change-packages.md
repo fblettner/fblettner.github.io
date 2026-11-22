@@ -1,7 +1,7 @@
 ---
 title: Change packages
 description: "Capture every tracked data write into a reviewable package — old → new diffs grouped by entity, exclude entries cherry-pick style, submit / approve / reject the package, export a JSON bundle and apply it on another environment with full pre-image drift detection. The canonical use case is promoting JD Edwards security from dev to prod."
-keywords: [Liberty Framework, change packages, changesets, JDE security promotion, draft / submitted / approved / exported / promoted / rejected, drift detection, replay, CALL_API, CALL_PLUGIN, change_replay, change_tracked, change_entity, post-apply, AppliedBundle, ly_change_packages, ly_change_entries, Nomaflow]
+keywords: [Liberty Framework, change packages, changesets, JDE security promotion, draft / submitted / approved / exported / promoted / rejected, drift detection, replay, CALL_API, CALL_PLUGIN, change_replay, change_tracked, change_entity, post-apply, AppliedBundle, Nomaflow]
 ---
 
 # Change packages
@@ -18,101 +18,178 @@ The **Package** page carries configuration slices (screens, menu items, dashboar
 
 ## Opening the page
 
-- **Liberty Next → Deploy → Changes**.
-- From the Liberty Next → Data → Connectors page, *Track changes* in the screen card opens the page filtered on the matching application.
+**Liberty Next → Deploy → Changes**.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 580" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 590" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="cp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="cp-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="cp-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="nfcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nfcp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nfcp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nfcp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="20" y="20" width="960" height="540" rx="14" fill="url(#cp-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomaflow · Changes</text>
-  <line x1="20" y1="68" x2="980" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="40" y="84" width="240" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <rect x="40" y="84" width="100" height="28" rx="6" fill="url(#cp-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="90" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Changes</text>
-  <text x="190" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Apply</text>
-
-  <rect x="40" y="128" width="280" height="412" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="56" y="142" width="248" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="68" y="160" fill="#64748b" fontSize="11" fontFamily="ui-monospace, monospace">🔍 Filter packages…</text>
-
-  <rect x="56" y="178" width="248" height="62" rx="8" fill="var(--hover-subtle)" stroke="#4a9eff" strokeWidth="1.4"/>
-  <text x="64" y="196" fill="#e2e8f0" fontSize="12" fontFamily="ui-monospace, monospace" fontWeight="700">JDE-PROD · Security 2026-06-09</text>
-  <text x="64" y="212" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">submitted · franck · 09/06 09:42 · 12 entries</text>
-  <rect x="64" y="222" width="60" height="16" rx="8" fill="rgba(251,146,60,0.10)" stroke="#fb923c" strokeWidth="1"/>
-  <text x="94" y="234" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">PENDING</text>
-
-  <rect x="56" y="248" width="248" height="60" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="64" y="266" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">JDE-PROD · UDC refresh</text>
-  <text x="64" y="282" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">draft · franck · 09/06 08:15 · 4 entries</text>
-  <rect x="64" y="292" width="48" height="16" rx="8" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="88" y="304" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">DRAFT</text>
-
-  <rect x="56" y="316" width="248" height="60" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="64" y="334" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">JDE-PROD · Permissions Q2</text>
-  <text x="64" y="350" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">approved · valeria · 06/06 17:10 · 47 entries</text>
-  <rect x="64" y="360" width="60" height="16" rx="8" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="94" y="372" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">APPROVED</text>
-
-  <rect x="56" y="384" width="248" height="60" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="64" y="402" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">JDE-PROD · Permissions Q1</text>
-  <text x="64" y="418" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">exported · valeria · 04/06 12:01 · 23 entries</text>
-  <rect x="64" y="428" width="60" height="16" rx="8" fill="rgba(255,255,255,0.05)" stroke="#475569"/>
-  <text x="94" y="440" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">EXPORTED</text>
-
-  <rect x="336" y="128" width="624" height="412" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="352" y="150" fill="#e2e8f0" fontSize="13" fontFamily="ui-monospace, monospace" fontWeight="700">Security 2026-06-09</text>
-  <text x="540" y="150" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">application = JDE-PROD · 12 entries</text>
-  <rect x="744" y="136" width="64" height="24" rx="6" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="776" y="151" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Approve</text>
-  <rect x="816" y="136" width="56" height="24" rx="6" fill="rgba(248,113,113,0.10)" stroke="#f87171" strokeWidth="1"/>
-  <text x="844" y="151" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Reject</text>
-  <rect x="880" y="136" width="64" height="24" rx="6" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="912" y="151" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Export</text>
-
-  <text x="352" y="186" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="600">▾ ROLES (3)</text>
-  <text x="450" y="186" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">PRJM_NEW · UDC_ADM · BUYER_R2</text>
-  <rect x="352" y="194" width="592" height="64" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="364" y="212" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">PRJM_NEW · INSERT · src: import security</text>
-  <rect x="364" y="220" width="44" height="14" rx="7" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="386" y="231" fill="#22c55e" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">INSERT</text>
-  <text x="364" y="248" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">RLDF · ∅ → PRJM_NEW   |   RLDC · ∅ → 1   |   +6 more</text>
-
-  <text x="352" y="278" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="600">▾ RELATIONSHIPS (5)</text>
-  <text x="464" y="278" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">F95921 · F00926</text>
-  <rect x="352" y="286" width="592" height="48" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="364" y="304" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">RLDF=PRJM_NEW · YRLE=A03 · INSERT</text>
-  <rect x="364" y="312" width="44" height="14" rx="7" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
-  <text x="386" y="323" fill="#22c55e" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">INSERT</text>
-
-  <text x="352" y="354" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="600">▾ SECURITY (4)</text>
-  <text x="448" y="354" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">F00950</text>
-  <rect x="352" y="362" width="592" height="48" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="364" y="380" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">RLUSER=PRJM_NEW · RLAT1=8 · UPDATE</text>
-  <rect x="364" y="388" width="48" height="14" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="388" y="399" fill="#4a9eff" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">UPDATE</text>
-
-  <text x="352" y="430" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="600">▾ ACTION REPLAYS (1)</text>
-  <text x="488" y="430" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">call_plugin · nomajde.security:j_remerge_security</text>
-  <rect x="352" y="438" width="592" height="46" rx="8" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="364" y="456" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">CALL_PLUGIN · child_role=PRJM_NEW · replay = true</text>
-  <rect x="364" y="464" width="68" height="14" rx="7" fill="rgba(251,146,60,0.10)" stroke="#fb923c" strokeWidth="1"/>
-  <text x="398" y="475" fill="#fb923c" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">CALL_PLUGIN</text>
-
-  <rect x="352" y="500" width="592" height="28" rx="6" fill="rgba(0,0,0,0.20)" stroke="#1f2937"/>
-  <text x="364" y="518" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Post-apply: 1 step · nomajde-remerge-security  (runs once on the target after every captured row lands)</text>
+  <rect x="220" y="20" width="880" height="550" rx="14" fill="url(#nfcp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#4a9eff" fontSize="13" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="260" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Changes</text>
+  <rect x="1011" y="32" width="69" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1045.5" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Refresh</text>
+  <rect x="914" y="32" width="89" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="958.5" y="47.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New package</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="78" width="67" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="273.5" y="93.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">≋ Changes</text>
+  <rect x="313" y="78" width="57" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="341.5" y="93.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">⇧ Apply</text>
+  <rect x="240" y="114" width="250" height="440" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="124" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="260" y="138.5" fill="#475569" fontSize="8.5" fontFamily="system-ui, sans-serif">⌕  Filter by status / date…</text>
+  <rect x="250" y="156" width="230" height="58" rx="7" fill="rgba(74,158,255,0.08)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="262" y="173" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">Package 4 · crm</text>
+  <rect x="262" y="180" width="39" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="281.5" y="190.7" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DRAFT</text>
+  <text x="307" y="191" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">crm · 12 change(s)</text>
+  <text x="262" y="206" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">created · 11/20/2026</text>
+  <rect x="250" y="222" width="230" height="58" rx="7" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="262" y="239" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">Package 3 · crm</text>
+  <rect x="262" y="246" width="47" height="15" rx="7.5" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="285.5" y="256.7" fill="#fb923c" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PENDING</text>
+  <text x="315" y="257" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">crm · 5 change(s)</text>
+  <text x="262" y="272" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">submitted · 11/18/2026</text>
+  <rect x="250" y="288" width="230" height="58" rx="7" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="262" y="305" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">role-cleanup</text>
+  <rect x="262" y="312" width="39" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="281.5" y="322.7" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DRAFT</text>
+  <rect x="305" y="312" width="43" height="15" rx="7.5" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="326.5" y="322.7" fill="#c084fc" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">custom</text>
+  <text x="354" y="323" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">crm · 3 change(s)</text>
+  <text x="262" y="338" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">created · 11/15/2026</text>
+  <rect x="250" y="354" width="230" height="58" rx="7" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="262" y="371" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">Package 1 · crm</text>
+  <rect x="262" y="378" width="51" height="15" rx="7.5" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="287.5" y="388.7" fill="#94a3b8" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">EXPORTED</text>
+  <text x="319" y="389" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">crm · 42 change(s)</text>
+  <text x="262" y="404" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">approved · 11/02/2026</text>
+  <rect x="502" y="114" width="578" height="440" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="516" y="136" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">Package 4 · crm</text>
+  <rect x="622" y="125" width="39" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="641.5" y="135.7" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">DRAFT</text>
+  <rect x="1008" y="124" width="58" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1037.0" y="138.5" fill="#f87171" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Delete</text>
+  <rect x="944" y="124" width="58" height="22" rx="5" fill="url(#nfcp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="973.0" y="138.5" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤ Submit</text>
+  <rect x="871" y="124" width="67" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="904.5" y="138.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Expand all</text>
+  <line x1="502" y1="156" x2="1080" y2="156" stroke="#1f2937" strokeWidth="1"/>
+  <text x="516" y="179" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌄</text>
+  <text x="530" y="179" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
+  <text x="544" y="179" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Roles</text>
+  <text x="576.6" y="179" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· ROLE=SALES_MGR</text>
+  <rect x="896" y="168" width="60" height="16" rx="8" fill="none" stroke="#475569" strokeWidth="1"/>
+  <text x="926.0" y="179" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">3 CHANGE(S)</text>
+  <rect x="964" y="167" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="989.0" y="179.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⇲ Move</text>
+  <rect x="1014" y="167" width="52" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1040.0" y="179.5" fill="#f87171" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Delete</text>
+  <rect x="536" y="192" width="530" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="544" y="208" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">⌄</text>
+  <rect x="556" y="196" width="43" height="15" rx="7.5" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="577.5" y="206.7" fill="#4ade80" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">INSERT</text>
+  <text x="607" y="207.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">6 field(s)</text>
+  <text x="662.6" y="207.5" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">crm.roles</text>
+  <text x="1058" y="207.5" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="1042" y="207.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Move</text>
+  <text x="1018.08" y="207.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Exclude</text>
+  <text x="564" y="230" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">ROLE</text>
+  <text x="672" y="230" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">SALES_MGR</text>
+  <text x="564" y="245" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">DESCRIPTION</text>
+  <text x="672" y="245" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">Sales managers</text>
+  <text x="564" y="260" fill="#4a9eff" fontSize="8" fontFamily="system-ui, sans-serif">+ 4 unchanged</text>
+  <rect x="536" y="272" width="530" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="544" y="288" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="556" y="276" width="43" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="577.5" y="286.7" fill="#4a9eff" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">UPDATE</text>
+  <text x="607" y="287.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2 changed</text>
+  <text x="657.84" y="287.5" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">crm.roles</text>
+  <text x="1058" y="287.5" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="1042" y="287.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Move</text>
+  <text x="1018.08" y="287.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Exclude</text>
+  <rect x="536" y="300" width="530" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="544" y="316" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">›</text>
+  <rect x="556" y="304" width="64" height="15" rx="7.5" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="588.0" y="314.7" fill="#fb923c" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">CALL PLUGIN</text>
+  <text x="628" y="315.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">replays on apply</text>
+  <text x="712.16" y="315.5" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">crm.remerge</text>
+  <text x="1058" y="315.5" fill="#f87171" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="1042" y="315.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Move</text>
+  <text x="1018.08" y="315.5" fill="#94a3b8" fontSize="8" textAnchor="end" fontFamily="system-ui, sans-serif">Exclude</text>
+  <text x="516" y="343" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="530" y="343" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
+  <text x="544" y="343" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Users</text>
+  <text x="576.6" y="343" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· USER=JDOE</text>
+  <rect x="642.57" y="332" width="69" height="16" rx="4" fill="#4a9eff" fillOpacity="0.14" stroke="#4a9eff" strokeOpacity="0.5" strokeWidth="1"/>
+  <text x="649.57" y="343.5" fill="#4a9eff" fontSize="7.5" fontWeight="700" fontFamily="ui-monospace, monospace">import users</text>
+  <rect x="896" y="332" width="60" height="16" rx="8" fill="none" stroke="#475569" strokeWidth="1"/>
+  <text x="926.0" y="343" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">4 CHANGE(S)</text>
+  <rect x="964" y="331" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="989.0" y="343.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⇲ Move</text>
+  <rect x="1014" y="331" width="52" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1040.0" y="343.5" fill="#f87171" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Delete</text>
+  <text x="516" y="371" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="530" y="371" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
+  <text x="544" y="371" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Users</text>
+  <text x="576.6" y="371" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· USER=ASMITH</text>
+  <rect x="896" y="360" width="60" height="16" rx="8" fill="none" stroke="#475569" strokeWidth="1"/>
+  <text x="926.0" y="371" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">2 CHANGE(S)</text>
+  <rect x="964" y="359" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="989.0" y="371.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⇲ Move</text>
+  <rect x="1014" y="359" width="52" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1040.0" y="371.5" fill="#f87171" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Delete</text>
+  <text x="516" y="399" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">›</text>
+  <text x="530" y="399" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">≋</text>
+  <text x="544" y="399" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Security</text>
+  <text x="592.56" y="399" fill="#94a3b8" fontSize="8.5" fontFamily="ui-monospace, monospace">· ROLE=SALES_MGR · OBJECT=P4210</text>
+  <rect x="896" y="388" width="60" height="16" rx="8" fill="none" stroke="#475569" strokeWidth="1"/>
+  <text x="926.0" y="399" fill="#94a3b8" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">3 CHANGE(S)</text>
+  <rect x="964" y="387" width="50" height="18" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="989.0" y="399.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">⇲ Move</text>
+  <rect x="1014" y="387" width="52" height="18" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1040.0" y="399.5" fill="#f87171" fontSize="7.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Delete</text>
+  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Changes · Apply</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">review here, apply a bundle there</text>
+  <line x1="200" y1="87.0" x2="240" y2="90" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Packages</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">status, application, changes</text>
+  <line x1="200" y1="187.0" x2="250" y2="185" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="20" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A custom package</text>
+  <text x="30" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a holding package to move into</text>
+  <line x1="200" y1="347.0" x2="250" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1120" y="72" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="87" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">New package</text>
+  <text x="1130" y="100" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a custom holding package</text>
+  <line x1="1120" y1="89.0" x2="991" y2="57" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1120" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lifecycle buttons</text>
+  <text x="1130" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">by state: Submit, Approve, Export…</text>
+  <line x1="1120" y1="157.0" x2="973.0" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One line per record</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entity, key, number of changes</text>
+  <line x1="1120" y1="227.0" x2="1066" y2="176" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1120" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Each change</text>
+  <text x="1130" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Exclude, Move, Delete</text>
+  <line x1="1120" y1="317.0" x2="1058" y2="205" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
+  <rect x="1120" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The diff</text>
+  <text x="1130" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">old → new, the rest on request</text>
+  <line x1="1120" y1="397.0" x2="922" y2="255" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nfcp-arrow)"/>
 </svg>
 
 ---
@@ -175,40 +252,42 @@ A package walks through these states:
 | **`EXPORTED`** | A JSON bundle has been downloaded. The package is now the source-side record of what was shipped; the bundle is what reaches the target. |
 | **`REJECTED`** | The reviewer turned it down. It stays rejected; the next tracked write on the application opens a new draft. |
 
-The four lifecycle buttons on the detail header — *Submit*, *Approve*, *Reject*, *Export* — fire `POST /admin/changesets/<id>/submit` (or `…/approve`, `…/reject`, `…/export`). Change packages are reserved to superusers.
+The detail header shows the buttons of the package's state — **Submit** on a draft, **Approve** and **Reject** on a pending package, **Export bundle** and **Promote to…** on an approved or exported one — and they call `POST /admin/changesets/<id>/submit` (or `…/approve`, `…/reject`, `…/export`). Change packages are reserved to superusers.
 
-### Per-entry: exclude / re-include
+### Exclude, move, delete \{#entries\}
 
-While the package is `DRAFT`, every captured entry has an **Exclude** button. Excluded entries are not removed (no audit loss); they're flagged `status = excluded` and skipped on compaction + export. Re-including is one click. Useful for cherry-picking: capture a wide set of changes during the day, exclude the experiment that didn't pan out, ship the rest.
+While the package is `DRAFT`, each change has **Exclude**, **Move** and a delete icon, and each record (all the changes of one row) has **Move** and **Delete**:
 
-Compaction is computed at **export time**, not on capture — exclusions take effect immediately the moment the bundle is built.
+| Action | Effect |
+|---|---|
+| **Exclude** / **Include** | The change stays in the package, dimmed, flagged `excluded`, and is left out of the compaction and the export. A second click includes it again. Useful to keep an experiment out of the bundle without losing its trace. |
+| **Move** | Moves the change — or the whole record — to another draft package of the same application, or to a **New custom package…** created on the spot. |
+| **Delete** | Removes the change — or the record — from the package log for good, after confirmation. The rows already written to the database are not affected; a later export can no longer include them. |
+
+Compaction is computed at **export time**, not on capture — exclusions take effect the moment the bundle is built.
 
 ---
 
-## The Changes tab — review and act
+## The Changes tab — review and act \{#changes-tab\}
 
-The page has two tabs: **Changes** (the package catalogue) and **Apply** (covered below).
+The page has two tabs: **Changes** (the packages) and **Apply** (covered below). In the page header, **New package** creates a **custom** package — a holding package for the application, where changes are moved to be promoted later —, and **Refresh** reads the list again.
 
 ### Left column — the package list
 
 | Element | What |
 |---|---|
-| Filter box | Matches the package name or status. |
-| Active package | Pre-selected on open (the draft of the application the operator last touched). Highlighted blue. |
-| Package row | Name + meta line (`status · captured_by · timestamp · entry_count`) + a coloured status badge. |
-| Status colours | `DRAFT` blue, `PENDING` orange, `APPROVED` green, `EXPORTED` grey, `REJECTED` red. |
-| Trash icon | Deletes the package log — the rows already written to the underlying tables are NOT affected; only the change-package record is removed. Confirmed via the themed dialog. |
+| **Filter by status / date…** | Narrows the list by status or date. |
+| Package row | The name, the status badge — `DRAFT` blue, `PENDING` orange, `APPROVED` green, `EXPORTED` grey, `REJECTED` red —, a **custom** badge for a holding package, the application and the number of changes, then when it was created, submitted or approved. |
+| Selected package | Highlighted; its detail is on the right. |
 
 ### Right column — package detail
 
 | Element | What |
 |---|---|
-| Header | Package name + application + entry count + lifecycle buttons (*Submit* / *Approve* / *Reject* / *Export*) + the resolved post-apply step ids (when set on contributing screens). |
-| Entries grouped by entity | Default groups: `ROLES`, `USERS`, `RELATIONSHIPS`, `SECURITY`, `MENUS`, `ACTION REPLAYS` (the CALL_API / CALL_PLUGIN entries) — the group label comes from each entry's `change_entity`. Click the group head to fold / unfold. |
-| Group head | The label + the entry count + a short sample of the natural keys (e.g. `PRJM_NEW · UDC_ADM · BUYER_R2`). |
-| Entry row | Operation badge + the natural key + the firing action label. Click the chevron to expand the `old → new` diff. |
-| Diff view | Two-column `field` / `value` table with three tones: red strikethrough = old, green = new, secondary = unchanged. A small *Show unchanged* toggle reveals the noise of untouched columns when reviewing a renamed-but-not-changed entry. |
-| Per-entry buttons | *Exclude* (only on `DRAFT` packages) flips the entry to `EXCLUDED` and dims it. Click again to re-include. |
+| Header | The package's name and status; **Expand all** / **Collapse all**; the buttons of its state (**Submit**, **Approve** / **Reject**, **Export bundle** / **Promote to…**); **Delete**, which removes the package log — the rows already written stay — after confirmation. On an approved package, *+ N post-apply* tells how many post-apply steps the bundle will carry. |
+| One line per record | The entity (`change_entity`, or the query), the record's key (`ROLE=SALES_MGR`), the action that produced the changes when there is one (*import users*, *AI assistant*), the number of changes, and on a draft **Move** / **Delete**. A click unfolds its changes. |
+| A change | The operation badge (`INSERT`, `UPDATE`, `DELETE`, `CALL API`, `CALL PLUGIN`), what it does — *N field(s)*, *N changed*, *row removed*, *replays on apply* or *captured · won't replay* —, the connector and query, and on a draft **Exclude** / **Move** / delete. A click unfolds the diff. |
+| The diff | `field` / value: the old value struck in red, the new one in green; **+ N unchanged** shows the other columns (**hide N unchanged** folds them). A call shows its arguments, and whether it is re-run on apply. |
 
 ### Post-apply steps on the header
 

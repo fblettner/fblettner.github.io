@@ -16,7 +16,7 @@ What goes to Anthropic in that case, and what does not, is described on [Data se
 
 ## At a glance
 
-<svg viewBox="0 0 1200 432" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 544" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="mcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="mcp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -24,75 +24,75 @@ What goes to Anthropic in that case, and what does not, is described on [Data se
     <marker id="mcp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="392" rx="14" fill="url(#mcp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Profile</text>
-  <rect x="240" y="62" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="270.5" y="76.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Profile</text>
-  <rect x="307" y="62" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="340.0" y="76.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Security</text>
-  <rect x="379" y="62" width="94" height="22" rx="5" fill="url(#mcp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="426.0" y="76.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Access tokens</text>
-  <line x1="240" y1="94" x2="960" y2="94" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="116" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">A personal access token lets an external client — Claude, through a custom connector —</text>
-  <text x="240" y="130" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">use the assistant's tools as you: with your permissions and your data scope, never more.</text>
-  <text x="240" y="156" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTOR URL</text>
-  <rect x="240" y="162" width="330" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="176.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">https://liberty.example.com/mcp</text>
-  <text x="600" y="156" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VALID FOR (DAYS)</text>
-  <rect x="600" y="162" width="90" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="610" y="176.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">90</text>
-  <text x="240" y="208" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">YOUR TOKEN — THE CONNECTOR'S REQUEST HEADER: AUTHORIZATION: BEARER &lt;TOKEN&gt;</text>
-  <rect x="240" y="214" width="560" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="228.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">7Qd2mVx4…x9Lk</text>
-  <rect x="810" y="214" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="832.0" y="228.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Copy</text>
-  <text x="240" y="256" fill="#fb923c" fontSize="9.5" fontFamily="system-ui, sans-serif">Copy it now: it is shown once and not stored. It expires on 17/02/2027.</text>
-  <text x="240" y="284" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTED BY SIGN-IN</text>
-  <rect x="240" y="290" width="720" height="26" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="307" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Claude · last used 19/11/2026</text>
-  <rect x="876" y="292" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="915.0" y="306.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">End access</text>
-  <rect x="240" y="320" width="720" height="26" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="337" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Claude Code · last used 17/11/2026</text>
-  <rect x="876" y="322" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="915.0" y="336.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">End access</text>
-  <line x1="240" y1="362" x2="960" y2="362" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="240" y="374" width="156" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="318.0" y="388.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Claude Desktop extension</text>
-  <rect x="860" y="374" width="100" height="22" rx="5" fill="url(#mcp-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="910.0" y="388.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Create a token</text>
-  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Access tokens tab</text>
-  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with the mcp:use permission</text>
-  <line x1="200" y1="93.0" x2="409" y2="89" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="20" y="156" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="171" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector URL</text>
-  <text x="30" y="184" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to paste in Claude</text>
-  <line x1="200" y1="173.0" x2="240" y2="173" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="20" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Shown once</text>
-  <text x="30" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">never stored on the server</text>
-  <line x1="200" y1="257.0" x2="240" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="20" y="368" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Claude Desktop extension</text>
-  <text x="30" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">named after its instance</text>
-  <line x1="200" y1="385.0" x2="240" y2="385" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Validity</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">90 days, capped by the server</text>
-  <line x1="1000" y1="167.0" x2="692" y2="173" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="1000" y="208" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="223" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The request header</text>
-  <text x="1010" y="236" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Authorization: Bearer …</text>
-  <line x1="1000" y1="225.0" x2="856" y2="225" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="1000" y="286" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="301" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clients that signed in</text>
-  <text x="1010" y="314" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one ended, the others kept</text>
-  <line x1="1000" y1="303.0" x2="956" y2="303" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
-  <rect x="1000" y="368" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One token per click</text>
-  <text x="1010" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pasted tokens are not listed</text>
-  <line x1="1000" y1="385.0" x2="958" y2="385" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="260" y="20" width="680" height="504" rx="14" fill="url(#mcp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <circle cx="300" cy="54" r="18" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="300" y="59" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">J</text>
+  <text x="328" y="58" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">John Doe</text>
+  <rect x="400" y="47" width="40" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="420.0" y="58.2" fill="#4a9eff" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">admin</text>
+  <rect x="898" y="42" width="24" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="910.0" y="57.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕</text>
+  <line x1="260" y1="86" x2="940" y2="86" stroke="#1f2937" strokeWidth="1"/>
+  <text x="284" y="106" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Profile</text>
+  <text x="353.2" y="106" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Security</text>
+  <text x="428.0" y="106" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Access tokens</text>
+  <line x1="422.0" y1="116" x2="506.8" y2="116" stroke="#4a9eff" strokeWidth="2"/>
+  <line x1="260" y1="117" x2="940" y2="117" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="280" y="130" width="640" height="40" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="292" y="147" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">A personal access token lets an external client — Claude, through a custom connector —</text>
+  <text x="292" y="161" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">use the assistant's tools as you: with your permissions and your data scope, never more.</text>
+  <text x="280" y="192" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Connector URL</text>
+  <text x="920" y="192" fill="#e2e8f0" fontSize="9.5" textAnchor="end" fontFamily="ui-monospace, monospace">https://liberty.example.com/mcp</text>
+  <text x="280" y="214" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">YOUR TOKEN — THE CONNECTOR'S REQUEST HEADER: AUTHORIZATION: BEARER &lt;TOKEN&gt;</text>
+  <rect x="280" y="220" width="640" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="235.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">eyJhbGciOiJIUzI1NiJ9…x9Lk</text>
+  <rect x="280" y="252" width="640" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="292" y="268" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Copy it now: it is shown once and not stored. It expires on 02/20/2027.</text>
+  <rect x="280" y="284" width="50" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="305.0" y="297.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Copy</text>
+  <rect x="280" y="316" width="640" height="40" rx="6" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="292" y="333" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">A token also ends when your account is deactivated or loses the permission, and when you change</text>
+  <text x="292" y="347" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">your password — do that if a token leaks. End access stops a client connected by sign-in.</text>
+  <text x="280" y="374" fill="#64748b" fontSize="8" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CONNECTED BY SIGN-IN</text>
+  <text x="280" y="397" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Claude · last used 11/19/2026</text>
+  <rect x="851" y="385" width="69" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="885.5" y="398.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">End access</text>
+  <text x="280" y="425" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Claude Code · last used 11/17/2026</text>
+  <rect x="851" y="413" width="69" height="20" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="885.5" y="426.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">End access</text>
+  <rect x="280" y="444" width="145" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="352.5" y="458.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">⤓ Claude Desktop extension</text>
+  <line x1="260" y1="480" x2="940" y2="480" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="860" y="490" width="60" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="890.0" y="505.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Close</text>
+  <rect x="20" y="92" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="107" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Access tokens tab</text>
+  <text x="30" y="120" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with the mcp:use permission</text>
+  <line x1="220" y1="109.0" x2="422.0" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="20" y="176" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="191" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connector URL</text>
+  <text x="30" y="204" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to give to Claude</text>
+  <line x1="220" y1="193.0" x2="280" y2="188" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="20" y="236" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="251" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Shown once</text>
+  <text x="30" y="264" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">never stored on the server</text>
+  <line x1="220" y1="253.0" x2="280" y2="248" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="20" y="438" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="453" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Claude Desktop extension</text>
+  <text x="30" y="466" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">named after its instance</text>
+  <line x1="220" y1="455.0" x2="280" y2="455" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="980" y="214" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="990" y="229" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The request header</text>
+  <text x="990" y="242" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Authorization: Bearer …</text>
+  <line x1="980" y1="231.0" x2="920" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="980" y="290" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="990" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clients that signed in</text>
+  <text x="990" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one ended, the others kept</text>
+  <line x1="980" y1="307.0" x2="920" y2="397" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
+  <rect x="980" y="476" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="990" y="491" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Before a token: Valid for (days)</text>
+  <text x="990" y="504" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">then Create a token</text>
+  <line x1="980" y1="493.0" x2="920" y2="502" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mcp-arrow)"/>
 </svg>
 
 ---
@@ -142,7 +142,7 @@ The user opens their profile — their name in the top bar — then **Access tok
 
 1. **Valid for (days)**: 90 by default. A longer validity than the server allows is shortened to the server's maximum; the expiry date shown with the token is the one that applies.
 2. **Create a token**.
-3. Copy the token (**Copy**): *it is shown once and not stored*.
+3. The token takes the place of the validity field, with its expiry date: copy it (**Copy**) — *it is shown once and not stored*. **Close** leaves the tab; the next visit offers a new token.
 
 The tab also gives the **Connector URL**, the address of the server followed by `/mcp`.
 

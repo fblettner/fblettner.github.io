@@ -13,39 +13,55 @@ A user signs into Liberty through one of two paths:
 | **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against the stored users and mints a JWT. |
 | **OIDC** | The user clicks *Sign in with OIDC*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
 
-Both can coexist — a single install offers both buttons on the sign-in screen, and users pick whichever applies.
+Both can coexist — the sign-in screen carries both buttons, and users pick whichever applies.
 
 ---
 
 ## The sign-in screen
 
-<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 344" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <linearGradient id="si-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="login-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="login-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="login-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="login-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
-  <rect x="20" y="20" width="960" height="320" rx="14" fill="url(#si-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="500" y="60" fill="#e2e8f0" fontSize="14" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in to Liberty</text>
 
-  <text x="300" y="100" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Username</text>
-  <rect x="300" y="110" width="400" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="312" y="130" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">alice</text>
-
-  <text x="300" y="158" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">Password</text>
-  <rect x="300" y="168" width="400" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="312" y="188" fill="#cbd5e1" fontSize="12" fontFamily="ui-monospace, monospace">••••••••••</text>
-
-  <rect x="300" y="216" width="400" height="36" rx="6" fill="#4a9eff"/>
-  <text x="500" y="238" fill="#0b1220" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in</text>
-
-  <line x1="300" y1="276" x2="430" y2="276" stroke="#334155"/>
-  <text x="500" y="282" fill="#64748b" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">or</text>
-  <line x1="570" y1="276" x2="700" y2="276" stroke="#334155"/>
-
-  <rect x="300" y="296" width="400" height="36" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="500" y="318" fill="#cbd5e1" fontSize="12" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in with Keycloak</text>
+  <rect x="440" y="20" width="320" height="304" rx="14" fill="url(#login-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="464" y="58" fill="#4a9eff" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next</text>
+  <text x="464" y="76" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">low-code framework</text>
+  <text x="464" y="102" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">USERNAME</text>
+  <rect x="464" y="108" width="272" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="122.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">jdoe</text>
+  <text x="464" y="152" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PASSWORD</text>
+  <rect x="464" y="158" width="272" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="173.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">••••••••••</text>
+  <rect x="464" y="194" width="272" height="28" rx="5" fill="url(#login-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="600.0" y="211.5" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in</text>
+  <text x="600.0" y="238" fill="#4a9eff" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Forgot password?</text>
+  <rect x="464" y="252" width="272" height="28" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="600.0" y="269.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Sign in with OIDC</text>
+  <text x="464" y="294" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">OIDC must be enabled in config/app.toml; otherwise</text>
+  <text x="464" y="306" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">that button 404s.</text>
+  <rect x="160" y="40" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The application's name</text>
+  <text x="170" y="68" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">App name, else Liberty Next</text>
+  <line x1="360" y1="57.0" x2="440" y2="54" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="160" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Local account</text>
+  <text x="170" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">username and password</text>
+  <line x1="360" y1="177.0" x2="464" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="840" y="170" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="850" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Forgot password?</text>
+  <text x="850" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">only when e-mail is set up</text>
+  <line x1="840" y1="187.0" x2="660.0" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
+  <rect x="840" y="260" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="850" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Single sign-on</text>
+  <text x="850" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">to the OIDC provider</text>
+  <line x1="840" y1="277.0" x2="736" y2="266" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#login-arrow)"/>
 </svg>
 
-When OIDC is configured, a second button appears below the local form. When OIDC isn't configured, only the local form shows.
+The screen shows the application's name (**App name**, else *Liberty Next*), the local form, then **Sign in with OIDC** and a line under it saying that OIDC must be enabled. The OIDC button is always there: while OIDC is not enabled, it leads to an error page (404). **Forgot password?** appears under **Sign in** only when e-mail notifications are set up — see [Users → Forgot password](./users.md#forgot).
 
 ---
 
@@ -83,7 +99,7 @@ OIDC is set in **Liberty Next → Administer → App → OpenID Connect (SSO)**.
 
 | Field | Required | Notes |
 |---|---|---|
-| **Enabled** | yes | Shows or hides the **Sign in with OIDC** button. |
+| **Enabled** | yes | Makes **Sign in with OIDC** lead to the provider; off, the button answers 404. |
 | **Discovery URL** | yes | The provider's `.well-known/openid-configuration` URL. |
 | **Client ID** | yes | The client id registered at the provider. |
 | **Client secret** | yes | Encrypted when saved. |
@@ -186,7 +202,7 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 | The **Discovery URL** returns 404 or HTML. | Sign-in fails at startup with a config error. | Verify the URL — most providers add `/.well-known/openid-configuration` to a base URL; Liberty needs the full path. |
 | The **Username claim** is not in the token. | First sign-in fails with "no username". | Either change the claim to one the IdP actually emits (`email` works for most) or configure the IdP to emit the expected claim. |
 | OIDC user signs in but sees an empty app. | Expected — OIDC users land with no roles. | Operator assigns roles via *Liberty Next → Administer → Access → Users*. |
-| OIDC configured but not enabled. | The OIDC button doesn't show. | Tick **Enabled**. |
+| OIDC configured but not enabled. | **Sign in with OIDC** leads to a 404 page. | Tick **Enabled**. |
 
 ---
 
