@@ -6,7 +6,7 @@ keywords: [Nomasx-1, security review, access review, dormant accounts, privilege
 
 # Security review
 
-**Security review**, under **Overview** in the Nomasx-1 menu, is the page for an access review: it lists what is wrong in the access of each connected application, the accounts to look at first, and the screens where to act.
+**Security**, in the **Reviews** folder of the Nomasx-1 menu, is the page for an access review: it lists what is wrong in the access of each connected application, the accounts to look at first, and the screens where to act.
 
 ---
 

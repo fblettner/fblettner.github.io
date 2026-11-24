@@ -1,14 +1,14 @@
 ---
 title: Database audit
-description: "Monitoring → Database audit in Nomajde: the JD Edwards EnterpriseOne database read live from Oracle's dictionary, the way an audit reads it — the instance and its parameters, what the figures say, then size, tablespaces, the largest tables, activity, the most expensive statements, sessions, redo logs, objects and statistics — without any Diagnostics or Tuning Pack view."
-keywords: [Nomajde, JD Edwards, JDE E1, database audit, Oracle, tablespace, NOARCHIVELOG, redo logs, buffer cache, hard parse, sessions, invalid objects, unusable indexes, statistics, control_management_pack_access, AWR, ASH]
+description: "Monitoring → Database audit in Nomajde: the JD Edwards EnterpriseOne database read live from its own dictionary — Oracle, SQL Server, Db2 for Linux / UNIX / Windows or Db2 for i (IBM i) — the way an audit reads it — the instance and its parameters, what the figures say, then size, tablespaces, the largest tables, activity, the most expensive statements, sessions, redo logs, objects and statistics — without any Diagnostics or Tuning Pack view."
+keywords: [Nomajde, JD Edwards, JDE E1, database audit, Oracle, tablespace, NOARCHIVELOG, redo logs, buffer cache, hard parse, sessions, invalid objects, unusable indexes, statistics, control_management_pack_access, AWR, ASH, SQL Server, transaction log, data files, Db2, Db2 for i, IBM i, AS/400, disk pools, ASP, journals]
 ---
 
 # Database audit
 
-**Monitoring → Database audit** reads the JD Edwards database live from Oracle's dictionary, the way an audit reads it: what the instance is, what the figures say, then nine sections in four tabs. It is read-only and written for Oracle.
+**Monitoring → Database audit** reads the JD Edwards database live from its own dictionary, the way an audit reads it: what the instance is, what the figures say, then nine sections in four tabs. It is read-only. Four databases are read — **Oracle**, **SQL Server**, **Db2 for Linux / UNIX / Windows** and **Db2 for i** (IBM i, AS/400) — with the same sections and the same rules, each in its own words: see [Per database](#databases). On another database, the page says the database the JD Edwards pool is on and reads nothing.
 
-No AWR, ASH, ADDM or SQL-monitor view is read: they belong to packs licensed separately, and reading them would itself count as a use. The activity figures therefore count since the instance started.
+On Oracle, no AWR, ASH, ADDM or SQL-monitor view is read: they belong to packs licensed separately, and reading them would itself count as a use. The activity figures therefore count since the instance started.
 
 ---
 
@@ -24,9 +24,10 @@ No AWR, ASH, ADDM or SQL-monitor view is read: they belong to packs licensed sep
 
   <rect x="220" y="20" width="760" height="312" rx="14" fill="url(#ndb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Database audit</text>
-  <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The JD Edwards database read live from Oracle's dictionary: size, activity, what costs the most, what is broken.</text>
+  <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The JD Edwards database read live from its own dictionary: size, activity, what costs the most, what is broken.</text>
   <rect x="885" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="922.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
+  <text x="875" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Read at 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="84" width="174.0" height="34" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.2"/>
   <rect x="248.0" y="92" width="18" height="18" rx="4" fill="#4a9eff" fillOpacity="0.18"/>
@@ -118,19 +119,86 @@ Each tab says, beside its description, how many of its points are to review.
 | Invalid objects, unusable indexes, statistics never taken or stale | On the JD Edwards owners. |
 | `control_management_pack_access` | Whether the Diagnostics / Tuning packs' features may be used — a licence exposure if they are not held. |
 
+These are Oracle's rules; the other databases follow the same ones in their own words, with a few of their own — see [Per database](#databases).
+
+---
+
+## What the page keeps \{#kept\}
+
+What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read — *Read at 14:02*, with the day when the reading is older than today. **Read again** reads every section anew.
+
+The Monitoring pages share their readings: once [Platform synthesis](../synthesis.md) is read, this page reads only the two sections the synthesis does not show, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+
+---
+
+## Per database \{#databases\}
+
+The database is the one the JD Edwards pool points at; its type decides the reading. The tabs and the rules stay the same; the sections and the columns take the database's own words, in both languages, on the page and in the [platform report](../synthesis.md#report). A section the database has nothing of says so (*SQL Server has nothing of this kind.*); a section that fails shows the database's own message, and the others are still read.
+
+The pool must be of the database's type, and Liberty Next must carry that database's driver — see the pool's [Database stage](../../framework/connectors.md#pool-stages).
+
+### Oracle \{#oracle\}
+
+The sections described above, from the `v$` and `dba_` views. The account needs to read them.
+
+### SQL Server \{#sql-server\}
+
+A JD Edwards on SQL Server is several databases — the business data and the control tables in one, the system tables, the server map, the Object Librarian and the data dictionary in another, each path code's central objects in its own. An owner is therefore a database **and** a schema: the pool's schemas name a table of another database than the pool's own as `DATABASE.SCHEMA` (`JDE_PRODUCTION.PRODDTA`); a plain name is a schema of the pool's database.
+
+| Section | What it shows |
+|---|---|
+| **The instance** | Version, edition, collation, the settings that matter (`max server memory (MB)`…), and the JD Edwards databases with their **Recovery**, **Compatibility**, **Read committed snapshot**, automatic statistics, **Auto shrink**, **Auto close** and **Page verify**. |
+| **Size** | Per **Database.schema**. |
+| **Data files** | In place of the tablespaces: how full each file is of what it may grow to — its own limit, or the room left on its volume. |
+| **The largest tables** | With their **Statistics** date. |
+| **Transaction logs** | One per database: **Recovery**, size, **Used %**, what it **Waits on**, **Last log backup**, **Virtual files**. |
+| **Activity** | Cache, **Batches compiled** in place of the hard parses, the page life, the waits. |
+| **The most expensive statements** | Those still in the plan cache. |
+| **Objects and statistics** | **Disabled indexes**, statistics **Never computed** or **Stale** — SQL Server has no invalid object. |
+
+Its own rules flag `max server memory` not set, a JD Edwards database with auto shrink, auto close, automatic statistics off or a page verify other than `CHECKSUM`, a transaction log 80 % full, a log in full recovery never backed up or not for more than 24 hours, a database in SIMPLE recovery, and a log cut in more than 1 000 virtual files.
+
+The account needs `VIEW SERVER STATE` and to be a user of the JD Edwards databases.
+
+### Db2 for Linux, UNIX and Windows \{#db2\}
+
+The same sections, from the monitor functions and the catalog: the tablespaces, the **Transaction log** and the log files archived per hour, the buffer pools and the package cache (**Not in the package cache** in place of the hard parses, **Sort overflows** for the sorts on disk), the time waited by cause, lock waits, **Indexes to rebuild**, the tables **Used, never analysed**. Its own rules flag circular logging, automatic statistics off, the self-tuning memory off, a log nearly full, and deadlocks or lock timeouts since the database was activated.
+
+The account needs to run the monitor functions (`SQLADM` or `DBADM`) and to read the catalog.
+
+### Db2 for i (IBM i) \{#db2-for-i\}
+
+On an IBM i, the database is the system: there is no instance, tablespace, redo log or buffer cache. The sections keep their place and show what the system has instead:
+
+| Section | What it shows |
+|---|---|
+| **The system** | Its release and PTF levels, processors, memory, the last IPL, the system values that matter. |
+| **Libraries** | The size per library — the pool's schemas name them. |
+| **Disk pools (ASP)** | How full each disk pool is. |
+| **The largest files** | With their **Deleted rows** and **Last used** date. |
+| **Journals** | Their **Receivers**, who manages them, whether they delete their receivers, the files journaled, and the receivers attached per hour. |
+| **Activity** | **Processor in use**, **Active jobs**, **Jobs in the system**, temporary storage; **Memory pools** with their faults in place of the waits. |
+| **What the jobs run now** | The statements the active jobs run at this moment. The plan cache is read only through a procedure that writes a file, which this reading never runs. |
+| **Jobs** | The active jobs, by name, client address and user. |
+| **Indexes and deleted rows** | **Indexes not valid**, the files **To reorganise**, the **Indexes the system advises**. |
+
+Its own rules flag a journal that is not active, a journal that keeps its receivers on line, files holding many deleted rows, and the indexes the system advises. A figure counts since the last IPL.
+
+The account needs to read the `QSYS2` services; the statement a job runs and the locks of another job ask for more (`*JOBCTL`, or the function usage `QIBM_DB_SQLADM`).
 ---
 
 ## Access \{#access\}
 
-The page shows to the roles that hold its menu entry and the permission `plugin:nomajde.dbaudit:j_db_audit`. It reads the database through the JD Edwards database connection.
+The page shows to the roles that hold its menu entry and the permission `plugin:nomajde.dbaudit:j_db_audit`. It reads the database through the JD Edwards database connection; what the account needs is said for each database under [Per database](#databases).
 
 ---
 
 ## Tips & best practices \{#tips\}
 
 - Read the **Overview** tab first: the amber lines are the points an auditor would raise.
-- Check `control_management_pack_access` on every database of the platform: `NONE` keeps the packs' features out of reach.
-- The activity figures count since the instance started: compare two readings a few days apart rather than one reading after a restart.
+- On Oracle, check `control_management_pack_access` on every database of the platform: `NONE` keeps the packs' features out of reach.
+- On SQL Server, write in the pool's schemas the `DATABASE.SCHEMA` of each library that is not in the pool's own database: the largest tables, the disabled indexes and the statistics are read only for the databases the pool names.
+- The activity figures count since the database started (since the last IPL on an IBM i): compare two readings a few days apart rather than one reading after a restart.
 
 ---
 

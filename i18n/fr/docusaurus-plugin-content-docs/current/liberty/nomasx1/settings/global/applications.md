@@ -217,6 +217,7 @@ Les paramètres JD Edwards et LDAP de chaque application sont aussi des colonnes
 | **Type d'application** | Type de système source, choisi dans une liste (`JDE` — JD Edwards…). Détermine les étapes de collecte qui s'appliquent. |
 | **Type de base** | Technologie de la base, choisie dans une liste (`ORACLE` — Oracle…). |
 | **Pool** | Connexion de l'application, choisie parmi les pools de l'installation. Un pool de base de données pour une application JD Edwards ou une base ; un pool d'annuaire (type *LDAP directory*) pour une application LDAP. Vide : le pool propre à la tâche de collecte. |
+| **Connecté depuis moins de (jours) = utilisateur** | Pour une application JD Edwards dont Object Usage Tracking n'a pas de données : un utilisateur connecté depuis moins de ce nombre de jours compte comme un utilisateur réel — la [revue des licences](../../licensing-review.md) le compte sur les modules que sa sécurité autorise, et le [rapport d'audit des licences](../../reports/audit-licences.md) ne le classe pas parmi les comptes jamais utilisés. Vide : 90 jours. |
 
 Le pool est le seul réglage de connexion de l'application : son adresse, son compte et son mot de passe se règlent sur le pool, dans **Liberty Next → Administrer → Pools** — voir [Pools](../../../framework/connectors.md#pools). Les [rapports](../../reports/audit-licences.md) y lisent aussi le système qu'ils citent (le serveur et le nom de service d'un pool Oracle, la base d'un annuaire) et impriment le nom du pool.
 

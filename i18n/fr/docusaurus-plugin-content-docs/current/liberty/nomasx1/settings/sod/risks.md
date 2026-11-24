@@ -132,9 +132,79 @@ Les risques sont le *ce qui pourrait mal se passer* — *Approuver un paiement �
 
 ---
 
+## Boîte de dialogue \{#edit-dialog\}
+
+**Ajouter une ligne** ouvre un formulaire vide ; un clic sur une ligne l'ouvre, sous le titre **Modifier · Paramètres - Risques (SoD)**, avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**. **Modifier en lot** change plusieurs lignes directement dans la grille.
+
+<svg viewBox="0 0 1320 382" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdrisd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdrisd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdrisd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdrisd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="342" rx="14" fill="url(#sdrisd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Paramètres - Risques (SoD)</text>
+  <rect x="1054" y="34" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1066" y="49" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="82" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ID APPLICATION</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">1 — JDE-PROD</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="128" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ID PROCESSUS</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="149.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC001 — Order To Cash</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="174" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RISQUE ID</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="195.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTCR05</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="220" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RISQUE</text>
+  <rect x="240" y="226" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="241.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">An individual can create a fraudulent sales order and amend the debit note…</text>
+  <text x="240" y="266" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NIVEAU CRITIQUE</text>
+  <rect x="240" y="272" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="287.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">H</text>
+  <line x1="220" y1="312" x2="1100" y2="312" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="996" y="326" width="84" height="22" rx="5" fill="url(#sdrisd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1038.0" y="340.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="925" y="326" width="63" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="956.5" y="340.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="844" y="326" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="880.5" y="340.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Dupliquer</text>
+  <rect x="763" y="326" width="73" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="799.5" y="340.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="20" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clés</text>
+  <text x="30" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">figées une fois enregistrées</text>
+  <line x1="200" y1="91.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrisd-arrow)"/>
+  <rect x="1120" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Listes filtrées</text>
+  <text x="1130" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtrées sur les champs au-dessus</text>
+  <line x1="1120" y1="91.0" x2="1060" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrisd-arrow)"/>
+  <rect x="1120" y="292" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="307" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Supprimer · Dupliquer</text>
+  <text x="1130" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur une ligne enregistrée</text>
+  <line x1="1120" y1="309.0" x2="880.5" y2="337" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrisd-arrow)"/>
+</svg>
+
+| Champ | Contenu |
+|---|---|
+| **ID application** | L'application, choisie dans la liste. |
+| **ID processus** | Le processus, choisi parmi ceux de l'application. |
+| **Risque ID** | Code du risque (`OTCR05`…), repris par la matrice. |
+| **Risque** | Description du risque, sur plusieurs lignes. |
+| **Niveau critique** | Niveau du risque (`H`, `C`…) : les risques élevés et critiques comptent en *Risque élevé* dans la [revue](../../sod-review.md#tabs). |
+
+Les clés — ID application, ID processus et Risque ID — sont figées une fois la ligne enregistrée : pour en changer une, supprimer la ligne puis la recréer.
+
+---
+
 ## Import depuis Excel \{#import\}
 
-La grille est en lecture seule : un clic sur une ligne n'ouvre rien. Les lignes s'ajoutent et se modifient par **Importer**, depuis un fichier Excel (`.xlsx`) ou `.csv` dont les colonnes reprennent celles de la grille — le plus simple est d'**Exporter** la grille, de modifier le fichier puis de le réimporter.
+Pour ajouter ou modifier de nombreuses lignes d'un coup, **Importer** charge un fichier Excel (`.xlsx`) ou `.csv` dont les colonnes reprennent celles de la grille — le plus simple est d'**Exporter** la grille, de modifier le fichier puis de le réimporter.
 
 <svg viewBox="0 0 1320 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>

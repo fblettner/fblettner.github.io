@@ -143,7 +143,7 @@ For each connected application:
 
 - **What did each user actually do?** *Schema + Table + Transaction date + Count* tells how many rows of which table a user touched on a given timestamp.
 - **Cross-check theoretical rights.** Combined with the *Rights* matrix, an empty activity log on a user with extensive rights is the strongest revocation argument.
-- **Feed the proven SoD analysis.** The *Proven* conflicts screen intersects this dataset with the SoD details — if a user does not appear here for the relevant tables, the conflict is theoretical only.
+- **Feed the exercised SoD analysis.** The activity log is one of the sources of evidence of [Conflicts — Proven](./conflicts/proven.md) and of the [Segregation of duties review](../sod-review.md#evidence): the program that wrote a row, or the table written, shows an activity done.
 
 The activity log is built from database-level triggers / auditing on the source-system tables — outside of any application-layer permission. It captures what *the database* recorded, not what the application *believes* happened.
 

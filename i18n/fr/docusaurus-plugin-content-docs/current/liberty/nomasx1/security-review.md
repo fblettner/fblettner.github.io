@@ -6,7 +6,7 @@ keywords: [Nomasx-1, revue de sécurité, revue des accès, comptes dormants, co
 
 # Revue de sécurité
 
-**Revue de sécurité**, sous **Vue d'ensemble** dans le menu de Nomasx-1, est la page d'une revue des accès : elle liste ce qui ne va pas dans les accès de chaque application connectée, les comptes à examiner en premier, et les écrans où agir.
+**Sécurité**, dans le dossier **Revues** du menu de Nomasx-1, est la page d'une revue des accès : elle liste ce qui ne va pas dans les accès de chaque application connectée, les comptes à examiner en premier, et les écrans où agir.
 
 ---
 

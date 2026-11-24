@@ -54,7 +54,7 @@ A faster interface for the ERP's operators, reading and writing its database wit
 
 | Provided | Where |
 |---|---|
-| Oracle, SQL Server and PostgreSQL pools; Oracle thick mode for older servers | [Connectors](./connectors.md#oracle-thick) |
+| PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2 and Db2 for i (IBM i, AS/400) pools; Oracle thick mode for older servers | [Connectors](./connectors.md#pool-sql-server-db2) |
 | One app on several environments (development, test, production) through a **Pool** picker | [Connectors → Multi-pool](./connectors.md#multi-pool) |
 | JD Edwards conventions: Julian dates, right-justified codes, data dictionary import | [Dictionary](./dictionary.md#formats), [Scan a table](./dictionary.md#scan-a-table) |
 | Read-only screens, writes enabled screen by screen | [Screens](./build/screens/overview.md) |

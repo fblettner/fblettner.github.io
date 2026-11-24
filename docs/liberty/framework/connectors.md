@@ -167,7 +167,7 @@ A pool is a connection of the installation, defined in **Liberty Next → Admini
 
 | Kind | URL | Named by |
 |---|---|---|
-| **A database** — PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite | `postgresql+asyncpg://…`, `oracle+oracledb://…` | SQL connectors, job steps, the environment a screen runs on. |
+| **A database** — PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, Db2 for i (IBM i, AS/400), SQLite | `postgresql+asyncpg://…`, `oracle+oracledb://…`, `mssql+pymssql://…`, `db2+ibm_db://…`, `ibmi://…` | SQL connectors, job steps, the environment a screen runs on. |
 | **An HTTP server** | `http://…` or `https://…` | API connectors and each of their environments — see [An HTTP server](#pool-http). |
 | **An LDAP directory** | `ldap://…` or `ldaps://…` | The `ldap_sync` step of a job and the code of an application — see [An LDAP directory](#pool-ldap). |
 
@@ -244,17 +244,19 @@ The list says what each pool reaches — `postgresql · host:5432 / database`, `
   <text x="880" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
   <rect x="880" y="246" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="889" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">8443</text>
-  <rect x="470" y="276" width="192" height="164" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="482" y="292.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">PostgreSQL</text>
-  <text x="482" y="310.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">Oracle</text>
-  <text x="482" y="329.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MySQL</text>
-  <text x="482" y="347.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MariaDB</text>
-  <text x="482" y="366.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQL Server</text>
-  <text x="482" y="384.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQLite</text>
-  <text x="482" y="403.0" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP directory</text>
-  <rect x="472" y="409.5" width="188" height="17" rx="4" fill="rgba(74,158,255,0.14)"/>
-  <text x="482" y="421.5" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
-  <text x="650" y="421.5" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">✓</text>
+  <rect x="470" y="276" width="192" height="172" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="482" y="291.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">PostgreSQL</text>
+  <text x="482" y="307.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Oracle</text>
+  <text x="482" y="324.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">MySQL</text>
+  <text x="482" y="340.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">MariaDB</text>
+  <text x="482" y="357.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">SQL Server</text>
+  <text x="482" y="373.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Db2</text>
+  <text x="482" y="390.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Db2 for i (IBM i, AS/400)</text>
+  <text x="482" y="406.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">SQLite</text>
+  <text x="482" y="423.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">LDAP directory</text>
+  <rect x="472" y="428.0" width="188" height="16" rx="4" fill="rgba(74,158,255,0.14)"/>
+  <text x="482" y="439.5" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
+  <text x="650" y="439.5" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">✓</text>
   <text x="675" y="290" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE PATH</text>
   <rect x="675" y="296" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="684" y="311.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">api/v2</text>
@@ -276,7 +278,7 @@ The list says what each pool reaches — `postgresql · host:5432 / database`, `
   <line x1="200" y1="273.0" x2="256" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
   <rect x="20" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">The kind</text>
-  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">eight kinds, one list</text>
+  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ten kinds, one list</text>
   <line x1="200" y1="367.0" x2="470" y2="380" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
   <rect x="1120" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Test connection</text>
@@ -302,12 +304,50 @@ The picked pool is drawn as stage cards, each saying what it holds: **Database**
 
 | Stage | Fields |
 |---|---|
-| **Database** | The address, typed as an address: the **Database type** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite, *LDAP directory*, *HTTP server (an API)*), **Host**, **Port**, and the one name the type needs — **Database**, an Oracle **Service name** (a **SID** when the URL is written with one), a SQLite **File**, a directory's **Base DN**, a server's **Base path**. Picking another type moves the pool to it: its driver, its usual port; the type also chooses a query's [per-dialect variant](./build/queries/per-dialect-sql.md). **Advanced: driver, options, URL** holds the **Driver**, the **Options** (what follows the `?` of the URL) and the **URL** composed from the fields, which stays editable (`${VARIABLE}` accepted). A URL the page cannot show field by field is kept exactly as written. |
+| **Database** | The address, typed as an address: the **Database type** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, Db2 for i (IBM i, AS/400), SQLite, *LDAP directory*, *HTTP server (an API)*), **Host**, **Port**, and the one name the type needs — **Database**, an Oracle **Service name** (a **SID** when the URL is written with one), a SQLite **File**, a directory's **Base DN**, a server's **Base path**. Picking another type moves the pool to it: its driver, its usual port; the type also chooses a query's [per-dialect variant](./build/queries/per-dialect-sql.md). **Advanced: driver, options, URL** holds the **Driver**, the **Options** (what follows the `?` of the URL) and the **URL** composed from the fields, which stays editable (`${VARIABLE}` accepted). A URL the page cannot show field by field is kept exactly as written. |
 | **Account** | The **User** and the **Password**, kept out of the URL and encrypted when saved; the password field has a show / hide button. A password written in the URL is flagged, with **Move it to the password field**. A directory's account is the **Account (bind DN, DOMAIN\user or user@domain)**, typed as it is; an HTTP server's is the **Account**, with its **Signing key**, **Certificate** and **Verify SSL** — see [below](#pool-http). |
 | **Schemas**, **Database links** | The values of the `#SCHEMA.<NAME>#` and `#DBLINK.<NAME>#` tokens — see [below](#schema-and-db-link-tokens). |
-| **Tuning** | **Pool size**, **Max overflow** (connections kept open, extra connections under load), **Pool pre ping** (liveness check), **Pool recycle** (seconds before a connection is renewed), **Echo** (logs every statement, for debugging), **Max rows** (default row limit of the pool's reads, 1 000 when empty), **Arraysize** (Oracle: rows fetched per round trip; raise it to 500–1 000 for large reads), **Trim strings** (removes the trailing spaces of fixed-length text — Oracle `CHAR`, JD Edwards), **Coalesce nulls** (on writes, replaces empty values with a space or 0 — Oracle `NOT NULL` text columns), **Debug sql** (logs each statement with its final values). |
+| **Tuning** | How many connections the pool keeps, when it renews them, what it logs, and what each database needs (rows per round trip on Oracle, trailing spaces, empty values, query compilation on PostgreSQL) — see [Tuning](#pool-tuning). |
 
 **Test connection** opens one connection with the pool as it is on the page — saved or not — and answers *Connected in N ms* with the server's version, or *Could not connect* with the driver's own words. A directory is bound to once with its account. An HTTP server receives one request at its address, and any HTTP status is an answer: *Connected in 85 ms — http HTTP 404 The server answers at this address, whatever the status…* — whether its account is accepted is checked by the **Test** of the API connector, which knows how it signs in. Nothing is saved and the running pools are not touched.
+
+On Oracle the test runs `SELECT 1 FROM DUAL`, on Db2 and Db2 for i `SELECT 1 FROM SYSIBM.SYSDUMMY1`, elsewhere `SELECT 1`.
+
+#### Tuning \{#pool-tuning\}
+
+The **Tuning** stage of a database pool. Each field shows a one-line hint under its label; **more** unfolds the full description.
+
+| Field | Default | Effect |
+|---|---|---|
+| **Connections kept open** | 5 | How many connections stay open, ready to be used. |
+| **Extra connections** | 10 | How many more connections may be opened when the server is busy. |
+| **Test before use** | on | Checks that a connection still answers before handing it out. |
+| **Renew after (seconds)** | -1 | A connection older than this is replaced; -1 keeps it for ever. |
+| **Log every statement** | off | Writes every statement to the server log. For a diagnosis only. |
+| **Let PostgreSQL compile queries** | off | PostgreSQL only — see [below](#pool-jit). |
+| **Rows read at most** | empty (1 000) | How many rows a screen reads from this database unless it says otherwise. |
+| **Rows per round trip** | empty (driver default) | Oracle only: how many rows are fetched at a time. Raise it to 500–1 000 for large reads. |
+| **Trim trailing spaces** | off | Removes the spaces a fixed-width text column adds at the end of its values (Oracle `CHAR`, JD Edwards). |
+| **Fill empty values** | off | On a write, puts a space or a zero where a value is left empty, for columns that refuse empty (Oracle `NOT NULL` text columns). |
+| **Log statements and values** | off | Writes each statement with its values to the server log. For a diagnosis only. |
+
+##### Query compilation on PostgreSQL \{#pool-jit\}
+
+PostgreSQL compiles (JIT) a query it estimates to be heavy before running it, at every run. On the short queries of screens, searches and dashboards the estimate is often wrong, and the compilation then costs far more than the query itself — measured on a search: 145 ms of compilation for 4 ms of work, and seconds on a server with one processor. Each PostgreSQL pool therefore turns JIT off for its own sessions; the database's other users keep the server's setting. The collections and the Nomaflow jobs run on the same pools, and their heavy reads are as fast or faster without it.
+
+Switch **Let PostgreSQL compile queries** on to leave the database's own setting to the pool's sessions. The field has no effect on the other databases.
+
+#### SQL Server, Db2 and IBM i \{#pool-sql-server-db2\}
+
+A pool reaches these databases like any other: the screens, the queries, the jobs and the applications read it the same way. Their drivers do not ship with the base package:
+
+| Database type | Driver (URL) | Usual port | Database field | Driver to install |
+|---|---|---|---|---|
+| **SQL Server** | `mssql+pymssql` — `mssql+aioodbc` is also offered under *Advanced* | 1433 | **Database** | `liberty-next[mssql]` — nothing else to install on the server. `mssql+aioodbc` needs Microsoft's ODBC driver on the server. |
+| **Db2** (Linux, UNIX, Windows) | `db2+ibm_db` — `db2+pyodbc` is also offered | 50000 | **Database** | `liberty-next[db2]`. IBM publishes the driver for x86-64 Linux, macOS and Windows, not for arm64 Linux. |
+| **Db2 for i (IBM i, AS/400)** | `ibmi` (through ODBC) | none | **Database** — the system's own name | `liberty-next[ibmi]`, plus unixODBC and IBM's *IBM i Access ODBC Driver* (IBM's download, under its own licence) on the server. |
+
+The Docker image carries the SQL Server driver, and the Db2 driver on amd64 only; the IBM i driver is not in the image. On a [Python install](../installation/python-server.md#install), add the extras that match the pools. When the driver of a pool is missing, the pool's error and the result of **Test connection** name the extra to install — *no driver for a 'db2+ibm_db' database is installed — install it with: pip install 'liberty-next[db2]'*.
 
 #### An HTTP server \{#pool-http\}
 

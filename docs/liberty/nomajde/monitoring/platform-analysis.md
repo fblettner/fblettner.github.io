@@ -6,7 +6,9 @@ keywords: [Nomajde, JD Edwards, JDE E1, platform analysis, Server Manager, insta
 
 # Platform analysis
 
-**Monitoring → Platform analysis** reads what Server Manager measures now and reads it as an analysis: the figures, then **what the figures say** — the points to review first —, then the details by subject in four tabs. Nothing is kept: the figures are those of the console at the moment the page is read.
+**Monitoring → Platform analysis** reads what Server Manager measures now and reads it as an analysis: the figures, then **what the figures say** — the points to review first —, then the details by subject in four tabs. The figures are those of the console at the moment the page is read.
+
+What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again** reads anew. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
 
 ---
 
@@ -25,6 +27,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, platform analysis, Server Manager, insta
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The JD Edwards servers as Server Manager measures them now, and what the figures point at.</text>
   <rect x="885" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="922.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
+  <text x="875" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Read at 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="84" width="174.0" height="34" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.2"/>
   <rect x="248.0" y="92" width="18" height="18" rx="4" fill="#4a9eff" fillOpacity="0.18"/>

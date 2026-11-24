@@ -86,7 +86,17 @@ pipx install 'liberty-next[all]'
 
 Sur un serveur, installer le paquet sous l'utilisateur de service créé à [l'étape 2](#secrets) — `sudo -u liberty pipx install 'liberty-next[all]'` — pour que l'unité systemd le trouve dans le répertoire personnel de cet utilisateur.
 
-`[all]` ajoute les éléments facultatifs : rapports PDF, étape LDAP et migrations de schéma des applications sous licence. pipx place ces commandes dans le `PATH` :
+`[all]` ajoute les éléments facultatifs : rapports PDF, étape LDAP et migrations de schéma des applications sous licence. Les pilotes de PostgreSQL, Oracle et SQLite sont toujours présents ; un pool sur une autre base demande son propre extra, ajouté à la même installation :
+
+| Pools sur | Installation | À prévoir aussi sur le serveur |
+|---|---|---|
+| SQL Server | `pipx install 'liberty-next[all,mssql]'` | Rien. |
+| Db2 (Linux, UNIX, Windows) | `pipx install 'liberty-next[all,db2]'` | Rien — mais IBM ne publie aucun pilote pour Linux arm64. |
+| Db2 for i (IBM i, AS/400) | `pipx install 'liberty-next[all,ibmi]'` | unixODBC et le pilote *IBM i Access ODBC Driver* d'IBM (téléchargement IBM, sous sa propre licence). |
+
+Sur une installation existante, ajouter à l'environnement les paquets qu'apporte l'extra, sans changer la version du framework : `pipx inject liberty-next pymssql` (SQL Server), `ibm_db_sa` (Db2), `sqlalchemy-ibmi pyodbc` (Db2 for i) ; puis redémarrer le serveur. Un pool dont le pilote manque indique l'extra à installer — voir [SQL Server, Db2 et IBM i](../framework/connectors.md#pool-sql-server-db2).
+
+pipx place ces commandes dans le `PATH` :
 
 | Commande | Usage |
 |---|---|

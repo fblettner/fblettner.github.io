@@ -636,6 +636,10 @@ L'exécution lit aussi ce que Nomasx-1 collecte pour le même JD Edwards, s'il l
 
 Ces éléments demandent que les références croisées et leur étape UDO aient d'abord été collectées dans Nomasx-1 ; relancer ensuite l'analyse pour les prendre en compte.
 
+#### Un JD Edwards derrière un lien de base de données \{#dblink\}
+
+Quand Liberty atteint les bibliothèques de JD Edwards par un lien de base de données, l'exécution suit le pool JD Edwards : chaque table est lue avec sa bibliothèque, prise dans les **Schémas** du pool, et le lien de cette bibliothèque, pris dans ses **Liens de base**, sous la même clé — `OL` pour l'Object Librarian, `SY` pour les tables d'utilisation, `CO` pour les références croisées de JD Edwards. Une bibliothèque sans lien est lue localement. Le journal de l'exécution indique quelle bibliothèque et quel lien elle lit. Voir [Jetons de schéma et de DB link](../../framework/connectors.md#schema-and-db-link-tokens).
+
 ---
 
 ## Le classement d'un objet \{#rules\}

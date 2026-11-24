@@ -8,7 +8,7 @@ keywords: [Nomasx-1, licenses, CSI, Customer Support Identifier, Oracle, support
 
 The **CSI** screen lists every Oracle *Customer Support Identifier* declared in Nomasx-1. One line per contract. Each row carries the identifier, a friendly description, the contract validity dates and its current status.
 
-The CSI is the contractual anchor: the entitlement counts (subscribed licences, support), the usage analysis (*Usage report*) and the financial impact computation (*Financial report*) all attach to a CSI through the components catalog.
+The CSI is the contractual anchor: its lines — components alone and bundles —, the figures the customer declares and the users of other applications are what the [Licensing review](../licensing-review.md) reads, the way [How a contract is counted](../how-a-contract-is-counted.md) describes.
 
 ---
 
@@ -136,9 +136,9 @@ Audit columns (`CSI_AUDIT_USER`, `CSI_AUDIT_DATE`) are hidden but tracked on the
 
 ## Edit dialog
 
-Click **Add row** to register a new CSI, or click a row to open it. The dialog has three tabs. The *Applications* and *Components* tabs are hidden on a new contract — they appear once the CSI is saved. The footer carries **Delete**, **Duplicate**, **Cancel** and **Save**.
+Click **Add row** to register a new CSI, or click a row to open it. The dialog has seven tabs. Only *Contract Support* shows on a new contract — the six grids appear once the CSI is saved. Each grid has **Add row** and **Bulk edit**, and a click on one of its rows opens its own form (**Edit · License - Bundles**…). The footer carries **Delete**, **Duplicate**, **Cancel** and **Save**.
 
-<svg viewBox="0 0 1320 372" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 382" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="csd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="csd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -146,86 +146,78 @@ Click **Add row** to register a new CSI, or click a row to open it. The dialog h
     <marker id="csd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="215" y="20" width="890" height="322" rx="14" fill="url(#csd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · License - Contracts</text>
-  <rect x="1061" y="36" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1073.0" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
-  <line x1="215" y1="68" x2="1105" y2="68" stroke="#1f2937" strokeWidth="1"/>
-  <text x="288.5" y="92" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Contract Support</text>
-  <text x="390.5" y="92" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Applications</text>
-  <text x="476.5" y="92" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Components</text>
-  <line x1="439" y1="101" x2="514" y2="101" stroke="#4a9eff" strokeWidth="2"/>
-  <line x1="235" y1="102" x2="1085" y2="102" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="235" y="120" width="72" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="271.0" y="134.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add row</text>
-  <rect x="313" y="120" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="354.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Bulk edit</text>
-  <rect x="402" y="120" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="412" y="134.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">⌕ Search…</text>
-  <rect x="717" y="120" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="747.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Views</text>
-  <rect x="784" y="120" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="820.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⏷ Filters</text>
-  <rect x="862" y="120" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="892.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⌘ Group</text>
-  <rect x="929" y="120" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="965.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Columns</text>
-  <rect x="1007" y="120" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1046.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩ Export ▾</text>
-  <rect x="235" y="152" width="850" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="341" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">CSI NUMBER (ID)</text>
-  <text x="355" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">CSI NUMBER</text>
-  <text x="651" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">COMPONENT ID (ID)</text>
-  <text x="665" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COMPONENT ID</text>
-  <text x="895" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">METRIC ID</text>
-  <text x="1041" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">QUANTITY</text>
-  <rect x="235" y="178" width="850" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1101</text>
-  <text x="665" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne Financials</text>
-  <text x="895" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">100</text>
-  <rect x="235" y="200" width="850" height="22" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1007</text>
-  <text x="665" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne Sales Order Mg…</text>
-  <text x="895" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">50</text>
-  <rect x="235" y="222" width="850" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1504</text>
-  <text x="665" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne System Foundat…</text>
-  <text x="895" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">250</text>
-  <text x="235" y="266" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Rows per page   50 ⌄     Showing 1–3 of 3</text>
-  <line x1="215" y1="288" x2="1105" y2="288" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="1028" y="302" width="57" height="24" rx="5" fill="url(#csd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="1056.5" y="317.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▣ Save</text>
-  <rect x="952" y="302" width="68" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="986.0" y="317.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Cancel</text>
-  <rect x="859" y="302" width="85" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="901.5" y="317.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Duplicate</text>
-  <rect x="794" y="302" width="57" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="822.5" y="317.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
-  <rect x="12" y="67" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="82" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three tabs</text>
-  <text x="22" y="95" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">contract, applications, components</text>
-  <line x1="197" y1="84.0" x2="395" y2="84" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="12" y="114" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="129" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add row</text>
-  <text x="22" y="142" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a component and its quantity</text>
-  <line x1="197" y1="131.0" x2="265" y2="131" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="1119" y="172.0" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1129" y="187.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Components bought</text>
-  <text x="1129" y="200.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">metric and quantity per component</text>
-  <line x1="1119" y1="189.0" x2="415" y2="189.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="1119" y="309" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1129" y="324" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save</text>
-  <text x="1129" y="337" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">contract and its tabs</text>
-  <line x1="1119" y1="326.0" x2="1056.5" y2="326" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="220" y="90" width="880" height="274" rx="14" fill="url(#csd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="116" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · License - Contracts</text>
+  <line x1="220" y1="130" x2="1100" y2="130" stroke="#1f2937" strokeWidth="1"/>
+  <text x="292.664" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Contract Support</text>
+  <text x="387.576" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Applications</text>
+  <text x="466.8640000000001" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Components</text>
+  <text x="533.1320000000001" y="154" fill="#e2e8f0" fontSize="9.3" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Bundles</text>
+  <line x1="503.9040000000001" y1="162" x2="562.3600000000001" y2="162" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="617.6280000000002" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Bundle components</text>
+  <text x="725.5600000000002" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Declared figures</text>
+  <text x="859.5320000000002" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Users of other applications</text>
+  <line x1="240" y1="163" x2="1080" y2="163" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="176" width="72" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="276.0" y="190.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add row</text>
+  <rect x="318" y="176" width="83" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="359.5" y="190.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Bulk edit</text>
+  <rect x="407" y="176" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="417" y="190.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="240" y="210" width="840" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CSI NUMBER</text>
+  <text x="360" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BUNDLE</text>
+  <text x="460" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <text x="680" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">METRIC ID</text>
+  <text x="840" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUANTITY</text>
+  <text x="930" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPONENTS</text>
+  <rect x="240" y="242" width="840" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">10000001</text>
+  <text x="360" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">DIST</text>
+  <text x="460" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Distribution suite</text>
+  <text x="680" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10 · Application User</text>
+  <text x="840" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">25</text>
+  <text x="930" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">4</text>
+  <rect x="240" y="272" width="840" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">10000001</text>
+  <text x="360" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-SALES</text>
+  <text x="460" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Inventory and Sales</text>
+  <text x="680" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10 · Application User</text>
+  <text x="840" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">40</text>
+  <text x="930" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <line x1="220" y1="316" x2="1100" y2="316" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1036" y="328" width="44" height="22" rx="5" fill="url(#csd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1058.0" y="342.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="973" y="328" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1000.5" y="342.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="893" y="328" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="929.0" y="342.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Duplicate</text>
+  <rect x="830" y="328" width="55" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="857.5" y="342.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
+  <rect x="160" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bundles</text>
+  <text x="170" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a line counted once for its modules</text>
+  <line x1="262.5" y1="42" x2="533.1320000000001" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="377" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="387" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bundle components</text>
+  <text x="387" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the modules of each bundle</text>
+  <line x1="479.5" y1="42" x2="617.6280000000002" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="594" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="604" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Declared figures</text>
+  <text x="604" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">revenue, employees, dated</text>
+  <line x1="696.5" y1="42" x2="725.5600000000002" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="851" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="861" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Users of other applications</text>
+  <text x="861" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">added to Named User Plus</text>
+  <line x1="953.5" y1="42" x2="859.5320000000002" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="1120" y="252" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="267" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Components</text>
+  <text x="1130" y="280" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">how many modules it holds</text>
+  <line x1="1120" y1="269.0" x2="940" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="20" y="176" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="191" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add row</text>
+  <text x="30" y="204" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a bundle of this contract</text>
+  <line x1="200" y1="193.0" x2="240" y2="187" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
 </svg>
 
 ### Tab 1 — Contract Support
@@ -242,17 +234,58 @@ The contract identity.
 
 ### Tab 2 — Applications
 
-Grid linking the CSI to the applications it covers (*CSI Number*, *Application ID*, with the application's type and database, read-only: they come from [Applications](../settings/global/applications.md)). On a saved line, *CSI Number* and *Application ID* are read-only. Add one row per application with **Add row**: an entry here is what makes the contract count for that application in *Subscribed Licenses* and the compliance reports. Hidden on **Add**.
+Grid linking the CSI to the applications it covers (*CSI Number*, *Application ID*, with the application's type and database, read-only: they come from [Applications](../settings/global/applications.md)). On a saved line, *CSI Number* and *Application ID* are read-only. Add one row per application with **Add row**: an entry here is what makes the contract count for that application in the [Licensing review](../licensing-review.md) and the [licence audit report](../reports/audit-licences.md). Hidden on **Add**.
 
 ### Tab 3 — Components
 
-Grid listing the licensed components of the CSI: *Component ID*, *Metric ID* and *Quantity*, one row per component. Aggregates feed the *Subscribed Licenses* page. Hidden on **Add**.
+Grid listing the components licensed alone on the CSI: *Component ID*, *Metric ID* and *Quantity*, one row per component and metric. Each one is a line of the contract (see [How a contract is counted](../how-a-contract-is-counted.md#lines)). Hidden on **Add**.
+
+### Tab 4 — Bundles \{#tab-bundles\}
+
+The bundles of the contract: several modules sold as one line, where a user is counted once for all of them.
+
+| Field | What to enter |
+|---|---|
+| **CSI Number** | The contract, filled in; read-only on a saved row. |
+| **Bundle** | Required. A short code of the bundle on this contract (`DIST`, `INV-SALES`…). |
+| **Description** | The name the pages show (*Distribution suite*). |
+| **Metric ID** | Picked from the metrics: usually *Application User*. |
+| **Quantity** | What was subscribed. |
+| **Components** | Read-only: how many modules the bundle holds, from the next tab. |
+
+A bundle with no component is listed on [Subscribed licences](./subscribed-licences.md) and said empty; it covers nothing.
+
+### Tab 5 — Bundle components \{#tab-bundle-components\}
+
+The modules of each bundle, one row per bundle and module: *CSI Number*, **Bundle** (picked from the bundles of this contract) and **Component ID** (picked from the components, by name). Both are required.
+
+### Tab 6 — Declared figures \{#tab-declared\}
+
+What the customer declares for the contract, dated: the latest date is the one the [Licensing review](../licensing-review.md#lines-other) reads.
+
+| Field | What to enter |
+|---|---|
+| **Declared on** | Required. The date of the declaration. |
+| **Revenue declared (millions)** | Compared with the lines in *Enterprise $M*. |
+| **Employees declared** | Compared with the lines in *Employee*. Empty: the employees collected from JD Edwards are used. |
+| **Comment** | Where the figure comes from (annual report, HR count…). |
+
+### Tab 7 — Users of other applications \{#tab-other-users\}
+
+The users of an application whose users cannot be collected — a reporting portal, a tool that signs in to the same database —, one row per application. They are added to the count of a database licensed per Named User Plus (see [Named User Plus on a database](../how-a-contract-is-counted.md#named)).
+
+| Field | What to enter |
+|---|---|
+| **Application** | Required. The name of the application. |
+| **Users** | Required. How many people use it. |
+| **Counted on** | The date of the count. |
+| **Comment** | How they were counted. |
 
 ---
 
 ## Tips & best practices
 
 - **Sort by *To Date* ascending** to surface the next renewals — the budget-planning view.
-- **Confirm every active CSI maps to at least one application** in *Subscribed Licenses*. An orphan CSI is a contract paid for an application that no longer uses it.
+- **Confirm every active CSI maps to at least one application** in [Subscribed licences](./subscribed-licences.md). An orphan CSI is a contract paid for an application that no longer uses it.
 - **Ended contracts remain visible** for audit traceability — clear *Enabled* rather than deleting the row.
 - **The screen is writable** — only the licence administrator should edit it. Each change is captured in the audit columns and surfaces in the *Audit Trail* if the underlying table is being audited.

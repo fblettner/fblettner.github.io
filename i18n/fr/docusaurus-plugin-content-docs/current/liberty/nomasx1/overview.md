@@ -213,7 +213,7 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
       <li>Customer Support Identifiers et licences rattachées — le côté contractuel.</li>
       <li>Par base de données, la liste des options Oracle requises selon ce que les scripts de collecte ont trouvé sur l'instance.</li>
       <li>Cohortes JDE par application — utilisateurs activés, transactionnels, dormants, transactions orphelines.</li>
-      <li>Rapport d'utilisation et Rapport financier — requis vs acquis et l'écart monétaire.</li>
+      <li>Revue des licences — qui est compté sur quelle ligne des contrats, ce qui manque et ce que cela pourrait coûter (une hypothèse aux prix publics).</li>
     </ul>
   </div>
 
@@ -454,21 +454,21 @@ Un deuxième exemple : **Applications → Conflits → Synthèse**, les conflits
 
 ## La carte de l'application
 
-Le menu s'ouvre sur les trois tableaux de bord, l'Explorateur de données et les rapports, puis viennent les sections de travail et les paramètres.
+Le menu s'ouvre sur la vue d'ensemble et les **Revues** — ce qu'on lit pour juger de la situation —, l'Explorateur de données et les rapports, puis viennent les sections de travail et les paramètres.
 
 | Section | Ce qu'elle couvre |
 |---|---|
 | **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
-| **Séparation des tâches**, **Revue de sécurité** | Deux tableaux de bord sous la Vue d'ensemble : les [conflits](./sod-dashboard.md) — tendance, risques, paires de rôles, conflits avérés — et la [revue des accès](./security-review.md) — douze contrôles et les comptes à revoir d'abord. |
+| **Revues** | Cinq lectures de la situation : [Sécurité](./security-review.md) — la revue des accès, douze contrôles et les comptes à revoir d'abord ; [Séparation des tâches](./sod-review.md) — les conflits permis et ceux que les utilisateurs ont exercés, avec leur preuve ; [Licences](./licensing-review.md) — la revue des licences ; [À corriger](./security-analysis.md) — dix-neuf contrôles, chaque constat avec l'action à mener ; [Séparation des tâches : évolution](./sod-dashboard.md) — les conflits d'une collecte à l'autre. |
 | **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi. |
 | **Rapports** | L'[audit des licences](./reports/audit-licences.md) et l'[évaluation Sécurité & SoD](./reports/security-sox.md), produits pour une application et téléchargés en PDF ou en Markdown. |
 | **Dernière collecte** | La dernière collecte de chaque module par application, groupée par module ; un clic sur une ligne ouvre l'exécution qui l'a produite. |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
-| **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
+| **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés, avec la [sécurité de ligne](./applications/rights/row-security.md) et la [sécurité des UDO](./applications/rights/udo-security.md)), Object Usage Tracking (composants, objets, détails), conflits (synthèse, détails, avérés, par utilisateur, par rôle), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |
-| **Licences** | Contrats CSI, photographie JD Edwards, licences Oracle requises, licences acquises, rapport d'utilisation, rapport financier. |
+| **Licences** | Contrats CSI, photographie JD Edwards, licences Oracle requises, licences souscrites ; la revue des licences sous Revues. |
 | **Tâches** | [Collecter la sécurité et la SoD ou les licences, produire les deux rapports d'audit](./jobs.md), pour une ou plusieurs applications, avec un journal en direct. |
-| **Paramètres** | Définitions des sources (applications, schémas JDE, catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
+| **Paramètres** | Définitions des sources (applications, schémas JDE et [bibliothèques UDO](./settings/global/udo-libraries.md), catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
 
 ---
 
@@ -476,7 +476,7 @@ Le menu s'ouvre sur les trois tableaux de bord, l'Explorateur de données et les
 
 | Rôle | Pourquoi on ouvre Nomasx-1 |
 |---|---|
-| **Auditeur interne** | La revue SoD trimestrielle — conflits ouverts, conflits avérés par l'activité, tendance dans le temps. |
+| **Auditeur interne** | La revue SoD trimestrielle — conflits ouverts, conflits exercés et leur preuve, tendance dans le temps. |
 | **Responsable sécurité** | Le « qui a accès à X » du quotidien — catalogue utilisateurs et rôles, avec comptes dormants et affectations expirées repérés. |
 | **Administrateur sécurité JDE** | Catalogue inter-environnements des utilisateurs et rôles, plus simple que le security workbench JDE, avec édition en masse dans Nomajde quand des changements sont nécessaires. |
 | **Responsable licences** | Réconciliation requis-vs-acquis, preuves issues d'Object Usage Tracking, rapport d'écart financier avant chaque renouvellement. |

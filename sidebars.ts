@@ -286,8 +286,18 @@ const sidebars: SidebarsConfig = {
   nomasx1Sidebar: [
     'liberty/nomasx1/overview',
     'liberty/nomasx1/audit-synthesis',
-    'liberty/nomasx1/sod-dashboard',
-    'liberty/nomasx1/security-review',
+    {
+      type: 'category',
+      label: 'Reviews',
+      items: [
+        'liberty/nomasx1/security-review',
+        'liberty/nomasx1/sod-review',
+        'liberty/nomasx1/licensing-review',
+        'liberty/nomasx1/how-a-contract-is-counted',
+        'liberty/nomasx1/security-analysis',
+        'liberty/nomasx1/sod-dashboard',
+      ],
+    },
     'liberty/nomasx1/data-explorer',
     'liberty/nomasx1/ai-assistant',
     'liberty/nomasx1/jobs',
@@ -331,6 +341,8 @@ const sidebars: SidebarsConfig = {
           items: [
             'liberty/nomasx1/applications/rights/users',
             'liberty/nomasx1/applications/rights/roles',
+            'liberty/nomasx1/applications/rights/row-security',
+            'liberty/nomasx1/applications/rights/udo-security',
             'liberty/nomasx1/applications/rights/users-roles',
             'liberty/nomasx1/applications/rights/users-menus',
             'liberty/nomasx1/applications/rights/roles-menus',
@@ -380,11 +392,11 @@ const sidebars: SidebarsConfig = {
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/licenses', description: 'Licence management: CSI inventory, JD Edwards and Oracle reporting, subscribed quantities, usage and financial impact.'},
       items: [
         'liberty/nomasx1/licenses/csi',
+        'liberty/nomasx1/licenses/subscribed-licences',
         'liberty/nomasx1/licenses/jd-edwards',
         'liberty/nomasx1/licenses/oracle',
-        'liberty/nomasx1/licenses/subscribed',
-        'liberty/nomasx1/licenses/usage-report',
-        'liberty/nomasx1/licenses/financial-report',
+        'liberty/nomasx1/licenses/odi',
+        'liberty/nomasx1/licenses/analytics-server',
       ],
     },
     {
@@ -409,6 +421,7 @@ const sidebars: SidebarsConfig = {
             'liberty/nomasx1/settings/global/applications',
             'liberty/nomasx1/settings/global/custom-queries',
             'liberty/nomasx1/settings/global/jd-edwards',
+            'liberty/nomasx1/settings/global/udo-libraries',
             'liberty/nomasx1/settings/global/ldap',
           ],
         },
@@ -460,6 +473,7 @@ const sidebars: SidebarsConfig = {
           link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/pricing', description: 'Component catalog, licensing metrics and price book.'},
           items: [
             'liberty/nomasx1/settings/pricing/components',
+            'liberty/nomasx1/settings/pricing/components-included',
             'liberty/nomasx1/settings/pricing/metrics',
             'liberty/nomasx1/settings/pricing/pricing',
           ],
@@ -500,6 +514,16 @@ const sidebars: SidebarsConfig = {
         'liberty/nomajde/security-maintenance/role-relationships',
         'liberty/nomajde/security-maintenance/environments',
         'liberty/nomajde/security-maintenance/security-workbench',
+        {
+          type: 'category',
+          label: 'Security simulation',
+          link: {type: 'doc', id: 'liberty/nomajde/security-maintenance/security-simulation'},
+          items: [
+            'liberty/nomajde/security-maintenance/secure-a-module',
+            'liberty/nomajde/security-maintenance/workbench-consistency',
+            'liberty/nomajde/security-maintenance/security-test-cases',
+          ],
+        },
       ],
     },
     {

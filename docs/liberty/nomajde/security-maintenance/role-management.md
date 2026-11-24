@@ -61,7 +61,7 @@ For each user or role in the JDE security catalogue:
 |---|---|---|
 | **User / Role** | `AUUSER` — JDE identifier. | Either a sign-on user ID or a role ID — JDE stores both in the same table. |
 | **Description** | `AUROLEDESC` — friendly label. | The label that surfaces on JDE forms and on the Nomajde reports. |
-| **Sequence** | `AUSEQNO` — sequence number. | Display order used when a user holds several roles — lower number wins. |
+| **Sequence** | `AUSEQNO` — sequence number. | Precedence when a user holds several roles — the role with the highest sequence is read first. |
 
 Other JDE attributes carried on the row but hidden by default: language, e-mail, last login, intensive-user flag, action / inactive marker, and the audit columns (program, job, date, time).
 
@@ -119,7 +119,7 @@ The user / role identification and the JDE display preferences (language, countr
 |---|---|
 | **User / Role** | The JDE identifier — the sign-on user for a user, the role ID for a role. Mandatory. |
 | **Description** | Friendly label that surfaces on JDE forms and in the Nomajde reports. |
-| **Sequence** | Display order when the same user holds several roles — lower number first. |
+| **Sequence** | Precedence when the same user holds several roles — highest sequence first. |
 
 The JDE display fields (language, country, date format, decimal separator, currency, time zone, time format, OMW logging, right-to-left, intensive user) keep their JDE semantics. Leave them empty to inherit the JDE default, or set them per user when the deployment guidelines require it.
 
@@ -290,6 +290,7 @@ For a full system re-merge — recovery after a security-table re-import, or a k
 ## Tips & best practices
 
 - **Use *Import Security* to onboard a new user** by cloning a reference one — much faster than rebuilding the workbench by hand.
-- **The Sequence column matters** when a user holds several roles — JDE resolves the effective rights using the sequence order. Keep the most restrictive role at the lowest sequence number.
+- **The Sequence column matters** when a user holds several roles — JDE resolves the effective rights in sequence order, the highest sequence first: the first rule found for an object decides. Give the highest sequence to the role whose rules must prevail.
 - **Maintain users and roles in the same place.** JDE stores both in *F00926*; the screen surfaces both. Apply your own naming convention (e.g. `*_USER` for users, `*_ROLE` for roles) to keep them visually separate on the grid.
 - **Check *Nomasx-1 → Conflicts → Summary by User*** after onboarding a user, to confirm the attached roles do not create SoD conflicts.
+- **Simulate a role before giving it**: [Security simulation](./security-simulation.md) shows, with *Roles added*, what the user would gain, object by object — nothing is written.

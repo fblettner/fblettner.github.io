@@ -25,6 +25,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Ce qui ralentit la plateforme JD Edwards maintenant, et par où commencer.</text>
   <rect x="907" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="933.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
+  <text x="897" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Lu à 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="86" width="137.6" height="40" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="105" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">12 480</text>
@@ -120,7 +121,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
 
 Neuf chiffres ouvrent la page : **appels de fonctions métier**, **secondes passées dedans**, **ms par appel**, **dépassements de délai**, **requêtes en attente**, **% mémoire Java, le plus haut**, **% réussite du cache, le plus bas**, **% réussite du cache de la base** et **sessions bloquées**. Un chiffre passe en orange ou en rouge au-delà de son seuil.
 
-**Relire**, en haut à droite, relit l'ensemble.
+Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire**, en haut à droite, relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
 
 ---
 
@@ -155,7 +156,7 @@ La plupart des lignes portent à droite un bouton **Détails** : il lit en direc
 | Processus zombies, noyau avec des requêtes en attente, transactions ouvertes | Les processus du serveur d'entreprise concerné — les zombies eux-mêmes quand Server Manager les distingue, sinon tous les processus du serveur. |
 | Mémoire Java, étape du serveur, cache | Les nœuds, les appels de fonctions métier ou les caches du serveur concerné. |
 
-Un détail de la base n'est lu que sur une base Oracle ; sur une autre base, la ligne le précise. Comme le reste de la page, **Détails** ne fait que lire : ni AWR, ni ASH.
+Un détail de la base se lit sur Oracle, SQL Server et Db2 (Db2 for i compris), chacune dans ses propres termes ; une ligne pour laquelle la base n'a pas de lignes l'indique : *Ce détail n'est pas lu sur cette base.* Sur un IBM i, qui compte les travaux en attente d'un verrou sans dire depuis combien de temps, la ligne indique combien de travaux attendent et combien les bloquent. Comme le reste de la page, **Détails** ne fait que lire : sur Oracle, ni AWR, ni ASH.
 
 ---
 
@@ -166,7 +167,7 @@ L'encadré du bas de page en donne les limites :
 - chaque chiffre est l'instant présent ou un compteur depuis le démarrage des serveurs : il n'y a pas encore d'historique, la page dit donc ce qui est lent, pas depuis quand ;
 - les seuils : une fonction est signalée à partir d'une part du temps mesuré ou d'une durée par appel, une mémoire Java à partir de 80 %, un cache sous 80 % de réussite, une requête à partir d'une durée par exécution, le cache de la base sous 90 % ;
 - les dépassements de délai sont les compteurs des fonctions métier — les fichiers journaux du serveur d'entreprise ne sont pas accessibles par Server Manager ;
-- la base est lue depuis ses propres compteurs, sans le Diagnostics Pack : ni AWR, ni ASH.
+- la base est lue depuis ses propres compteurs — sur Oracle sans le Diagnostics Pack : ni AWR, ni ASH.
 
 ---
 

@@ -121,7 +121,17 @@ The command:
   Postgres:       published on 127.0.0.1:5432 only (POSTGRES_BIND=0.0.0.0 in .env to open it)
 ```
 
-Write the passwords down: the Traefik dashboard password is shown only once (`.env` keeps only its hash). The Liberty and pgAdmin passwords stay in `.env`.
+Write the passwords down: the Traefik dashboard password is shown only once (`.env` keeps only its hash), and so is the Liberty administrator's, which is not written in `.env`. The pgAdmin password stays in `.env`.
+
+### The administrator account \{#admin-password\}
+
+The summary says what the run did with the **`admin`** account. When the run created it, its password is shown — the one the install chose, or the one the server chose itself when `.env` was already there: after `./install.sh prepare`, after a first run stopped before the stack started, after the data volumes were removed. When the account was already there, no password is shown: the summary says so and gives the command that sets a new one.
+
+```text title="When the account was already there"
+  Sign in to Liberty with the administrator account that was already there — its password is the one
+  shown when it was created; this run did not change it.
+    (Lost it? docker exec -u liberty liberty-next liberty-admin set-password admin --password <new>)
+```
 
 Open the Liberty address, sign in as **`admin`**, then go on with the [licence and the licensed apps](./deploy-prebuilt-apps.md) and [HTTPS](./traefik.md).
 
@@ -165,7 +175,7 @@ The licence key is not an option: paste it in **Liberty Next → Administer → 
 
 ### Running the install again \{#rerun\}
 
-Running `./liberty install` on a host that already has a `.env` is safe: the secrets, the volumes and the recorded compose files are kept, and the stack is started again if it was stopped. To change HTTPS or the apps afterwards, use `./liberty ssl …` and `./liberty apps …` rather than a new install.
+Running `./liberty install` on a host that already has a `.env` is safe: the secrets, the volumes and the recorded compose files are kept, and the stack is started again if it was stopped; the administrator account is left as it is (see [The administrator account](#admin-password)). To change HTTPS or the apps afterwards, use `./liberty ssl …` and `./liberty apps …` rather than a new install.
 
 If a previous install left volumes behind but its `.env` is gone, the install refuses to start: the old database was created with passwords nobody has any more. Restore the old `.env`, or wipe everything with `./liberty install --reset` and install again.
 

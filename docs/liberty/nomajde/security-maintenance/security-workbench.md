@@ -215,3 +215,4 @@ This is what makes a JDE security promotion repeatable: pair it with the [`nomaj
 - **Excel upload** for SI-delivered security bundles. The standard *Add* flow handles single rows; the upload is meant for the dozens of rows that ship with a new module.
 - **A deny on *All Actions* with `User = *PUBLIC` plus targeted grants on roles** is the standard JDE pattern. The grid makes it easy to read whether the deny is in place for every object.
 - **After bulk changes**, run *Nomasx-1 → Applications → Rights* to confirm the effective rights match the intent — the workbench shows what is configured, *Rights* shows what JDE will compute at sign-on.
+- **Before and after a change**, [Security simulation](./security-simulation.md) gives what a user or role would be allowed, object by object, with a what-if that writes nothing; its [Consistency](./workbench-consistency.md) tab lists the lines of this grid that serve nothing or contradict each other.

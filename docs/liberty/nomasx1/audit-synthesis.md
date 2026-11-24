@@ -278,7 +278,7 @@ keywords: [Nomasx-1, overview, audit synthesis, dashboard, segregation of duties
 | **Segregation of duties** — users carrying a conflict | The users with at least one conflict. | Conflict lines · privileged users in conflict · business processes concerned. |
 | **Licence exposure** — components deployed beyond the subscription | The value of the users over the subscribed quantities: list price plus three years of support per user over. | Components over the subscription out of all components · users over. |
 
-The exposure reads the [Subscribed Licenses](./licenses/subscribed.md) and the [pricing catalogue](./settings/pricing/pricing.md): a component without a price counts zero.
+The exposure reads the [Subscribed Licenses](./licenses/subscribed-licences.md) and the [pricing catalogue](./settings/pricing/pricing.md): a component without a price counts zero.
 
 ---
 
@@ -314,7 +314,7 @@ The findings of the [Security & SoD assessment report](./reports/security-sox.md
 | **Transacting users per month** | The distinct users with transactions each month, the applications added up. |
 | **Users with the most conflicts** | The users carrying the most conflict lines, with the number of processes; privileged accounts are tagged. |
 
-The detail behind each widget is in the screens: [Conflicts](./applications/conflicts/summary.md), [Users](./security/users.md), [Roles](./security/roles.md), [Usage Report](./licenses/usage-report.md), [Financial Report](./licenses/financial-report.md).
+The detail behind each widget is in the screens: [Conflicts](./applications/conflicts/summary.md), [Users](./security/users.md), [Roles](./security/roles.md), [Licensing review](./licensing-review.md).
 
 ---
 

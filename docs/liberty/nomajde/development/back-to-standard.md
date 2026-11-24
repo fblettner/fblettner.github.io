@@ -280,6 +280,10 @@ The job is read-only on JD Edwards: it reads the specifications of the two path 
 
 Opening a row does not need the job again: the comparison of that object is made on the spot.
 
+### A JD Edwards behind a database link \{#dblink\}
+
+When Liberty reaches the JD Edwards libraries through a database link, the job and the page follow the JD Edwards pool: each table is read with its library from the pool's **Schemas** and that library's link from its **Database links**, under the same key — `OL` for the Object Librarian, `SY` for the OMW tables, `CO` for the central objects of both path codes. A library with no link is read locally. The specifications are stored as BLOBs, which the usual driver cannot read through a link: behind a `CO` link they are read by the thick Oracle driver, by itself — nothing to set. See [Schema and DB-link tokens](../../framework/connectors.md#schema-and-db-link-tokens).
+
 ---
 
 ## Access \{#access\}

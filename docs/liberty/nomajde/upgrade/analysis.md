@@ -636,6 +636,10 @@ The run also reads what Nomasx-1 collects for the same JD Edwards, when it does:
 
 These need the cross reference and its UDO step collected first in Nomasx-1; run the analysis again to take them.
 
+#### A JD Edwards behind a database link \{#dblink\}
+
+When Liberty reaches the JD Edwards libraries through a database link, the run follows the JD Edwards pool: each table is read with its library from the pool's **Schemas** and that library's link from its **Database links**, under the same key — `OL` for the Object Librarian, `SY` for the usage tables, `CO` for JD Edwards' own cross reference. A library with no link is read locally. The run's log says which library and which link it reads. See [Schema and DB-link tokens](../../framework/connectors.md#schema-and-db-link-tokens).
+
 ---
 
 ## How an object is judged \{#rules\}

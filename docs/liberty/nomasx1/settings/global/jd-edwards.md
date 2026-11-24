@@ -271,7 +271,7 @@ Click **Add row** to give an application its JD Edwards settings, or click a row
 | **JDE CO** | Schema of the central objects — the specifications read by the cross reference. |
 | **JDE OL** | Schema of the Object Librarian (F9860, F9861) — the objects catalogue and the menus. |
 | **F00950** | Schema of the security workbench table, when it is not the system one. |
-| **JDE_UDO_SEC** | Schema of the user defined objects' security table (F00950W): its rows are added to the security collected. Blank: skipped. |
+| **JDE_UDO_SEC** | Schema of the user defined objects' security table (F00950W): its lines are collected as the [UDO security](../../applications/rights/udo-security.md), and the view lines of the composite and E1 pages feed the rights. Blank: skipped. |
 | **JDE_UDO_OL** | Schema of the user defined objects' librarian (F9860W, F9861W), read for the composite pages, the E1 pages and the inventory of user defined objects. Blank: those steps do nothing and say so. |
 | **…_DBLINK** | Next to each schema: the database link that reaches it. Blank when the JDE tables are in the database Nomasx-1 connects to. |
 | **Thick LOB read (Y/N)** | Tick when the JDE tables are reached through a database link: the menus and the specifications (LOB columns) are then read by a short-lived thick-mode process. |
@@ -290,6 +290,7 @@ The menus read decide the access paths behind *Menus*, *Rights*, the segregation
 ## Tips & best practices
 
 - **Ask the JDE administrator** for the schema names and the database links — they come from the JDE installation (path code, data sources).
+- **Check the library first** on the [UDO libraries](./udo-libraries.md) screen: it lists every library that holds F00950W, F9860W and F9861W, and marks the one with the 9.2 layout to put in **JDE_UDO_SEC** and **JDE_UDO_OL**.
 - **Fill JDE_UDO_OL** on any Tools 9.2 installation: much of what a customer changes is a user defined object, and composite pages give access paths the standard menus do not.
 - **Tick Thick LOB read only with a database link**; a local install reads the LOB columns directly.
 - **Keep the OUT retention longer than the collection interval**, so no usage row is purged before Nomasx-1 has read it.

@@ -217,6 +217,7 @@ Click **Add row** to declare a new application, or click a row to open it. The d
 | **Application Type** | Kind of source system, picked from a list (`JDE` — JD Edwards…). Drives which collection steps apply. |
 | **Database type** | Database technology, picked from a list (`ORACLE` — Oracle…). |
 | **Pool** | The application's connection, picked from the pools of the installation. A database pool for a JD Edwards or database application; a directory pool (type *LDAP directory*) for an LDAP application. Blank: the collection job's own pool. |
+| **Signed in within (days) = a user** | For a JD Edwards application whose Object Usage Tracking has no data: a user who signed in within this number of days counts as a real user — the [Licensing review](../../licensing-review.md) counts them on the modules their security allows, and the [licence audit report](../../reports/audit-licences.md) does not list them as never used. Empty: 90 days. |
 
 The pool is the only connection setting of the application: its address, its account and its password are set on the pool, under **Liberty Next → Administer → Pools** — see [Pools](../../../framework/connectors.md#pools). The [reports](../../reports/audit-licences.md) also read from it the system they name (the server and the service name of an Oracle pool, the base of a directory) and print the pool.
 

@@ -133,9 +133,87 @@ This is the most operationally important SoD setting: editing a row here changes
 
 ---
 
+## Edit dialog \{#edit-dialog\}
+
+**Add row** opens an empty form; a click on a row opens it, titled **Edit · Settings - Matrix (SOD)**, with **Delete**, **Duplicate**, **Cancel** and **Save**. **Bulk edit** changes several rows in the grid itself.
+
+<svg viewBox="0 0 1320 428" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdmatd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdmatd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdmatd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdmatd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="388" rx="14" fill="url(#sdmatd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · Settings - Matrix (SOD)</text>
+  <rect x="1054" y="34" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1066" y="49" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="82" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">1 — JDE-PROD</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="128" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESS ID</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="149.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC001 — Order To Cash</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="174" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIVITY 1 ID</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="195.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC02 — Process sales orders</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="220" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIVITY 2 ID</text>
+  <rect x="240" y="226" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="241.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC05 — Process credit / debit notes</text>
+  <rect x="240" y="226" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="266" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RISK ID</text>
+  <rect x="240" y="272" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="287.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTCR05 — An individual can create…  ▾</text>
+  <text x="240" y="312" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RISK LEVEL</text>
+  <rect x="240" y="318" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="333.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">H</text>
+  <line x1="220" y1="358" x2="1100" y2="358" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1033" y="372" width="47" height="22" rx="5" fill="url(#sdmatd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1056.5" y="386.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="968" y="372" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="996.5" y="386.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="887" y="372" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="923.5" y="386.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Duplicate</text>
+  <rect x="822" y="372" width="57" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="850.5" y="386.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
+  <rect x="20" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Keys</text>
+  <text x="30" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">read-only once saved</text>
+  <line x1="200" y1="91.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="20" y="267" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="282" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Picked from a list</text>
+  <text x="30" y="295" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the risks of the process</text>
+  <line x1="200" y1="284.0" x2="240" y2="284" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="1120" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lists by parent</text>
+  <text x="1130" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtered on the fields above</text>
+  <line x1="1120" y1="91.0" x2="1060" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="1120" y="338" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="353" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Delete · Duplicate</text>
+  <text x="1130" y="366" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on a saved row</text>
+  <line x1="1120" y1="355.0" x2="923.5" y2="383" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Application ID** | The application, picked from the list. |
+| **Process ID** | The process, picked among those of the application. |
+| **Activity 1 ID** · **Activity 2 ID** | The two incompatible activities, picked among those of the process. |
+| **Risk ID** | The risk the pair carries, picked among the risks of the process. It can be changed on a saved rule. |
+| **Risk Level** | Level of the rule. |
+
+The keys — Application ID, Process ID and the two activities — are read-only once the row is saved: to change one, delete the row and add it again.
+
+---
+
 ## Import from Excel \{#import\}
 
-The grid is read-only: a click on a row opens nothing. Rows are added and changed with **Import**, from an Excel (`.xlsx`) or `.csv` file whose columns match the grid's — the easiest way is to **Export** the grid, edit the file and import it back.
+Many rows at once are added or changed with **Import**, from an Excel (`.xlsx`) or `.csv` file whose columns match the grid's — the easiest way is to **Export** the grid, edit the file and import it back.
 
 <svg viewBox="0 0 1320 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -203,6 +281,7 @@ The file carries these columns:
 
 ## Tips & best practices
 
+- **[What to fix](../../security-analysis.md#consistency) lists the rules that cannot work** — a risk or an activity missing.
 - **Adding a row** generates new conflicts at the next SoD refresh — coordinate with the security administrator and HR.
 - **Removing a row** clears existing conflicts at the next refresh. Document the rationale: an auditor reviewing the SoD framework will ask why.
 - **Risk level here should match the *Risks* catalog level** — keeping the two in sync avoids confusing dashboard rendering.

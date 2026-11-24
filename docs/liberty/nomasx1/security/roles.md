@@ -151,7 +151,7 @@ For each role known to **any connected application**, answer three questions in 
 
 - **Which roles exist?** The role catalog drives every other security view — assignments, conflicts, segregation-of-duties matrices.
 - **What does the role represent?** The role name is the human-readable label visible to administrators. It should be self-explanatory and follow the company naming convention.
-- **In what order is the role evaluated?** The sequence drives the precedence at login when the source system lets a user inherit configuration from several roles. Lower number = earlier evaluation = stronger precedence (JDE convention).
+- **In what order is the role evaluated?** The sequence drives the precedence at login when the source system lets a user inherit configuration from several roles. Higher number = earlier evaluation = stronger precedence (JDE convention).
 
 The screen is the entry point when an auditor asks *"give me the list of roles in scope"* or when a new SoD matrix is being built.
 
@@ -164,7 +164,7 @@ The screen is the entry point when an auditor asks *"give me the list of roles i
 | **Application ID** | `ROL_APPS_ID` — application identifier from the source system (numeric reference). | Which application the role belongs to. |
 | **Role ID** | `ROL_ID` — role identifier (technical name). | The role's technical name as known to the source system. |
 | **Role Name** | `ROL_NAME` — descriptive name. | Human-readable label. |
-| **Sequence** | `ROL_SEQ` — numeric. | Evaluation order at login. Lower runs first; used by the source system to resolve precedence between several roles held by the same user. |
+| **Sequence** | `ROL_SEQ` — numeric. | Evaluation order at login. Higher runs first; used by the source system to resolve precedence between several roles held by the same user. |
 
 Hidden columns kept on the row: `ROL_DT_REFRESH`, `ROL_UKID` (used by downstream screens and reconciliation).
 
@@ -191,5 +191,5 @@ The **⋯** button at the start of a row, or a right-click on the row, opens the
 
 - **Compare the catalog with the *Roles not used* screen** to spot roles that exist but were never assigned. These are typically the leftover of past reorganisations.
 - **Look for near-duplicate role names** (e.g. `ACCT_AP` vs `ACCT_AP_OLD`). A role rename in the source system creates a new row — the old one usually stays around until a manual cleanup.
-- **Use the *Sequence* column** to identify the role with the lowest sequence that a user holds — this is the role driving most of the runtime behavior on JDE.
+- **Use the *Sequence* column** to identify the role with the highest sequence that a user holds — its rules are read first and prevail on JDE.
 - **⋯ → Display Users** opens the *Assignments* screen filtered on that role — the fastest way to count holders before deciding to delete it.

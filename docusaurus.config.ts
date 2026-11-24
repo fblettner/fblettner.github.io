@@ -143,6 +143,9 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          {from: '/liberty/nomasx1/licenses/subscribed', to: '/liberty/nomasx1/licenses/subscribed-licences'},
+          {from: '/liberty/nomasx1/licenses/usage-report', to: '/liberty/nomasx1/licensing-review'},
+          {from: '/liberty/nomasx1/licenses/financial-report', to: '/liberty/nomasx1/licensing-review'},
           // Legacy Liberty v1 technical pages, replaced by the Installation section.
           {from: '/liberty/technical/architecture', to: '/liberty/installation/architecture'},
           {from: '/liberty/technical/installation', to: '/liberty/installation/docker'},

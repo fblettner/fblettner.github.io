@@ -87,7 +87,7 @@ Liberty Next is under active development — new capabilities ship regularly, an
 
 | Area | What Liberty Next provides |
 |---|---|
-| **Data sources** | SQL pools (PostgreSQL, Oracle, SQLite) and HTTP API endpoints, declared in TOML under `config/`. |
+| **Data sources** | SQL pools (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, Db2 for i, SQLite) and HTTP API endpoints, declared in TOML under `config/`. |
 | **Schema discovery** | Columns are read from the query's cursor at runtime; the dictionary adds labels, formats and display rules per column. |
 | **Screens** | One [`Screen`](./framework/build/screens/overview.md) entry per business object: grid, modal form, per-field conditions, audit tab. |
 | **Dashboards** | [Charts and KPIs](./framework/dashboards.md) over the same named queries — bar, line, pie, stat panels. |

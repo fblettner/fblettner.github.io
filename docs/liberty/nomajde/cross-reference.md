@@ -14,7 +14,7 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
 
 ## At a glance
 
-<svg viewBox="0 0 1320 450" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 478" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="xra-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="xra-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,11 +22,11 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
     <marker id="xra-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="880" height="410" rx="14" fill="url(#xra-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="880" height="438" rx="14" fill="url(#xra-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Cross reference</text>
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">What is in a JD Edwards application or report, and where an item, a view or a table is used.</text>
   <line x1="232" y1="74" x2="1088" y2="74" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="236" y="88" width="250" height="330" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="236" y="88" width="250" height="358" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <rect x="246" y="98" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="256" y="112.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">⌕ P01012</text>
   <rect x="246" y="128" width="60" height="15" rx="7.5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
@@ -67,7 +67,7 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
   <text x="252" y="330.5" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">D7000150</text>
   <text x="312" y="330.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">P01012 - Plug &amp; Play - 01</text>
   <text x="472" y="330.5" fill="#64748b" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">BSFN</text>
-  <rect x="498" y="88" width="586" height="330" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="498" y="88" width="586" height="358" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="510" y="110" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">P01012</text>
   <text x="564" y="110" fill="#cbd5e1" fontSize="10.5" fontFamily="system-ui, sans-serif">Address Book</text>
   <text x="648" y="110" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">template T01012 · 6 form(s) · collected on 21/11/2026</text>
@@ -77,74 +77,86 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
   <text x="597.0" y="136.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Last used 29/10/2026 · 3 user(s)</text>
   <rect x="690" y="122" width="98" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="739.0" y="136.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Refresh from JDE</text>
-  <rect x="510.0" y="152" width="182.0" height="56" rx="7" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="518.0" y="166" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">W01012A</text>
-  <text x="518.0" y="178" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Address Book Revision</text>
-  <text x="518.0" y="189" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">view V0101E</text>
-  <text x="518.0" y="200" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">84 fields · 13 UDO(s)</text>
-  <rect x="700.0" y="152" width="182.0" height="56" rx="7" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="708.0" y="166" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">W01012B</text>
-  <text x="708.0" y="178" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Work With Addresses</text>
-  <text x="708.0" y="189" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">view V0101E · entry point</text>
-  <text x="708.0" y="200" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">19 grid columns · 18 UDO(s)</text>
-  <rect x="890.0" y="152" width="182.0" height="56" rx="7" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="898.0" y="166" fill="#e2e8f0" fontSize="8.5" fontFamily="ui-monospace, monospace">W01012C</text>
-  <text x="898.0" y="178" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Formatted Address</text>
-  <text x="898.0" y="189" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">view V0101E</text>
-  <text x="898.0" y="200" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">14 fields</text>
-  <rect x="510" y="218" width="529" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="511" y="219" width="51" height="18" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="536.5" y="231.0" fill="#4a9eff" fontSize="7.4" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Fields (3)</text>
-  <line x1="563" y1="222" x2="563" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="604.0" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Grid columns (19)</text>
-  <line x1="645" y1="222" x2="645" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="696.5" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Buttons and exits (16)</text>
-  <line x1="748" y1="222" x2="748" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="785.0" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Everything (42)</text>
-  <line x1="822" y1="222" x2="822" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="861.0" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Event rules (23)</text>
-  <line x1="900" y1="222" x2="900" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="945.0" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Interconnection (2)</text>
-  <line x1="990" y1="222" x2="990" y2="234" stroke="#334155" strokeWidth="1"/>
-  <text x="1014.5" y="231.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">UDOs (18)</text>
-  <text x="510" y="254" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">In grey: the form gives no text — JDE shows the data dictionary's title.</text>
-  <rect x="510" y="264" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="520" y="278.5" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">⌕ Search…</text>
-  <rect x="1017" y="264" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1044.5" y="278.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
-  <rect x="961" y="264" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="986.5" y="278.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
-  <rect x="914" y="264" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="935.0" y="278.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Group</text>
-  <rect x="858" y="264" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="883.5" y="278.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Filters</text>
-  <rect x="811" y="264" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="832.0" y="278.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
-  <rect x="510" y="294" width="562" height="94" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="510" y="294" width="562" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="520" y="309.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">DATA ITEM</text>
-  <text x="600" y="309.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">TEXT ON THE FORM</text>
-  <text x="760" y="309.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">TABLE</text>
-  <text x="896" y="309.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" textAnchor="end" fontFamily="ui-monospace, monospace">CONTROL</text>
-  <text x="910" y="309.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">WHERE USED</text>
-  <text x="520" y="332.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">AT1</text>
-  <text x="600" y="332.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Search Type</text>
-  <text x="760" y="332.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
-  <text x="896" y="332.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">54</text>
-  <text x="910" y="332.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
-  <line x1="511" y1="340" x2="1071" y2="340" stroke="#1f2937" strokeWidth="1"/>
-  <text x="520" y="354.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ALPH</text>
-  <text x="600" y="354.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Alpha Name</text>
-  <text x="760" y="354.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
-  <text x="896" y="354.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">58</text>
-  <text x="910" y="354.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
-  <line x1="511" y1="362" x2="1071" y2="362" stroke="#1f2937" strokeWidth="1"/>
-  <text x="520" y="376.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">DC</text>
-  <text x="600" y="376.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Compressed Description</text>
-  <text x="760" y="376.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
-  <text x="896" y="376.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">60</text>
-  <text x="910" y="376.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
-  <line x1="511" y1="384" x2="1071" y2="384" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="510.0" y="152" width="277.0" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="518.0" y="163" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012A</text>
+  <text x="558.72" y="163" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Address Book Revision</text>
+  <text x="518.0" y="173.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">V0101E · 84 fields · 0 columns · 14 buttons · 13 UDO(s)</text>
+  <rect x="795.0" y="152" width="277.0" height="26" rx="6" fill="rgba(50,215,75,0.08)" stroke="#4ade80" strokeWidth="1"/>
+  <text x="803.0" y="163" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012B</text>
+  <text x="843.72" y="163" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Work With Addresses</text>
+  <text x="803.0" y="173.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">V0101E · entry point · 3 fields · 19 columns · 18 UDO(s)</text>
+  <rect x="510.0" y="181" width="277.0" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="518.0" y="192" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012C</text>
+  <text x="558.72" y="192" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Formatted Address</text>
+  <text x="518.0" y="202.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">V0101E · 14 fields · 0 columns · 0 buttons</text>
+  <rect x="795.0" y="181" width="277.0" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="803.0" y="192" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012D</text>
+  <text x="843.72" y="192" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Next Number Failure</text>
+  <text x="803.0" y="202.5" fill="#ff9f0a" fontSize="7" fontFamily="system-ui, sans-serif">no business view</text>
+  <text x="868.72" y="202.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">· 1 buttons</text>
+  <rect x="510.0" y="210" width="277.0" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="518.0" y="221" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012E</text>
+  <text x="558.72" y="221" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Global Location Number Maintenance</text>
+  <text x="518.0" y="231.5" fill="#ff9f0a" fontSize="7" fontFamily="system-ui, sans-serif">no business view</text>
+  <text x="583.72" y="231.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">· 3 fields</text>
+  <rect x="795.0" y="210" width="277.0" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="803.0" y="221" fill="#e2e8f0" fontSize="8" fontFamily="ui-monospace, monospace">W01012F</text>
+  <text x="843.72" y="221" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">GLN Manual Entry Confirmation</text>
+  <text x="803.0" y="231.5" fill="#ff9f0a" fontSize="7" fontFamily="system-ui, sans-serif">no business view</text>
+  <text x="868.72" y="231.5" fill="#64748b" fontSize="7" fontFamily="system-ui, sans-serif">· 2 buttons</text>
+  <rect x="510" y="246" width="529" height="20" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="511" y="247" width="51" height="18" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="536.5" y="259.0" fill="#4a9eff" fontSize="7.4" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Fields (3)</text>
+  <line x1="563" y1="250" x2="563" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="604.0" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Grid columns (19)</text>
+  <line x1="645" y1="250" x2="645" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="696.5" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Buttons and exits (16)</text>
+  <line x1="748" y1="250" x2="748" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="785.0" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Everything (42)</text>
+  <line x1="822" y1="250" x2="822" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="861.0" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Event rules (23)</text>
+  <line x1="900" y1="250" x2="900" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="945.0" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">Interconnection (2)</text>
+  <line x1="990" y1="250" x2="990" y2="262" stroke="#334155" strokeWidth="1"/>
+  <text x="1014.5" y="259.0" fill="#94a3b8" fontSize="7.4" textAnchor="middle" fontFamily="system-ui, sans-serif">UDOs (18)</text>
+  <text x="510" y="282" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">In grey: the form gives no text — JDE shows the data dictionary's title.</text>
+  <rect x="510" y="292" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="520" y="306.5" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">⌕ Search…</text>
+  <rect x="1017" y="292" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1044.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Export ▾</text>
+  <rect x="961" y="292" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="986.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
+  <rect x="914" y="292" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="935.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Group</text>
+  <rect x="858" y="292" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="883.5" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Filters</text>
+  <rect x="811" y="292" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="832.0" y="306.5" fill="#94a3b8" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif">Views</text>
+  <rect x="510" y="322" width="562" height="94" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="510" y="322" width="562" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="520" y="337.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">DATA ITEM</text>
+  <text x="600" y="337.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">TEXT ON THE FORM</text>
+  <text x="760" y="337.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">TABLE</text>
+  <text x="896" y="337.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" textAnchor="end" fontFamily="ui-monospace, monospace">CONTROL</text>
+  <text x="910" y="337.0" fill="#cbd5e1" fontSize="8" fontWeight="700" letterSpacing="0.05em" fontFamily="ui-monospace, monospace">WHERE USED</text>
+  <text x="520" y="360.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">AT1</text>
+  <text x="600" y="360.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Search Type</text>
+  <text x="760" y="360.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
+  <text x="896" y="360.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">54</text>
+  <text x="910" y="360.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
+  <line x1="511" y1="368" x2="1071" y2="368" stroke="#1f2937" strokeWidth="1"/>
+  <text x="520" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">ALPH</text>
+  <text x="600" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Alpha Name</text>
+  <text x="760" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
+  <text x="896" y="382.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">58</text>
+  <text x="910" y="382.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
+  <line x1="511" y1="390" x2="1071" y2="390" stroke="#1f2937" strokeWidth="1"/>
+  <text x="520" y="404.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">DC</text>
+  <text x="600" y="404.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Compressed Description</text>
+  <text x="760" y="404.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace"></text>
+  <text x="896" y="404.5" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">60</text>
+  <text x="910" y="404.5" fill="#4a9eff" fontSize="8.5" fontFamily="ui-monospace, monospace">Where used</text>
+  <line x1="511" y1="412" x2="1071" y2="412" stroke="#1f2937" strokeWidth="1"/>
   <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One search</text>
   <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">application, report, item, UDO…</text>
@@ -168,26 +180,26 @@ The page reads the cross reference collected from the JD Edwards EnterpriseOne s
   <rect x="1120" y="104" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="119" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Usage and refresh</text>
   <text x="1130" y="132" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who used it · read it again</text>
-  <line x1="1120" y1="121.0" x2="724" y2="133" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
+  <line x1="1120" y1="121.0" x2="788" y2="133" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
   <rect x="1120" y="180" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Forms as cards</text>
-  <text x="1130" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">entry point, counts, UDOs</text>
-  <line x1="1120" y1="197.0" x2="1070" y2="184" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
-  <rect x="1120" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tabs of the form</text>
-  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fields … event rules, UDOs</text>
-  <line x1="1120" y1="267.0" x2="798" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
+  <text x="1130" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">two lines, three rows at most</text>
+  <line x1="1120" y1="197.0" x2="1070" y2="194" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
+  <rect x="1120" y="262" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="277" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tabs of the form</text>
+  <text x="1130" y="290" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fields … event rules, UDOs</text>
+  <line x1="1120" y1="279.0" x2="798" y2="266" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
   <rect x="1120" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Where used</text>
   <text x="1130" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">switches to the other question</text>
-  <line x1="1120" y1="347.0" x2="1014" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
+  <line x1="1120" y1="347.0" x2="1014" y2="368" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xra-arrow)"/>
 </svg>
 
 ---
 
 ## Search \{#search\}
 
-Type part of a name, an identifier or a description; the examples under the search box start one in a click: `P01012`, `P4210`, `R42565`, `AN8`, `V0101E`, `F0101`, `F4211`, `D0100033`, `B4200310`, `F4211FSBeginDoc`, *address number*, *sales order*. The results are grouped by kind — **Applications**, **Reports**, **Data items**, **Business views**, **Tables**, **Data structures**, **Business functions**, **User defined objects** — each line with its description from the Object Librarian. A click opens the object on the right.
+Type part of a name, an identifier or a description; the examples under the search box start one in a click: `P01012`, `P4210`, `R42565`, `AN8`, `V0101E`, `F0101`, `F4211`, `D0100033`, `B4200310`, `F4211FSBeginDoc`, *address number*, *sales order*. The results are grouped by kind — **Applications**, **Reports**, **Data items**, **Business views**, **Tables**, **Data structures**, **Business functions**, **User defined objects** — each line with its description from the Object Librarian. A click opens the object on the right. The search starts about half a second after the last letter typed: a word typed at normal speed starts one search, not one per letter.
 
 The closest match comes first: an identifier typed exactly, then — for the applications and the reports — the object whose title is exactly what was typed, before those whose title only starts with it. Typing *address book* opens on `P01012` *Address Book*, ahead of the twenty applications whose title begins with those words.
 
@@ -203,17 +215,23 @@ The chips under the search box — **Everything**, **Applications**, **Reports**
 
 | Object | Opens on |
 |---|---|
-| **Application** | Its forms as cards: identifier, title, business view, counts of fields, grid columns, buttons and exits, UDOs. A form the application calls from outside is tagged **entry point**. A form's tabs: **Fields**, **Grid columns**, **Buttons and exits**, **Everything**, **Event rules**, **Interconnection** (the data items a caller hands it) and **UDOs** (the user defined objects that sit on it, the service requests that run it, the pages and links that open it). |
-| **Report** | Its sections as cards (kind, business view, counts), and in a section its **Fields**, **Labels**, **Data selection**, **Data sequencing** — in their rank, ascending or descending —, **Everything** and **Event rules**. |
-| **Business view** | The tables it reads (the primary one first), its columns, its **Joins** — which two tables, the join type, the columns they are joined on. |
+| **Application** | Its forms as cards two lines high: the identifier and the title, then the business view and the counts of fields, grid columns, buttons and exits, UDOs — the whole of it on hover. At most three rows of cards show; more scroll inside their block, so the grid under them keeps its room. A form the application calls from outside is tagged **entry point**. A form's tabs: **Fields**, **Grid columns**, **Buttons and exits**, **Everything**, **Event rules**, **Interconnection** (the data items a caller hands it) and **UDOs** (the user defined objects that sit on it, the service requests that run it, the pages and links that open it). |
+| **Report** | Its sections as cards, laid out as the forms (kind, business view, counts), and in a section its **Fields**, **Labels**, **Data selection**, **Data sequencing** — in their rank, ascending or descending —, **Everything** and **Event rules**. |
+| **Business view** | The tables it reads (the primary one first), its columns, its **Joins** as cards, laid out as the forms — which two tables, the join type, the columns they are joined on. |
 | **Table** | Who uses it, then its **Columns** (data item and SQL name, in order), its **Indexes** (primary, unique, their columns) and its **Triggers**. |
 | **Data structure** | Its items in their order, and the business functions that take it. |
 | **Business function object** | Its functions, each with its data structure and its module; **Where called** lists the objects whose event rules call a function, and where in each. |
 | **User defined object** | What it is — type, system code, owner, status, who changed it and when — and the **objects it uses**, each line with **How** it uses it and **Where in the page**: see [User defined objects](#udo). The **Objects that carry it** list the pages, orchestrations or other UDOs that hold this one. |
 
-A control the form gives no text to shows the data dictionary's title **in grey**: it is what JD Edwards displays. The **Event rules** tab lists what the rules of a form, a section or a function do — the business functions they call, the tables and views they read and write with the operations, the forms they open, the reports they run.
+A control the form gives no text to shows the data dictionary's title **in grey**: it is what JD Edwards displays. The texts of a form — its title, its labels, its column headings — are those of JD Edwards' base language, as the reports' texts are: a text that exists only as a translation is not shown, and the data dictionary's title stands in its place. The texts are taken when an application is read: to bring them up to date, read the applications again — the job `nomasx1-xref` with **What to read** = `all`, or **Refresh from JDE** on one application. The **Event rules** tab lists what the rules of a form, a section or a function do — the business functions they call, the tables and views they read and write with the operations, the forms they open, the reports they run.
 
 Every list is a grid of its own: search, filters, grouping, columns and export.
+
+:::info[Behind a database link]
+
+When the JD Edwards database is reached through a database link, the data dictionary's titles (F9202) are read through the link the JD Edwards pool names under the key `DD` in its **Database links** — see [Schema and DB-link tokens](../framework/connectors.md#schema-and-db-link-tokens). No link for `DD`: the table is read locally.
+
+:::
 
 ### User defined objects \{#udo\}
 

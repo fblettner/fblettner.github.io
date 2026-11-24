@@ -43,7 +43,7 @@ Sur une installation Python, les mêmes étapes tiennent en trois commandes — 
 | Option | Effet |
 |---|---|
 | `--dry-run` | Affiche le plan de fusion et s'arrête : rien n'est écrit. |
-| `--force-config` | Actualise aussi les entités livrées modifiées localement sans être marquées `override` (voir plus bas). |
+| `--force-config` | Actualise aussi les entités livrées modifiées localement sans être marquées `override`, et donne aux menus livrés l'ordre du wheel (voir plus bas). |
 
 ---
 
@@ -75,6 +75,19 @@ Un nouveau wheel apporte de nouveaux écrans, entrées de menu, éléments du di
 **Les tâches Nomaflow** sont fusionnées tâche par tâche. La partie produit d'une tâche livrée — ses étapes, sa description, ses étiquettes, les paramètres qu'elle propose — est mise à jour ; ce qui a été réglé dessus est conservé : activation, planification, fuseau horaire, préréglages, alertes, réessais, niveau de journal, délai et valeurs de ses paramètres. Les tâches créées sur le serveur restent. Une tâche livrée dont les étapes ont été modifiées est conservée telle quelle et listée à la fin ; une tâche marquée `override = true` dans `jobs.toml` est toujours conservée telle qu'enregistrée.
 
 Ce qui a été livré est enregistré sous `config/.bundled/` : la mise à jour suivante distingue ainsi « jamais modifié » de « modifié ». Les entités conservées parce qu'elles ont été modifiées localement sont listées en fin d'exécution : les marquer `override = true` pour les garder définitivement, ou relancer avec `--force-config` pour prendre la version de l'éditeur.
+
+### L'ordre des menus \{#menu-order\}
+
+Les entrées d'un menu livré sont fusionnées une à une, et leur ordre aussi :
+
+| Sur le serveur | Après la mise à jour |
+|---|---|
+| Personne n'a déplacé d'entrée — les entrées livrées la dernière fois sont toujours dans l'ordre livré | Le menu prend l'ordre du nouveau wheel : une nouvelle entrée apparaît là où l'éditeur l'a placée, et un ordre modifié par l'éditeur est appliqué. Les entrées créées localement restent juste après l'entrée qu'elles suivaient. |
+| Des entrées ont été déplacées | L'ordre local est conservé. Seules les nouvelles entrées sont placées : chacune dans son dossier, juste après l'entrée qu'elle suit dans le wheel — à défaut juste après son dossier, sinon en fin de menu. |
+| Aucune trace de la livraison précédente | Rien n'indique si des entrées ont été déplacées : l'ordre local est conservé, et les nouvelles entrées sont placées comme ci-dessus. |
+| Installation avec `--force-config` | Le menu prend l'ordre du wheel, même là où des entrées ont été déplacées. |
+
+Le rapport affiché en fin d'exécution nomme les menus dont les entrées ont pris l'ordre du wheel — `⇅ <menu>: its entries take the shipment's order`.
 
 Les applications se mettent à jour en même temps que le framework avec `./liberty upgrade --apps <wheel>` — voir [Mise à jour et retour arrière](./upgrading.md#apps).
 

@@ -121,7 +121,17 @@ La commande :
   Postgres:       published on 127.0.0.1:5432 only (POSTGRES_BIND=0.0.0.0 in .env to open it)
 ```
 
-Noter les mots de passe : celui du tableau de bord Traefik n'est affiché qu'une fois (`.env` n'en garde que l'empreinte). Ceux de Liberty et de pgAdmin restent dans `.env`.
+Noter les mots de passe : celui du tableau de bord Traefik n'est affiché qu'une fois (`.env` n'en garde que l'empreinte), de même que celui de l'administrateur de Liberty, qui n'est pas écrit dans `.env`. Le mot de passe de pgAdmin reste dans `.env`.
+
+### Le compte administrateur \{#admin-password\}
+
+Le récapitulatif indique ce que l'exécution a fait du compte **`admin`**. Si elle l'a créé, son mot de passe est affiché — celui choisi par l'installation, ou celui que le serveur a choisi lui-même quand `.env` existait déjà : après `./install.sh prepare`, après une première exécution arrêtée avant le démarrage de l'ensemble, après la suppression des volumes de données. Si le compte existait déjà, aucun mot de passe n'est affiché : le récapitulatif le signale et donne la commande qui en définit un nouveau.
+
+```text title="Quand le compte existait déjà"
+  Sign in to Liberty with the administrator account that was already there — its password is the one
+  shown when it was created; this run did not change it.
+    (Lost it? docker exec -u liberty liberty-next liberty-admin set-password admin --password <new>)
+```
 
 Ouvrir l'adresse de Liberty, se connecter en **`admin`**, puis poursuivre avec [la licence et les applications sous licence](./deploy-prebuilt-apps.md) et [le HTTPS](./traefik.md).
 
@@ -165,7 +175,7 @@ La clé de licence n'est pas une option : la coller dans **Liberty Next → Admi
 
 ### Relancer l'installation \{#rerun\}
 
-Relancer `./liberty install` sur un hôte qui a déjà un `.env` est sans risque : les secrets, les volumes et les fichiers compose enregistrés sont conservés, et l'ensemble est redémarré s'il était arrêté. Pour modifier ensuite le HTTPS ou les applications, utiliser `./liberty ssl …` et `./liberty apps …` plutôt qu'une nouvelle installation.
+Relancer `./liberty install` sur un hôte qui a déjà un `.env` est sans risque : les secrets, les volumes et les fichiers compose enregistrés sont conservés, et l'ensemble est redémarré s'il était arrêté ; le compte administrateur reste tel quel (voir [Le compte administrateur](#admin-password)). Pour modifier ensuite le HTTPS ou les applications, utiliser `./liberty ssl …` et `./liberty apps …` plutôt qu'une nouvelle installation.
 
 Si une installation précédente a laissé des volumes mais que son `.env` a disparu, l'installation refuse de démarrer : l'ancienne base a été créée avec des mots de passe que plus personne ne connaît. Restaurer l'ancien `.env`, ou tout effacer avec `./liberty install --reset` puis réinstaller.
 

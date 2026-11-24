@@ -61,7 +61,7 @@ Pour chaque utilisateur ou rôle du catalogue de sécurité JDE :
 |---|---|---|
 | **Utilisateur / Rôle** | `AUUSER` — identifiant JDE. | Soit un identifiant utilisateur, soit un identifiant rôle — JDE stocke les deux dans la même table. |
 | **Description** | `AUROLEDESC` — libellé. | Le libellé qui apparaît sur les écrans JDE et dans les rapports Nomajde. |
-| **Séquence** | `AUSEQNO` — numéro de séquence. | Ordre d'affichage quand un utilisateur détient plusieurs rôles — le numéro le plus bas l'emporte. |
+| **Séquence** | `AUSEQNO` — numéro de séquence. | Priorité quand un utilisateur détient plusieurs rôles — le rôle de séquence la plus élevée est lu en premier. |
 
 Autres attributs JDE portés par la ligne mais masqués par défaut : langue, courriel, dernière connexion, indicateur utilisateur intensif, marqueur action / inactif et les colonnes d'audit (programme, job, date, heure).
 
@@ -119,7 +119,7 @@ L'identification de l'utilisateur / rôle et les préférences d'affichage JDE (
 |---|---|
 | **Utilisateur / Rôle** | L'identifiant JDE — le sign-on user pour un utilisateur, le code rôle pour un rôle. Obligatoire. |
 | **Description** | Libellé qui apparaît sur les écrans JDE et dans les rapports Nomajde. |
-| **Séquence** | Ordre d'affichage quand un utilisateur détient plusieurs rôles — le numéro le plus bas d'abord. |
+| **Séquence** | Priorité quand un même utilisateur détient plusieurs rôles — la séquence la plus élevée d'abord. |
 
 Les champs d'affichage JDE (langue, pays, format de date, séparateur décimal, devise, fuseau, format d'heure, traçage OMW, droite-à-gauche, utilisateur intensif) gardent leur sémantique JDE. Les laisser vides pour hériter de la valeur par défaut JDE, ou les renseigner par utilisateur quand les règles de déploiement le demandent.
 
@@ -290,6 +290,7 @@ Pour une re-fusion système complète — récupération après une ré-importat
 ## Conseils & bonnes pratiques
 
 - **Utiliser *Importer la sécurité* pour onboarder un nouvel utilisateur** en clonant une référence — bien plus rapide que reconstruire le workbench à la main.
-- **La colonne *Séquence* compte** quand un utilisateur détient plusieurs rôles — JDE résout les droits effectifs selon l'ordre de séquence. Garder le rôle le plus restrictif au numéro de séquence le plus bas.
+- **La colonne *Séquence* compte** quand un utilisateur détient plusieurs rôles — JDE résout les droits effectifs dans l'ordre des séquences, de la plus élevée à la plus basse : la première règle trouvée pour un objet décide. Donner la séquence la plus élevée au rôle dont les règles doivent prévaloir.
 - **Maintenir utilisateurs et rôles au même endroit.** JDE les stocke tous deux dans *F00926* ; l'écran affiche les deux. Appliquer sa propre convention de nommage (par exemple `*_USER` pour les utilisateurs, `*_ROLE` pour les rôles) pour les séparer visuellement.
 - **Contrôler *Nomasx-1 → Conflits → Synthèse par utilisateur*** après l'onboarding d'un utilisateur, pour vérifier que les rôles rattachés ne créent pas de conflit SoD.
+- **Simuler un rôle avant de l'attribuer** : la [Simulation de la sécurité](./security-simulation.md) montre, avec *Rôles ajoutés*, ce que l'utilisateur y gagnerait, objet par objet — rien n'est écrit.

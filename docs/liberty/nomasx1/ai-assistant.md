@@ -76,14 +76,14 @@ Two tools, **both read-only**: they read what Nomasx-1 has collected, never chan
 | Tool | What it answers | For example |
 |---|---|---|
 | **A user's conflicts** (`nomasx1_user_conflicts`) | One user's segregation-of-duties conflicts, counted. | *What are JDOE's conflicts, and which role should I take away?* |
-| **Licence position** (`nomasx1_licence_position`) | Where the licences stand, for one application or all: subscribed against used, per component, and what the over-deployment is worth. | *Which components are over the subscription, and what is the exposure?* |
+| **Licence position** (`nomasx1_licence_position`) | Where the JD Edwards licences stand, for one application or all, as the [Licensing review](./licensing-review.md) reads them: missing seats, modules no line covers, lines counted another way, and the estimate. | *Which modules are missing seats, and what could it cost?* |
 
 ### A user's conflicts \{#user-conflicts\}
 
 Given a user ID — and an application when the user exists in several — the tool returns:
 
-- **the conflict lines** of the user, and how many of them are **proven**: both sides exercised, according to the activity log (see [Conflicts — Proven](./applications/conflicts/proven.md));
-- **the risks in conflict**, per process, with their level — the highest first, then the most proven;
+- **the conflict lines** of the user, and how many of them belong to a conflict the user **exercised**: both activities done, according to Object Usage Tracking, the activity log or the tables written — the same reading as the [Segregation of duties review](./sod-review.md#same-statement) and [Conflicts — Proven](./applications/conflicts/proven.md);
+- **the risks in conflict**, per process, with their level — the highest first, then the most exercised;
 - **the role, or the pair of roles, that gives both sides**, with what to do about it: one role on both sides is corrected in the role itself, and every holder is fixed; two roles together call for taking one away from the user, or for splitting the duties;
 - **the first conflict lines**, each with its two activities, objects and roles;
 - **the account**: its status, its creation date and its last login, per application.
@@ -92,12 +92,13 @@ A user with no conflict gets a note saying so — with a reminder to check the u
 
 ### Licence position \{#licence-position\}
 
-For one application, or every application the user may see, the tool returns:
+For one application, or every application the user may see, the tool reads the same position as the [Licensing review](./licensing-review.md) and returns:
 
-- **per application**: the **exposure** — the over-deployment at the list price plus three years of support, the same figure as the *Licence exposure* card of the [Audit synthesis](./audit-synthesis.md) —, how many components and how many users are over the subscription, and how many components over the subscription have no price;
-- **per component**, the most over-deployed first: the users, the active users, the subscribed quantity and the **gap** (negative = over the subscription), and its exposure when the component is priced.
+- **per application**: the people counted and on what basis — the modules they used, or the modules their security allows for those who signed in within the application's period —, the missing seats, the people on a module no line covers, and the **estimate** at public list price with three years of support;
+- **the lines that are full**, the **missing seats** and the **modules not covered**, per module, with their estimate;
+- **the lines counted another way** — revenue, employees, processors, Named User Plus — against what is declared or counted.
 
-The answer says how to read the gap and the exposure, so that the assistant words them the way the screens do. Without any licence usage collected, it says which collection to run (the job `nomasx1-collect-all`, preset *Licences*). The figures come from [Usage Report](./licenses/usage-report.md), [Financial Report](./licenses/financial-report.md) and the [Audit synthesis](./audit-synthesis.md).
+The answer always carries the same warning as the page: a reading of the contracts applied to what was collected, an assumption to discuss with Oracle, never a certified position — and the assistant says so. The rules are those of [How a contract is counted](./how-a-contract-is-counted.md).
 
 The lists are cut to what a model can read — 20 risks, 15 role pairs, 15 conflict lines, 40 components — and the answer says how many lines it left out. The full lists stay on the screens, where they can be exported.
 
@@ -109,7 +110,7 @@ The lists are cut to what a model can read — 20 risks, 15 role pairs, 15 confl
 |---|---|
 | **Run the Security & SoD assessment report** | Checks on **Last Refresh** that the SECURITY and SOD modules ran after the last change (and offers to run the collection), then walks through the [security report](./reports/security-sox.md): its parameters, its findings and their severity, and how to fix a self-conflicting role. |
 | **Run the licence audit** | Checks the inputs — contracts, prices, system codes — and the usage collected, then walks through the [licence audit report](./reports/audit-licences.md) and the sections to read first. |
-| **Investigate a segregation-of-duties conflict** | Starts from the user's conflict lines, tells a self-conflicting role from a pair of roles, puts the proven conflicts first, and has the collections run again after the change in the source system. |
+| **Investigate a segregation-of-duties conflict** | Starts from the user's conflict lines, tells a self-conflicting role from a pair of roles, puts the exercised conflicts first, and has the collections run again after the change in the source system. |
 
 ---
 
@@ -124,7 +125,7 @@ Five screens have questions of their own, which take the place of the applicatio
 | [Security → Users](./security/users.md) | *Which users in this list have not logged in for 90 days?* · *Which users here are privileged, technical or generic?* · *Explain the status and the dates of the user I clicked* |
 | [Conflicts → Summary](./applications/conflicts/summary.md) | *Which process carries the most conflicts?* · *Which risks are the most critical in this summary?* · *How do I fix a self-conflicting role?* |
 | [Conflicts → Details](./applications/conflicts/details.md) | *Which role pair explains the conflict I clicked?* · *Which users share the conflicts in this list?* |
-| [Licenses → Usage Report](./licenses/usage-report.md) | *Which components are over the subscribed quantity?* · *Which users count for the component I clicked?* · *How is the compliance gap computed?* |
+| [Reviews → Licences](./licensing-review.md) | *Which modules are missing seats?* · *Who uses a module no line covers?* · *How is a bundle counted?* |
 | **Last Refresh** | *Which module is the most out of date?* · *How do I refresh the security data?* |
 
 Every screen tells the assistant what is on it — the screen, its filters, the row clicked — so that *this user* or *the conflict I clicked* needs no explanation. The line under the assistant's header shows what is sent; its **×** stops it for as long as the user stays on the page.
@@ -133,7 +134,7 @@ Every screen tells the assistant what is on it — the screen, its filters, the 
 
 ## Who can use it \{#access\}
 
-A tool is offered to whoever reads the screens it stands on, **through the menu grants of their roles**: the conflicts tool to a role that opens **Applications → Conflicts → Details**, the licence tool to a role that opens **Licenses → Usage Report**. Nothing more to grant — the four [predefined roles](./overview.md#roles) (Auditor, Security officer, Licence manager, Administrator) have both, and the assistant itself needs `ai:chat`, which they hold as well.
+A tool is offered to whoever reads the screens it stands on, **through the menu grants of their roles**: the conflicts tool to a role that opens **Applications → Conflicts → Details**, the licence tool to a role that may read the licence position, as the [Licensing review](./licensing-review.md#access) does. Nothing more to grant — the four [predefined roles](./overview.md#roles) (Auditor, Security officer, Licence manager, Administrator) have both, and the assistant itself needs `ai:chat`, which they hold as well.
 
 The user's **data scope** applies as it does on the screens: a user limited to some applications gets the conflicts and the licences of those applications only, and *all applications* means all those the user may see.
 
@@ -143,4 +144,4 @@ The user's **data scope** applies as it does on the screens: a user limited to s
 
 - [AI assistant](../framework/ai-assistant.md) — how the assistant works in Liberty Next.
 - [MCP](../framework/mcp.md) — the same tools from Claude Desktop or Claude Code.
-- [Conflicts — Details](./applications/conflicts/details.md) · [Usage Report](./licenses/usage-report.md) · [Audit synthesis](./audit-synthesis.md).
+- [Conflicts — Details](./applications/conflicts/details.md) · [Licensing review](./licensing-review.md) · [Audit synthesis](./audit-synthesis.md).

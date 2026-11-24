@@ -130,9 +130,66 @@ Audit columns (`PROCESS_AUDIT_USER`, `PROCESS_AUDIT_DATE`) are kept on the row.
 
 ---
 
+## Edit dialog \{#edit-dialog\}
+
+**Add row** opens an empty form; a click on a row opens it, titled **Edit · Settings - Process (SOD)**, with **Delete**, **Duplicate**, **Cancel** and **Save**. **Bulk edit** changes several rows in the grid itself.
+
+<svg viewBox="0 0 1320 290" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdprod-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdprod-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdprod-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdprod-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="250" rx="14" fill="url(#sdprod-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Edit · Settings - Process (SOD)</text>
+  <rect x="1054" y="34" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1066" y="49" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="82" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APPLICATION ID</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">1 — JDE-PROD</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="128" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESS ID</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="149.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC001</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="174" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESS</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="195.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Order To Cash</text>
+  <line x1="220" y1="220" x2="1100" y2="220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="1033" y="234" width="47" height="22" rx="5" fill="url(#sdprod-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1056.5" y="248.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="968" y="234" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="996.5" y="248.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="887" y="234" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="923.5" y="248.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Duplicate</text>
+  <rect x="822" y="234" width="57" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="850.5" y="248.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
+  <rect x="20" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Keys</text>
+  <text x="30" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">read-only once saved</text>
+  <line x1="200" y1="91.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdprod-arrow)"/>
+  <rect x="1120" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Delete · Duplicate</text>
+  <text x="1130" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on a saved row</text>
+  <line x1="1120" y1="217.0" x2="923.5" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdprod-arrow)"/>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Application ID** | The application, picked from the list. |
+| **Process ID** | Short code of the process (`OTC001`, `PTP001`…), referenced by every other SoD setting. |
+| **Process** | Name of the process. |
+
+The keys — Application ID and Process ID — are read-only once the row is saved: to change one, delete the row and add it again.
+
+---
+
 ## Import from Excel \{#import\}
 
-The grid is read-only: a click on a row opens nothing. Rows are added and changed with **Import**, from an Excel (`.xlsx`) or `.csv` file whose columns match the grid's — the easiest way is to **Export** the grid, edit the file and import it back.
+Many rows at once are added or changed with **Import**, from an Excel (`.xlsx`) or `.csv` file whose columns match the grid's — the easiest way is to **Export** the grid, edit the file and import it back.
 
 <svg viewBox="0 0 1320 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>

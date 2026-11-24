@@ -133,9 +133,87 @@ C'est le paramètre SoD le plus opérationnellement critique : modifier une lign
 
 ---
 
+## Boîte de dialogue \{#edit-dialog\}
+
+**Ajouter une ligne** ouvre un formulaire vide ; un clic sur une ligne l'ouvre, sous le titre **Modifier · Paramètres - Matrice (SoD)**, avec **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**. **Modifier en lot** change plusieurs lignes directement dans la grille.
+
+<svg viewBox="0 0 1320 428" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdmatd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdmatd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdmatd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdmatd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="880" height="388" rx="14" fill="url(#sdmatd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Paramètres - Matrice (SoD)</text>
+  <rect x="1054" y="34" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1066" y="49" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
+  <line x1="220" y1="66" x2="1100" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="82" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ID APPLICATION</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="103.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">1 — JDE-PROD</text>
+  <rect x="240" y="88" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="128" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ID PROCESSUS</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="149.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC001 — Order To Cash</text>
+  <rect x="240" y="134" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="174" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIVITÉ 1 ID</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="195.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC02 — Process sales orders</text>
+  <rect x="240" y="180" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="220" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIVITÉ 2 ID</text>
+  <rect x="240" y="226" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="241.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTC05 — Process credit / debit notes</text>
+  <rect x="240" y="226" width="840" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="none"/>
+  <text x="240" y="266" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RISQUE ID</text>
+  <rect x="240" y="272" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="287.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">OTCR05 — An individual can create…  ▾</text>
+  <text x="240" y="312" fill="#64748b" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NIVEAU DE RISQUE</text>
+  <rect x="240" y="318" width="840" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="333.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">H</text>
+  <line x1="220" y1="358" x2="1100" y2="358" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="996" y="372" width="84" height="22" rx="5" fill="url(#sdmatd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1038.0" y="386.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="925" y="372" width="63" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="956.5" y="386.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="844" y="372" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="880.5" y="386.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Dupliquer</text>
+  <rect x="763" y="372" width="73" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="799.5" y="386.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="20" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clés</text>
+  <text x="30" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">figées une fois enregistrées</text>
+  <line x1="200" y1="91.0" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="20" y="267" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="282" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choisi dans une liste</text>
+  <text x="30" y="295" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les risques du processus</text>
+  <line x1="200" y1="284.0" x2="240" y2="284" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="1120" y="74" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="89" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Listes filtrées</text>
+  <text x="1130" y="102" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtrées sur les champs au-dessus</text>
+  <line x1="1120" y1="91.0" x2="1060" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+  <rect x="1120" y="338" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="353" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Supprimer · Dupliquer</text>
+  <text x="1130" y="366" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur une ligne enregistrée</text>
+  <line x1="1120" y1="355.0" x2="880.5" y2="383" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdmatd-arrow)"/>
+</svg>
+
+| Champ | Contenu |
+|---|---|
+| **ID application** | L'application, choisie dans la liste. |
+| **ID processus** | Le processus, choisi parmi ceux de l'application. |
+| **Activité 1 ID** · **Activité 2 ID** | Les deux activités incompatibles, choisies parmi celles du processus. |
+| **Risque ID** | Le risque que porte la paire, choisi parmi les risques du processus. Il reste modifiable sur une règle enregistrée. |
+| **Niveau de risque** | Niveau de la règle. |
+
+Les clés — ID application, ID processus et les deux activités — sont figées une fois la ligne enregistrée : pour en changer une, supprimer la ligne puis la recréer.
+
+---
+
 ## Import depuis Excel \{#import\}
 
-La grille est en lecture seule : un clic sur une ligne n'ouvre rien. Les lignes s'ajoutent et se modifient par **Importer**, depuis un fichier Excel (`.xlsx`) ou `.csv` dont les colonnes reprennent celles de la grille — le plus simple est d'**Exporter** la grille, de modifier le fichier puis de le réimporter.
+Pour ajouter ou modifier de nombreuses lignes d'un coup, **Importer** charge un fichier Excel (`.xlsx`) ou `.csv` dont les colonnes reprennent celles de la grille — le plus simple est d'**Exporter** la grille, de modifier le fichier puis de le réimporter.
 
 <svg viewBox="0 0 1320 310" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -203,6 +281,7 @@ Le fichier porte les colonnes suivantes :
 
 ## Conseils & bonnes pratiques
 
+- **[À corriger](../../security-analysis.md#consistency) signale les règles qui ne peuvent pas fonctionner** — un risque ou une activité manquant.
 - **Ajouter une ligne** génère de nouveaux conflits au prochain rafraîchissement — se coordonner avec l'administrateur sécurité et la RH.
 - **Retirer une ligne** efface les conflits existants au prochain rafraîchissement. Documenter la justification : un auditeur qui revoit le cadre SoD demandera pourquoi.
 - **Le niveau ici doit correspondre au niveau du catalogue *Risques*** — garder les deux alignés évite un rendu de tableau de bord confus.

@@ -8,7 +8,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, platform synthesis, monitoring, Server M
 
 **Platform synthesis**, right under **Overview** in the Nomajde menu, puts the JD Edwards EnterpriseOne platform on one page: six figures, then **what needs attention** across the three analyses of the Monitoring folder — [Platform analysis](./monitoring/platform-analysis.md), [Performance](./monitoring/performance.md) and [Database audit](./monitoring/database-audit.md) — in one list, the most serious first, and the [architecture](./monitoring/architecture.md) as it is found. It is the page to open first when the question is "how is the platform doing?"; each tab leads to the full page behind it. Two more tabs look further: **Capacity** — the size of the platform and how its figures move — and **Improvements** — what could be improved in the architecture. **Get the report (PDF)** writes it all as a document to share.
 
-Everything is read live, each time the page is opened or **Read again** is clicked; the page only reads. The history of the figures is what the *Platform snapshot* job keeps.
+Everything is read live the first time the page is opened; the page only reads. What it read is then kept while the browser session lasts: opening the page again draws it at once, and the header says when the oldest of its readings was made (*Read at 14:02*). **Read again** reads everything anew. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again. The history of the figures is what the *Platform snapshot* job keeps.
 
 ---
 
@@ -27,6 +27,7 @@ Everything is read live, each time the page is opened or **Read again** is click
   <text x="240" y="63" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The JD Edwards platform at a glance: what needs attention, its architecture, and what each analysis says.</text>
   <rect x="885" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="922.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
+  <text x="739" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Read at 14:02</text>
   <rect x="749" y="34" width="128" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="813.0" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
   <rect x="240.0" y="78" width="113.33333333333333" height="46" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -168,9 +169,9 @@ The **Capacity** tab says how large the platform is, how loaded it is, and how i
 
 ### The size of the platform
 
-Read now: the **processors** of the database server with its cores, its **memory** and its load, the **database size**, and the batch volume — **batch jobs a day** on average over the days with jobs, **the busiest day**, **batch jobs in error** and **batch jobs waiting now**. The database server's figures are read from an Oracle database only.
+Read now: the **processors** of the database server with its cores, its **memory** and its load, the **database size**, and the batch volume — **batch jobs a day** on average over the days with jobs, **the busiest day**, **batch jobs in error** and **batch jobs waiting now**. The database server's figures are read from an Oracle, SQL Server or Db2 database (Db2 for i included), each from its own dictionary.
 
-**Batch jobs per day** draws the jobs of the last 30 days, one bar per day, with the queues they went through. The batch figures come from JD Edwards' own job table, which keeps its history: nothing has to be collected first.
+**Batch jobs per day** draws the jobs of the last 30 days, one bar per day, with the queues they went through. The batch figures come from JD Edwards' own job table (F986110, in the server map), which keeps its history: nothing has to be collected first. On SQL Server, the table is looked for in the databases the pool names. When the JD Edwards database is reached through a database link, the table is read through the link the pool names under the key `SVM` in its **Database links** (see [Connectors → Schema and DB-link tokens](../framework/connectors.md#schema-and-db-link-tokens)); when the pool names no `SVM` library, the table is looked for in the remote database's dictionary.
 
 ### The servers and their size
 
@@ -308,7 +309,7 @@ The block lists the fifteen checks with their outcome — **a proposal**, **noth
 
 ## Get the report \{#report\}
 
-**Get the report (PDF)**, at the top of the page, writes the Platform synthesis as a document for a reader who was not in front of the page, in the page's language: what needs attention, the architecture on a landscape page with each server's size and where each figure comes from, the capacity (the size of the platform, the batch jobs per day, how the figures moved) and what could be improved. A source that did not answer is named in the document.
+**Get the report (PDF)**, at the top of the page, writes the Platform synthesis as a document for a reader who was not in front of the page, in the page's language: what needs attention, the architecture on a landscape page with each server's size and where each figure comes from, the capacity (the size of the platform, the batch jobs per day, how the figures moved) and what could be improved. The database sections take the words of the database read (*Data files*, *Transaction logs*, *Disk pools*, *Journals*…). A source that did not answer is named in the document.
 
 The same document is on the **Reports** page (*JD Edwards platform synthesis*), with the language, the customer name written on the cover and **With the OCI estimate**: the [OCI target](./monitoring/oci-target.md) and its estimate are then added as a chapter, with their own choices (currency, licence, edition, high availability, recovery site, non-production platforms). The *Platform synthesis report* job sends it by mail every month (see [Jobs](./jobs.md)).
 

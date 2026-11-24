@@ -87,7 +87,7 @@ Liberty Next est en développement actif — de nouvelles fonctionnalités sorte
 
 | Domaine | Ce que le framework fournit |
 |---|---|
-| **Sources de données** | Pools SQL (PostgreSQL, Oracle, SQLite) et endpoints HTTP, déclarés en TOML sous `config/`. |
+| **Sources de données** | Pools SQL (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, Db2 for i, SQLite) et endpoints HTTP, déclarés en TOML sous `config/`. |
 | **Découverte de schéma** | Les colonnes sont lues à l'exécution depuis le curseur de la requête ; le dictionnaire ajoute libellés, formats et règles d'affichage par colonne. |
 | **Écrans** | Une entrée [`Screen`](/liberty/framework/build/screens/overview/) par objet métier : grille, formulaire modal, conditions par champ, onglet d'audit. |
 | **Tableaux de bord** | [Graphiques et indicateurs](/liberty/framework/dashboards) au-dessus des mêmes requêtes nommées — barres, lignes, camemberts, panneaux numériques. |

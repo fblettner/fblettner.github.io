@@ -1,12 +1,12 @@
 ---
-title: Segregation of duties
-description: "The Nomasx-1 Segregation-of-duties monitoring dashboard: users in conflict, conflict lines, conflicts proven by activity and roles involved, the conflicts per refresh by risk level, the risks hit, the role pairs behind them, the users with the most conflicts, per process, and the links to the conflict screens and the Explorer."
-keywords: [Nomasx-1, segregation of duties, SoD, dashboard, conflicts, proven conflicts, risks, role pairs, trend, risk level, monitoring]
+title: "Segregation of duties: trend"
+description: "The Nomasx-1 Segregation-of-duties monitoring dashboard: users in conflict, conflict lines, conflicts exercised and roles involved, the conflicts per refresh by risk level, the risks hit, the role pairs behind them, the users with the most conflicts, per process, and the links to the conflict screens and the Explorer."
+keywords: [Nomasx-1, segregation of duties, SoD, dashboard, conflicts, exercised conflicts, proven conflicts, risks, role pairs, trend, risk level, monitoring]
 ---
 
-# Segregation of duties
+# Segregation of duties: trend
 
-**Segregation of duties**, right under **Overview** in the Nomasx-1 menu, follows the conflicts the [SoD matrix](./settings/sod/matrix.md) finds in the access of every connected application: how many, which risks, which roles cause them, which conflicts were actually exercised, and how it evolves from one refresh to the next.
+**Segregation of duties: trend**, in the **Reviews** folder of the Nomasx-1 menu, follows the conflicts the [SoD matrix](./settings/sod/matrix.md) finds in the access of every connected application: how many, which risks, which roles cause them, which conflicts were actually exercised, and how it evolves from one refresh to the next.
 
 ---
 
@@ -52,10 +52,10 @@ keywords: [Nomasx-1, segregation of duties, SoD, dashboard, conflicts, proven co
   <text x="464.5" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">1,204</text>
   <text x="464.5" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">18 risks hit in 4 processes</text>
   <rect x="665.0" y="158" width="202.5" height="90" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="677.0" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Proven by activity</text>
-  <text x="677.0" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Both activities actually used</text>
+  <text x="677.0" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Exercised</text>
+  <text x="677.0" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Both activities done by the user</text>
   <text x="677.0" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">9 users</text>
-  <text x="677.0" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">41 proven conflict lines</text>
+  <text x="677.0" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">41 conflicts exercised (user × rule)</text>
   <rect x="877.5" y="158" width="202.5" height="90" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="889.5" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Roles involved</text>
   <text x="889.5" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Roles carrying one side of a conflict</text>
@@ -262,10 +262,10 @@ The **Period** — *Last 12 months* when the page opens — applies to the trend
 |---|---|---|
 | **Users in conflict** — at the latest refresh | The users carrying at least one conflict. | The privileged ones, and the date of the latest refresh. |
 | **Conflict lines** — user × risk × activity pair | Every conflict found. | The risks hit and the processes concerned. |
-| **Proven by activity** — both conflicting activities actually used | The users who used both sides of a conflict, according to the activity log. | The proven conflict lines. |
+| **Exercised** — both conflicting activities done by the user: usage tracking, activity log or tables written | The users who did both sides of a conflict. | The conflicts exercised (user × rule). |
 | **Roles involved** — roles carrying one side of a conflict | The roles involved. | The role pairs behind the conflicts. |
 
-A conflict is **proven** when the user's activity log shows transactions on the objects of both incompatible activities: the risk is not theoretical. It needs the activity log to be collected.
+A conflict is **exercised** when what was collected shows the user did both incompatible activities — ran both programs (Object Usage Tracking), wrote through both programs (activity log) or wrote tables of both programs — at the strength of its weaker side. The figure reads the same statement as the [Segregation of duties review](./sod-review.md#same-statement), which shows these conflicts one by one with their evidence.
 
 ---
 
@@ -291,5 +291,6 @@ Each widget shows only when the user may run its query, and the row-level scope 
 ## Related
 
 - [Overview — Audit synthesis](./audit-synthesis.md) — the synthesis of the whole application.
+- [Segregation of duties review](./sod-review.md) — the conflicts exercised, with their evidence.
 - [Security review](./security-review.md) — the accounts and rights to review.
 - [Jobs](./jobs.md) — refresh the conflicts: *Collect security and SoD*.

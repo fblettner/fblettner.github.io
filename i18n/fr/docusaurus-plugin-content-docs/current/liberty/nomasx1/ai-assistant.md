@@ -76,14 +76,14 @@ Deux outils, **tous deux en lecture seule** : ils lisent ce que Nomasx-1 a colle
 | Outil | Ce qu'il donne | Par exemple |
 |---|---|---|
 | **Les conflits d'un utilisateur** (`nomasx1_user_conflicts`) | Les conflits de séparation des tâches d'un utilisateur, décomptés. | *Quels sont les conflits de JDOE, et quel rôle faut-il lui retirer ?* |
-| **La situation des licences** (`nomasx1_licence_position`) | L'état des licences, pour une application ou pour toutes : souscrit et utilisé, par composant, et la valeur du dépassement. | *Quels composants dépassent la souscription, et quelle est l'exposition ?* |
+| **La situation des licences** (`nomasx1_licence_position`) | L'état des licences JD Edwards, pour une application ou pour toutes, tel que le lit la [revue des licences](./licensing-review.md) : licences manquantes, modules qu'aucune ligne ne couvre, lignes comptées autrement, et l'estimation. | *Quels modules manquent de licences, et combien cela pourrait-il coûter ?* |
 
 ### Les conflits d'un utilisateur \{#user-conflicts\}
 
 À partir d'un identifiant d'utilisateur — et d'une application quand l'utilisateur existe dans plusieurs —, l'outil renvoie :
 
-- **les lignes de conflit** de l'utilisateur, et combien sont **avérées** : les deux côtés exercés, d'après le suivi d'activité (voir [Conflits — Avérés](./applications/conflicts/proven.md)) ;
-- **les risques en conflit**, par processus, avec leur niveau — le plus élevé d'abord, puis les plus avérés ;
+- **les lignes de conflit** de l'utilisateur, et combien appartiennent à un conflit qu'il a **exercé** : les deux activités faites, d'après Object Usage Tracking, le journal d'activité ou les tables écrites — la même lecture que la [Revue de la séparation des tâches](./sod-review.md#same-statement) et [Conflits — Avérés](./applications/conflicts/proven.md) ;
+- **les risques en conflit**, par processus, avec leur niveau — le plus élevé d'abord, puis les plus exercés ;
 - **le rôle, ou la paire de rôles, qui donne les deux côtés**, avec la conduite à tenir : un rôle présent des deux côtés se corrige dans le rôle lui-même, ce qui règle le cas de tous ses titulaires ; deux rôles combinés appellent le retrait de l'un d'eux à l'utilisateur, ou une séparation des tâches ;
 - **les premières lignes de conflit**, chacune avec ses deux activités, ses deux objets et ses deux rôles ;
 - **le compte** : son statut, sa date de création et sa dernière connexion, par application.
@@ -92,12 +92,13 @@ Un utilisateur sans conflit reçoit une note qui le dit — avec un rappel : vé
 
 ### La situation des licences \{#licence-position\}
 
-Pour une application, ou pour toutes celles que l'utilisateur peut voir, l'outil renvoie :
+Pour une application, ou pour toutes celles que l'utilisateur peut voir, l'outil lit la même position que la [revue des licences](./licensing-review.md) et renvoie :
 
-- **par application** : l'**exposition** — le dépassement au prix catalogue, plus trois ans de support, soit le même chiffre que la carte *Exposition licences* de la [Synthèse d'audit](./audit-synthesis.md) —, le nombre de composants et d'utilisateurs au-delà de la souscription, et le nombre de composants en dépassement sans prix ;
-- **par composant**, le plus en dépassement d'abord : les utilisateurs, les utilisateurs actifs, la quantité souscrite et l'**écart** (négatif = au-delà de la souscription), ainsi que son exposition quand le composant a un prix.
+- **par application** : les personnes comptées et la base retenue — les modules qu'elles ont utilisés, ou ceux que leur sécurité autorise pour les utilisateurs connectés pendant la période de l'application —, les licences manquantes, les personnes sur un module qu'aucune ligne ne couvre, et l'**estimation** au prix public avec trois ans de support ;
+- **les lignes pleines**, les **licences manquantes** et les **modules non couverts**, par module, avec leur estimation ;
+- **les lignes comptées autrement** — chiffre d'affaires, employés, processeurs, Named User Plus — face à ce qui est déclaré ou compté.
 
-La réponse précise comment lire l'écart et l'exposition, pour que l'assistant les formule comme les écrans. Sans aucune utilisation de licence collectée, elle indique la collecte à lancer (la tâche `nomasx1-collect-all`, préréglage *Licences*). Les chiffres sont ceux du [Rapport d'utilisation](./licenses/usage-report.md), du [Rapport financier](./licenses/financial-report.md) et de la [Synthèse d'audit](./audit-synthesis.md).
+La réponse porte toujours le même avertissement que la page : une lecture des contrats appliquée à ce qui a été collecté, une hypothèse à discuter avec Oracle, jamais une position certifiée — et l'assistant le dit. Les règles sont celles de [Lecture d'un contrat](./how-a-contract-is-counted.md).
 
 Les listes sont réduites à ce qu'un modèle peut lire — 20 risques, 15 paires de rôles, 15 lignes de conflit, 40 composants — et la réponse indique combien de lignes elle a laissées de côté. Les listes complètes restent sur les écrans, où elles s'exportent.
 
@@ -109,7 +110,7 @@ Les listes sont réduites à ce qu'un modèle peut lire — 20 risques, 15 paire
 |---|---|
 | **Lancer le rapport d'évaluation Sécurité & SoD** | Vérifie dans **Dernière collecte** que les modules SECURITY et SOD ont été collectés après la dernière modification (et propose de lancer la collecte), puis guide dans le [rapport de sécurité](./reports/security-sox.md) : ses paramètres, ses constats et leur gravité, et la correction d'un rôle en conflit avec lui-même. |
 | **Lancer l'audit des licences** | Vérifie les données d'entrée — contrats, prix, codes système — et l'utilisation collectée, puis guide dans le [rapport d'audit des licences](./reports/audit-licences.md) et les sections à lire en premier. |
-| **Analyser un conflit de séparation des tâches** | Part des lignes de conflit de l'utilisateur, distingue un rôle en conflit avec lui-même d'une paire de rôles, traite d'abord les conflits avérés, et fait relancer les collectes après la modification dans le système source. |
+| **Analyser un conflit de séparation des tâches** | Part des lignes de conflit de l'utilisateur, distingue un rôle en conflit avec lui-même d'une paire de rôles, traite d'abord les conflits exercés, et fait relancer les collectes après la modification dans le système source. |
 
 ---
 
@@ -124,7 +125,7 @@ Cinq écrans ont leurs propres questions, qui remplacent celles de l'application
 | [Sécurité → Utilisateurs](./security/users.md) | *Quels utilisateurs de cette liste ne se sont pas connectés depuis 90 jours ?* · *Quels utilisateurs ici sont à privilèges, techniques ou génériques ?* · *Explique le statut et les dates de l'utilisateur que j'ai cliqué* |
 | [Conflits → Synthèse](./applications/conflicts/summary.md) | *Quel processus porte le plus de conflits ?* · *Quels risques sont les plus critiques dans ce résumé ?* · *Comment corriger un rôle auto-conflictuel ?* |
 | [Conflits → Détails](./applications/conflicts/details.md) | *Quelle paire de rôles explique le conflit que j'ai cliqué ?* · *Quels utilisateurs partagent les conflits de cette liste ?* |
-| [Licences → Rapport d'utilisation](./licenses/usage-report.md) | *Quels composants dépassent la quantité souscrite ?* · *Quels utilisateurs comptent pour le composant que j'ai cliqué ?* · *Comment l'écart de conformité est-il calculé ?* |
+| [Revues → Licences](./licensing-review.md) | *Quels modules manquent de licences ?* · *Qui utilise un module qu'aucune ligne ne couvre ?* · *Comment un bundle est-il compté ?* |
 | **Dernière collecte** | *Quel module est le plus en retard ?* · *Comment rafraîchir les données de sécurité ?* |
 
 Chaque écran indique à l'assistant ce qui est affiché — l'écran, ses filtres, la ligne cliquée : *cet utilisateur* ou *le conflit que j'ai cliqué* n'ont pas besoin d'être expliqués. La ligne sous l'en-tête de l'assistant montre ce qui est transmis ; sa **×** l'interrompt tant que l'utilisateur reste sur la page.
@@ -133,7 +134,7 @@ Chaque écran indique à l'assistant ce qui est affiché — l'écran, ses filtr
 
 ## Qui peut s'en servir \{#access\}
 
-Un outil est proposé à qui lit les écrans sur lesquels il s'appuie, **par les accès aux menus de ses rôles** : l'outil des conflits à un rôle qui ouvre **Applications → Conflits → Détails**, l'outil des licences à un rôle qui ouvre **Licences → Rapport d'utilisation**. Rien d'autre à accorder — les quatre [rôles prédéfinis](./overview.md#roles) (Auditeur, Responsable sécurité, Gestionnaire des licences, Administrateur) disposent des deux, et l'assistant lui-même demande `ai:chat`, qu'ils détiennent aussi.
+Un outil est proposé à qui lit les écrans sur lesquels il s'appuie, **par les accès aux menus de ses rôles** : l'outil des conflits à un rôle qui ouvre **Applications → Conflits → Détails**, l'outil des licences à un rôle qui peut lire la position de licences, comme pour la [revue des licences](./licensing-review.md#access). Rien d'autre à accorder — les quatre [rôles prédéfinis](./overview.md#roles) (Auditeur, Responsable sécurité, Gestionnaire des licences, Administrateur) disposent des deux, et l'assistant lui-même demande `ai:chat`, qu'ils détiennent aussi.
 
 Le **périmètre de données** de l'utilisateur s'applique comme sur les écrans : un utilisateur limité à certaines applications n'obtient que les conflits et les licences de celles-ci, et *toutes les applications* désigne toutes celles qu'il peut voir.
 
@@ -143,4 +144,4 @@ Le **périmètre de données** de l'utilisateur s'applique comme sur les écrans
 
 - [Assistant IA](../framework/ai-assistant.md) — le fonctionnement de l'assistant dans Liberty Next.
 - [MCP](../framework/mcp.md) — les mêmes outils depuis Claude Desktop ou Claude Code.
-- [Conflits — Détails](./applications/conflicts/details.md) · [Rapport d'utilisation](./licenses/usage-report.md) · [Synthèse d'audit](./audit-synthesis.md).
+- [Conflits — Détails](./applications/conflicts/details.md) · [Revue des licences](./licensing-review.md) · [Synthèse d'audit](./audit-synthesis.md).

@@ -27,6 +27,7 @@ The same diagram is the **Architecture** tab of the [Platform synthesis](../synt
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The JD Edwards platform as it is found now: what Server Manager declares, and what only the database shows.</text>
   <rect x="1005" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
+  <text x="723" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Read at 14:02</text>
   <rect x="896" y="34" width="101" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="946.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Download as SVG</text>
   <rect x="733" y="34" width="155" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -214,6 +215,8 @@ Five figures head the page: **instances running** (out of those Server Manager d
 
 Under them, each source of the diagram says whether it was read: **Server Manager instances**, **Business function calls**, **JD Edwards pool**, **Database instance**, **Database sessions** — *read*, *not read* or *not read on this database*. A source that did not answer is named in a warning with the reason, and the rest is still drawn.
 
+What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again** reads anew. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+
 ---
 
 ## The diagram \{#diagram\}
@@ -224,7 +227,7 @@ One column per tier, left to right — a tier with nothing in it is not drawn:
 |---|---|
 | **Web and AIS** | The web servers and the AIS servers, and the **application server** they run in — WebLogic or WebSphere, with its version (*Application server · WebLogic 14.1.1*). |
 | **Enterprise servers** | The enterprise servers. |
-| **Database** | The database the JD Edwards connection points at: its product and version, its sessions. |
+| **Database** | The database the JD Edwards connection points at: its product (Oracle, SQL Server, Db2, Db2 for i…) and version, its sessions. |
 | **Other database clients** | The other machines connected to the database — a tool, an interface: the busiest ones one by one, the rest gathered on one card (*12 other machines*). |
 | **Other servers** | The instances of another type. |
 | **Administration** | The Server Manager console. |
@@ -269,7 +272,7 @@ The diagram is drawn from what was read:
 
 - **Server Manager does not answer** — the servers shown are those the database sessions name, and the page says that what is declared is not known;
 - **the database sessions are not read** — who connects to the database is not shown;
-- **the database is not Oracle** — the database audit is not read, but the pool still says where the database is;
+- **the database is none of Oracle, SQL Server and Db2** — the database audit is not read, but the pool still says where the database is;
 - **nothing answers** — the page says that neither Server Manager nor the database answered.
 
 ---

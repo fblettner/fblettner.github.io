@@ -54,7 +54,7 @@ Une interface plus rapide pour les utilisateurs d'un ERP, qui lit et écrit sa b
 
 | Fourni | Référence |
 |---|---|
-| Pools Oracle, SQL Server et PostgreSQL ; mode thick Oracle pour les serveurs anciens | [Connecteurs](./connectors.md#oracle-thick) |
+| Pools PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2 et Db2 for i (IBM i, AS/400) ; mode thick Oracle pour les serveurs anciens | [Connecteurs](./connectors.md#pool-sql-server-db2) |
 | Une même application sur plusieurs environnements (développement, recette, production) grâce au sélecteur **Pool** | [Connecteurs multi-pools](./connectors.md#multi-pool) |
 | Conventions JD Edwards : dates juliennes, codes cadrés à droite, reprise du dictionnaire de données | [Dictionnaire](./dictionary.md#formats), [Analyser une table](./dictionary.md#scan-a-table) |
 | Écrans en lecture seule, écriture activée écran par écran | [Écrans](./build/screens/overview.md) |

@@ -25,6 +25,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">What slows the JD Edwards platform down now, and what to look at first.</text>
   <rect x="885" y="34" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="922.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
+  <text x="875" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Read at 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="86" width="137.6" height="40" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="105" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">12,480</text>
@@ -120,7 +121,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
 
 Nine figures head the page: **business function calls**, **seconds spent in them**, **ms per call**, **timeouts**, **requests waiting**, **% Java heap, highest**, **% cache hits, lowest**, **% database cache hits** and **sessions blocked**. A figure turns amber or red past its threshold.
 
-**Read again**, at the top right, reads everything once more.
+What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again**, at the top right, reads everything once more. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
 
 ---
 
@@ -155,7 +156,7 @@ Most lines carry a **Details** button, at their right: it reads, live, the rows 
 | Zombie processes, kernel with requests waiting, open transactions | The processes of the enterprise server named — the zombies themselves when Server Manager says which they are, otherwise every process of the server. |
 | Java heap, server step, cache | The nodes, the business function calls or the caches of the server named. |
 
-A database detail is read from an Oracle database only; on another database the line says so. Like the rest of the page, **Details** only reads: no AWR, no ASH.
+A database detail is read from Oracle, SQL Server and Db2 (Db2 for i included), each in its own words; a line a database has no rows for says *This detail is not read on this database.* On an IBM i, which counts the jobs waiting on a lock without saying for how long, the line gives how many jobs wait and how many hold them. Like the rest of the page, **Details** only reads: on Oracle, no AWR, no ASH.
 
 ---
 
@@ -166,7 +167,7 @@ The box at the bottom of the page states its limits:
 - every figure is the present moment or a counter since the servers started: there is no history yet, so the page says what is slow, not since when;
 - the thresholds: a function is flagged from a share of the time measured or a time per call, a Java heap from 80 %, a cache under 80 % of hits, a statement from a time per execution, the database cache under 90 %;
 - the timeouts are the business functions' own counters — the enterprise server's log files are not reachable through Server Manager;
-- the database is read from its own counters, without the Diagnostics Pack: no AWR, no ASH.
+- the database is read from its own counters — on Oracle without the Diagnostics Pack: no AWR, no ASH.
 
 ---
 

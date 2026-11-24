@@ -1,12 +1,12 @@
 ---
-title: Séparation des tâches
-description: "Le tableau de bord de suivi de la séparation des tâches de Nomasx-1 : utilisateurs en conflit, lignes de conflit, conflits avérés par l'activité et rôles impliqués, les conflits par rafraîchissement et par niveau de risque, les risques touchés, les paires de rôles en cause, les utilisateurs les plus en conflit, le détail par processus, et les liens vers les écrans de conflits et l'explorateur."
-keywords: [Nomasx-1, séparation des tâches, SoD, tableau de bord, conflits, conflits avérés, risques, paires de rôles, tendance, niveau de risque, suivi]
+title: "Séparation des tâches : évolution"
+description: "Le tableau de bord de suivi de la séparation des tâches de Nomasx-1 : utilisateurs en conflit, lignes de conflit, conflits exercés et rôles impliqués, les conflits par rafraîchissement et par niveau de risque, les risques touchés, les paires de rôles en cause, les utilisateurs les plus en conflit, le détail par processus, et les liens vers les écrans de conflits et l'explorateur."
+keywords: [Nomasx-1, séparation des tâches, SoD, tableau de bord, conflits, conflits exercés, conflits avérés, risques, paires de rôles, tendance, niveau de risque, suivi]
 ---
 
-# Séparation des tâches
+# Séparation des tâches : évolution
 
-**Séparation des tâches**, juste sous **Vue d'ensemble** dans le menu de Nomasx-1, suit les conflits que la [matrice SoD](./settings/sod/matrix.md) détecte dans les accès de chaque application connectée : combien, quels risques, quels rôles les provoquent, quels conflits ont réellement été exercés, et leur évolution d'un rafraîchissement à l'autre.
+**Séparation des tâches : évolution**, dans le dossier **Revues** du menu de Nomasx-1, suit les conflits que la [matrice SoD](./settings/sod/matrix.md) détecte dans les accès de chaque application connectée : combien, quels risques, quels rôles les provoquent, quels conflits ont réellement été exercés, et leur évolution d'un rafraîchissement à l'autre.
 
 ---
 
@@ -52,10 +52,10 @@ keywords: [Nomasx-1, séparation des tâches, SoD, tableau de bord, conflits, co
   <text x="464.5" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">1 204</text>
   <text x="464.5" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">18 risques touchés dans 4 processus</text>
   <rect x="665.0" y="158" width="202.5" height="90" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="677.0" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Avérés par l'activité</text>
-  <text x="677.0" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Les deux activités réellement utilisées</text>
+  <text x="677.0" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Exercés</text>
+  <text x="677.0" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Les deux activités faites par l'utilisateur</text>
   <text x="677.0" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">9 utilisateurs</text>
-  <text x="677.0" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">41 lignes de conflit avérées</text>
+  <text x="677.0" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">41 conflits exercés (utilisateur × règle)</text>
   <rect x="877.5" y="158" width="202.5" height="90" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="889.5" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Rôles impliqués</text>
   <text x="889.5" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Rôles portant un côté d'un conflit</text>
@@ -262,10 +262,10 @@ La **Période** — *12 derniers mois* à l'ouverture — s'applique au graphiqu
 |---|---|---|
 | **Utilisateurs en conflit** — au dernier rafraîchissement | Les utilisateurs porteurs d'au moins un conflit. | Ceux à privilèges, et la date du dernier rafraîchissement. |
 | **Lignes de conflit** — utilisateur × risque × paire d'activités | Chaque conflit relevé. | Les risques touchés et les processus concernés. |
-| **Avérés par l'activité** — les deux activités en conflit réellement utilisées | Les utilisateurs qui ont utilisé les deux côtés d'un conflit, d'après le journal d'activité. | Les lignes de conflit avérées. |
+| **Exercés** — les deux activités en conflit faites par l'utilisateur : suivi d'utilisation, journal d'activité ou tables écrites | Les utilisateurs qui ont fait les deux côtés d'un conflit. | Les conflits exercés (utilisateur × règle). |
 | **Rôles impliqués** — rôles portant un côté d'un conflit | Les rôles en cause. | Les paires de rôles à l'origine des conflits. |
 
-Un conflit est **avéré** quand le journal d'activité de l'utilisateur montre des transactions sur les objets des deux activités incompatibles : le risque n'est plus théorique. Cela suppose la collecte du journal d'activité.
+Un conflit est **exercé** quand les données collectées montrent que l'utilisateur a fait les deux activités incompatibles — lancé les deux programmes (Object Usage Tracking), écrit par les deux programmes (journal d'activité) ou écrit dans des tables des deux programmes — au niveau de son côté le plus faible. L'indicateur lit la même requête que la [Revue de la séparation des tâches](./sod-review.md#same-statement), qui présente ces conflits un par un avec leur preuve.
 
 ---
 
@@ -291,5 +291,6 @@ Chaque widget ne s'affiche que si l'utilisateur peut lancer sa requête, et le p
 ## Voir aussi
 
 - [Vue d'ensemble — Synthèse d'audit](./audit-synthesis.md) — la synthèse de toute l'application.
+- [Revue de la séparation des tâches](./sod-review.md) — les conflits exercés, avec leur preuve.
 - [Revue de sécurité](./security-review.md) — les comptes et droits à revoir.
 - [Tâches](./jobs.md) — rafraîchir les conflits : *Collecter la sécurité et la SoD*.

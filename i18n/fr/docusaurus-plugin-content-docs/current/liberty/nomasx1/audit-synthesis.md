@@ -278,7 +278,7 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
 | **Séparation des tâches** — utilisateurs porteurs d'un conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
 | **Exposition licences** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
 
-L'exposition s'appuie sur les [licences souscrites](./licenses/subscribed.md) et le [catalogue de prix](./settings/pricing/pricing.md) : un composant sans prix compte pour zéro.
+L'exposition s'appuie sur les [licences souscrites](./licenses/subscribed-licences.md) et le [catalogue de prix](./settings/pricing/pricing.md) : un composant sans prix compte pour zéro.
 
 ---
 
@@ -314,7 +314,7 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 | **Utilisateurs transactionnels par mois** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
 | **Utilisateurs les plus en conflit** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |
 
-Le détail derrière chaque widget se trouve dans les écrans : [Conflits](./applications/conflicts/summary.md), [Utilisateurs](./security/users.md), [Rôles](./security/roles.md), [Rapport d'utilisation](./licenses/usage-report.md), [Rapport financier](./licenses/financial-report.md).
+Le détail derrière chaque widget se trouve dans les écrans : [Conflits](./applications/conflicts/summary.md), [Utilisateurs](./security/users.md), [Rôles](./security/roles.md), [Revue des licences](./licensing-review.md).
 
 ---
 

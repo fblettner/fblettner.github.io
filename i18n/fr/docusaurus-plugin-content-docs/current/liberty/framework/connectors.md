@@ -167,7 +167,7 @@ Un pool est une connexion de l'installation, définie dans **Liberty Next → Ad
 
 | Type | URL | Désigné par |
 |---|---|---|
-| **Une base de données** — PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite | `postgresql+asyncpg://…`, `oracle+oracledb://…` | Les connecteurs SQL, les étapes de tâche, l'environnement d'un écran. |
+| **Une base de données** — PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, Db2 for i (IBM i, AS/400), SQLite | `postgresql+asyncpg://…`, `oracle+oracledb://…`, `mssql+pymssql://…`, `db2+ibm_db://…`, `ibmi://…` | Les connecteurs SQL, les étapes de tâche, l'environnement d'un écran. |
 | **Un serveur HTTP** | `http://…` ou `https://…` | Les connecteurs API et chacun de leurs environnements — voir [Un serveur HTTP](#pool-http). |
 | **Un annuaire LDAP** | `ldap://…` ou `ldaps://…` | L'étape `ldap_sync` d'une tâche et le code d'une application — voir [Un annuaire LDAP](#pool-ldap). |
 
@@ -244,17 +244,19 @@ La liste indique la cible de chaque pool — `postgresql · hôte:5432 / base`, 
   <text x="880" y="240" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PORT</text>
   <rect x="880" y="246" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="889" y="261.5" fill="#e2e8f0" fontSize="9.5" fontFamily="system-ui, sans-serif">8443</text>
-  <rect x="470" y="276" width="192" height="164" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
-  <text x="482" y="292.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">PostgreSQL</text>
-  <text x="482" y="310.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">Oracle</text>
-  <text x="482" y="329.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MySQL</text>
-  <text x="482" y="347.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">MariaDB</text>
-  <text x="482" y="366.0" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQL Server</text>
-  <text x="482" y="384.5" fill="#cbd5e1" fontSize="9.2" fontFamily="system-ui, sans-serif">SQLite</text>
-  <text x="482" y="403.0" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">LDAP directory</text>
-  <rect x="472" y="409.5" width="188" height="17" rx="4" fill="rgba(74,158,255,0.14)"/>
-  <text x="482" y="421.5" fill="#4a9eff" fontSize="9.2" fontWeight="700" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
-  <text x="650" y="421.5" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">✓</text>
+  <rect x="470" y="276" width="192" height="172" rx="6" fill="#111827" stroke="#334155" strokeWidth="1"/>
+  <text x="482" y="291.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">PostgreSQL</text>
+  <text x="482" y="307.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Oracle</text>
+  <text x="482" y="324.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">MySQL</text>
+  <text x="482" y="340.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">MariaDB</text>
+  <text x="482" y="357.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">SQL Server</text>
+  <text x="482" y="373.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Db2</text>
+  <text x="482" y="390.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Db2 for i (IBM i, AS/400)</text>
+  <text x="482" y="406.5" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">SQLite</text>
+  <text x="482" y="423.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">LDAP directory</text>
+  <rect x="472" y="428.0" width="188" height="16" rx="4" fill="rgba(74,158,255,0.14)"/>
+  <text x="482" y="439.5" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">HTTP server (an API)</text>
+  <text x="650" y="439.5" fill="#4a9eff" fontSize="9" fontFamily="system-ui, sans-serif">✓</text>
   <text x="675" y="290" fill="#94a3b8" fontSize="8" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHEMIN DE BASE</text>
   <rect x="675" y="296" width="192" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="684" y="311.5" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">api/v2</text>
@@ -276,7 +278,7 @@ La liste indique la cible de chaque pool — `postgresql · hôte:5432 / base`, 
   <line x1="200" y1="273.0" x2="256" y2="238" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
   <rect x="20" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le type</text>
-  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">huit types, une seule liste</text>
+  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dix types, une seule liste</text>
   <line x1="200" y1="367.0" x2="470" y2="380" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pol-arrow)"/>
   <rect x="1120" y="40" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="55" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tester la connexion</text>
@@ -302,12 +304,50 @@ Le pool choisi est dessiné en cartes d'étape, chacune résumant son contenu : 
 
 | Étape | Champs |
 |---|---|
-| **Base de données** | L'adresse, saisie comme une adresse : le **Type de base** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, SQLite, *LDAP directory*, *HTTP server (an API)*), l'**Hôte**, le **Port**, et le nom propre au type — **Base**, un **Nom de service** Oracle (un **SID** si l'URL est écrite ainsi), un **Fichier** SQLite, le **DN de base** d'un annuaire, le **Chemin de base** d'un serveur. Choisir un autre type y fait passer le pool : son pilote, son port habituel ; le type choisit aussi la [variante par dialecte](./build/queries/per-dialect-sql.md) d'une requête. **Avancé : pilote, options, URL** contient le **Pilote**, les **Options** (ce qui suit le `?` de l'URL) et l'**URL** composée à partir des champs, qui reste modifiable (`${VARIABLE}` accepté). Une URL que la page ne sait pas présenter champ par champ est gardée telle qu'elle est écrite. |
+| **Base de données** | L'adresse, saisie comme une adresse : le **Type de base** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, *Db2 for i (IBM i, AS/400)*, SQLite, *LDAP directory*, *HTTP server (an API)*), l'**Hôte**, le **Port**, et le nom propre au type — **Base**, un **Nom de service** Oracle (un **SID** si l'URL est écrite ainsi), un **Fichier** SQLite, le **DN de base** d'un annuaire, le **Chemin de base** d'un serveur. Choisir un autre type y fait passer le pool : son pilote, son port habituel ; le type choisit aussi la [variante par dialecte](./build/queries/per-dialect-sql.md) d'une requête. **Avancé : pilote, options, URL** contient le **Pilote**, les **Options** (ce qui suit le `?` de l'URL) et l'**URL** composée à partir des champs, qui reste modifiable (`${VARIABLE}` accepté). Une URL que la page ne sait pas présenter champ par champ est gardée telle qu'elle est écrite. |
 | **Compte** | L'**Utilisateur** et le **Password**, tenu hors de l'URL et chiffré à l'enregistrement ; le champ du mot de passe a un bouton afficher / masquer. Un mot de passe écrit dans l'URL est signalé, avec le bouton **Le déplacer dans le champ mot de passe**. Le compte d'un annuaire se saisit tel quel dans **Compte (DN de liaison, DOMAINE\utilisateur ou utilisateur@domaine)** ; celui d'un serveur HTTP dans **Compte**, avec sa **Signing key**, son **Certificate** et **Verify SSL** — voir [plus bas](#pool-http). |
 | **Schémas**, **Liens de base** | Les valeurs des jetons `#SCHEMA.<NOM>#` et `#DBLINK.<NOM>#` — voir [plus bas](#schema-and-db-link-tokens). |
-| **Réglages fins** | **Pool size**, **Max overflow** (connexions gardées ouvertes, connexions supplémentaires sous charge), **Pool pre ping** (contrôle de validité), **Pool recycle** (secondes avant le renouvellement d'une connexion), **Echo** (journalise chaque instruction, pour la mise au point), **Max rows** (limite de lignes par défaut des lectures du pool, 1 000 si vide), **Arraysize** (Oracle : lignes lues par aller-retour ; à relever entre 500 et 1 000 pour les gros volumes), **Trim strings** (retire les espaces de fin des textes de longueur fixe — Oracle `CHAR`, JD Edwards), **Coalesce nulls** (à l'écriture, remplace les valeurs vides par un espace ou 0 — colonnes texte Oracle `NOT NULL`), **Debug sql** (journalise chaque instruction avec ses valeurs finales). |
+| **Réglages fins** | Le nombre de connexions gardées par le pool, leur renouvellement, ce qui est journalisé, et ce que demande chaque base (lignes par aller-retour sur Oracle, espaces de fin, valeurs vides, compilation des requêtes sur PostgreSQL) — voir [Réglages fins](#pool-tuning). |
 
 **Tester la connexion** ouvre une connexion avec le pool tel qu'il est à l'écran — enregistré ou non — et répond *Connecté en N ms* avec la version du serveur, ou *Connexion impossible* avec les termes du pilote. Sur un annuaire, le test s'authentifie une fois avec le compte puis se déconnecte. Sur un serveur HTTP, il envoie une requête à l'adresse, et tout statut HTTP vaut réponse : *Connecté en 85 ms — http HTTP 404 Le serveur répond à cette adresse, quel que soit le statut…* ; l'acceptation du compte se vérifie par le **Test** du connecteur API, qui connaît sa façon de s'authentifier. Rien n'est enregistré et les pools en service ne sont pas touchés.
+
+Sur Oracle, le test exécute `SELECT 1 FROM DUAL`, sur Db2 et Db2 for i `SELECT 1 FROM SYSIBM.SYSDUMMY1`, ailleurs `SELECT 1`.
+
+#### Réglages fins \{#pool-tuning\}
+
+L'étape **Réglages fins** d'un pool de base de données. Chaque champ affiche une aide d'une ligne sous son libellé ; **plus** déplie la description complète. Les libellés sont cités tels que l'application les affiche.
+
+| Champ | Par défaut | Effet |
+|---|---|---|
+| **Connections kept open** | 5 | Nombre de connexions gardées ouvertes, prêtes à l'emploi. |
+| **Extra connections** | 10 | Nombre de connexions supplémentaires autorisées quand le serveur est chargé. |
+| **Test before use** | activé | Vérifie qu'une connexion répond encore avant de la fournir. |
+| **Renew after (seconds)** | -1 | Une connexion plus ancienne que cette durée est remplacée ; -1 la conserve indéfiniment. |
+| **Log every statement** | désactivé | Écrit chaque instruction dans le journal du serveur. Pour un diagnostic uniquement. |
+| **Let PostgreSQL compile queries** | désactivé | PostgreSQL uniquement — voir [plus bas](#pool-jit). |
+| **Rows read at most** | vide (1 000) | Nombre de lignes qu'un écran lit dans cette base, sauf indication contraire de l'écran. |
+| **Rows per round trip** | vide (valeur du pilote) | Oracle uniquement : nombre de lignes lues à chaque aller-retour. À relever entre 500 et 1 000 pour les gros volumes. |
+| **Trim trailing spaces** | désactivé | Retire les espaces qu'une colonne texte de longueur fixe ajoute en fin de valeur (Oracle `CHAR`, JD Edwards). |
+| **Fill empty values** | désactivé | À l'écriture, met un espace ou un zéro à la place d'une valeur laissée vide, pour les colonnes qui refusent le vide (colonnes texte Oracle `NOT NULL`). |
+| **Log statements and values** | désactivé | Écrit chaque instruction avec ses valeurs dans le journal du serveur. Pour un diagnostic uniquement. |
+
+##### Compilation des requêtes sur PostgreSQL \{#pool-jit\}
+
+PostgreSQL compile (JIT) une requête qu'il estime lourde avant de l'exécuter, et ce à chaque exécution. Sur les requêtes courtes des écrans, des recherches et des tableaux de bord, l'estimation est souvent fausse et la compilation coûte alors bien plus que la requête elle-même — mesuré sur une recherche : 145 ms de compilation pour 4 ms de travail, et plusieurs secondes sur un serveur à un seul processeur. Chaque pool PostgreSQL désactive donc la compilation pour ses propres sessions ; les autres utilisateurs de la base gardent le réglage du serveur. Les collectes et les tâches Nomaflow passent par les mêmes pools, et leurs lectures lourdes sont aussi rapides, voire plus rapides, sans elle.
+
+Activer **Let PostgreSQL compile queries** rend aux sessions du pool le réglage propre à la base. Le champ est sans effet sur les autres bases.
+
+#### SQL Server, Db2 et IBM i \{#pool-sql-server-db2\}
+
+Un pool atteint ces bases comme n'importe quelle autre : les écrans, les requêtes, les tâches et les applications les lisent de la même façon. Leurs pilotes ne sont pas fournis avec le paquet de base :
+
+| Type de base | Pilote (URL) | Port habituel | Champ de la base | Pilote à installer |
+|---|---|---|---|---|
+| **SQL Server** | `mssql+pymssql` — `mssql+aioodbc` reste proposé sous *Avancé* | 1433 | **Base** | `liberty-next[mssql]` — rien d'autre à installer sur le serveur. `mssql+aioodbc` demande le pilote ODBC de Microsoft sur le serveur. |
+| **Db2** (Linux, UNIX, Windows) | `db2+ibm_db` — `db2+pyodbc` est aussi proposé | 50000 | **Base** | `liberty-next[db2]`. IBM publie le pilote pour Linux x86-64, macOS et Windows, pas pour Linux arm64. |
+| **Db2 for i (IBM i, AS/400)** | `ibmi` (via ODBC) | aucun | **Base** — le nom du système | `liberty-next[ibmi]`, ainsi qu'unixODBC et le pilote *IBM i Access ODBC Driver* d'IBM (téléchargement IBM, sous sa propre licence) sur le serveur. |
+
+L'image Docker contient le pilote SQL Server, et le pilote Db2 en amd64 uniquement ; le pilote IBM i n'est pas dans l'image. Sur une [installation Python](../installation/python-server.md#install), ajouter les extras qui correspondent aux pools. Quand le pilote d'un pool manque, l'erreur du pool comme le résultat de **Tester la connexion** indiquent l'extra à installer — *no driver for a 'db2+ibm_db' database is installed — install it with: pip install 'liberty-next[db2]'*.
 
 #### Un serveur HTTP \{#pool-http\}
 

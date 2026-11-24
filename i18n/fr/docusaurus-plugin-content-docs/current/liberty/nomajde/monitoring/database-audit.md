@@ -1,14 +1,14 @@
 ---
 title: Audit de la base de données
-description: "Supervision → Audit de la base de données dans Nomajde : la base de JD Edwards EnterpriseOne lue en direct dans le dictionnaire Oracle, comme la lit un audit — l'instance et ses paramètres, ce que disent les chiffres, puis la taille, les tablespaces, les plus grosses tables, l'activité, les instructions les plus coûteuses, les sessions, les journaux redo, les objets et les statistiques — sans aucune vue des packs Diagnostics ou Tuning."
-keywords: [Nomajde, JD Edwards, JDE E1, audit de la base, Oracle, tablespace, NOARCHIVELOG, journaux redo, cache, analyse complète, sessions, objets invalides, index inutilisables, statistiques, control_management_pack_access, AWR, ASH]
+description: "Supervision → Audit de la base de données dans Nomajde : la base de JD Edwards EnterpriseOne lue en direct dans son propre dictionnaire — Oracle, SQL Server, Db2 pour Linux / UNIX / Windows ou Db2 for i (IBM i) — comme la lit un audit — l'instance et ses paramètres, ce que disent les chiffres, puis la taille, les tablespaces, les plus grosses tables, l'activité, les instructions les plus coûteuses, les sessions, les journaux redo, les objets et les statistiques — sans aucune vue des packs Diagnostics ou Tuning."
+keywords: [Nomajde, JD Edwards, JDE E1, audit de la base, Oracle, tablespace, NOARCHIVELOG, journaux redo, cache, analyse complète, sessions, objets invalides, index inutilisables, statistiques, control_management_pack_access, AWR, ASH, SQL Server, journal de transactions, fichiers de données, Db2, Db2 for i, IBM i, AS/400, pools de disques, ASP, journaux]
 ---
 
 # Audit de la base de données
 
-**Supervision → Audit de la base de données** lit la base de JD Edwards en direct dans le dictionnaire Oracle, comme la lit un audit : ce qu'est l'instance, ce que disent les chiffres, puis neuf sections réparties en quatre onglets. La page ne fait que lire, et elle est écrite pour Oracle.
+**Supervision → Audit de la base de données** lit la base de JD Edwards en direct dans son propre dictionnaire, comme la lit un audit : ce qu'est l'instance, ce que disent les chiffres, puis neuf sections réparties en quatre onglets. La page ne fait que lire. Quatre bases sont lues — **Oracle**, **SQL Server**, **Db2 pour Linux / UNIX / Windows** et **Db2 for i** (IBM i, AS/400) — avec les mêmes sections et les mêmes règles, chacune dans ses propres termes : voir [Selon la base](#databases). Sur une autre base, la page indique la base du pool JD Edwards et ne lit rien.
 
-Aucune vue AWR, ASH, ADDM ou SQL Monitor n'est lue : elles appartiennent à des packs licenciés à part, et les lire compterait déjà comme une utilisation. Les chiffres d'activité comptent donc depuis le démarrage de l'instance.
+Sur Oracle, aucune vue AWR, ASH, ADDM ou SQL Monitor n'est lue : elles appartiennent à des packs licenciés à part, et les lire compterait déjà comme une utilisation. Les chiffres d'activité comptent donc depuis le démarrage de l'instance.
 
 ---
 
@@ -24,9 +24,10 @@ Aucune vue AWR, ASH, ADDM ou SQL Monitor n'est lue : elles appartiennent à des 
 
   <rect x="220" y="20" width="760" height="312" rx="14" fill="url(#ndb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Audit de la base de données</text>
-  <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">La base JD Edwards lue en direct dans le dictionnaire Oracle : taille, activité, ce qui coûte le plus, ce qui est cassé.</text>
+  <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">La base JD Edwards lue en direct dans son propre dictionnaire : taille, activité, ce qui coûte le plus, ce qui est cassé.</text>
   <rect x="907" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="933.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
+  <text x="897" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Lu à 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="84" width="174.0" height="34" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.2"/>
   <rect x="248.0" y="92" width="18" height="18" rx="4" fill="#4a9eff" fillOpacity="0.18"/>
@@ -118,19 +119,86 @@ Chaque onglet indique, à côté de sa description, combien de ses points sont �
 | Objets invalides, index inutilisables, statistiques jamais calculées ou périmées | Sur les propriétaires JD Edwards. |
 | `control_management_pack_access` | Si les fonctions des packs Diagnostics / Tuning peuvent être utilisées — une exposition de licence s'ils ne sont pas détenus. |
 
+Ce sont les règles d'Oracle ; les autres bases appliquent les mêmes dans leurs propres termes, avec quelques règles qui leur sont propres — voir [Selon la base](#databases).
+
+---
+
+## Ce que la page conserve \{#kept\}
+
+Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture — *Lu à 14:02*, avec le jour quand la lecture date d'avant aujourd'hui. **Relire** relit toutes les sections.
+
+Les pages de la supervision partagent leurs lectures : une fois la [synthèse de la plateforme](../synthesis.md) lue, cette page ne lit plus que les deux sections que la synthèse n'affiche pas, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+
+---
+
+## Selon la base \{#databases\}
+
+La base lue est celle vers laquelle pointe le pool JD Edwards ; son type détermine la lecture. Les onglets et les règles restent les mêmes ; les sections et les colonnes prennent les termes de la base, dans les deux langues, sur la page comme dans le [rapport de la plateforme](../synthesis.md#report). Une section dont la base n'a pas l'équivalent l'indique (*SQL Server n'a rien de ce genre.*) ; une section en échec affiche le message de la base elle-même, et les autres sont lues malgré tout.
+
+Le pool doit être du type de la base, et Liberty Next doit disposer du pilote de cette base — voir l'[étape Base de données](../../framework/connectors.md#pool-stages) du pool.
+
+### Oracle \{#oracle\}
+
+Les sections décrites plus haut, lues dans les vues `v$` et `dba_`. Le compte doit pouvoir les lire.
+
+### SQL Server \{#sql-server\}
+
+Un JD Edwards sur SQL Server occupe plusieurs bases — les données métier et les tables de contrôle dans l'une, les tables système, la carte des serveurs, l'Object Librarian et le dictionnaire de données dans une autre, les objets centraux de chaque code chemin dans la leur. Un propriétaire est donc une base **et** un schéma : les schémas du pool désignent une table d'une autre base que celle du pool sous la forme `BASE.SCHÉMA` (`JDE_PRODUCTION.PRODDTA`) ; un nom seul est un schéma de la base du pool.
+
+| Section | Contenu |
+|---|---|
+| **L'instance** | Version, édition, collation, les paramètres qui comptent (`max server memory (MB)`…), et les bases JD Edwards avec leur mode de **Récupération**, leur **Compatibilité**, **Read committed snapshot**, les statistiques automatiques, **Auto shrink**, **Auto close** et la **Vérification des pages**. |
+| **Taille** | Par **Base.schéma**. |
+| **Fichiers de données** | À la place des tablespaces : le remplissage de chaque fichier par rapport à ce qu'il peut atteindre — sa propre limite, ou la place restante sur son volume. |
+| **Les plus grosses tables** | Avec la date de leurs **Statistiques**. |
+| **Journaux de transactions** | Un par base : **Récupération**, taille, **Utilisé %**, ce qu'il **Attend**, **Dernière sauvegarde du journal**, **Fichiers virtuels**. |
+| **Activité** | Le cache, les **Lots compilés** à la place des analyses complètes, la durée de vie d'une page, les attentes. |
+| **Les instructions les plus coûteuses** | Celles encore présentes dans le cache des plans. |
+| **Objets et statistiques** | **Index désactivés**, statistiques **Jamais calculées** ou **Périmées** — SQL Server n'a pas d'objet invalide. |
+
+Ses règles propres signalent un `max server memory` non fixé, une base JD Edwards en auto shrink, en auto close, sans mise à jour automatique des statistiques ou avec une vérification des pages autre que `CHECKSUM`, un journal de transactions plein à 80 %, un journal en récupération complète jamais sauvegardé ou pas depuis plus de 24 heures, une base en récupération SIMPLE, et un journal découpé en plus de 1 000 fichiers virtuels.
+
+Le compte doit détenir `VIEW SERVER STATE` et être utilisateur des bases JD Edwards.
+
+### Db2 pour Linux, UNIX et Windows \{#db2\}
+
+Les mêmes sections, lues dans les fonctions de surveillance et le catalogue : les tablespaces, le **Journal de transactions** et les fichiers journaux archivés par heure, les pools de mémoire tampon et le cache de packages (**Hors du cache de packages** à la place des analyses complètes, **Débordements de tri** pour les tris sur disque), le temps attendu par cause, les attentes de verrou, les **Index à reconstruire**, les tables **Utilisées, jamais analysées**. Ses règles propres signalent la journalisation circulaire, les statistiques automatiques désactivées, la mémoire auto-réglée désactivée, un journal presque plein, et les interblocages ou dépassements de délai de verrou depuis l'activation de la base.
+
+Le compte doit pouvoir exécuter les fonctions de surveillance (`SQLADM` ou `DBADM`) et lire le catalogue.
+
+### Db2 for i (IBM i) \{#db2-for-i\}
+
+Sur un IBM i, la base est le système : il n'y a ni instance, ni tablespace, ni journal redo, ni cache à dimensionner. Les sections gardent leur place et présentent ce que le système a à la place :
+
+| Section | Contenu |
+|---|---|
+| **Le système** | Sa version et ses niveaux de PTF, les processeurs, la mémoire, le dernier IPL, les valeurs système qui comptent. |
+| **Bibliothèques** | La taille par bibliothèque — les schémas du pool les désignent. |
+| **Pools de disques (ASP)** | Le taux de remplissage de chaque pool de disques. |
+| **Les plus gros fichiers** | Avec leurs **Lignes supprimées** et leur date de **Dernière utilisation**. |
+| **Journaux** | Leurs **Récepteurs**, qui les gère, s'ils suppriment leurs récepteurs, les fichiers journalisés, et les récepteurs attachés par heure. |
+| **Activité** | **Processeur utilisé**, **Travaux actifs**, **Travaux dans le système**, stockage temporaire ; les **Pools de mémoire** et leurs défauts de page à la place des attentes. |
+| **Ce que les travaux exécutent maintenant** | Les instructions que les travaux actifs exécutent à cet instant. Le cache des plans ne se lit que par une procédure qui écrit un fichier, ce que cette lecture ne fait jamais. |
+| **Travaux** | Les travaux actifs, par nom, adresse du client et utilisateur. |
+| **Index et lignes supprimées** | **Index non valides**, fichiers **À réorganiser**, **Index conseillés par le système**. |
+
+Ses règles propres signalent un journal qui n'est pas actif, un journal qui garde ses récepteurs en ligne, des fichiers chargés de lignes supprimées, et les index conseillés par le système. Les chiffres comptent depuis le dernier IPL.
+
+Le compte doit pouvoir lire les services de `QSYS2` ; l'instruction exécutée par un travail et les verrous d'un autre travail demandent davantage (`*JOBCTL`, ou l'usage de fonction `QIBM_DB_SQLADM`).
 ---
 
 ## Accès \{#access\}
 
-La page s'affiche pour les rôles qui détiennent son entrée de menu et la permission `plugin:nomajde.dbaudit:j_db_audit`. Elle lit la base par la connexion à la base de JD Edwards.
+La page s'affiche pour les rôles qui détiennent son entrée de menu et la permission `plugin:nomajde.dbaudit:j_db_audit`. Elle lit la base par la connexion à la base de JD Edwards ; les droits nécessaires au compte sont indiqués pour chaque base sous [Selon la base](#databases).
 
 ---
 
 ## Conseils & bonnes pratiques \{#tips\}
 
 - Lire d'abord l'onglet **Vue d'ensemble** : les lignes orange sont les points qu'un auditeur relèverait.
-- Vérifier `control_management_pack_access` sur chaque base de la plateforme : `NONE` met les fonctions des packs hors de portée.
-- Les chiffres d'activité comptent depuis le démarrage de l'instance : comparer deux lectures à quelques jours d'intervalle plutôt qu'une lecture juste après un redémarrage.
+- Sur Oracle, vérifier `control_management_pack_access` sur chaque base de la plateforme : `NONE` met les fonctions des packs hors de portée.
+- Sur SQL Server, inscrire dans les schémas du pool le `BASE.SCHÉMA` de chaque bibliothèque qui n'est pas dans la base du pool : les plus grosses tables, les index désactivés et les statistiques ne sont lus que pour les bases que le pool désigne.
+- Les chiffres d'activité comptent depuis le démarrage de la base (depuis le dernier IPL sur un IBM i) : comparer deux lectures à quelques jours d'intervalle plutôt qu'une lecture juste après un redémarrage.
 
 ---
 

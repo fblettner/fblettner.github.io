@@ -8,7 +8,7 @@ keywords: [Nomasx-1, licences, CSI, Customer Support Identifier, Oracle, contrat
 
 L'écran **CSI** liste tous les *Customer Support Identifier* Oracle déclarés dans Nomasx-1. Une ligne par contrat. Chaque ligne porte l'identifiant, une description lisible, les dates de validité et le statut courant.
 
-Le CSI est l'ancrage contractuel : les volumétries (licences acquises, support), l'analyse d'utilisation (*Rapport d'utilisation*) et le calcul d'impact financier (*Rapport financier*) s'y rattachent tous via le catalogue des composants.
+Le CSI est l'ancrage contractuel : ses lignes — composants seuls et bundles —, les chiffres déclarés par le client et les utilisateurs des autres applications sont ce que lit la [revue des licences](../licensing-review.md), selon les règles de [Lecture d'un contrat](../how-a-contract-is-counted.md).
 
 ---
 
@@ -134,9 +134,9 @@ Les colonnes d'audit (`CSI_AUDIT_USER`, `CSI_AUDIT_DATE`) sont masquées mais tr
 
 ## Boîte de dialogue
 
-**Ajouter une ligne** enregistre un nouveau CSI ; un clic sur une ligne l'ouvre. La fenêtre compte trois onglets. Les onglets *Applications* et *Composants* sont absents sur un nouveau contrat : ils apparaissent une fois le CSI enregistré. Le pied de fenêtre porte **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
+**Ajouter une ligne** enregistre un nouveau CSI ; un clic sur une ligne l'ouvre. La fenêtre compte sept onglets. Sur un nouveau contrat, seul *Contrat de support* est présent : les six grilles apparaissent une fois le CSI enregistré. Chaque grille propose **Ajouter une ligne** et **Modifier en lot**, et un clic sur l'une de ses lignes ouvre son propre formulaire (**Modifier · Licences - Bundles**…). Le pied de fenêtre porte **Supprimer**, **Dupliquer**, **Annuler** et **Enregistrer**.
 
-<svg viewBox="0 0 1320 372" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 382" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="csd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="csd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -144,86 +144,78 @@ Les colonnes d'audit (`CSI_AUDIT_USER`, `CSI_AUDIT_DATE`) sont masquées mais tr
     <marker id="csd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="215" y="20" width="890" height="322" rx="14" fill="url(#csd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="235" y="50" fill="#e2e8f0" fontSize="12.5" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Licences - Contrats</text>
-  <rect x="1061" y="36" width="24" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1073.0" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⤢</text>
-  <line x1="215" y1="68" x2="1105" y2="68" stroke="#1f2937" strokeWidth="1"/>
-  <text x="293.5" y="92" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Contrat de support</text>
-  <text x="400.5" y="92" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Applications</text>
-  <text x="486.5" y="92" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Composants</text>
-  <line x1="449" y1="101" x2="524" y2="101" stroke="#4a9eff" strokeWidth="2"/>
-  <line x1="235" y1="102" x2="1085" y2="102" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="235" y="120" width="128" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="299.0" y="134.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une ligne</text>
-  <rect x="369" y="120" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="427.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Modifier en lot</text>
-  <rect x="492" y="120" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="502" y="134.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
-  <rect x="695" y="120" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="722.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▦ Vues</text>
-  <rect x="756" y="120" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="792.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⏷ Filtres</text>
-  <rect x="834" y="120" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="870.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⌘ Grouper</text>
-  <rect x="912" y="120" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="951.0" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▥ Colonnes</text>
-  <rect x="996" y="120" width="89" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="1040.5" y="134.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⇩ Exporter ▾</text>
-  <rect x="235" y="152" width="850" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="341" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">N° CSI (ID)</text>
-  <text x="355" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">N° CSI</text>
-  <text x="651" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">COMPOSANT ID (ID)</text>
-  <text x="665" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">COMPOSANT ID</text>
-  <text x="895" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">MÉTRIQUE ID</text>
-  <text x="1041" y="167.0" fill="#cbd5e1" fontSize="7.8" fontWeight="700" letterSpacing="0.04em" textAnchor="end" fontFamily="ui-monospace, monospace">QUANTITÉ</text>
-  <rect x="235" y="178" width="850" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1101</text>
-  <text x="665" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne Financials</text>
-  <text x="895" y="192.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="192.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">100</text>
-  <rect x="235" y="200" width="850" height="22" fill="rgba(255,255,255,0.015)" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1007</text>
-  <text x="665" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne Sales Order Mg…</text>
-  <text x="895" y="214.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="214.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">50</text>
-  <rect x="235" y="222" width="850" height="22" fill="#0d1220" stroke="#1f2937" strokeWidth="0.6"/>
-  <text x="341" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">10000001</text>
-  <text x="355" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">ACME — JD Edwards support</text>
-  <text x="651" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">1504</text>
-  <text x="665" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne System Foundat…</text>
-  <text x="895" y="236.3" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Application User</text>
-  <text x="1041" y="236.3" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">250</text>
-  <text x="235" y="266" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lignes par page   50 ⌄     Affichage 1–3 sur 3</text>
-  <line x1="215" y1="288" x2="1105" y2="288" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="989" y="302" width="96" height="24" rx="5" fill="url(#csd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="1037.0" y="317.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▣ Enregistrer</text>
-  <rect x="907" y="302" width="74" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="944.0" y="317.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Annuler</text>
-  <rect x="814" y="302" width="85" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="856.5" y="317.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⧉ Dupliquer</text>
-  <rect x="732" y="302" width="74" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="769.0" y="317.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
-  <rect x="12" y="67" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="82" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois onglets</text>
-  <text x="22" y="95" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">contrat, applications, composants</text>
-  <line x1="197" y1="84.0" x2="395" y2="84" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="12" y="114" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="22" y="129" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une ligne</text>
-  <text x="22" y="142" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un composant et sa quantité</text>
-  <line x1="197" y1="131.0" x2="265" y2="131" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="1119" y="172.0" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1129" y="187.0" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Composants acquis</text>
-  <text x="1129" y="200.0" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">métrique et quantité par composant</text>
-  <line x1="1119" y1="189.0" x2="415" y2="189.0" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
-  <rect x="1119" y="309" width="191" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1129" y="324" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistrer</text>
-  <text x="1129" y="337" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le contrat et ses onglets</text>
-  <line x1="1119" y1="326.0" x2="1037.0" y2="326" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="220" y="90" width="880" height="274" rx="14" fill="url(#csd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="116" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier · Licences - Contrats</text>
+  <line x1="220" y1="130" x2="1100" y2="130" stroke="#1f2937" strokeWidth="1"/>
+  <text x="297.872" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Contrat de support</text>
+  <text x="397.992" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Applications</text>
+  <text x="477.28000000000003" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Composants</text>
+  <text x="543.548" y="154" fill="#e2e8f0" fontSize="9.3" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Bundles</text>
+  <line x1="514.32" y1="162" x2="572.7760000000001" y2="162" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="641.0640000000001" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Composants des bundles</text>
+  <text x="764.6200000000001" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Chiffres déclarés</text>
+  <text x="924.6320000000002" y="154" fill="#94a3b8" fontSize="9.3" textAnchor="middle" fontFamily="system-ui, sans-serif">Utilisateurs des autres applications</text>
+  <line x1="240" y1="163" x2="1080" y2="163" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="176" width="128" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="304.0" y="190.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter une ligne</text>
+  <rect x="374" y="176" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="432.5" y="190.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">✎ Modifier en lot</text>
+  <rect x="497" y="176" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="507" y="190.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">⌕ Rechercher…</text>
+  <rect x="240" y="210" width="840" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">N° CSI</text>
+  <text x="360" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BUNDLE</text>
+  <text x="460" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DESCRIPTION</text>
+  <text x="680" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MÉTRIQUE ID</text>
+  <text x="840" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUANTITÉ</text>
+  <text x="930" y="227.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPOSANTS</text>
+  <rect x="240" y="242" width="840" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">10000001</text>
+  <text x="360" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">DIST</text>
+  <text x="460" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Suite distribution</text>
+  <text x="680" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10 · Application User</text>
+  <text x="840" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">25</text>
+  <text x="930" y="258.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">4</text>
+  <rect x="240" y="272" width="840" height="26" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">10000001</text>
+  <text x="360" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-SALES</text>
+  <text x="460" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Stocks et ventes</text>
+  <text x="680" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">10 · Application User</text>
+  <text x="840" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">40</text>
+  <text x="930" y="288.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2</text>
+  <line x1="220" y1="316" x2="1100" y2="316" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="997" y="328" width="83" height="22" rx="5" fill="url(#csd-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1038.5" y="342.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="928" y="328" width="61" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="958.5" y="342.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
+  <rect x="848" y="328" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="884.0" y="342.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Dupliquer</text>
+  <rect x="768" y="328" width="72" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="804.0" y="342.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="160" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="170" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bundles</text>
+  <text x="170" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne comptée une fois pour ses modules</text>
+  <line x1="262.5" y1="42" x2="543.548" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="377" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="387" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Composants des bundles</text>
+  <text x="387" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les modules de chaque bundle</text>
+  <line x1="479.5" y1="42" x2="641.0640000000001" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="594" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="604" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Chiffres déclarés</text>
+  <text x="604" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chiffre d'affaires, employés, datés</text>
+  <line x1="696.5" y1="42" x2="764.6200000000001" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="851" y="8" width="205" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="861" y="23" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Utilisateurs des autres applications</text>
+  <text x="861" y="36" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ajoutés aux Named User Plus</text>
+  <line x1="953.5" y1="42" x2="924.6320000000002" y2="144" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="1120" y="252" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="267" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Composants</text>
+  <text x="1130" y="280" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nombre de modules qu'il contient</text>
+  <line x1="1120" y1="269.0" x2="940" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
+  <rect x="20" y="176" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="191" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter une ligne</text>
+  <text x="30" y="204" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un bundle de ce contrat</text>
+  <line x1="200" y1="193.0" x2="240" y2="187" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#csd-arrow)"/>
 </svg>
 
 ### Onglet 1 — Contrat de support
@@ -240,17 +232,58 @@ Identité du contrat.
 
 ### Onglet 2 — Applications
 
-Grille qui relie le CSI aux applications couvertes (*N° CSI*, *ID application*, avec le type et la base de l'application, en lecture seule : ils viennent d'[Applications](../settings/global/applications.md)). Sur une ligne enregistrée, *N° CSI* et *ID application* sont en lecture seule. Une ligne par application, par **Ajouter une ligne** : une entrée ici est ce qui fait que le contrat compte pour l'application dans *Licences acquises* et les rapports de conformité. Masqué à l'ajout.
+Grille qui relie le CSI aux applications couvertes (*N° CSI*, *ID application*, avec le type et la base de l'application, en lecture seule : ils viennent d'[Applications](../settings/global/applications.md)). Sur une ligne enregistrée, *N° CSI* et *ID application* sont en lecture seule. Une ligne par application, par **Ajouter une ligne** : une entrée ici est ce qui fait que le contrat compte pour l'application dans la [revue des licences](../licensing-review.md) et le [rapport d'audit des licences](../reports/audit-licences.md). Masqué à l'ajout.
 
 ### Onglet 3 — Composants
 
-Grille des composants licenciés du CSI : *Composant ID*, *Métrique ID* et *Quantité*, une ligne par composant. L'agrégat alimente la page *Licences acquises*. Masqué à l'ajout.
+Grille des composants licenciés seuls sur le CSI : *Composant ID*, *Métrique ID* et *Quantité*, une ligne par composant et par métrique. Chacune est une ligne du contrat (voir [Lecture d'un contrat](../how-a-contract-is-counted.md#lines)). Masqué à l'ajout.
+
+### Onglet 4 — Bundles \{#tab-bundles\}
+
+Les bundles du contrat : plusieurs modules vendus sous une seule ligne, sur laquelle un utilisateur n'est compté qu'une fois pour tous.
+
+| Champ | À renseigner |
+|---|---|
+| **N° CSI** | Le contrat, prérempli ; non modifiable sur une ligne enregistrée. |
+| **Bundle** | Obligatoire. Code court du bundle dans ce contrat (`DIST`, `INV-SALES`…). |
+| **Description** | Le nom affiché par les pages (*Suite distribution*). |
+| **Métrique ID** | Choisie parmi les métriques : en général *Application User*. |
+| **Quantité** | La quantité souscrite. |
+| **Composants** | En lecture seule : le nombre de modules du bundle, d'après l'onglet suivant. |
+
+Un bundle sans composant apparaît dans [Licences souscrites](./subscribed-licences.md), signalé vide ; il ne couvre rien.
+
+### Onglet 5 — Composants des bundles \{#tab-bundle-components\}
+
+Les modules de chaque bundle, une ligne par bundle et par module : *N° CSI*, **Bundle** (choisi parmi les bundles de ce contrat) et **Composant ID** (choisi par son nom parmi les composants). Les deux sont obligatoires.
+
+### Onglet 6 — Chiffres déclarés \{#tab-declared\}
+
+Ce que le client déclare pour le contrat, daté : la [revue des licences](../licensing-review.md#lines-other) lit la date la plus récente.
+
+| Champ | À renseigner |
+|---|---|
+| **Déclaré le** | Obligatoire. Date de la déclaration. |
+| **Chiffre d'affaires déclaré (millions)** | Comparé aux lignes en *Enterprise $M*. |
+| **Employés déclarés** | Comparés aux lignes en *Employee*. Vide : les employés collectés dans JD Edwards sont retenus. |
+| **Commentaire** | Origine du chiffre (rapport annuel, effectif RH…). |
+
+### Onglet 7 — Utilisateurs des autres applications \{#tab-other-users\}
+
+Les utilisateurs d'une application dont les utilisateurs ne peuvent pas être collectés — un portail de reporting, un outil qui se connecte à la même base —, une ligne par application. Ils s'ajoutent au comptage d'une base de données licenciée en Named User Plus (voir [Named User Plus d'une base de données](../how-a-contract-is-counted.md#named)).
+
+| Champ | À renseigner |
+|---|---|
+| **Application** | Obligatoire. Nom de l'application. |
+| **Utilisateurs** | Obligatoire. Nombre de personnes qui l'utilisent. |
+| **Compté le** | Date du comptage. |
+| **Commentaire** | Mode de comptage. |
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Trier sur *Date Fin* croissante** pour faire remonter les prochains renouvellements — vue de planification budgétaire.
-- **Vérifier que chaque CSI actif est associé à au moins une application** dans *Licences acquises*. Un CSI orphelin est un contrat payé pour une application qui ne l'utilise plus.
+- **Vérifier que chaque CSI actif est associé à au moins une application** dans [Licences souscrites](./subscribed-licences.md). Un CSI orphelin est un contrat payé pour une application qui ne l'utilise plus.
 - **Les contrats échus restent visibles** pour la traçabilité d'audit : décocher *Actif* plutôt que supprimer la ligne.
 - **L'écran est en écriture** — seul l'administrateur licences devrait le modifier. Chaque changement est capté dans les colonnes d'audit et apparaît dans *Audit Trail* si la table sous-jacente est auditée.

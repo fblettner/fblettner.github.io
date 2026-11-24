@@ -143,7 +143,7 @@ Pour chaque application connectée :
 
 - **Qu'a fait chaque utilisateur ?** *Schéma + Table + Date + Nombre* indique combien de lignes de quelle table un utilisateur a touchées à un instant donné.
 - **Recouper avec les droits théoriques.** Combiné à la matrice des *Droits*, un journal vide pour un utilisateur aux droits étendus est l'argument de révocation le plus solide.
-- **Alimenter l'analyse SoD avérée.** L'écran *Conflits — Avérés* intersecte ce jeu de données avec les détails SoD — si un utilisateur n'apparaît pas ici pour les tables concernées, le conflit reste théorique.
+- **Alimenter l'analyse des conflits exercés.** Le journal d'activité est l'une des sources de preuve de [Conflits — Avérés](./conflicts/proven.md) et de la [Revue de la séparation des tâches](../sod-review.md#evidence) : le programme qui a écrit une ligne, ou la table écrite, montre une activité faite.
 
 Le journal s'appuie sur des triggers / un audit au niveau base sur les tables du système source — en dehors de toute permission applicative. Il capte ce que *la base* a enregistré, pas ce que l'application *pense* avoir fait.
 

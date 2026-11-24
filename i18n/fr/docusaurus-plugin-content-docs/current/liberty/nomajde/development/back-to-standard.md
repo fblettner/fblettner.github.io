@@ -280,6 +280,10 @@ La tâche est en lecture seule sur JD Edwards : elle lit les spécifications des
 
 L'ouverture d'une ligne ne demande pas de relancer la tâche : la comparaison de cet objet est faite sur le moment.
 
+### Un JD Edwards derrière un lien de base de données \{#dblink\}
+
+Quand Liberty atteint les bibliothèques de JD Edwards par un lien de base de données, la tâche et la page suivent le pool JD Edwards : chaque table est lue avec sa bibliothèque, prise dans les **Schémas** du pool, et le lien de cette bibliothèque, pris dans ses **Liens de base**, sous la même clé — `OL` pour l'Object Librarian, `SY` pour les tables OMW, `CO` pour les objets centraux des deux path codes. Une bibliothèque sans lien est lue localement. Les spécifications sont stockées en BLOB, que le pilote habituel ne sait pas lire à travers un lien : derrière un lien `CO`, elles sont lues par le pilote Oracle en mode thick, sans rien à paramétrer. Voir [Jetons de schéma et de DB link](../../framework/connectors.md#schema-and-db-link-tokens).
+
 ---
 
 ## Accès \{#access\}

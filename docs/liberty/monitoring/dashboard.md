@@ -62,87 +62,78 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
   <text x="891.5" y="180" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Python 3.12</text>
   <text x="248" y="218" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Database pools</text>
   <text x="248" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">POOL</text>
-  <text x="310" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">DIALECT</text>
-  <text x="420" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">IN USE</text>
-  <text x="458" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">IDLE</text>
-  <text x="508" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">OVERFL.</text>
-  <line x1="236" y1="242" x2="512.0" y2="242" stroke="#1f2937" strokeWidth="1"/>
+  <text x="340" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">DIALECT</text>
+  <text x="590" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">IN USE</text>
+  <text x="650" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">IDLE</text>
+  <text x="724" y="236" fill="#94a3b8" fontSize="7.5" textAnchor="end" fontFamily="system-ui, sans-serif">OVERFLOW</text>
+  <line x1="242" y1="242" x2="730" y2="242" stroke="#1f2937" strokeWidth="1"/>
   <text x="248" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">default</text>
-  <text x="310" y="256" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql</text>
-  <text x="420" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
-  <text x="458" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">2</text>
-  <text x="508" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
-  <line x1="242" y1="262" x2="506.0" y2="262" stroke="#1f2937" strokeWidth="1"/>
+  <text x="340" y="256" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql</text>
+  <text x="590" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">0</text>
+  <text x="650" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
+  <text x="724" y="256" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">0/10</text>
+  <line x1="242" y1="262" x2="730" y2="262" stroke="#1f2937" strokeWidth="1"/>
   <text x="248" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">crm</text>
-  <text x="310" y="276" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql</text>
-  <text x="420" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">2</text>
-  <text x="458" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">3</text>
-  <text x="508" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
-  <line x1="242" y1="282" x2="506.0" y2="282" stroke="#1f2937" strokeWidth="1"/>
+  <text x="340" y="276" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql</text>
+  <text x="590" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">2</text>
+  <text x="650" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">3</text>
+  <text x="724" y="276" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">0/10</text>
+  <line x1="242" y1="282" x2="730" y2="282" stroke="#1f2937" strokeWidth="1"/>
   <text x="248" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">erp</text>
-  <text x="310" y="296" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">oracle</text>
-  <text x="420" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
-  <text x="458" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">4</text>
-  <text x="508" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
-  <line x1="242" y1="302" x2="506.0" y2="302" stroke="#1f2937" strokeWidth="1"/>
+  <text x="340" y="296" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">oracle</text>
+  <text x="590" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">1</text>
+  <text x="650" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">4</text>
+  <text x="724" y="296" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">0/9</text>
+  <line x1="242" y1="302" x2="730" y2="302" stroke="#1f2937" strokeWidth="1"/>
   <text x="248" y="316" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">sales</text>
-  <text x="310" y="316" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">not opened</text>
-  <text x="420" y="316" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
-  <text x="458" y="316" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
-  <text x="508" y="316" fill="#cbd5e1" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">—</text>
-  <line x1="242" y1="322" x2="506.0" y2="322" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="236" y="200" width="276.0" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="534.0" y="218" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Connected users</text>
-  <text x="534.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">USER</text>
-  <text x="630.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">SESSION</text>
-  <text x="710.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">CLIENT</text>
-  <line x1="522.0" y1="242" x2="798.0" y2="242" stroke="#1f2937" strokeWidth="1"/>
-  <text x="534.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe  super</text>
-  <text x="630.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">a1F3x…</text>
-  <text x="710.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.12</text>
-  <line x1="528.0" y1="262" x2="792.0" y2="262" stroke="#1f2937" strokeWidth="1"/>
-  <text x="534.0" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
-  <text x="630.0" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">9c2eK…</text>
-  <text x="710.0" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.31</text>
-  <line x1="528.0" y1="282" x2="792.0" y2="282" stroke="#1f2937" strokeWidth="1"/>
-  <text x="534.0" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
-  <text x="630.0" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Qp7wL…</text>
-  <text x="710.0" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.31</text>
-  <line x1="528.0" y1="302" x2="792.0" y2="302" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="522.0" y="200" width="276.0" height="108" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="820.0" y="218" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Record locks</text>
-  <text x="820.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">RECORD</text>
-  <text x="930.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">USER</text>
-  <text x="1010.0" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">SINCE</text>
-  <line x1="808.0" y1="242" x2="1084.0" y2="242" stroke="#1f2937" strokeWidth="1"/>
-  <text x="820.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">crm/orders 4512</text>
-  <text x="930.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
-  <text x="1010.0" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">14:02</text>
-  <line x1="814.0" y1="262" x2="1078.0" y2="262" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="808.0" y="200" width="276.0" height="68" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="356" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Runtime</text>
-  <text x="248" y="374" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="338" y="374" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif"></text>
-  <line x1="236" y1="380" x2="512.0" y2="380" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Connectors</text>
-  <text x="338" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">12</text>
-  <line x1="242" y1="400" x2="506.0" y2="400" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="414" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Screens</text>
-  <text x="338" y="414" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">87</text>
-  <line x1="242" y1="420" x2="506.0" y2="420" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="434" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Platform</text>
-  <text x="338" y="434" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Linux-6.8-x86_64</text>
-  <line x1="242" y1="440" x2="506.0" y2="440" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="454" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">AI</text>
-  <text x="338" y="454" fill="#4ade80" fontSize="8.5" fontFamily="system-ui, sans-serif">on · claude-sonnet-4-5</text>
-  <line x1="242" y1="460" x2="506.0" y2="460" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="474" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">License</text>
-  <text x="338" y="474" fill="#4ade80" fontSize="8.5" fontFamily="system-ui, sans-serif">full · ACME</text>
-  <line x1="242" y1="480" x2="506.0" y2="480" stroke="#1f2937" strokeWidth="1"/>
-  <text x="248" y="494" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Socket.IO</text>
-  <text x="338" y="494" fill="#4ade80" fontSize="8.5" fontFamily="system-ui, sans-serif">open</text>
-  <line x1="242" y1="500" x2="506.0" y2="500" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="236" y="338" width="276.0" height="168" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="340" y="316" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">postgresql</text>
+  <text x="724" y="316" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="ui-monospace, monospace">not opened</text>
+  <rect x="236" y="200" width="500" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="758" y="218" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Connected users</text>
+  <text x="758" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">USER</text>
+  <text x="890" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">SESSION</text>
+  <text x="990" y="236" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">CLIENT</text>
+  <line x1="752" y1="242" x2="1078" y2="242" stroke="#1f2937" strokeWidth="1"/>
+  <text x="758" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jdoe  super</text>
+  <text x="890" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">a1F3x…</text>
+  <text x="990" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.12</text>
+  <line x1="752" y1="262" x2="1078" y2="262" stroke="#1f2937" strokeWidth="1"/>
+  <text x="758" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="890" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">9c2eK…</text>
+  <text x="990" y="276" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.31</text>
+  <line x1="752" y1="282" x2="1078" y2="282" stroke="#1f2937" strokeWidth="1"/>
+  <text x="758" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="890" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Qp7wL…</text>
+  <text x="990" y="296" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">10.0.0.31</text>
+  <rect x="746" y="200" width="338" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="356" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Record locks</text>
+  <text x="248" y="374" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">RECORD</text>
+  <text x="420" y="374" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">USER</text>
+  <text x="540" y="374" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">SINCE</text>
+  <line x1="242" y1="380" x2="649" y2="380" stroke="#1f2937" strokeWidth="1"/>
+  <text x="248" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">crm/orders 4512</text>
+  <text x="420" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">asmith</text>
+  <text x="540" y="394" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">14:02</text>
+  <rect x="236" y="338" width="419" height="168" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="356" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Runtime</text>
+  <text x="677" y="382" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Connectors</text>
+  <text x="767" y="382" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">12</text>
+  <line x1="671" y1="388" x2="1078" y2="388" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="402" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Screens</text>
+  <text x="767" y="402" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">87</text>
+  <line x1="671" y1="408" x2="1078" y2="408" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="422" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Platform</text>
+  <text x="767" y="422" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">Linux-6.8-x86_64</text>
+  <line x1="671" y1="428" x2="1078" y2="428" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="442" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">AI</text>
+  <text x="767" y="442" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">on · claude-sonnet-4-5</text>
+  <line x1="671" y1="448" x2="1078" y2="448" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="462" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">License</text>
+  <text x="767" y="462" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">full · ACME</text>
+  <line x1="671" y1="468" x2="1078" y2="468" stroke="#1f2937" strokeWidth="1"/>
+  <text x="677" y="482" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Socket.IO</text>
+  <text x="767" y="482" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">open</text>
+  <rect x="665" y="338" width="419" height="168" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="248" y="534" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Live log tail</text>
   <rect x="980" y="544" width="92" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1026.0" y="558.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">✕ Clear filter</text>
@@ -171,27 +162,33 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
   <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Four KPIs</text>
   <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">users, locks, pools, uptime</text>
   <line x1="200" y1="167.0" x2="236" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
-  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Database pools</text>
-  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in use, idle, overflow</text>
-  <line x1="200" y1="277.0" x2="236" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Database pools</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the widest panel; wraps</text>
+  <line x1="200" y1="267.0" x2="236" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
   <rect x="20" y="420" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Runtime</text>
-  <text x="30" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">counts, platform, AI, licence</text>
-  <line x1="200" y1="437.0" x2="236" y2="398" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
+  <text x="30" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Record locks</text>
+  <text x="30" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who edits which record</text>
+  <line x1="200" y1="437.0" x2="236" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
   <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live log</text>
   <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">level, text filter, pause</text>
   <line x1="200" y1="577.0" x2="248" y2="555" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
   <rect x="1120" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Record locks</text>
-  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">who edits which record</text>
-  <line x1="1120" y1="267.0" x2="1084" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
+  <text x="1130" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Connected users</text>
+  <text x="1130" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one row per open tab</text>
+  <line x1="1120" y1="267.0" x2="1084" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
   <rect x="1120" y="540" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="555" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Minimum level</text>
   <text x="1130" y="568" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">All, INFO+, WARN+, ERROR</text>
   <line x1="1120" y1="557.0" x2="835" y2="544" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
+  <rect x="1120" y="420" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="435" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Runtime</text>
+  <text x="1130" y="448" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">counts, platform, AI, licence</text>
+  <line x1="1120" y1="437.0" x2="1084" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#monl-arrow)"/>
 </svg>
+
+The four panels below the KPIs — database pools, connected users, record locks, runtime — each take the width their content needs and wrap onto the next row when the window is too narrow: the pools table, with its five columns, gets the widest panel. A table still wider than its panel (a narrow window) scrolls inside it, and no column is cut.
 
 ---
 
@@ -208,9 +205,9 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
 
 ## Database pools \{#pools\}
 
-One row per pool: **Pool**, **Dialect**, **In use** (connections busy), **Idle** (open and free), **Overflow** (connections beyond the pool's size). *not opened* means no query has used the pool yet.
+One row per pool: **Pool**, **Dialect**, **In use** (connections busy), **Idle** (open and free), **Overflow** (connections opened beyond those kept open, then the most allowed: `0/10`). A pool that no query has used yet has no figures: *not opened*, on one line.
 
-All connections *In use* with *Overflow* above 0 means queries wait for a connection: look for slow queries in the log, or raise the pool's size in **Liberty Next → Administer → Pools**.
+All connections *In use* with *Overflow* above 0 means queries wait for a connection: look for slow queries in the log, or raise **Connections kept open** or **Extra connections** in the pool's *Tuning* stage (**Liberty Next → Administer → Pools**, see [Connectors → Tuning](../framework/connectors.md#pool-tuning)).
 
 ---
 

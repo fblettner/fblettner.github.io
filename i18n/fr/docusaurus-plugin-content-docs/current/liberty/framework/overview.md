@@ -134,7 +134,7 @@ React 19 + Vite + TypeScript, construit une fois dans `frontend/dist` et servi e
 
 ## Le backend en un paragraphe
 
-Python 3.12, FastAPI, SQLAlchemy 2.0 async avec asyncpg (PostgreSQL) + oracledb (Oracle, thin), Anthropic SDK pour l'assistant IA, authlib pour OIDC, Argon2 pour le hash des mots de passe, cryptography pour le chiffrement de champ AES-256-GCM, APScheduler pour les jobs cron, Socket.IO pour les mises à jour live. Un seul processus, un seul port, aucun démon compagnon. Du Python ne s'écrit que pour une étape de tâche ou une action d'écran spécifique.
+Python 3.12, FastAPI, SQLAlchemy 2.0 async avec asyncpg (PostgreSQL) + oracledb (Oracle, thin) — pymssql (SQL Server), ibm_db (Db2) et ODBC (Db2 for i) en pilotes optionnels, Anthropic SDK pour l'assistant IA, authlib pour OIDC, Argon2 pour le hash des mots de passe, cryptography pour le chiffrement de champ AES-256-GCM, APScheduler pour les tâches planifiées, Socket.IO pour les mises à jour live. Un seul processus, un seul port, aucun démon compagnon. Du Python ne s'écrit que pour une étape de tâche ou une action d'écran spécifique.
 
 ---
 

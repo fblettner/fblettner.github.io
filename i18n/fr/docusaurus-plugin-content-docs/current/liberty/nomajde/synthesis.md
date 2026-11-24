@@ -8,7 +8,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, synthèse de la plateforme, supervision,
 
 **Synthèse de la plateforme**, juste sous **Vue d'ensemble** dans le menu de Nomajde, rassemble la plateforme JD Edwards EnterpriseOne sur une seule page : six chiffres, puis **ce qui demande attention** dans les trois analyses du dossier Supervision — [Analyse de la plateforme](./monitoring/platform-analysis.md), [Performance](./monitoring/performance.md) et [Audit de la base de données](./monitoring/database-audit.md) — en une seule liste, le plus sérieux d'abord, et l'[architecture](./monitoring/architecture.md) telle qu'elle est trouvée. C'est la page à ouvrir en premier pour savoir comment se porte la plateforme ; chaque onglet mène à la page complète correspondante. Deux onglets vont plus loin : **Capacité** — la taille de la plateforme et l'évolution de ses chiffres — et **Améliorations** — ce qui peut être amélioré dans l'architecture. **Obtenir le rapport (PDF)** rassemble le tout dans un document à diffuser.
 
-Tout est lu en direct, à chaque ouverture de la page ou clic sur **Relire** ; la page ne fait que lire. L'historique des chiffres est celui que conserve la tâche *Relevé de la plateforme*.
+Tout est lu en direct à la première ouverture de la page ; la page ne fait que lire. Ce qu'elle a lu est ensuite conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la plus ancienne de ses lectures (*Lu à 14:02*). **Relire** relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout. L'historique des chiffres est celui que conserve la tâche *Relevé de la plateforme*.
 
 ---
 
@@ -27,6 +27,7 @@ Tout est lu en direct, à chaque ouverture de la page ou clic sur **Relire** ; l
   <text x="240" y="63" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">La plateforme JD Edwards en un coup d'œil : ce qui demande attention, son architecture, et ce que dit chaque analyse.</text>
   <rect x="907" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="933.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
+  <text x="740" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Lu à 14:02</text>
   <rect x="750" y="34" width="149" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="824.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
   <rect x="240.0" y="78" width="113.33333333333333" height="46" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -168,9 +169,9 @@ L'onglet **Capacité** indique la taille de la plateforme, sa charge et l'évolu
 
 ### La taille de la plateforme
 
-Lus maintenant : les **processeurs** du serveur de base de données avec ses cœurs, sa **mémoire** et sa charge, la **taille de la base**, et le volume batch — **traitements batch par jour** en moyenne sur les jours qui en comptent, **le jour le plus chargé**, **traitements batch en erreur** et **traitements batch en attente**. Les chiffres du serveur de base ne se lisent que sur une base Oracle.
+Lus maintenant : les **processeurs** du serveur de base de données avec ses cœurs, sa **mémoire** et sa charge, la **taille de la base**, et le volume batch — **traitements batch par jour** en moyenne sur les jours qui en comptent, **le jour le plus chargé**, **traitements batch en erreur** et **traitements batch en attente**. Les chiffres du serveur de base se lisent sur une base Oracle, SQL Server ou Db2 (Db2 for i compris), chacune dans son propre dictionnaire.
 
-**Traitements batch par jour** trace les traitements des 30 derniers jours, une barre par jour, avec les files d'attente par lesquelles ils sont passés. Ces chiffres viennent de la table des traitements de JD Edwards, qui conserve son historique : rien n'est à collecter au préalable.
+**Traitements batch par jour** trace les traitements des 30 derniers jours, une barre par jour, avec les files d'attente par lesquelles ils sont passés. Ces chiffres viennent de la table des traitements de JD Edwards (F986110, dans la carte des serveurs), qui conserve son historique : rien n'est à collecter au préalable. Sur SQL Server, la table est recherchée dans les bases que désigne le pool. Quand la base de JD Edwards est atteinte par un lien de base de données, la table est lue par le lien que le pool indique sous la clé `SVM` dans ses **Liens de base** (voir [Connecteurs → Jetons de schéma et de DB link](../framework/connectors.md#schema-and-db-link-tokens)) ; si le pool ne désigne pas de bibliothèque `SVM`, la table est recherchée dans le dictionnaire de la base distante.
 
 ### Les serveurs et leur taille
 
@@ -308,7 +309,7 @@ Le bloc liste les quinze vérifications avec leur résultat — **une propositio
 
 ## Obtenir le rapport \{#report\}
 
-**Obtenir le rapport (PDF)**, en haut de la page, produit la synthèse de la plateforme sous forme de document, pour un lecteur qui n'avait pas la page sous les yeux, dans la langue de la page : ce qui demande attention, l'architecture sur une page à l'italienne avec la taille de chaque serveur et l'origine de chaque chiffre, la capacité (taille de la plateforme, traitements batch par jour, évolution des chiffres) et ce qui peut être amélioré. Une source qui n'a pas répondu est nommée dans le document.
+**Obtenir le rapport (PDF)**, en haut de la page, produit la synthèse de la plateforme sous forme de document, pour un lecteur qui n'avait pas la page sous les yeux, dans la langue de la page : ce qui demande attention, l'architecture sur une page à l'italienne avec la taille de chaque serveur et l'origine de chaque chiffre, la capacité (taille de la plateforme, traitements batch par jour, évolution des chiffres) et ce qui peut être amélioré. Les sections de la base prennent les termes de la base lue (*Fichiers de données*, *Journaux de transactions*, *Pools de disques*, *Journaux*…). Une source qui n'a pas répondu est nommée dans le document.
 
 Le même document figure sur la page **Rapports** (*JD Edwards platform synthesis*), avec en paramètres la langue, le nom du client inscrit sur la couverture et **With the OCI estimate** : la [Cible OCI](./monitoring/oci-target.md) et son estimation y sont alors ajoutées en chapitre, avec leurs propres choix (devise, licence, édition, haute disponibilité, site de reprise, plateformes hors production). La tâche *Rapport de synthèse de la plateforme* l'envoie chaque mois par e-mail (voir [Tâches](./jobs.md)).
 

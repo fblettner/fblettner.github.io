@@ -43,7 +43,7 @@ On a Python install, the same steps are three commands — see [Python server](.
 | Option | Effect |
 |---|---|
 | `--dry-run` | Prints the merge plan and stops: nothing is written. |
-| `--force-config` | Also refreshes the vendor entities you changed without marking them as yours (see below). |
+| `--force-config` | Also refreshes the vendor entities you changed without marking them as yours, and gives the delivered menus the wheel's order (see below). |
 
 ---
 
@@ -75,6 +75,19 @@ A new wheel brings new screens, menu items, dictionary entries, queries and dash
 **The Nomaflow jobs** are merged job by job. The product's part of a delivered job — its steps, description, tags, the parameters it offers — is refreshed; what you set on it is kept: enabled or not, schedule, timezone, presets, alerts, retry, log level, timeout and the values of its parameters. Your own jobs stay. A delivered job whose steps you changed is kept as it is and listed at the end; a job marked `override = true` in `jobs.toml` is always kept as saved.
 
 What was delivered is recorded under `config/.bundled/`, so the next upgrade knows "never changed" from "changed". The entities kept because they were changed locally are listed at the end of the run: mark them `override = true` to keep them for good, or install again with `--force-config` to take the vendor version.
+
+### The order of the menus \{#menu-order\}
+
+The entries of a delivered menu are merged one by one, and so is their order:
+
+| On the server | After the upgrade |
+|---|---|
+| Nobody moved an entry — the entries delivered last time are still in their delivered order | The menu takes the new wheel's order: a new entry appears where the vendor placed it, and an order the vendor changed is applied. The entries you created stay right after the entry they followed. |
+| Entries were moved | Your order is kept. Only the new entries are placed: each one in its folder, right after the entry it follows in the wheel — else right after its folder, else at the end of the menu. |
+| No record of the previous delivery | Nothing says whether entries were moved: your order is kept, and the new entries are placed as above. |
+| Installed with `--force-config` | The menu takes the wheel's order, even where entries were moved. |
+
+The report printed at the end names the menus whose entries took the wheel's order — `⇅ <menu>: its entries take the shipment's order`.
 
 The apps upgrade together with the framework with `./liberty upgrade --apps <wheel>` — see [Upgrade and rollback](./upgrading.md#apps).
 

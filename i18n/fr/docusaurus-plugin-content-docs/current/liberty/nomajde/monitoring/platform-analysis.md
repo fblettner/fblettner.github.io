@@ -6,7 +6,9 @@ keywords: [Nomajde, JD Edwards, JDE E1, analyse de la plateforme, Server Manager
 
 # Analyse de la plateforme
 
-**Supervision → Analyse de la plateforme** lit ce que Server Manager mesure maintenant et le présente comme une analyse : les chiffres, puis **ce que disent les chiffres** — les points à revoir d'abord —, puis le détail par sujet, en quatre onglets. Rien n'est conservé : les chiffres sont ceux de la console au moment de la lecture.
+**Supervision → Analyse de la plateforme** lit ce que Server Manager mesure maintenant et le présente comme une analyse : les chiffres, puis **ce que disent les chiffres** — les points à revoir d'abord —, puis le détail par sujet, en quatre onglets. Les chiffres sont ceux de la console au moment de la lecture.
+
+Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire** relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
 
 ---
 
@@ -25,6 +27,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, analyse de la plateforme, Server Manager
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Les serveurs JD Edwards tels que Server Manager les mesure maintenant, et ce que les chiffres désignent.</text>
   <rect x="907" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="933.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
+  <text x="897" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Lu à 14:02</text>
   <line x1="232" y1="74" x2="968" y2="74" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="84" width="174.0" height="34" rx="7" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1.2"/>
   <rect x="248.0" y="92" width="18" height="18" rx="4" fill="#4a9eff" fillOpacity="0.18"/>

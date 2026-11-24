@@ -269,7 +269,7 @@ Le champ **Application ID** au-dessus de la grille la restreint à une applicati
 | **JDE CO** | Schéma des objets centraux — les spécifications lues par la référence croisée. |
 | **JDE OL** | Schéma de l'Object Librarian (F9860, F9861) — catalogue des objets et menus. |
 | **F00950** | Schéma de la table du security workbench, quand ce n'est pas le schéma système. |
-| **JDE_UDO_SEC** | Schéma de la table de sécurité des objets utilisateur (F00950W) : ses lignes s'ajoutent à la sécurité collectée. Vide : ignorée. |
+| **JDE_UDO_SEC** | Schéma de la table de sécurité des objets utilisateur (F00950W) : ses lignes sont collectées dans la [sécurité des UDO](../../applications/rights/udo-security.md), et les lignes de consultation des pages composites et E1 alimentent les droits. Vide : ignorée. |
 | **JDE_UDO_OL** | Schéma de la bibliothèque des objets utilisateur (F9860W, F9861W), lue pour les pages composites, les E1 pages et l'inventaire des objets utilisateur. Vide : ces étapes ne font rien et le signalent. |
 | **…_DBLINK** | À côté de chaque schéma : le lien de base qui y mène. Vide quand les tables JDE sont dans la base à laquelle Nomasx-1 se connecte. |
 | **Lecture LOB en mode thick (O/N)** | À cocher quand les tables JDE sont atteintes par un lien de base : les menus et les spécifications (colonnes LOB) sont alors lus par un processus thick de courte durée. |
@@ -288,6 +288,7 @@ Les menus lus déterminent les chemins d'accès derrière *Menus*, *Droits*, la 
 ## Conseils & bonnes pratiques
 
 - **Demander à l'administrateur JDE** les noms des schémas et des liens de base : ils viennent de l'installation JDE (path code, sources de données).
+- **Vérifier d'abord la bibliothèque** dans l'écran [Bibliothèques UDO](./udo-libraries.md) : il recense chaque bibliothèque qui contient F00950W, F9860W et F9861W, et marque celle de structure 9.2 à indiquer dans **JDE_UDO_SEC** et **JDE_UDO_OL**.
 - **Renseigner JDE_UDO_OL** sur toute installation en Tools 9.2 : une grande part de ce que modifie un client est un objet utilisateur, et les pages composites donnent des chemins d'accès absents des menus standard.
 - **Ne cocher la lecture LOB en mode thick qu'avec un lien de base** ; une installation locale lit directement les colonnes LOB.
 - **Garder une rétention OUT plus longue que l'intervalle de collecte**, pour qu'aucune ligne d'utilisation ne soit purgée avant sa lecture par Nomasx-1.

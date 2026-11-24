@@ -213,7 +213,7 @@ A single platform that pulls every relevant source — ERP, database, directory 
       <li>Customer Support Identifiers and the licences attached to each — the contractual side.</li>
       <li>Per-database list of required Oracle options based on what the collection scripts found on the instance.</li>
       <li>JDE per-app cohorts — enabled users, transactional users, dormant accounts, orphan transactions.</li>
-      <li>Usage Report and Financial Report — required vs subscribed and the monetary gap.</li>
+      <li>Licensing review — who is counted on which line of the contracts, what is missing and what it could cost (an assumption at list prices).</li>
     </ul>
   </div>
 
@@ -454,21 +454,21 @@ A second example: **Applications → Conflicts → Summary**, the segregation-of
 
 ## The application map
 
-The menu opens on the three dashboards, the Data Explorer and the reports, then the working sections and the settings.
+The menu opens on the overview and the **Reviews** — what is read to judge the situation —, the Data Explorer and the reports, then the working sections and the settings.
 
 | Section | What it covers |
 |---|---|
 | **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
-| **Segregation of duties**, **Security review** | Two dashboards under Overview: the [conflicts](./sod-dashboard.md) — trend, risks, role pairs, proven conflicts — and the [access review](./security-review.md) — twelve checks and the accounts to review first. |
+| **Reviews** | Five readings of the situation: [Security](./security-review.md) — the access review, twelve checks and the accounts to review first; [Segregation of duties](./sod-review.md) — the conflicts allowed and those the users exercised, with their evidence; [Licences](./licensing-review.md) — the licensing review; [What to fix](./security-analysis.md) — nineteen checks, each finding with what to do; [Segregation of duties: trend](./sod-dashboard.md) — the conflicts refresh after refresh. |
 | **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards. |
 | **Reports** | The [licence audit](./reports/audit-licences.md) and the [Security & SoD assessment](./reports/security-sox.md), run for one application and downloaded as PDF or Markdown. |
 | **Last Refresh** | The last collection of each module per application, grouped by module; a click on a line opens the run that produced it. |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
-| **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
+| **Applications** | Per connected application: menus, rights (per user, per role, combined, with the [row security](./applications/rights/row-security.md) and the [UDO security](./applications/rights/udo-security.md)), Object Usage Tracking (components, objects, details), Conflicts (summary, details, exercised, by user, by role), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
-| **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed Licenses, Usage Report, Financial Report. |
+| **Licences** | CSI contracts, JD Edwards licence picture, Oracle licence requirements, Subscribed licences; the Licensing review under Reviews. |
 | **Jobs** | [Collect the security and SoD data or the licences, produce the two audit reports](./jobs.md), for one or several applications, with a live log. |
-| **Settings** | Source-system definitions (applications, JDE schemas, Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
+| **Settings** | Source-system definitions (applications, JDE schemas and [UDO libraries](./settings/global/udo-libraries.md), Oracle catalogues), LDAP department mapping, SoD configuration (processes, activities, risks, objects, matrix), pricing catalogue, security and AD flags. |
 
 ---
 
@@ -476,7 +476,7 @@ The menu opens on the three dashboards, the Data Explorer and the reports, then 
 
 | Role | What they typically open Nomasx-1 for |
 |---|---|
-| **Internal auditor** | The quarterly SoD review — open conflicts, the ones proven by activity, trend over time. |
+| **Internal auditor** | The quarterly SoD review — open conflicts, the ones the users exercised and their evidence, trend over time. |
 | **Security officer** | Day-to-day "who has access to X" — the user-and-role catalogue, with dormant accounts and expired assignments flagged. |
 | **JDE security administrator** | Cross-environment user-and-role catalogue, easier than the JDE security workbench, with bulk edits in Nomajde when changes are needed. |
 | **Licence manager** | Required-vs-subscribed reconciliation, Object Usage Tracking evidence, financial-gap report before each renewal. |

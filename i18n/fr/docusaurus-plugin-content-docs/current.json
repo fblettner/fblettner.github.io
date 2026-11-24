@@ -671,6 +671,14 @@
     "message": "Services JD Edwards (AIS)",
     "description": "The label for category 'JD Edwards services (AIS)' in sidebar 'nomajdeSidebar'"
   },
+  "sidebar.nomajdeSidebar.category.Security simulation": {
+    "message": "Simulation de la sécurité",
+    "description": "The label for category Security simulation in sidebar nomajdeSidebar"
+  },
+  "sidebar.nomasx1Sidebar.category.Reviews": {
+    "message": "Revues",
+    "description": "The label for category Reviews in sidebar nomasx1Sidebar"
+  },
   "sidebar.nomajdeSidebar.category.Development": {
     "message": "Développement",
     "description": "The label for category Development in sidebar nomajdeSidebar"

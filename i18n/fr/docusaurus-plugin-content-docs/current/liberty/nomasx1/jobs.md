@@ -35,6 +35,8 @@ Les droits effectifs comprennent les chemins d'accès des objets définis par l'
 
 Les deux entrées de collecte lancent la même tâche avec un jeu d'étapes différent : **Collecter la sécurité et la SoD** écarte les étapes de licences, **Collecter les licences** écarte celles de sécurité et de SoD. Aucune des deux ne lit l'annuaire (LDAP), le journal d'activité, les propriétés de la base Oracle, la référence croisée des objets JD Edwards ni l'inventaire des objets définis par l'utilisateur. Les exploitants collectent les trois premiers avec le préréglage *Everything* de la tâche dans Nomaflow, ou par sa planification ; la référence croisée et l'inventaire des objets définis par l'utilisateur (étape `JDE_UDO`) viennent de la tâche [`nomasx1-xref`](../nomaflow/bundled-jobs.md#nomasx1-xref), que lisent les références croisées et l'analyse de montée de version de Nomajde. Tant que l'annuaire n'est pas lu, les contrôles d'annuaire de la [revue de sécurité](./security-review.md) affichent *Aucun annuaire collecté*.
 
+Sur une application JD Edwards, deux étapes de la collecte de la sécurité suivent celle du Security Workbench : `JDE_SEC_ROWS` lit la **sécurité de ligne** et `JDE_SEC_UDO` toute la **sécurité des UDO** — chaque catégorie et chaque type de ligne —, chacune dans sa propre table, présentées dans [Sécurité de ligne](./applications/rights/row-security.md) et [Sécurité des UDO](./applications/rights/udo-security.md). Aucune ne modifie les droits, les chiffres de licences ni la séparation des tâches : la sécurité de ligne ne décide pas de ce qu'un utilisateur peut ouvrir, et les droits ne retiennent de la sécurité des UDO que les lignes de consultation des pages composites et E1. [À corriger](./security-analysis.md) lit les deux. La sécurité des UDO n'est lue que si **JDE_UDO_SEC** est renseigné dans les [paramètres JD Edwards](./settings/global/jd-edwards.md) ; l'écran [Bibliothèques UDO](./settings/global/udo-libraries.md) donne la bibliothèque à indiquer.
+
 Une étape en échec n'arrête pas les autres : l'exécution continue et se termine en échec en nommant l'étape.
 
 ---
@@ -42,6 +44,21 @@ Une étape en échec n'arrête pas les autres : l'exécution continue et se term
 ## Selon une planification \{#reports\}
 
 Les exploitants planifient les mêmes tâches dans Nomaflow : la collecte chaque nuit sur toutes les applications, les deux rapports le 1er de chaque mois — envoyés aux titulaires du rôle `nomasx1_auditor`, PDF joint, une fois le compte de messagerie renseigné. Les tâches sont livrées désactivées. Voir [Tâches livrées](../nomaflow/bundled-jobs.md#collect).
+
+---
+
+## Données de démonstration \{#demo\}
+
+`nomasx1-demo-licences` est réservée aux **plateformes de démonstration**. Elle ne figure pas dans le menu de Nomasx-1 : les opérateurs la lancent depuis Nomaflow, où elle est livrée désactivée. Elle donne à une application un contrat de démonstration qui présente tous les cas que connaît la [revue des licences](./licensing-review.md), ainsi qu'une utilisation pour les utilisateurs de l'application.
+
+| Paramètre | Effet |
+|---|---|
+| **Application** | L'application qui reçoit la démonstration. |
+| **Écrire les données de démonstration, ou les retirer** | `add` les écrit (après avoir retiré une démonstration précédente) ; `remove` retire tout ce qu'elle a écrit. |
+
+Ce qu'écrit `add` lui est propre, sur un contrat dédié (*DEMO — licensing review*) : deux bundles — un petit dont les modules figurent aussi dans le grand —, des lignes au chiffre d'affaires avec un chiffre d'affaires déclaré supérieur à la souscription, une ligne aux employés, une ligne au processeur, une ligne de module, une base et un pack en Named User Plus avec des utilisateurs déclarés pour une autre application, des personnes qui utilisent un module qu'aucune ligne ne couvre, et une installation d'Oracle Data Integrator et d'Oracle Analytics Server avec leurs lignes de contrat. Quand Nomajde est installé, elle saisit aussi des machines de démonstration dans [Taille des serveurs](../nomajde/monitoring/server-sizes.md) — leur nom commence par `DEMO-`. Elle ne modifie jamais un contrat réel.
+
+L'utilisation qu'elle écrit est remplacée par la collecte des licences suivante : relancer la tâche après chaque collecte.
 
 ---
 

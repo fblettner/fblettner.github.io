@@ -151,7 +151,7 @@ Pour chaque rôle connu d'**une application connectée**, répondre en un coup d
 
 - **Quels rôles existent ?** Le catalogue des rôles alimente toutes les autres vues — affectations, conflits, matrices de séparation des tâches.
 - **À quoi correspond chaque rôle ?** Le nom du rôle est le libellé lisible exposé aux administrateurs. Il doit parler de lui-même et suivre la convention de nommage de l'entreprise.
-- **Dans quel ordre le rôle est-il évalué ?** La séquence détermine la priorité à la connexion quand le système source permet à un utilisateur d'hériter de la configuration de plusieurs rôles. Plus le numéro est bas, plus le rôle est évalué tôt — donc prioritaire (convention JDE).
+- **Dans quel ordre le rôle est-il évalué ?** La séquence détermine la priorité à la connexion quand le système source permet à un utilisateur d'hériter de la configuration de plusieurs rôles. Plus le numéro est élevé, plus le rôle est évalué tôt — donc prioritaire (convention JDE).
 
 L'écran est le point d'entrée quand un auditeur demande *« la liste des rôles dans le périmètre »* ou quand une nouvelle matrice SoD doit être construite.
 
@@ -164,7 +164,7 @@ L'écran est le point d'entrée quand un auditeur demande *« la liste des rôle
 | **Application ID** | `ROL_APPS_ID` — identifiant numérique de l'application source. | Application à laquelle appartient le rôle. |
 | **Rôle ID** | `ROL_ID` — identifiant technique du rôle. | Nom technique du rôle tel que connu du système source. |
 | **Nom du rôle** | `ROL_NAME` — libellé descriptif. | Étiquette lisible. |
-| **Séquence** | `ROL_SEQ` — numérique. | Ordre d'évaluation à la connexion. La valeur la plus basse passe en premier ; sert au système source à arbitrer la priorité entre plusieurs rôles détenus par un même utilisateur. |
+| **Séquence** | `ROL_SEQ` — numérique. | Ordre d'évaluation à la connexion. La valeur la plus élevée passe en premier ; sert au système source à arbitrer la priorité entre plusieurs rôles détenus par un même utilisateur. |
 
 Colonnes masquées portées par la ligne : `ROL_DT_REFRESH`, `ROL_UKID` (utilisées par les écrans en aval et lors du rapprochement).
 
@@ -191,5 +191,5 @@ Le bouton **⋯** en début de ligne, ou un clic droit sur la ligne, ouvre le me
 
 - **Confronter le catalogue à l'écran *Rôles non utilisés*** pour repérer les rôles existants mais jamais affectés. Ce sont en général les vestiges de réorganisations passées.
 - **Repérer les noms de rôles quasi identiques** (par exemple `CPTA_FOUR` et `CPTA_FOUR_OLD`). Un renommage de rôle dans la source crée une nouvelle ligne — l'ancienne reste en général tant qu'un nettoyage manuel n'a pas eu lieu.
-- **Utiliser la colonne *Séquence*** pour identifier, parmi les rôles détenus par un utilisateur, celui qui a la séquence la plus basse — c'est le rôle qui pilote l'essentiel du comportement à l'exécution côté JDE.
+- **Utiliser la colonne *Séquence*** pour identifier, parmi les rôles détenus par un utilisateur, celui qui a la séquence la plus élevée — ses règles sont lues en premier et prévalent côté JDE.
 - **⋯ → Display Users** ouvre l'écran *Affectations* filtré sur ce rôle — le moyen le plus rapide de compter ses détenteurs avant de décider de le supprimer.

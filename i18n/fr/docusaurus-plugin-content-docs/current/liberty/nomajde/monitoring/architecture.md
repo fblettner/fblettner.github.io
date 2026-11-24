@@ -27,6 +27,7 @@ Le même schéma forme l'onglet **Architecture** de la [Synthèse de la platefor
   <text x="240" y="62" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">La plateforme JD Edwards telle qu'elle est trouvée maintenant : ce que Server Manager déclare, et ce que seule la base montre.</text>
   <rect x="1027" y="34" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1053.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
+  <text x="687" y="48.5" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Lu à 14:02</text>
   <rect x="902" y="34" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="960.5" y="48.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Télécharger en SVG</text>
   <rect x="697" y="34" width="197" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -214,6 +215,8 @@ Cinq chiffres ouvrent la page : **instances en marche** (sur celles que déclare
 
 En dessous, chaque source du schéma indique si elle a été lue : **Instances Server Manager**, **Appels de fonctions métier**, **Pool JD Edwards**, **Instance de la base**, **Sessions de la base** — *lu*, *non lu* ou *non lu sur cette base*. Une source qui n'a pas répondu est nommée dans un avertissement avec la raison, et le reste est tout de même dessiné.
 
+Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire** relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+
 ---
 
 ## Le schéma \{#diagram\}
@@ -224,7 +227,7 @@ Une colonne par niveau, de gauche à droite — un niveau vide n'est pas dessin�
 |---|---|
 | **Web et AIS** | Les serveurs web et les serveurs AIS, avec le **serveur d'applications** qui les héberge — WebLogic ou WebSphere, avec sa version (*Serveur d'applications · WebLogic 14.1.1*). |
 | **Serveurs d'entreprise** | Les serveurs d'entreprise. |
-| **Base de données** | La base vers laquelle pointe la connexion JD Edwards : son produit et sa version, ses sessions. |
+| **Base de données** | La base vers laquelle pointe la connexion JD Edwards : son produit (Oracle, SQL Server, Db2, Db2 for i…) et sa version, ses sessions. |
 | **Autres clients de la base** | Les autres machines connectées à la base — un outil, une interface : les plus actives une à une, les autres regroupées sur une carte (*12 autres machines*). |
 | **Autres serveurs** | Les instances d'un autre type. |
 | **Administration** | La console Server Manager. |
@@ -269,7 +272,7 @@ Le schéma est dessiné à partir de ce qui a été lu :
 
 - **Server Manager ne répond pas** — les serveurs montrés sont ceux que nomment les sessions de la base, et la page précise que ce qui est déclaré n'est pas connu ;
 - **les sessions de la base ne sont pas lues** — les machines qui se connectent à la base n'apparaissent pas ;
-- **la base n'est pas Oracle** — l'audit de la base n'est pas lu, mais le pool indique tout de même où se trouve la base ;
+- **la base n'est ni Oracle, ni SQL Server, ni Db2** — l'audit de la base n'est pas lu, mais le pool indique tout de même où se trouve la base ;
 - **rien ne répond** — la page indique que ni Server Manager ni la base n'ont répondu.
 
 ---
