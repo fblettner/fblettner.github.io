@@ -1,6 +1,6 @@
 ---
 title: Connecteurs SQL
-description: "Définition de connecteurs SQL utilisés par NomaUBL pour lire ou écrire dans n'importe quelle base accessible — Oracle ou PostgreSQL — au travers de requêtes nommées et paramétrées. Chaque requête porte un nom, un libellé, une description, une spécification de paramètres, le SQL avec des placeholders :param, et un drapeau Writable. L'éditeur a trois onglets Connection / Queries / Test, et le runtime lie les paramètres via PreparedStatement, sans concaténation dans le SQL."
+description: "Définition de connecteurs SQL utilisés par NomaUBL pour lire ou écrire dans n'importe quelle base accessible — Oracle ou PostgreSQL — au travers de requêtes nommées et paramétrées. Chaque requête porte un nom, un libellé, une description, une spécification de paramètres, le SQL avec des placeholders :param, et un drapeau Writable. L'éditeur présente Connection / Queries / Test sous forme de cartes d'étape, et le runtime lie les paramètres via PreparedStatement, sans concaténation dans le SQL."
 keywords: [NomaUBL, connecteurs SQL, requêtes SQL, requêtes nommées, JDBC, Oracle, PostgreSQL, Microsoft SQL Server, Custom JDBC, DB2, MariaDB, Snowflake, PreparedStatement, binding paramètres, writable, liaisons d'actions, règles de notification, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
@@ -16,7 +16,7 @@ Cibles typiques :
 
 La page fonctionne quel que soit le système source, le connecteur SQL pouvant pointer sur n'importe quelle base JDBC accessible.
 
-L'éditeur a **trois onglets** :
+L'éditeur présente ses **trois sections sous forme de cartes d'étape**, alignées en haut. Chaque carte indique le nom de la section et son état — les premières valeurs renseignées parmi ses champs — et un clic affiche ses champs ([fonctionnement des cartes](./settings-overview.md#section-cards)) :
 
 1. **Connection** — type de base, URL JDBC, identifiants, schéma et limites de requêtes.
 2. **Queries** — cartes repliables par requête : nom, libellé, description, SQL, paramètres, drapeau `Writable`.
@@ -26,30 +26,43 @@ L'éditeur a **trois onglets** :
 
 ## Accès à l'éditeur
 
-- *Paramètres* → **+ Add SQL** en haut à droite de la barre des ressources pour créer un nouveau connecteur SQL.
-- Les connecteurs SQL existants se trouvent dans le groupe **SQL** de la barre des ressources avec un badge `sql` — cliquer sur l'un d'eux ouvre l'éditeur.
+- *Paramètres* → **+ Add SQL** dans l'en-tête de la page pour créer un nouveau connecteur SQL.
+- Les connecteurs SQL existants sont des cartes du domaine **SQL connectors** de la navigation, avec un badge `sql` — un clic sur l'une d'elles ouvre l'éditeur.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 744" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="sql-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="sql-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="sql-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="sql-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="680" rx="14" fill="url(#sql-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="704" rx="14" fill="url(#sql-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="92" height="24" rx="4" fill="transparent"/>
-  <text x="286" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Connection</text>
-  <rect x="338" y="28" width="64" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="370" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Queries</text>
-  <rect x="408" y="28" width="48" height="24" rx="4" fill="transparent"/>
-  <text x="432" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Test</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="174" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">jdbc:oracle:thin:@erp:152…</text>
+  <line x1="407" y1="52.0" x2="419" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#sql-flow)"/>
+  <rect x="422" y="30" width="174" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="430" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="438.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="452" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUERIES</text>
+  <text x="431" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="597" y1="52.0" x2="609" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#sql-flow)"/>
+  <rect x="612" y="30" width="174" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="620" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="628.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="642" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <text x="621" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REQUÊTES</text>
   <text x="240" y="104" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Utiliser des placeholders :name pour les paramètres. Autorisés : SELECT / INSERT / UPDATE / DELETE / MERGE.</text>
@@ -114,7 +127,7 @@ L'éditeur a **trois onglets** :
   <text x="252" y="666" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">SQL parsé → :doc :dct :kco liés positionnellement · pas de concaténation.</text>
 
   <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois onglets</text>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois cartes d'étape</text>
   <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Connection / Queries / Test</text>
   <line x1="200" y1="115" x2="240" y2="46" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sql-arrow)"/>
 
@@ -137,11 +150,12 @@ L'éditeur a **trois onglets** :
   <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Panneau Test · réel</text>
   <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">colonnes + lignes ou nb affectées</text>
   <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sql-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Onglet 1 — Connexion
+## Carte 1 — Connection
 
 ### Connection
 
@@ -171,9 +185,9 @@ L'éditeur a **trois onglets** :
 
 ---
 
-## Onglet 2 — Requêtes
+## Carte 2 — Queries
 
-L'onglet Queries est une liste de cartes repliables. L'en-tête de carte affiche un badge **LECT. / ÉCRIT.**, le nom de la requête et la description en deuxième ligne — un connecteur à plusieurs requêtes se lit ainsi comme une liste à cocher d'un coup d'œil. Cliquer sur un en-tête déplie l'éditeur ; **+ Add query** ajoute une nouvelle requête.
+La section Queries est une liste de cartes repliables. L'en-tête de carte affiche un badge **LECT. / ÉCRIT.**, le nom de la requête et la description en deuxième ligne — un connecteur à plusieurs requêtes se lit ainsi comme une liste à cocher d'un coup d'œil. Cliquer sur un en-tête déplie l'éditeur ; **+ Add query** ajoute une nouvelle requête.
 
 ### Champs par requête
 
@@ -201,7 +215,7 @@ Le binding des paramètres passe par `PreparedStatement`. Le runtime analyse le 
 
 Les jetons à l'intérieur de l'un de ces constructs passent inchangés.
 
-La spec des paramètres pilote l'onglet *Test* et l'éditeur des appels : chaque `:name` déclaré devient un champ étiqueté pré-rempli avec la valeur `default`. Les lignes de spec sont séparées par des points-virgules ; chaque ligne contient jusqu'à trois champs séparés par des barres verticales. Les champs vides sont acceptés (un paramètre sans défaut donne simplement un champ vide).
+La spec des paramètres pilote la carte *Test* et l'éditeur des appels : chaque `:name` déclaré devient un champ étiqueté pré-rempli avec la valeur `default`. Les lignes de spec sont séparées par des points-virgules ; chaque ligne contient jusqu'à trois champs séparés par des barres verticales. Les champs vides sont acceptés (un paramètre sans défaut donne simplement un champ vide).
 
 #### Strip des guillemets sur les paramètres chaîne
 
@@ -221,13 +235,13 @@ Le strip des guillemets ne remplace **pas** la règle Oracle de comparaison non-
 
 ---
 
-## Onglet 3 — Test
+## Carte 3 — Test
 
 Un runner intégré qui exécute la requête sélectionnée sur la base cible et affiche le résultat.
 
 | Élément | Description |
 |---|---|
-| **Query** | Liste déroulante de toutes les requêtes déclarées dans l'onglet Queries, au format `name — Label`. La sélection d'une requête pré-remplit les lignes de paramètres à partir de la spec. |
+| **Query** | Liste déroulante de toutes les requêtes déclarées dans la carte Queries, au format `name — Label`. La sélection d'une requête pré-remplit les lignes de paramètres à partir de la spec. |
 | **Parameters** | Une ligne par `:placeholder` déclaré, plus un bouton *Add param* pour des paramètres ad hoc absents de la spec. Chaque ligne a un champ nom et un champ valeur. |
 | **Run** | Envoie l'appel à `/api/sql-connectors/{connecteur}/{requête}` avec les valeurs de paramètres. Le résultat est affiché à côté du bouton. |
 
@@ -235,11 +249,11 @@ Un runner intégré qui exécute la requête sélectionnée sur la base cible et
 
 | Type d'instruction | Affichage |
 |---|---|
-| **SELECT** | Type d'instruction + nombre de lignes + durée sur la ligne verte de succès ; en dessous, un tableau compact colonnes × lignes. Le runtime plafonne le nombre de lignes à *Max rows* de l'onglet Connection. |
+| **SELECT** | Type d'instruction + nombre de lignes + durée sur la ligne verte de succès ; en dessous, un tableau compact colonnes × lignes. Le runtime plafonne le nombre de lignes à *Max rows* de la carte Connection. |
 | **INSERT / UPDATE / DELETE / MERGE** | Type d'instruction + nombre de lignes affectées + durée sur la ligne verte de succès. Pas de tableau — le runtime ne renvoie que le compteur d'updates pour les appels non-`SELECT`. |
 | **Erreur** | Cadre d'erreur rouge avec le message JDBC / analyseur (`SQLException`, violation de la liste blanche, `:placeholder` manquant, etc.). |
 
-L'onglet Test appelle la base réelle — *Enregistrer* le connecteur d'abord après une édition ; sinon le test tourne contre la version précédemment enregistrée de la requête.
+La carte Test appelle la base réelle — *Enregistrer* le connecteur d'abord après une édition ; sinon le test s'exécute sur la version de la requête enregistrée précédemment.
 
 ---
 
@@ -292,6 +306,6 @@ Exemple : une règle qui commence par chercher l'e-mail du client via une requê
 - **Démarrer chaque connecteur en `Writable=Non`.** Passer le drapeau à `Oui` uniquement sur les requêtes qui doivent vraiment écrire. Un connecteur en `SELECT` seul ne peut pas être détourné pour exécuter un `DELETE`, même si une faute de frappe pointe la règle sur la mauvaise requête.
 - **Utiliser des placeholders `:name` pour toute valeur fournie par l'utilisateur.** Concaténer une valeur dans la chaîne SQL court-circuite la protection qu'offrent les paramètres liés. L'analyseur ignore volontairement les jetons à l'intérieur des littéraux et des commentaires : un `:` dans une chaîne reste sans effet.
 - **Réduire Max rows par défaut sur les requêtes orientées tableau de bord.** Un widget qui lit les 10 dernières factures rejetées n'a pas besoin de 1000 lignes en retour ; le plafonner à 50 garde l'interface réactive et le fetch JDBC peu coûteux.
-- **Tester avant d'enregistrer en cas de modification.** L'onglet Test prend en compte l'édition en cours quand il existe des changements non enregistrés, mais le bouton *Run* appelle la base réelle — il n'y a pas de rollback. Une requête `Writable=Oui` testée s'engage si le SQL le décide.
+- **Tester avant d'enregistrer en cas de modification.** La carte Test prend en compte l'édition en cours quand il existe des changements non enregistrés, mais le bouton *Run* appelle la base réelle — il n'y a pas de rollback. Une requête `Writable=Oui` testée s'engage si le SQL le décide.
 - **Coupler connecteurs SQL et API via le chaînage des réponses.** Une règle de notification peut lire une valeur via une requête SQL et la transmettre comme paramètre à un webhook HTTP, sans code de chaque côté. Voir [Règles de notification — onglet Actions](../management/notification-rules.md#onglet-actions) pour les détails.
 - **Garder les identifiants dans un compte BD dédié.** Même sur un connecteur en lecture seule, donner au compte JDBC les seuls droits dont les requêtes ont besoin — `SELECT` sur un petit ensemble de tables, sans accès large au schéma.

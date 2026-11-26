@@ -12,7 +12,7 @@ This screen configures the access to the **JD Edwards database** NomaUBL reads f
 This is one of the **JDE-specific** parts of NomaUBL. Other Configuration pages are source-agnostic (JDE, SAP, NetSuite, custom ERP); this one only applies when the source is JD Edwards.
 :::
 
-The editor has **two tabs**:
+The editor shows its **two sections as step cards** across the top. Each card gives the section's name and its state — the first values set among its fields — and a click shows its fields ([how the cards work](../settings-overview.md#section-cards)):
 
 1. **Connection** — JDBC URL, credentials, post-extraction record handling.
 2. **Tables** — schema and the three JDE BIP tables.
@@ -21,21 +21,30 @@ The editor has **two tabs**:
 
 ## At a glance
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 484" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="jde-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="jde-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="jde-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="jde-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="420" rx="14" fill="url(#jde-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="444" rx="14" fill="url(#jde-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="92" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="286" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Connection</text>
-  <rect x="338" y="28" width="64" height="24" rx="4" fill="transparent"/>
-  <text x="370" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Tables</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="270" height="44" rx="8" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">jdbc:oracle:thin:@dbserver:15… · JDE_RO_U…</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#jde-flow)"/>
+  <rect x="518" y="30" width="270" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="548" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLES</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PRODDTA · SY920</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Connection</text>
   <text x="240" y="108" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JDBC URL</text>
@@ -57,7 +66,7 @@ The editor has **two tabs**:
 
   <line x1="240" y1="226" x2="780" y2="226" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="248" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Tables tab — preview</text>
+  <text x="240" y="248" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Tables section — preview</text>
   <text x="240" y="270" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SCHEMA</text>
   <rect x="340" y="260" width="180" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="350" y="276" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">PRODDTA</text>
@@ -89,11 +98,12 @@ The editor has **two tabs**:
   <text x="830" y="333" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three BIP tables</text>
   <text x="830" y="346" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">job · XML BLOB · rendered PDF</text>
   <line x1="820" y1="334" x2="780" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#jde-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Tab 1 — Connection
+## Card 1 — Connection
 
 ### Connection
 
@@ -120,7 +130,7 @@ Pick `NO` while validating an integration, switch to `REMOVE` once you trust the
 
 ---
 
-## Tab 2 — Tables
+## Card 2 — Tables
 
 ### Schema
 

@@ -30,138 +30,115 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 450" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nrule-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="nrule-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nrule-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <linearGradient id="nrule-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.28"/><stop offset="100%" stopColor="#22c55e" stopOpacity="0.10"/></linearGradient>
+    <marker id="nrlfr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nrlfr-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nrlfr-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nrlfr-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="240" y="20" width="540" height="620" rx="14" fill="url(#nrule-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="262" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Règles de notification</text>
-  <rect x="558" y="30" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="580" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">+ Add</text>
-  <rect x="606" y="30" width="48" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="630" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">⎘ Copy</text>
-  <rect x="658" y="30" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="688" y="45" fill="#f87171" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">🗑 Remove</text>
-  <rect x="722" y="30" width="44" height="22" rx="5" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/><text x="744" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">💾 Save</text>
-
-  <line x1="240" y1="68" x2="780" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="262" y="84" width="180" height="540" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="270" y="92" width="164" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/><text x="278" y="107" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Rechercher…</text>
-  <line x1="262" y1="124" x2="442" y2="124" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="262" y="124" width="180" height="50" fill="rgba(255,255,255,0.04)"/>
-  <text x="276" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">pa-rejection</text>
-  <text x="276" y="156" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Alerte sur rejet PA</text>
-  <rect x="402" y="142" width="32" height="14" rx="7" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/><text x="418" y="152" fill="#4ade80" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">on</text>
-
-  <line x1="262" y1="174" x2="442" y2="174" stroke="#1f2937" strokeWidth="1"/>
-  <text x="276" y="192" fill="#cbd5e1" fontSize="11" fontWeight="600" fontFamily="system-ui, sans-serif">pa-success</text>
-  <text x="276" y="206" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Confirmation de dépôt PA</text>
-  <rect x="402" y="192" width="32" height="14" rx="7" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/><text x="418" y="202" fill="#4ade80" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">on</text>
-
-  <line x1="262" y1="224" x2="442" y2="224" stroke="#1f2937" strokeWidth="1"/>
-  <text x="276" y="242" fill="#cbd5e1" fontSize="11" fontWeight="600" fontFamily="system-ui, sans-serif">validation-failure</text>
-  <text x="276" y="256" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Erreurs XSD / Schematron</text>
-  <rect x="402" y="242" width="40" height="14" rx="7" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/><text x="422" y="252" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">off</text>
-
-  <rect x="462" y="84" width="298" height="540" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="470" y="92" width="282" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="480" y="113" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
-  <text x="566" y="113" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Alerte sur rejet PA</text>
-
-  <text x="478" y="148" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">DÉCLENCHEUR</text>
-  <text x="478" y="170" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Statut</text>
-  <rect x="540" y="160" width="60" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="570" y="171" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">9904 ×</text>
-  <rect x="606" y="160" width="60" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="636" y="171" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">9907 ×</text>
-  <text x="478" y="194" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Motif</text>
-  <rect x="540" y="184" width="80" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="580" y="195" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">REJ_ADR ×</text>
-
-  <text x="478" y="226" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">CANAUX</text>
-  <rect x="478" y="232" width="58" height="20" rx="10" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="507" y="246" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">☑ portal</text>
-  <rect x="540" y="232" width="56" height="20" rx="10" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="568" y="246" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">☑ email</text>
-  <rect x="600" y="232" width="58" height="20" rx="10" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="629" y="246" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">☐ action</text>
-
-  <text x="478" y="278" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">DESTINATAIRE</text>
-  <text x="478" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Type</text>
-  <rect x="540" y="288" width="80" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="546" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">role ▾</text>
-  <text x="478" y="320" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Valeur</text>
-  <rect x="540" y="310" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="324" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">accountants</text>
-  <text x="478" y="340" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CC</text>
-  <rect x="540" y="332" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="346" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">superviseur@nomana-it.fr</text>
-
-  <text x="478" y="380" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">CONTENU E-MAIL</text>
-  <text x="478" y="400" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Sujet</text>
-  <rect x="540" y="390" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="404" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Invoice &#123;doc&#125; &#123;dct&#125; &#123;kco&#125; — Rejected</text>
-  <text x="478" y="420" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Corps</text>
-  <rect x="540" y="412" width="200" height="34" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="426" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Status: &#123;statusLabel&#125;</text>
-  <text x="548" y="438" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Reason: &#123;reasonLabel&#125;</text>
-  <rect x="540" y="450" width="14" height="14" rx="3" fill="url(#nrule-g-green)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="558" y="461" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">attachPdf · joindre la facture rendue</text>
-
-  <text x="478" y="496" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">APPEL D'ACTION · désactivé</text>
-  <text x="478" y="516" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Connecteur / endpoint / paramètres — uniquement quand ☑ action ci-dessus</text>
-
-  <text x="478" y="552" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">TEST</text>
-  <rect x="478" y="560" width="60" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="486" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">12345</text>
-  <rect x="544" y="560" width="40" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="552" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">RI</text>
-  <rect x="590" y="560" width="60" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="598" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">00070</text>
-  <rect x="656" y="560" width="84" height="20" rx="4" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="698" y="574" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">▶ Lancer</text>
-
-  <rect x="478" y="592" width="262" height="20" rx="4" fill="rgba(74,222,128,0.10)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="488" y="606" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">✓ Émis · 1 portail · 2 e-mails</text>
-
-  <rect x="20" y="36" width="200" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="52" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Barre d'actions</text>
-  <text x="30" y="65" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">add / copy / remove / save</text>
-  <line x1="220" y1="50" x2="240" y2="50" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="138" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="154" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Liste des règles</text>
-  <text x="30" y="167" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pastille on / off par ligne</text>
-  <line x1="220" y1="156" x2="262" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="148" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="164" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Puces de déclencheur</text>
-  <text x="810" y="177" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">multi-sélection statut + motif</text>
-  <line x1="800" y1="166" x2="690" y2="170" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="232" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="248" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Canaux</text>
-  <text x="810" y="261" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">portal · email · action</text>
-  <line x1="800" y1="250" x2="660" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="296" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="312" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Destinataire</text>
-  <text x="30" y="325" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cible portail + liste e-mails</text>
-  <line x1="220" y1="314" x2="478" y2="314" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="396" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="412" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Sujet et corps</text>
-  <text x="810" y="425" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;placeholders&#125; résolus à l'envoi</text>
-  <line x1="800" y1="414" x2="744" y2="402" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="552" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="568" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Panneau de test</text>
-  <text x="30" y="581" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">exécute la règle de bout en bout</text>
-  <line x1="220" y1="570" x2="478" y2="570" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
+  <rect x="220" y="20" width="880" height="414" rx="14" fill="url(#nrlfr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Règles de notification</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Définissez quels changements de statut/motif doivent notifier qui</text>
+  <rect x="997" y="34" width="83" height="22" rx="5" fill="url(#nrlfr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1038.5" y="48.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <rect x="919" y="34" width="72" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="955.0" y="48.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+  <rect x="858" y="34" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="885.5" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Copier</text>
+  <rect x="780" y="34" width="72" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="816.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Ajouter</text>
+  <rect x="240" y="84" width="200" height="330" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="92" width="184" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="106.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Rechercher…</text>
+  <rect x="246" y="124" width="188" height="38" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="254" y="139" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
+  <text x="254" y="153" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Alerte sur rejet PA</text>
+  <rect x="394" y="134" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="410.0" y="145.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">on</text>
+  <rect x="246" y="168" width="188" height="38" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="183" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-deposit</text>
+  <text x="254" y="197" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Confirmation de dépôt PA</text>
+  <rect x="394" y="178" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="410.0" y="189.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">on</text>
+  <rect x="246" y="212" width="188" height="38" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="227" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">validation-failure</text>
+  <text x="254" y="241" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Erreurs XSD / Schematron</text>
+  <rect x="394" y="222" width="32" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="410.0" y="233.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">off</text>
+  <rect x="454" y="84" width="626" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="468" y="104" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
+  <text x="574" y="104" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Alerte sur rejet PA</text>
+  <rect x="454" y="112" width="626" height="64" fill="rgba(255,255,255,0.015)"/>
+  <rect x="466" y="122" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="474" y="129" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="482.0" y="140.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">●</text>
+  <text x="496" y="140.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GENERAL</text>
+  <text x="475" y="158" fill="#4ade80" fontSize="9" fontFamily="system-ui, sans-serif">Active</text>
+  <line x1="657" y1="144.0" x2="669" y2="144.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlfr-flow)"/>
+  <rect x="672" y="122" width="190" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="680" y="129" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="688.0" y="140.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">ϟ</text>
+  <text x="702" y="140.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TRIGGER</text>
+  <text x="681" y="158" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9904, 9907</text>
+  <line x1="863" y1="144.0" x2="875" y2="144.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlfr-flow)"/>
+  <rect x="878" y="122" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="886" y="129" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="894.0" y="140.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="908" y="140.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHANNELS</text>
+  <text x="887" y="158" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Portail (cloche + boîte), Email</text>
+  <rect x="454" y="166" width="626" height="64" fill="rgba(255,255,255,0.015)"/>
+  <rect x="466" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="474" y="183" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="482.0" y="194.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✉</text>
+  <text x="496" y="194.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
+  <text x="475" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Envoyé</text>
+  <line x1="657" y1="198.0" x2="669" y2="198.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlfr-flow)"/>
+  <rect x="672" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="680" y="183" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="688.0" y="194.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <text x="702" y="194.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="681" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">1 appel(s)</text>
+  <line x1="863" y1="198.0" x2="875" y2="198.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlfr-flow)"/>
+  <rect x="878" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="886" y="183" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="894.0" y="194.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="908" y="194.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <text x="887" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Essayer sur une facture</text>
+  <line x1="454" y1="230" x2="1080" y2="230" stroke="#1f2937" strokeWidth="1"/>
+  <text x="468" y="252" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CODES STATUT</text>
+  <rect x="594" y="240" width="48" height="18" rx="9.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="618.0" y="252.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9904 ×</text>
+  <rect x="648" y="240" width="48" height="18" rx="9.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="672.0" y="252.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9907 ×</text>
+  <text x="468" y="282" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CODES MOTIF</text>
+  <rect x="594" y="270" width="63" height="18" rx="9.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="625.5" y="282.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">REJ_ADR ×</text>
+  <text x="468" y="312" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIRECTION</text>
+  <rect x="594" y="297" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="604" y="311.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Toutes (émises + reçues) ▾</text>
+  <text x="468" y="342" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Mêmes codes que dans l'onglet Historique d'une facture. Vide = tous.</text>
+  <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Liste des règles</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pastille on / off par règle</text>
+  <line x1="200" y1="137.0" x2="248" y2="143" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlfr-arrow)"/>
+  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Puces du déclencheur</text>
+  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">statut + motif, choix multiple</text>
+  <line x1="200" y1="307.0" x2="464" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlfr-arrow)"/>
+  <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Barre d'outils</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ajouter / copier / supprimer / enregistrer</text>
+  <line x1="1120" y1="47.0" x2="1080" y2="45" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlfr-arrow)"/>
+  <rect x="1120" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Étapes de la règle</text>
+  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'étape choisie s'ouvre dessous</text>
+  <line x1="1120" y1="137.0" x2="1076" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlfr-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">État sur chaque carte</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce que contient chaque partie</text>
+  <line x1="1120" y1="227.0" x2="1076" y2="226" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlfr-arrow)"/>
 </svg>
 
 La page comporte une **liste de règles** à gauche et un **éditeur de règle** à droite. Chaque règle est une ressource `notification-rule` enregistrée dans `config-notifications.json` ; le dispatcher les recharge au démarrage et après chaque enregistrement.
@@ -192,16 +169,27 @@ Une zone de recherche en haut de la barre latérale filtre la liste par sous-cha
 
 ## L'éditeur de règle
 
-L'éditeur est organisé en **six onglets** — chaque onglet tient sur un écran et la liste d'actions dispose de l'espace nécessaire pour s'allonger. L'onglet revient à *Général* au changement de règle.
+L'éditeur présente la règle sous forme de **six cartes d'étape** alignées en haut — **General**, **Trigger**, **Channels**, **Email**, **Actions** et **Test**, libellés affichés en anglais par l'application — qui résument chacune leur réglage :
 
-### Onglet Général
+| Carte | État affiché |
+|---|---|
+| **General** (Général) | *Active* (en vert) ou *Désactivée*. |
+| **Trigger** (Déclencheur) | Les codes statut du déclencheur, ou *Tout statut*. |
+| **Channels** (Canaux) | Les canaux cochés (*Portail (cloche + boîte)*, *Email*, *Appel API*), ou *Aucun*. |
+| **Email** | *Envoyé* quand le canal e-mail est coché, *Non utilisé* sinon. |
+| **Actions** | Le nombre d'appels de connecteur (*2 appel(s)*). |
+| **Test** | *Essayer sur une facture*. |
+
+Un clic sur une carte affiche ses champs sous les cartes. L'éditeur revient sur *General* au changement de règle.
+
+### Général (*General*)
 
 | Champ | Description |
 |---|---|
 | **Description** | Phrase libre affichée sous le nom de la règle dans la liste. Premier endroit où lire ce que fait la règle. |
 | **Activée** | Case unique. Décochée, la règle reste dans le catalogue mais est ignorée à l'envoi. La même valeur pilote la pastille `on` / `off` de la liste. |
 
-### Onglet Déclencheur
+### Déclencheur (*Trigger*)
 
 Le déclencheur définit **quand** la règle se déclenche. Trois champs se combinent, tous optionnels :
 
@@ -215,14 +203,14 @@ Les deux premiers champs sont des **multi-sélections à puces** — choisir une
 
 Quand plusieurs champs sont renseignés, tous doivent correspondre (ET logique) pour que la règle se déclenche — une règle `Statut = 207`, `Direction = Reçues uniquement` câble ainsi la notification de rejet côté fournisseur sans entrer en collision avec la règle `Statut = 207` côté client qui existe déjà sur le même modèle.
 
-### Onglet Canaux
+### Canaux (*Channels*)
 
 Deux canaux de livraison, plus le bloc destinataire :
 
 - **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](../application/notifications.md) et dans la cloche.
 - **`email`** — envoie un message SMTP via le compte mail configuré sur le template `e-invoicing`.
 
-Les appels d'action partent automatiquement quand la règle a au moins une entrée dans l'onglet *Actions*. Pour bloquer les appels d'action, désactiver la règle depuis l'onglet Général.
+Les appels d'action partent automatiquement quand la règle a au moins une entrée dans la carte *Actions*. Pour bloquer les appels d'action, désactiver la règle depuis la carte *General*.
 
 Le modèle de destinataire comporte deux parties indépendantes : une **cible portail** (utilisateur / rôle) et une **liste d'e-mails**.
 
@@ -234,9 +222,9 @@ Le modèle de destinataire comporte deux parties indépendantes : une **cible po
 
 Quand l'authentification est activée, une cible portail dont la ligne `F564250` porte un e-mail reçoit aussi le canal e-mail automatiquement.
 
-### Onglet Email
+### Email
 
-L'onglet Email affiche son contenu sans condition — aucune case ne le verrouille plus. L'envoi effectif d'un e-mail dépend de la case `email` de l'onglet *Canaux*.
+La carte *Email* affiche toujours ses champs. L'envoi effectif d'un e-mail dépend de la case `email` de la carte *Channels*, ce que reprend l'état de la carte *Email* (*Envoyé* / *Non utilisé*).
 
 | Champ | Valeur par défaut | Description |
 |---|---|---|
@@ -244,7 +232,7 @@ L'onglet Email affiche son contenu sans condition — aucune case ne le verrouil
 | **Corps** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Corps en texte brut. Saisie multi-lignes. |
 | **Attach PDF** | `Y` | Génère le PDF de la facture (via le `pdf-template` résolu) et l'attache à l'e-mail. Le PDF est généré une seule fois par envoi et réutilisé pour chaque destinataire ; un échec de génération est tracé mais ne fait pas échouer l'e-mail. |
 
-Placeholders disponibles dans le sujet et le corps : les 10 champs canoniques — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Onglet Actions* ci-dessous).
+Placeholders disponibles dans le sujet et le corps : les 10 champs canoniques — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Actions* ci-dessous).
 
 Le jeu de placeholders fusionne aussi toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — tirées par un seul SELECT `F564231 LEFT JOIN F564230` à côté des champs canoniques. Les montants sont rendus à 2 décimales, les dates JDE Julian en ISO, les colonnes CHAR sont trimées. Les champs canoniques priment quand une colonne du catalogue partage un nom — `{doc}` / `{status}` gardent leur sens familier.
 
@@ -252,9 +240,9 @@ Un bouton `{ }` se trouve à côté de l'input Sujet et du textarea Corps. Cliqu
 
 Le `NTSUBJ` côté portail reprend le même sujet ; le `NTMSGE` côté portail prend par défaut juste `{statusLabel}` — la boîte de réception affiche déjà la référence du document en ligne, donc la dupliquer dans le corps serait redondant.
 
-### Onglet Actions
+### Actions \{#onglet-actions\}
 
-L'onglet Actions porte une **liste** d'appels de connecteur au lieu d'un seul. Chaque appel est rendu sous forme de carte repliable. L'en-tête de la carte affiche l'index de l'appel (`#1`, `#2`, …) et soit le champ *Description*, soit `connecteur · cible` quand aucune description n'est saisie ; cliquer dessus déplie l'éditeur.
+La carte *Actions* porte une **liste** d'appels de connecteur. Chaque appel est rendu sous forme de carte repliable. L'en-tête de la carte affiche l'index de l'appel (`#1`, `#2`, …) et soit le champ *Description*, soit `connecteur · cible` quand aucune description n'est saisie ; cliquer dessus déplie l'éditeur.
 
 | Champ | Description |
 |---|---|
@@ -290,7 +278,7 @@ Exemple : une règle qui commence par lire l'e-mail du client via une requête S
 
 Les appels d'action sont exécutés **avant** le canal e-mail : un `transport.close()` SMTP bloqué ne peut donc pas les empêcher. L'écriture portail passe en premier ; les e-mails partent une fois la chaîne d'actions terminée.
 
-### Onglet Test
+### Test
 
 Un runner *Test* synchrone. Il accepte un triplet `(doc, dct, kco)`, optionnellement un code statut et un message personnalisé, puis **exécute réellement la règle** sur tous les canaux activés — l'écriture portail arrive dans la boîte, la chaîne d'actions s'exécute, l'e-mail part par SMTP. La bannière de résultat indique les compteurs d'envoi (`✓ Émis · 1 portail · 2 e-mails · 3 action(s) exécutée(s)`) ou la première erreur.
 

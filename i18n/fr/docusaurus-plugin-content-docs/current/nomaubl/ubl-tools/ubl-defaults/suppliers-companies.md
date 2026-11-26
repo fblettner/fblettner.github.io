@@ -33,7 +33,7 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **Code** | — | Code société interne (par ex. `00001`, `MAIN`, la clé société du système source). Sert au rapprochement avec le XML source et comme clé de recherche pour le sélecteur de défaut. |
 | **Name** | BT-27 | Raison sociale légale. |
 
-### Identifiants
+### Identifiants \{#identifiers\}
 
 | Champ | UBL | Description |
 |---|---|---|
@@ -44,6 +44,10 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **VAT** | BT-31 | Identifiant à la TVA (par ex. `FR00000000000`). |
 | **Capital (si mentions légales vides)** | BT-33 | Capital social, utilisé seulement quand **BT-33 – Mentions légales** est vide (voir ci-dessous). |
 | **BT-33 – Mentions légales** | BT-33 | Texte légal complet du vendeur, repris tel quel dans la facture : forme juridique, capital, RCS, numéro d'immatriculation… (par ex. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+| **BT-34 – Adresse électronique** | BT-34 | Adresse électronique du vendeur. |
+| **BT-34 – Schéma de l'adresse électronique** | BT-34 | Schéma de cette adresse, choisi dans la liste *scheme-ids*. *— Schéma général —* (par défaut) reprend le schéma **Endpoint** de l'onglet [Identifiants de schéma](./scheme-ids.md). |
+
+Une société qui n'est pas adressée sous le schéma général porte son propre schéma : pour une société de Monaco, par exemple, le schéma `9940` (numéro de TVA monégasque), avec son numéro de TVA comme adresse électronique. Le champ est aussi proposé quand un document surcharge les sociétés, et s'applique dès l'enregistrement des valeurs par défaut UBL.
 
 ### Mentions légales (BT-33) \{#legal-information\}
 

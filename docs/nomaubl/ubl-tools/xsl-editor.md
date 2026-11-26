@@ -270,6 +270,21 @@ A `TAG_*` select isn't limited to a single XML path:
 
 The **Document Root** section recalls these syntaxes above its fields: *Paths: element, parent/element, ../element, //element (anywhere), sum(a, b), a + " " + b, "\n" line break*. Existing mappings produce the same output as before.
 
+#### Emit conditions \{#emit-conditions\}
+
+A custom extension field, an item property or a note — document or line — can be written only when the source matches a condition. The condition cell holds the element tested (a name or a slash path), an operator button and the value:
+
+| Operator | Row written when |
+|---|---|
+| `=` *(default)* | The element's value is one of the listed values (comma-separated: `KWH,M3,LTR`). |
+| `≠` | The element's value is none of the listed values. An absent or empty element counts as different. With no value, `≠` means "element not empty". |
+
+A click on the button switches between `=` and `≠` (*Equal to — click for different from*). The `+` at the end of the cell adds a condition, each with its own `=` / `≠`; the row is written when **all** of them hold, and `×` removes one. For an "either case" rule — this value, or that other element — write two rows for the same target, each with its own conditions.
+
+Example: an item property written only for the lines whose `LineType` is neither `RI` nor `RM` and whose `Country` is `FR` — first condition `LineType` `≠` `RI,RM`, second condition `Country` `=` `FR`.
+
+The column headings read *Condition (elem = / ≠ val)* in the extension fields and item properties, *Condition element* and *= / ≠ value* in the notes.
+
 #### Scoping
 
 `TAG_ROOT`, `TAG_VAT_LINE` and `TAG_LINE_ITEM` are **scope contexts**: every other variable below them resolves *relative* to the path they define.
@@ -337,7 +352,7 @@ For data a trading partner needs but that has no standard EN 16931 home — a ro
 |---|---|
 | **Element name** | The tag written inside `ext:ExtensionContent`. Emitted as a plain unprefixed element in the document's own namespace (no `xmlns`) — the shape certified platforms accept. |
 | **Value** | A source path, an expression combining paths, a `{template}` call or a constant enclosed in backticks (see [Combining and matching source values](#combining-and-matching-source-values) above). |
-| **Emit condition** | The same optional `cond_value` predicate as item properties — omit the row when a source value doesn't match. |
+| **Emit condition** | One or more [conditions](#emit-conditions), `=` or `≠`, as for item properties and notes — the row is omitted when they do not all hold. |
 
 Every configured field is emitted in its own `ext:UBLExtension` / `ext:ExtensionContent` block (UBL admits a single child element per extension content), and the whole block is skipped when no field resolves. Empty by default, so existing invoices are unchanged.
 

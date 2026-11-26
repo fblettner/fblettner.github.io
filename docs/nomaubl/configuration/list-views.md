@@ -241,7 +241,7 @@ The list of operators offered per column depends on the catalog entry's filter b
 |---|---|
 | `exact` | `equals`, `≠`, `empty`, `not empty`. |
 | `LIKE` | `contains`, `equals`, `≠`, `empty`, `not empty`. |
-| `inList` | `equals` (multi-pick — the catalog splits comma-separated buckets into an `IN (?,?,?,?,?)` clause). |
+| `inList` | *include* (`=`), *exclude* (`≠`), *is empty* (`∅`), *is not empty* (`≠∅`) — multi-pick for include and exclude. |
 | `between` | `<`, `≤`, `>`, `≥`, `between`. Applies to numeric and date columns. |
 
 Marking a column **Filter** = off in the spec keeps it visible in the grid but removes its chip from the panel; useful for read-only fields the operator does not need to query.
@@ -253,6 +253,8 @@ A column can be bound to a reference list — either a regulated one from [Refer
 When the catalog or the spec declares a column as a reference list (`refList: …`) — the *statuses* picker on Invoices, the *eReporting statuses* on E-Reporting, any custom list — the Advanced Filters panel and the per-column filter row both render a **multi-select picker** instead of a single dropdown. Each row in the picker is a toggle (`code — label`), the trigger shows `N selected` past the inline cap, and a `✕` button on the right resets the selection in one click without opening the popover.
 
 The multi-select selection is encoded as comma-joined in `OpFilter.a` (e.g. `200,210,9907`); on the server side, the catalog's `filterInList` flag splits it into an `IN (?,?,?,?,?)` clause, so picking three statuses really does return the union — not a `LIKE` over the joined string.
+
+An **operator button** precedes the picker, in the panel and in the column filter row: *include* (`=`, the default) gives the `IN` clause above; *exclude* (`≠`) gives `NOT IN` and keeps the rows with no value (`col IS NULL OR col NOT IN (…)`); *is empty* (`∅`) and *is not empty* (`≠∅`) hide the picker. *include* with nothing picked is no filter. A saved view stores the operator with the values; one saved with the values alone reads as *include*.
 
 The `between` operator on a date / number / text column widens the column to fit both operand inputs (`BETWEEN_COL_WIDTH = 340px`) so the two fields render side by side rather than truncating. Switching back to a single-operand operator snaps the column to its spec width on the next render.
 

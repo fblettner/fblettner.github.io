@@ -33,7 +33,7 @@ The directory holds one card per company. Each card contains:
 | **Code** | — | Internal company code (e.g. `00001`, `MAIN`, the source-system's company key). Used to match against the source XML and as the lookup key for the default selector above. |
 | **Name** | BT-27 | Legal company name. |
 
-### Identifiers
+### Identifiers \{#identifiers\}
 
 | Field | UBL | Description |
 |---|---|---|
@@ -44,6 +44,10 @@ The directory holds one card per company. Each card contains:
 | **VAT** | BT-31 | VAT identifier (e.g. `FR00000000000`). |
 | **Capital (if no legal text)** | BT-33 | Share capital, used only when **BT-33 – Legal information** is empty (see below). |
 | **BT-33 – Legal information** | BT-33 | Full legal text of the seller, written as is in the invoice: legal form, capital, RCS, registration number… (e.g. `SAS au capital de 50 000 EUR – RCS Paris 123 456 789`). |
+| **BT-34 – Electronic address** | BT-34 | The seller's electronic address. |
+| **BT-34 – Electronic address scheme** | BT-34 | The scheme of that address, picked from the *scheme-ids* list. *— General scheme —* (the default) keeps the **Endpoint** scheme of the [Scheme IDs](./scheme-ids.md) tab. |
+
+A company that is not addressed under the general scheme carries its own: for a company in Monaco, for example, the scheme `9940` (Monaco VAT number) with its VAT number as electronic address. The field is also offered when a document overrides the companies, and applies once the UBL Defaults are saved.
 
 ### Legal information (BT-33) \{#legal-information\}
 

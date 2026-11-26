@@ -164,8 +164,8 @@ Chaque liste de NomaUBL — factures, documents, e-reporting, erreurs d'intégra
 |---|---|
 | Colonnes visibles et leur ordre, largeurs de colonne | Sens, onglets de statut, zone de recherche |
 | Regroupement, tri, lignes par page | Libellés, formats et listes de valeurs — définis dans [List views](../configuration/list-views.md) |
-| Filtres de colonne (la ligne de filtres s'ouvre quand la vue en contient) | |
-| Filtres avancés — factures, documents, erreurs d'intégration, journal de traitement, e-reporting | |
+| Filtres de colonne, avec l'opérateur d'un filtre sur liste — inclure, exclure, vide, non vide (la ligne de filtres s'ouvre quand la vue en contient) | |
+| Filtres avancés, opérateurs compris — factures, documents, erreurs d'intégration, journal de traitement, e-reporting | |
 | Période et base de date — factures, documents, erreurs d'intégration, journal de traitement | |
 
 Une période enregistrée en *Aujourd'hui*, *Hier*, *Ce mois-ci*, *Mois dernier*, *Ce trimestre*, *Cette année* ou *12 derniers mois* suit le calendrier : elle est recalculée le jour où la vue s'ouvre. Seule une période *Personnalisé* garde ses dates. Une vue enregistrée sans période laisse la période en cours inchangée.

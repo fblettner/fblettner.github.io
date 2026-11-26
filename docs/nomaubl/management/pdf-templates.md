@@ -336,6 +336,8 @@ Nine reorderable preset sections cover the canonical shape of an invoice PDF: **
 
 The drawer groups toggles by **`Category · Name`** prefix and arranges them in side-by-side columns that mirror the PDF layout itself — *Header* reads as **METAS** | **SUPPLIERS**, *Line Table* as **Group headers** | **Columns** | **Sub-details** — instead of one long flat list. Toggles use the rounded-blue `Checkbox` component for visual consistency in dark mode.
 
+#### Toggles of each preset section
+
 The full list of toggles per preset section:
 
 - **Header** — nine `META · …` toggles (invoice number, issue date, due date, contract / despatch advice (BT-16) / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).

@@ -219,6 +219,8 @@ Three sections in this tab:
 | **Download UBL** | Saves the archived UBL of the invoice. |
 | **Download CII** | Shown when the document has a [post-transform](../ubl-tools/post-transform.md): the archived UBL converted on demand, named after the post-transform (*Download converted file* when it has no name). |
 
+To change the transaction type of an invoice (B2B, B2C…) or edit its stored UBL as text, use the UBL tab of the [document window](./edocuments.md#ubl-tab-actions) on the E-Documents page.
+
 ### Lifecycle group
 
 The **lifecycle** is the audit trail of every status the invoice has been in. Each event shows:

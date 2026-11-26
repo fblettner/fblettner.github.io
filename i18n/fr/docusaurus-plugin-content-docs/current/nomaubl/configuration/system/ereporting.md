@@ -1,6 +1,6 @@
 ---
 title: E-Reporting
-description: "Configure la production et la soumission des bundles e-Reporting — identité Sender / Issuer, planification, api-connecteur qui porte le transport HTTP de la PA, et repli SFTP pour la soumission sortante. Mise en quatre onglets : Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / vide remplace l'ancien drapeau sendToPA Y/N."
+description: "Configure la production et la soumission des bundles e-Reporting — identité Sender / Issuer, planification, api-connecteur qui porte le transport HTTP de la PA, et repli SFTP pour la soumission sortante. Quatre sections présentées en cartes d'étape : Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / vide remplace l'ancien drapeau sendToPA Y/N."
 keywords: [NomaUBL, e-reporting, e-reporting français, AFNOR XP Z12-014, Flux 10.1, Flux 10.3, B2BINT, B2C, OUTOFSCOPE, sender, issuer, SIREN, frequency, MONTHLY, paMode, api-connecteur, SFTP, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
@@ -10,7 +10,7 @@ L'éditeur **E-Reporting** configure la **production et la soumission des bundle
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
-L'éditeur comporte **quatre onglets** :
+L'éditeur présente ses **quatre sections sous forme de cartes d'étape**, alignées en haut. Chaque carte indique le nom de la section et son état — les premières valeurs renseignées parmi ses champs — et un clic affiche ses champs ([fonctionnement des cartes](../settings-overview.md#section-cards)) :
 
 1. **Identity** — champs d'identification Sender (PA) et Issuer (Déclarant) émis dans le bundle.
 2. **Reporting** — Business Process (B2BINT) et cadence.
@@ -21,7 +21,7 @@ L'éditeur comporte **quatre onglets** :
 
 ## Accès à l'éditeur
 
-- *Paramètres* → modèle **e-reporting** (la ressource au niveau système).
+- *Paramètres* → domaine **E-reporting** → carte **E-reporting** (modèle système `e-reporting`).
 - Une barre **Scope** en haut choisit le paramétrage modifié : **Default (e-reporting)** ou **Company *kco* (e-reporting-*kco*)**. Saisir un code société puis cliquer sur **Add override** crée un paramétrage société initialisé à partir du défaut ; **Delete override** supprime celui qui est sélectionné. Chaque société peut ainsi avoir son propre émetteur, sa fréquence et sa connexion PA.
 - À l'exécution, le paramétrage de la société est lu en premier, puis le défaut. Les sociétés à traiter sont déduites des paramétrages société ; **Companies (kco) override**, sur le défaut, ne nomme que les sociétés à traiter **avec les réglages par défaut** — une société qui a son propre paramétrage utilise celui-ci.
 
@@ -29,25 +29,42 @@ L'éditeur comporte **quatre onglets** :
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 644" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="erep-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="erep-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="erep-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="erep-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="580" rx="14" fill="url(#erep-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="604" rx="14" fill="url(#erep-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="68" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="274" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Identity</text>
-  <rect x="314" y="28" width="76" height="24" rx="4" fill="transparent"/>
-  <text x="352" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Reporting</text>
-  <rect x="396" y="28" width="100" height="24" rx="4" fill="transparent"/>
-  <text x="446" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">PA Connection</text>
-  <rect x="502" y="28" width="76" height="24" rx="4" fill="transparent"/>
-  <text x="540" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="127" height="44" rx="8" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▣</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IDENTITY</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PA01 · WK</text>
+  <line x1="360" y1="52.0" x2="372" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#erep-flow)"/>
+  <rect x="375" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="383" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="391.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▤</text>
+  <text x="405" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REPORTING</text>
+  <text x="384" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">MONTHLY · 10.1,…</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#erep-flow)"/>
+  <rect x="518" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="548" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PA CONNECTION</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">pa-default · repo…</text>
+  <line x1="646" y1="52.0" x2="658" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#erep-flow)"/>
+  <rect x="661" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="669" y="37" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="677.0" y="48.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">≡</text>
+  <text x="691" y="48.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
+  <text x="670" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">API</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Sender (PA)</text>
   <text x="240" y="108" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MATRICULE</text>
@@ -70,7 +87,7 @@ L'éditeur comporte **quatre onglets** :
 
   <line x1="240" y1="208" x2="780" y2="208" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet Reporting — aperçu</text>
+  <text x="240" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Section Reporting — aperçu</text>
   <text x="240" y="254" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FREQUENCY</text>
   <rect x="320" y="244" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="330" y="261" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">MONTHLY ▾</text>
@@ -80,7 +97,7 @@ L'éditeur comporte **quatre onglets** :
 
   <line x1="240" y1="292" x2="780" y2="292" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="316" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet PA Connection — aperçu</text>
+  <text x="240" y="316" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Section PA Connection — aperçu</text>
   <text x="240" y="338" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
   <rect x="320" y="328" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="330" y="345" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">pa-default ▾</text>
@@ -92,7 +109,7 @@ L'éditeur comporte **quatre onglets** :
 
   <line x1="240" y1="412" x2="780" y2="412" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="436" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet FTP/SFTP — aperçu</text>
+  <text x="240" y="436" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Section FTP/SFTP — aperçu</text>
   <text x="240" y="458" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEND MODE</text>
   <rect x="320" y="448" width="180" height="26" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
   <text x="330" y="465" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">API ▾</text>
@@ -125,13 +142,14 @@ L'éditeur comporte **quatre onglets** :
   <text x="830" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">paMode = API/FTP/vide</text>
   <text x="830" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">remplace sendToPA Y/N</text>
   <line x1="820" y1="466" x2="500" y2="466" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#erep-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Onglet 1 — Identity
+## Carte 1 — Identity
 
-L'onglet Identity porte les acteurs émis sur chaque bundle de rapport. Les deux blocs sont rendus comme éléments XML à l'intérieur de l'enveloppe AFNOR XP Z12-014 (`<Sender>` et `<Issuer>`).
+La section Identity porte les acteurs émis sur chaque bundle de rapport. Les deux blocs sont rendus comme éléments XML à l'intérieur de l'enveloppe AFNOR XP Z12-014 (`<Sender>` et `<Issuer>`).
 
 ### Sender (PA)
 
@@ -153,7 +171,7 @@ L'onglet Identity porte les acteurs émis sur chaque bundle de rapport. Les deux
 
 ---
 
-## Onglet 2 — Reporting
+## Carte 2 — Reporting
 
 ### Business Process (B2BINT uniquement)
 
@@ -176,7 +194,7 @@ Chaque rapport porte les deux flux — 10.1 (B2B international, détail) et 10.3
 
 ---
 
-## Onglet 3 — PA Connection
+## Carte 3 — PA Connection
 
 ### api-connecteur
 
@@ -201,13 +219,13 @@ Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — 
 
 ---
 
-## Onglet 4 — FTP/SFTP
+## Carte 4 — FTP/SFTP
 
 ### Send Mode
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **soumettre les rapports générés** à la PA. `API` route le bundle via l'api-connecteur choisi sur l'onglet précédent ; `FTP` écrit le XML dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* permet à NomaUBL de **générer les rapports sans les soumettre** — utile pour valider l'identité avant d'impliquer la PA. |
+| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **soumettre les rapports générés** à la PA. `API` route le bundle via l'api-connecteur choisi sur la carte précédente ; `FTP` écrit le XML dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* permet à NomaUBL de **générer les rapports sans les soumettre** — utile pour valider l'identité avant d'impliquer la PA. |
 
 Le champ `paMode` fonctionne de la même manière que sur la page E-Invoicing.
 

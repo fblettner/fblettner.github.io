@@ -30,138 +30,115 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## At a glance
 
-<svg viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 450" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nrule-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="nrule-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nrule-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <linearGradient id="nrule-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.28"/><stop offset="100%" stopColor="#22c55e" stopOpacity="0.10"/></linearGradient>
+    <marker id="nrlen-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="nrlen-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="nrlen-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="nrlen-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="240" y="20" width="540" height="620" rx="14" fill="url(#nrule-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="262" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Notification Rules</text>
-  <rect x="558" y="30" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="580" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">+ Add</text>
-  <rect x="606" y="30" width="48" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="630" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">⎘ Copy</text>
-  <rect x="658" y="30" width="60" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/><text x="688" y="45" fill="#f87171" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">🗑 Remove</text>
-  <rect x="722" y="30" width="44" height="22" rx="5" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/><text x="744" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">💾 Save</text>
-
-  <line x1="240" y1="68" x2="780" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="262" y="84" width="180" height="540" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="270" y="92" width="164" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/><text x="278" y="107" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Search…</text>
-  <line x1="262" y1="124" x2="442" y2="124" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="262" y="124" width="180" height="50" fill="rgba(255,255,255,0.04)"/>
-  <text x="276" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">pa-rejection</text>
-  <text x="276" y="156" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Alert on PA rejection</text>
-  <rect x="402" y="142" width="32" height="14" rx="7" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/><text x="418" y="152" fill="#4ade80" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">on</text>
-
-  <line x1="262" y1="174" x2="442" y2="174" stroke="#1f2937" strokeWidth="1"/>
-  <text x="276" y="192" fill="#cbd5e1" fontSize="11" fontWeight="600" fontFamily="system-ui, sans-serif">pa-success</text>
-  <text x="276" y="206" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">PA deposit confirmation</text>
-  <rect x="402" y="192" width="32" height="14" rx="7" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/><text x="418" y="202" fill="#4ade80" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">on</text>
-
-  <line x1="262" y1="224" x2="442" y2="224" stroke="#1f2937" strokeWidth="1"/>
-  <text x="276" y="242" fill="#cbd5e1" fontSize="11" fontWeight="600" fontFamily="system-ui, sans-serif">validation-failure</text>
-  <text x="276" y="256" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">XSD / Schematron errors</text>
-  <rect x="402" y="242" width="40" height="14" rx="7" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/><text x="422" y="252" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace" textAnchor="middle">off</text>
-
-  <rect x="462" y="84" width="298" height="540" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="470" y="92" width="282" height="34" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="480" y="113" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
-  <text x="566" y="113" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Alert on PA rejection</text>
-
-  <text x="478" y="148" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">TRIGGER</text>
-  <text x="478" y="170" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Status</text>
-  <rect x="540" y="160" width="60" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="570" y="171" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">9904 ×</text>
-  <rect x="606" y="160" width="60" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="636" y="171" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">9907 ×</text>
-  <text x="478" y="194" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Reason</text>
-  <rect x="540" y="184" width="80" height="16" rx="8" fill="rgba(74,158,255,0.15)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="580" y="195" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">REJ_ADR ×</text>
-
-  <text x="478" y="226" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">CHANNELS</text>
-  <rect x="478" y="232" width="58" height="20" rx="10" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="507" y="246" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">☑ portal</text>
-  <rect x="540" y="232" width="56" height="20" rx="10" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="568" y="246" fill="#e2e8f0" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">☑ email</text>
-  <rect x="600" y="232" width="58" height="20" rx="10" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="629" y="246" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">☐ action</text>
-
-  <text x="478" y="278" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">RECIPIENT</text>
-  <text x="478" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Type</text>
-  <rect x="540" y="288" width="80" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="546" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">role ▾</text>
-  <text x="478" y="320" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Value</text>
-  <rect x="540" y="310" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="324" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">accountants</text>
-  <text x="478" y="340" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CC</text>
-  <rect x="540" y="332" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="346" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">supervisor@nomana-it.fr</text>
-
-  <text x="478" y="380" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">EMAIL CONTENT</text>
-  <text x="478" y="400" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Subject</text>
-  <rect x="540" y="390" width="200" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="404" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Invoice &#123;doc&#125; &#123;dct&#125; &#123;kco&#125; — Rejected</text>
-  <text x="478" y="420" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Body</text>
-  <rect x="540" y="412" width="200" height="34" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="548" y="426" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Status: &#123;statusLabel&#125;</text>
-  <text x="548" y="438" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Reason: &#123;reasonLabel&#125;</text>
-  <rect x="540" y="450" width="14" height="14" rx="3" fill="url(#nrule-g-green)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="558" y="461" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">attachPdf · attach the rendered invoice</text>
-
-  <text x="478" y="496" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">ACTION CALL · disabled</text>
-  <text x="478" y="516" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Connector / endpoint / params — only when ☑ action above</text>
-
-  <text x="478" y="552" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">TEST</text>
-  <rect x="478" y="560" width="60" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="486" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">12345</text>
-  <rect x="544" y="560" width="40" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="552" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">RI</text>
-  <rect x="590" y="560" width="60" height="20" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="598" y="574" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">00070</text>
-  <rect x="656" y="560" width="84" height="20" rx="4" fill="url(#nrule-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="698" y="574" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">▶ Run test</text>
-
-  <rect x="478" y="592" width="262" height="20" rx="4" fill="rgba(74,222,128,0.10)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="488" y="606" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">✓ Dispatched · 1 portal · 2 email</text>
-
-  <rect x="20" y="36" width="200" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="52" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Toolbar</text>
-  <text x="30" y="65" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">add / copy / remove / save</text>
-  <line x1="220" y1="50" x2="240" y2="50" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="138" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="154" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Rule list</text>
-  <text x="30" y="167" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on / off pill per row</text>
-  <line x1="220" y1="156" x2="262" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="148" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="164" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Trigger chips</text>
-  <text x="810" y="177" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">status + reason multi-select</text>
-  <line x1="800" y1="166" x2="690" y2="170" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="232" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="248" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Channels</text>
-  <text x="810" y="261" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">portal · email · action</text>
-  <line x1="800" y1="250" x2="660" y2="244" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="296" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="312" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Recipient</text>
-  <text x="30" y="325" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">portal target + email list</text>
-  <line x1="220" y1="314" x2="478" y2="314" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="800" y="396" width="180" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="412" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Subject + body</text>
-  <text x="810" y="425" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;placeholders&#125; resolved live</text>
-  <line x1="800" y1="414" x2="744" y2="402" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
-
-  <rect x="20" y="552" width="200" height="36" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="568" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Test panel</text>
-  <text x="30" y="581" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fires the rule end-to-end</text>
-  <line x1="220" y1="570" x2="478" y2="570" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrule-arrow)"/>
+  <rect x="220" y="20" width="880" height="414" rx="14" fill="url(#nrlen-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Notification Rules</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Define which invoice status/reason changes should notify whom</text>
+  <rect x="1036" y="34" width="44" height="22" rx="5" fill="url(#nrlen-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="1058.0" y="48.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
+  <rect x="975" y="34" width="55" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="1002.5" y="48.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Remove</text>
+  <rect x="925" y="34" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="947.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Copy</text>
+  <rect x="869" y="34" width="50" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="894.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add</text>
+  <rect x="240" y="84" width="200" height="330" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="92" width="184" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="106.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Search…</text>
+  <rect x="246" y="124" width="188" height="38" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="254" y="139" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
+  <text x="254" y="153" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Alert on PA rejection</text>
+  <rect x="394" y="134" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="410.0" y="145.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">on</text>
+  <rect x="246" y="168" width="188" height="38" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="183" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-deposit</text>
+  <text x="254" y="197" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">PA deposit confirmation</text>
+  <rect x="394" y="178" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="410.0" y="189.2" fill="#4ade80" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">on</text>
+  <rect x="246" y="212" width="188" height="38" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="227" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="ui-monospace, monospace">validation-failure</text>
+  <text x="254" y="241" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">XSD / Schematron errors</text>
+  <rect x="394" y="222" width="32" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="410.0" y="233.2" fill="#94a3b8" fontSize="8" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">off</text>
+  <rect x="454" y="84" width="626" height="330" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="468" y="104" fill="#e2e8f0" fontSize="11.5" fontWeight="700" fontFamily="ui-monospace, monospace">pa-rejection</text>
+  <text x="574" y="104" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Alert on PA rejection</text>
+  <rect x="454" y="112" width="626" height="64" fill="rgba(255,255,255,0.015)"/>
+  <rect x="466" y="122" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="474" y="129" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="482.0" y="140.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">●</text>
+  <text x="496" y="140.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GENERAL</text>
+  <text x="475" y="158" fill="#4ade80" fontSize="9" fontFamily="system-ui, sans-serif">Active</text>
+  <line x1="657" y1="144.0" x2="669" y2="144.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlen-flow)"/>
+  <rect x="672" y="122" width="190" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="680" y="129" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="688.0" y="140.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">ϟ</text>
+  <text x="702" y="140.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TRIGGER</text>
+  <text x="681" y="158" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9904, 9907</text>
+  <line x1="863" y1="144.0" x2="875" y2="144.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlen-flow)"/>
+  <rect x="878" y="122" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="886" y="129" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="894.0" y="140.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">◔</text>
+  <text x="908" y="140.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHANNELS</text>
+  <text x="887" y="158" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Portal (bell + inbox), Email</text>
+  <rect x="454" y="166" width="626" height="64" fill="rgba(255,255,255,0.015)"/>
+  <rect x="466" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="474" y="183" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="482.0" y="194.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✉</text>
+  <text x="496" y="194.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
+  <text x="475" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sent</text>
+  <line x1="657" y1="198.0" x2="669" y2="198.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlen-flow)"/>
+  <rect x="672" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="680" y="183" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="688.0" y="194.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <text x="702" y="194.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ACTIONS</text>
+  <text x="681" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">1 call(s)</text>
+  <line x1="863" y1="198.0" x2="875" y2="198.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#nrlen-flow)"/>
+  <rect x="878" y="176" width="190" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="886" y="183" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="894.0" y="194.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="908" y="194.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <text x="887" y="212" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Try on an invoice</text>
+  <line x1="454" y1="230" x2="1080" y2="230" stroke="#1f2937" strokeWidth="1"/>
+  <text x="468" y="252" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">STATUS CODES</text>
+  <rect x="594" y="240" width="48" height="18" rx="9.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="618.0" y="252.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9904 ×</text>
+  <rect x="648" y="240" width="48" height="18" rx="9.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="672.0" y="252.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">9907 ×</text>
+  <text x="468" y="282" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REASON CODES</text>
+  <rect x="594" y="270" width="63" height="18" rx="9.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="625.5" y="282.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">REJ_ADR ×</text>
+  <text x="468" y="312" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIRECTION</text>
+  <rect x="594" y="297" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="604" y="311.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Any (issued + received) ▾</text>
+  <text x="468" y="342" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Same codes used in the invoice history tab. Empty = match any.</text>
+  <rect x="20" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rule list</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on / off pill per rule</text>
+  <line x1="200" y1="137.0" x2="248" y2="143" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlen-arrow)"/>
+  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trigger chips</text>
+  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">status + reason multi-select</text>
+  <line x1="200" y1="307.0" x2="464" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlen-arrow)"/>
+  <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toolbar</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">add / copy / remove / save</text>
+  <line x1="1120" y1="47.0" x2="1080" y2="45" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlen-arrow)"/>
+  <rect x="1120" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Steps of the rule</text>
+  <text x="1130" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the selected one opens below</text>
+  <line x1="1120" y1="137.0" x2="1076" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlen-arrow)"/>
+  <rect x="1120" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">State per card</text>
+  <text x="1130" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">what each part holds</text>
+  <line x1="1120" y1="227.0" x2="1076" y2="226" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nrlen-arrow)"/>
 </svg>
 
 The page is split between the **rule list** on the left and the **rule editor** on the right. Each rule is a `notification-rule` resource saved in `config-notifications.json`; the dispatcher reloads them at startup and after every save.
@@ -192,16 +169,27 @@ A search box at the top of the sidebar filters the list by substring on the rule
 
 ## The rule editor
 
-The editor is organised into **six tabs** — each tab fits a screen and the action list has room to grow. The tab resets to *General* when you switch rules.
+The editor shows the rule as **six step cards** across the top — **General**, **Trigger**, **Channels**, **Email**, **Actions** and **Test** — each with its state in a few words:
 
-### General tab
+| Card | State shown |
+|---|---|
+| **General** | *Active* (in green) or *Disabled*. |
+| **Trigger** | The status codes of the trigger, or *Any status*. |
+| **Channels** | The channels ticked (*Portal (bell + inbox)*, *Email*, *API call*), or *None*. |
+| **Email** | *Sent* when the email channel is ticked, *Not used* otherwise. |
+| **Actions** | The number of connector calls (*2 call(s)*). |
+| **Test** | *Try on an invoice*. |
+
+Click a card to edit its fields below the cards. The editor opens on *General* when you switch rules.
+
+### General
 
 | Field | Description |
 |---|---|
 | **Description** | Free-form sentence shown under the rule name in the rule list. The first place to read what the rule does. |
 | **Enabled** | Single checkbox. When off, the rule stays in the catalogue but is skipped at dispatch time. The same value drives the `on` / `off` pill on the rule list. |
 
-### Trigger tab
+### Trigger
 
 The trigger decides **when** the rule fires. Three fields combine, all optional:
 
@@ -215,14 +203,14 @@ Both fields are surfaced as **chip multi-selects** — picking from a dropdown a
 
 When several fields are filled, they all must match (logical AND) for the rule to fire — so a `Status = 207`, `Direction = Received only` rule wires the supplier-side rejection notification without colliding with the customer-side `Status = 207` rule that already exists on the same template.
 
-### Channels tab
+### Channels
 
 Two delivery channels, plus the recipient settings:
 
 - **`portal`** — writes a row in `F564253` for the recipient. The user sees it in the [Notifications](../application/notifications.md) inbox and the bell.
 - **`email`** — sends an SMTP message via the configured `e-invoicing` mail account.
 
-Action calls fire automatically when the rule has at least one entry in the *Actions* tab. To suppress action calls, disable the rule on the General tab.
+Action calls fire automatically when the rule has at least one entry on the *Actions* card. To suppress action calls, disable the rule on the *General* card.
 
 The recipient model has two independent halves: a **portal target** (user / role) and an **email list**.
 
@@ -234,9 +222,9 @@ The recipient model has two independent halves: a **portal target** (user / role
 
 When auth is enabled, a portal target with an email on its `F564250` row also receives the email channel automatically.
 
-### Email tab
+### Email
 
-The email tab shows its content unconditionally — no checkbox gates it any more. Whether the rule actually sends an email depends on the *Channels* tab's `email` checkbox.
+The *Email* card always shows its fields. Whether the rule actually sends an email depends on the `email` checkbox of the *Channels* card — which the *Email* card's state reflects (*Sent* / *Not used*).
 
 | Field | Default | Description |
 |---|---|---|
@@ -244,7 +232,7 @@ The email tab shows its content unconditionally — no checkbox gates it any mor
 | **Body** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Plain-text body. Multi-line input. |
 | **Attach PDF** | `Y` | Render the invoice PDF (via the resolved `pdf-template`) and attach it to the e-mail. The PDF is rendered once per dispatch and reused across every recipient; a render failure is logged but never fails the e-mail. |
 
-Available placeholders in subject / body: the 10 canonical notification fields — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions tab* below).
+Available placeholders in subject / body: the 10 canonical notification fields — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions* below).
 
 The placeholder set also merges every column from the [Invoices](../application/invoices.md) view's catalog — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — pulled in a single `F564231 LEFT JOIN F564230` SELECT alongside the canonical fields. Amounts are surfaced with two decimals, JDE Julian dates as ISO, CHAR columns trimmed. Canonical fields take precedence when a catalog column happens to share a name, so `{doc}` / `{status}` keep their familiar meaning.
 
@@ -252,9 +240,9 @@ A `{ }` button sits next to the Subject input and the Body textarea. Click it to
 
 The portal `NTSUBJ` uses the same subject; the portal `NTMSGE` defaults to just `{statusLabel}` because the inbox UI already shows the doc reference inline — duplicating it in the body would be noise.
 
-### Actions tab
+### Actions \{#actions-tab\}
 
-The Actions tab holds a **list** of connector calls instead of a single call. Each call is rendered as a collapsible card. The card header shows the call index (`#1`, `#2`, …) and either the *Description* field or `connector · target` when no description is set; clicking it expands the editor.
+The *Actions* card holds a **list** of connector calls. Each call is rendered as a collapsible card. The card header shows the call index (`#1`, `#2`, …) and either the *Description* field or `connector · target` when no description is set; clicking it expands the editor.
 
 | Field | Description |
 |---|---|
@@ -290,7 +278,7 @@ Example: a rule that first reads the customer's email via a SQL query, then send
 
 Action calls run **before** the email channel, so a hung SMTP `transport.close()` can never block them. The portal write goes first; emails follow once the action chain has run.
 
-### Test tab
+### Test
 
 A synchronous *Test* runner. It accepts a `(doc, dct, kco)` triplet, optionally a status code and a custom message, and **actually fires the rule** through every enabled channel — the portal write lands in the inbox, the action chain executes, the e-mail goes out via SMTP. The resulting banner reports the dispatch counts (`✓ Dispatched · 1 portal · 2 email · 3 action(s) ran`) or the first error.
 

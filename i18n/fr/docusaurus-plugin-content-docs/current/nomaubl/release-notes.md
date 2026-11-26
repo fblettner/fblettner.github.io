@@ -17,17 +17,22 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
-    <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
-    <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
-    <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
-    <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
-    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
+    <a href="#v2026-11-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-25</span></a>
+    <a href="#v2026-11-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-23</span></a>
+    <a href="#v2026-11-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-21</span></a>
+    <a href="#v2026-11-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-20</span></a>
+    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (133)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (138)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
+      <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
+      <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
+      <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
+      <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
       <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
       <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
       <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
@@ -180,6 +185,81 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   </details>
 </div>
 {/* versions:end */}
+
+---
+
+## 2026.11.26.1 — 2026-11-26 \{#v2026-11-26-1\}
+
+### Améliorations
+- **Fenêtre du document : changer le type de transaction, modifier l'UBL.** Deux actions réservées à l'administration dans l'onglet UBL. Changer le type attribue un autre type (B2B, B2C…) à la facture : seul le type change, dans l'UBL et dans les listes, sans validation, changement de statut ni envoi. Modifier l'UBL ouvre l'UBL en texte ; l'enregistrement le valide de nouveau, comme la fenêtre facture, et une facture déjà traitée par la plateforme est refusée. Les deux demandent le nouveau droit « Modifier l'UBL / changer le type » (éditeur de rôles, Actions) : un rôle doté d'une liste d'actions ne l'a pas tant qu'il n'est pas coché.
+- **Documents : activité et type par règle.** Nouvelle étape Règles sur un document. Une règle teste le document (type de document JDE, société, montant, numéro client, un élément du spool ; pour une source UBL, le vendeur, l'acheteur, le code type, la devise ou tout élément de l'UBL) et donne une activité, un type ou les deux. Les règles sont lues de haut en bas ; sans correspondance, le document garde l'activité et le type de son étape Identification. « Essayer sur l'exemple » indique la règle qui s'applique. Appliquées au traitement du document : un enregistrement depuis la fenêtre facture ou la fenêtre du document ne les modifie jamais. Les règles de traitement (traiter comme un autre type, exclure) rejoignent la même étape.
+- **PDF vers XML : une page par étapes.** Les réglages sont regroupés en étapes présentées en cartes avec leur état (Source, Facture, Société, Lignes, Récapitulatif TVA, Résultat) ; les réglages de l'étape choisie s'affichent à côté des lignes du PDF et du XML. Un seul bouton « Enregistrer dans le document », avec un repère quand des modifications sont en attente. Réglages et résultats inchangés.
+- **PDF vers XML : résultat par facture, vue du PDF.** L'étape Résultat liste chaque facture d'un PDF texte (pages, lignes, taux de TVA, somme des lignes comparée au total de la facture) et signale celles sans ligne ou dont les lignes ne retombent pas sur le total ; un clic affiche la facture dans le XML. À côté des réglages, les lignes lues dans le PDF peuvent laisser place au PDF lui-même.
+- **Connecteurs : éditeur par étapes.** Connexion, Authentification, Endpoints, Webhooks et Test sont présentés en cartes avec leur état, et un endpoint se règle en quatre parties (ce qu'il est, ses entrées, l'appel, la réponse). Mêmes réglages qu'auparavant.
+- **Documents : éditeur par étapes.** Un document se règle par cartes dans l'ordre d'un traitement (Source, Identification, Enrichissement, Règles, UBL, Sortie, Avancé), chacune affichant son état ; les étapes sans objet pour la source sont masquées. Un document de source PDF propose un bouton « Ouvrir dans PDF vers XML ». Mêmes réglages qu'auparavant.
+- **Règles de notification, dossiers surveillés, bindings d'actions, promotion : même présentation.** Une règle de notification et un dossier surveillé se règlent par cartes affichant leur état ; un binding d'action présente son bouton suivi de ses appels en chaîne ; la Promotion s'ouvre sur trois cartes (construire un paquet, importer un paquet, historique). Mêmes réglages qu'auparavant.
+- **Paramètres : navigation en cartes, sections en étapes.** Les entrées de la navigation des Paramètres sont des cartes avec une icône et une ligne décrivant leur contenu. E-invoicing, e-reporting, recherche annuaire, connecteurs SQL et les deux bases présentent leurs sections en cartes au-dessus des champs, comme un connecteur. Mêmes réglages qu'auparavant.
+- **Récupération des statuts, Extraire & Traiter, Versions des fichiers : même présentation.** La récupération des statuts s'ouvre sur deux cartes (récupérer les statuts, contrôles). Extraire & Traiter suit quatre étapes (source, traitement, résultat de l'extraction, résultat du traitement) avec un seul bouton de lancement. Dans Versions des fichiers, les dossiers sont des titres et les fichiers des cartes.
+- **PDF texte : factures imprimées avec leurs codes de terme métier.** Une mise en page qui imprime le code de chaque valeur (« Date d'échéance (BT-9) », « Total TVA (BT-110) ») est désormais lue par ses libellés : les champs portent le nom du libellé, les valeurs texte sont conservées (devise, type de facture, mode de paiement), un code entre parenthèses en fin de valeur est aussi fourni à part (380, EUR, 42, le schéma d'une adresse électronique) et les valeurs imprimées sur plusieurs lignes sont réunies. Un titre de bloc comme « Vendeur » ou « Client » n'est plus pris pour le nom du tiers, et « VILLE, FR » donne la ville et le pays. Dans un tableau, un texte aligné à gauche sous un en-tête centré va dans sa colonne ; un récapitulatif de TVA dont l'en-tête tient sur deux lignes est lu.
+- **Plateformes à l'API de flux AFNOR.** Un connecteur peut désormais déposer le fichier d'e-reporting comme un flux (`{{filePath}}` et `{{reportName}}` dans un corps multipart), et la liste des factures reçues lit le `flowId` d'une recherche de flux.
+
+### Corrections
+- **Document sans modèle RTF traité sans type de traitement.** Il produit désormais son UBL au lieu d'échouer sur un PDF impossible à générer (« PDF creation failed »).
+- **Fenêtre facture : enregistrement refusé après l'ajout d'une référence.** Sur une facture ou un avoir portant un code de date d'exigibilité de la TVA sans dates de période de facturation, l'ajout d'une facture antérieure ou d'une référence de commande ne fait plus échouer l'enregistrement sur la structure du document (période de facturation mal placée). Un document déjà enregistré ainsi se corrige en l'ouvrant puis en l'enregistrant de nouveau.
+- **PDF texte : nom imprimé sur deux lignes.** Dans un tableau lu par position, une valeur répartie au-dessus et au-dessous de sa ligne (un nom long) ne fait plus lire les autres valeurs empilées de la facture comme des titres de section (numéro de session et date de fin perdus, section erronée).
+- **PDF texte : tableau qui se poursuit sur la page suivante.** Le pied de la page et l'en-tête de la suivante ne sont plus lus comme des lignes de facture.
+- **Versions des fichiers : l'éditeur restait sur le premier fichier.** Choisir un autre fichier pendant qu'un fichier est ouvert dans l'éditeur affiche désormais cet autre fichier ; une confirmation est demandée s'il reste des modifications non enregistrées.
+- **PDF texte : champs de l'en-tête réimprimé sur la page suivante.** Sur une facture de plusieurs pages, l'en-tête répété sur une page suivante ne produit plus un second jeu de champs (suffixés _2).
+
+---
+
+## 2026.11.25.1 — 2026-11-25 \{#v2026-11-25-1\}
+
+### Améliorations
+- **Filtres sur liste : inclure, exclure, vide, non vide.** Dans le panneau Filtres avancés et dans les filtres de colonne des tableaux, un filtre à liste déroulante dispose d'un bouton d'opérateur : l'une des valeurs sélectionnées (comme auparavant), aucune d'elles, sans valeur, avec une valeur. Exclure conserve les lignes sans valeur. Les vues enregistrées continuent de fonctionner.
+- **Explorateur : « différent de » sur un champ codé** (statut, motif, type…) conserve désormais aussi les lignes où le champ est vide.
+- **Adresse électronique de l'acheteur : le SIREN par défaut devient optionnel.** Dans Valeurs par défaut UBL › Identifiants de schéma, une case « Utiliser le SIREN quand l'acheteur n'a pas d'adresse électronique », cochée par défaut. Décochée, la facture d'un acheteur sans adresse est produite sans adresse et s'arrête à la validation (adresse obligatoire).
+
+### Corrections
+- **Validation des très grosses factures.** Une facture de plusieurs milliers de lignes ne reste plus bloquée en validation : une facture de 10 000 lignes est désormais validée en une vingtaine de secondes. Les constats sont les mêmes qu'auparavant. Les déclarations d'e-reporting bénéficient de la même correction.
+- **Règles de traitement : « XPath sur le document ».** Le champ accepte désormais un chemin (`Facture_Entete_S4/Type_document_ID80`) ; jusqu'ici seul un nom d'élément fonctionnait, et une règle écrite avec un chemin ne s'appliquait jamais. Un chemin introuvable se rabat sur son dernier nom d'élément. Les `{…}` d'un chemin de pièce jointe lisent un chemin de la même façon.
+
+### Mise à niveau
+- Lancer la mise à niveau pour que chaque environnement reçoive les nouvelles feuilles de style. Rien ne change tant que la case reste cochée.
+
+---
+
+## 2026.11.23.1 — 2026-11-23 \{#v2026-11-23-1\}
+
+### Améliorations
+- **Mapping : condition « différent de ».** Dans les champs d'extension, les propriétés d'article et les notes (document et ligne), le `=` d'une condition est un bouton qui bascule en `≠` : la ligne est émise quand l'élément ne correspond à aucune des valeurs listées. Un élément absent ou vide compte comme différent ; `≠` sans valeur signifie « élément renseigné ».
+- **Mapping : plusieurs conditions par ligne.** Le `+` de la cellule de condition en ajoute une, chacune avec son `=` / `≠` ; la ligne est émise quand toutes sont remplies. Deux lignes pour le même élément couvrent une règle « dans l'un ou l'autre cas ».
+
+### Mise à niveau
+- Lancer la mise à niveau pour que chaque environnement reçoive la nouvelle feuille de style commune. Les mappings existants ne changent pas.
+
+---
+
+## 2026.11.21.1 — 2026-11-21 \{#v2026-11-21-1\}
+
+### Améliorations
+- **Explorateur : nouvelle présentation de la page.** Vue, Période, Lignes, Mesures et Filtres occupent chacun une carte ; la vue se choisit par des boutons à icône ; le résultat est un panneau dont l'en-tête indique ce que l'exécution a renvoyé. Enregistrer, Supprimer, Excel et PDF sont dans l'en-tête de la page.
+- **Explorateur : bouton Définition.** Il masque les champs et les cartes de définition pour laisser toute la page au résultat. Une analyse enregistrée s'ouvre sur son résultat, une nouvelle sur sa définition ; définition masquée, la période reste sur la ligne Vue.
+- **Explorateur : code ou libellé.** Une ligne portant sur un champ codé (statut, motif, type…) choisit son affichage : code et libellé ensemble comme auparavant, le libellé, le code, ou deux colonnes. Le tableau, le tableau croisé, les graphiques, le PDF et l'Excel suivent ce choix, enregistré avec l'analyse. Les rapports planifiés conservent code et libellé.
+- **Explorateur : Excel d'une analyse.** Le bouton Excel de l'en-tête exporte le résultat tel qu'affiché, le tableau croisé pour un pivot.
+- **Explorateur : liste des champs.** Tout déplier / tout replier à côté de la recherche, et chaque champ affiche le nom utilisé dans les champs calculés.
+- **Tableaux de bord de l'explorateur : mise en page à la main.** En mode Modifier la disposition, une tuile se déplace par sa poignée et se redimensionne par son coin ; les flèches du clavier font de même.
+
+---
+
+## 2026.11.20.1 — 2026-11-20 \{#v2026-11-20-1\}
+
+### Améliorations
+- **Valeurs par défaut UBL : lignes de facture reprises en frais ou remise de document.** Dans Remises / charges, des règles désignent les lignes de la source qui ne sont pas des lignes de facture au sens de la norme, par exemple des frais de port : conditions sur les champs de la ligne, frais ou remise, code motif choisi dans la liste ou lu dans un champ de la ligne. Une ligne concernée quitte les lignes de facture et est totalisée par code motif et taux de TVA en frais ou remise de niveau document ; les totaux suivent. La source et le PDF ne changent pas. Règles générales, surchargeables par document. Nécessite la mise à niveau ; sans règle, rien ne change.
+- **Valeurs par défaut UBL, sociétés : schéma de l'adresse électronique (BT-34).** Une société peut porter son propre schéma à côté de son adresse électronique, par exemple 9940 avec le numéro de TVA pour une société à Monaco. Laissé sur le schéma général, rien ne change. Le réglage existe aussi dans la surcharge des sociétés d'un document. Le code 9940 (numéro de TVA Monaco) rejoint la liste des schémas. Prend effet après un enregistrement des valeurs par défaut UBL.
+
+### Corrections
+- **Valeurs par défaut UBL, onglet TVA : code d'exonération par code source.** Dans les valeurs générales, les modifications de cette correspondance n'étaient pas écrites dans le fichier alors que la page affichait Enregistré. Elles sont désormais enregistrées ; les autres correspondances de TVA n'étaient pas concernées.
 
 ---
 

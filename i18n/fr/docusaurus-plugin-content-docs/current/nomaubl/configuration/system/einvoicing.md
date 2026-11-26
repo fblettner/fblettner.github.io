@@ -1,6 +1,6 @@
 ---
 title: E-Invoicing
-description: "Configure le dialogue entre NomaUBL et une Plateforme Agréée (PA) — par référence à un api-connecteur réutilisable, avec un repli SFTP optionnel pour la soumission sortante et une section de récupération des statuts. Mise en onglets : UBL Validation · PA Connection · FTP/SFTP · Status. L'api-connecteur porte le flux d'authentification et les endpoints ; cette page le référence par son nom et surcharge les noms d'endpoint par tâche au besoin."
+description: "Configure le dialogue entre NomaUBL et une Plateforme Agréée (PA) — par référence à un api-connecteur réutilisable, avec un repli SFTP optionnel pour la soumission sortante et une section de récupération des statuts. Quatre sections présentées en cartes d'étape : UBL Validation · PA Connection · FTP/SFTP · Status. L'api-connecteur porte le flux d'authentification et les endpoints ; cette page le référence par son nom et surcharge les noms d'endpoint par tâche au besoin."
 keywords: [NomaUBL, e-invoicing, Plateforme Agréée, PA, api-connecteur, paMode, OAUTH2, REST API, SFTP, validation UBL, réforme facturation électronique, récupération des statuts, cycle de vie, JD Edwards, SAP, NetSuite]
 ---
 
@@ -10,7 +10,7 @@ L'éditeur **E-Invoicing** définit **comment NomaUBL parle à une Plateforme Ag
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
-L'éditeur comporte **quatre onglets** :
+L'éditeur présente ses **quatre sections sous forme de cartes d'étape**, alignées en haut. Chaque carte indique le nom de la section et son état — les premières valeurs renseignées parmi ses champs — et un clic affiche ses champs ([fonctionnement des cartes](../settings-overview.md#section-cards)) :
 
 1. **UBL Validation** — répertoire des transformations XSL utilisées pour convertir le XML source en UBL.
 2. **PA Connection** — choix de l'api-connecteur qui porte le transport HTTP de la PA, plus surcharges de noms d'endpoint par tâche et paramètres de connexion.
@@ -21,32 +21,49 @@ L'éditeur comporte **quatre onglets** :
 
 ## Accès à l'éditeur
 
-- *Paramètres* → modèle **e-invoicing** (la ressource au niveau système).
+- *Paramètres* → domaine **E-invoicing** → carte **E-invoicing** (modèle système `e-invoicing`).
 - La portée par défaut est le template platform-wide `e-invoicing`. Les surcharges par société se trouvent sur les templates `e-invoicing-{kco}` et suivent la même forme ; le résolveur côté runtime regarde d'abord le template par société puis retombe sur le template platform-wide.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 624" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="einv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="einv-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="einv-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="einv-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="560" rx="14" fill="url(#einv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="584" rx="14" fill="url(#einv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="106" height="24" rx="4" fill="transparent"/>
-  <text x="293" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL Validation</text>
-  <rect x="352" y="28" width="100" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="402" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">PA Connection</text>
-  <rect x="458" y="28" width="76" height="24" rx="4" fill="transparent"/>
-  <text x="496" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
-  <rect x="540" y="28" width="60" height="24" rx="4" fill="transparent"/>
-  <text x="570" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Status</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UBL VALIDATION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">%APP_HOME%/%ENV%/…</text>
+  <line x1="360" y1="52.0" x2="372" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="375" y="30" width="127" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="383" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="391.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="405" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PA CONNECTION</text>
+  <text x="384" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">pa-default · impo…</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="518" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">≡</text>
+  <text x="548" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">API · 22</text>
+  <line x1="646" y1="52.0" x2="658" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="661" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="669" y="37" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="677.0" y="48.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">☰</text>
+  <text x="691" y="48.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <text x="670" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">pa-default · 100</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">api-connecteur</text>
   <text x="240" y="104" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Le transport HTTP de la PA — flux d'auth, base URL, endpoints — vit dans un api-connecteur réutilisable.</text>
@@ -85,7 +102,7 @@ L'éditeur comporte **quatre onglets** :
 
   <line x1="240" y1="438" x2="780" y2="438" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet FTP/SFTP — aperçu</text>
+  <text x="240" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Section FTP/SFTP — aperçu</text>
   <text x="240" y="484" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEND MODE</text>
   <rect x="320" y="474" width="200" height="26" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
   <text x="330" y="491" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">API ▾</text>
@@ -115,13 +132,14 @@ L'éditeur comporte **quatre onglets** :
   <text x="830" y="491" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">paMode = API / FTP</text>
   <text x="830" y="504" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vide = pas d'envoi sortant</text>
   <line x1="820" y1="492" x2="520" y2="492" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#einv-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Onglet 1 — UBL Validation
+## Carte 1 — UBL Validation
 
-Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transformer le XML source en UBL**. La validation de conformité UBL passe par des schématrons standards, documentés sur la page [Validate](../../ubl-tools/validate.md).
+Cette section configure le **répertoire des fichiers XSL** utilisés pour **transformer le XML source en UBL**. La validation de conformité UBL passe par des schématrons standards, documentés sur la page [Validate](../../ubl-tools/validate.md).
 
 | Champ | Description |
 |---|---|
@@ -141,7 +159,7 @@ Utilisés quand une facture n'a **aucun document** — créée dans l'éditeur m
 
 ---
 
-## Onglet 2 — PA Connection
+## Carte 2 — PA Connection
 
 ### api-connecteur
 
@@ -175,13 +193,13 @@ Paramètres de niveau connexion qui s'appliquent à **chaque appel routé via l'
 
 ---
 
-## Onglet 3 — FTP/SFTP
+## Carte 3 — FTP/SFTP
 
 ### Send Mode
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **envoyer les factures à la PA**. `API` route la soumission via l'api-connecteur choisi sur l'onglet précédent ; `FTP` écrit l'UBL dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* ignore complètement la soumission sortante (utile pendant le câblage d'un nouveau type de document). La récupération des statuts, le polling d'import et les actions vendeur passent toujours par l'API quel que soit ce choix. |
+| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **envoyer les factures à la PA**. `API` route la soumission via l'api-connecteur choisi sur la carte précédente ; `FTP` écrit l'UBL dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* ignore complètement la soumission sortante (utile pendant le câblage d'un nouveau type de document). La récupération des statuts, le polling d'import et les actions vendeur passent toujours par l'API quel que soit ce choix. |
 
 ### SFTP Server
 
@@ -198,7 +216,7 @@ La carte entière est atténuée quand *Send Mode* ≠ `FTP` — ces champs ne s
 
 ---
 
-## Onglet 4 — Status
+## Carte 4 — Status
 
 La section **Status Retrieval** pilote la boucle de récupération des statuts de cycle de vie.
 
@@ -208,6 +226,11 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 | **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. Tenue **par source de statuts** : une surcharge société qui interroge via son propre connecteur ou endpoint de statuts garde sa propre date (à sa première exécution, elle part de celle du modèle par défaut), tandis que les surcharges qui partagent le connecteur par défaut suivent la date du modèle par défaut. Une page en échec ne retient que cette source. |
 | **Status connector** | *(vide = même connecteur que la PA)* | Connecteur utilisé **uniquement** pour la récupération des statuts de cycle de vie. À renseigner sur une surcharge société quand la PA délivre des identifiants de statuts distincts par société (Esker) : l'envoi garde le connecteur PA partagé, les statuts passent par celui-ci. |
 | **Watermark advance** | `Now` *(défaut)* | Mode recherche uniquement. *Now* place le curseur à l'heure d'interrogation. *Last event* le place sur le `updatedAt` source de l'élément le plus récent récupéré — pour les PA qui plafonnent leur recherche sans pagination (Yooz : 200 flux), une rafale est ainsi vidée sur plusieurs interrogations au lieu d'en perdre la fin. Demande le mappage connecteur `event.updatedAt` (par ex. `item.updatedAt`) et des éléments renvoyés du plus ancien au plus récent. |
+
+### Import et interrogation du cycle de vie
+
+| Champ | Défaut | Description |
+|---|---|---|
 | **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière récupération (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
 | **Import parallel** | *(défaut `4`, max `8`)* | Nombre de factures en attente (statut 9906) que le contrôle de statut d'import interroge **en même temps**. À augmenter pour résorber plus vite un gros arriéré ; mettre `1` pour l'ancien comportement séquentiel. |
 | **Import group size** | *(défaut `1`, max `100`)* | Mode d'import `per-invoice` uniquement. Nombre de factures par requête, pour une plateforme qui accepte une liste d'identifiants (TX2 : `10`) : le corps du point d'accès contient alors `{{uuids}}` dans son tableau JSON — les identifiants entre guillemets doubles, séparés par des virgules ; `{{uuid}}` reste le premier identifiant. Les factures sont regroupées par société et par flux, et une facture sans identifiant de la plateforme est interrogée seule. Une facture absente de la réponse, ou sans statut dans celle-ci, reste en attente. `1` = une requête par facture. |
@@ -216,11 +239,13 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 | **Min invoice date** | *(vide = pas de seuil)* | Un **seuil d'ingestion** : une facture du pipeline XML datée avant cette date est écartée d'emblée — pas d'écriture en base, pas de génération, pas d'envoi PA. Il protège les relances d'anciens jobs BIP et les archives héritées (un document avec une ligne d'archive mais sans en-tête paraîtrait sinon « jamais envoyé » et serait renvoyé). Les dates de facture vides ou illisibles ne sont jamais bloquées. |
 | **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
+### Autofacturation et fréquences d'interrogation
+
 :::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
 Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est transmise via le canal « achats » de la plateforme : NomaUBL emploie automatiquement la variante `-selfbilled` d'un endpoint (`import-selfbilled`, `import-status-selfbilled`) quand le connecteur la définit, et retombe sur l'endpoint standard sinon. La connexion à la plateforme — URL et identifiants — reste identique ; seuls les endpoints diffèrent.
 :::
 
-:::info[Les intervalles de polling vivent sur `global`]
+:::info[Les intervalles de polling se règlent dans `global`]
 Les intervalles qui pilotent la fréquence de polling de la PA — `fetchImportInterval`, `fetchStatusInterval`, cadence e-reporting — sont des réglages globaux modifiés depuis chaque tâche de la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md) ; ils s'appliquent à toutes les sociétés.
 :::
 

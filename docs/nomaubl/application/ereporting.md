@@ -322,7 +322,7 @@ The toolbar above the table combines three free-text filters with two quick acti
 
 ### Advanced Filters
 
-A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them. A column backed by a reference list takes several values and an operator — include, exclude, empty, not empty ([details](./invoices.md#list-filters)).
 
 The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `status` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several status codes returns the union.
 

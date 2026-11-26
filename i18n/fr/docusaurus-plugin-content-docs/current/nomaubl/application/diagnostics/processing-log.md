@@ -185,7 +185,7 @@ En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) p
 
 ### Filtres avancés
 
-Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas. Une colonne adossée à une liste de référence accepte plusieurs valeurs et un opérateur — inclure, exclure, vide, non vide ([détails](../invoices.md#list-filters)).
 
 Le drill-through depuis les barres de débit du Tech Dashboard vers cette page amorce maintenant le `DateRangeFilter` V2 via `initialRange` — la période cliquée sur la barre reste appliquée ici.
 

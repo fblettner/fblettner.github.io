@@ -17,17 +17,22 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
-    <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
-    <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
-    <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
-    <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
-    <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
+    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
+    <a href="#v2026-11-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-25</span></a>
+    <a href="#v2026-11-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-23</span></a>
+    <a href="#v2026-11-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-21</span></a>
+    <a href="#v2026-11-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-20</span></a>
+    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (133)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (138)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
+      <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
+      <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
+      <a href="#v2026-11-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-12</span></a>
+      <a href="#v2026-11-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-11</span></a>
       <a href="#v2026-11-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-10</span></a>
       <a href="#v2026-11-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-08</span></a>
       <a href="#v2026-11-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-06</span></a>
@@ -180,6 +185,81 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   </details>
 </div>
 {/* versions:end */}
+
+---
+
+## 2026.11.26.1 — 2026-11-26 \{#v2026-11-26-1\}
+
+### Improvements
+- **Document window: change the transaction type, edit the UBL.** On the UBL tab, two actions for administrators. Change type sets another type (B2B, B2C…) on the invoice: only the type changes, in the UBL and in the lists, with no validation, status change or send. Edit UBL opens the UBL as text; saving validates it again as the invoice window does, and an invoice already processed by the platform is refused. Both need the new right "Edit UBL / change type" (role editor, Actions): a role with an action list does not have it until it is ticked.
+- **Documents: activity and type by rule.** New Rules step on a document. A rule tests the document (JDE document type, company, amount, customer number, an element of the spool; on a UBL source, the seller, the buyer, the type code, the currency or any element of the UBL) and gives an activity, a type or both. Rules are read from top to bottom; with no match the document keeps the activity and type of its Identification step. "Try on the sample" shows which rule applies. Applied when the document is processed: a save from the invoice or document window never changes them. The processing rules (treat as another type, exclude) move to the same step.
+- **PDF to XML: a page in steps.** The settings are grouped in steps shown as cards with their state (Source, Invoice, Company, Lines, VAT summary, Result); the selected step's settings sit beside the rows of the PDF and the XML. One "Save to document" button, with a mark when changes are pending. Settings and results are unchanged.
+- **PDF to XML: result per invoice, PDF view.** The Result step lists each invoice of a text PDF (pages, lines, VAT rates, sum of the lines against the invoice total) and marks those with no lines or whose lines do not add up; a click shows the invoice in the XML. Beside the settings, the rows read from the PDF can be swapped for the PDF itself.
+- **Connectors: editor in steps.** Connection, Authentication, Endpoints, Webhooks and Test are shown as cards with their state, and an endpoint is edited in four parts (what it is, inputs, the call, the answer). Same settings as before.
+- **Documents: editor in steps.** A document is edited through cards in the order of a run (Source, Identification, Enrichment, Rules, UBL, Output, Advanced), each showing its state; steps that do not apply to the source are hidden. A PDF-source document has an "Open in PDF to XML" button. Same settings as before.
+- **Notification rules, watched folders, action bindings, promotion: same look.** A notification rule and a watched folder are edited through cards showing their state; an action binding shows its button followed by its calls as a chain; Promotion opens on three cards (build a package, import a package, history). Same settings as before.
+- **Settings: navigation as cards, sections as steps.** The entries of the Settings navigation are cards with an icon and a line saying what each holds. E-invoicing, e-reporting, directory lookup, SQL connectors and the two databases show their sections as cards across the top, like a connector. Same settings as before.
+- **Fetch status, Extract and process, File versions: same look.** Fetch status opens on two cards (retrieve statuses, checks). Extract and process follows four steps (source, processing, extraction result, processing result) with one run button. In File versions, folders are headings and files are cards.
+- **Text PDF: invoices printed with their business-term codes.** A layout that prints the code of each value ("Date d'échéance (BT-9)", "Total TVA (BT-110)") is now read by its labels: fields are named by the label, text values are kept (currency, invoice type, payment means), a code in parentheses at the end of a value also comes out on its own (380, EUR, 42, the scheme of an electronic address), and values printed on several rows are joined. A block heading such as "Vendeur" or "Client" is no longer taken as the party's name, and "CITY, FR" gives the city and the country. In a table, a text left-aligned under a centred header goes to its own column; a VAT summary whose header is on two rows is read.
+- **Platforms with the AFNOR flow API.** A connector can now send the e-reporting file as a flow (`{{filePath}}` and `{{reportName}}` in a multipart body), and the list of received invoices reads the `flowId` of a flow search.
+
+### Fixes
+- **Document without an RTF template run with no processing type.** It now produces its UBL instead of failing on a PDF it cannot render ("PDF creation failed").
+- **Invoice window: save refused after adding a reference.** On an invoice or credit note carrying a VAT point date code without invoicing period dates, adding a preceding invoice or an order reference no longer makes the save fail on the document structure (invoicing period out of place). A document already saved that way is corrected by opening it and saving again.
+- **Text PDF: name printed on two rows.** In a table read by position, a value wrapped above and below its line (a long name) no longer makes the other stacked values of the invoice be read as section titles (session number and end date lost, wrong section).
+- **Text PDF: table continued on the next page.** The footer of the page and the header of the next one are no longer read as invoice lines.
+- **File versions: the editor stayed on the first file.** Choosing another file while one is open in the editor now shows the other file; unsaved changes are asked about first.
+- **Text PDF: fields of the header printed again on the next page.** On an invoice of several pages, the header repeated on a following page no longer produces a second set of fields (ending in _2).
+
+---
+
+## 2026.11.25.1 — 2026-11-25 \{#v2026-11-25-1\}
+
+### Improvements
+- **List filters: include, exclude, empty, not empty.** In the Advanced Filters panel and in the table's column filters, a dropdown filter has an operator button: one of the selected values (as before), none of them, no value, any value. Exclude keeps the rows with no value. Saved views keep working.
+- **Explorer: "not equals" on a coded field** (status, reason, type…) now also keeps the rows where the field is empty.
+- **Buyer electronic address: SIREN by default, now optional.** UBL Defaults › Scheme IDs has a box "Use the SIREN when the buyer has no electronic address", ticked by default. Unticked, an invoice whose buyer has no address is produced without one and stops at validation (address mandatory).
+
+### Fixes
+- **Validation of very large invoices.** An invoice of several thousand lines no longer stays in validation without ending: a 10,000-line invoice is now validated in about 20 seconds. The findings are the same as before. E-reporting declarations get the same correction.
+- **Processing rules: "XPath on the document".** The field now accepts a path (`Facture_Entete_S4/Type_document_ID80`); until now only a bare element name worked and a rule written with a path never matched. A path that finds nothing falls back on its last element name. An attachment path's `{…}` placeholders read a path the same way.
+
+### Upgrade
+- Run the upgrade so each environment receives the new stylesheets. Nothing changes until the box is unticked.
+
+---
+
+## 2026.11.23.1 — 2026-11-23 \{#v2026-11-23-1\}
+
+### Improvements
+- **Mapping: "different from" in a condition.** In the extension fields, item properties and notes (document and line), the `=` of a condition is a button that switches to `≠`: the row is emitted when the element matches none of the listed values. An absent or empty element counts as different; `≠` with no value means "element not empty".
+- **Mapping: several conditions on a row.** `+` in the condition cell adds a condition, each with its own `=` / `≠`; the row is emitted when all of them hold. Two rows for the same element cover an "either case" rule.
+
+### Upgrade
+- Run the upgrade so each environment receives the new common stylesheet. Existing mappings are unchanged.
+
+---
+
+## 2026.11.21.1 — 2026-11-21 \{#v2026-11-21-1\}
+
+### Improvements
+- **Explorer: new page layout.** View, Period, Rows, Measures and Filters are one card each; the view is picked with icon buttons; the result is a panel whose heading says what the run returned. Save, Delete, Excel and PDF are in the page header.
+- **Explorer: Definition button.** It hides the fields and the shelves so the result takes the whole page. A saved analysis opens on its result, a new one on its definition; with the definition hidden, the period stays on the View line.
+- **Explorer: code or label.** A row on a coded field (status, reason, type…) chooses what it shows: code and label together as before, the label, the code, or two columns. The table, the pivot, the charts, the PDF and the Excel follow, and the choice is saved with the analysis. Scheduled reports keep code and label.
+- **Explorer: Excel of an analysis.** The header's Excel button exports the result as shown, the cross table for a pivot.
+- **Explorer: fields list.** Expand all / collapse all next to the search, and each field shows the name used in calculated fields.
+- **Explorer dashboards: layout by hand.** In Edit layout a tile is moved by dragging its grip and sized by its corner; the arrow keys do the same.
+
+---
+
+## 2026.11.20.1 — 2026-11-20 \{#v2026-11-20-1\}
+
+### Improvements
+- **UBL Defaults: invoice lines carried as a document charge or allowance.** Rules in Allowances / charges name the source lines that are not invoice lines for the standard, such as a freight line: conditions on the line's fields, charge or allowance, reason code from the list or read from a field of the line. A matching line leaves the invoice lines and is added up per reason code and VAT rate as a document-level charge or allowance; the totals follow. The source and the PDF are unchanged. General rules, overridable per document. Requires the upgrade; without a rule nothing changes.
+- **UBL Defaults, companies: scheme of the electronic address (BT-34).** A company can carry its own scheme next to its electronic address, for example 9940 with the VAT number for a company in Monaco. Left on the general scheme, nothing changes. Also available in a document's company override. Code 9940 (Monaco VAT number) is added to the scheme list. Takes effect once the UBL Defaults are saved.
+
+### Fixes
+- **UBL Defaults, VAT tab: exemption code by source code.** Changes to this mapping in the general defaults were not written to the file although the page answered Saved. They are now saved; the other VAT mappings were not affected.
 
 ---
 

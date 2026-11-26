@@ -206,14 +206,25 @@ Une étape sans facture sur la période est grisée. Un clic depuis un tableau d
 Un panneau **Filtres avancés** pliable se trouve sous la rangée des statuts. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — par défaut *DOC*, *DCT*, *Société*, *Code Tiers*, *Tiers*, *Type doc.*, *Suivi*, *Statut*, *Type facture*, *Code activité*, *Code motif* — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas : la saisie dans le panneau ne sollicite pas le serveur.
 
 :::info[Comment les filtres texte trouvent les lignes]
-Un filtre texte correspond depuis le **début** de la valeur et utilise l'index de la colonne : la liste reste rapide sur une grande table. Pour chercher un texte n'importe où dans la valeur, l'encadrer de signes pourcent — `%acme%` trouve *acme* où qu'il apparaisse, au prix d'un parcours complet. Le filtre **DOC** prend un raccourci : une valeur entièrement numérique recherche directement le numéro de document. Les filtres sur les colonnes adossées à une liste de référence (statut, routage…) acceptent **plusieurs valeurs à la fois** — la liste affiche alors les lignes qui correspondent à l'une d'elles.
+Un filtre texte correspond depuis le **début** de la valeur et utilise l'index de la colonne : la liste reste rapide sur une grande table. Pour chercher un texte n'importe où dans la valeur, l'encadrer de signes pourcent — `%acme%` trouve *acme* où qu'il apparaisse, au prix d'un parcours complet. Le filtre **DOC** prend un raccourci : une valeur entièrement numérique recherche directement le numéro de document. Les filtres sur les colonnes adossées à une liste de référence (statut, routage…) acceptent **plusieurs valeurs à la fois** et un opérateur — inclure, exclure, vide, non vide — décrit [plus bas](#list-filters).
 :::
 
 L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — chacun choisit les colonnes qu'il interroge réellement et retire les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
 
 La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
 
-Les colonnes adossées à une liste de référence (Statut, statut e-reporting, listes personnalisées) reçoivent une **sélection multiple** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` : choisir trois statuts renvoie l'union. Un code peut aussi se saisir dans la recherche de la liste (Entrée, plusieurs séparés par des virgules) : une liste incomplète ou encore vide permet donc tout de même de filtrer.
+#### Filtres sur une liste \{#list-filters\}
+
+Les colonnes adossées à une liste de référence (Statut, statut e-reporting, listes personnalisées) reçoivent une **sélection multiple** dans le panneau Filtres avancés et dans la ligne de filtre par colonne, précédée d'un **bouton d'opérateur** :
+
+| Opérateur | Bouton | Lignes conservées |
+|---|---|---|
+| **inclure** *(par défaut)* | `=` | La valeur fait partie des valeurs choisies. |
+| **exclure** | `≠` | La valeur ne fait partie d'aucune des valeurs choisies — les lignes sans valeur sont conservées elles aussi. |
+| **est vide** | `∅` | Le champ n'a pas de valeur. Aucune valeur à choisir. |
+| **n'est pas vide** | `≠∅` | Le champ a une valeur, quelle qu'elle soit. Aucune valeur à choisir. |
+
+Le nombre de codes choisis est libre : au-delà du plafond, le déclencheur affiche `N sélectionné(s)`, et un `✕` à droite réinitialise la sélection en un clic. *inclure* avec trois statuts renvoie l'union des trois ; *exclure* renvoie toutes les autres lignes. Un code peut aussi se saisir dans la recherche de la liste (Entrée, plusieurs séparés par des virgules) : une liste incomplète ou encore vide permet donc tout de même de filtrer. Une [vue enregistrée](./saved-views.md) conserve l'opérateur avec les valeurs.
 
 ### Barre d'outils de la grille
 

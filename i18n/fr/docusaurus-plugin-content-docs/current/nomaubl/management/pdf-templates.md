@@ -337,7 +337,9 @@ Neuf sections prédéfinies réordonnables couvrent la forme standard d'un PDF d
 
 Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les présente en colonnes côte à côte qui reflètent la mise en page PDF — *Header* se lit comme **METAS** | **SUPPLIERS**, *Line Table* comme **Group headers** | **Columns** | **Sub-details** — au lieu d'une longue liste plate. Les bascules utilisent le composant `Checkbox` rond-bleu pour une cohérence visuelle en mode sombre.
 
-Liste complète des bascules par section prédéfinie :
+#### Switchs de chaque section prédéfinie
+
+Liste complète des switchs par section prédéfinie :
 
 - **Header** — neuf bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / avis d'expédition (BT-16) / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client ; son identifiant est libellé d'après son schéma (SIRET, GLN…), *Identifiant* quand le schéma est inconnu. La boîte Client imprime aussi le contact de l'acheteur — *Contact name*, *Phone*, *Email*, chacun avec son option, actives par défaut — quand la facture le porte ; sur une facture d'autofacturation, c'est là qu'apparaît le contact de la société émettrice.

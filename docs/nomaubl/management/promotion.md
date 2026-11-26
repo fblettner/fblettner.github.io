@@ -8,96 +8,113 @@ keywords: [NomaUBL, promotion, export, import, package, environments, dev, test,
 
 The **Promotion** page moves configuration from one instance to another — development to test, test to production — **item by item**, with the files each item uses. Export builds a package; import shows what the package would change, field by field, then writes it after a version snapshot. The keys that belong to an instance — passwords, URLs, hosts, the license, the environment name… — **never travel** and are never overwritten on the target.
 
-Open it from **Management → Promotion**. The page has three views: **Export** (build a package, or promote the selection straight to another instance), **Import** (apply a package) and **History**.
+Open it from **Management → Promotion**. The page opens on three cards, one per task: **Build a package** (pick items and their files, download a package or promote it straight to another instance), **Import a package** (apply a package to this instance, after a preview) and **History** (the packages exported, imported and promoted). The chosen card is highlighted and its view shows below.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1200 392" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 444" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="pm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="pm-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="pm-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pmoen-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pmoen-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pmoen-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pmoen-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="346" rx="14" fill="url(#pm-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="760" height="404" rx="14" fill="url(#pmoen-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Promotion</text>
-  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Move templates, lists, jobs, connectors and settings between instances, item by item. Instance keys never travel.</text>
-  <rect x="240" y="80" width="114" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="241" y="81" width="55" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="268.5" y="95.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Export</text>
-  <line x1="297" y1="85" x2="297" y2="99" stroke="#334155" strokeWidth="1"/>
-  <text x="325.5" y="95.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Import</text>
-  <rect x="420" y="80" width="240" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="430" y="95.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Filter items…</text>
-  <rect x="240" y="116" width="470" height="230" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="252" y="127" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M254.5,132.5 L256.8,134.8 L260.8,130" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="269" y="136" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">DOCUMENT TEMPLATE (2)</text>
-  <rect x="264" y="151" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M266.5,156.5 L268.8,158.8 L272.8,154" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="281" y="160" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">invoices</text>
-  <text x="340" y="160" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Customer invoices</text>
-  <rect x="280" y="167" width="117" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="338.5" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">pdf-template:standard</text>
-  <rect x="403" y="167" width="94" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="450.0" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">xsl/invoices.xsl</text>
-  <rect x="503" y="167" width="113" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="559.5" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">ubl/invoices-ubl.xsl</text>
-  <rect x="264" y="193" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="281" y="202" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">credit_notes</text>
-  <text x="356" y="202" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Credit notes</text>
-  <rect x="252" y="223" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="269" y="232" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">PDF TEMPLATE (1)</text>
-  <rect x="264" y="247" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M266.5,252.5 L268.8,254.8 L272.8,250" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="281" y="256" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">standard</text>
-  <rect x="333.8" y="244" width="65" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="366.3" y="255.2" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">dependency</text>
-  <rect x="252" y="277" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="269" y="286" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">CONNECTOR (3)  ›</text>
-  <rect x="252" y="299" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="269" y="308" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">SETTINGS TEMPLATE (4)  ›</text>
-  <rect x="722" y="116" width="238" height="230" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="736" y="138" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Selection</text>
-  <text x="736" y="158" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">1 item(s), 1 dependency(ies), 2 file(s)</text>
-  <text x="736" y="184" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">The package holds the items, their files</text>
-  <text x="736" y="199" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">relative to the environment root, and a</text>
-  <text x="736" y="214" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">manifest. Passwords, secrets, URLs, hosts,</text>
-  <text x="736" y="229" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">the license… are never exported.</text>
-  <rect x="736" y="260" width="210" height="26" rx="5" fill="url(#pm-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="841.0" y="276.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Export package</text>
-  <rect x="736" y="294" width="210" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="841.0" y="309.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Clear selection</text>
-  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export or import</text>
-  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">preview before every write</text>
-  <line x1="200" y1="93.0" x2="240" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
-  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tree by kind</text>
-  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tick a kind to take all</text>
-  <line x1="200" y1="157.0" x2="252" y2="132" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
-  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dependencies</text>
-  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">files and PDF template follow</text>
-  <line x1="200" y1="247.0" x2="280" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
-  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Added automatically</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">named by a selected document</text>
-  <line x1="200" y1="317.0" x2="333.8" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
-  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Selection count</text>
-  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">items, dependencies, files</text>
-  <line x1="1000" y1="167.0" x2="960" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Move templates, lists, jobs, connectors and settings between instances, item by item, with their files.</text>
+  <rect x="240.0" y="80" width="232.0" height="60" rx="9" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <rect x="252.0" y="97.0" width="26" height="26" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="265.0" y="113.5" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇</text>
+  <text x="288.0" y="108.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Build a package</text>
+  <text x="288.0" y="122.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="484.0" y="80" width="232.0" height="60" rx="9" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="496.0" y="97.0" width="26" height="26" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="509.0" y="113.5" fill="#c084fc" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬆</text>
+  <text x="532.0" y="108.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Import a package</text>
+  <text x="532.0" y="122.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="728.0" y="80" width="232.0" height="60" rx="9" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="740.0" y="97.0" width="26" height="26" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="753.0" y="113.5" fill="#fb923c" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">↺</text>
+  <text x="776.0" y="108.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">History</text>
+  <text x="776.0" y="122.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="288.0" y="122" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Pick items and their files, download</text>
+  <text x="288.0" y="133" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">a package or promote it</text>
+  <text x="532.0" y="122" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Apply a package to this instance,</text>
+  <text x="532.0" y="133" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">after a preview</text>
+  <text x="776.0" y="122" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">The packages exported, imported</text>
+  <text x="776.0" y="133" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">and promoted</text>
+  <rect x="240" y="154" width="470" height="250" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="164" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="260" y="178.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Filter items…</text>
+  <rect x="252" y="195" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M254.5,200.5 L256.8,202.8 L260.8,198" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="269" y="204" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">DOCUMENT (2)</text>
+  <rect x="266" y="217" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M268.5,222.5 L270.8,224.8 L274.8,220" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="283" y="226" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">invoices</text>
+  <text x="340" y="226" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Customer invoices</text>
+  <rect x="282" y="232" width="117" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="340.5" y="243.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">pdf-template:standard</text>
+  <rect x="405" y="232" width="94" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="452.0" y="243.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">xsl/invoices.xsl</text>
+  <rect x="505" y="232" width="113" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="561.5" y="243.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">ubl/invoices-ubl.xsl</text>
+  <rect x="266" y="257" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="283" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">credit_notes</text>
+  <text x="356" y="266" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Credit notes</text>
+  <rect x="252" y="285" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="294" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">PDF-TEMPLATE (1)</text>
+  <rect x="266" y="307" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M268.5,312.5 L270.8,314.8 L274.8,310" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="283" y="316" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">standard</text>
+  <rect x="336" y="304" width="65" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="368.5" y="315.2" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">dependency</text>
+  <rect x="252" y="335" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="344" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">API-CONNECTOR (3)  ›</text>
+  <rect x="252" y="357" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="366" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">LIST (29)  ›</text>
+  <rect x="722" y="154" width="238" height="250" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="734" y="174" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Selection</text>
+  <text x="734" y="192" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">1 item(s), 1 dependency(ies), 3 file(s)</text>
+  <text x="734" y="212" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Passwords, secrets, URLs, hosts,</text>
+  <text x="734" y="225" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">the license… are never exported.</text>
+  <rect x="734" y="238" width="214" height="22" rx="5" fill="url(#pmoen-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="841.0" y="252.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Export package</text>
+  <rect x="734" y="268" width="214" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="841.0" y="282.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Clear selection</text>
+  <line x1="722" y1="304" x2="960" y2="304" stroke="#1f2937" strokeWidth="1"/>
+  <text x="734" y="324" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Promote to an instance</text>
+  <rect x="734" y="334" width="214" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="744" y="348.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Target instance: TEST ▾</text>
+  <rect x="734" y="366" width="214" height="22" rx="5" fill="url(#pmoen-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="841.0" y="380.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Promote…</text>
+  <rect x="20" y="88" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="103" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three mode cards</text>
+  <text x="30" y="116" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">build · import · history</text>
+  <line x1="200" y1="105.0" x2="240" y2="105" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
+  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tree by kind</text>
+  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tick a kind to take all</text>
+  <line x1="200" y1="217.0" x2="252" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
+  <rect x="20" y="395" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="410" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dependencies</text>
+  <text x="30" y="423" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">files and PDF template follow</text>
+  <line x1="200" y1="412.0" x2="350" y2="319" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
+  <rect x="1000" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Selection count</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">items, dependencies, files</text>
+  <line x1="1000" y1="177.0" x2="950" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
   <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Instance keys</text>
-  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">never exported, never overwritten</text>
-  <line x1="1000" y1="247.0" x2="960" y2="215" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
-  <rect x="1000" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export package</text>
-  <text x="1010" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ZIP with manifest, items, files</text>
-  <line x1="1000" y1="307.0" x2="946" y2="273" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export package</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ZIP with manifest, items, files</text>
+  <line x1="1000" y1="247.0" x2="948" y2="249" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
+  <rect x="1000" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Promote</text>
+  <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">straight to a target instance</text>
+  <line x1="1000" y1="347.0" x2="948" y2="376" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pmoen-arrow)"/>
 </svg>
 
 <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '760px', margin: '24px 0', fontFamily: 'system-ui, sans-serif'}}>
@@ -144,6 +161,8 @@ The global settings, single sign-on and the column overrides of the NomaUBL data
 
 ## Export
 
+On the **Build a package** card:
+
 1. **Pick the items** in the tree, grouped by kind with their count. The kind check box selects every visible item of the kind; **Filter items…** narrows the tree.
 2. **Read the dependencies** shown under each item: the files it uses and the items added with it. A PDF template named by a selected document is ticked automatically and flagged *dependency*.
 3. **Export package** downloads the ZIP. The side panel counts the items, dependencies and files of the selection; **Clear selection** starts again.
@@ -163,6 +182,8 @@ Passwords, secrets, tokens, API keys, the license, URLs, hosts, users, the datab
 ---
 
 ## Import
+
+On the **Import a package** card, the package is read, previewed, then applied:
 
 <div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '12.5px', overflowX: 'auto'}}>
   <div style={{opacity: 0.7, fontFamily: 'monospace', fontSize: '11px', marginBottom: '8px'}}>From DEV · release 10.24.1 · admin · 2026-10-24 09:15</div>
@@ -207,10 +228,10 @@ The grid is the shared data table; its view is listed in the [List views](../con
 
 ## Promote to another instance \{#promote\}
 
-When the two instances can reach each other, the selection of the **Export** view is sent straight to a target instance, without handling a ZIP file. The package is built as for an export, sent to the target's own preview, then to its import.
+When the two instances can reach each other, the selection of the **Build a package** card is sent straight to a target instance, without handling a ZIP file. The package is built as for an export, sent to the target's own preview, then to its import.
 
-1. **Pick the items** in the Export view (with their dependencies).
-2. Under **Promote to an instance**, at the bottom of the Export side panel, choose the **Target instance** (the last one used is remembered) and click **Promote…**.
+1. **Pick the items** under *Build a package* (with their dependencies).
+2. Under **Promote to an instance**, at the bottom of the side panel of *Build a package*, choose the **Target instance** (the last one used is remembered) and click **Promote…**.
 3. The **Promote to …** window shows the target's own preview — new, changed, identical, skipped, with the field diffs. Nothing is written yet: *Promote checks the selection on the target first and shows what would change there; nothing is written until you confirm.*
 4. In the same window, choose the policy for **Changed items and files** — *Replace with the package* or *Keep the target, write only new ones* — and a comment, then click **Promote n item(s) and n file(s)**. The target takes a version snapshot before each write, and its instance keys keep their values. The window then reads *Promoted to …: n item(s) and n file(s) written*.
 
@@ -233,7 +254,7 @@ The account is never sent to the browser and never travels in a package. This ed
 
 ## History \{#history\}
 
-The **History** view lists every package exported, import applied and promotion applied on the instance, newest first:
+The **History** card lists every package exported, import applied and promotion applied on the instance, newest first:
 
 | Column | Description |
 |---|---|

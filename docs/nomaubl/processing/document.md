@@ -20,7 +20,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Picking the source
 
-The first decision a document makes is its **Source**. It is set on the **[Documents](../management/documents.md) → Document tab → Source** field and read here:
+The first decision a document makes is its **Source**. It is set on the **[Documents](../management/documents.md#source) → Source step → Source** field and read here:
 
 | Source | When to pick it | What runs |
 |---|---|---|

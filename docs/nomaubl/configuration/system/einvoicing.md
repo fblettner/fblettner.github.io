@@ -1,6 +1,6 @@
 ---
 title: E-Invoicing
-description: "Configure how NomaUBL talks to a Plateforme Agréée (PA) — through a reusable api-connector reference, an optional SFTP fallback for outbound submission, and a status-retrieval section. Four-tab layout: UBL Validation · PA Connection · FTP/SFTP · Status. The api-connector holds the auth flow and endpoints; this page only references it by name and overrides per-task endpoint names when needed."
+description: "Configure how NomaUBL talks to a Plateforme Agréée (PA) — through a reusable api-connector reference, an optional SFTP fallback for outbound submission, and a status-retrieval section. Four sections shown as step cards: UBL Validation · PA Connection · FTP/SFTP · Status. The api-connector holds the auth flow and endpoints; this page only references it by name and overrides per-task endpoint names when needed."
 keywords: [NomaUBL, e-invoicing, Plateforme Agréée, PA, api-connector, paMode, OAUTH2, REST API, SFTP, UBL validation, French e-invoicing, réforme facturation électronique, status retrieval, lifecycle, JD Edwards, SAP, NetSuite]
 ---
 
@@ -10,7 +10,7 @@ The **E-Invoicing** editor tells NomaUBL **how to talk to a Plateforme Agréée 
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-The editor has **four tabs**:
+The editor shows its **four sections as step cards** across the top. Each card gives the section's name and its state — the first values set among its fields — and a click shows its fields ([how the cards work](../settings-overview.md#section-cards)):
 
 1. **UBL Validation** — directory of XSL transforms used to convert the source XML into UBL.
 2. **PA Connection** — picks the api-connector that holds the PA's HTTP transport, plus per-task endpoint name overrides and connection-level parameters.
@@ -21,32 +21,49 @@ The editor has **four tabs**:
 
 ## Opening the editor
 
-- *Settings* → **e-invoicing** template (the system-level resource).
+- *Settings* → **E-invoicing** area → **E-invoicing** card (the `e-invoicing` system template).
 - The default scope is the platform-wide `e-invoicing` template. Per-company overrides live on `e-invoicing-{kco}` templates and follow the same shape; the runtime resolver looks at the per-company template first and falls back to the platform-wide one.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 624" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="einv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="einv-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="einv-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="einv-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="560" rx="14" fill="url(#einv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="584" rx="14" fill="url(#einv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="106" height="24" rx="4" fill="transparent"/>
-  <text x="293" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL Validation</text>
-  <rect x="352" y="28" width="100" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="402" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">PA Connection</text>
-  <rect x="458" y="28" width="76" height="24" rx="4" fill="transparent"/>
-  <text x="496" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
-  <rect x="540" y="28" width="60" height="24" rx="4" fill="transparent"/>
-  <text x="570" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Status</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UBL VALIDATION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">%APP_HOME%/%ENV%/…</text>
+  <line x1="360" y1="52.0" x2="372" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="375" y="30" width="127" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="383" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="391.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="405" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PA CONNECTION</text>
+  <text x="384" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">pa-default · impo…</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="518" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">≡</text>
+  <text x="548" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FTP/SFTP</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">API · 22</text>
+  <line x1="646" y1="52.0" x2="658" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#einv-flow)"/>
+  <rect x="661" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="669" y="37" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="677.0" y="48.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">☰</text>
+  <text x="691" y="48.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <text x="670" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">pa-default · 100</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">API connector</text>
   <text x="240" y="104" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">The PA's HTTP transport — auth flow, base URL, endpoints — lives in a reusable api-connector.</text>
@@ -85,7 +102,7 @@ The editor has **four tabs**:
 
   <line x1="240" y1="438" x2="780" y2="438" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">FTP / SFTP tab — preview</text>
+  <text x="240" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">FTP/SFTP section — preview</text>
   <text x="240" y="484" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEND MODE</text>
   <rect x="320" y="474" width="200" height="26" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
   <text x="330" y="491" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">API ▾</text>
@@ -115,13 +132,14 @@ The editor has **four tabs**:
   <text x="830" y="491" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">paMode = API / FTP</text>
   <text x="830" y="504" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">empty = skip outbound send</text>
   <line x1="820" y1="492" x2="520" y2="492" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#einv-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Tab 1 — UBL Validation
+## Card 1 — UBL Validation
 
-This tab configures the **directory of XSL files** used to **transform the source XML into UBL**. The local UBL conformity check runs through standard schematrons and is documented separately on the [Validate](../../ubl-tools/validate.md) page.
+This section configures the **directory of XSL files** used to **transform the source XML into UBL**. The local UBL conformity check runs through standard schematrons and is documented separately on the [Validate](../../ubl-tools/validate.md) page.
 
 | Field | Description |
 |---|---|
@@ -141,7 +159,7 @@ Applied when an invoice has **no document** — one created in the manual editor
 
 ---
 
-## Tab 2 — PA Connection
+## Card 2 — PA Connection
 
 ### API connector
 
@@ -175,13 +193,13 @@ Connection-level parameters that apply to **every call routed through the picked
 
 ---
 
-## Tab 3 — FTP/SFTP
+## Card 3 — FTP/SFTP
 
 ### Send Mode
 
 | Field | Values | Description |
 |---|---|---|
-| **Send Mode** *(`paMode`)* | `API` *(default)* / `FTP` / *(empty)* | Transport used to **send invoices to the PA**. `API` routes the submission through the api-connector picked on the previous tab; `FTP` spools the UBL to a temp file and uploads it via SFTP using the server below; *(empty)* skips outbound submission entirely (useful while wiring up a new document type). Status retrieval, import polling and seller actions always go through the API regardless of this choice. |
+| **Send Mode** *(`paMode`)* | `API` *(default)* / `FTP` / *(empty)* | Transport used to **send invoices to the PA**. `API` routes the submission through the api-connector picked on the previous card; `FTP` spools the UBL to a temp file and uploads it via SFTP using the server below; *(empty)* skips outbound submission entirely (useful while wiring up a new document type). Status retrieval, import polling and seller actions always go through the API regardless of this choice. |
 
 ### SFTP Server
 
@@ -198,7 +216,7 @@ The whole card is dimmed when *Send Mode* ≠ `FTP` — these fields only apply 
 
 ---
 
-## Tab 4 — Status
+## Card 4 — Status
 
 The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 
@@ -208,6 +226,11 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. Kept **per status source**: a company override that polls through its own status connector or endpoint keeps its own date (on its first run it starts from the default's), while overrides sharing the default connector follow the default template's date. A failed page holds back only that source. |
 | **Status connector** | *(blank = same as the PA connector)* | Connector used **only** for lifecycle status retrieval. Set it on a company override when the PA issues separate status credentials per company (Esker): sending keeps the shared PA connector, statuses go through this one. |
 | **Watermark advance** | `Now` *(default)* | Search mode only. *Now* moves the cursor to the poll time. *Last event* moves it to the source `updatedAt` of the newest fetched item — for PAs that cap their search without paging (Yooz: 200 flows), so a burst is drained over successive polls instead of losing its tail. Needs the connector mapping `event.updatedAt` (e.g. `item.updatedAt`) and items returned oldest-first. |
+
+### Import and lifecycle poll
+
+| Field | Default | Description |
+|---|---|---|
 | **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
 | **Import parallel** | *(default `4`, max `8`)* | How many pending invoices (status 9906) the import-status check polls **at the same time**. Raise it to clear a large pending backlog faster; set `1` for the previous one-at-a-time behaviour. |
 | **Import group size** | *(default `1`, max `100`)* | `per-invoice` import mode only. Number of invoices per request, for a platform that accepts a list of ids (TX2: `10`): the endpoint body then carries `{{uuids}}` inside its JSON array — the ids, each in double quotes, separated by commas; `{{uuid}}` stays the first id. Invoices are grouped by company and flow, and an invoice without a platform id is polled alone. An invoice absent from the response, or without a status in it, stays pending. `1` = one request per invoice. |
@@ -215,6 +238,8 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Poll group size** | *(default `1`, max `100`)* | Same grouping for the per-invoice lifecycle poll, for a platform that accepts a list of document ids (TX2: `10`), with `{{uuids}}` in the endpoint body. `1` = one request per invoice (`{{uuid}}`). |
 | **Min invoice date** | *(empty = no cutoff)* | An **ingestion cutoff**: an XML-pipeline invoice dated before this date is skipped at the door — no database write, no generation, no PA send. It guards re-runs of old BIP jobs and legacy archives (a document with an archive row but no header would otherwise look "never sent" and be resent). Empty or unparseable invoice dates are never blocked. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
+
+### Self-billed invoices and polling intervals
 
 :::info[Self-billed invoices route to their own endpoints]
 A self-billed invoice (type 261, 389, 471, 473, 500, 501 or 502) is submitted through the platform's procurement channel: NomaUBL automatically uses the `-selfbilled` variant of an endpoint (`import-selfbilled`, `import-status-selfbilled`) when the connector defines it, and falls back to the standard endpoint otherwise. The platform connection — URL and credentials — is unchanged; only the endpoints differ.

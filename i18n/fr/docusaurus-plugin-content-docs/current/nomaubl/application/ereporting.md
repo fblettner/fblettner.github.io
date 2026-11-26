@@ -322,7 +322,7 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 
 ### Filtres avancés
 
-Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas. Une colonne adossée à une liste de référence accepte plusieurs valeurs et un opérateur — inclure, exclure, vide, non vide ([détails](./invoices.md#list-filters)).
 
 La page fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. La colonne refList `status` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs codes de statut renvoie l'union.
 

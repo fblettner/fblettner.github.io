@@ -296,7 +296,7 @@ The section header above the toggle reflects the current state:
 
 **Check all** / **Uncheck all** buttons appear under the toggle (disabled when the whitelist is off).
 
-### Action catalog
+### Action catalog \{#action-catalog\}
 
 Grouped by the page where the button lives — the same key can power buttons on more than one page.
 
@@ -304,6 +304,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 |---|---|---|---|
 | **Invoices** | Create | `invoice.create` | The *New Invoice* button of the [E-Invoicing](../../application/invoices.md) list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
+| **Invoices** | Edit UBL / change type | `invoice.edit-ubl` | Change the transaction type of an invoice or edit its stored UBL as text, from the UBL tab of the [document window](../../application/edocuments.md#ubl-tab-actions). A role restricted to a list of actions does not have it until it is ticked. |
 | **Invoices** | Mark reviewed | `invoice.review` | Mark invoices in error as reviewed by customer service, or clear the mark — [invoice list and window](../../application/invoices.md#mark-reviewed). The upgrade gives it to the roles that have *Edit* or *Push status (DB)*. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |

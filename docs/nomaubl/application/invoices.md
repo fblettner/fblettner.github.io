@@ -206,14 +206,25 @@ A stage with no invoice on the period is greyed out. A dashboard click (a queue,
 A collapsible **Advanced Filters** panel sits below the status row. It offers one row per filterable column of the active [List Views](../configuration/list-views.md) spec — by default *DOC*, *DCT*, *Company*, *Party Number*, *Party Name*, *Bar code*, *Review*, *Status*, *Invoice type*, *Activity code*, *Reason code* — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
 
 :::info[How the text filters match]
-A text filter matches from the **start** of the value and uses the column's index, so the list stays fast on a large table. To search for text anywhere in the value, wrap it in percent signs — `%acme%` matches *acme* wherever it appears, at the cost of a full scan. The **DOC** filter takes a shortcut: an all-digits value seeks the document number directly rather than scanning. Filters on columns backed by a reference list (status, routing…) accept **several values at once** — pick more than one and the list shows rows matching any of them.
+A text filter matches from the **start** of the value and uses the column's index, so the list stays fast on a large table. To search for text anywhere in the value, wrap it in percent signs — `%acme%` matches *acme* wherever it appears, at the cost of a full scan. The **DOC** filter takes a shortcut: an all-digits value seeks the document number directly rather than scanning. Filters on columns backed by a reference list (status, routing…) accept **several values at once** and an operator — include, exclude, empty, not empty — described [below](#list-filters).
 :::
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
 The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
 
-RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union. A code can also be typed in the search box of the picker (Enter, comma-separated for several), so a list that is incomplete or still empty still filters.
+#### Filters on a list \{#list-filters\}
+
+RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row, preceded by an **operator button**:
+
+| Operator | Button | Rows kept |
+|---|---|---|
+| **include** *(default)* | `=` | The value is one of the selected values. |
+| **exclude** | `≠` | The value is none of the selected values — the rows with no value are kept too. |
+| **is empty** | `∅` | The field has no value. No value to pick. |
+| **is not empty** | `≠∅` | The field has any value. No value to pick. |
+
+Pick any number of codes: the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. *include* with three statuses returns the union of the three; *exclude* returns every other row. A code can also be typed in the search box of the picker (Enter, comma-separated for several), so a list that is incomplete or still empty still filters. A [saved view](./saved-views.md) keeps the operator with the values.
 
 ### Grid toolbar
 

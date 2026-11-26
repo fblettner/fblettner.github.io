@@ -23,118 +23,98 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 506" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="action-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="action-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="action-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="acbfr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="acbfr-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="acbfr-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="acbfr-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="620" rx="14" fill="url(#action-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Liaisons d'actions</text>
-  <rect x="592" y="30" width="84" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="634" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
-  <rect x="680" y="30" width="100" height="22" rx="5" fill="url(#action-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="730" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">💾 Enregistrer</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="92" fill="#cbd5e1" fontSize="10" letterSpacing="0.06em" fontFamily="system-ui, sans-serif" fontWeight="700">PORTÉE</text>
-  <rect x="296" y="80" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="306" y="95" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">Défaut (e-invoicing) ▾</text>
-  <text x="528" y="95" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">basculer sur e-invoicing-00070 pour surcharger</text>
-
-  <rect x="240" y="116" width="540" height="220" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="138" fill="#94a3b8" fontSize="10" letterSpacing="0.06em" fontFamily="system-ui, sans-serif" fontWeight="700">ACTION</text>
-  <rect x="306" y="126" width="280" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="316" y="141" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">Renvoyer à la PA (statut 9904 / 9907) ▾</text>
-  <rect x="600" y="126" width="22" height="22" rx="4" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="611" y="141" fill="#f87171" fontSize="11" textAnchor="middle">🗑</text>
-
-  <rect x="252" y="158" width="528" height="32" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="266" y="178" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">▾</text>
-  <text x="284" y="178" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">Appel #1</text>
-  <text x="334" y="178" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">Re-soumettre la facture à la PA via api-connector</text>
-  <rect x="754" y="166" width="22" height="22" rx="4" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="765" y="181" fill="#f87171" fontSize="11" textAnchor="middle">×</text>
-
-  <text x="266" y="208" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
-  <rect x="266" y="214" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="276" y="229" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">my-pa · API ▾</text>
-  <text x="476" y="208" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CIBLE</text>
-  <rect x="476" y="214" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="486" y="229" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">import — POST /invoices ▾</text>
-
-  <text x="266" y="252" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
-  <rect x="266" y="258" width="510" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="276" y="273" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Numéro UBL  |  &#123;&#123;ublNumber&#125;&#125;</text>
-  <rect x="266" y="282" width="510" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="276" y="297" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Forcer renvoi |  Y</text>
-
-  <rect x="266" y="312" width="14" height="14" rx="3" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="273" y="323" fill="white" fontSize="10" textAnchor="middle">✓</text>
-  <text x="288" y="323" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Arrêt de la chaîne sur échec (saute les appels restants)</text>
-
-  <rect x="252" y="346" width="528" height="32" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="266" y="366" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">▸</text>
-  <text x="284" y="366" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">Appel #2</text>
-  <text x="334" y="366" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">Audit dans l'ERP source via sql-connector</text>
-  <rect x="588" y="354" width="60" height="16" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="618" y="365" fill="rgb(255,159,10)" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SQL</text>
-  <rect x="754" y="354" width="22" height="22" rx="4" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="765" y="369" fill="#f87171" fontSize="11" textAnchor="middle">×</text>
-
-  <rect x="252" y="386" width="160" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="332" y="401" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">+ Ajouter un appel</text>
-  <text x="424" y="401" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Les appels partent dans l'ordre. Référencer un appel précédent via {`{call.N.fieldName}`}.</text>
-
-  <rect x="240" y="426" width="540" height="180" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="448" fill="#94a3b8" fontSize="10" letterSpacing="0.06em" fontFamily="system-ui, sans-serif" fontWeight="700">ACTION</text>
-  <rect x="306" y="436" width="280" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="316" y="451" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">Paiement reçu (statut 205) ▾</text>
-
-  <rect x="252" y="468" width="528" height="32" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="266" y="488" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">▸</text>
-  <text x="284" y="488" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">Appel #1</text>
-  <text x="334" y="488" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">Mettre à jour le statut de paiement dans le CRM</text>
-
-  <rect x="252" y="508" width="528" height="32" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="266" y="528" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">▸</text>
-  <text x="284" y="528" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">Appel #2</text>
-  <text x="334" y="528" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">Notifier l'acheteur via webhook — utilise {`{call.1.confirmationId}`}</text>
-
-  <rect x="240" y="618" width="540" height="20" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="510" y="632" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">+ Ajouter une liaison</text>
-
-  <rect x="20" y="80" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sélecteur de portée</text>
-  <text x="30" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">défaut + surcharges par société</text>
-  <line x1="220" y1="96" x2="296" y2="93" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
-
-  <rect x="820" y="118" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="133" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Identifiant d'action</text>
-  <text x="830" y="146" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 ID réglementaires, liste fixe</text>
-  <line x1="820" y1="134" x2="586" y2="138" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
-
-  <rect x="20" y="166" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="181" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Liste multi-appels</text>
-  <text x="30" y="194" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cartes repliables · ordre déclaration</text>
-  <line x1="220" y1="182" x2="252" y2="174" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
-
-  <rect x="820" y="270" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Valeurs {`{{placeholder}}`}</text>
-  <text x="830" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">résolues au clic</text>
-  <line x1="820" y1="286" x2="780" y2="278" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
-
-  <rect x="20" y="310" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="325" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Arrêt sur échec</text>
-  <text x="30" y="338" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stoppe la chaîne au premier échec</text>
-  <line x1="220" y1="326" x2="266" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
-
-  <rect x="820" y="510" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="525" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Chaînage des réponses</text>
-  <text x="830" y="538" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">{`{call.N.fieldName}`} d'un appel précédent</text>
-  <line x1="820" y1="526" x2="780" y2="524" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#action-arrow)"/>
+  <rect x="220" y="20" width="760" height="470" rx="14" fill="url(#acbfr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Bindings d'actions</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Lier les actions vendeur réglementaires à des appels de connecteur. Les actions non liées sont désactivées.</text>
+  <rect x="810" y="34" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="850.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Actualiser</text>
+  <rect x="896" y="34" width="64" height="22" rx="5" fill="url(#acbfr-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="928.0" y="48.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer</text>
+  <text x="240" y="104" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Portée</text>
+  <rect x="290" y="90" width="240" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="300" y="104.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Défaut (e-invoicing) ▾</text>
+  <rect x="240" y="124" width="720" height="344" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="146" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Action</text>
+  <rect x="310" y="132" width="600" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="320" y="146.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Resend to PA (status 9904/9907) ▾</text>
+  <rect x="920" y="132" width="28" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="934.0" y="146.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
+  <rect x="240" y="162" width="720" height="64" fill="rgba(255,255,255,0.015)"/>
+  <rect x="252" y="172" width="162" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="260" y="179" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="268.0" y="190.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">☝</text>
+  <text x="282" y="190.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BOUTON</text>
+  <text x="261" y="208" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Resend to PA (status 9904/9…</text>
+  <line x1="415" y1="194.0" x2="427" y2="194.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#acbfr-flow)"/>
+  <rect x="430" y="172" width="162" height="44" rx="8" fill="rgba(255,159,10,0.14)" stroke="#fb923c" strokeWidth="1.3"/>
+  <rect x="438" y="179" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="446.0" y="190.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <text x="460" y="190.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CALL #1</text>
+  <text x="439" y="208" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Renvoyer la facture à la PA</text>
+  <line x1="593" y1="194.0" x2="605" y2="194.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#acbfr-flow)"/>
+  <rect x="608" y="172" width="162" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="616" y="179" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="624.0" y="190.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <text x="638" y="190.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CALL #2</text>
+  <text x="617" y="208" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Ligne d'audit dans l'ERP</text>
+  <line x1="771" y1="194.0" x2="783" y2="194.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#acbfr-flow)"/>
+  <rect x="786" y="172" width="162" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="794" y="179" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="802.0" y="190.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <text x="816" y="190.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CALL #3</text>
+  <text x="795" y="208" fill="#f87171" fontSize="9" fontFamily="system-ui, sans-serif">unconfigured call</text>
+  <line x1="240" y1="226" x2="960" y2="226" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250" y="236" width="700" height="128" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="254" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">▾  Call #1</text>
+  <text x="330" y="254" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Renvoyer la facture à la PA</text>
+  <text x="262" y="278" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTEUR</text>
+  <rect x="350" y="265" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="360" y="279.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">my-pa · API ▾</text>
+  <text x="550" y="278" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENDPOINT</text>
+  <rect x="610" y="265" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="620" y="279.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">import — POST /invoices ▾</text>
+  <text x="262" y="308" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
+  <rect x="350" y="295" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="360" y="309.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">ublNumber  |  &#123;&#123;ublNumber&#125;&#125;</text>
+  <rect x="262" y="335" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M264.5,340.5 L266.8,342.8 L270.8,338" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="279" y="344" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Stop the chain on failure (skip remaining calls)</text>
+  <text x="262" y="388" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">▸  Call #2</text>
+  <text x="330" y="388" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Ligne d'audit dans l'ERP</text>
+  <rect x="252" y="402" width="120" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="312.0" y="416.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add Call</text>
+  <rect x="20" y="90" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sélecteur de portée</text>
+  <text x="30" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">défaut + surcharges par société</text>
+  <line x1="200" y1="107.0" x2="236" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le bouton d'abord</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'action que la liaison traite</text>
+  <line x1="200" y1="177.0" x2="260" y2="195" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
+  <rect x="20" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appel ouvert</text>
+  <text x="30" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic sur une carte l'ouvre</text>
+  <line x1="200" y1="307.0" x2="252" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
+  <rect x="1000" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appels en chaîne</text>
+  <text x="1010" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">exécutés dans l'ordre</text>
+  <line x1="1000" y1="157.0" x2="640" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
+  <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Appel à compléter</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ni connecteur ni cible</text>
+  <line x1="1000" y1="247.0" x2="920" y2="208" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
+  <rect x="1000" y="330" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="345" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Arrêt en cas d'échec</text>
+  <text x="1010" y="358" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stoppe la chaîne à la 1re erreur</text>
+  <line x1="1000" y1="347.0" x2="570" y2="340" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#acbfr-arrow)"/>
 </svg>
 
 ---
@@ -156,7 +136,7 @@ Le bouton *Enregistrer* écrit dans la **portée sélectionnée uniquement** —
 
 ## La liste des actions
 
-Chaque liaison est rendue sous forme de carte. La carte porte une liste déroulante **Action** en haut (verrouillée aux sept ID réglementaires ci-dessous), une liste d'appels de connecteur dans des sous-cartes repliables et un bouton 🗑 par liaison.
+Chaque liaison est rendue sous forme de carte. La carte porte en haut une liste déroulante **Action** (verrouillée aux sept ID réglementaires ci-dessous) et un bouton 🗑 de suppression, puis la liaison dessinée comme une **chaîne** : une carte **Bouton** qui nomme l'action, suivie d'une carte par appel (*Call #1*, *Call #2*…) dans leur ordre d'exécution. Sous la chaîne, chaque appel garde sa sous-carte repliable avec ses champs.
 
 ### ID d'actions réglementaires
 
@@ -176,13 +156,18 @@ Chaque ID peut être lié au plus une fois **par portée**. La liste déroulante
 
 ### Liste d'appels
 
-Sous l'ID d'action, la liaison porte une **liste d'appels** rendus sous forme de cartes repliables. L'en-tête de carte affiche l'index de l'appel (`#1`, `#2`, …) et soit le champ *Description*, soit `connecteur · cible` quand la description est vide.
+Sous l'ID d'action, la liaison porte une **liste d'appels**, présentée à deux endroits :
+
+- **Dans la chaîne** — une carte par appel après la carte *Bouton*, avec le champ *Description*, ou `connecteur · endpoint` quand la description est vide. Un appel sans connecteur ou sans endpoint s'affiche en rouge (*unconfigured call* quand rien n'est renseigné). Un clic sur la carte d'un appel ouvre ou ferme sa sous-carte.
+- **En sous-cartes repliables** sous la chaîne — l'en-tête affiche l'index de l'appel (`#1`, `#2`, …) et le même résumé ; un clic déplie les champs.
+
+Les libellés *Call #N*, *unconfigured call* et la case d'arrêt sur échec restent en anglais dans l'application.
 
 | Champ | Description |
 |---|---|
 | **Description** | Libellé court libre pour cet appel (par exemple *Mettre à jour le statut client CRM*). Affiché en en-tête de carte repliée — une liaison à plusieurs appels se lit comme une liste à cocher d'un coup d'œil. Stocké uniquement comme métadonnée d'interface. |
 | **Connecteur** | Liste déroulante de tous les connecteurs API et SQL fusionnés avec les suffixes `· API` / `· SQL` pour que le type soit visible. |
-| **Cible** | Liste déroulante alimentée par `api.connectors.listEndpoints(connecteur)` pour un connecteur API ou par `api.sqlConnectors.listQueries(connecteur)` pour un connecteur SQL. Désactivée tant qu'aucun connecteur n'est choisi. |
+| **Endpoint** | Liste déroulante alimentée par `api.connectors.listEndpoints(connecteur)` pour un connecteur API ou par `api.sqlConnectors.listQueries(connecteur)` pour un connecteur SQL. Désactivée tant qu'aucun connecteur n'est choisi. |
 | **Paramètres** | Pré-remplis à partir des paramètres déclarés sur la cible, une ligne étiquetée par paramètre. Les valeurs peuvent mêler texte libre et jetons `{{placeholder}}`. Quand la cible ne déclare aucun paramètre, une ligne *Params* libre remplace la mise en page par ligne. |
 | **Arrêt sur échec** | Case unique. Cochée, un échec sur cet appel **interrompt la chaîne** et saute tous les appels restants. Décochée par défaut — la chaîne continue par défaut, comme dans les règles de notification. |
 
@@ -246,7 +231,7 @@ Chaque action personnalisée porte :
 | **Label** | Texte du bouton dans la modale (par ex. *Pousser vers CRM*). Enregistré sous `customAction.N.label`. |
 | **Direction** | `Toutes` *(défaut)* / `Émises uniquement (ventes)` / `Reçues uniquement (achats)`. Vide = bouton visible des deux côtés. Une fois fixée, le bouton est masqué sur les factures de la direction opposée — un *Sync CRM* côté émission et un *Marquer payée* côté réception peuvent coexister sur le même modèle, la modale n'affichant que ce qui a du sens pour la facture courante. Évalué contre l'indicateur `UHDRIN` stocké sur la ligne. |
 | **Statuses** | Liste facultative de codes de statut auxquels le bouton se limite. Vide = tous les statuts. À renseigner pour qu'un bouton *Créer un dossier* n'apparaisse que sur les factures rejetées, par exemple. |
-| **Liste d'appels** | Même éditeur de call-card que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
+| **Liste d'appels** | Même chaîne (la carte *Bouton* affiche le libellé, à défaut l'ID, à défaut *Sans libellé*) et même éditeur d'appels que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
 
 **+ Ajouter une action personnalisée** au pied de la section ajoute une nouvelle entrée. Retirer avec le bouton 🗑 par ligne.
 

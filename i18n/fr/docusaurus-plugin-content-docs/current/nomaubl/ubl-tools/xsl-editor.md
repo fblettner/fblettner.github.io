@@ -270,6 +270,21 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 
 La section **Document Root** rappelle ces syntaxes au-dessus de ses champs : *Chemins : élément, parent/élément, ../élément, //élément (n'importe où), sum(a, b), a + " " + b, "\n" saut de ligne*. Les mappings existants produisent le même résultat qu'avant.
 
+#### Conditions d'émission \{#emit-conditions\}
+
+Un champ d'extension, un attribut d'article ou une note — du document ou de la ligne — peut n'être écrit que si la source remplit une condition. La cellule de condition contient l'élément testé (un nom ou un chemin avec « / »), un bouton d'opérateur et la valeur :
+
+| Opérateur | Ligne écrite quand |
+|---|---|
+| `=` *(par défaut)* | La valeur de l'élément fait partie des valeurs indiquées (séparées par des virgules : `KWH,M3,LTR`). |
+| `≠` | La valeur de l'élément ne fait partie d'aucune des valeurs indiquées. Un élément absent ou vide est considéré comme différent. Sans valeur, `≠` signifie « élément non vide ». |
+
+Un clic sur le bouton fait passer de `=` à `≠` et inversement (infobulle *Equal to — click for different from*). Le `+` en fin de cellule ajoute une condition, chacune avec son propre `=` / `≠` ; la ligne est écrite quand **toutes** sont remplies, et `×` en retire une. Pour une règle du type « l'un ou l'autre » — telle valeur, ou tel autre élément — écrire deux lignes pour la même cible, chacune avec ses conditions.
+
+Exemple : un attribut d'article écrit seulement pour les lignes dont `LineType` ne vaut ni `RI` ni `RM` et dont `Country` vaut `FR` — première condition `LineType` `≠` `RI,RM`, seconde condition `Country` `=` `FR`.
+
+Les titres de colonne, en anglais dans l'éditeur, sont *Condition (elem = / ≠ val)* pour les champs d'extension et les attributs d'article, *Condition element* et *= / ≠ value* pour les notes.
+
 #### Scoping
 
 `TAG_ROOT`, `TAG_VAT_LINE` et `TAG_LINE_ITEM` sont des **contextes de portée** : toutes les autres variables s'y rattachent et leurs chemins se résolvent *relativement* au chemin défini par le contexte.
@@ -337,7 +352,7 @@ Pour des données attendues par un partenaire mais sans équivalent standard EN 
 |---|---|
 | **Nom d'élément** | Le nom de balise écrit à l'intérieur de `ext:ExtensionContent`. Émis sous forme d'élément simple sans préfixe ni `xmlns`, dans l'espace de noms du document — la forme qu'attendent les plateformes agréées. |
 | **Valeur** | Un chemin source, une expression combinant plusieurs chemins, un appel de `{template}` ou une constante entre accents graves (voir [Combiner et filtrer les valeurs source](#combining-and-matching-source-values) plus haut). |
-| **Condition d'émission** | Le même prédicat facultatif `cond_value` que les attributs d'article — la ligne est ignorée si la valeur source ne correspond pas. |
+| **Condition d'émission** | Une ou plusieurs [conditions](#emit-conditions), `=` ou `≠`, comme pour les attributs d'article et les notes — la ligne est ignorée si elles ne sont pas toutes remplies. |
 
 Chaque champ configuré est émis dans son propre bloc `ext:UBLExtension` / `ext:ExtensionContent` (UBL n'admet qu'un seul élément enfant par contenu d'extension), et le bloc complet est omis si aucun champ ne se résout. Vide par défaut : les factures existantes restent inchangées.
 

@@ -241,7 +241,7 @@ La liste d'opérateurs proposée par colonne dépend du comportement de filtre d
 |---|---|
 | `exact` | `equals`, `≠`, `empty`, `not empty`. |
 | `LIKE` | `contains`, `equals`, `≠`, `empty`, `not empty`. |
-| `inList` | `equals` (multi-choix — le catalogue éclate les buckets séparés par virgule en clause `IN (?,?,?,?,?)`). |
+| `inList` | *inclure* (`=`), *exclure* (`≠`), *est vide* (`∅`), *n'est pas vide* (`≠∅`) — choix multiple pour inclure et exclure. |
 | `between` | `<`, `≤`, `>`, `≥`, `between`. S'applique aux colonnes numériques et de date. |
 
 Marquer une colonne **Filtre** = désactivé dans la spec la laisse visible dans la grille mais retire sa pastille du panneau — utile pour les champs en lecture seule que l'opérateur n'a pas besoin d'interroger.
@@ -253,6 +253,8 @@ Une colonne peut être rattachée à une liste de référence — soit un catalo
 Quand le catalogue ou la spec déclare une colonne comme liste de référence (`refList: …`) — le picker *statuses* sur Factures, *eReporting statuses* sur E-Reporting, n'importe quelle liste personnalisée — le panneau Filtres avancés et la ligne de filtre par colonne rendent tous les deux un **picker multi-sélection** au lieu d'un dropdown simple. Chaque ligne du picker est une bascule (`code — libellé`), le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un bouton `✕` à droite réinitialise la sélection en un clic sans ouvrir le popover.
 
 La sélection multi-sélection est encodée en chaîne jointe par virgule dans `OpFilter.a` (par ex. `200,210,9907`) ; côté serveur, le flag `filterInList` du catalogue la décompose en clause `IN (?,?,?,?,?)` — choisir trois statuts renvoie bien l'union, pas un `LIKE` sur la chaîne jointe.
+
+Un **bouton d'opérateur** précède la sélection, dans le panneau comme dans la ligne de filtre par colonne : *inclure* (`=`, par défaut) produit la clause `IN` ci-dessus ; *exclure* (`≠`) produit un `NOT IN` qui conserve les lignes sans valeur (`col IS NULL OR col NOT IN (…)`) ; *est vide* (`∅`) et *n'est pas vide* (`≠∅`) masquent la sélection. *inclure* sans aucune valeur choisie ne filtre rien. Une vue enregistrée conserve l'opérateur avec les valeurs ; une vue qui ne contient que les valeurs est lue comme *inclure*.
 
 L'opérateur `between` sur une colonne date / nombre / texte élargit la colonne pour accueillir les deux champs opérandes (`BETWEEN_COL_WIDTH = 340px`) afin que les deux inputs s'affichent côte à côte sans être tronqués. Revenir à un opérateur à opérande unique remet la colonne à sa largeur de spec au rendu suivant.
 

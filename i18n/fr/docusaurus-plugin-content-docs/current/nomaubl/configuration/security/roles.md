@@ -296,7 +296,7 @@ L'en-tête de la section reflète l'état courant :
 
 Les boutons **Tout cocher** / **Tout décocher** apparaissent sous le switch (désactivés tant que le switch est désactivé).
 
-### Catalogue des actions
+### Catalogue des actions \{#action-catalog\}
 
 Regroupé par la page où vit le bouton — la même clé peut piloter des boutons sur plusieurs pages.
 
@@ -304,6 +304,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 |---|---|---|---|
 | **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
+| **Factures** | Modifier l'UBL / changer le type | `invoice.edit-ubl` | Change le type de transaction d'une facture ou modifie son UBL enregistré sous forme de texte, depuis l'onglet UBL de la [fenêtre du document](../../application/edocuments.md#ubl-tab-actions). Un rôle limité à une liste d'actions ne l'a pas tant qu'elle n'est pas cochée. |
 | **Factures** | Marquer comme traitée | `invoice.review` | Marquer des factures en erreur comme traitées par le service client, ou retirer la marque — [liste et fenêtre des factures](../../application/invoices.md#mark-reviewed). La mise à jour l'accorde aux rôles qui ont *Modifier* ou *Forcer un statut (base)*. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |

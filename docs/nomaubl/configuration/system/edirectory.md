@@ -1,6 +1,6 @@
 ---
 title: E-Directory
-description: "Configure the connection to the French PPF (Portail Public de Facturation) directory and the INSEE company search used to validate addressing codes and look up customer information before sending an e-invoice. Two-tab layout: Directory (Enable Check + INSEE Search) and Connector (api-connector picker + per-task endpoint overrides)."
+description: "Configure the connection to the French PPF (Portail Public de Facturation) directory and the INSEE company search used to validate addressing codes and look up customer information before sending an e-invoice. Two sections shown as step cards: Directory (Enable Check + INSEE Search) and Connector (api-connector picker + per-task endpoint overrides)."
 keywords: [NomaUBL, e-directory, PPF, Portail Public de Facturation, INSEE, addressing code, code adressage, e-invoicing, French e-invoicing, directory lookup, SIREN, SIRET, api-connector, ppf-directory]
 ---
 
@@ -15,7 +15,7 @@ The two are typically chained: an INSEE search resolves the customer's identifie
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-The editor has **two tabs**:
+The editor shows its **two sections as step cards** across the top. Each card gives the section's name and its state — the first values set among its fields — and a click shows its fields ([how the cards work](../settings-overview.md#section-cards)):
 
 1. **Directory** — Enable Check toggle and INSEE search settings.
 2. **Connector** — pick the api-connector that holds the PPF transport, plus per-task endpoint name overrides.
@@ -24,27 +24,36 @@ The editor has **two tabs**:
 
 ## Opening the editor
 
-- *Settings* → **e-directory** template (the system-level resource).
+- *Settings* → **E-invoicing** area → **Directory lookup** card (the `e-directory` system template).
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 504" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="edir-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="edir-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="edir-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="edir-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="440" rx="14" fill="url(#edir-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="464" rx="14" fill="url(#edir-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="84" height="24" rx="4" fill="transparent"/>
-  <text x="282" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Directory</text>
-  <rect x="330" y="28" width="84" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="372" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Connector</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="270" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⌕</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIRECTORY</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Y · 10</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#edir-flow)"/>
+  <rect x="518" y="30" width="270" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚭</text>
+  <text x="548" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTOR</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">ppf-directory · directory-check</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">API connector</text>
   <text x="240" y="104" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">The PPF directory's HTTP transport — auth, base URL, endpoints — lives in a reusable api-connector.</text>
@@ -66,7 +75,7 @@ The editor has **two tabs**:
 
   <line x1="240" y1="288" x2="780" y2="288" stroke="#1f2937" strokeWidth="1"/>
 
-  <text x="240" y="312" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Directory tab — preview</text>
+  <text x="240" y="312" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Directory section — preview</text>
   <text x="240" y="334" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENABLE CHECK</text>
   <rect x="346" y="324" width="160" height="26" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
   <text x="356" y="341" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">Y ▾</text>
@@ -97,11 +106,12 @@ The editor has **two tabs**:
   <text x="830" y="407" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">INSEE Search</text>
   <text x="830" y="420" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">company lookup by SIREN/SIRET</text>
   <line x1="820" y1="408" x2="446" y2="404" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Tab 1 — Directory
+## Card 1 — Directory
 
 ### Directory Check
 
@@ -127,7 +137,7 @@ Settings for the [Peppol lookup](../../application/edirectory.md#peppol-director
 
 ---
 
-## Tab 2 — Connector
+## Card 2 — Connector
 
 The PPF directory's HTTP transport — authentication flow, base URL, endpoints — lives in a reusable [api-connector](../api-connectors.md). This page **references it by name only** and never carries auth fields or HTTP endpoints inline. The bundled `ppf-directory` connector covers the standard flow; pick a custom connector when the directory exposes non-standard auth or routes through a tenant gateway.
 

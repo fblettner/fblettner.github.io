@@ -219,6 +219,8 @@ Trois sections dans cet onglet :
 | **Télécharger UBL** | Enregistre l'UBL archivé de la facture. |
 | **Télécharger CII** | Affiché quand le document a une [post-transformation](../ubl-tools/post-transform.md) : l'UBL archivé converti à la demande, au nom de la post-transformation (*Télécharger fichier converti* quand elle n'a pas de nom). |
 
+Pour changer le type de transaction d'une facture (B2B, B2C…) ou modifier son UBL enregistré sous forme de texte, passer par l'onglet UBL de la [fenêtre du document](./edocuments.md#ubl-tab-actions) de la page E-Documents.
+
 ### Groupe Cycle de vie
 
 Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la facture. Chaque événement affiche :

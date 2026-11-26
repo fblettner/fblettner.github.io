@@ -168,7 +168,7 @@ La même barre d'outils pilote les deux vues.
 
 ### Filtres avancés
 
-Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../../configuration/list-views.md) active (`view.integration-errors`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../../configuration/list-views.md) active (`view.integration-errors`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas. Une colonne adossée à une liste de référence accepte plusieurs valeurs et un opérateur — inclure, exclure, vide, non vide ([détails](../invoices.md#list-filters)).
 
 Le drill-through *Erreurs récentes* du Tech Dashboard remonte aussi ici : quand le tableau de bord transmet `{ doc, dct, kco }`, une pastille indique le filtre actif et propose un `×` pour le retirer. Utile quand le panneau est replié et que le filtre serait sinon invisible.
 

@@ -164,8 +164,8 @@ Every list of NomaUBL — invoices, documents, e-reporting, integration errors, 
 |---|---|
 | Visible columns and their order, column widths | Direction, status tabs, search box |
 | Grouping, sort, rows per page | Labels, formats and value lists — set in [List views](../configuration/list-views.md) |
-| Column filters (the filter row opens when the view has some) | |
-| Advanced Filters — invoices, documents, integration errors, processing log, e-reporting | |
+| Column filters, with the operator of a list filter — include, exclude, empty, not empty (the filter row opens when the view has some) | |
+| Advanced Filters, operators included — invoices, documents, integration errors, processing log, e-reporting | |
 | Period and date basis — invoices, documents, integration errors, processing log | |
 
 A period saved as *Today*, *Yesterday*, *This month*, *Last month*, *This quarter*, *This year* or *Last 12 months* follows the calendar: it is computed again the day the view opens. Only a *Custom* range keeps its dates. A view saved without a period leaves the current one unchanged.

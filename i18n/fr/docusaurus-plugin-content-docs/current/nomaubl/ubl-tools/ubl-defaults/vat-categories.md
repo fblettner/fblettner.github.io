@@ -1,6 +1,6 @@
 ---
 title: Catégories de TVA
-description: "UBL Defaults — onglet VAT. Catégorie TVA par défaut, taux zéro, mapping source → catégorie UBL (BT-118 / BT-151) et mapping catégorie → code d'exonération VATEX (BT-121)."
+description: "UBL Defaults — onglet VAT. Catégorie TVA par défaut, taux zéro, mapping source → catégorie UBL (BT-118 / BT-151) et mappings catégorie et code source → code d'exonération VATEX (BT-121)."
 keywords: [NomaUBL, UBL, defaults, BT-118, BT-121, BT-151, TVA, S, Z, E, K, G, AE, O, VATEX, exonération, catégorie]
 ---
 
@@ -82,6 +82,17 @@ Quand NomaUBL émet une catégorie qui demande un motif d'exonération, le code 
 
 
 Aucun motif d'exonération n'est émis sur les catégories taxée (`S`) et à taux zéro (`Z`), quoi que porte la source.
+
+### Code VATEX par code source \{#vatex-by-source\}
+
+La grille **Correspondances code source → code VATEX (BT-121)** convertit un code d'exonération lu dans la source — variables de code d'exonération du récapitulatif de TVA (`TAG_VAT_EXEMPTION_CODE`) ou de la ligne (`TAG_LINE_VAT_EXEMPTION_CODE`) dans l'[éditeur XSL](../xsl-editor.md#variable-mapping) — en code `VATEX-*`.
+
+| Colonne | Description |
+|---|---|
+| **Code externe** | Le code d'exonération tel que l'écrit le système source. |
+| **Code VATEX** | Le code issu de la liste de référence *vatex-codes*. |
+
+Un code source absent de la grille est repris tel quel. Un code lu dans la source l'emporte sur celui de la grille par catégorie ci-dessus. La grille est enregistrée avec le reste de l'onglet TVA, dans les valeurs par défaut générales comme dans une surcharge de document.
 
 ---
 

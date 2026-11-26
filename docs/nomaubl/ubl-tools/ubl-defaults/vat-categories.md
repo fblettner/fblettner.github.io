@@ -1,6 +1,6 @@
 ---
 title: VAT Categories
-description: "UBL Defaults — VAT tab. Default VAT category, zero rate, source → UBL category mapping (BT-118 / BT-151) and category → VATEX exemption-code mapping (BT-121)."
+description: "UBL Defaults — VAT tab. Default VAT category, zero rate, source → UBL category mapping (BT-118 / BT-151) and category and source code → VATEX exemption-code mappings (BT-121)."
 keywords: [NomaUBL, UBL, defaults, BT-118, BT-121, BT-151, VAT, TVA, S, Z, E, K, G, AE, O, VATEX, exemption, category]
 ---
 
@@ -82,6 +82,17 @@ When NomaUBL emits a category needing an exemption reason, it looks up the corre
 
 
 An exemption reason is never emitted on the taxed (`S`) and zero-rated (`Z`) categories, whatever the source carries.
+
+### VATEX code by source code \{#vatex-by-source\}
+
+The **Source → VATEX exemption code mappings (BT-121)** grid converts an exemption code read from the source — the exemption code variables of the VAT breakdown (`TAG_VAT_EXEMPTION_CODE`) or of the line (`TAG_LINE_VAT_EXEMPTION_CODE`) in the [XSL editor](../xsl-editor.md#variable-mapping) — into a `VATEX-*` code.
+
+| Column | Description |
+|---|---|
+| **External code** | The exemption code as the source system writes it. |
+| **VATEX code** | The code from the *vatex-codes* reference list. |
+
+A source code absent from the grid goes through unchanged. A code read from the source takes precedence over the code of the category grid above. The grid is saved with the rest of the VAT tab, in the general defaults as in a document override.
 
 ---
 

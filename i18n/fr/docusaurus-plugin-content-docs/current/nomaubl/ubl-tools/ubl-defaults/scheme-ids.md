@@ -22,7 +22,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md).
 | **Endpoint** | BT-34 / BT-49 | `0225` | EAS — schéma d'adresse électronique utilisé par le PPF. |
 | **Delivery location** | BT-71 | (variable) | Référentiel du lieu de livraison. |
 
-Chaque champ est rempli à partir de la liste de référence *scheme-ids* (voir *Configuration → Reference Lists*). Sélectionner la valeur correspondant au référentiel auquel l'identifiant appartient.
+Chaque champ est rempli à partir de la liste de référence *scheme-ids* (voir *Configuration → Reference Lists*). Sélectionner la valeur correspondant au référentiel auquel l'identifiant appartient. La liste comporte aussi `9940` (numéro de TVA monégasque), utilisé comme schéma de l'adresse électronique d'une société dans l'onglet [Sociétés fournisseurs](./suppliers-companies.md#identifiers).
 
 ---
 
@@ -32,6 +32,15 @@ L'adresse électronique de l'**acheteur** (BT-49) se règle indépendamment de c
 
 Les factures B2C et internationales — qui n'ont pas d'adresse électronique fondée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma **EM**), tandis que les factures B2B / B2G domestiques gardent leur routage d'endpoint habituel. Les types non listés conservent le schéma par défaut (`0225`) et la valeur d'endpoint courante. La liste *Identifiants de schéma* porte une entrée **Email (EM)** à cet effet.
 
+### Acheteur sans adresse électronique \{#buyer-siren\}
+
+La case à cocher **Utiliser le SIREN quand l'acheteur n'a pas d'adresse électronique**, cochée par défaut, règle le cas où aucune adresse n'est trouvée pour l'acheteur — ni dans la source, ni par les règles ci-dessus :
+
+| Case | BT-49 écrit |
+|---|---|
+| **Cochée** *(par défaut)* | Le SIREN de l'acheteur, sous le schéma de l'acheteur. |
+| **Décochée** | Rien : la facture est produite sans adresse électronique de l'acheteur et s'arrête à la validation, l'adresse étant obligatoire. |
+
 ---
 
 ## Conseils & bonnes pratiques
@@ -39,4 +48,5 @@ Les factures B2C et internationales — qui n'ont pas d'adresse électronique fo
 - **Utiliser `0225` pour l'endpoint BT-49 en France.** La Plateforme Agréée reconnaît `0225` comme code EAS de l'annuaire d'adresses électroniques français. Toute autre valeur est rejetée par le contrôle d'adressage (REJ_ADR).
 - **`0002` (SIREN) et `0009` (SIRET) ne sont pas interchangeables.** Ils renvoient à des référentiels différents (entité juridique vs établissement). Sélectionner celui qui correspond à la longueur et à la source de l'identifiant — un SIRET de 14 chiffres ne s'écrit jamais sous `0002`.
 - **Surcharger par template uniquement pour un cas client divergent.** Le fichier de defaults convient à la quasi-totalité des déploiements ; les surcharges document sont réservées aux exceptions véritables (par ex. un template émettant des identifiants à clé GLN).
+- **Ne décocher le repli sur le SIREN que si chaque acheteur doit porter une véritable adresse.** Une facture sans adresse est alors bloquée à la validation au lieu de partir avec le SIREN.
 - **Ajouter les codes manquants dans la liste de référence, pas ici.** Si une valeur cible n'apparaît pas dans une déroulante, modifier la liste *scheme-ids* dans *Configuration → Reference Lists* — la modification se répercute sur toutes les déroulantes de cet onglet.

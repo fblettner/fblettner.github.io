@@ -10,7 +10,7 @@ This screen configures the access to the **database NomaUBL uses to store its ow
 
 The tables hold invoice headers, lines, VAT summary, lifecycle events, validation results, runtime logs, e-reporting data, the auth model (users / roles / sessions / permissions) and the notifications inbox. The default names follow the JDE convention (`F564xxx`) — a legacy of NomaUBL's original deployment alongside JD Edwards — but every table name *and every column name* is configurable, so the connector works equally well in a non-JDE context.
 
-The editor has **four tabs**:
+The editor shows its **four sections as step cards** across the top. Each card gives the section's name and its state — the first values set among its fields — and a click shows its fields ([how the cards work](../settings-overview.md#section-cards)):
 
 1. **Connection** — database type, JDBC URL, credentials.
 2. **Tables** — schema, the full table catalogue, the *Validate Schema* panel and the detail-storage strategy.
@@ -21,32 +21,49 @@ The editor has **four tabs**:
 
 ## Opening the editor
 
-- Sidebar → **Configuration → Database Connectors → NomaUBL**.
+- *Settings* → **Platform** area → **NomaUBL database** card (the `db-nomaubl` system template). Its list views have their own card, **List views**, under **Views & UI**.
 - The configuration is stored as a `db-nomaubl` resource in the main config file. Saving the form writes it back through the standard Settings save flow.
 
 ---
 
-## At a glance — Tables tab
+## At a glance — Tables card
 
-<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 744" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="db-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="db-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="db-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="db-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="680" rx="14" fill="url(#db-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="704" rx="14" fill="url(#db-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="92" height="24" rx="4" fill="transparent"/>
-  <text x="286" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Connection</text>
-  <rect x="338" y="28" width="64" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="370" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Tables</text>
-  <rect x="408" y="28" width="72" height="24" rx="4" fill="transparent"/>
-  <text x="444" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Columns</text>
-  <rect x="486" y="28" width="76" height="24" rx="4" fill="transparent"/>
-  <text x="524" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Initialize</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">jdbc:postgresql:/…</text>
+  <line x1="360" y1="52.0" x2="372" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#db-flow)"/>
+  <rect x="375" y="30" width="127" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="383" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="391.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="405" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLES</text>
+  <text x="384" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">public · F564230</text>
+  <line x1="503" y1="52.0" x2="515" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#db-flow)"/>
+  <rect x="518" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="526" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="534.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▦</text>
+  <text x="548" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COLUMNS</text>
+  <text x="527" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="646" y1="52.0" x2="658" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#db-flow)"/>
+  <rect x="661" y="30" width="127" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="669" y="37" width="16" height="16" rx="5" fill="rgba(50,215,75,0.14)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="677.0" y="48.5" fill="#4ade80" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="691" y="48.5" fill="#4ade80" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INITIALIZE</text>
+  <text x="670" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Schema</text>
   <rect x="240" y="94" width="540" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -75,8 +92,6 @@ The editor has **four tabs**:
   <text x="252" y="320" fill="#94a3b8" fontSize="9" letterSpacing="0.04em" fontWeight="700" fontFamily="system-ui, sans-serif">E-REPORTING</text>
   <text x="290" y="340" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">E-Reporting Log</text>
   <text x="490" y="340" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">F564260</text>
-  <rect x="546" y="328" width="56" height="14" rx="7" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="574" y="338" fill="rgb(251,146,60)" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">renumb.</text>
   <text x="290" y="358" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">E-Reporting Lifecycle</text>
   <text x="490" y="358" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">F564261</text>
   <text x="290" y="376" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">E-Reporting Map</text>
@@ -86,8 +101,6 @@ The editor has **four tabs**:
   <text x="252" y="402" fill="#94a3b8" fontSize="9" letterSpacing="0.04em" fontWeight="700" fontFamily="system-ui, sans-serif">NOTIFICATIONS</text>
   <text x="290" y="422" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Notifications</text>
   <text x="490" y="422" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">F564253</text>
-  <rect x="546" y="410" width="42" height="14" rx="7" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="567" y="420" fill="rgb(50,215,75)" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">new</text>
 
   <rect x="240" y="434" width="540" height="20" rx="3" fill="rgba(74,158,255,0.04)"/>
   <text x="252" y="448" fill="#94a3b8" fontSize="9" letterSpacing="0.04em" fontWeight="700" fontFamily="system-ui, sans-serif">AUTH</text>
@@ -99,8 +112,6 @@ The editor has **four tabs**:
   <text x="490" y="504" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">F564252</text>
   <text x="290" y="522" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Auth · Permissions</text>
   <text x="490" y="522" fill="#cbd5e1" fontSize="11" fontFamily="ui-monospace, monospace">F564254</text>
-  <rect x="546" y="510" width="42" height="14" rx="7" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="567" y="520" fill="rgb(50,215,75)" fontSize="8" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">new</text>
 
   <line x1="240" y1="540" x2="780" y2="540" stroke="#1f2937" strokeWidth="1"/>
 
@@ -126,8 +137,8 @@ The editor has **four tabs**:
   <line x1="820" y1="196" x2="780" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#db-arrow)"/>
 
   <rect x="20" y="340" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="355" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting renumbered</text>
-  <text x="30" y="368" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">F564240/41/42 → 60/61/62</text>
+  <text x="30" y="355" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting tables</text>
+  <text x="30" y="368" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">log, lifecycle, map</text>
   <line x1="200" y1="356" x2="240" y2="350" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#db-arrow)"/>
 
   <rect x="820" y="420" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -144,11 +155,12 @@ The editor has **four tabs**:
   <text x="830" y="615" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Validate Schema</text>
   <text x="830" y="628" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">DDL drift detector — read-only</text>
   <line x1="820" y1="616" x2="780" y2="608" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#db-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Tab 1 — Connection
+## Card 1 — Connection
 
 ### Connection
 
@@ -166,7 +178,7 @@ The editor has **four tabs**:
 
 ---
 
-## Tab 2 — Tables
+## Card 2 — Tables
 
 ### Schema
 
@@ -248,9 +260,9 @@ The command parses the UBL document already kept on each invoice header and re-i
 
 ---
 
-## Tab 3 — Columns
+## Card 3 — Columns
 
-The Columns tab is a per-table editor that overrides **column names** at runtime via `UBLColumnConfig`. Every Java sub-handler that reads or writes a NomaUBL column resolves its name through `cols.<accessor>` instead of hardcoded literals — so renaming a column in the database (and recording it here) keeps the application running without a recompile.
+The Columns section is a per-table editor that overrides **column names** at runtime via `UBLColumnConfig`. Every Java sub-handler that reads or writes a NomaUBL column resolves its name through `cols.<accessor>` instead of hardcoded literals — so renaming a column in the database (and recording it here) keeps the application running without a recompile.
 
 The editor groups overrides by table and exposes the same accessor names referenced by Java code. The default values match the JDE `F564xxx` columns (`UHKCO`, `FETXFT`, `RGUKID`, …); changing them is a customer-side concern and rarely needed unless the schema diverges from the bundled DDL.
 
@@ -258,7 +270,7 @@ The **Tables** view of the [Developer](../../references/developer.md) page (*Doc
 
 ---
 
-## Tab 4 — Initialize
+## Card 4 — Initialize
 
 One-click bootstrap of a fresh NomaUBL database.
 
@@ -280,7 +292,7 @@ The operation is **safe to re-run** — existing tables and users are not modifi
 - **Pick the database type before filling the JDBC URL.** The placeholder and hint adapt to the chosen type, which avoids URL-format mistakes.
 - **Use a dedicated DB account.** Give it `SELECT / INSERT / UPDATE / DELETE` on the NomaUBL schema and `CREATE TABLE` permission for the initial bootstrap.
 - **Keep the default `F564xxx` table names when sitting next to JDE.** This makes joining NomaUBL tables to JDE tables in reporting tools straightforward.
-- **Use the Columns tab when migrating an existing schema.** A customer install that pre-dates a column rename can stay on its existing names — record the override here and the application code keeps working.
+- **Use the Columns card when migrating an existing schema.** A customer install that pre-dates a column rename can stay on its existing names — record the override here and the application code keeps working.
 - **Run *Validate schema* after every upgrade.** It catches missing columns introduced by the upgrade and type mismatches that would otherwise produce silent runtime errors. The check is read-only — safe to run anywhere.
 - **Leave *Store VAT details* on when the VAT declaration page is in use.** Without it the page falls back to parsing every UBL on each load — fine on a quiet month, painful on a busy quarter.
 - **Turn *Store line subtotals* off only on volume-constrained installations.** The *Lines* tab of the invoice detail modal still works from the UBL; only third-party SQL reporting on line items goes away.

@@ -21,67 +21,65 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="rsui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="rsui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="rsui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="rsui-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="360" rx="14" fill="url(#rsui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Retrieve Statuses</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Exécution</text>
-  <text x="240" y="108" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Récupère les événements postérieurs au repère ; le repère avance après chaque exécution réussie.</text>
-
-  <text x="240" y="132" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REPÈRE</text>
-  <rect x="340" y="122" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="450" y="137" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">2026-05-07T14:32:18Z</text>
-  <text x="568" y="137" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">lastRetrievalDate — avance à chaque exécution réussie</text>
-
-  <rect x="240" y="158" width="220" height="30" rx="6" fill="url(#rsui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
-  <text x="350" y="177" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📥 Récupérer les statuts</text>
-  <rect x="480" y="158" width="300" height="30" rx="6" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="495" y="177" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">✓ 24 événements · 18 appliqués · 6 doublons ignorés</text>
-
-  <line x1="240" y1="208" x2="780" y2="208" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats</text>
-
-  <rect x="240" y="246" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="261" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEVERITY · MODULE · FACTURE · MESSAGE</text>
-
-  <rect x="240" y="272" width="540" height="24" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="248" y="278" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
-  <text x="276" y="288" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
-  <text x="312" y="288" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0142 · 201 Mise à disposition → cycle + en-tête mis à jour</text>
-
-  <rect x="240" y="300" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="248" y="306" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
-  <text x="276" y="316" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
-  <text x="312" y="316" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0124 · 207 En litige (motif : écart de montant)</text>
-
-  <rect x="240" y="328" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="248" y="334" width="56" height="14" rx="3" fill="rgba(148,163,184,0.18)" stroke="rgba(148,163,184,0.40)" strokeWidth="1"/>
-  <text x="276" y="344" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">INFO</text>
-  <text x="312" y="344" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Repère avancé à 2026-05-07T18:04:55Z</text>
-
-  <rect x="20" y="120" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Repère temporel</text>
-  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">en lecture — n'avance que</text>
-  <line x1="220" y1="135" x2="340" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
-
-  <rect x="820" y="158" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="173" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résumé de l'exécution</text>
-  <text x="830" y="186" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">appliqués / ignorés</text>
-  <line x1="820" y1="174" x2="780" y2="174" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
-
-  <rect x="820" y="288" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Journal par événement</text>
-  <text x="830" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cycle de vie + en-tête</text>
-  <line x1="820" y1="304" x2="780" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+  <rect x="220" y="20" width="760" height="380" rx="14" fill="url(#rsui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Récupérer les statuts</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Récupère les événements de cycle de vie depuis la Plateforme Agréée et met à jour la base de données.</text>
+  <rect x="240.0" y="82" width="354.0" height="50" rx="9" fill="rgba(74,158,255,0.14)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <rect x="252.0" y="94.0" width="26" height="26" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="265.0" y="110.5" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">↻</text>
+  <text x="288.0" y="105.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Récupérer les statuts</text>
+  <text x="288.0" y="119.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Demander maintenant les nouveaux statuts à la plateforme</text>
+  <rect x="606.0" y="82" width="354.0" height="50" rx="9" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="618.0" y="94.0" width="26" height="26" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="631.0" y="110.5" fill="#fb923c" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="654.0" y="105.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Contrôles</text>
+  <text x="654.0" y="119.0" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Événements absents de l'historique, événements dans le désord…</text>
+  <rect x="240" y="146" width="720" height="92" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="168" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RÉCUPÉRATION DES STATUTS</text>
+  <text x="256" y="186" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Appelle l'endpoint des statuts PA depuis la dernière date de récupération ; met à jour le cycle de vie et le statut courant.</text>
+  <rect x="256" y="200" width="139" height="22" rx="5" fill="url(#rsui-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="325.5" y="214.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Récupérer les statuts</text>
+  <text x="409" y="215" fill="#4ade80" fontSize="9.5" fontFamily="system-ui, sans-serif">✓ Récupération des statuts terminée.</text>
+  <rect x="240" y="250" width="720" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="272" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RÉSULTATS</text>
+  <rect x="256" y="282" width="688" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="266" y="297.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SÉVÉRITÉ</text>
+  <text x="356" y="297.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODULE</text>
+  <text x="426" y="297.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MESSAGE</text>
+  <rect x="256" y="310" width="688" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="266" y="314.0" width="51" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="291.5" y="325.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">SUCCESS</text>
+  <text x="356" y="325.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">PA</text>
+  <text x="426" y="325.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">INV-2026-0142 · 201 Mise à disposition → cycle de vie + en-tête</text>
+  <rect x="256" y="338" width="688" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="266" y="342.0" width="37" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="284.5" y="353.2" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">INFO</text>
+  <text x="356" y="353.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">PA</text>
+  <text x="426" y="353.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Date de dernière récupération : 26/11/2026 18:04</text>
+  <rect x="20" y="90" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux cartes de mode</text>
+  <text x="30" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">récupérer ou contrôler</text>
+  <line x1="200" y1="107.0" x2="240" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un seul bouton</text>
+  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">depuis la dernière récupération</text>
+  <line x1="200" y1="217.0" x2="256" y2="211" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+  <rect x="1000" y="90" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contrôles</text>
+  <text x="1010" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">statuts manquants · ordre</text>
+  <line x1="1000" y1="107.0" x2="950" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+  <rect x="1000" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats</text>
+  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par événement appliqué</text>
+  <line x1="1000" y1="317.0" x2="944" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
 </svg>
 
 ---
@@ -170,11 +168,13 @@ Les codes `9906` / `9907` ne **font pas** partie de cette récupération — ce 
 
 ## Exécution
 
-Une seule section, un seul bouton.
+La page s'ouvre sur deux cartes : **Récupérer les statuts** (*Demander maintenant les nouveaux statuts à la plateforme*), sélectionnée par défaut, et **Contrôles** (*Événements absents de l'historique, événements dans le désordre*), qui regroupe les [contrôles d'intégrité](#integrity-checks). Les cartes et le bouton d'exécution ne s'affichent que pour les rôles qui disposent de l'action **Lancer les traitements** ; les autres utilisateurs ne voient que le texte d'aide.
+
+La carte **Récupérer les statuts** présente une seule section et un seul bouton.
 
 | Élément | Description |
 |---|---|
-| **Retrieve Statuses** | Déclenche la récupération. Désactivé pendant l'exécution. |
+| **Récupérer les statuts** | Déclenche la récupération. Désactivé pendant l'exécution. |
 | **Ligne de statut** | Message en ligne sous le bouton — vert en cas de succès, rouge en cas d'échec. |
 
 La page n'a aucun paramètre : tous les événements postérieurs à l'horodatage repère, pour chaque code de la liste configurée, sont récupérés en un seul appel. Aucune sélection par facture.
@@ -196,7 +196,7 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 ---
 
 ## Contrôles d'intégrité \{#integrity-checks\}
-Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](scheduled-jobs/lifecycle-checks.md) (ou les modes CLI équivalents).
+En plus de la récupération incrémentale, la carte **Contrôles** propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](scheduled-jobs/lifecycle-checks.md) (ou les modes CLI équivalents).
 
 ### Statuts manquants
 

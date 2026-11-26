@@ -20,7 +20,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Choix de la source
 
-La première décision d'un document est sa **Source**. Elle se définit dans **[Documents](../management/documents.md) → onglet Document → champ Source** et elle est lue ici :
+La première décision d'un document est sa **Source**. Elle se définit dans **[Documents](../management/documents.md#source) → étape Source → champ Source** et elle est lue ici :
 
 | Source | Quand la choisir | Ce qui s'exécute |
 |---|---|---|

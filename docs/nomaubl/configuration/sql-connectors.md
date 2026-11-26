@@ -1,6 +1,6 @@
 ---
 title: SQL Connectors
-description: "Define generic SQL connectors used by NomaUBL to read or write rows on any reachable database — Oracle or PostgreSQL — through named parameterised queries. Each query carries a name, label, description, parameter spec, the SQL itself with :param placeholders, and a Writable flag. The editor has Connection / Queries / Test tabs and the runtime binds parameters through PreparedStatement so values are never string-substituted into SQL."
+description: "Define generic SQL connectors used by NomaUBL to read or write rows on any reachable database — Oracle or PostgreSQL — through named parameterised queries. Each query carries a name, label, description, parameter spec, the SQL itself with :param placeholders, and a Writable flag. The editor shows Connection / Queries / Test as step cards and the runtime binds parameters through PreparedStatement so values are never string-substituted into SQL."
 keywords: [NomaUBL, SQL connectors, SQL queries, named queries, JDBC, Oracle, PostgreSQL, Microsoft SQL Server, Custom JDBC, DB2, MariaDB, Snowflake, PreparedStatement, parameter binding, writable, action bindings, notification rules, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
@@ -16,7 +16,7 @@ Typical targets are:
 
 The page applies to documents from any source system, since the SQL connector can point at any reachable JDBC database.
 
-The editor has **three tabs**:
+The editor shows its **three sections as step cards** across the top. Each card gives the section's name and its state — the first values set among its fields — and a click shows its fields ([how the cards work](./settings-overview.md#section-cards)):
 
 1. **Connection** — database type, JDBC URL, credentials, schema and query limits.
 2. **Queries** — collapsible per-query cards: name, label, description, SQL, parameters, `Writable` flag.
@@ -26,30 +26,43 @@ The editor has **three tabs**:
 
 ## Opening the editor
 
-- *Settings* → **+ Add SQL** at the top right of the resource sidebar to create a new SQL connector.
-- Existing SQL connectors live under the **SQL** group of the resource sidebar with an `sql` badge — click any of them to open the editor.
+- *Settings* → **+ Add SQL** in the page header to create a new SQL connector.
+- Existing SQL connectors are cards of the **SQL connectors** area of the navigation, with an `sql` badge — click one to open the editor.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 744" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="sql-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="sql-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="sql-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <marker id="sql-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="680" rx="14" fill="url(#sql-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="704" rx="14" fill="url(#sql-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="92" height="24" rx="4" fill="transparent"/>
-  <text x="286" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Connection</text>
-  <rect x="338" y="28" width="64" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="370" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Queries</text>
-  <rect x="408" y="28" width="48" height="24" rx="4" fill="transparent"/>
-  <text x="432" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Test</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="232" y="30" width="174" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="37" width="16" height="16" rx="5" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="248.0" y="48.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⇄</text>
+  <text x="262" y="48.5" fill="#4a9eff" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONNECTION</text>
+  <text x="241" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">jdbc:oracle:thin:@erp:152…</text>
+  <line x1="407" y1="52.0" x2="419" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#sql-flow)"/>
+  <rect x="422" y="30" width="174" height="44" rx="8" fill="rgba(168,85,247,0.14)" stroke="#c084fc" strokeWidth="1.3"/>
+  <rect x="430" y="37" width="16" height="16" rx="5" fill="rgba(168,85,247,0.14)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="438.0" y="48.5" fill="#c084fc" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⛁</text>
+  <text x="452" y="48.5" fill="#c084fc" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">QUERIES</text>
+  <text x="431" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="597" y1="52.0" x2="609" y2="52.0" stroke="#475569" strokeWidth="1.4" markerEnd="url(#sql-flow)"/>
+  <rect x="612" y="30" width="174" height="44" rx="8" fill="#0f1626" stroke="#334155" strokeWidth="1"/>
+  <rect x="620" y="37" width="16" height="16" rx="5" fill="rgba(255,159,10,0.14)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="628.0" y="48.5" fill="#fb923c" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶</text>
+  <text x="642" y="48.5" fill="#fb923c" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEST</text>
+  <text x="621" y="66" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">—</text>
+  <line x1="220" y1="84" x2="800" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <g transform="translate(0,24)">
 
   <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">QUERIES</text>
   <text x="240" y="104" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Use :name placeholders for parameters. Allowed: SELECT / INSERT / UPDATE / DELETE / MERGE.</text>
@@ -114,7 +127,7 @@ The editor has **three tabs**:
   <text x="252" y="666" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">Statement parsed → :doc :dct :kco bound positionally · no string interpolation.</text>
 
   <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three tabs</text>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three step cards</text>
   <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Connection / Queries / Test</text>
   <line x1="200" y1="115" x2="240" y2="46" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sql-arrow)"/>
 
@@ -137,11 +150,12 @@ The editor has **three tabs**:
   <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Test panel · live run</text>
   <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">columns + rows or affected count</text>
   <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sql-arrow)"/>
-</svg>
+
+  </g></svg>
 
 ---
 
-## Tab 1 — Connection
+## Card 1 — Connection
 
 ### Connection
 
@@ -171,9 +185,9 @@ The editor has **three tabs**:
 
 ---
 
-## Tab 2 — Queries
+## Card 2 — Queries
 
-The Queries tab is a list of collapsible cards. The card header shows a **READ / WRITE** badge, the query name, and the description as a secondary line so a connector with several queries reads as a punch-list at a glance. Click a header to expand the editor; click **+ Add query** to append a new one.
+The Queries section is a list of collapsible cards. The card header shows a **READ / WRITE** badge, the query name, and the description as a secondary line so a connector with several queries reads as a punch-list at a glance. Click a header to expand the editor; click **+ Add query** to append a new one.
 
 ### Per-query fields
 
@@ -201,7 +215,7 @@ Parameter binding goes through `PreparedStatement`. The runtime parses the SQL, 
 
 Tokens inside any of those constructs are passed through unchanged.
 
-The parameter spec drives the *Test* tab and the call-site editor: each declared `:name` becomes a labelled input pre-filled with its `default` value. Spec rows are semicolon-separated; each row has up to three pipe-delimited fields. Empty fields are accepted (a parameter with no default just renders an empty input).
+The parameter spec drives the *Test* card and the call-site editor: each declared `:name` becomes a labelled input pre-filled with its `default` value. Spec rows are semicolon-separated; each row has up to three pipe-delimited fields. Empty fields are accepted (a parameter with no default just renders an empty input).
 
 #### Surrounding quotes stripped on string params
 
@@ -221,13 +235,13 @@ Stripping the quotes is **not** a substitute for the standard Oracle non-blank-p
 
 ---
 
-## Tab 3 — Test
+## Card 3 — Test
 
 A built-in runner that executes the selected query against the live database and shows the result.
 
 | Element | Description |
 |---|---|
-| **Query** | Dropdown of every query declared on the Queries tab, with `name — Label` rendering. Selecting a query pre-fills the parameter rows from the spec. |
+| **Query** | Dropdown of every query declared on the Queries card, with `name — Label` rendering. Selecting a query pre-fills the parameter rows from the spec. |
 | **Parameters** | One row per declared `:placeholder`, plus an *Add param* button for ad-hoc parameters not in the spec. Each row has a name input and a value input. |
 | **Run** | Sends the call to `/api/sql-connectors/{connector}/{query}` with the parameter values. The result is rendered next to the button. |
 
@@ -235,11 +249,11 @@ A built-in runner that executes the selected query against the live database and
 
 | Statement type | What's shown |
 |---|---|
-| **SELECT** | Statement label + row count + duration on the green-on-success line; below it, a compact table of columns × rows. The runtime caps the number of rows to *Max rows* on the Connection tab. |
+| **SELECT** | Statement label + row count + duration on the green-on-success line; below it, a compact table of columns × rows. The runtime caps the number of rows to *Max rows* on the Connection card. |
 | **INSERT / UPDATE / DELETE / MERGE** | Statement label + affected count + duration on the green-on-success line. No table — the runtime returns only the update count for non-`SELECT` calls. |
 | **Error** | Red error box with the JDBC / parser error message (`SQLException`, allow-list violation, missing `:placeholder` value, etc.). |
 
-The Test tab calls the live database — *Save* the connector first if you have just edited it; otherwise the test runs against the previously-saved version of the query.
+The Test card calls the live database — *Save* the connector first if you have just edited it; otherwise the test runs against the previously-saved version of the query.
 
 ---
 
@@ -292,6 +306,6 @@ Example: a rule that first looks up the customer's email via a SQL query, then s
 - **Start every connector with `Writable=No`.** Flip the flag to `Yes` only on the queries that actually need to write. A `SELECT`-only connector cannot be coerced into running a `DELETE` even if a typo points the rule at the wrong query.
 - **Use `:name` placeholders for everything user-supplied.** Concatenating values into the SQL string defeats the parameter-binding safety net. The parser deliberately ignores tokens inside literals and comments so `:` characters inside strings are safe.
 - **Set Max rows tighter than the default for dashboard-style queries.** A widget that reads the top 10 rejected invoices does not need 1000 rows back; capping at 50 keeps the UI snappy and the JDBC fetch cheap.
-- **Test before saving when changing an existing query.** The Test tab uses the in-memory edit of the query when you have unsaved changes, but the *Run* button calls the live database — there is no rollback. A `Writable=Yes` query under test will commit if the SQL says so.
+- **Test before saving when changing an existing query.** The Test card uses the in-memory edit of the query when you have unsaved changes, but the *Run* button calls the live database — there is no rollback. A `Writable=Yes` query under test will commit if the SQL says so.
 - **Pair SQL connectors with API connectors via response chaining.** A notification rule can read a value from a SQL query and forward it as a parameter to an HTTP webhook, without code on either side. See the [Notification Rules — Actions tab](../management/notification-rules.md#actions-tab) for details.
 - **Keep credentials in a dedicated DB account.** Even on a read-only connector, give the JDBC user just the privileges the queries need — `SELECT` on a small set of tables, no broad schema access.

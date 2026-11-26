@@ -22,7 +22,7 @@ The override mechanism is described in the [Overview](./overview.md).
 | **Endpoint** | BT-34 / BT-49 | `0225` | EAS — electronic address scheme used by the French PPF. |
 | **Delivery location** | BT-71 | (varies) | Identifier scheme of the delivery location. |
 
-Each field is populated from the *scheme-ids* reference list (see *Configuration → Reference Lists*). Pick the value that matches the registry the underlying identifier belongs to.
+Each field is populated from the *scheme-ids* reference list (see *Configuration → Reference Lists*). Pick the value that matches the registry the underlying identifier belongs to. The list also carries `9940` (Monaco VAT number), used as the scheme of a company's electronic address on the [Suppliers / Companies](./suppliers-companies.md#identifiers) tab.
 
 ---
 
@@ -32,6 +32,15 @@ The **buyer** electronic address (BT-49) can be set independently of the seller'
 
 This lets B2C and international invoices — which have no SIRET-based electronic address — carry an email address (scheme **EM**) instead, while domestic B2B / B2G invoices keep their usual endpoint routing. Types you don't list keep the default scheme (`0225`) and the current endpoint value. The *Scheme IDs* list carries an **Email (EM)** entry for this.
 
+### Buyer without an electronic address \{#buyer-siren\}
+
+The box **Use the SIREN when the buyer has no electronic address**, ticked by default, decides what happens when no address is found for the buyer — none in the source and none from the rules above:
+
+| Box | BT-49 written |
+|---|---|
+| **Ticked** *(default)* | The buyer's SIREN, under the buyer's scheme. |
+| **Unticked** | Nothing: the invoice is produced without a buyer electronic address and stops at validation, the address being mandatory. |
+
 ---
 
 ## Tips & best practices
@@ -39,4 +48,5 @@ This lets B2C and international invoices — which have no SIRET-based electroni
 - **Use `0225` for the BT-49 endpoint in France.** The Plateforme Agréée recognises `0225` as the EAS code for the French e-invoicing endpoint registry. Other values are rejected by the addressing check (REJ_ADR).
 - **`0002` (SIREN) and `0009` (SIRET) are not interchangeable.** They reference different registries (entity vs establishment). Pick the one that matches the identifier length and source — never carry a 14-digit SIRET under `0002`.
 - **Override per template only when a customer requires a deviating scheme.** The defaults file is correct for almost every deployment; document overrides are reserved for genuine exceptions (e.g. a single template emitting GLN-keyed identifiers).
+- **Untick the SIREN fallback only when every buyer must carry a real address.** An invoice without one is then held at validation instead of being sent with the SIREN.
 - **Add missing scheme codes to the reference list, not here.** If a target value does not appear in a dropdown, edit the *scheme-ids* reference list in *Configuration → Reference Lists* — that change propagates to every dropdown on this tab.
