@@ -32,7 +32,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   </defs>
 
   <rect x="220" y="20" width="760" height="470" rx="14" fill="url(#acbfr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Bindings d'actions</text>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Liaisons d'actions</text>
   <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Lier les actions vendeur réglementaires à des appels de connecteur. Les actions non liées sont désactivées.</text>
   <rect x="810" y="34" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="850.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Actualiser</text>

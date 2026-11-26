@@ -162,7 +162,7 @@ Quand le *mode Package* est actif, l'icône des cartes est remplacée par une ca
 
 Sélectionner un fichier dans la barre latérale affiche son **historique de versions** dans le panneau principal.
 
-La barre d'outils indique le chemin du fichier et propose le bouton **Téléverser une nouvelle version** (sélecteur de fichier — l'envoi remplace le fichier courant et archive automatiquement la version précédente dans l'historique).
+La barre d'outils indique le chemin du fichier et propose le bouton **Nouvelle version** (sélecteur de fichier — l'envoi remplace le fichier courant et archive automatiquement la version précédente dans l'historique).
 
 ### Tableau d'historique des versions
 
@@ -311,9 +311,9 @@ Quitter le mode Package (en désactivant le bouton) vide la sélection.
 
 Des messages en ligne s'affichent en haut du panneau principal et disparaissent automatiquement après 4 secondes :
 
-- `Upload success — version N créée`
-- `Restore success — version N restaurée`
-- `Export success — N fichiers`
+- `Fichier envoyé avec succès (version N).`
+- `Version N restaurée avec succès.`
+- `Package exporté (N fichiers)`
 - `Import success — N fichiers`
 - Le message d'erreur de l'API en cas d'échec.
 

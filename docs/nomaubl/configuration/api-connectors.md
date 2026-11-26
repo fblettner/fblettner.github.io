@@ -146,7 +146,8 @@ The Settings editors of NomaUBL are in English, the connector editor included.
 | **Min. interval between requests (ms)** | Minimum gap between two requests to the connector's **host**. Empty or `0` = off. See [Request limits](#request-limits). |
 | **Error limit (per 120 s)** | Holds the requests to the host while this many error responses sit in the last 120 seconds. Empty or `0` = off. See [Request limits](#request-limits). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
-| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each capped at the `debugBodyLimit` length so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each cut at the **Debug body limit** so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+| **Debug body limit** | Characters of each body kept in the debug log (default `100000`). Lower it for a platform that returns very large payloads. |
 
 ### Request limits \{#request-limits\}
 

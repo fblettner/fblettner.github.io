@@ -86,6 +86,8 @@ Removing an override deletes the override block entirely — there is no soft "d
 
 Every tab holds one independently-overridable field group. The pages that follow document each tab in detail; the table below maps tab to scope at a glance.
 
+The sections are listed on the left as cards, each with its icon and its main values — the defaults it sets and how many rules, mappings, companies or notes it holds (e.g. *Payment Code Mapping* · `30 · 4 mappings`). On a document's file, a section that file overrides reads **Overridden for this file** instead.
+
 | Tab | UBL area | What is configured |
 |---|---|---|
 | [**Header**](./ubl-header-defaults.md) | Document header | UBL version, customization ID, default country, date input format. |

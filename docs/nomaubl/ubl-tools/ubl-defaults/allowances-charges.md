@@ -70,7 +70,7 @@ Some source lines are not invoice lines for the standard: a freight line, a hand
   <rect x="428" y="101" width="84" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="438" y="115.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Charge ▾</text>
   <rect x="520" y="101" width="210" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="530" y="115.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">FC  Frais de transport ▾</text>
+  <text x="530" y="115.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">FC  Freight service ▾</text>
   <rect x="926" y="101" width="24" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
   <text x="938.0" y="115.5" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">🗑</text>
   <rect x="254" y="130" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>

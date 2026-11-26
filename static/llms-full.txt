@@ -34275,6 +34275,8 @@ Removing an override deletes the override block entirely — there is no soft "d
 
 Every tab holds one independently-overridable field group. The pages that follow document each tab in detail; the table below maps tab to scope at a glance.
 
+The sections are listed on the left as cards, each with its icon and its main values — the defaults it sets and how many rules, mappings, companies or notes it holds (e.g. *Payment Code Mapping* · `30 · 4 mappings`). On a document's file, a section that file overrides reads **Overridden for this file** instead.
+
 | Tab | UBL area | What is configured |
 |---|---|---|
 | [**Header**](./ubl-header-defaults.md) | Document header | UBL version, customization ID, default country, date input format. |
@@ -35524,12 +35526,14 @@ Open it from **Management → Documents**. A document is edited through **steps 
 
 ## Steps of the editor \{#steps\}
 
+The documents are listed on the left as cards: each shows the document's name, its description and an icon that follows its source (XML spool, PDF, UBL or connector). Selecting a card opens its editor.
+
 Each card shows the step's name and its state in a few words; a value still to set shows in red. Clicking a card opens its settings under the strip. Steps that do not apply to the document's source are hidden.
 
 | Step | What its card shows | Shown for |
 |---|---|---|
 | **Source** | The source and the direction, e.g. `XML · issued`. | Every source. |
-| **Identification** | `Activity … · type …`, or **No activity** in red. | XML, PDF and UBL sources — not a connector source. |
+| **Identification** | `Activity … · type …`, or **No activity** in red. | Every source. |
 | **Enrichment** | The number of lookups, or `None`. | XML, PDF and connector sources; a UBL source shows it only when lookups were set on it. |
 | **Rules** | The number of rules (activity and type rules plus processing rules), or `None`. | Every source. |
 | **UBL** | The file name of the UBL stylesheet, `Already UBL` for a UBL source, or **No stylesheet** in red. | Every source. |
@@ -35669,7 +35673,7 @@ Two patterns are supported:
     The connector response is materialised as an XML document with the same shape an XML spool would have, so the existing XSLT chain runs without change. Every XPath you already use still applies.
   
 
-A connector-source document has no *Identification* step: its settings are the connector ones above. Use **Load connector sample** in the [XSL Editor](../ubl-tools/xsl-editor.md) to pull a real response so the XPath picker autocompletes against actual data.
+For a connector source, the *Identification* step reads the connector's XML: a field of the header call (e.g. `DocNumber`), or a path for a nested one (`Header/customer/id`) — see [Document Identification](#document-identification). Use **Load connector sample** in the [XSL Editor](../ubl-tools/xsl-editor.md) to pull a real response so the XPath picker autocompletes against actual data.
 
 Running a connector-sourced document is described on [Processing → Process Document](../processing/document.md): the page replaces the file picker with the parameter form derived from the header connector. The same parameters are passed from the CLI via repeatable `--param key=value` arguments (see [Command Line](./command-line.md)).
 
@@ -35683,11 +35687,13 @@ Each UBL invoice is validated and routed by **its own** transaction type — B2B
 
 ## Identification \{#identification\}
 
-This step tells NomaUBL **which document it is**: its activity and type, its key, and the functional data read from the spool. Its fields depend on the source; it is not shown for a connector source.
+This step tells NomaUBL **which document it is**: its activity and type, its key, and the functional data read from the spool. Its fields depend on the source: one set for an XML, PDF or connector source, another for a UBL source.
 
-### Document Identification *(when Source = XML or PDF)*
+### Document Identification *(when Source = XML, PDF or connector)* \{#document-identification\}
 
 NomaUBL uses these five fields to know **which document it is**, who owns it, and what business type it belongs to. Each field takes an XML tag and a default for cases where the tag is absent.
+
+A tag is an element name — the first element of that name in the document — or a **path** such as `Header/customer/id` when several elements share a name (a connector's nested answer, a spool with the same tag in several blocks). A path that finds nothing gives nothing: the default applies.
 
 | Field | Maps to source-system concept |
 |---|---|
@@ -36037,7 +36043,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 - Sidebar → **Management → PDF Templates**.
 - The page lists every layout in the catalogue. The sidebar entry **`built-in`** is the bundled factory layout — read-only, always present as a safety fallback.
-- The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the sidebar.
+- The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the list.
 
 ---
 
@@ -36077,11 +36083,11 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 
 ## The catalogue
 
-The sidebar list contains every saved layout plus the bundled `built-in`.
+The list on the left shows every saved layout plus the bundled `built-in`, each as a card with its name and description.
 
 - **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
-- **Description** — free-text label persisted on the resource. Surfaced both in the sidebar and in the *PDF Template* selector on a document.
+- **Description** — free-text label persisted on the resource. Surfaced both on its card in the list and in the *PDF Template* selector on a document.
 
 ---
 
@@ -39821,7 +39827,8 @@ The Settings editors of NomaUBL are in English, the connector editor included.
 | **Min. interval between requests (ms)** | Minimum gap between two requests to the connector's **host**. Empty or `0` = off. See [Request limits](#request-limits). |
 | **Error limit (per 120 s)** | Holds the requests to the host while this many error responses sit in the last 120 seconds. Empty or `0` = off. See [Request limits](#request-limits). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
-| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each capped at the `debugBodyLimit` length so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each cut at the **Debug body limit** so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
+| **Debug body limit** | Characters of each body kept in the debug log (default `100000`). Lower it for a platform that returns very large payloads. |
 
 ### Request limits \{#request-limits\}
 
@@ -41941,8 +41948,14 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Fetch status, Extract and process, File versions: same look.** Fetch status opens on two cards (retrieve statuses, checks). Extract and process follows four steps (source, processing, extraction result, processing result) with one run button. In File versions, folders are headings and files are cards.
 - **Text PDF: invoices printed with their business-term codes.** A layout that prints the code of each value ("Date d'échéance (BT-9)", "Total TVA (BT-110)") is now read by its labels: fields are named by the label, text values are kept (currency, invoice type, payment means), a code in parentheses at the end of a value also comes out on its own (380, EUR, 42, the scheme of an electronic address), and values printed on several rows are joined. A block heading such as "Vendeur" or "Client" is no longer taken as the party's name, and "CITY, FR" gives the city and the country. In a table, a text left-aligned under a centred header goes to its own column; a VAT summary whose header is on two rows is read.
 - **Platforms with the AFNOR flow API.** A connector can now send the e-reporting file as a flow (`{{filePath}}` and `{{reportName}}` in a multipart body), and the list of received invoices reads the `flowId` of a flow search.
+- **UBL Defaults, Documents and PDF templates: left navigation as cards.** The Documents and PDF templates lists show each entry as a card with its icon and description, as in Settings. In UBL Defaults, the left navigation shows each section as a card with its main values (defaults, number of rules, mappings, companies, notes), as in Settings; on a document's file, an overridden section says so.
 
 ### Fixes
+- **Connector-source document: Identification step.** The editor now shows it, so the invoice number, type, company, activity and the other identification fields can be set from the connector's fields. They could not be set in the editor before. An identification field of any XML, PDF or connector document also accepts a path (`Header/customer/id`) when several elements share a name.
+- **API reference.** The three document calls added this release (change the transaction type, save an edited UBL, try activity and type rules) are now listed.
+- **API connector, Debug.** The help now says what is logged (headers with credentials masked, whole bodies), and the size kept per body can be set (Debug body limit).
+- **UBL Defaults in English.** Allowance and charge reason codes and the VAT lists show their English labels.
+- **Wording.** Activity and type rules say that their type is not the transaction type. In French: "Liaisons d'actions", and "Envoyer" for a file upload in File versions.
 - **Document without an RTF template run with no processing type.** It now produces its UBL instead of failing on a PDF it cannot render ("PDF creation failed").
 - **Invoice window: save refused after adding a reference.** On an invoice or credit note carrying a VAT point date code without invoicing period dates, adding a preceding invoice or an order reference no longer makes the save fail on the document structure (invoicing period out of place). A document already saved that way is corrected by opening it and saving again.
 - **Text PDF: name printed on two rows.** In a table read by position, a value wrapped above and below its line (a long name) no longer makes the other stacked values of the invoice be read as section titles (session number and end date lost, wrong section).
@@ -41984,7 +41997,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 ### Improvements
 - **Explorer: new page layout.** View, Period, Rows, Measures and Filters are one card each; the view is picked with icon buttons; the result is a panel whose heading says what the run returned. Save, Delete, Excel and PDF are in the page header.
 - **Explorer: Definition button.** It hides the fields and the shelves so the result takes the whole page. A saved analysis opens on its result, a new one on its definition; with the definition hidden, the period stays on the View line.
-- **Explorer: code or label.** A row on a coded field (status, reason, type…) chooses what it shows: code and label together as before, the label, the code, or two columns. The table, the pivot, the charts, the PDF and the Excel follow, and the choice is saved with the analysis. Scheduled reports keep code and label.
+- **Explorer: code or label.** A row on a coded field (status, reason, type…) chooses what it shows: code and label together as before, the label, the code, or two columns. The table, the pivot, the charts, the PDF and the Excel follow, and the choice is saved with the analysis; two columns applies to the table, the others then keep code and label together. Scheduled reports keep code and label.
 - **Explorer: Excel of an analysis.** The header's Excel button exports the result as shown, the cross table for a pivot.
 - **Explorer: fields list.** Expand all / collapse all next to the search, and each field shows the name used in calculated fields.
 - **Explorer dashboards: layout by hand.** In Edit layout a tile is moved by dragging its grip and sized by its corner; the arrow keys do the same.

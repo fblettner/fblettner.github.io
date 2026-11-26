@@ -23,7 +23,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 - Barre latérale → **Gestion → Modèles PDF**.
 - La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme valeur de repli.
-- La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la barre latérale.
+- La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la liste.
 
 ---
 
@@ -187,11 +187,11 @@ La barre d'actions couvre le cycle de vie du catalogue et la désignation du dé
 
 ## Le catalogue
 
-La barre latérale liste toutes les mises en page enregistrées, plus la `built-in` livrée.
+La liste de gauche affiche toutes les mises en page enregistrées, plus la `built-in` livrée, chacune sous forme de carte avec son nom et sa description.
 
 - **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
 - **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
-- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un document.
+- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois sur sa carte dans la liste et dans le sélecteur *PDF Template* d'un document.
 
 ---
 

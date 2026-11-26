@@ -86,6 +86,8 @@ La suppression d'une surcharge retire le bloc en totalité — pas de mode « d�
 
 Chaque onglet correspond à un groupe surchargeable de manière indépendante. Les pages suivantes documentent chaque onglet en détail ; le tableau ci-dessous donne le périmètre d'un coup d'œil.
 
+Les sections sont listées à gauche sous forme de cartes, chacune avec son icône et ses valeurs principales — les valeurs par défaut qu'elle fixe et le nombre de règles, de correspondances, de sociétés ou de notes qu'elle contient (par ex. *Codes de paiement* · `30 · 4 correspondances`). Sur le fichier d'un document, une section surchargée par ce fichier affiche à la place **Surchargé pour ce fichier**.
+
 | Onglet | Zone UBL | Contenu configuré |
 |---|---|---|
 | [**Header**](./ubl-header-defaults.md) | En-tête du document | Version UBL, identifiant de personnalisation, pays par défaut, format de date d'entrée. |

@@ -3155,6 +3155,70 @@
         }
       }
     },
+    "/api/list-documents/{doc}/{dct}/{kco}/routing-type": {
+      "post": {
+        "tags": ["Documents"],
+        "x-permission": "any signed-in user",
+        "summary": "Change the transaction type of a document",
+        "description": "Rewrites the routing note of the archived UBL (#BAR#<type>, or #ADN#B2G) and the transaction type of the invoice header.\n\nNothing else changes: no status, no lifecycle event, no validation, nothing sent. Requires the invoice.edit-ubl action.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "type": "B2C" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "type": "B2C", "xml": "<?xml version=\"1.0\"?>…" } } } }
+          }
+        }
+      }
+    },
+    "/api/list-documents/{doc}/{dct}/{kco}/ubl": {
+      "post": {
+        "tags": ["Documents"],
+        "x-permission": "any signed-in user",
+        "summary": "Save an edited UBL",
+        "description": "Saves the UBL edited by hand as the invoice window does: the UBL is validated, the header rewritten and the findings replaced.\n\nActivity and type keep their stored values. Refused on an invoice the platform has already processed. Requires the invoice.edit-ubl action.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "xml": "<?xml version=\"1.0\"?>…" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/list-documents/value-rules-test": {
+      "post": {
+        "tags": ["Documents"],
+        "x-permission": "any signed-in user",
+        "summary": "Try activity and type rules on a sample",
+        "description": "Runs the rules being edited on one sample (source XML, or UBL for a UBL-source document) and returns the activity and the type they give with the rule that set each. Nothing is saved.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "template": "invoices", "rules": [{ "name": "Export", "conditions": [{ "field": "kco", "op": "eq", "value": "00010" }], "activity": "VRC", "type": "" }], "xml": "<?xml version=\"1.0\"?>…" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "read": "1001 RI 00010", "activity": "VRC", "activityRule": "Export", "type": null, "typeRule": null } } } }
+          }
+        }
+      }
+    },
     "/api/system": {
       "get": {
         "tags": ["System"],

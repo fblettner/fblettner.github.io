@@ -168,12 +168,14 @@ Open it from **Management → Documents**. A document is edited through **steps 
 
 ## Steps of the editor \{#steps\}
 
+The documents are listed on the left as cards: each shows the document's name, its description and an icon that follows its source (XML spool, PDF, UBL or connector). Selecting a card opens its editor.
+
 Each card shows the step's name and its state in a few words; a value still to set shows in red. Clicking a card opens its settings under the strip. Steps that do not apply to the document's source are hidden.
 
 | Step | What its card shows | Shown for |
 |---|---|---|
 | **Source** | The source and the direction, e.g. `XML · issued`. | Every source. |
-| **Identification** | `Activity … · type …`, or **No activity** in red. | XML, PDF and UBL sources — not a connector source. |
+| **Identification** | `Activity … · type …`, or **No activity** in red. | Every source. |
 | **Enrichment** | The number of lookups, or `None`. | XML, PDF and connector sources; a UBL source shows it only when lookups were set on it. |
 | **Rules** | The number of rules (activity and type rules plus processing rules), or `None`. | Every source. |
 | **UBL** | The file name of the UBL stylesheet, `Already UBL` for a UBL source, or **No stylesheet** in red. | Every source. |
@@ -344,7 +346,7 @@ Two patterns are supported:
   </div>
 </div>
 
-A connector-source document has no *Identification* step: its settings are the connector ones above. Use **Load connector sample** in the [XSL Editor](../ubl-tools/xsl-editor.md) to pull a real response so the XPath picker autocompletes against actual data.
+For a connector source, the *Identification* step reads the connector's XML: a field of the header call (e.g. `DocNumber`), or a path for a nested one (`Header/customer/id`) — see [Document Identification](#document-identification). Use **Load connector sample** in the [XSL Editor](../ubl-tools/xsl-editor.md) to pull a real response so the XPath picker autocompletes against actual data.
 
 Running a connector-sourced document is described on [Processing → Process Document](../processing/document.md): the page replaces the file picker with the parameter form derived from the header connector. The same parameters are passed from the CLI via repeatable `--param key=value` arguments (see [Command Line](./command-line.md)).
 
@@ -358,11 +360,13 @@ Each UBL invoice is validated and routed by **its own** transaction type — B2B
 
 ## Identification \{#identification\}
 
-This step tells NomaUBL **which document it is**: its activity and type, its key, and the functional data read from the spool. Its fields depend on the source; it is not shown for a connector source.
+This step tells NomaUBL **which document it is**: its activity and type, its key, and the functional data read from the spool. Its fields depend on the source: one set for an XML, PDF or connector source, another for a UBL source.
 
-### Document Identification *(when Source = XML or PDF)*
+### Document Identification *(when Source = XML, PDF or connector)* \{#document-identification\}
 
 NomaUBL uses these five fields to know **which document it is**, who owns it, and what business type it belongs to. Each field takes an XML tag and a default for cases where the tag is absent.
+
+A tag is an element name — the first element of that name in the document — or a **path** such as `Header/customer/id` when several elements share a name (a connector's nested answer, a spool with the same tag in several blocks). A path that finds nothing gives nothing: the default applies.
 
 | Field | Maps to source-system concept |
 |---|---|

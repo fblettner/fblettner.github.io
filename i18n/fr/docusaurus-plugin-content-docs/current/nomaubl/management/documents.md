@@ -170,12 +170,14 @@ L'éditeur reste en anglais : les libellés sont cités tels qu'ils apparaissent
 
 ## Étapes de l'éditeur \{#steps\}
 
+Les documents sont listés à gauche sous forme de cartes : chacune affiche le nom du document, sa description et une icône qui suit sa source (spool XML, PDF, UBL ou connecteur). Un clic sur une carte ouvre son éditeur.
+
 Chaque carte affiche le nom de l'étape et son état en quelques mots ; une valeur encore à saisir apparaît en rouge. Un clic sur une carte ouvre ses réglages sous la bande. Les étapes sans objet pour la source du document sont masquées.
 
 | Étape | État affiché sur la carte | Présente pour |
 |---|---|---|
 | **Source** | La source et le sens, par ex. `XML · issued`. | Toutes les sources. |
-| **Identification** | `Activity … · type …`, ou **No activity** en rouge. | Sources XML, PDF et UBL — pas pour un connecteur. |
+| **Identification** | `Activity … · type …`, ou **No activity** en rouge. | Toutes les sources. |
 | **Enrichment** | Le nombre de recherches, ou `None`. | Sources XML, PDF et connecteur ; pour une source UBL, seulement si des recherches y ont été définies. |
 | **Rules** | Le nombre de règles (activité et type, plus règles de traitement), ou `None`. | Toutes les sources. |
 | **UBL** | Le nom du fichier de la feuille UBL, `Already UBL` pour une source UBL, ou **No stylesheet** en rouge. | Toutes les sources. |
@@ -346,7 +348,7 @@ Deux schémas sont gérés :
   </div>
 </div>
 
-Un document à source connecteur n'a pas d'étape *Identification* : ses réglages sont ceux du connecteur ci-dessus. **Charger un échantillon connecteur**, dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md), rapatrie une vraie réponse : le sélecteur XPath propose alors des chemins tirés de données réelles.
+Pour une source connecteur, l'étape *Identification* lit le XML du connecteur : un champ de l'appel d'en-tête (par ex. `DocNumber`), ou un chemin pour un champ imbriqué (`Header/customer/id`) — voir [Identification du document](#document-identification). **Charger un échantillon connecteur**, dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md), rapatrie une vraie réponse : le sélecteur XPath propose alors des chemins tirés de données réelles.
 
 L'exécution d'un document à source connecteur est décrite sur [Traitement → Traiter un document](../processing/document.md) : la page remplace le sélecteur de fichier par le formulaire de paramètres dérivé du connecteur d'en-tête. Les mêmes paramètres sont transmis en ligne de commande via des arguments `--param clé=valeur` répétables (voir [Ligne de commande](./command-line.md)).
 
@@ -360,11 +362,13 @@ Chaque facture UBL est validée et routée selon **son propre** type de transact
 
 ## Identification \{#identification\}
 
-Cette étape indique à NomaUBL **quel est le document** : son activité et son type, sa clé, et les données fonctionnelles lues dans le spool. Ses champs dépendent de la source ; elle n'apparaît pas pour une source connecteur.
+Cette étape indique à NomaUBL **quel est le document** : son activité et son type, sa clé, et les données fonctionnelles lues dans le spool. Ses champs dépendent de la source ; un jeu pour une source XML, PDF ou connecteur, un autre pour une source UBL.
 
-### Identification du document *(quand Source = XML ou PDF)*
+### Identification du document *(quand Source = XML, PDF ou connecteur)* \{#document-identification\}
 
 NomaUBL utilise ces cinq champs pour savoir **quel est le document**, à qui il appartient et à quel type métier il correspond. Chaque champ prend une balise XML et une valeur par défaut, utilisée si la balise est absente.
+
+Une balise est un nom d'élément — le premier élément de ce nom dans le document — ou un **chemin** comme `Header/customer/id` quand plusieurs éléments portent le même nom (réponse imbriquée d'un connecteur, spool qui répète une balise dans plusieurs blocs). Un chemin qui ne trouve rien ne donne rien : la valeur par défaut s'applique.
 
 | Champ | Concept du système source |
 |---|---|

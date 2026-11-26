@@ -23,7 +23,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 - Sidebar → **Management → PDF Templates**.
 - The page lists every layout in the catalogue. The sidebar entry **`built-in`** is the bundled factory layout — read-only, always present as a safety fallback.
-- The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the sidebar.
+- The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the list.
 
 ---
 
@@ -187,11 +187,11 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 
 ## The catalogue
 
-The sidebar list contains every saved layout plus the bundled `built-in`.
+The list on the left shows every saved layout plus the bundled `built-in`, each as a card with its name and description.
 
 - **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
-- **Description** — free-text label persisted on the resource. Surfaced both in the sidebar and in the *PDF Template* selector on a document.
+- **Description** — free-text label persisted on the resource. Surfaced both on its card in the list and in the *PDF Template* selector on a document.
 
 ---
 

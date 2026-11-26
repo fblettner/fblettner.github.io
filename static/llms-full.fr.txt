@@ -34262,6 +34262,8 @@ La suppression d'une surcharge retire le bloc en totalité — pas de mode « d�
 
 Chaque onglet correspond à un groupe surchargeable de manière indépendante. Les pages suivantes documentent chaque onglet en détail ; le tableau ci-dessous donne le périmètre d'un coup d'œil.
 
+Les sections sont listées à gauche sous forme de cartes, chacune avec son icône et ses valeurs principales — les valeurs par défaut qu'elle fixe et le nombre de règles, de correspondances, de sociétés ou de notes qu'elle contient (par ex. *Codes de paiement* · `30 · 4 correspondances`). Sur le fichier d'un document, une section surchargée par ce fichier affiche à la place **Surchargé pour ce fichier**.
+
 | Onglet | Zone UBL | Contenu configuré |
 |---|---|---|
 | [**Header**](./ubl-header-defaults.md) | En-tête du document | Version UBL, identifiant de personnalisation, pays par défaut, format de date d'entrée. |
@@ -35513,12 +35515,14 @@ L'éditeur reste en anglais : les libellés sont cités tels qu'ils apparaissent
 
 ## Étapes de l'éditeur \{#steps\}
 
+Les documents sont listés à gauche sous forme de cartes : chacune affiche le nom du document, sa description et une icône qui suit sa source (spool XML, PDF, UBL ou connecteur). Un clic sur une carte ouvre son éditeur.
+
 Chaque carte affiche le nom de l'étape et son état en quelques mots ; une valeur encore à saisir apparaît en rouge. Un clic sur une carte ouvre ses réglages sous la bande. Les étapes sans objet pour la source du document sont masquées.
 
 | Étape | État affiché sur la carte | Présente pour |
 |---|---|---|
 | **Source** | La source et le sens, par ex. `XML · issued`. | Toutes les sources. |
-| **Identification** | `Activity … · type …`, ou **No activity** en rouge. | Sources XML, PDF et UBL — pas pour un connecteur. |
+| **Identification** | `Activity … · type …`, ou **No activity** en rouge. | Toutes les sources. |
 | **Enrichment** | Le nombre de recherches, ou `None`. | Sources XML, PDF et connecteur ; pour une source UBL, seulement si des recherches y ont été définies. |
 | **Rules** | Le nombre de règles (activité et type, plus règles de traitement), ou `None`. | Toutes les sources. |
 | **UBL** | Le nom du fichier de la feuille UBL, `Already UBL` pour une source UBL, ou **No stylesheet** en rouge. | Toutes les sources. |
@@ -35658,7 +35662,7 @@ Deux schémas sont gérés :
     La réponse du connecteur est matérialisée en document XML, de la même forme qu'aurait un spool XML, pour que la chaîne XSLT existante s'exécute sans modification. Chaque XPath déjà en place fonctionne tel quel.
   
 
-Un document à source connecteur n'a pas d'étape *Identification* : ses réglages sont ceux du connecteur ci-dessus. **Charger un échantillon connecteur**, dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md), rapatrie une vraie réponse : le sélecteur XPath propose alors des chemins tirés de données réelles.
+Pour une source connecteur, l'étape *Identification* lit le XML du connecteur : un champ de l'appel d'en-tête (par ex. `DocNumber`), ou un chemin pour un champ imbriqué (`Header/customer/id`) — voir [Identification du document](#document-identification). **Charger un échantillon connecteur**, dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md), rapatrie une vraie réponse : le sélecteur XPath propose alors des chemins tirés de données réelles.
 
 L'exécution d'un document à source connecteur est décrite sur [Traitement → Traiter un document](../processing/document.md) : la page remplace le sélecteur de fichier par le formulaire de paramètres dérivé du connecteur d'en-tête. Les mêmes paramètres sont transmis en ligne de commande via des arguments `--param clé=valeur` répétables (voir [Ligne de commande](./command-line.md)).
 
@@ -35672,11 +35676,13 @@ Chaque facture UBL est validée et routée selon **son propre** type de transact
 
 ## Identification \{#identification\}
 
-Cette étape indique à NomaUBL **quel est le document** : son activité et son type, sa clé, et les données fonctionnelles lues dans le spool. Ses champs dépendent de la source ; elle n'apparaît pas pour une source connecteur.
+Cette étape indique à NomaUBL **quel est le document** : son activité et son type, sa clé, et les données fonctionnelles lues dans le spool. Ses champs dépendent de la source ; un jeu pour une source XML, PDF ou connecteur, un autre pour une source UBL.
 
-### Identification du document *(quand Source = XML ou PDF)*
+### Identification du document *(quand Source = XML, PDF ou connecteur)* \{#document-identification\}
 
 NomaUBL utilise ces cinq champs pour savoir **quel est le document**, à qui il appartient et à quel type métier il correspond. Chaque champ prend une balise XML et une valeur par défaut, utilisée si la balise est absente.
+
+Une balise est un nom d'élément — le premier élément de ce nom dans le document — ou un **chemin** comme `Header/customer/id` quand plusieurs éléments portent le même nom (réponse imbriquée d'un connecteur, spool qui répète une balise dans plusieurs blocs). Un chemin qui ne trouve rien ne donne rien : la valeur par défaut s'applique.
 
 | Champ | Concept du système source |
 |---|---|
@@ -36026,7 +36032,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 - Barre latérale → **Gestion → Modèles PDF**.
 - La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme valeur de repli.
-- La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la barre latérale.
+- La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la liste.
 
 ---
 
@@ -36066,11 +36072,11 @@ La barre d'actions couvre le cycle de vie du catalogue et la désignation du dé
 
 ## Le catalogue
 
-La barre latérale liste toutes les mises en page enregistrées, plus la `built-in` livrée.
+La liste de gauche affiche toutes les mises en page enregistrées, plus la `built-in` livrée, chacune sous forme de carte avec son nom et sa description.
 
 - **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
 - **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
-- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un document.
+- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois sur sa carte dans la liste et dans le sélecteur *PDF Template* d'un document.
 
 ---
 
@@ -36791,7 +36797,7 @@ Quand le *mode Package* est actif, l'icône des cartes est remplacée par une ca
 
 Sélectionner un fichier dans la barre latérale affiche son **historique de versions** dans le panneau principal.
 
-La barre d'outils indique le chemin du fichier et propose le bouton **Téléverser une nouvelle version** (sélecteur de fichier — l'envoi remplace le fichier courant et archive automatiquement la version précédente dans l'historique).
+La barre d'outils indique le chemin du fichier et propose le bouton **Nouvelle version** (sélecteur de fichier — l'envoi remplace le fichier courant et archive automatiquement la version précédente dans l'historique).
 
 ### Tableau d'historique des versions
 
@@ -36938,9 +36944,9 @@ Quitter le mode Package (en désactivant le bouton) vide la sélection.
 
 Des messages en ligne s'affichent en haut du panneau principal et disparaissent automatiquement après 4 secondes :
 
-- `Upload success — version N créée`
-- `Restore success — version N restaurée`
-- `Export success — N fichiers`
+- `Fichier envoyé avec succès (version N).`
+- `Version N restaurée avec succès.`
+- `Package exporté (N fichiers)`
 - `Import success — N fichiers`
 - Le message d'erreur de l'API en cas d'échec.
 
@@ -39820,7 +39826,8 @@ Comme les autres éditeurs des Paramètres de NomaUBL, l'éditeur de connecteur 
 | **Min. interval between requests (ms)** | Écart minimal entre deux requêtes vers l'**hôte** du connecteur. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
 | **Error limit (per 120 s)** | Retient les requêtes vers l'hôte tant que ce nombre de réponses en erreur figure dans les 120 dernières secondes. Vide ou `0` = inactif. Voir [Limites de requêtes](#request-limits). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
-| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur est tracé dans le journal du service — l'URL et le code HTTP, les **en-têtes** de requête et de réponse (l'autorisation et les autres en-têtes sensibles étant masqués), et les **corps** complets de requête et de réponse, chacun tronqué à la longueur `debugBodyLimit` pour qu'un gros contenu ne noie pas le journal. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête, les en-têtes et les corps exacts échangés ; à désactiver une fois le connecteur stable. |
+| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur est tracé dans le journal du service — l'URL et le code HTTP, les **en-têtes** de requête et de réponse (l'autorisation et les autres en-têtes sensibles étant masqués), et les **corps** complets de requête et de réponse, chacun tronqué à la **Debug body limit** pour qu'un gros contenu ne noie pas le journal. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête, les en-têtes et les corps exacts échangés ; à désactiver une fois le connecteur stable. |
+| **Debug body limit** | Nombre de caractères conservés pour chaque corps dans la trace de debug (défaut `100000`). À réduire pour une plateforme qui renvoie de très gros contenus. |
 
 ### Limites de requêtes \{#request-limits\}
 
@@ -41940,8 +41947,14 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Récupération des statuts, Extraire & Traiter, Versions des fichiers : même présentation.** La récupération des statuts s'ouvre sur deux cartes (récupérer les statuts, contrôles). Extraire & Traiter suit quatre étapes (source, traitement, résultat de l'extraction, résultat du traitement) avec un seul bouton de lancement. Dans Versions des fichiers, les dossiers sont des titres et les fichiers des cartes.
 - **PDF texte : factures imprimées avec leurs codes de terme métier.** Une mise en page qui imprime le code de chaque valeur (« Date d'échéance (BT-9) », « Total TVA (BT-110) ») est désormais lue par ses libellés : les champs portent le nom du libellé, les valeurs texte sont conservées (devise, type de facture, mode de paiement), un code entre parenthèses en fin de valeur est aussi fourni à part (380, EUR, 42, le schéma d'une adresse électronique) et les valeurs imprimées sur plusieurs lignes sont réunies. Un titre de bloc comme « Vendeur » ou « Client » n'est plus pris pour le nom du tiers, et « VILLE, FR » donne la ville et le pays. Dans un tableau, un texte aligné à gauche sous un en-tête centré va dans sa colonne ; un récapitulatif de TVA dont l'en-tête tient sur deux lignes est lu.
 - **Plateformes à l'API de flux AFNOR.** Un connecteur peut désormais déposer le fichier d'e-reporting comme un flux (`{{filePath}}` et `{{reportName}}` dans un corps multipart), et la liste des factures reçues lit le `flowId` d'une recherche de flux.
+- **Valeurs UBL par défaut, Documents et modèles PDF : navigation de gauche en cartes.** Les listes des Documents et des modèles PDF présentent chaque entrée en carte, avec son icône et sa description, comme dans les Paramètres. Dans les valeurs UBL par défaut, la navigation de gauche présente chaque section en carte avec ses valeurs principales (défauts, nombre de règles, de correspondances, de sociétés, de mentions), comme dans les Paramètres ; sur le fichier d'un document, une section surchargée l'indique.
 
 ### Corrections
+- **Document de source connecteur : étape Identification.** L'éditeur l'affiche désormais : numéro de facture, type, société, activité et les autres champs d'identification se renseignent à partir des champs du connecteur. Ils n'étaient pas accessibles dans l'éditeur. Un champ d'identification d'un document XML, PDF ou connecteur accepte aussi un chemin (`Header/customer/id`) quand plusieurs éléments portent le même nom.
+- **Référence API.** Les trois appels de documents ajoutés dans cette version (changer le type de transaction, enregistrer un UBL modifié, essayer des règles d'activité et de type) y figurent.
+- **Connecteur API, Debug.** L'aide décrit ce qui est tracé (en-têtes avec identifiants masqués, corps entiers) et la taille conservée par corps se règle (Debug body limit).
+- **Valeurs UBL par défaut en anglais.** Les codes de motif de remise et de charge et les listes de TVA affichent leur libellé anglais.
+- **Libellés.** Les règles d'activité et de type précisent que leur type n'est pas le type de transaction. En français : « Liaisons d'actions », et « Envoyer » pour l'envoi d'un fichier dans les versions de fichiers.
 - **Document sans modèle RTF traité sans type de traitement.** Il produit désormais son UBL au lieu d'échouer sur un PDF impossible à générer (« PDF creation failed »).
 - **Fenêtre facture : enregistrement refusé après l'ajout d'une référence.** Sur une facture ou un avoir portant un code de date d'exigibilité de la TVA sans dates de période de facturation, l'ajout d'une facture antérieure ou d'une référence de commande ne fait plus échouer l'enregistrement sur la structure du document (période de facturation mal placée). Un document déjà enregistré ainsi se corrige en l'ouvrant puis en l'enregistrant de nouveau.
 - **PDF texte : nom imprimé sur deux lignes.** Dans un tableau lu par position, une valeur répartie au-dessus et au-dessous de sa ligne (un nom long) ne fait plus lire les autres valeurs empilées de la facture comme des titres de section (numéro de session et date de fin perdus, section erronée).
@@ -41983,7 +41996,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Améliorations
 - **Explorateur : nouvelle présentation de la page.** Vue, Période, Lignes, Mesures et Filtres occupent chacun une carte ; la vue se choisit par des boutons à icône ; le résultat est un panneau dont l'en-tête indique ce que l'exécution a renvoyé. Enregistrer, Supprimer, Excel et PDF sont dans l'en-tête de la page.
 - **Explorateur : bouton Définition.** Il masque les champs et les cartes de définition pour laisser toute la page au résultat. Une analyse enregistrée s'ouvre sur son résultat, une nouvelle sur sa définition ; définition masquée, la période reste sur la ligne Vue.
-- **Explorateur : code ou libellé.** Une ligne portant sur un champ codé (statut, motif, type…) choisit son affichage : code et libellé ensemble comme auparavant, le libellé, le code, ou deux colonnes. Le tableau, le tableau croisé, les graphiques, le PDF et l'Excel suivent ce choix, enregistré avec l'analyse. Les rapports planifiés conservent code et libellé.
+- **Explorateur : code ou libellé.** Une ligne portant sur un champ codé (statut, motif, type…) choisit son affichage : code et libellé ensemble comme auparavant, le libellé, le code, ou deux colonnes. Le tableau, le tableau croisé, les graphiques, le PDF et l'Excel suivent ce choix, enregistré avec l'analyse ; les deux colonnes valent pour le tableau, les autres gardent alors code et libellé ensemble. Les rapports planifiés conservent code et libellé.
 - **Explorateur : Excel d'une analyse.** Le bouton Excel de l'en-tête exporte le résultat tel qu'affiché, le tableau croisé pour un pivot.
 - **Explorateur : liste des champs.** Tout déplier / tout replier à côté de la recherche, et chaque champ affiche le nom utilisé dans les champs calculés.
 - **Tableaux de bord de l'explorateur : mise en page à la main.** En mode Modifier la disposition, une tuile se déplace par sa poignée et se redimensionne par son coin ; les flèches du clavier font de même.
