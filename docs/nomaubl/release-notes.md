@@ -17,17 +17,18 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
+    <a href="#v2026-11-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-27</span></a>
+    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
     <a href="#v2026-11-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-25</span></a>
     <a href="#v2026-11-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-23</span></a>
     <a href="#v2026-11-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-21</span></a>
     <a href="#v2026-11-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-20</span></a>
-    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (138)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (139)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
       <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
       <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
       <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
@@ -185,6 +186,14 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   </details>
 </div>
 {/* versions:end */}
+
+---
+
+## 2026.11.27.1 — 2026-11-27 \{#v2026-11-27-1\}
+
+### Improvements
+
+- **Readable PDF: modern style.** A PDF template can now be drawn in a modern style: seller and document number at the top, a strip with issue date, due date, period and the amount to pay, seller and buyer side by side with their identifiers aligned, lines kept whole across pages, with their details under the item across the full width and allowances and charges as tags, VAT and payment beside a totals card, notes on the full width, a footer with the page number on every page. Choose it per template with the Classic / Modern switch of the template builder, or take the new factory template `built-in-modern`; sections, options, accent colour and logo are the same, and the wording the modern style adds (seller, contact, email, payment rows, VAT breakdown, page…) is in the template's labels like the rest. With a pale accent colour the text on it is printed dark so it stays readable. Existing templates keep the classic layout, unchanged. A new installation starts on the modern one.
 
 ---
 

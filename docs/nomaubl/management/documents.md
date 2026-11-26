@@ -768,7 +768,7 @@ The **PDF Template** group picks the **PDF layout** applied when this document i
 
 | Field | Description |
 |---|---|
-| **Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the bundled `built-in`. Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
+| **Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the two factory layouts `built-in` (classic) and `built-in-modern` (modern style). Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
 
 The resolution chain at render time is therefore: this field → `global.defaultPdfTemplate` → `built-in`. Every stored invoice carries the document name in `F564231.UHTMPL`, so the PDF generator re-renders on demand against the layout that was active for that document.
 

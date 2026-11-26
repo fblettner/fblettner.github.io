@@ -1,7 +1,7 @@
 ---
 title: PDF Templates
 description: "First-class library of reusable PDF layouts. Each template is a pdf-template resource referenced by documents by name. Edit once, propagate everywhere via a full-screen visual builder — palette of sections on the left, live preview in the centre, inspector with options + custom-block tree editor on the right."
-keywords: [NomaUBL, PDF templates, pdf-template, layout, defaultPdfTemplate, built-in, visual builder, block section, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, custom ERP]
+keywords: [NomaUBL, PDF templates, pdf-template, layout, defaultPdfTemplate, built-in, built-in-modern, classic style, modern style, visual builder, block section, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # PDF Templates
@@ -22,7 +22,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the page
 
 - Sidebar → **Management → PDF Templates**.
-- The page lists every layout in the catalogue. The sidebar entry **`built-in`** is the bundled factory layout — read-only, always present as a safety fallback.
+- The page lists every layout in the catalogue. The entries **`built-in`** and **`built-in-modern`** are the two bundled factory layouts — the same sections drawn in the [classic and the modern style](#style), read-only and always present; `built-in` is the safety fallback.
 - The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the list.
 
 ---
@@ -165,7 +165,7 @@ When NomaUBL renders a PDF for an invoice, it walks a three-step chain to choose
 2. Otherwise, the `defaultPdfTemplate` property on the **`global`** template is used — set from this page via the **Set as default** button.
 3. Otherwise, the bundled **`built-in`** layout is used — always present, never deletable.
 
-The third step is the safety net: a freshly installed environment renders sensible PDFs even before any layout is created.
+The third step is the safety net. A new installation sets `defaultPdfTemplate` to **`built-in-modern`**, so its PDFs come out in the modern style before any layout is created.
 
 ---
 
@@ -177,9 +177,9 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 |---|---|
 | **Open visual builder** | Opens the selected layout in the full-screen [visual builder](#visual-builder) — palette on the left, live preview in the centre, inspector on the right. The primary editing surface. |
 | **Add** | Opens a modal asking for a name and a description. Creates an empty `pdf-template` resource — start by adding sections in the builder. |
-| **Import** | Loads a JSON file produced by another instance (or the *Export* action). Updates the matching template if the name already exists, otherwise creates it. The reserved name `built-in` is rejected. |
-| **Copy** | Duplicates the selected layout under a new name. The fastest way to derive a variant from `built-in` or from an existing customer-specific template. |
-| **Remove** | Deletes the selected layout after a confirmation. Disabled on `built-in`. |
+| **Import** | Loads a JSON file produced by another instance (or the *Export* action). Updates the matching template if the name already exists, otherwise creates it. The reserved names `built-in` and `built-in-modern` are rejected. |
+| **Copy** | Duplicates the selected layout under a new name. The fastest way to derive a variant from `built-in`, `built-in-modern` or from an existing customer-specific template. |
+| **Remove** | Deletes the selected layout after a confirmation. Disabled on the two factory layouts. |
 | **Set as default** | Writes the selected layout's name into `global.defaultPdfTemplate`. Documents without an explicit `pdfTemplate` then resolve to this layout. |
 | **Reset to factory** | Clears `global.defaultPdfTemplate`, restoring the chain to `built-in`. |
 
@@ -187,11 +187,137 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 
 ## The catalogue
 
-The list on the left shows every saved layout plus the bundled `built-in`, each as a card with its name and description.
+The list on the left shows every saved layout plus the two bundled factory layouts, each as a card with its name and description.
 
-- **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
+- **`built-in`** and **`built-in-modern`** — pinned to the top, read-only, marked with a `factory` badge; their description reads *Bundled default PDF template* and *Bundled modern PDF template*. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
 - **Description** — free-text label persisted on the resource. Surfaced both on its card in the list and in the *PDF Template* selector on a document.
+
+---
+
+## Style — classic or modern \{#style\}
+
+A layout is drawn in one of two styles, chosen with the **Style** switch (*Classic* / *Modern*) of the [builder toolbar](#template-settings). The style changes the drawing only: the sections, their options, the labels, the accent colour, the logo and the number and date formats stay the same, so a template switches back and forth without losing anything. Existing templates keep the classic layout; the factory layout **`built-in-modern`** is the modern counterpart of `built-in`, with dates as `dd/MM/yyyy`.
+
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs><marker id="pdfmod-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker></defs>
+  <rect x="300" y="20" width="400" height="580" rx="6" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1"/>
+  <rect x="318" y="40" width="64" height="26" rx="4" fill="#e2e8f0" stroke="none" strokeWidth="1"/>
+  <text x="350" y="57" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">LOGO</text>
+  <text x="682" y="48" fill="#0f766e" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">INVOICE</text>
+  <text x="682" y="70" fill="#0f172a" fontSize="17" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">FA-2026-001234</text>
+  <rect x="318" y="84" width="364" height="40" rx="5" fill="#0f766e" stroke="none" strokeWidth="1"/>
+  <text x="328" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Issue Date</text>
+  <text x="328" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">24/05/2026</text>
+  <text x="419" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Due Date</text>
+  <text x="419" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">23/06/2026</text>
+  <text x="510" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Period</text>
+  <text x="510" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">05/2026</text>
+  <text x="601" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Amount Payable</text>
+  <text x="601" y="115" fill="#ffffff" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">1 500,00 €</text>
+  <rect x="318" y="136" width="178" height="82" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="151" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">SELLER</text>
+  <text x="328" y="166" fill="#0f172a" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">ACME Industries SA</text>
+  <text x="328" y="179" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <text x="328" y="195" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">SIREN  123 456 789</text>
+  <text x="328" y="207" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">VAT number  FR12 123456789</text>
+  <rect x="504" y="136" width="178" height="82" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="514" y="151" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">CUSTOMER</text>
+  <text x="514" y="166" fill="#0f172a" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">Beta SARL</text>
+  <text x="514" y="179" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <text x="514" y="195" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">SIREN  987 654 321</text>
+  <text x="514" y="207" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">VAT number  FR98 987654321</text>
+  <text x="318" y="234" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">Order 4500012 · Buyer Ref. ACH-77</text>
+  <rect x="318" y="244" width="364" height="18" rx="3" fill="#f1f5f9" stroke="none" strokeWidth="1"/>
+  <text x="326" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700">Description</text>
+  <text x="520" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Qty</text>
+  <text x="580" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Unit price</text>
+  <text x="632" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Amount</text>
+  <text x="676" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Tax</text>
+  <text x="326" y="278" fill="#0f172a" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="600">Cargo crates</text>
+  <text x="520" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20</text>
+  <text x="580" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">50,00</text>
+  <text x="632" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">950,00</text>
+  <text x="676" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20 %</text>
+  <text x="326" y="292" fill="#64748b" fontSize="7.2" fontFamily="system-ui, sans-serif">Item code CR-20 · Origin France · Customer line no. 10</text>
+  <rect x="326" y="298" width="70" height="13" rx="6" fill="#ccfbf1" stroke="none" strokeWidth="1"/>
+  <text x="361" y="308" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="600" textAnchor="middle">Discount −5 %</text>
+  <line x1="318" y1="318" x2="682" y2="318" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="326" y="334" fill="#0f172a" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="600">Express shipping</text>
+  <text x="520" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">1</text>
+  <text x="580" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">300,00</text>
+  <text x="632" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">300,00</text>
+  <text x="676" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20 %</text>
+  <text x="326" y="348" fill="#64748b" fontSize="7.2" fontFamily="system-ui, sans-serif">Period 01/05/2026 – 31/05/2026</text>
+  <line x1="318" y1="358" x2="682" y2="358" stroke="#e2e8f0" strokeWidth="1"/>
+  <rect x="318" y="372" width="190" height="46" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="386" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">VAT breakdown</text>
+  <text x="328" y="400" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">S · 20 %   1 250,00   250,00</text>
+  <rect x="318" y="424" width="190" height="46" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="438" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">PAYMENT</text>
+  <text x="328" y="452" fill="#475569" fontSize="7.5" fontFamily="system-ui, sans-serif">Means  Credit transfer</text>
+  <text x="328" y="464" fill="#475569" fontSize="7" fontFamily="ui-monospace, monospace">IBAN  FR76 3000 1007 9412 3456 7890 185</text>
+  <rect x="520" y="372" width="162" height="98" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="530" y="390" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total HT</text>
+  <text x="672" y="390" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">1 250,00</text>
+  <text x="530" y="405" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total Tax</text>
+  <text x="672" y="405" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">250,00</text>
+  <text x="530" y="420" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total TTC</text>
+  <text x="672" y="420" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">1 500,00</text>
+  <rect x="526" y="440" width="150" height="22" rx="4" fill="#0f766e" stroke="none" strokeWidth="1"/>
+  <text x="534" y="455" fill="#ffffff" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700">Amount Payable</text>
+  <text x="670" y="455" fill="#ffffff" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">1 500,00 €</text>
+  <rect x="318" y="482" width="364" height="30" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="501" fill="#475569" fontSize="7.2" fontFamily="system-ui, sans-serif">Payment terms: 30 days net. Late payment penalty: 3 × the legal interest rate.</text>
+  <line x1="318" y1="570" x2="682" y2="570" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="318" y="584" fill="#94a3b8" fontSize="6.5" fontFamily="system-ui, sans-serif">ACME Industries SA  ·  SA  ·  SIREN 123456789  ·  VAT number FR12 123456789</text>
+  <text x="682" y="584" fill="#94a3b8" fontSize="6.5" fontFamily="system-ui, sans-serif" textAnchor="end">FA-2026-001234  ·  Page 1 / 1</text>
+  <rect x="20" y="36" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="52" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Header</text>
+  <text x="30" y="66" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">seller logo · document number</text>
+  <line x1="240" y1="55" x2="316" y2="53" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="86" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="102" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Key facts strip</text>
+  <text x="30" y="116" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dates, period, amount to pay</text>
+  <line x1="240" y1="105" x2="316" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="158" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="174" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Seller and buyer cards</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">identifiers aligned</text>
+  <line x1="240" y1="177" x2="316" y2="177" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="478" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="494" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Notes</text>
+  <text x="30" y="508" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">full width</text>
+  <line x1="240" y1="497" x2="316" y2="497" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="262" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="278" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Lines kept whole</text>
+  <text x="770" y="292" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">never split across pages</text>
+  <line x1="760" y1="281" x2="684" y2="290" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="312" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="328" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Details under the item</text>
+  <text x="770" y="342" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">full width · allowances as tags</text>
+  <line x1="760" y1="331" x2="600" y2="306" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="400" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="416" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">VAT and payment</text>
+  <text x="770" y="430" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">beside the totals card</text>
+  <line x1="760" y1="419" x2="684" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="558" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="574" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Page footer</text>
+  <text x="770" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">legal line · page n / N</text>
+  <line x1="760" y1="577" x2="684" y2="578" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+</svg>
+
+
+In the modern style:
+
+- **Header** — the logo and the document kind and number at the top; the seller's name and address are printed in the seller card below, not repeated here. With no *Parties* section, the header prints them itself, with the seller's identifiers.
+- **Key facts strip** — issue date, due date, period and amount to pay, on the accent colour.
+- **Seller and buyer cards** — side by side, identifiers aligned (SIREN, VAT number, electronic address, tax ID), contact and email; the other references (order, buyer reference…) follow under the cards.
+- **Lines** — a line is never split across two pages; its details (item code, origin, customer line, period…) run under the item across the full width, and line allowances and charges show as tags.
+- **VAT and payment** — a *VAT breakdown* placed just before *Totals* and a *Payment* placed just after it are drawn on the left of a totals card that ends with the amount payable; placed elsewhere, each is drawn on its own.
+- **Notes** — on the full width.
+- **Page footer** — on every page: the seller's legal line (name, legal form, SIREN, VAT number) on the left, the document number and *Page n / N* on the right.
+
+The free-form [`block`](#block-sections--xpath-driven-free-form-composition) sections keep the same drawing in both styles. With a pale accent colour, the text printed on it switches to dark so it stays readable. Every word the modern style adds is one of the template's [labels](#labels).
 
 ---
 
@@ -392,12 +518,13 @@ The centre preview re-renders every keystroke — the iframe stays mounted and u
 
 ---
 
-## Template settings — builder toolbar
+## Template settings — builder toolbar \{#template-settings\}
 
 The builder toolbar carries a few settings applied to the whole layout:
 
 | Setting | What it does |
 |---|---|
+| **Style** | *Classic* or *Modern* — how the sections are drawn; see [Style](#style). A template that never chose keeps *Classic*. |
 | **Accent** | The accent colour for the section titles (CUSTOMER / DELIVERY), the highlighted total, the line-table header underline and the row-highlight background. Enter a 6-digit hex with or without `#`; the soft row-highlight tint is derived automatically. Empty keeps the default blue. |
 | **Date** | The date pattern applied across the PDF — issue, due, period and per-line delivery dates. Choices: `yyyy-MM-dd` (default), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
 | **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally and *Logo width / height (pt)* set the box it is scaled to (ratio kept; blank = 200 × 80 points at most). The builder preview uses the same size as the produced PDF. PNG, JPG and GIF are supported. |
@@ -406,7 +533,7 @@ The builder toolbar carries a few settings applied to the whole layout:
 
 ### Labels \{#labels\}
 
-Every text the PDF generator prints — 46 labels across the document header, parties, lines table, line details, VAT summary, totals and payment — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
+Every text the PDF generator prints — 75 labels across the document header, parties, lines table, line details, VAT summary, totals, payment and page footer, including the words only the modern style prints (seller, contact, email, payment rows, VAT breakdown, page…) — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
 
 - each row shows the label key with an **FR** and an **EN** field; the default wording shows as placeholder, and a blank field keeps it;
 - a **Search…** box and an **Overridden only (N)** filter help find a label; overridden keys are highlighted;
@@ -442,7 +569,7 @@ The page reads and writes via the standard template endpoints — same routes us
 | `POST /api/templates` | Creates a new layout (Add). |
 | `POST /api/templates/{from}/copy/{to}` | Duplicates (Copy). |
 | `PUT /api/templates/{name}` | Saves edits. |
-| `DELETE /api/templates/{name}` | Removes a layout. The reserved `built-in` is rejected. |
+| `DELETE /api/templates/{name}` | Removes a layout. The reserved `built-in` and `built-in-modern` are rejected. |
 | `POST /api/pdf-templates/preview` | Renders an arbitrary `pdfTemplate` JSON against a sample invoice — used by the live preview iframe. |
 | `PUT /api/templates/global` (with `defaultPdfTemplate`) | Behind *Set as default* / *Reset to factory*. |
 
@@ -450,10 +577,10 @@ The page reads and writes via the standard template endpoints — same routes us
 
 ## Tips & best practices
 
-- **Start from `built-in` via Copy.** The factory layout is a solid baseline — derive variants by copying and tuning the toggles instead of starting from an empty template.
+- **Start from a factory layout via Copy.** `built-in` (classic) and `built-in-modern` are solid baselines — derive variants by copying and tuning the toggles instead of starting from an empty template.
 - **One layout, many documents.** For each invoice variant (standard, credit note, recipient receipt …) prefer one shared layout over per-document inline JSON. The benefit is a single edit point when the legal mentions or the column set changes.
 - **Set a default early.** Mark a layout as default before connecting customer-specific documents — every new document then resolves to it implicitly, and the explicit `pdfTemplate` property on a doc template stays reserved for genuine variants.
 - **Use `block` for what presets don't cover.** Custom legal mentions, country-specific footers, structured signature blocks, watermarks — all best modelled as a `block` rather than asked of an existing preset.
 - **Iterate inside the visual builder.** Toggling a section, then watching the centre preview re-render is the fastest way to converge on a layout — the live preview is always visible, no modal to open.
 - **Load a real XML once per session.** The **↑ Load XML sample** button at the top of the builder feeds the picker for every block — load it once and every XPath autocompletion uses your data.
-- **Don't delete `built-in`.** The button stays disabled on it for that reason — it is the safety fallback at the end of the resolution chain.
+- **Don't delete the factory layouts.** The button stays disabled on them for that reason — `built-in` is the safety fallback at the end of the resolution chain.

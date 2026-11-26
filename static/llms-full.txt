@@ -35960,7 +35960,7 @@ The **PDF Template** group picks the **PDF layout** applied when this document i
 
 | Field | Description |
 |---|---|
-| **Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the bundled `built-in`. Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
+| **Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the two factory layouts `built-in` (classic) and `built-in-modern` (modern style). Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
 
 The resolution chain at render time is therefore: this field → `global.defaultPdfTemplate` → `built-in`. Every stored invoice carries the document name in `F564231.UHTMPL`, so the PDF generator re-renders on demand against the layout that was active for that document.
 
@@ -36042,7 +36042,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the page
 
 - Sidebar → **Management → PDF Templates**.
-- The page lists every layout in the catalogue. The sidebar entry **`built-in`** is the bundled factory layout — read-only, always present as a safety fallback.
+- The page lists every layout in the catalogue. The entries **`built-in`** and **`built-in-modern`** are the two bundled factory layouts — the same sections drawn in the [classic and the modern style](#style), read-only and always present; `built-in` is the safety fallback.
 - The current default layout — i.e. what a document with no explicit `pdfTemplate` resolves to — is marked with a yellow ★ in the list.
 
 ---
@@ -36061,7 +36061,7 @@ When NomaUBL renders a PDF for an invoice, it walks a three-step chain to choose
 2. Otherwise, the `defaultPdfTemplate` property on the **`global`** template is used — set from this page via the **Set as default** button.
 3. Otherwise, the bundled **`built-in`** layout is used — always present, never deletable.
 
-The third step is the safety net: a freshly installed environment renders sensible PDFs even before any layout is created.
+The third step is the safety net. A new installation sets `defaultPdfTemplate` to **`built-in-modern`**, so its PDFs come out in the modern style before any layout is created.
 
 ---
 
@@ -36073,9 +36073,9 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 |---|---|
 | **Open visual builder** | Opens the selected layout in the full-screen [visual builder](#visual-builder) — palette on the left, live preview in the centre, inspector on the right. The primary editing surface. |
 | **Add** | Opens a modal asking for a name and a description. Creates an empty `pdf-template` resource — start by adding sections in the builder. |
-| **Import** | Loads a JSON file produced by another instance (or the *Export* action). Updates the matching template if the name already exists, otherwise creates it. The reserved name `built-in` is rejected. |
-| **Copy** | Duplicates the selected layout under a new name. The fastest way to derive a variant from `built-in` or from an existing customer-specific template. |
-| **Remove** | Deletes the selected layout after a confirmation. Disabled on `built-in`. |
+| **Import** | Loads a JSON file produced by another instance (or the *Export* action). Updates the matching template if the name already exists, otherwise creates it. The reserved names `built-in` and `built-in-modern` are rejected. |
+| **Copy** | Duplicates the selected layout under a new name. The fastest way to derive a variant from `built-in`, `built-in-modern` or from an existing customer-specific template. |
+| **Remove** | Deletes the selected layout after a confirmation. Disabled on the two factory layouts. |
 | **Set as default** | Writes the selected layout's name into `global.defaultPdfTemplate`. Documents without an explicit `pdfTemplate` then resolve to this layout. |
 | **Reset to factory** | Clears `global.defaultPdfTemplate`, restoring the chain to `built-in`. |
 
@@ -36083,11 +36083,29 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 
 ## The catalogue
 
-The list on the left shows every saved layout plus the bundled `built-in`, each as a card with its name and description.
+The list on the left shows every saved layout plus the two bundled factory layouts, each as a card with its name and description.
 
-- **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
+- **`built-in`** and **`built-in-modern`** — pinned to the top, read-only, marked with a `factory` badge; their description reads *Bundled default PDF template* and *Bundled modern PDF template*. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
 - **Description** — free-text label persisted on the resource. Surfaced both on its card in the list and in the *PDF Template* selector on a document.
+
+---
+
+## Style — classic or modern \{#style\}
+
+A layout is drawn in one of two styles, chosen with the **Style** switch (*Classic* / *Modern*) of the [builder toolbar](#template-settings). The style changes the drawing only: the sections, their options, the labels, the accent colour, the logo and the number and date formats stay the same, so a template switches back and forth without losing anything. Existing templates keep the classic layout; the factory layout **`built-in-modern`** is the modern counterpart of `built-in`, with dates as `dd/MM/yyyy`.
+
+In the modern style:
+
+- **Header** — the logo and the document kind and number at the top; the seller's name and address are printed in the seller card below, not repeated here. With no *Parties* section, the header prints them itself, with the seller's identifiers.
+- **Key facts strip** — issue date, due date, period and amount to pay, on the accent colour.
+- **Seller and buyer cards** — side by side, identifiers aligned (SIREN, VAT number, electronic address, tax ID), contact and email; the other references (order, buyer reference…) follow under the cards.
+- **Lines** — a line is never split across two pages; its details (item code, origin, customer line, period…) run under the item across the full width, and line allowances and charges show as tags.
+- **VAT and payment** — a *VAT breakdown* placed just before *Totals* and a *Payment* placed just after it are drawn on the left of a totals card that ends with the amount payable; placed elsewhere, each is drawn on its own.
+- **Notes** — on the full width.
+- **Page footer** — on every page: the seller's legal line (name, legal form, SIREN, VAT number) on the left, the document number and *Page n / N* on the right.
+
+The free-form [`block`](#block-sections--xpath-driven-free-form-composition) sections keep the same drawing in both styles. With a pale accent colour, the text printed on it switches to dark so it stays readable. Every word the modern style adds is one of the template's [labels](#labels).
 
 ---
 
@@ -36188,12 +36206,13 @@ The centre preview re-renders every keystroke — the iframe stays mounted and u
 
 ---
 
-## Template settings — builder toolbar
+## Template settings — builder toolbar \{#template-settings\}
 
 The builder toolbar carries a few settings applied to the whole layout:
 
 | Setting | What it does |
 |---|---|
+| **Style** | *Classic* or *Modern* — how the sections are drawn; see [Style](#style). A template that never chose keeps *Classic*. |
 | **Accent** | The accent colour for the section titles (CUSTOMER / DELIVERY), the highlighted total, the line-table header underline and the row-highlight background. Enter a 6-digit hex with or without `#`; the soft row-highlight tint is derived automatically. Empty keeps the default blue. |
 | **Date** | The date pattern applied across the PDF — issue, due, period and per-line delivery dates. Choices: `yyyy-MM-dd` (default), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
 | **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally and *Logo width / height (pt)* set the box it is scaled to (ratio kept; blank = 200 × 80 points at most). The builder preview uses the same size as the produced PDF. PNG, JPG and GIF are supported. |
@@ -36202,7 +36221,7 @@ The builder toolbar carries a few settings applied to the whole layout:
 
 ### Labels \{#labels\}
 
-Every text the PDF generator prints — 46 labels across the document header, parties, lines table, line details, VAT summary, totals and payment — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
+Every text the PDF generator prints — 75 labels across the document header, parties, lines table, line details, VAT summary, totals, payment and page footer, including the words only the modern style prints (seller, contact, email, payment rows, VAT breakdown, page…) — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
 
 - each row shows the label key with an **FR** and an **EN** field; the default wording shows as placeholder, and a blank field keeps it;
 - a **Search…** box and an **Overridden only (N)** filter help find a label; overridden keys are highlighted;
@@ -36238,7 +36257,7 @@ The page reads and writes via the standard template endpoints — same routes us
 | `POST /api/templates` | Creates a new layout (Add). |
 | `POST /api/templates/{from}/copy/{to}` | Duplicates (Copy). |
 | `PUT /api/templates/{name}` | Saves edits. |
-| `DELETE /api/templates/{name}` | Removes a layout. The reserved `built-in` is rejected. |
+| `DELETE /api/templates/{name}` | Removes a layout. The reserved `built-in` and `built-in-modern` are rejected. |
 | `POST /api/pdf-templates/preview` | Renders an arbitrary `pdfTemplate` JSON against a sample invoice — used by the live preview iframe. |
 | `PUT /api/templates/global` (with `defaultPdfTemplate`) | Behind *Set as default* / *Reset to factory*. |
 
@@ -36246,13 +36265,13 @@ The page reads and writes via the standard template endpoints — same routes us
 
 ## Tips & best practices
 
-- **Start from `built-in` via Copy.** The factory layout is a solid baseline — derive variants by copying and tuning the toggles instead of starting from an empty template.
+- **Start from a factory layout via Copy.** `built-in` (classic) and `built-in-modern` are solid baselines — derive variants by copying and tuning the toggles instead of starting from an empty template.
 - **One layout, many documents.** For each invoice variant (standard, credit note, recipient receipt …) prefer one shared layout over per-document inline JSON. The benefit is a single edit point when the legal mentions or the column set changes.
 - **Set a default early.** Mark a layout as default before connecting customer-specific documents — every new document then resolves to it implicitly, and the explicit `pdfTemplate` property on a doc template stays reserved for genuine variants.
 - **Use `block` for what presets don't cover.** Custom legal mentions, country-specific footers, structured signature blocks, watermarks — all best modelled as a `block` rather than asked of an existing preset.
 - **Iterate inside the visual builder.** Toggling a section, then watching the centre preview re-render is the fastest way to converge on a layout — the live preview is always visible, no modal to open.
 - **Load a real XML once per session.** The **↑ Load XML sample** button at the top of the builder feeds the picker for every block — load it once and every XPath autocompletion uses your data.
-- **Don't delete `built-in`.** The button stays disabled on it for that reason — it is the safety fallback at the end of the resolution chain.
+- **Don't delete the factory layouts.** The button stays disabled on them for that reason — `built-in` is the safety fallback at the end of the resolution chain.
 
 ---
 
@@ -41931,6 +41950,14 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   
 
 {/* versions:end */}
+
+---
+
+## 2026.11.27.1 — 2026-11-27 \{#v2026-11-27-1\}
+
+### Improvements
+
+- **Readable PDF: modern style.** A PDF template can now be drawn in a modern style: seller and document number at the top, a strip with issue date, due date, period and the amount to pay, seller and buyer side by side with their identifiers aligned, lines kept whole across pages, with their details under the item across the full width and allowances and charges as tags, VAT and payment beside a totals card, notes on the full width, a footer with the page number on every page. Choose it per template with the Classic / Modern switch of the template builder, or take the new factory template `built-in-modern`; sections, options, accent colour and logo are the same, and the wording the modern style adds (seller, contact, email, payment rows, VAT breakdown, page…) is in the template's labels like the rest. With a pale accent colour the text on it is printed dark so it stays readable. Existing templates keep the classic layout, unchanged. A new installation starts on the modern one.
 
 ---
 

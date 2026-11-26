@@ -17,17 +17,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 <div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
     <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
+    <a href="#v2026-11-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.11.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-27</span></a>
+    <a href="#v2026-11-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-26</span></a>
     <a href="#v2026-11-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-25</span></a>
     <a href="#v2026-11-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-23</span></a>
     <a href="#v2026-11-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-21</span></a>
     <a href="#v2026-11-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-20</span></a>
-    <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
   </div>
   <details style={{marginTop: '12px'}}>
-    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (138)</summary>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>Toutes les versions (139)</summary>
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
       <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-11</span>
+      <a href="#v2026-11-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-19</span></a>
       <a href="#v2026-11-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-18</span></a>
       <a href="#v2026-11-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-16</span></a>
       <a href="#v2026-11-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.11.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-11-13</span></a>
@@ -185,6 +186,14 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   </details>
 </div>
 {/* versions:end */}
+
+---
+
+## 2026.11.27.1 — 2026-11-27 \{#v2026-11-27-1\}
+
+### Améliorations
+
+- **PDF lisible : style moderne.** Un modèle PDF peut désormais être dessiné dans un style moderne : vendeur et numéro du document en tête, un bandeau avec la date d'émission, l'échéance, la période et le net à payer, vendeur et client côte à côte avec leurs identifiants alignés, lignes gardées entières d'une page à l'autre, avec leurs détails sous l'article sur toute la largeur et remises et charges en étiquettes, TVA et paiement à côté d'une carte des totaux, mentions sur toute la largeur, un pied de page numéroté sur chaque page. Il se choisit par modèle avec le sélecteur Classique / Moderne du constructeur de modèles, ou en prenant le nouveau modèle d'usine `built-in-modern` ; sections, options, couleur d'accent et logo restent les mêmes, et les libellés propres au style moderne (vendeur, contact, email, lignes du paiement, détail de la TVA, page…) se règlent dans les libellés du modèle comme les autres. Avec une couleur d'accent claire, le texte posé dessus est imprimé en foncé pour rester lisible. Les modèles existants conservent la mise en page classique, inchangée. Une nouvelle installation démarre sur le modèle moderne.
 
 ---
 

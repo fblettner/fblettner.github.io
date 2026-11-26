@@ -1,7 +1,7 @@
 ---
 title: Modèles PDF
 description: "Bibliothèque de mises en page PDF réutilisables. Chaque modèle est une ressource pdf-template référencée par son nom depuis les documents. Édition unique, propagation à l'ensemble via un éditeur visuel plein écran — palette de sections à gauche, aperçu en direct au centre, inspecteur avec options + éditeur arborescent des blocs personnalisés à droite."
-keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate, built-in, éditeur visuel, section block, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, ERP personnalisé]
+keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate, built-in, built-in-modern, style classique, style moderne, éditeur visuel, section block, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Modèles PDF
@@ -22,7 +22,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 ## Accès à la page
 
 - Barre latérale → **Gestion → Modèles PDF**.
-- La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme valeur de repli.
+- La page liste toutes les mises en page du catalogue. Les entrées **`built-in`** et **`built-in-modern`** sont les deux mises en page livrées — les mêmes sections dessinées dans le [style classique et le style moderne](#style), en lecture seule et toujours présentes ; `built-in` sert de valeur de repli.
 - La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la liste.
 
 ---
@@ -165,7 +165,7 @@ Au moment du rendu PDF d'une facture, NomaUBL parcourt une chaîne en trois temp
 2. À défaut, c'est la propriété `defaultPdfTemplate` du modèle **`global`** qui s'applique — réglée sur cette page via le bouton *Définir par défaut*.
 3. À défaut, la mise en page intégrée **`built-in`** s'applique — toujours présente, jamais supprimable.
 
-Cette troisième étape est la valeur de repli : un environnement tout juste installé produit des PDF cohérents avant même qu'une mise en page soit créée.
+Cette troisième étape sert de valeur de repli. Une nouvelle installation renseigne `defaultPdfTemplate` avec **`built-in-modern`** : ses PDF sortent dans le style moderne avant même la création d'une mise en page.
 
 ---
 
@@ -177,9 +177,9 @@ La barre d'actions couvre le cycle de vie du catalogue et la désignation du dé
 |---|---|
 | **Ouvrir l'éditeur visuel** | Ouvre la mise en page sélectionnée dans l'[éditeur visuel](#visual-builder) plein écran — palette à gauche, aperçu en direct au centre, inspecteur à droite. Surface d'édition principale. |
 | **Ajouter** | Ouvre une modale qui demande un nom et une description. Crée une ressource `pdf-template` vide — l'ajout des sections se fait ensuite dans l'éditeur visuel. |
-| **Importer** | Charge un fichier JSON produit par une autre instance (ou par l'action *Exporter*). Met à jour le modèle correspondant si le nom existe déjà, sinon le crée. Le nom réservé `built-in` est rejeté. |
-| **Copier** | Duplique la mise en page sélectionnée sous un nouveau nom. La méthode la plus rapide pour dériver une variante à partir de `built-in` ou d'un modèle existant spécifique à un client. |
-| **Supprimer** | Supprime la mise en page sélectionnée après confirmation. Bouton désactivé sur `built-in`. |
+| **Importer** | Charge un fichier JSON produit par une autre instance (ou par l'action *Exporter*). Met à jour le modèle correspondant si le nom existe déjà, sinon le crée. Les noms réservés `built-in` et `built-in-modern` sont rejetés. |
+| **Copier** | Duplique la mise en page sélectionnée sous un nouveau nom. La méthode la plus rapide pour dériver une variante à partir de `built-in`, de `built-in-modern` ou d'un modèle existant spécifique à un client. |
+| **Supprimer** | Supprime la mise en page sélectionnée après confirmation. Bouton désactivé sur les deux mises en page livrées. |
 | **Définir par défaut** | Enregistre le nom de la mise en page sélectionnée dans `global.defaultPdfTemplate`. Tout document sans `pdfTemplate` explicite utilise alors cette mise en page. |
 | **Remettre par défaut** | Vide `global.defaultPdfTemplate`, ce qui ramène la résolution sur `built-in`. |
 
@@ -187,11 +187,137 @@ La barre d'actions couvre le cycle de vie du catalogue et la désignation du dé
 
 ## Le catalogue
 
-La liste de gauche affiche toutes les mises en page enregistrées, plus la `built-in` livrée, chacune sous forme de carte avec son nom et sa description.
+La liste de gauche affiche toutes les mises en page enregistrées, plus les deux mises en page livrées, chacune sous forme de carte avec son nom et sa description.
 
-- **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
+- **`built-in`** et **`built-in-modern`** — épinglées en haut, en lecture seule, marquées d'un badge `factory` ; leur description est *Bundled default PDF template* et *Bundled modern PDF template*. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
 - **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
 - **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois sur sa carte dans la liste et dans le sélecteur *PDF Template* d'un document.
+
+---
+
+## Style — classique ou moderne \{#style\}
+
+Une mise en page est dessinée dans l'un des deux styles, au choix du switch **Style** (*Classic* / *Modern*) de la [barre du constructeur](#template-settings). Le style ne modifie que le dessin : sections, options, libellés, couleur d'accent, logo et formats des nombres et des dates restent identiques, si bien qu'un modèle passe d'un style à l'autre sans rien perdre. Les modèles existants conservent la mise en page classique ; la mise en page livrée **`built-in-modern`** est l'équivalent moderne de `built-in`, avec des dates au format `dd/MM/yyyy`.
+
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs><marker id="pdfmod-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker></defs>
+  <rect x="300" y="20" width="400" height="580" rx="6" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1"/>
+  <rect x="318" y="40" width="64" height="26" rx="4" fill="#e2e8f0" stroke="none" strokeWidth="1"/>
+  <text x="350" y="57" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">LOGO</text>
+  <text x="682" y="48" fill="#0f766e" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">FACTURE</text>
+  <text x="682" y="70" fill="#0f172a" fontSize="17" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">FA-2026-001234</text>
+  <rect x="318" y="84" width="364" height="40" rx="5" fill="#0f766e" stroke="none" strokeWidth="1"/>
+  <text x="328" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Date d'émission</text>
+  <text x="328" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">24/05/2026</text>
+  <text x="419" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Date d'échéance</text>
+  <text x="419" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">23/06/2026</text>
+  <text x="510" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Période</text>
+  <text x="510" y="115" fill="#ffffff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">05/2026</text>
+  <text x="601" y="99" fill="#ccfbf1" fontSize="7" fontFamily="system-ui, sans-serif">Net à payer</text>
+  <text x="601" y="115" fill="#ffffff" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">1 500,00 €</text>
+  <rect x="318" y="136" width="178" height="82" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="151" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">VENDEUR</text>
+  <text x="328" y="166" fill="#0f172a" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">ACME Industries SA</text>
+  <text x="328" y="179" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <text x="328" y="195" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">SIREN  123 456 789</text>
+  <text x="328" y="207" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">N° TVA  FR12 123456789</text>
+  <rect x="504" y="136" width="178" height="82" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="514" y="151" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">CLIENT</text>
+  <text x="514" y="166" fill="#0f172a" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">Beta SARL</text>
+  <text x="514" y="179" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <text x="514" y="195" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">SIREN  987 654 321</text>
+  <text x="514" y="207" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">N° TVA  FR98 987654321</text>
+  <text x="318" y="234" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">Commande 4500012 · Réf. acheteur ACH-77</text>
+  <rect x="318" y="244" width="364" height="18" rx="3" fill="#f1f5f9" stroke="none" strokeWidth="1"/>
+  <text x="326" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700">Description</text>
+  <text x="520" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Qté</text>
+  <text x="580" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Prix unitaire</text>
+  <text x="632" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">Montant</text>
+  <text x="676" y="256" fill="#334155" fontSize="7.5" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">TVA</text>
+  <text x="326" y="278" fill="#0f172a" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="600">Caisses de transport</text>
+  <text x="520" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20</text>
+  <text x="580" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">50,00</text>
+  <text x="632" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">950,00</text>
+  <text x="676" y="278" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20 %</text>
+  <text x="326" y="292" fill="#64748b" fontSize="7.2" fontFamily="system-ui, sans-serif">Code article CR-20 · Origine France · N° ligne client 10</text>
+  <rect x="326" y="298" width="70" height="13" rx="6" fill="#ccfbf1" stroke="none" strokeWidth="1"/>
+  <text x="361" y="308" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="600" textAnchor="middle">Remise −5 %</text>
+  <line x1="318" y1="318" x2="682" y2="318" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="326" y="334" fill="#0f172a" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="600">Livraison express</text>
+  <text x="520" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">1</text>
+  <text x="580" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">300,00</text>
+  <text x="632" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">300,00</text>
+  <text x="676" y="334" fill="#334155" fontSize="8.5" fontFamily="system-ui, sans-serif" textAnchor="end">20 %</text>
+  <text x="326" y="348" fill="#64748b" fontSize="7.2" fontFamily="system-ui, sans-serif">Période 01/05/2026 – 31/05/2026</text>
+  <line x1="318" y1="358" x2="682" y2="358" stroke="#e2e8f0" strokeWidth="1"/>
+  <rect x="318" y="372" width="190" height="46" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="386" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">Détail de la TVA</text>
+  <text x="328" y="400" fill="#475569" fontSize="7.5" fontFamily="ui-monospace, monospace">S · 20 %   1 250,00   250,00</text>
+  <rect x="318" y="424" width="190" height="46" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="438" fill="#0f766e" fontSize="7" fontFamily="system-ui, sans-serif" fontWeight="700">PAIEMENT</text>
+  <text x="328" y="452" fill="#475569" fontSize="7.5" fontFamily="system-ui, sans-serif">Mode  Virement</text>
+  <text x="328" y="464" fill="#475569" fontSize="7" fontFamily="ui-monospace, monospace">IBAN  FR76 3000 1007 9412 3456 7890 185</text>
+  <rect x="520" y="372" width="162" height="98" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="530" y="390" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total HT</text>
+  <text x="672" y="390" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">1 250,00</text>
+  <text x="530" y="405" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total TVA</text>
+  <text x="672" y="405" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">250,00</text>
+  <text x="530" y="420" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Total TTC</text>
+  <text x="672" y="420" fill="#334155" fontSize="8" fontFamily="system-ui, sans-serif" textAnchor="end">1 500,00</text>
+  <rect x="526" y="440" width="150" height="22" rx="4" fill="#0f766e" stroke="none" strokeWidth="1"/>
+  <text x="534" y="455" fill="#ffffff" fontSize="8" fontFamily="system-ui, sans-serif" fontWeight="700">Net à payer</text>
+  <text x="670" y="455" fill="#ffffff" fontSize="9" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="end">1 500,00 €</text>
+  <rect x="318" y="482" width="364" height="30" rx="5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="328" y="501" fill="#475569" fontSize="7.2" fontFamily="system-ui, sans-serif">Conditions de paiement : 30 jours net. Pénalités de retard : 3 fois le taux légal.</text>
+  <line x1="318" y1="570" x2="682" y2="570" stroke="#e2e8f0" strokeWidth="1"/>
+  <text x="318" y="584" fill="#94a3b8" fontSize="6.5" fontFamily="system-ui, sans-serif">ACME Industries SA  ·  SA  ·  SIREN 123456789  ·  N° TVA FR12 123456789</text>
+  <text x="682" y="584" fill="#94a3b8" fontSize="6.5" fontFamily="system-ui, sans-serif" textAnchor="end">FA-2026-001234  ·  Page 1 / 1</text>
+  <rect x="20" y="36" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="52" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">En-tête</text>
+  <text x="30" y="66" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">logo du vendeur · numéro</text>
+  <line x1="240" y1="55" x2="316" y2="53" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="86" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="102" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Bandeau des repères</text>
+  <text x="30" y="116" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dates, période, net à payer</text>
+  <line x1="240" y1="105" x2="316" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="158" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="174" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Cartes vendeur et client</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">identifiants alignés</text>
+  <line x1="240" y1="177" x2="316" y2="177" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="20" y="478" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="494" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Notes</text>
+  <text x="30" y="508" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur toute la largeur</text>
+  <line x1="240" y1="497" x2="316" y2="497" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="262" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="278" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Lignes entières</text>
+  <text x="770" y="292" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">jamais coupées entre deux pages</text>
+  <line x1="760" y1="281" x2="684" y2="290" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="312" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="328" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Détails sous l'article</text>
+  <text x="770" y="342" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pleine largeur · remises en étiquettes</text>
+  <line x1="760" y1="331" x2="600" y2="306" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="400" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="416" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">TVA et paiement</text>
+  <text x="770" y="430" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à côté des totaux</text>
+  <line x1="760" y1="419" x2="684" y2="420" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+  <rect x="760" y="558" width="220" height="38" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="574" fill="currentColor" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">Pied de page</text>
+  <text x="770" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mentions légales · page n / N</text>
+  <line x1="760" y1="577" x2="684" y2="578" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdfmod-arrow)"/>
+</svg>
+
+
+Dans le style moderne :
+
+- **En-tête** — le logo, puis la nature et le numéro du document en haut ; le nom et l'adresse du vendeur figurent dans sa carte, plus bas, sans répétition. En l'absence de section *Parties*, l'en-tête les imprime lui-même, avec les identifiants du vendeur.
+- **Bandeau des repères** — date d'émission, date d'échéance, période et net à payer, sur la couleur d'accent.
+- **Cartes vendeur et client** — côte à côte, identifiants alignés (SIREN, n° de TVA, adresse électronique, n° fiscal), contact et e-mail ; les autres références (commande, référence acheteur…) suivent sous les cartes.
+- **Lignes** — une ligne n'est jamais coupée entre deux pages ; son détail (code article, origine, ligne client, période…) court sous l'article sur toute la largeur, et les remises et frais de ligne s'affichent en étiquettes.
+- **TVA et paiement** — un *Détail de la TVA* placé juste avant les *Totaux* et un *Paiement* placé juste après s'impriment à gauche d'un encadré des totaux qui se termine par le net à payer ; placés ailleurs, chacun s'imprime seul.
+- **Notes** — sur toute la largeur.
+- **Pied de page** — sur chaque page : la mention légale du vendeur (nom, forme juridique, SIREN, n° de TVA) à gauche, le numéro du document et *Page n / N* à droite.
+
+Les sections libres [`block`](#sections-block--composition-libre-pilotée-par-xpath) gardent le même dessin dans les deux styles. Sur une couleur d'accent claire, le texte imprimé dessus passe en foncé pour rester lisible. Chaque mot ajouté par le style moderne fait partie des [libellés](#libelles) du modèle.
 
 ---
 
@@ -393,12 +519,13 @@ L'aperçu au centre se regénère à chaque frappe — l'iframe reste montée et
 
 ---
 
-## Réglages du modèle — barre du constructeur
+## Réglages du modèle — barre du constructeur \{#template-settings\}
 
 La barre du constructeur porte quelques réglages appliqués à toute la mise en page :
 
 | Réglage | Effet |
 |---|---|
+| **Style** | *Classic* ou *Modern* — le dessin des sections ; voir [Style](#style). Un modèle sans choix explicite reste en *Classic*. |
 | **Accent** | La couleur d'accent des titres de section (CLIENT / LIVRAISON), du total mis en évidence, du soulignement de l'en-tête du tableau de lignes et du fond des lignes surlignées. Saisissez un hexa à 6 chiffres avec ou sans `#` ; la teinte de fond est dérivée automatiquement. Vide = bleu par défaut. |
 | **Date** | Le format de date appliqué dans tout le PDF — dates d'émission, d'échéance, de période et de livraison par ligne. Valeurs : `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
 | **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement et où *Logo width / height (pt)* fixent le cadre de mise à l'échelle (proportions conservées ; vide = 200 × 80 points au plus). L'aperçu du constructeur utilise la même taille que le PDF produit. PNG, JPG et GIF sont pris en charge. |
@@ -407,7 +534,7 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 
 ### Libellés \{#libelles\}
 
-Tous les textes imprimés par le générateur PDF — 46 libellés répartis entre l'en-tête du document, les parties, le tableau des lignes, le détail des lignes, le récapitulatif TVA, les totaux et le paiement — peuvent être remplacés **par modèle PDF et par langue**. Ouvrir **Labels** dans le groupe *Template* du constructeur :
+Tous les textes imprimés par le générateur PDF — 75 libellés répartis entre l'en-tête du document, les parties, le tableau des lignes, le détail des lignes, le récapitulatif TVA, les totaux, le paiement et le pied de page, y compris les mots propres au style moderne (vendeur, contact, e-mail, lignes du paiement, détail de la TVA, page…) — peuvent être remplacés **par modèle PDF et par langue**. Ouvrir **Labels** dans le groupe *Template* du constructeur :
 
 - chaque ligne affiche la clé du libellé avec un champ **FR** et un champ **EN** ; le texte par défaut s'affiche en indication, et un champ laissé vide le conserve ;
 - une zone **Search…** et un filtre **Overridden only (N)** aident à retrouver un libellé ; les clés remplacées sont mises en évidence ;
@@ -443,7 +570,7 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 | `POST /api/templates` | Crée une mise en page (Add). |
 | `POST /api/templates/{from}/copy/{to}` | Duplique (Copy). |
 | `PUT /api/templates/{nom}` | Enregistre les modifications. |
-| `DELETE /api/templates/{nom}` | Supprime une mise en page. Le nom réservé `built-in` est rejeté. |
+| `DELETE /api/templates/{nom}` | Supprime une mise en page. Les noms réservés `built-in` et `built-in-modern` sont rejetés. |
 | `POST /api/pdf-templates/preview` | Rend un JSON `pdfTemplate` arbitraire face à une facture d'exemple — utilisé par l'iframe d'aperçu. |
 | `PUT /api/templates/global` (avec `defaultPdfTemplate`) | Backend des actions *Set as default* / *Reset to factory*. |
 
@@ -451,10 +578,10 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 
 ## Conseils & bonnes pratiques
 
-- **Partir de `built-in` via Copier.** La mise en page livrée est une base solide — préférer la dériver par copie et ajustement de bascules plutôt que de partir d'un modèle vide.
+- **Partir d'une mise en page livrée via Copier.** `built-in` (classique) et `built-in-modern` sont des bases solides — préférer les dériver par copie et ajustement de bascules plutôt que de partir d'un modèle vide.
 - **Un seul modèle, plusieurs documents.** Pour chaque variante de facture (standard, avoir, reçu destinataire …), privilégier un modèle partagé plutôt qu'un JSON inline par document. Le bénéfice : un point d'édition unique quand les mentions légales ou le jeu de colonnes évoluent.
 - **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des documents spécifiques aux clients — chaque nouveau document utilise alors ce défaut implicitement, et la propriété `pdfTemplate` explicite reste réservée aux vraies variantes.
 - **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une section prédéfinie.
 - **Itérer dans l'éditeur visuel.** Basculer une section et observer l'aperçu au centre se regénérer est le moyen le plus rapide d'arriver à une mise en page — l'aperçu en direct est toujours visible, pas de modale à ouvrir.
 - **Charger une vraie facture une fois par session.** Le bouton **↑ Charger XML** en haut de l'éditeur alimente le sélecteur de chaque bloc — chargement unique, et chaque auto-complétion XPath utilise vos données.
-- **Ne pas supprimer `built-in`.** Le bouton est désactivé sur cette entrée pour cette raison — c'est la valeur de repli au bout de la chaîne de résolution.
+- **Ne pas supprimer les mises en page livrées.** Le bouton est désactivé sur ces entrées pour cette raison — `built-in` est la valeur de repli au bout de la chaîne de résolution.

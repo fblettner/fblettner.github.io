@@ -770,7 +770,7 @@ Le groupe **PDF Template** désigne la **mise en page PDF** appliquée au rendu 
 
 | Champ | Description |
 |---|---|
-| **Template** | Liste déroulante qui regroupe toutes les mises en page enregistrées (les ressources `pdf-template` issues de *Modèles PDF*) et la mise en page livrée `built-in`. Laisser vide pour utiliser le défaut global (`global.defaultPdfTemplate`) ; champ vide et défaut global vide ramènent à `built-in`. |
+| **Template** | Liste déroulante qui regroupe toutes les mises en page enregistrées (les ressources `pdf-template` issues de *Modèles PDF*) et les deux mises en page livrées `built-in` (classique) et `built-in-modern` (style moderne). Laisser vide pour utiliser le défaut global (`global.defaultPdfTemplate`) ; champ vide et défaut global vide ramènent à `built-in`. |
 
 La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture enregistrée porte le nom du document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de la produire de nouveau à la demande avec la mise en page active pour ce document.
 
