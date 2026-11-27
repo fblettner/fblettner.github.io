@@ -447,6 +447,14 @@ Ces tâches s'adressent directement aux serveurs JD Edwards : Server Manager pou
 
 ---
 
+### `nomajde-platform-reading` \{#nomajde-platform-reading\}
+
+**Lecture anticipée de la plateforme.** Chaque étape exécute une lecture de la [Synthèse de la plateforme](../nomajde/synthesis.md) ou de l'une de ses pages et en conserve la réponse : ces pages s'ouvrent aussitôt, avec l'heure de la lecture ; leur bouton *Relire* interroge toujours la plateforme en direct. Étapes : `ARCHITECTURE`, `SERVERS`, `PERFORMANCE`, `DATABASE_INSTANCE`, `DATABASE_TABLESPACES`, `DATABASE_REDO`, `DATABASE_ACTIVITY`, `DATABASE_SESSIONS`, `DATABASE_OBJECTS`, `DATABASE_SIZE`, `CAPACITY` (30 jours), `HISTORY` (90 jours), `SIZES`, `PROPOSALS`. L'échec d'une étape n'interrompt pas les suivantes. Lecture seule côté JD Edwards.
+
+**Planification** — `0 6 * * *` (Europe/Paris), `enabled = false` : l'activer évite toute attente à la première personne qui ouvre ces pages le matin.
+
+---
+
 ### `nomajde-ais-report` \{#nomajde-ais-report\}
 
 **Lancement d'un état JD Edwards (UBE) au travers d'AIS, avec attente de sa fin.** Étape `nomajde.ais_steps:j_ais_report` sur le connecteur `ais_connection`.
@@ -501,7 +509,7 @@ Conditions, options de traitement, paramètres, entrées, étapes et valeurs de 
 
 ### `nomajde-jde-tests` \{#nomajde-jde-tests\}
 
-**Joue une suite de tests sur JD Edwards** et échoue quand un cas échoue ou diffère de la référence. Étape `tests` — `nomajde.ais_steps:j_ais_tests`, par le connecteur `ais_connection`.
+**Joue une suite de tests sur JD Edwards** et échoue quand un cas échoue ou diffère de la référence. Étape `tests` — `nomajde.ais_steps:j_ais_tests`, par le connecteur propre à la suite : `ais_connection` pour les suites AIS, `jde_security` pour la suite de sécurité.
 
 | Paramètre | Défaut | Rôle |
 |---|---|---|
@@ -558,6 +566,7 @@ Paramètres de `nomajde-upgrade-collect` :
 | Références croisées | `JDE_XREF_APPS`, `JDE_XREF_REPORTS`, `JDE_XREF_SPECS` — applications, états, vues métier | Non |
 | Objets définis par l'utilisateur | `JDE_UDO` — l'inventaire des objets définis par l'utilisateur (F9860W, F9861W) et ce que chacun nomme — pages composites, pages E1, orchestrations et leurs étapes, demandes de service, notifications, dispositions CafeOne, états One View, recherches, processus, extensions d'écran, listes de surveillance ; demande **JDE_UDO_OL** dans *Paramètres → Global → JD Edwards* | Non |
 | Vues | `REFRESH_VIEWS` | Oui |
+| Réponses conservées | `KEEP_SOD_REVIEW`, `KEEP_WHAT_TO_FIX`, `KEEP_LICENSING_REVIEW` — préparent les réponses de la [Revue de la séparation des tâches](../nomasx1/sod-review.md), de la page [À corriger](../nomasx1/security-analysis.md) et de la [Revue des licences](../nomasx1/licensing-review.md), qui s'ouvrent ainsi aussitôt ; leur échec ne fait jamais échouer la collecte | Oui |
 
 **Préréglages**
 

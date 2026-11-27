@@ -36,7 +36,7 @@ Columns not matched are ignored.
 
 The **Import from Excel** dialog asks for the file and for what to do with **existing rows**: *Update or insert*, *Insert only* or *Update only*. **Check** runs two passes:
 
-1. **Screen rules** — every value against its column: a lookup code must exist, an enum value must be allowed, a Boolean must be one of the two values.
+1. **Screen rules** — every value against its column: a lookup code must exist, an enum value must be allowed, a Boolean must be one of the two values. A list narrowed by other columns of the row — a child task by its view and its parent — is checked against that row's own list, as in the record form.
 2. **Database** — the rows that passed run the real insert or update inside a transaction that is rolled back: constraint violations, missing values and existing keys show up as in a real save.
 
 The report lists the valid and invalid rows with the error of each. **Save N valid rows** writes only the valid rows, in batches.

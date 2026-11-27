@@ -28,7 +28,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
 
   <rect x="220" y="18" width="880" height="542" rx="14" fill="url(#odil-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Oracle Data Integrator</text>
-  <text x="240" y="63" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Où tournent les agents, et ce que cela représente en licences au processeur.</text>
+  <text x="240" y="63" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Où s'exécutent les agents, et ce que cela représente en licences au processeur.</text>
   <rect x="1025" y="36" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1052.5" y="50.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
   <rect x="847" y="36" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -40,7 +40,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
   <rect x="240" y="124" width="500" height="136" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <circle cx="256" cy="138" r="8" fill="#4a9eff"/>
   <text x="256" y="141.5" fill="#0f172a" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
-  <text x="270" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Où tourne un agent ?</text>
+  <text x="270" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Où s'exécute un agent ?</text>
   <line x1="241" y1="152" x2="739" y2="152" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="168" fill="#64748b" fontSize="7.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MACHINE</text>
   <text x="342" y="168" fill="#64748b" fontSize="7.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CŒURS</text>
@@ -131,7 +131,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
   <rect x="760" y="280" width="312" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="760" y="280" width="3" height="24" fill="#f87171"/>
   <text x="770" y="295" fill="#f87171" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">RISQUE</text>
-  <text x="824" y="295" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Un agent tourne sur JDEENT01, un serveur JD Edwards…</text>
+  <text x="824" y="295" fill="#cbd5e1" fontSize="8" fontFamily="system-ui, sans-serif">Un agent s'exécute sur JDEENT01, un serveur JD Edwards…</text>
   <rect x="760" y="310" width="312" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="760" y="310" width="3" height="24" fill="#f87171"/>
   <text x="770" y="325" fill="#f87171" fontSize="7.5" fontWeight="700" fontFamily="system-ui, sans-serif">RISQUE</text>
@@ -144,7 +144,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
   <text x="762" y="396" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est compté</text>
   <text x="762" y="416" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">cluster PRODCL : 96 cœurs sur ESXHOST01… → 48</text>
   <rect x="752" y="436" width="328" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="762" y="454" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Souscrit sur ce contrat</text>
+  <text x="762" y="454" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Souscrit</text>
   <text x="762" y="474" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Data Integrator Enterprise Edition · 4 Processor</text>
   <rect x="20" y="132" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="147" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · Machines</text>
@@ -190,13 +190,19 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
 
 Une installation est rattachée à un contrat : le champ **Contrat** de l'en-tête le sélectionne (`numéro · description`), et la page rouvre le dernier consulté — à la première ouverture, un contrat qui comporte déjà une ligne Data Integrator ou une machine saisie. Sans aucun contrat, la page invite à en créer un dans **Licences → [CSI](./csi.md)**. **Relire** relit l'installation.
 
+### Une installation, plusieurs contrats \{#several-contracts\}
+
+Licences achetées en deux commandes pour les mêmes machines, ou Named User Plus ajoutés plus tard par un autre contrat : l'installation n'est décrite **qu'une fois**, sous un seul contrat. Dans le bloc **Souscrit** de ce contrat, **un autre contrat la couvre aussi…** désigne les autres contrats ; leurs lignes sont alors comptées avec celles de l'installation, chacune précédée de son numéro de contrat, et **Retirer** enlève un contrat de la liste. Seul un contrat sans machine propre pour ce produit, et qui n'est pas déjà compté avec une autre installation, peut être choisi.
+
+Ouverte sur un contrat compté avec un autre, la page l'indique — *Les lignes de ce contrat sont comptées avec l'installation décrite sous le contrat …* — et **Ouvrir le contrat …** mène à l'installation ; aucune machine ne peut y être saisie. Dans **Revues → Licences**, l'installation apparaît une seule fois, sous ses contrats reliés par `+` (`10000001 + 10000002`).
+
 ---
 
 ## Le questionnaire \{#questionnaire\}
 
 Quatre étapes numérotées occupent la partie gauche. Chaque modification est enregistrée immédiatement — une liste dès qu'une valeur est choisie, un nombre à la sortie du champ — puis l'analyse de droite est relue.
 
-### 1 · Où tourne un agent ? \{#step-agents\}
+### 1 · Où s'exécute un agent ? \{#step-agents\}
 
 Oracle compte chaque processeur où les transformations sont exécutées : toute machine portant un agent, quel que soit l'endroit où il a été installé. Ajouter une machine depuis **un serveur connu…** (les machines de l'écran [Taille des serveurs](../../nomajde/monitoring/server-sizes.md) de nomajde) ou saisir **son nom**, puis **Ajouter**.
 
@@ -237,7 +243,7 @@ La partie droite présente la lecture des réponses par le serveur.
 | **Chiffres** | *Processeurs nécessaires* (en rouge au-delà des processeurs souscrits), *Processeurs souscrits*, *Named User Plus nécessaires* et *souscrits* (si le contrat comporte une ligne Named User Plus), *Risque estimé* en euros, *Encore à répondre*. |
 | **Ce que cela signifie** | Les constats, risques en tête, chacun avec son niveau : **risque**, **à vérifier**, **non connu**, **correct**. |
 | **Ce qui est compté** | Chaque machine (`nom : cœurs → processeurs`) ou cluster entier (`cluster nom : cœurs sur hôtes → processeurs`). |
-| **Souscrit sur ce contrat** | Les lignes du contrat sur Data Integrator, avec quantité et métrique — *aucune ligne pour ce produit* sinon. |
+| **Souscrit** | Les lignes du contrat sur Data Integrator, avec quantité et métrique — et celles des autres contrats qui couvrent l'installation, chacune avec son numéro de contrat (voir [Une installation, plusieurs contrats](#several-contracts)) ; *aucune ligne pour ce produit* sinon. |
 
 ### Le calcul des processeurs \{#processors\}
 
@@ -255,7 +261,7 @@ Les cœurs de chaque machine sont additionnés par facteur de cœur, multipliés
 | risque | **Référentiel au-delà d'Express Edition** — plus de 12 Go : une édition sous licence est requise. |
 | risque | **Base sans ligne** — un référentiel en Standard Edition 2 ou Enterprise Edition, non partagé avec JD Edwards, sans ligne pour cette édition. |
 | non connu | Aucune machine saisie · une machine sans cœurs · une machine virtuelle dont les hôtes du cluster ne sont pas saisis (ses propres cœurs ne sont qu'un minimum) · un hôte de cluster sans cœurs · une question sans réponse · aucun référentiel · une édition non saisie. |
-| correct | Référentiel dans les 12 Go d'Express Edition · base également utilisée par JD Edwards (à vérifier : le contrat doit permettre cet usage) · base couverte par une ligne. |
+| correct | Licences au processeur couvertes (*Licences au processeur : 1 nécessaires, 2 souscrites — couvert.*) · Named User Plus couverts (nécessaires, utilisateurs, minimum, souscrits) · Référentiel dans les 12 Go d'Express Edition · base également utilisée par JD Edwards (à vérifier : le contrat doit permettre cet usage) · base couverte par une ligne. |
 
 Les mêmes phrases, dans la langue du lecteur, accompagnent l'installation dans **Revues → Licences**, dans son PDF et dans le rapport d'audit des licences ; ce qui lui manque y entre dans le risque estimé.
 

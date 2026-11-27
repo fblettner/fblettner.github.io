@@ -121,7 +121,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, fonctions m
 
 Neuf chiffres ouvrent la page : **appels de fonctions métier**, **secondes passées dedans**, **ms par appel**, **dépassements de délai**, **requêtes en attente**, **% mémoire Java, le plus haut**, **% réussite du cache, le plus bas**, **% réussite du cache de la base** et **sessions bloquées**. Un chiffre passe en orange ou en rouge au-delà de son seuil.
 
-Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire**, en haut à droite, relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+La page s'ouvre aussitôt sur la lecture que conserve le serveur — la dernière, faite par la [tâche de lecture de la plateforme](../jobs.md#platform-reading) ou par le dernier **Relire**, quel qu'en soit l'auteur — et l'en-tête en indique l'heure (*Lu à 14:02*, avec le jour quand elle date d'avant aujourd'hui) : un chiffre ancien n'est jamais pris pour l'état présent. **Relire**, en haut à droite, relit en direct, quelle que soit la durée, et remplace la lecture conservée pour tous les utilisateurs. Tant qu'aucune lecture n'est conservée, la première ouverture lit en direct. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres.
 
 ---
 
@@ -145,7 +145,7 @@ La plupart des lignes portent à droite un bouton **Détails** : il lit en direc
 
 | Conseil | Ce que liste **Détails** |
 |---|---|
-| Tables jamais analysées, ou aux statistiques périmées | Chaque table : propriétaire, table, sa description, nombre de lignes, dernière analyse, état des statistiques. |
+| Tables jamais analysées, ou aux statistiques périmées | Chaque table : propriétaire, table, sa description, nombre de lignes, dernière analyse, état des statistiques. La description vient de l'Object Librarian, lu par le lien de base de données du pool quand il se trouve dans une autre base ; si le compte ne peut pas le lire, les tables s'affichent sans description. |
 | Index inutilisables | Chaque index, sa table et son type. |
 | Sessions bloquées | Les sessions en attente et celles qui les bloquent : session, utilisateur, programme, machine, attente. |
 | Une requête lente | Son texte complet et le plan d'exécution retenu par la base. |

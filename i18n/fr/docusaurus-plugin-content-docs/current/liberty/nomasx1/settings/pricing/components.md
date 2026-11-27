@@ -167,7 +167,7 @@ La grille est modifiable. **Ajouter une ligne** ouvre un formulaire vide ; un cl
 
 | Champ | À renseigner |
 |---|---|
-| **Composant ID** | Numéro du composant. Non modifiable sur une ligne enregistrée : pour renuméroter un composant, en ajouter un nouveau. |
+| **Composant ID** | Numéro du composant, saisi à l'ajout de la ligne — tout numéro encore libre, ce qui permet de créer un nouveau composant. Non modifiable sur une ligne enregistrée : pour renuméroter un composant, en ajouter un nouveau. |
 | **Liste de prix** | `JD Edwards`, `Technology`… |
 | **Catégorie** | Le regroupement auquel appartient le composant. |
 | **Composant** | Le nom repris par toutes les pages. |

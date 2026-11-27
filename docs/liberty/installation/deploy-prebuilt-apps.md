@@ -14,7 +14,7 @@ Nomasx-1, Nomajde and their Nomaflow jobs are delivered as one Python wheel, `li
 
 Sign in as a superuser and open **Liberty Next → Administer → App → License**. Paste the key you were delivered and save: the key is encrypted with the install's master key and the licensed connectors appear at once, without a restart.
 
-Without a key, the apps install but their licensed connectors stay hidden. `liberty-license status` (in the container: `docker exec -u liberty liberty-next liberty-license status`) shows what the key covers and when it expires — see [Licence key](../framework/build/secure/license-key.md).
+Without a key, the apps install but their licensed connectors stay hidden. `liberty-license status` (in the container: `docker exec -u liberty liberty-next liberty-license status`) shows what the key covers and when it expires — see [Licence key](../framework/build/secure/license-key.md). A key covers one application, another, or all of them: an application it does not cover is not offered — no menu, no pages, no jobs — even though the wheel installs it (see [What a key covers](../framework/build/secure/license-key.md#coverage)).
 
 ---
 

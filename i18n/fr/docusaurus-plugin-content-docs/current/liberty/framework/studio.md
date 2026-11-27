@@ -508,7 +508,7 @@ Le Studio signale ce qu'une application porte pour rien, et ce qui est cassé :
 | **Afficher les N qu'aucun écran n'utilise** (en bas de la colonne Données) | Liste les requêtes et les points d'accès de l'application qu'aucun écran n'utilise ; **Masquer les N qu'aucun écran n'utilise** les replie. |
 | Pastille orange en haut | Le nombre d'écrans que rien n'ouvre. |
 
-Un écran est ouvert par une entrée de menu (l'écran lui-même, ou une requête qu'il lit), par un autre écran (son clic sur une ligne, un onglet de sa fiche, une action `navigate`) ou par une [entité de l'Explorateur](./explorer/model.md) qui le désigne. La règle est celle de **Déployer → Intégrité** : un écran que le Studio dit n'être ouvert par rien est l'écran orphelin que signale l'Intégrité. La pastille d'intégrité, à côté, ouvre le contrôle complet.
+Un écran est ouvert par une entrée de menu (l'écran lui-même, ou une requête qu'il lit), par un autre écran (son clic sur une ligne, un onglet de sa fiche, une action `navigate`) par une [entité de l'Explorateur](./explorer/model.md) qui le désigne, ou par l'entrée de menu d'une page qui l'indique dans **Screens the page works through** (voir [Une page livrée par une application](./build/menus/item-types.md#app-page)). La règle est celle de **Déployer → Intégrité** : un écran que le Studio dit n'être ouvert par rien est l'écran orphelin que signale l'Intégrité. La pastille d'intégrité, à côté, ouvre le contrôle complet.
 
 ### Modifier sur place \{#edit\}
 

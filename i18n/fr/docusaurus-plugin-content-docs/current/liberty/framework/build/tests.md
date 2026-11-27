@@ -205,7 +205,7 @@ Le **+** d'un lien insère une étape vide à cet endroit — *pas encore de poi
 |---|---|
 | **Nom** | Unique dans le cas : les résultats et la référence sont conservés par étape. |
 | **Point d'accès appelé** | Choisi dans la liste du connecteur. |
-| **Paramètres** | Le formulaire du point d'accès : un champ libellé par paramètre, son aide en dessous, une liste déroulante quand il a une liste de valeurs. |
+| **Paramètres** | Le formulaire du point d'accès : un champ libellé par paramètre, son aide en dessous, une liste déroulante quand il a une liste de valeurs ou désigne un [lookup du dictionnaire](./queries/parameter-binding.md#param-lookup) — une valeur conservée par une étape précédente (`{{nom}}`) peut toujours y être saisie. |
 | **L'appel** | *doit fonctionner* ou *doit être refusé* — avec **Le refus dit** pour contrôler le message. |
 | **Lignes, au moins** / **exactement** / **au plus** | Le nombre de lignes, comptées là où le point d'accès indique ses lignes. |
 | **La première ligne contient** | Des valeurs de la première ligne, par nom de colonne du point d'accès. |

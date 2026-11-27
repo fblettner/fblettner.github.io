@@ -215,7 +215,7 @@ Five figures head the page: **instances running** (out of those Server Manager d
 
 Under them, each source of the diagram says whether it was read: **Server Manager instances**, **Business function calls**, **JD Edwards pool**, **Database instance**, **Database sessions** — *read*, *not read* or *not read on this database*. A source that did not answer is named in a warning with the reason, and the rest is still drawn.
 
-What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again** reads anew. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+The page opens at once on the reading the server keeps — the last one, made by the [platform reading job](../jobs.md#platform-reading) or by anyone's last **Read again** — and the header says when it was made (*Read at 14:02*, with the day when it is older than today): an old figure is never taken for the present. **Read again** reads live, however long it takes, and replaces the kept reading for everybody. With no reading kept yet, the first opening reads live. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others.
 
 ---
 
@@ -259,7 +259,7 @@ A click on a card opens, on the right, what is known of it: its **State**, wheth
 
 | Button | What it does |
 |---|---|
-| **Download as SVG** | Reads the platform again and saves the picture as an SVG file (`jde-architecture.svg`), at the size of a landscape report page. |
+| **Download as SVG** | Saves the diagram shown as an SVG file (`jde-architecture.svg`), at the size of a landscape report page — at once: nothing is read again, so the file is the picture on the page. |
 | **Keep for the audit report** | Reads the platform again and keeps that reading for the licence audit report of the application on this JD Edwards pool: the report draws it on its architecture page, in its own language — unless a picture was put there by hand. Only the last reading is kept. |
 
 The line under the header says what is kept: *Nothing is kept for the audit report yet*, or the date of the reading kept and its pool.

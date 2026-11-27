@@ -161,10 +161,22 @@ Les mêmes champs figurent dans l'onglet **LDAP** d'[Applications](./application
 |---|---|
 | **Application ID** | L'application. Non modifiable une fois enregistrée. |
 | **Contexte LDAP** | DN de base d'où part la recherche (par exemple `OU=Users,DC=acme,DC=local`). |
-| **Filtre LDAP** | Filtre LDAP standard qui restreint les entrées lues (par exemple `(objectClass=user)`). |
+| **Filtre LDAP** | Filtre LDAP standard qui restreint les entrées lues (par exemple `(objectClass=user)`). Vide : toutes les personnes du contexte sont lues (`(objectClass=person)`). |
 | **Exclusion LDAP** | Entrées à écarter de la collecte. |
 
 La grille affiche aussi **Utilisateur (Audit)** et **Date (Audit)** : auteur et date de la dernière modification de la ligne.
+
+---
+
+## Annuaires autres qu'Active Directory \{#other-directories\}
+
+La collecte LDAP lit Active Directory et tout autre annuaire LDAP désigné par le pool — l'annuaire embarqué de WebLogic derrière Oracle Analytics Server (ou OBIEE), un OpenLDAP. Sur un tel annuaire :
+
+- seuls les attributs connus de son schéma sont demandés : ceux d'Active Directory — société, service, responsable, expiration… — restent vides ;
+- le compte est l'`uid` de l'entrée, à défaut son `cn` ; le nom affiché est le prénom et le nom, à défaut le `cn` ;
+- chaque compte est considéré comme **actif**, car un tel annuaire n'indique pas qu'un compte est désactivé ou expiré.
+
+Les comparaisons de *Sécurité → LDAP* portent donc sur les comptes et leurs noms ; les contrôles fondés sur l'état désactivé ou sur le service n'ont de sens que sur Active Directory.
 
 ---
 

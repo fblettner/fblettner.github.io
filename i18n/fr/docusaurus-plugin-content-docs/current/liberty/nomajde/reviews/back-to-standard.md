@@ -1,12 +1,12 @@
 ---
 title: Retour au standard
-description: "Développement → Retour au standard dans Nomajde : les objets standard JD Edwards EnterpriseOne qu'un path code tient pour modifiés, et les copies d'objets standard, comparés enregistrement par enregistrement aux objets d'Oracle du path code d'origine — ceux qui peuvent revenir au standard tels quels, ceux qui diffèrent et en quoi, ceux qui diffèrent sans jamais être lancés — avec le projet OMW qui contient chacun et les jours de reprise économisés à chaque montée de version."
+description: "Revues → Retour au standard dans Nomajde : les objets standard JD Edwards EnterpriseOne qu'un path code tient pour modifiés, et les copies d'objets standard, comparés enregistrement par enregistrement aux objets d'Oracle du path code d'origine — ceux qui peuvent revenir au standard tels quels, ceux qui diffèrent et en quoi, ceux qui diffèrent sans jamais être lancés — avec le projet OMW qui contient chacun et les jours de reprise économisés à chaque montée de version."
 keywords: [Nomajde, JD Edwards, JDE E1, retour au standard, reprise, montée de version, pristine, PS920, path code, Object Librarian, projet OMW, spécifications, règles d'événement, objets spécifiques, copies, comparaison]
 ---
 
 # Retour au standard
 
-**Développement → Retour au standard** répond à une question que tout client JD Edwards EnterpriseOne se pose avant une montée de version : parmi tous les objets standard modifiés au fil des années, **quelles modifications servent encore ?** Chaque objet modifié, et chaque copie d'un objet standard, coûte des jours de reprise à chaque montée de version. La page les recense, compare chacun à l'objet d'Oracle du path code d'origine (`PS920`, les objets d'Oracle tels que livrés) ou d'un autre path code, et les classe : **ceux qui peuvent revenir au standard tels quels**, **ceux qui diffèrent, et en quoi**, **ceux qui diffèrent mais que personne ne lance**. JD Edwards est uniquement lu.
+**Revues → Retour au standard** répond à une question que tout client JD Edwards EnterpriseOne se pose avant une montée de version : parmi tous les objets standard modifiés au fil des années, **quelles modifications servent encore ?** Chaque objet modifié, et chaque copie d'un objet standard, coûte des jours de reprise à chaque montée de version. La page les recense, compare chacun à l'objet d'Oracle du path code d'origine (`PS920`, les objets d'Oracle tels que livrés) ou d'un autre path code, et les classe : **ceux qui peuvent revenir au standard tels quels**, **ceux qui diffèrent, et en quoi**, **ceux qui diffèrent mais que personne ne lance**. JD Edwards est uniquement lu.
 
 ---
 
@@ -305,6 +305,6 @@ La page se trouve dans le dossier **Développement** du menu Nomajde. Les rôles
 ## Voir aussi
 
 - [Préparer la montée de version](../upgrade/analysis.md) — ce qu'une version impose de reprendre, et comment l'original d'une copie est retrouvé.
-- [Object Management Workbench](../master-data/delivered-screens.md#omw) — les projets OMW, leurs objets et leur journal.
+- [Object Management Workbench](./omw.md) — les projets OMW, leurs objets et leur journal.
 - [Références croisées](../cross-reference.md) — où un objet est utilisé avant de le ramener au standard.
 - [Tâches](../jobs.md#standard-compare) — la tâche de comparaison dans le dossier Tâches.

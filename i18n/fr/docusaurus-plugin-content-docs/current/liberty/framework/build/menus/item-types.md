@@ -263,6 +263,15 @@ Comme un lien vers le modèle, elle s'affiche pour qui peut utiliser le modèle 
 
 `/app/<app>/<page>` ouvre une page qu'une application livre avec ses plugins — une structure à parcourir, un parcours guidé, tout ce qui n'est ni une grille ni une fiche. L'entrée demande la permission `page:<app>:<page>`. Voir [Plugins → Les pages d'une application](../../apps/plugins.md#pages).
 
+Une page peut lire et enregistrer par les requêtes d'un écran — une fiche ouverte depuis la page, l'import des écrans. L'entrée indique alors ces écrans dans **Screens the page works through** (onglet *Advanced*) :
+
+- qui reçoit l'entrée reçoit ce dont les écrans ont besoin : leur lecture, et leur modification si l'entrée est accordée en **Lecture et modification** ;
+- les écrans sont considérés comme atteints depuis le menu — le Studio et **Déployer → Intégrité** ne les signalent pas comme ouverts par rien ;
+- **Rechercher les usages** sur l'un de ces écrans fait apparaître l'entrée ;
+- le contrôle d'intégrité signale un écran indiqué ici qui n'existe pas.
+
+Laisser le champ vide pour une page qui ne passe que par ses propres fonctions.
+
 ### Quand l'utiliser
 
 - Un produit embarqué (Nomaflow, les tableaux de bord spécialisés de Nomasx-1).

@@ -445,6 +445,14 @@ Jobs that reach the JD Edwards servers themselves: Server Manager for the health
 
 ---
 
+### `nomajde-platform-reading` \{#nomajde-platform-reading\}
+
+**Read the platform ahead of time.** Each step runs one reading of [Platform synthesis](../nomajde/synthesis.md) and its pages and keeps the answer, so those pages open at once with the moment of the reading; their *Read again* still reads live. Steps: `ARCHITECTURE`, `SERVERS`, `PERFORMANCE`, `DATABASE_INSTANCE`, `DATABASE_TABLESPACES`, `DATABASE_REDO`, `DATABASE_ACTIVITY`, `DATABASE_SESSIONS`, `DATABASE_OBJECTS`, `DATABASE_SIZE`, `CAPACITY` (30 days), `HISTORY` (90 days), `SIZES`, `PROPOSALS`. A step that fails does not stop the others. Read-only on JD Edwards.
+
+**Schedule** — `0 6 * * *` (Europe/Paris), `enabled = false`: enable it so that the first person to open the pages in the morning does not wait.
+
+---
+
 ### `nomajde-ais-report` \{#nomajde-ais-report\}
 
 **Run a JD Edwards report (UBE) through AIS and wait until it is done.** Step `nomajde.ais_steps:j_ais_report` over the `ais_connection` connector.
@@ -499,7 +507,7 @@ Conditions, processing options, parameters, inputs, steps and field values are g
 
 ### `nomajde-jde-tests` \{#nomajde-jde-tests\}
 
-**Plays a test suite on JD Edwards** and fails when a case fails or differs from the reference. Step `tests` — `nomajde.ais_steps:j_ais_tests`, through the `ais_connection` connector.
+**Plays a test suite on JD Edwards** and fails when a case fails or differs from the reference. Step `tests` — `nomajde.ais_steps:j_ais_tests`, through the suite's own connector: `ais_connection` for the AIS suites, `jde_security` for the security suite.
 
 | Parameter | Default | What |
 |---|---|---|
@@ -556,6 +564,7 @@ Parameters of `nomajde-upgrade-collect`:
 | Cross reference | `JDE_XREF_APPS`, `JDE_XREF_REPORTS`, `JDE_XREF_SPECS` — applications, reports, business views | No |
 | User defined objects | `JDE_UDO` — the inventory of the user defined objects (F9860W, F9861W) and what each one names — composite pages, E1 pages, orchestrations and their steps, service requests, notifications, CafeOne layouts, One View reports, searches, processes, form extensions, watchlists; needs **JDE_UDO_OL** in *Settings → Global → JD Edwards* | No |
 | Views | `REFRESH_VIEWS` | Yes |
+| Kept answers | `KEEP_SOD_REVIEW`, `KEEP_WHAT_TO_FIX`, `KEEP_LICENSING_REVIEW` — prepare the answers of the [Segregation of duties review](../nomasx1/sod-review.md), [What to fix](../nomasx1/security-analysis.md) and the [Licensing review](../nomasx1/licensing-review.md), so they open at once; a failure there never fails the collection | Yes |
 
 **Presets**
 

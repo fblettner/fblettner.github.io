@@ -8,7 +8,7 @@ keywords: [Nomasx-1, analyse de la sécurité, à corriger, remédiation, sépar
 
 **À corriger**, dans le dossier **Revues** du menu Nomasx-1, est l'analyse de la sécurité d'une application : dix-neuf contrôles exécutés sur les données collectées, chaque constat accompagné de l'action à mener. La [Revue de sécurité](./security-review.md) désigne les comptes à examiner, la [Revue de la séparation des tâches](./sod-review.md) les conflits ; cette page indique **où une modification en supprime le plus** et **ce qui ne colle pas** dans la sécurité elle-même.
 
-La page porte sur une application à la fois, choisie en haut à droite ; **Relire** relance les contrôles. **La page ne modifie rien** : la sécurité se corrige dans JD Edwards — ou avec la [Maintenance de la sécurité](../nomajde/security-maintenance/security-workbench.md) de Nomajde — puis se collecte à nouveau.
+La page porte sur une application à la fois, choisie en haut à droite. La page s'ouvre immédiatement sur la réponse conservée par le serveur, avec l'heure de son calcul à côté de **Relire** (*Calculé le 24 nov. à 06:15*) : la collecte la prépare à chaque exécution, si bien que la première personne qui ouvre la page après la collecte de la nuit n'attend pas. **Relire** relance les contrôles sur-le-champ, quelle que soit sa durée, et remplace pour tous celle qui était conservée. **La page ne modifie rien** : la sécurité se corrige dans JD Edwards — ou avec la [Maintenance de la sécurité](../nomajde/security-maintenance/security-workbench.md) de Nomajde — puis se collecte à nouveau.
 
 :::info[Spécifique à JDE]
 Les contrôles lisent la sécurité collectée depuis JD Edwards EnterpriseOne — dont le Security Workbench, la sécurité des UDO et la sécurité de ligne. La liste des applications ne propose que les applications JD Edwards.
@@ -31,11 +31,12 @@ Les contrôles lisent la sécurité collectée depuis JD Edwards EnterpriseOne �
   <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">◎</text>
   <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Analyse de la sécurité</text>
   <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Ce qu'il faut corriger, et ce qui ne colle pas — chaque constat avec quoi faire.</text>
+  <text x="1019" y="52.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Calculé le 24 nov. à 06:15</text>
   <rect x="1027" y="38" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1053.5" y="52.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
-  <rect x="869" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="879" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
-  <text x="861" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="747" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="757" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
+  <text x="739" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="92" width="161.6" height="54" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="114" fill="#fb923c" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">202</text>
@@ -91,7 +92,7 @@ Les contrôles lisent la sécurité collectée depuis JD Edwards EnterpriseOne �
   <rect x="440" y="294.0" width="41" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
   <text x="460.5" y="305.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">élevé</text>
   <text x="504" y="305.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">JSMITH</text>
-  <text x="614" y="305.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">tables, used</text>
+  <text x="614" y="305.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">a écrit les tables…</text>
   <text x="704" y="305.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">4</text>
   <text x="738" y="305.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Revoyez d'abord ce qui a été fait ; puis retirez…</text>
   <rect x="240" y="318" width="840" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -99,7 +100,7 @@ Les contrôles lisent la sécurité collectée depuis JD Edwards EnterpriseOne �
   <rect x="440" y="322.0" width="41" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
   <text x="460.5" y="333.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">élevé</text>
   <text x="504" y="333.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">FINADMIN</text>
-  <text x="614" y="333.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">39 rule(s)</text>
+  <text x="614" y="333.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">39 règle(s)</text>
   <text x="704" y="333.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">22</text>
   <text x="738" y="333.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Le rôle donne les deux activités : scindez-le…</text>
   <rect x="240" y="346" width="840" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -107,7 +108,7 @@ Les contrôles lisent la sécurité collectée depuis JD Edwards EnterpriseOne �
   <rect x="440" y="350.0" width="41" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
   <text x="460.5" y="361.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">élevé</text>
   <text x="504" y="361.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">APCLERK + PURCH</text>
-  <text x="614" y="361.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">3 rule(s)</text>
+  <text x="614" y="361.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">3 règle(s)</text>
   <text x="704" y="361.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2</text>
   <text x="738" y="361.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Ne donnez pas les deux à une même personne…</text>
   <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>

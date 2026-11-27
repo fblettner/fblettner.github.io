@@ -148,13 +148,15 @@ They are set on the **Actions** stage of the [Screen Designer](./overview.md#des
 
 | Group | Lists | When they fire | `source` reads from |
 |---|---|---|---|
-| **Dialog hooks** | `on_load` | Once the dialog has loaded the row (edit) or seeded the defaults (add). | The form. |
+| **Dialog hooks** | `on_load` | Once the dialog has loaded the row (edit) or seeded the defaults (add) — and again when **Duplicate** turns the record into a new one. | The form; on an existing record, its values from the start. |
 | | `on_save` | After the dialog's main insert or update succeeds. | The form at save time. |
 | | `on_cancel` | When the dialog is closed without saving, before it closes; an error keeps it open. | The form. |
 | **Toolbar** | `actions` | Each entry is a button above the grid. | No row context; prompt values under `INPUT.<name>`. |
 | **Row hooks** | `on_insert`, `on_update`, `on_delete` | After the write succeeds — from the dialog or from grid editing. | The new row, or the deleted row. |
 | | `on_duplicate` | When a row duplicated with the dialog's **Duplicate** is saved, instead of `on_insert`. | The new row, and the source row under `SOURCE_<column>`. |
 | **Row menu** *(own section)* | `row_menu` | Each entry is a menu item on a row: right-click, or the ⋯ handle at the start of the row. | The clicked row. |
+
+**`on_load` and Duplicate.** *Duplicate* turns the record into a new one in the same form: the opening actions run again for the copy, as for a form opened to add — a value they fetch for a new record (an identifier asked of another system) is fetched again for the copy instead of being left blank. On an existing record, the actions see that record's values as soon as they run: an action that tests whether a field is empty answers *no* on a record being edited, and does not replace its key.
 
 Hooks run their list in order and stop at the first error, unless an action has **stop_on_error** off. A toolbar or row-menu entry runs as one action: to run several steps from one button, use a `chain`.
 

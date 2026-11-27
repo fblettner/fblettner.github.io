@@ -485,8 +485,31 @@ const sidebars: SidebarsConfig = {
   nomajdeSidebar: [
     'liberty/nomajde/overview',
     'liberty/nomajde/home',
-    'liberty/nomajde/synthesis',
-    'liberty/nomajde/upgrade/analysis',
+    {
+      type: 'category',
+      label: 'Reviews',
+      items: [
+        'liberty/nomajde/synthesis',
+        'liberty/nomajde/upgrade/analysis',
+        'liberty/nomajde/reviews/simulate-security',
+        'liberty/nomajde/reviews/security-consistency',
+        'liberty/nomajde/reviews/back-to-standard',
+        'liberty/nomajde/reviews/omw',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Security Management',
+      link: {type: 'doc', id: 'liberty/nomajde/security-management/overview'},
+      items: [
+        'liberty/nomajde/security-management/user-or-role',
+        'liberty/nomajde/security-management/object',
+        'liberty/nomajde/security-management/table',
+        'liberty/nomajde/security-management/menu',
+        'liberty/nomajde/security-management/udo',
+        'liberty/nomajde/security-management/secure-a-module',
+      ],
+    },
     'liberty/nomajde/data-explorer',
     'liberty/nomajde/cross-reference',
     {
@@ -514,22 +537,13 @@ const sidebars: SidebarsConfig = {
         'liberty/nomajde/security-maintenance/role-relationships',
         'liberty/nomajde/security-maintenance/environments',
         'liberty/nomajde/security-maintenance/security-workbench',
-        {
-          type: 'category',
-          label: 'Security simulation',
-          link: {type: 'doc', id: 'liberty/nomajde/security-maintenance/security-simulation'},
-          items: [
-            'liberty/nomajde/security-maintenance/secure-a-module',
-            'liberty/nomajde/security-maintenance/workbench-consistency',
-            'liberty/nomajde/security-maintenance/security-test-cases',
-          ],
-        },
+        'liberty/nomajde/security-maintenance/menu-filtering',
       ],
     },
     {
       type: 'category',
       label: 'Development',
-      items: ['liberty/nomajde/development/back-to-standard'],
+      items: ['liberty/nomajde/development/menus'],
     },
     {
       type: 'category',
@@ -537,7 +551,12 @@ const sidebars: SidebarsConfig = {
       items: ['liberty/nomajde/monitoring/jde-servers', 'liberty/nomajde/monitoring/server-manager', 'liberty/nomajde/monitoring/architecture', 'liberty/nomajde/monitoring/platform-analysis', 'liberty/nomajde/monitoring/performance', 'liberty/nomajde/monitoring/database-audit', 'liberty/nomajde/monitoring/server-sizes', 'liberty/nomajde/monitoring/oci-target'],
     },
     'liberty/nomajde/jobs',
-    'liberty/nomajde/tests',
+    {
+      type: 'category',
+      label: 'Tests',
+      link: {type: 'doc', id: 'liberty/nomajde/tests'},
+      items: ['liberty/nomajde/security-maintenance/security-test-cases'],
+    },
     'liberty/nomajde/ai-assistant',
     {
       type: 'category',

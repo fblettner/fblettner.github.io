@@ -156,6 +156,7 @@ L'étape **Paramètres** de l'éditeur de requête liste les paramètres, un par
 | **Help**, **Example** | Ce qu'il faut y mettre, en une phrase, et une valeur d'exemple (pour un paramètre JSON, un exemple du JSON) : affichés sous le champ où le paramètre se renseigne, et transmis à l'assistant IA. |
 | **Choices** | Les seules valeurs admises, quand elles sont peu nombreuses : une liste déroulante là où le paramètre se renseigne. |
 | **Required** | Un appel sans valeur pour ce paramètre, et sans valeur par défaut, est refusé avant toute exécution. |
+| **List to pick in**, **Connector of the lookup**, **What narrows the list** | Un lookup du dictionnaire dans lequel la valeur se choisit — voir [plus bas](#param-lookup). |
 
 ```sql
 SELECT *
@@ -171,6 +172,18 @@ WHERE  invoice_date BETWEEN :FROM_DATE AND :TO_DATE
 | `STATUS` | Statut | `OPEN` |
 
 La déclaration est facultative : un paramètre que l'appelant n'envoie pas et qui n'a pas de valeur par défaut reçoit `NULL`.
+
+### Un paramètre choisi dans une liste \{#param-lookup\}
+
+Un paramètre déclaré d'une requête — ou d'un [point d'accès API](../api-endpoints.md#inputs) — peut désigner un **lookup du dictionnaire**. Là où le paramètre se renseigne — le formulaire de paramètres d'un écran, la page d'appel qu'ouvre une entrée de menu de type point d'accès, une [étape de test](../tests.md#step) —, sa valeur se choisit dans cette liste au lieu d'être saisie, avec le code, le libellé, les colonnes supplémentaires et les pastilles de filtre du lookup ; une longue liste s'ouvre [en tableau](../../dictionary.md#open-as-table).
+
+| Champ | Rôle |
+|---|---|
+| **List to pick in** | Le lookup, choisi parmi ceux du dictionnaire — les lookups partagés et ceux de chaque connecteur. |
+| **Connector of the lookup** | Le connecteur auquel appartient le lookup (son périmètre de dictionnaire, et l'endroit où s'exécute sa requête quand le lookup n'en désigne pas). Vide : le connecteur du paramètre — à renseigner pour un point d'accès API. |
+| **What narrows the list** | Des lignes `nom=valeur` : un `:paramètre` de la requête du lookup, associé au nom d'un autre paramètre (sa valeur du moment est transmise) ou à une valeur fixe — les UDO du type choisi, les colonnes de la table choisie. |
+
+Une liste restreinte par un autre paramètre attend celui-ci : le champ indique *choisissez d'abord …* tant que ce paramètre n'a pas de valeur. Une valeur absente de la liste peut toujours être saisie — par exemple une valeur capturée par une étape de test précédente (`{{nom}}`).
 
 ---
 

@@ -306,9 +306,16 @@ Un lookup est une requête dont les lignes remplacent un code par un libellé �
 | **Columns handed back** | Les colonnes qu'une colonne d'écran peut recopier dans d'autres champs du formulaire au choix d'une ligne. |
 | **Extra columns shown** | Des colonnes supplémentaires affichées à côté du code et du libellé, pour distinguer des lignes proches. |
 | **Columns to filter on** | Les colonnes supplémentaires qui reçoivent des pastilles de filtre en haut de la liste. |
+| **Hide the code** | Pour un code que personne ne lit — un identifiant généré, l'identifiant d'une tâche JD Edwards : la liste n'affiche que le libellé et les colonnes supplémentaires, triés sur le libellé, dans la fiche, les cellules de saisie de la grille et les filtres. La grille s'ouvre avec la colonne du code masquée ; elle reste dans le choix des colonnes et dans un export de toutes les colonnes. La valeur enregistrée reste le code. |
 | **Keep on upgrade** | Comme pour les entrées. |
 
 La requête du lookup déclare ses propres `:params` ; leurs valeurs viennent du champ **List parameters** de l'entrée, ou de la colonne d'écran. Les listes en cascade se construisent sur l'écran — voir [Séquences et lookups](./build/queries/sequences-and-lookups.md).
+
+### Une longue liste, en tableau \{#open-as-table\}
+
+Toute liste déroulante longue (40 lignes ou plus) ou dotée de colonnes supplémentaires se termine par **Ouvrir en tableau** — sur chaque écran, fiche, filtre et page d'application, sans rien à configurer. La boîte de dialogue — titrée du nom du champ, ou *Choisir dans la liste* — présente le code, la description et chaque colonne supplémentaire sous son en-tête, avec la même recherche et les mêmes pastilles de filtre que la liste, et la place de tout lire ; un clic sur une ligne la choisit.
+
+Un lookup fournit aussi sa liste à un paramètre déclaré d'une requête ou d'un point d'accès : là où le paramètre se renseigne, sa valeur se choisit dans la liste du lookup — voir [Liaison de paramètres → Un paramètre choisi dans une liste](./build/queries/parameter-binding.md#param-lookup).
 
 ---
 

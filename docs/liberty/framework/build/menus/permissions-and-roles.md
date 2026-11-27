@@ -261,6 +261,8 @@ An entry is shown for what the user may open through it:
 
 On every type but `job`, the entry or its folder in **Read** shows the entry; on every type, a `menu:` deny hides it, and the `roles` filter applies first.
 
+The licence comes before all of this: the menu of an application the licence does not cover is not shown, nor an entry of another menu that opens one of its pages — see [What a key covers](../secure/license-key.md#coverage). An entry that opens a page and names **Screens the page works through** gives those screens' read — and their change with **Read and change** — see [A page an application ships](./item-types.md#app-page).
+
 **Which applications a user sees.** An application that has a menu and is shown in the switcher is listed for a user only when at least one of its entries is theirs through a permission. The entries open to everyone — an external address, an open page, a dashboard of texts — do not list an application by themselves. A superuser, or a role holding `*`, sees every application.
 
 To check a role, open it in **Liberty Next → Administer → Access**: the eye of each entry and the count of each application (`sales · 4 of 6 shown`) follow this rule. The AI assistant names the applications by the same rule.

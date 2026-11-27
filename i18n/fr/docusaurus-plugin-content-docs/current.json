@@ -671,10 +671,6 @@
     "message": "Services JD Edwards (AIS)",
     "description": "The label for category 'JD Edwards services (AIS)' in sidebar 'nomajdeSidebar'"
   },
-  "sidebar.nomajdeSidebar.category.Security simulation": {
-    "message": "Simulation de la sécurité",
-    "description": "The label for category Security simulation in sidebar nomajdeSidebar"
-  },
   "sidebar.nomasx1Sidebar.category.Reviews": {
     "message": "Revues",
     "description": "The label for category Reviews in sidebar nomasx1Sidebar"
@@ -686,5 +682,17 @@
   "sidebar.nomajdeSidebar.category.JD Edwards data": {
     "message": "Données JD Edwards",
     "description": "The label for category 'JD Edwards data' in sidebar 'nomajdeSidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.Reviews": {
+    "message": "Revues",
+    "description": "The label for category Reviews in sidebar nomajdeSidebar"
+  },
+  "sidebar.nomajdeSidebar.category.Security Management": {
+    "message": "Gestion de la sécurité",
+    "description": "The label for category Security Management in sidebar nomajdeSidebar"
+  },
+  "sidebar.nomajdeSidebar.category.Tests": {
+    "message": "Tests",
+    "description": "The label for category Tests in sidebar nomajdeSidebar"
   }
 }

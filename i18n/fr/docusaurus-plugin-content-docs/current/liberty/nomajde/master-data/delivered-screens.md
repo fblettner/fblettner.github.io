@@ -160,7 +160,9 @@ Les titres de colonnes et les listes de valeurs proviennent du dictionnaire de d
 | **Objets des projets OMW** | F98222 | Général. |
 | **Journal OMW** | F98210 | Général. |
 
-À côté du workbench, **Développement → Retour au standard** compare les objets modifiés à ceux d'Oracle et indique le projet OMW qui contient chacun — voir [Retour au standard](../development/back-to-standard.md).
+Pour lire l'OMW d'un seul tenant — un projet avec ses objets, ses utilisateurs et son journal, tout ce qui a été fait sur un objet, ce que détient un utilisateur — et pour créer un projet ou y ajouter un utilisateur ou un objet, ouvrir **Revues → Object Management Workbench** : voir [Object Management Workbench](../reviews/omw.md).
+
+À côté du workbench, **Revues → Retour au standard** compare les objets modifiés à ceux d'Oracle et indique le projet OMW qui contient chacun — voir [Retour au standard](../reviews/back-to-standard.md).
 
 ---
 

@@ -220,6 +220,7 @@ Click a row → the panel on the right loads the form of the entry, in three tab
 | **Folder** | Advanced | The folder the entry sits in, picked among the folders; blank for the top of the menu. The tree's indent / outdent actions change it too. |
 | **Fixed values** | Advanced | Values given to what is opened — a filter already filled in. One line per value: its name, picked among the filters of the screen it opens or the parameters of the query it opens (or typed), and the value. A line left without a name is not saved. |
 | **Only for the roles** | Advanced | Shows the entry to these roles only. See [Permissions and roles](./permissions-and-roles.md). |
+| **Screens the page works through** | Advanced | For an entry that opens a page an application ships: the screens of the application the page reads and saves through. Whoever is given the entry is given what those screens need — see [A page an application ships](./item-types.md#app-page). |
 | **Keep on upgrade** | Advanced | An upgrade of the application leaves this entry as saved here. |
 | **Translations** | Translations | The label in the other languages. See [Translations and icons](./translations-and-icons.md). |
 

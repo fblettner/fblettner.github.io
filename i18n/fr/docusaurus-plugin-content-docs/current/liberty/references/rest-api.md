@@ -64,7 +64,7 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | `POST` | `/api/sql/{connector}/_import` | Importe des lignes (l'import Excel de la grille). |
 | `POST` | `/api/http/{connector}/{endpoint}` | Appelle un endpoint d'un connecteur API. |
 | `GET` | `/api/actions`, `/api/actions/{action_id}` | Les services (Logique → Services). |
-| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Les fonctions de plugin appelables depuis les écrans. |
+| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Les fonctions de plugin appelables depuis les écrans. `kept: "use"` dans le corps de `run` renvoie aussitôt la [réponse conservée](../framework/apps/plugins.md#page-kept) de la fonction, `kept: "refresh"` la recalcule et la conserve. Une fonction d'une application que la licence ne couvre pas est refusée. |
 
 ---
 
@@ -92,7 +92,7 @@ Voir [Se connecter](../framework/build/secure/sign-in.md).
 | `GET` | `/api/notifications` (`?unread=1`), `/api/notifications/unread_count` | Les notifications de l'appelant. |
 | `POST` | `/api/notifications/read` | Marque des notifications comme lues (`{ids}`, ou toutes). |
 | `POST` | `/api/notify/fire` | Déclenche une règle de notification de type action (utilisé par l'action d'écran `send_notification`). |
-| `GET` | `/api/license` | Mode de licence, client, offre, applications, expiration. |
+| `GET` | `/api/license` | Mode de licence, client, offre, applications couvertes, expiration — voir [Ce que couvre une clé](../framework/build/secure/license-key.md#coverage). |
 
 ---
 

@@ -197,11 +197,13 @@ Every conflict found by the [SoD matrix](./settings/sod/matrix.md): the user, th
 
 ## Licence compliance \{#licenses\}
 
-The transactions of each user per table and day, the chain object → system code → licence component, the usage against the subscribed quantities, the financial exposure, and the employees per extraction date.
+The transactions of each user per table and day, the chain object → system code → licence component, the users per component, the financial exposure of the [Licensing review](./licensing-review.md), and the employees per extraction date.
 
-**Analyses**: *Financial exposure*, *Financial exposure by component* (price, support and total), *Usage vs subscribed by component*, *Compliance gap by component* — negative means more users than subscribed —, *Transactions by month*, *Transacting users by component* and *by company* — pick the period to apply a 90-day rule —, *Most used tables*, *Employees per extraction*.
+**Analyses**: *Financial exposure*, *Financial exposure by component* (price, support and total for each line of the Licensing review beyond the subscription, with its kind), *Users by component* — the users with rights and the active users — and its chart *Users by component (chart)*, *Transactions by month*, *Transacting users by component* and *by company* — pick the period to apply a 90-day rule —, *Most used tables*, *Employees per extraction*.
 
-**Dashboard** *Licence overview*: the financial exposure, the usage against the subscription per component, the transaction trend and the transacting users.
+**Dashboard** *Licence overview*: the financial exposure of the Licensing review, the users per component, the transaction trend and the transacting users.
+
+The two entities of the model answer two different questions. *Users per component* counts, per application and component, the users with rights and the active users, without comparing them with the subscription. *Financial exposure* holds what the Licensing review finds beyond the subscription — missing seats, modules no contract line covers, Named User Plus, Data Integrator and Analytics Server — at the list price and three years of support; the amounts keep their sign (negative = beyond the subscription). It holds the review's last computing — the collection's or the last *Read again* of the review — and stays empty until one of the two has run.
 
 :::info[JDE-specific]
 The transactions and the object → system code → licence component chain come from the JD Edwards EnterpriseOne usage collection. For another source, the *Licence compliance* model holds what that source's collection provides.

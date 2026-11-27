@@ -142,7 +142,7 @@ The page says it on top: *an assumption built from your answers and Oracle's pub
   <text x="762" y="412" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">What is counted</text>
   <text x="762" y="432" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">OASSRV01: 16 cores → 8</text>
   <rect x="752" y="452" width="328" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="762" y="470" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Subscribed on this contract</text>
+  <text x="762" y="470" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Subscribed</text>
   <text x="762" y="490" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Analytics Server · 100 Named User Plus</text>
   <rect x="20" y="132" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="147" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · Machines</text>
@@ -193,6 +193,12 @@ The page says it on top: *an assumption built from your answers and Oracle's pub
 An installation belongs to a contract: **Contract** in the header picks it (`number · description`), and the page reopens on the last one — at first, on a contract that already has a line on Analytics Server or a machine stated. With no contract at all, the page says to create one under **Licences → [CSI](./csi.md)**. **Read again** reads the installation again.
 
 The contract lines read as Analytics Server are those on *Analytics Server* and on *Business Intelligence Suite Foundation Edition* (and its *for Oracle Applications* version).
+
+### One installation, several contracts \{#several-contracts\}
+
+Licences bought in two orders for the same machines, or Named User Plus added later by another contract: the installation is still described **once**, under one contract. In the **Subscribed** block of that contract, **another contract covers it too…** names the other contracts; their lines are then counted together with the installation's, each shown with its contract number, and **Remove** takes a contract out of the list. Only a contract that has no machine of its own for the product, and is not already counted with another installation, can be picked.
+
+Opened on a contract counted with another one, the page says so — *The lines of this contract are counted with the installation described under contract …* — and **Open contract …** goes to the installation; no machine can be stated there. On **Reviews → Licences**, the installation appears once, under its contracts joined by `+` (`10000001 + 10000002`).
 
 ---
 
@@ -259,7 +265,7 @@ The right-hand side is the server's reading of the answers.
 | **Figures** | *Processors needed* (red when above those subscribed), *Processors subscribed*, *Named User Plus needed* and *subscribed* (when the contract has a Named User Plus line), *Estimated risk* in euros, *Still to answer*. |
 | **What it means** | The findings, the risks first, each with its level: **risk**, **to check**, **not known**, **fine**. |
 | **What is counted** | Each server (`name: cores → processors`) or whole cluster (`cluster name: cores on hosts → processors`). |
-| **Subscribed on this contract** | The contract's lines on Analytics Server, with their quantity and metric — *no line for this product* otherwise. |
+| **Subscribed** | The contract's lines on Analytics Server, with their quantity and metric — and those of the other contracts that cover the installation, each with its contract number (see [One installation, several contracts](#several-contracts)); *no line for this product* otherwise. |
 
 ### How the licences are counted \{#processors\}
 
@@ -277,7 +283,7 @@ Each server's cores × the core factor of its chip, added up per factor before t
 | risk | **Database with no line** — a repository or data warehouse on Standard Edition 2 or Enterprise Edition, not used by JD Edwards, with no line for that edition. |
 | to check | **Data warehouse on Express Edition** — check its size and use stay within the edition's limits. |
 | not known | No server stated · a server with no cores · a virtual machine whose cluster hosts are not stated (its own cores are only a floor) · a cluster host with no cores · where the users are kept or how many, not answered · no repository · an edition not stated. |
-| fine | Repository within the 12 GB of Express Edition · database also used by JD Edwards (check the contract allows this use) · database covered by a line. |
+| fine | Processor licences covered (*Processor licences: 1 needed, 2 subscribed — covered.*) · Named User Plus covered (needed, users, minimum, subscribed) · Repository within the 12 GB of Express Edition · database also used by JD Edwards (check the contract allows this use) · database covered by a line. |
 
 The same sentences, in the language of the reader, appear for the installation on **Reviews → Licences**, in its PDF and in the licence audit report; what it is short of is part of the estimated risk there.
 

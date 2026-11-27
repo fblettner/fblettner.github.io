@@ -10,6 +10,8 @@ Le dossier **Tests** vérifie que JD Edwards **se comporte toujours de la même 
 
 Rien n'est installé dans JD Edwards, et aucun script n'est à écrire : un cas se construit en choisissant des appels dans une liste, la réponse de JD Edwards servant à remplir ce qui est attendu.
 
+Les mêmes pages testent aussi la **sécurité** : la suite `jde-security` vérifie ce qu'un utilisateur ou un rôle peut faire, voir et modifier — voir [Cas de test de la sécurité](./security-maintenance/security-test-cases.md).
+
 ---
 
 ## Vue d'ensemble
@@ -546,7 +548,7 @@ Rien n'est installé dans JD Edwards, et aucun script n'est à écrire : un cas 
 | Entrée de menu | Usage |
 |---|---|
 | **Tests → Résultats** | Le déroulement des dernières exécutions : cas réussis, en échec, modifiés ou jamais joués, les dernières exécutions de chaque suite en barres, chaque cas avec ses derniers résultats. |
-| **Tests → Cas** | Les suites et leurs cas, dessinés et modifiés comme des enchaînements d'appels. |
+| **Tests → Cas** | Les suites et leurs cas, dessinés et modifiés comme des enchaînements d'appels — les suites AIS et la [suite de sécurité](#security). |
 | **Tests → Lancer les tests** | La tâche qui joue une suite — à la demande, ou selon une planification. |
 
 **Résultats** et **Cas** sont les pages de tests de Liberty Next, décrites en détail dans [Tests](../framework/build/tests.md) ; cette page couvre ce qui est propre à JD Edwards.
@@ -600,10 +602,12 @@ Un résultat *Modifié* n'est pas toujours un défaut — une mise à jour peut 
 
 | Paramètre | Défaut | Rôle |
 |---|---|---|
-| **Suite** | `smoke` | La suite à jouer, parmi celles du connecteur AIS. |
+| **Suite** | `smoke` | La suite à jouer, parmi toutes les suites de tests — celles d'AIS et la [suite de sécurité](#security). |
 | **Comparer à la référence, ou l'enregistrer** | compare | *compare* contrôle les cas et signale les écarts ; *record* garde l'exécution comme nouvelle référence. |
 | **Seulement ces cas** | vide | Des identifiants de cas séparés par des virgules ; vide = tous. |
 | **Cas qui écrivent dans JDE** | no | *yes* joue aussi les cas marqués comme modifiant des données. |
+
+Chaque suite se joue par son propre connecteur : la [suite de sécurité](#security) se planifie donc comme celles d'AIS.
 
 L'exécution est **en échec** dès qu'un cas échoue ou a changé, ce qui déclenche les alertes de la tâche. Ses fichiers contiennent un rapport Excel, une ligne par étape : cas, libellé, statut du cas, étape, point d'accès, statut de l'étape, durée et constat. Les résultats apparaissent aussi dans **Tests → Résultats**.
 
@@ -621,6 +625,14 @@ Nomajde est livré avec une première suite, **smoke** — *JDE — what must ke
 | `unknown-table-is-refused` | Une table inexistante est refusée, et non renvoyée vide. |
 
 Elle sert à valider la connexion ; viennent ensuite les cas qui comptent pour le métier : les formulaires les plus utilisés, les fonctions métier appelées par les interfaces, les tables de paramétrage qu'une mise à jour ne doit pas toucher.
+
+---
+
+## La suite de sécurité \{#security\}
+
+Une seconde suite, **jde-security** — *JDE — who may do what* — teste la sécurité de JD Edwards telle qu'elle est, sans passer par AIS : chaque étape interroge un point de la sécurité par un point d'accès de `jde_security` — `rights` (une application : exécuter, ajouter, modifier, supprimer), `menu` (une tâche de menu : montrée), `udo` (un UDO : vu), `column` (une colonne de table : voir, ajouter, modifier) — avec la ligne qui décide pour une application, un UDO ou une colonne. Ses paramètres se choisissent dans des listes : qui, l'objet, la vue de tâches et la tâche, la nature d'UDO et l'UDO, la table et la colonne.
+
+Elle est livrée avec cinq cas d'exemple d'une sécurité fermée et séparée, sur les rôles livrés par JD Edwards, à adapter ; [Simuler la sécurité](./reviews/simulate-security.md#keep) y ajoute un cas à partir de ce qu'elle présente. Le détail se trouve dans [Cas de test de la sécurité](./security-maintenance/security-test-cases.md).
 
 ---
 
@@ -652,3 +664,4 @@ Les trois permissions de tests se trouvent dans les règles *Au-delà des menus*
 - [Tests](../framework/build/tests.md) — la page Cas en détail ; [Résultats des tests](../monitoring/test-results.md).
 - [Services JD Edwards (AIS)](./ais/services.md) et [Créer à partir de…](./ais/create-from.md) — les appels possibles dans une étape.
 - [Préparer la montée de version](./upgrade/analysis.md) — ce qu'il faut reprendre avant de jouer les tests.
+- [Cas de test de la sécurité](./security-maintenance/security-test-cases.md) — la suite `jde-security`.

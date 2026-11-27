@@ -1,6 +1,6 @@
 ---
 title: Clé de licence
-description: "La clé de licence de Liberty Next : ce qu'elle active (Nomasx-1, Nomajde), où la coller (Liberty Next → Administrer → App → Licence), comment la vérifier (liberty-license, /api/license), ce qui se passe sans elle, et comment la remplacer avant son expiration."
+description: "La clé de licence de Liberty Next : ce qu'elle active (Nomasx-1, Nomajde — une application, une autre ou toutes), les connecteurs et tâches rattachés à une application, où la coller (Liberty Next → Administrer → App → Licence), comment la vérifier (liberty-license, /api/license), ce qui se passe sans elle, et comment la remplacer avant son expiration."
 keywords: [Liberty Next, licence, clé de licence, Nomasx-1, Nomajde, Paramètres App, liberty-license, api license, expiration, mode restreint]
 ---
 
@@ -138,6 +138,39 @@ Avant de la coller, la clé peut être vérifiée sur le serveur : `liberty-lice
 | `liberty-license status` | Validité, produits couverts, date d'expiration de la clé configurée. |
 | `GET /api/license` | `{mode, customer, plan, apps, expires_at, error}`. |
 | `GET /info` | `license.mode` : `full` ou `restricted`. |
+| **Surveillance**, bloc *Exécution* | La ligne **Licence** : *complète* avec le client, l'offre et les applications couvertes — voir [Surveillance](../../../monitoring/dashboard.md#runtime). |
+
+---
+
+## Ce que couvre une clé \{#coverage\}
+
+Une clé couvre une application sous licence, une autre, ou toutes — selon l'offre souscrite. Une clé qui ne nomme aucune application les couvre toutes. `liberty-license status`, `GET /api/license` et la ligne **Licence** de la page Surveillance indiquent les applications couvertes.
+
+Une application que la clé ne couvre pas n'est proposée nulle part — elle n'est pas seulement absente du menu :
+
+| Élément | Pour une application non couverte par la clé |
+|---|---|
+| **Menu et sélecteur** | Son menu n'apparaît pas et l'application ne figure pas dans le sélecteur. Une entrée du menu d'une autre application qui ouvre l'une de ses pages est retirée aussi. |
+| **Pages** | Ses pages ne sont ni proposées ni ouvertes. |
+| **Fonctions** | Une fonction appelée par son nom — depuis une action d'écran, une page, `POST /api/plugins/run` — est refusée avec le message *The licence of this installation does not cover the application …*. |
+| **Tâches** | Ses tâches ne sont ni affichées, ni planifiées, ni exécutées — voir [Tâches rattachées à une application](#jobs). |
+| **Data Explorer** | Ses modèles ne sont pas proposés. |
+| **Rôles** | Ses rôles prédéfinis n'apparaissent pas dans **Ajouter un rôle prédéfini…**. |
+| **Assistant IA** | Ses outils ne sont pas transmis à l'assistant. |
+
+Un changement de licence s'applique aussitôt : les applications, leurs menus et leurs tâches suivent la nouvelle clé sans redémarrage.
+
+### Connecteur au service d'une application \{#connector-applications\}
+
+Une application peut reposer sur plusieurs connecteurs — le sien, une seconde base, un connecteur qui porte ses services. Le réglage d'un connecteur qui désigne les applications sous licence dont il fait partie s'appelle **Serves the applications** sur un connecteur SQL (carte **Réglages**) et **Sert les applications** sur un connecteur API (étape **Connexion**) — voir [Connecteurs](../../connectors.md#connection-fields) :
+
+- le connecteur est chargé si la clé couvre l'une de ces applications, et écarté sinon ;
+- une application sous licence dont les données sont lues par une autre application désigne cette dernière : son connecteur reste chargé pour elle, sans que son menu, ses pages, ses fonctions ni ses tâches soient proposés ;
+- vide : le connecteur est indépendant et ne suit aucune application.
+
+### Tâches rattachées à une application \{#jobs\}
+
+Une tâche Nomaflow porte le réglage **Applications** (éditeur de tâche, section *Tâche* — voir [Créer une tâche](../../../nomaflow/jobs/create.md#sections)) : elle est affichée, planifiée et exécutée si la clé couvre l'une des applications indiquées. Une tâche qui n'en indique aucune est toujours proposée. Quand la clé change, les tâches suivent aussitôt : celles d'une application qui n'est plus couverte quittent la liste et leur planification s'arrête ; celles d'une application nouvellement couverte apparaissent avec leur planification.
 
 ---
 
@@ -152,6 +185,8 @@ Une installation sous licence envoie une fois par jour un rapport à l'outil de 
 | Comptes actifs | Leur nombre. |
 | Empreinte de l'installation | Un condensat court qui distingue deux installations ; il ne contient ni adresse ni nom. |
 
+Quand les comptes sont tenus dans un fichier (le réglage par défaut), l'installation conserve sa propre identité dans un fichier `.installation`, placé à côté du fichier des comptes (`auth.toml`, dans le dossier `config/` — le volume `liberty-config` sous Docker). L'empreinte en est tirée : une mise à jour, un conteneur recréé ou un nouveau nom d'hôte ne font donc pas apparaître une nouvelle installation dans l'outil de gestion des licences. Supprimer ce fichier donne une nouvelle identité à l'installation.
+
 Aucun chiffre des applications, aucun nom d'utilisateur, aucune donnée.
 
 Le rapport est envoyé par une tâche Nomaflow, `liberty-usage-report`, listée sous **Nomaflow → Tâches** et planifiée chaque jour à 04:17. Chaque exécution montre ce qui a été envoyé et la réponse de l'outil ; un envoi refusé ou sans réponse est l'erreur de l'exécution. La tâche se lance, se suspend et se replanifie comme les autres.
@@ -162,7 +197,7 @@ La tâche existe tant qu'une clé de licence est installée et que l'**Adresse d
 
 ## Sans clé valide \{#restricted\}
 
-Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mode restreint** : le framework et les applications construites avec lui fonctionnent, les applications sous licence ne se chargent pas. Le journal du serveur en donne la raison par une ligne commençant par `license: not loading licensed connector(s)`.
+Sans clé, ou avec une clé expirée ou invalide, le serveur fonctionne en **mode restreint** : le framework et les applications construites avec lui fonctionnent, les applications sous licence ne se chargent pas. Une clé valide qui ne couvre pas une application écarte celle-ci de la même façon — voir [Ce que couvre une clé](#coverage). Le journal du serveur en donne la raison par une ligne commençant par `license: not loading licensed connector(s)`.
 
 ---
 

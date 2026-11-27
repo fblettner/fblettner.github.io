@@ -10,6 +10,8 @@ The **Tests** folder checks that JD Edwards **still behaves the same** after a c
 
 Nothing is installed in JD Edwards, and no script is written: a case is built by picking calls in a list and letting JD Edwards' own answer fill in what to expect.
 
+The same pages also test the **security**: the suite `jde-security` asks what a user or a role may do, see and change — see [Security test cases](./security-maintenance/security-test-cases.md).
+
 ---
 
 ## At a glance
@@ -546,7 +548,7 @@ Nothing is installed in JD Edwards, and no script is written: a case is built by
 | Menu entry | Use |
 |---|---|
 | **Tests → Results** | How the last runs went: cases passed, failed, changed or never played, the last runs of each suite as bars, each case with its last results. |
-| **Tests → Cases** | The suites and their cases, drawn and edited as flows of calls. |
+| **Tests → Cases** | The suites and their cases, drawn and edited as flows of calls — the AIS suites and the [security suite](#security). |
 | **Tests → Run the tests** | The job that plays a suite — on demand here, or on a schedule. |
 
 **Results** and **Cases** are the test pages of Liberty Next, described in full in [Tests](../framework/build/tests.md); this page covers what is specific to JD Edwards.
@@ -600,10 +602,12 @@ A *Changed* is not always a defect — an update may legitimately add a column �
 
 | Parameter | Default | Meaning |
 |---|---|---|
-| **Suite** | `smoke` | The suite to play, among the suites of the AIS connector. |
+| **Suite** | `smoke` | The suite to play, among every test suite — the AIS suites and the [security suite](#security). |
 | **Compare with the reference, or record it** | compare | *compare* checks the cases and reports what differs; *record* keeps the run as the new reference. |
 | **Only these cases** | blank | Case identifiers separated by commas; blank plays them all. |
 | **Cases that write on JDE** | no | *yes* also plays the cases marked as changing data. |
+
+Each suite is played through its own connector, so the [security suite](#security) can be scheduled like the AIS ones.
 
 The run **fails** when a case fails or has changed, which triggers the job's alerts. Its files hold an Excel report, one line per step: case, label, case status, step, endpoint, step status, duration and what was found. The results also appear in **Tests → Results**.
 
@@ -621,6 +625,14 @@ Nomajde ships a first suite, **smoke** — *JDE — what must keep working* — 
 | `unknown-table-is-refused` | A table that does not exist is refused, not answered empty. |
 
 Use it to check the connection, then add the cases that matter to the business: the forms the users live in, the business functions the interfaces call, the set-up tables an update must not touch.
+
+---
+
+## The security suite \{#security\}
+
+A second suite, **jde-security** — *JDE — who may do what* — tests the JD Edwards security as it is, without AIS: each step asks one place of the security through an endpoint of `jde_security` — `rights` (an application: run, add, change, delete), `menu` (a menu task: shown), `udo` (a UDO: seen), `column` (a table's column: view, add, change) — with the line that decides for an application, a UDO or a column. Its parameters are picked in lists: who, the object, the task view and the task, the kind of UDO and the UDO, the table and the column.
+
+It ships five sample cases of a closed, separated security on the roles JD Edwards delivers, to adapt; [Simulate Security](./reviews/simulate-security.md#keep) adds a case from what it lists. Everything is in [Security test cases](./security-maintenance/security-test-cases.md).
 
 ---
 
@@ -652,3 +664,4 @@ The three test permissions are in a role's *Beyond the menus* rules, type **Test
 - [Tests](../framework/build/tests.md) — the Cases page in full; [Test results](../monitoring/test-results.md).
 - [JD Edwards services (AIS)](./ais/services.md) and [Create from…](./ais/create-from.md) — the calls a step can make.
 - [Prepare for upgrade](./upgrade/analysis.md) — what to retrofit before the tests are played.
+- [Security test cases](./security-maintenance/security-test-cases.md) — the suite `jde-security`.

@@ -220,6 +220,7 @@ Cliquer une ligne → le panneau de droite charge le formulaire de l'entrée, en
 | **Folder** | Advanced | Le dossier où se range l'entrée, choisi parmi les dossiers ; vide pour le haut du menu. Les actions d'indentation et de désindentation de l'arbre le modifient aussi. |
 | **Fixed values** | Advanced | Des valeurs transmises à ce qui s'ouvre — un filtre déjà renseigné. Une ligne par valeur : son nom, choisi parmi les filtres de l'écran ouvert ou les paramètres de la requête ouverte (ou saisi), puis la valeur. Une ligne laissée sans nom n'est pas enregistrée. |
 | **Only for the roles** | Advanced | N'affiche l'entrée qu'à ces rôles. Voir [Permissions et rôles](./permissions-and-roles.md). |
+| **Screens the page works through** | Advanced | Pour une entrée qui ouvre une page livrée par une application : les écrans de l'application par lesquels la page lit et enregistre. Qui reçoit l'entrée reçoit aussi ce dont ces écrans ont besoin — voir [Une page livrée par une application](./item-types.md#app-page). |
 | **Keep on upgrade** | Advanced | Une mise à jour de l'application laisse cette entrée telle qu'enregistrée ici. |
 | **Translations** | Translations | Le libellé dans les autres langues. Voir [Traductions et icônes](./translations-and-icons.md). |
 

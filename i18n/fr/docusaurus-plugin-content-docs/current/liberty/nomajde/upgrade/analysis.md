@@ -706,4 +706,4 @@ La page est visible des rôles qui détiennent son entrée de menu, avec les per
 - [Tâches](../jobs.md) — lancer une tâche depuis le menu de Nomajde.
 - [Tests de non-régression](../tests.md) — vérifier que JD Edwards se comporte toujours de la même façon une fois la montée de version faite.
 - [Références croisées](../cross-reference.md) — où un objet est utilisé, avec **Seulement les applications de l'analyse de montée de version**.
-- [Retour au standard](../development/back-to-standard.md) — les objets modifiés et les copies qui pourraient revenir au standard, et économiser leur reprise.
+- [Retour au standard](../reviews/back-to-standard.md) — les objets modifiés et les copies qui pourraient revenir au standard, et économiser leur reprise.

@@ -8,7 +8,7 @@ keywords: [Nomasx-1, segregation of duties, SoD, SoD review, exercised conflicts
 
 **Segregation of duties**, in the **Reviews** folder of the Nomasx-1 menu, answers the question an auditor asks after the list of conflicts: *which of them did the users actually do?* A conflict says that a user's security **allows** two activities that should not meet in one person. The review tells, for each user and each rule of the [matrix](./settings/sod/matrix.md), whether what was collected shows that the user **did both** — and with which evidence.
 
-The page reads one application at a time, picked at the top right. **Read again** reads the collected tables anew. Nothing is changed: the page reads what the collections wrote.
+The page reads one application at a time, picked at the top right. The page opens at once on the answer kept by the server, with the moment it was computed next to **Read again** (*Computed on 24 Nov at 06:15*): the collection prepares it each time it runs, so the first person to open the page after the night's collection does not wait. **Read again** computes the answer now, however long it takes, and replaces the kept one for everybody. Nothing is changed: the page reads what the collections wrote.
 
 :::info[JDE-specific]
 The review reads the JD Edwards EnterpriseOne applications: its evidence comes from Object Usage Tracking, the activity log, the transactions, the audit trail and JD Edwards' cross reference. The picker lists the JD Edwards applications only.
@@ -31,11 +31,12 @@ The review reads the JD Edwards EnterpriseOne applications: its evidence comes f
   <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">◈</text>
   <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Segregation of duties review</text>
   <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">The conflicts security allows, and those the users actually exercised.</text>
+  <text x="997" y="52.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Computed on 24 Nov at 06:15</text>
   <rect x="1005" y="38" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="52.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
-  <rect x="847" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="857" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
-  <text x="839" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="707" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="717" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
+  <text x="699" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="92" width="133.33333333333334" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="114" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">22</text>
@@ -161,7 +162,7 @@ The review reads the JD Edwards EnterpriseOne applications: its evidence comes f
   <line x1="200" y1="347.0" x2="760" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrv-arrow)"/>
   <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read again</text>
-  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reads the collected tables anew</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">computes now, for everybody</text>
   <line x1="1120" y1="47.0" x2="1060" y2="49" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrv-arrow)"/>
   <rect x="1120" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exercised</text>

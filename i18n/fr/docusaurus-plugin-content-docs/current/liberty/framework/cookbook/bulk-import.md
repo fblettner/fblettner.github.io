@@ -36,7 +36,7 @@ Les colonnes non reconnues sont ignorées.
 
 La fenêtre **Importer depuis Excel** demande le fichier et le traitement des **lignes existantes** : *Mettre à jour ou insérer*, *Insérer seulement* ou *Mettre à jour seulement*. **Vérifier** procède en deux passes :
 
-1. **Règles de l'écran** — chaque valeur au regard de sa colonne : un code de lookup doit exister, une valeur d'énumération doit être autorisée, un booléen doit prendre l'une des deux valeurs.
+1. **Règles de l'écran** — chaque valeur au regard de sa colonne : un code de lookup doit exister, une valeur d'énumération doit être autorisée, un booléen doit prendre l'une des deux valeurs. Une liste restreinte par d'autres colonnes de la ligne — une tâche enfant par sa vue et sa tâche parente — est contrôlée sur la liste propre à cette ligne, comme dans la fiche.
 2. **Base de données** — les lignes retenues exécutent l'insertion ou la mise à jour réelle dans une transaction annulée ensuite : violations de contraintes, valeurs manquantes et clés existantes apparaissent comme lors d'un véritable enregistrement.
 
 Le rapport liste les lignes valides et invalides, avec l'erreur de chacune. **Enregistrer N lignes valides** n'écrit que les lignes valides, par lots.

@@ -121,7 +121,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, performance, Server Manager, business fu
 
 Nine figures head the page: **business function calls**, **seconds spent in them**, **ms per call**, **timeouts**, **requests waiting**, **% Java heap, highest**, **% cache hits, lowest**, **% database cache hits** and **sessions blocked**. A figure turns amber or red past its threshold.
 
-What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again**, at the top right, reads everything once more. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+The page opens at once on the reading the server keeps — the last one, made by the [platform reading job](../jobs.md#platform-reading) or by anyone's last **Read again** — and the header says when it was made (*Read at 14:02*, with the day when it is older than today): an old figure is never taken for the present. **Read again**, at the top right, reads live, however long it takes, and replaces the kept reading for everybody. With no reading kept yet, the first opening reads live. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others.
 
 ---
 
@@ -145,7 +145,7 @@ Most lines carry a **Details** button, at their right: it reads, live, the rows 
 
 | Line | What **Details** lists |
 |---|---|
-| Tables never analysed, or with stale statistics | Each table: owner, table, its description, rows, last analysis, state of its statistics. |
+| Tables never analysed, or with stale statistics | Each table: owner, table, its description, rows, last analysis, state of its statistics. The description comes from the Object Librarian, through the pool's database link when it is in another database; when the account may not read it, the tables are listed without it. |
 | Unusable indexes | Each index, its table and its type. |
 | Blocked sessions | The sessions waiting, and who blocks them: session, user, program, machine, wait. |
 | A slow statement | Its full text and the plan the database runs it with. |

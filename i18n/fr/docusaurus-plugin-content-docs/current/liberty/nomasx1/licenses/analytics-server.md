@@ -40,7 +40,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
   <rect x="240" y="124" width="500" height="114" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <circle cx="256" cy="138" r="8" fill="#4a9eff"/>
   <text x="256" y="141.5" fill="#0f172a" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">1</text>
-  <text x="270" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Quels serveurs font tourner Analytics Server ?</text>
+  <text x="270" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Quels serveurs hébergent Analytics Server ?</text>
   <line x1="241" y1="152" x2="739" y2="152" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="168" fill="#64748b" fontSize="7.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MACHINE</text>
   <text x="342" y="168" fill="#64748b" fontSize="7.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CŒURS</text>
@@ -142,7 +142,7 @@ La page le rappelle en tête : *une hypothèse construite à partir de vos répo
   <text x="762" y="412" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est compté</text>
   <text x="762" y="432" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">OASSRV01 : 16 cœurs → 8</text>
   <rect x="752" y="452" width="328" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="762" y="470" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Souscrit sur ce contrat</text>
+  <text x="762" y="470" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Souscrit</text>
   <text x="762" y="490" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Analytics Server · 100 Named User Plus</text>
   <rect x="20" y="132" width="185" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="147" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">1 · Machines</text>
@@ -194,13 +194,19 @@ Une installation est rattachée à un contrat : le champ **Contrat** de l'en-tê
 
 Les lignes de contrat retenues pour Analytics Server sont celles qui portent sur *Analytics Server* et sur *Business Intelligence Suite Foundation Edition* (y compris sa version *for Oracle Applications*).
 
+### Une installation, plusieurs contrats \{#several-contracts\}
+
+Licences achetées en deux commandes pour les mêmes machines, ou Named User Plus ajoutés plus tard par un autre contrat : l'installation n'est décrite **qu'une fois**, sous un seul contrat. Dans le bloc **Souscrit** de ce contrat, **un autre contrat la couvre aussi…** désigne les autres contrats ; leurs lignes sont alors comptées avec celles de l'installation, chacune précédée de son numéro de contrat, et **Retirer** enlève un contrat de la liste. Seul un contrat sans machine propre pour ce produit, et qui n'est pas déjà compté avec une autre installation, peut être choisi.
+
+Ouverte sur un contrat compté avec un autre, la page l'indique — *Les lignes de ce contrat sont comptées avec l'installation décrite sous le contrat …* — et **Ouvrir le contrat …** mène à l'installation ; aucune machine ne peut y être saisie. Dans **Revues → Licences**, l'installation apparaît une seule fois, sous ses contrats reliés par `+` (`10000001 + 10000002`).
+
 ---
 
 ## Le questionnaire \{#questionnaire\}
 
 Quatre étapes numérotées occupent la partie gauche. Chaque modification est enregistrée immédiatement — une liste dès qu'une valeur est choisie, un nombre à la sortie du champ — puis l'analyse de droite est relue.
 
-### 1 · Quels serveurs font tourner Analytics Server ? \{#step-servers\}
+### 1 · Quels serveurs hébergent Analytics Server ? \{#step-servers\}
 
 Toute machine où Analytics Server est installé ou en service. Ajouter une machine depuis **un serveur connu…** (les machines de l'écran [Taille des serveurs](../../nomajde/monitoring/server-sizes.md) de nomajde) ou saisir **son nom**, puis **Ajouter**.
 
@@ -259,7 +265,7 @@ La partie droite présente la lecture des réponses par le serveur.
 | **Chiffres** | *Processeurs nécessaires* (en rouge au-delà des processeurs souscrits), *Processeurs souscrits*, *Named User Plus nécessaires* et *souscrits* (si le contrat comporte une ligne Named User Plus), *Risque estimé* en euros, *Encore à répondre*. |
 | **Ce que cela signifie** | Les constats, risques en tête, chacun avec son niveau : **risque**, **à vérifier**, **non connu**, **correct**. |
 | **Ce qui est compté** | Chaque serveur (`nom : cœurs → processeurs`) ou cluster entier (`cluster nom : cœurs sur hôtes → processeurs`). |
-| **Souscrit sur ce contrat** | Les lignes du contrat sur Analytics Server, avec quantité et métrique — *aucune ligne pour ce produit* sinon. |
+| **Souscrit** | Les lignes du contrat sur Analytics Server, avec quantité et métrique — et celles des autres contrats qui couvrent l'installation, chacune avec son numéro de contrat (voir [Une installation, plusieurs contrats](#several-contracts)) ; *aucune ligne pour ce produit* sinon. |
 
 ### Le calcul des licences \{#processors\}
 
@@ -277,7 +283,7 @@ Les cœurs de chaque serveur sont additionnés par facteur de cœur, multipliés
 | risque | **Base sans ligne** — un référentiel ou un entrepôt en Standard Edition 2 ou Enterprise Edition, non partagé avec JD Edwards, sans ligne pour cette édition. |
 | à vérifier | **Entrepôt de données en Express Edition** — vérifier que sa taille et son usage restent dans les limites de l'édition. |
 | non connu | Aucun serveur saisi · un serveur sans cœurs · une machine virtuelle dont les hôtes du cluster ne sont pas saisis (ses propres cœurs ne sont qu'un minimum) · un hôte de cluster sans cœurs · emplacement ou nombre des utilisateurs sans réponse · aucun référentiel · une édition non saisie. |
-| correct | Référentiel dans les 12 Go d'Express Edition · base également utilisée par JD Edwards (à vérifier : le contrat doit permettre cet usage) · base couverte par une ligne. |
+| correct | Licences au processeur couvertes (*Licences au processeur : 1 nécessaires, 2 souscrites — couvert.*) · Named User Plus couverts (nécessaires, utilisateurs, minimum, souscrits) · Référentiel dans les 12 Go d'Express Edition · base également utilisée par JD Edwards (à vérifier : le contrat doit permettre cet usage) · base couverte par une ligne. |
 
 Les mêmes phrases, dans la langue du lecteur, accompagnent l'installation dans **Revues → Licences**, dans son PDF et dans le rapport d'audit des licences ; ce qui lui manque y entre dans le risque estimé.
 

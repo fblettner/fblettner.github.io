@@ -101,7 +101,7 @@ Chaque onglet indique, à côté de sa description, combien de ses points sont �
 | Onglet | Sections |
 |---|---|
 | **Vue d'ensemble** | **L'instance** — version, instance, base, mode, plateforme et les paramètres qui comptent (`control_management_pack_access`, `cursor_sharing`, `db_block_size`, `open_cursors`, `processes`, `sga_target`, `undo_retention`…) — et **Ce que disent les chiffres**. |
-| **Stockage** | **Taille** selon ce que contient chaque propriétaire — données métier, tables de contrôle, objets centraux, système, bibliothèque d'objets, dictionnaire de données, Oracle, autres — ; **Tablespaces**, avec ce qu'ils utilisent et ce qu'ils peuvent atteindre ; **Les plus grosses tables**, index et LOB compris, avec leur description issue de l'Object Librarian. |
+| **Stockage** | **Taille** selon ce que contient chaque propriétaire — données métier, tables de contrôle, objets centraux, système, bibliothèque d'objets, dictionnaire de données, Oracle, autres — ; **Tablespaces**, avec ce qu'ils utilisent et ce qu'ils peuvent atteindre ; **Les plus grosses tables**, index et LOB compris, avec leur description issue de l'Object Librarian — lu par le lien de base de données du pool quand l'Object Librarian se trouve dans une autre base. Si le compte ne peut pas le lire, les tailles s'affichent sans les descriptions, et *Ce que disent les chiffres* indique la table sur laquelle accorder le droit. |
 | **Activité** | **Activité** — cinq chiffres sur une même bande : taux de succès du cache, analyses complètes, exécutions, validations, tris sur disque — ; **Où le temps a été attendu** à côté des **Sessions** par programme — noyaux JDE, traitements JDE, serveurs web / AIS, outils ; **Journaux redo** et leurs bascules heure par heure, sur toute la largeur ; **Les instructions les plus coûteuses** et qui les envoie, en dernier. |
 | **Objets** | **Objets et statistiques** — objets invalides, index inutilisables, tables JDE jamais analysées ou aux statistiques périmées. |
 
@@ -118,6 +118,7 @@ Chaque onglet indique, à côté de sa description, combien de ses points sont �
 | Outils connectés à la base | Des sessions d'autres programmes que JD Edwards. |
 | Objets invalides, index inutilisables, statistiques jamais calculées ou périmées | Sur les propriétaires JD Edwards. |
 | `control_management_pack_access` | Si les fonctions des packs Diagnostics / Tuning peuvent être utilisées — une exposition de licence s'ils ne sont pas détenus. |
+| Tables sans description | Le compte ne peut pas lire la table de l'Object Librarian : les plus grosses tables s'affichent sans leur description, et la ligne donne le `GRANT SELECT` à exécuter. |
 
 Ce sont les règles d'Oracle ; les autres bases appliquent les mêmes dans leurs propres termes, avec quelques règles qui leur sont propres — voir [Selon la base](#databases).
 
@@ -125,9 +126,9 @@ Ce sont les règles d'Oracle ; les autres bases appliquent les mêmes dans leurs
 
 ## Ce que la page conserve \{#kept\}
 
-Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture — *Lu à 14:02*, avec le jour quand la lecture date d'avant aujourd'hui. **Relire** relit toutes les sections.
+La page s'ouvre aussitôt sur les lectures que conserve le serveur, section par section — les dernières, faites par la [tâche de lecture de la plateforme](../jobs.md#platform-reading) ou par le dernier **Relire**, quel qu'en soit l'auteur — et l'en-tête indique l'heure de la plus ancienne — *Lu à 14:02*, avec le jour quand la lecture date d'avant aujourd'hui : un chiffre ancien n'est jamais pris pour l'état présent. **Relire** relit toutes les sections en direct, quelle que soit la durée, et remplace les lectures conservées pour tous les utilisateurs. Tant qu'aucune lecture n'est conservée, la première ouverture lit en direct.
 
-Les pages de la supervision partagent leurs lectures : une fois la [synthèse de la plateforme](../synthesis.md) lue, cette page ne lit plus que les deux sections que la synthèse n'affiche pas, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+Les pages de la supervision partagent leurs lectures : une fois la [synthèse de la plateforme](../synthesis.md) lue, cette page ne lit plus que les deux sections que la synthèse n'affiche pas, et ce qu'une page relit est à jour dans les autres.
 
 ---
 

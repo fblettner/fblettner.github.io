@@ -148,13 +148,15 @@ Ils se règlent à l'étape **Actions** du [Concepteur d'écran](./overview.md#d
 
 | Groupe | Listes | Déclenchement | `source` lit dans |
 |---|---|---|---|
-| **Hooks de dialogue** | `on_load` | Une fois la ligne chargée (modification) ou les valeurs par défaut posées (ajout). | Le formulaire. |
+| **Hooks de dialogue** | `on_load` | Une fois la ligne chargée (modification) ou les valeurs par défaut posées (ajout) — et de nouveau quand **Dupliquer** fait de l'enregistrement un nouvel enregistrement. | Le formulaire ; sur un enregistrement existant, ses valeurs dès le départ. |
 | | `on_save` | Après le succès de l'insertion ou de la mise à jour principale du dialogue. | Le formulaire au moment de l'enregistrement. |
 | | `on_cancel` | À la fermeture du dialogue sans enregistrement, avant sa fermeture ; une erreur le maintient ouvert. | Le formulaire. |
 | **Barre d'outils** | `actions` | Chaque entrée est un bouton au-dessus de la grille. | Aucune ligne ; valeurs saisies dans `INPUT.<nom>`. |
 | **Hooks de ligne** | `on_insert`, `on_update`, `on_delete` | Après le succès de l'écriture — depuis le dialogue ou la saisie en grille. | La ligne créée, ou la ligne supprimée. |
-| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Duplicate** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
+| | `on_duplicate` | À l'enregistrement d'une ligne dupliquée par le bouton **Dupliquer** du dialogue, à la place de `on_insert`. | La nouvelle ligne, et la ligne d'origine sous `SOURCE_<colonne>`. |
 | **Menu de ligne** *(section dédiée)* | `row_menu` | Chaque entrée est un élément du menu d'une ligne : clic droit, ou poignée ⋯ en début de ligne. | La ligne cliquée. |
+
+**`on_load` et Dupliquer.** *Dupliquer* transforme l'enregistrement en un nouvel enregistrement dans la même fiche : les actions d'ouverture s'exécutent de nouveau pour la copie, comme pour une fiche ouverte en ajout. Une valeur qu'elles obtiennent pour un nouvel enregistrement (un identifiant demandé à un autre système) est donc obtenue de nouveau pour la copie, au lieu de rester vide. Sur un enregistrement existant, les actions voient ses valeurs dès leur exécution : une action qui teste si un champ est vide répond *non* sur un enregistrement en modification et ne remplace pas sa clé.
 
 Un hook exécute sa liste dans l'ordre et s'arrête à la première erreur, sauf si une action a **stop_on_error** désactivé. Une entrée de barre d'outils ou de menu de ligne correspond à une seule action : pour enchaîner plusieurs étapes depuis un même bouton, passer par une `chain`.
 

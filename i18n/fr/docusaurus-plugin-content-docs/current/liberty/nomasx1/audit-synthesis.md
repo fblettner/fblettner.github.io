@@ -60,7 +60,8 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
   <text x="889.5" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Exposition licences</text>
   <text x="889.5" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Au-delà de la souscription</text>
   <text x="889.5" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">84 500 €</text>
-  <text x="889.5" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">4 composants sur 22 · 18 utilisateurs en trop</text>
+  <text x="889.5" y="232" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">4 lignes au-delà de la souscription</text>
+  <text x="889.5" y="243" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">18 utilisateurs en trop</text>
   <rect x="240" y="260" width="520" height="176" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="254" y="280" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Conflits par rafraîchissement</text>
   <text x="254" y="293" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Les lignes de conflit à chaque rafraîchissement SoD sur la période, par processus métier</text>
@@ -115,7 +116,7 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
   <text x="1066" y="379" fill="#e2e8f0" fontSize="8.8" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
   <line x1="784" y1="395" x2="1066" y2="395" stroke="#1f2937" strokeWidth="1"/>
   <circle cx="788" cy="406" r="3.2" fill="#f87171"/>
-  <text x="800" y="409" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Composants au-delà de la souscription</text>
+  <text x="800" y="409" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Licences au-delà de la souscription</text>
   <text x="800" y="420" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">acheter, ou retirer des droits</text>
   <text x="1066" y="409" fill="#e2e8f0" fontSize="8.8" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">84 500 €</text>
   <text x="1066" y="420" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">4</text>
@@ -138,7 +139,7 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
   <text x="499.33333333333326" y="574" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">248 lignes de conflit</text>
   <rect x="523.3333333333333" y="448" width="273.3333333333333" height="140" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="537.3333333333333" y="468" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Par composant de licence</text>
-  <text x="537.3333333333333" y="481" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Utilisateurs avec des droits, face à la souscription</text>
+  <text x="537.3333333333333" y="481" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Utilisateurs avec des droits sur chaque composant</text>
   <text x="537.3333333333333" y="507" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">General Accounting</text>
   <text x="782.6666666666665" y="507" fill="#e2e8f0" fontSize="8.6" textAnchor="end" fontFamily="system-ui, sans-serif">64</text>
   <rect x="537.3333333333333" y="512" width="245.33333333333331" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
@@ -276,9 +277,9 @@ keywords: [Nomasx-1, vue d'ensemble, synthèse d'audit, tableau de bord, sépara
 | **Utilisateurs** — comptes déclarés | Les comptes collectés. | Actifs · désactivés · **dormants** : actifs sans connexion depuis 90 jours. |
 | **Rôles** — rôles définis et leur affectation | Les rôles définis. | Attribués · **orphelins** (attribués à personne) · utilisateurs titulaires de plus de 10 rôles, avec le maximum. |
 | **Séparation des tâches** — utilisateurs porteurs d'un conflit | Les utilisateurs porteurs d'au moins un conflit. | Lignes de conflit · utilisateurs privilégiés en conflit · processus métier concernés. |
-| **Exposition licences** — composants déployés au-delà de la souscription | La valeur des utilisateurs en surnombre par rapport aux quantités souscrites : prix catalogue plus trois ans de support par utilisateur en trop. | Composants en dépassement sur l'ensemble des composants · utilisateurs en surnombre. |
+| **Exposition licences** — ce que la revue des licences trouve au-delà de la souscription | Le total des lignes de la [revue des licences](./licensing-review.md) au-delà de la souscription — licences manquantes, modules qu'aucune ligne ne couvre, Named User Plus, Data Integrator et Analytics Server — au prix catalogue plus trois ans de support. | Lignes au-delà de la souscription · utilisateurs en trop. |
 
-L'exposition s'appuie sur les [licences souscrites](./licenses/subscribed-licences.md) et le [catalogue de prix](./settings/pricing/pricing.md) : un composant sans prix compte pour zéro.
+La carte affiche le dernier calcul de la revue — celui de la collecte ou du dernier **Relire** de la revue — et donne le même total que la revue, ligne à ligne (voir [Une seule exposition partout](./licensing-review.md#exposure)). Elle reste vide tant que la collecte n'a pas été exécutée ou que la revue n'a pas été relue une fois.
 
 ---
 
@@ -291,7 +292,7 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 | **Violations SoD actives** — ou *Aucune violation SoD*, ou *Aucune matrice SoD définie* | Les règles de la matrice déclenchées sur l'ensemble des règles, et les associations privilégiées. Rouge dès qu'un utilisateur privilégié est concerné. Sans matrice, la définir dans [Paramètres → SoD](./settings/sod/matrix.md). |
 | **Rôles auto-conflictuels** | Un rôle accorde à lui seul les deux côtés d'une paire incompatible : corriger le rôle règle le cas de tous ses titulaires. |
 | **Combinaisons de rôles en conflit** | Des paires de rôles qui ne contreviennent à la séparation des tâches que détenues ensemble : séparer les fonctions ou revoir les attributions. |
-| **Composants au-delà de la souscription** | Plus d'utilisateurs disposant de droits que de licences : acheter, ou retirer des droits. Le montant est l'exposition ; rouge à partir de 250 000, orange à partir de 25 000. |
+| **Licences au-delà de la souscription** | Les lignes de la revue des licences au-delà de ce qui est souscrit : acheter, ou retirer des droits. Le montant est l'exposition licences, le nombre celui des lignes ; rouge à partir de 250 000, orange à partir de 25 000. |
 | **Comptes à privilèges** | Accès de super-utilisateur : vérifier que chacun a un titulaire, une justification et une revue trimestrielle. |
 | **Comptes actifs dormants** | Aucune connexion depuis 90 jours, dont les comptes jamais utilisés : désactiver ou recertifier. |
 | **Comptes génériques / partagés** | Les actions ne peuvent pas être imputées à une personne : les remplacer par des comptes nominatifs. |
@@ -309,7 +310,7 @@ Les constats du [rapport d'évaluation Sécurité & SoD](./reports/security-sox.
 |---|---|
 | **Conflits par rafraîchissement** | Les lignes de conflit à chaque rafraîchissement SoD de la période, empilées par processus métier — la tendance de la remédiation. |
 | **Par processus** | Les utilisateurs en conflit par processus métier, avec le nombre de lignes de conflit ; en rouge quand des utilisateurs privilégiés en font partie. |
-| **Par composant de licence** | Les utilisateurs disposant de droits par composant, face à la quantité souscrite. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
+| **Par composant de licence** | Les utilisateurs disposant de droits sur chaque composant — sans comparaison avec la souscription, qui revient à la revue des licences. Les comptes techniques et liés sont exclus ; un utilisateur actif s'est connecté au cours des 90 derniers jours. |
 | **Fraîcheur des données** | La dernière collecte par module, avec son ancienneté : vert sous 2 jours, orange sous 8, rouge au-delà. Une ligne rouge signale des chiffres anciens. |
 | **Utilisateurs transactionnels par mois** | Les utilisateurs distincts ayant des transactions chaque mois, toutes applications confondues. |
 | **Utilisateurs les plus en conflit** | Les utilisateurs porteurs du plus grand nombre de lignes de conflit, avec le nombre de processus ; les comptes privilégiés sont signalés. |

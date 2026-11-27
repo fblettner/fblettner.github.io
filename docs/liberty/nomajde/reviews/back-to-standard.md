@@ -1,12 +1,12 @@
 ---
 title: Back to standard
-description: "Development → Back to standard in Nomajde: the standard JD Edwards EnterpriseOne objects a path code holds as changed, and the copies made of standard objects, compared record by record with Oracle's own in the pristine path code — which can go back to standard as they are, which differ and by what, which differ and are never run — with the OMW project that holds each one and the retrofit days saved at each upgrade."
+description: "Reviews → Back to standard in Nomajde: the standard JD Edwards EnterpriseOne objects a path code holds as changed, and the copies made of standard objects, compared record by record with Oracle's own in the pristine path code — which can go back to standard as they are, which differ and by what, which differ and are never run — with the OMW project that holds each one and the retrofit days saved at each upgrade."
 keywords: [Nomajde, JD Edwards, JDE E1, back to standard, retrofit, upgrade, pristine, PS920, path code, Object Librarian, OMW project, specifications, event rules, custom objects, copies, compare]
 ---
 
 # Back to standard
 
-**Development → Back to standard** answers a question every JD Edwards EnterpriseOne customer meets before an upgrade: of all the standard objects changed over the years, **which changes still matter?** Each changed object, and each copy of a standard object, costs retrofit days at every upgrade. The page lists them, compares each one with Oracle's own object in the pristine path code (`PS920`, Oracle's objects as delivered) or in another path code, and sorts them: **those that can go back to standard as they are**, **those that differ, and by what**, and **those that differ but that nobody runs**. JD Edwards is only read.
+**Reviews → Back to standard** answers a question every JD Edwards EnterpriseOne customer meets before an upgrade: of all the standard objects changed over the years, **which changes still matter?** Each changed object, and each copy of a standard object, costs retrofit days at every upgrade. The page lists them, compares each one with Oracle's own object in the pristine path code (`PS920`, Oracle's objects as delivered) or in another path code, and sorts them: **those that can go back to standard as they are**, **those that differ, and by what**, and **those that differ but that nobody runs**. JD Edwards is only read.
 
 ---
 
@@ -305,6 +305,6 @@ The page is in the **Development** folder of the Nomajde menu. The predefined ro
 ## Related
 
 - [Prepare for upgrade](../upgrade/analysis.md) — what a release makes you retrofit, and how the original of a copy is found.
-- [Object Management Workbench](../master-data/delivered-screens.md#omw) — the OMW projects, their objects and their log.
+- [Object Management Workbench](./omw.md) — the OMW projects, their objects and their log.
 - [Cross Reference](../cross-reference.md) — where an object is used before taking it back.
 - [Jobs](../jobs.md#standard-compare) — the comparison job in the Jobs folder.

@@ -129,7 +129,10 @@ Les chaînes de dialecte proviennent de SQLAlchemy. Le dialecte d'un pool suit s
 | `mariadb` | MariaDB. |
 | `mssql` | Microsoft SQL Server. |
 | `sqlite` | SQLite. |
-| `db2` | IBM DB2. |
+| `db2` | IBM Db2 (Linux, UNIX, Windows). |
+| `ibmi` | Db2 for i (IBM i, AS/400). |
+
+Un pool Db2 ou IBM i s'appelle `db2` / `ibmi` partout, avant comme après sa connexion — et non du nom que se donne le pilote d'IBM : une variante écrite sous `db2` ou `ibmi` est donc bien celle qui s'exécute.
 
 Le validateur impose deux règles sur la map :
 

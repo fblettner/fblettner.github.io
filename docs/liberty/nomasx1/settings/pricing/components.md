@@ -167,7 +167,7 @@ The grid is writable. **Add row** opens an empty form; a click on a row opens it
 
 | Field | What to enter |
 |---|---|
-| **Component ID** | The number of the component. Read-only on a saved row: to renumber a component, add a new one. |
+| **Component ID** | The number of the component, typed when the row is added — any number not yet used, so a new component can be created. Read-only on a saved row: to renumber a component, add a new one. |
 | **Price List** | `JD Edwards`, `Technology`… |
 | **Category** | The group the component belongs to. |
 | **Component** | The name every page shows. |

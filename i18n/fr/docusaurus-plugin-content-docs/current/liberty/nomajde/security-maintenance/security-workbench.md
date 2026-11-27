@@ -199,6 +199,14 @@ La visibilité des colonnes peut aussi être forcée manuellement via le bouton 
 
 ---
 
+## Sécurité des UDO : le code produit \{#udo-security-product-code\}
+
+L'écran **Sécurité des UDO** (**Maintenance de la sécurité → Sécurité des UDO**) présente les lignes de sécurité des objets définis par les utilisateurs (`F00950W`) dans une grille semblable à celle-ci, avec le même export, la même modification en lot et le même chargement depuis un fichier. Son champ **Product Code** lit sa propre liste : **All Product Codes** (`*ALL`) d'abord, puis les codes produit. Une ligne d'UDO qui n'est rattachée à aucun produit porte `*ALL` — la valeur par défaut du formulaire, et celle de la plupart des lignes écrites par JD Edwards : une telle ligne s'affiche donc avec son libellé et s'importe depuis un fichier comme toute autre.
+
+Les lignes de filtrage des menus ont leur propre grille, [Filtrage des menus](./menu-filtering.md).
+
+---
+
 ## Suivi des modifications
 
 Les changements de sécurité faits sur cet écran sont **captés dans le [paquet de modifications](../../nomaflow/change-packages.md) actif**, sous l'entité `security`. Chaque octroi, retrait ou édition en masse devient une entrée vérifiable : un changement du workbench se promeut du développement vers la production sous forme de lot relu, au lieu d'être réappliqué à la main.
@@ -215,4 +223,5 @@ C'est ce qui rend une promotion de sécurité JDE reproductible : associez-y le 
 - **Upload Excel** pour les lots de sécurité livrés par l'intégrateur. Le flux *Ajouter* gère les lignes unitaires ; l'upload est fait pour les dizaines de lignes qui accompagnent un nouveau module.
 - **Une interdiction sur *Toutes actions* avec `Utilisateur = *PUBLIC` plus des autorisations ciblées sur les rôles** est le motif JDE standard. La grille permet de vérifier facilement que l'interdiction est en place pour chaque objet.
 - **Après des changements en masse**, exécuter *Nomasx-1 → Applications → Droits* pour confirmer que les droits effectifs correspondent à l'intention — le workbench montre ce qui est paramétré, *Droits* montre ce que JDE calcule à la connexion.
-- **Avant et après un changement**, la [Simulation de la sécurité](./security-simulation.md) donne ce qu'un utilisateur ou un rôle aurait le droit de faire, objet par objet, avec une hypothèse qui n'écrit rien ; son onglet [Cohérence](./workbench-consistency.md) liste les lignes de cette grille inutiles ou contradictoires.
+- **Avant et après une modification**, [Simuler la sécurité](../reviews/simulate-security.md) montre l'effet d'un changement avant toute écriture, et [Cohérence de la sécurité](../reviews/security-consistency.md) liste les lignes de cette grille qui ne servent à rien ou se contredisent.
+- **Les lignes d'un seul utilisateur ou rôle, une nature à la fois** : [Gestion de la sécurité → un utilisateur ou un rôle](../security-management/user-or-role.md#applications) présente ses lignes du Security Workbench sous forme de cases, à côté de tout ce qui s'y applique, et enregistre par cet écran.

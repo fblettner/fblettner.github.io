@@ -8,7 +8,7 @@ keywords: [Nomasx-1, séparation des tâches, SoD, revue SoD, conflits exercés,
 
 **Séparation des tâches**, dans le dossier **Revues** du menu Nomasx-1, répond à la question que pose un auditeur une fois la liste des conflits en main : *lesquels les utilisateurs ont-ils réellement exercés ?* Un conflit signifie que la sécurité d'un utilisateur lui **permet** deux activités qui ne devraient pas être réunies sur une même personne. La revue indique, pour chaque utilisateur et chaque règle de la [matrice](./settings/sod/matrix.md), si les données collectées montrent qu'il a **fait les deux** — et sur quelle preuve.
 
-La page porte sur une application à la fois, choisie en haut à droite. **Relire** relit les tables collectées. Rien n'est modifié : la page lit ce que les collectes ont écrit.
+La page porte sur une application à la fois, choisie en haut à droite. La page s'ouvre immédiatement sur la réponse conservée par le serveur, avec l'heure de son calcul à côté de **Relire** (*Calculé le 24 nov. à 06:15*) : la collecte la prépare à chaque exécution, si bien que la première personne qui ouvre la page après la collecte de la nuit n'attend pas. **Relire** recalcule la réponse sur-le-champ, quelle que soit sa durée, et remplace pour tous celle qui était conservée. Rien n'est modifié : la page lit ce que les collectes ont écrit.
 
 :::info[Spécifique à JDE]
 La revue porte sur les applications JD Edwards EnterpriseOne : ses preuves viennent d'Object Usage Tracking, du journal d'activité, des transactions, de la piste d'audit et de la référence croisée de JD Edwards. La liste des applications ne propose que les applications JD Edwards.
@@ -31,11 +31,12 @@ La revue porte sur les applications JD Edwards EnterpriseOne : ses preuves vienn
   <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">◈</text>
   <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Revue de la séparation des tâches</text>
   <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Les conflits que la sécurité permet, et ceux que les utilisateurs ont réellement exercés.</text>
+  <text x="1019" y="52.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Calculé le 24 nov. à 06:15</text>
   <rect x="1027" y="38" width="53" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1053.5" y="52.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
-  <rect x="869" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="879" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
-  <text x="861" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="747" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="757" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
+  <text x="739" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="92" width="133.33333333333334" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="114" fill="#4a9eff" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">22</text>
@@ -161,7 +162,7 @@ La revue porte sur les applications JD Edwards EnterpriseOne : ses preuves vienn
   <line x1="200" y1="347.0" x2="760" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrv-arrow)"/>
   <rect x="1120" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Relire</text>
-  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">relit les tables collectées</text>
+  <text x="1130" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">recalcule pour tous</text>
   <line x1="1120" y1="47.0" x2="1060" y2="49" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdrv-arrow)"/>
   <rect x="1120" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exercés</text>

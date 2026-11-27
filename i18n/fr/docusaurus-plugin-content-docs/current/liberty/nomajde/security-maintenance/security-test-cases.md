@@ -1,20 +1,20 @@
 ---
 title: Cas de test de la sécurité
-description: "Simulation de la sécurité → Cas de test dans Nomajde : des attentes sur la sécurité de JD Edwards EnterpriseOne (ce rôle peut exécuter P4210, ne peut pas supprimer dans P0411) enregistrées en cas, rejouées sur la sécurité actuelle après chaque changement, avec ce qui ne tient plus et la règle qui décide désormais ; cinq cas d'exemple à adapter et un éditeur pour chaque cas."
-keywords: [Nomajde, JD Edwards, JDE E1, cas de test, non-régression, simulation de la sécurité, Security Workbench, attentes, exemples, rôles]
+description: "La sécurité JD Edwards EnterpriseOne testée comme tout autre test dans Nomajde (Tests → Cas, suite jde-security) : chaque étape interroge un point de la sécurité telle qu'elle est — ce qu'un utilisateur ou un rôle peut faire sur une application, si une tâche de menu est montrée, si un UDO est vu, ce qui est permis sur une colonne de table — avec la ligne qui décide ; paramètres choisis dans des listes, cinq cas d'exemple d'une sécurité fermée et séparée à adapter, et cas gardés depuis Simuler la sécurité."
+keywords: [Nomajde, JD Edwards, JDE E1, cas de test de la sécurité, non-régression, jde-security, jde_security, Security Workbench, filtrage des menus, sécurité des UDO, sécurité des colonnes, cas d'exemple, Simuler la sécurité, rôles]
 ---
 
 # Cas de test de la sécurité
 
-L'onglet **Cas de test** de la [Simulation de la sécurité](./security-simulation.md) assure la non-régression d'un projet de sécurité JD Edwards EnterpriseOne. Un cas est une liste d'**attentes** sur un utilisateur, un rôle ou `*PUBLIC` — *peut exécuter P4210*, *ne peut pas supprimer dans P0411* — et **Tout rejouer** confronte chaque cas à la sécurité telle qu'elle est. Après une modification dans le Security Workbench, une refusion de rôles ou une promotion, la liste indique ce qui ne tient plus et la règle qui décide désormais.
+Les cas de test de la sécurité assurent la non-régression d'un projet de sécurité JD Edwards EnterpriseOne. Un cas dit ce qu'un utilisateur, un rôle ou `*PUBLIC` doit pouvoir faire et ce qui doit lui être refusé — *peut exécuter P0411*, *ne voit pas le menu Supply Management*, *ne voit pas la colonne SSN de F060116* — et le jouer interroge la sécurité **telle qu'elle est maintenant**. Après un changement dans le Security Workbench, une fusion de rôles ou une promotion vers un autre environnement, une étape en échec indique ce qui n'est plus vrai.
 
-Les cas sont enregistrés dans la base propre de Nomajde ; les rejouer ne fait que lire JD Edwards.
+Ce sont des cas des [tests](../tests.md) comme les autres : écrits, joués et comparés dans **Tests → Cas**, dans la suite **`jde-security`** (*JDE — who may do what*), avec leurs résultats dans **Tests → Résultats**. Jouer un cas ne fait que lire JD Edwards.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 450" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="njtc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="njtc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -22,285 +22,195 @@ Les cas sont enregistrés dans la base propre de Nomajde ; les rejouer ne fait q
     <marker id="njtc-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="414" rx="14" fill="url(#njtc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Simulation de la sécurité</text>
-  <text x="240" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Ce qu'un utilisateur aurait le droit de faire, avant de l'écrire — et les cas qui vérifient que cela le reste.</text>
-  <rect x="240.0" y="78" width="175.5" height="38" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250.0" y="94" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Simuler</text>
-  <text x="250.0" y="108" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Un utilisateur, un module, une hypothèse</text>
-  <rect x="421.5" y="78" width="175.5" height="38" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="431.5" y="94" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sécuriser un module</text>
-  <text x="431.5" y="108" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Tout un module pour un rôle</text>
-  <rect x="603.0" y="78" width="175.5" height="38" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="613.0" y="94" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Cohérence</text>
-  <text x="613.0" y="108" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Des lignes inutiles ou qui se contredisent</text>
-  <rect x="784.5" y="78" width="175.5" height="38" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="794.5" y="94" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Cas de test</text>
-  <text x="794.5" y="108" fill="#94a3b8" fontSize="7.5" fontFamily="system-ui, sans-serif">Des attentes rejouées sur la sécurité · 7</text>
-  <rect x="240" y="126" width="89" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="284.5" y="140.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Tout rejouer</text>
-  <rect x="337" y="126" width="134" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="404.0" y="140.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Ajouter les exemples</text>
-  <rect x="240" y="156" width="720" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CAS</text>
-  <text x="508" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CONCERNE</text>
-  <text x="588" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ATTENTES</text>
-  <text x="674" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DERNIER PASSAGE</text>
-  <text x="774" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TENUES</text>
-  <text x="824" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ROMPUES</text>
-  <text x="880" y="171.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif"></text>
-  <rect x="240" y="184" width="720" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="198.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Comptabilité fournisseurs — JSMITH</text>
-  <text x="508" y="198.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">JSMITH</text>
-  <text x="588" y="198.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">24</text>
-  <text x="674" y="198.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-20 08:15</text>
-  <text x="774" y="198.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">24</text>
-  <rect x="824" y="187.0" width="22" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="835.0" y="198.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">0</text>
-  <text x="880" y="198.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Rejouer · Modifier · Supprimer</text>
-  <rect x="240" y="210" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="224.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Accounts payable clerk</text>
-  <text x="508" y="224.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">APCLERK</text>
-  <text x="588" y="224.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">6</text>
-  <text x="674" y="224.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-20 08:15</text>
-  <text x="774" y="224.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">4</text>
-  <rect x="824" y="213.0" width="22" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="835.0" y="224.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">2</text>
-  <text x="880" y="224.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Rejouer · Modifier · Supprimer</text>
-  <rect x="240" y="236" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="250.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Buyer</text>
-  <text x="508" y="250.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">BUYER</text>
-  <text x="588" y="250.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">5</text>
-  <text x="674" y="250.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-20 08:15</text>
-  <text x="774" y="250.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">5</text>
-  <rect x="824" y="239.0" width="22" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="835.0" y="250.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">0</text>
-  <text x="880" y="250.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Rejouer · Modifier · Supprimer</text>
-  <rect x="240" y="262" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Inquiry only</text>
-  <text x="508" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">INQUIRY</text>
-  <text x="588" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">8</text>
-  <text x="674" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">jamais</text>
-  <text x="774" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="824" y="276.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="880" y="276.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Rejouer · Modifier · Supprimer</text>
-  <rect x="240" y="288" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="302.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Nobody but administrators manages security</text>
-  <text x="508" y="302.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">&#42;PUBLIC</text>
-  <text x="588" y="302.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">4</text>
-  <text x="674" y="302.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">2026-11-20 08:15</text>
-  <text x="774" y="302.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">4</text>
-  <rect x="824" y="291.0" width="22" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="835.0" y="302.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">0</text>
-  <text x="880" y="302.5" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Rejouer · Modifier · Supprimer</text>
-  <text x="250" y="332" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CE QUI NE TIENT PLUS  2</text>
-  <rect x="240" y="340" width="720" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CAS</text>
-  <text x="440" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">OBJET</text>
-  <text x="510" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DROIT</text>
-  <text x="580" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ATTENDU</text>
-  <text x="650" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LA SÉCURITÉ DIT</text>
-  <text x="760" y="355.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DÉCIDÉ PAR</text>
-  <rect x="240" y="368" width="720" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Accounts payable clerk</text>
-  <text x="440" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">P0411</text>
-  <text x="510" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">supprimer</text>
-  <rect x="580" y="371.0" width="32" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="596.0" y="382.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">NON</text>
-  <rect x="650" y="371.0" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="666.0" y="382.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">oui</text>
-  <text x="760" y="382.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">APCLERK on &#42;ALL</text>
-  <rect x="240" y="394" width="720" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="250" y="408.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Accounts payable clerk</text>
-  <text x="440" y="408.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">P0911</text>
-  <text x="510" y="408.5" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">exécuter</text>
-  <rect x="580" y="397.0" width="32" height="16" rx="8.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="596.0" y="408.2" fill="#f87171" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">NON</text>
-  <rect x="650" y="397.0" width="32" height="16" rx="8.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="666.0" y="408.2" fill="#4ade80" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">oui</text>
-  <text x="760" y="408.5" fill="#cbd5e1" fontSize="8.5" fontFamily="ui-monospace, monospace">no rule</text>
-  <rect x="20" y="128" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="143" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tout rejouer</text>
-  <text x="30" y="156" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque cas, sécurité actuelle</text>
-  <line x1="200" y1="145.0" x2="250" y2="137" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
-  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exemples</text>
-  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rôles fictifs à adapter</text>
-  <line x1="200" y1="247.0" x2="250" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
+  <rect x="220" y="20" width="880" height="440" rx="14" fill="url(#njtc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tests</text>
+  <rect x="236" y="60" width="210" height="386" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="246" y="70" width="190" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="341.0" y="84.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle suite</text>
+  <text x="248" y="112" fill="#94a3b8" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JDE — WHO MAY DO WHAT</text>
+  <rect x="242" y="122" width="198" height="20" rx="5" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="250" y="136" fill="#f87171" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="264" y="136" fill="#e2e8f0" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Accounts payable manager</text>
+  <text x="250" y="160" fill="#f87171" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="264" y="160" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Accounts receivable ma…</text>
+  <text x="250" y="184" fill="#f87171" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="264" y="184" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Buyer</text>
+  <text x="250" y="208" fill="#f87171" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="264" y="208" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Security administrator</text>
+  <text x="250" y="232" fill="#f87171" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✕</text>
+  <text x="264" y="232" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample — Everybody is closed by…</text>
+  <text x="250" y="256" fill="#4ade80" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">✓</text>
+  <text x="264" y="256" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">AP_MANAGER — clôture mensuelle</text>
+  <text x="250" y="280" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+ Nouveau cas</text>
+  <text x="250" y="304" fill="#94a3b8" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">JDE — WHAT MUST KEEP WORKING</text>
+  <rect x="458" y="60" width="88" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="502.0" y="74.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Jouer ce cas</text>
+  <rect x="552" y="60" width="98" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="601.0" y="74.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▷ Jouer la suite</text>
+  <rect x="458" y="90" width="250" height="356" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="478" y="102" width="210" height="22" rx="11" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="583.0" y="117" fill="#e2e8f0" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sample — Accounts payable manager</text>
+  <rect x="498" y="136" width="170" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="510" y="152" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">✓ RIGHTS</text>
+  <text x="510" y="168" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">P0411</text>
+  <line x1="583.0" y1="182" x2="583.0" y2="196" stroke="#475569" strokeWidth="1"/>
+  <rect x="498" y="196" width="170" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,69,58,0.45)" strokeWidth="1"/>
+  <text x="510" y="212" fill="#f87171" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">✕ RIGHTS</text>
+  <text x="510" y="228" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">P4310</text>
+  <line x1="583.0" y1="242" x2="583.0" y2="256" stroke="#475569" strokeWidth="1"/>
+  <rect x="498" y="256" width="170" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="510" y="272" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">✓ MENU</text>
+  <text x="510" y="288" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Menu — Financials</text>
+  <line x1="583.0" y1="302" x2="583.0" y2="316" stroke="#475569" strokeWidth="1"/>
+  <rect x="498" y="316" width="170" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1"/>
+  <text x="510" y="332" fill="#4ade80" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">✓ UDO</text>
+  <text x="510" y="348" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">WATCHLIST — Payments Ov…</text>
+  <line x1="583.0" y1="362" x2="583.0" y2="376" stroke="#475569" strokeWidth="1"/>
+  <rect x="498" y="376" width="170" height="46" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,69,58,0.45)" strokeWidth="1"/>
+  <text x="510" y="392" fill="#f87171" fontSize="8" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">✕ COLUMN</text>
+  <text x="510" y="408" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">F060116.SSN</text>
+  <rect x="724" y="60" width="360" height="386" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="738" y="82" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">L'étape</text>
+  <text x="738" y="100" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOM</text>
+  <rect x="738" y="106" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="748" y="120.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Menu — Financials</text>
+  <text x="890" y="100" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POINT D'ACCÈS APPELÉ</text>
+  <rect x="890" y="106" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="900" y="120.5" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">menu  Whether a user or role is sho…  ▾</text>
+  <text x="738" y="146" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMÈTRES</text>
+  <rect x="738" y="152" width="332" height="120" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="748" y="170" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">User, role or &#42;PUBLIC</text>
+  <rect x="748" y="175" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="758" y="189.5" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">AP_MANAGER  ×  ▾</text>
+  <text x="910" y="170" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Task view</text>
+  <rect x="910" y="175" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="920" y="189.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">91 EnterpriseOne Me…  ×  ▾</text>
+  <text x="748" y="214" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Task</text>
+  <rect x="748" y="219" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="758" y="233.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Financials  ×  ▾</text>
+  <text x="910" y="214" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Folder</text>
+  <rect x="910" y="219" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="920" y="233.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">▾</text>
+  <text x="748" y="258" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">A menu or a task of the task view.</text>
+  <text x="910" y="258" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">Only when the task sits in several…</text>
+  <text x="738" y="296" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui est attendu</text>
+  <text x="738" y="316" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">L'APPEL</text>
+  <rect x="738" y="322" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="748" y="336.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">doit fonctionner  ▾</text>
+  <text x="738" y="366" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UNE VALEUR DE LA RÉPONSE BRUTE EST ÉGALE À — CHEMIN, VALEUR</text>
+  <rect x="738" y="372" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="748" y="386.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">shown</text>
+  <rect x="896" y="372" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="906" y="386.5" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">Y</text>
+  <rect x="738" y="415" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M740.5,420.5 L742.8,422.8 L746.8,418" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="755" y="424" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Jouée même après un échec (un nettoyage)</text>
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La suite jde-security</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cinq exemples, puis vos cas</text>
+  <line x1="200" y1="117.0" x2="242" y2="112" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Gardé depuis la simulation</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Garder comme cas de test…</text>
+  <line x1="200" y1="277.0" x2="246" y2="254" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
   <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui ne tient plus</text>
-  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avec la règle qui décide</text>
-  <line x1="200" y1="397.0" x2="250" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
-  <rect x="1000" y="128" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="143" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouter les exemples</text>
-  <text x="1010" y="156" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cinq cas, jamais écrasés</text>
-  <line x1="1000" y1="145.0" x2="471" y2="137" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
-  <rect x="1000" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dernier passage</text>
-  <text x="1010" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tenues / rompues gardées</text>
-  <line x1="1000" y1="237.0" x2="810" y2="196" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
-  <rect x="1000" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Actions par ligne</text>
-  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rejouer · modifier · supprimer</text>
-  <line x1="1000" y1="317.0" x2="870" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une étape par point vérifié</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rights · menu · udo · column</text>
+  <line x1="200" y1="397.0" x2="498" y2="400" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
+  <rect x="1140" y="150" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choisis en liste</text>
+  <text x="1150" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">qui, vue, tâche, dossier</text>
+  <line x1="1140" y1="167.0" x2="1070" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
+  <rect x="1140" y="370" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1150" y="385" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ce qui doit être vrai</text>
+  <text x="1150" y="398" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shown, seen, run… = Y ou N</text>
+  <line x1="1140" y1="387.0" x2="1070" y2="384" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njtc-arrow)"/>
 </svg>
 
 ---
 
-## La liste des cas \{#list\}
+## Les quatre appels de sécurité \{#endpoints\}
 
-**Tout rejouer** rejoue chaque cas ; **Ajouter les exemples** ajoute les [cas d'exemple](#samples). Le titre de l'onglet indique le nombre de cas.
+Chaque étape d'un cas de sécurité appelle un point d'accès du connecteur `jde_security` et attend certaines valeurs de sa réponse. Chaque réponse est calculée comme JD Edwards la décide : un utilisateur est pris avec les rôles qu'il détient aujourd'hui, puis `*PUBLIC` (voir [Comment cela se décide](../reviews/simulate-security.md#rule)).
 
-| Colonne | Contenu |
-|---|---|
-| **Cas** | Le nom donné à l'enregistrement du cas. |
-| **Concerne** | L'utilisateur, le rôle ou `*PUBLIC` visé par les attentes. |
-| **Attentes** | Le nombre d'attentes du cas. |
-| **Dernier passage** | La date du dernier passage, ou *jamais*. |
-| **Tenues** / **Rompues** | Le résultat du dernier passage : le nombre d'attentes rompues est en rouge dès qu'une attente casse, en vert à 0. |
-| — | **Rejouer** rejoue ce cas, **Modifier** ouvre l'[éditeur](#edit), **Supprimer** supprime le cas et ses attentes. |
-
-Un cas se crée de trois façons : [enregistré depuis une simulation](./security-simulation.md#save) (chaque objet et chaque droit de la réponse deviennent une attente), ajouté depuis les exemples, ou rédigé à la main dans l'éditeur à partir d'un cas existant.
+| Point d'accès | Question posée | Paramètres | Réponse |
+|---|---|---|---|
+| **`rights`** — *What a user or role may do on an object* | Une application, un écran ou un état | **User, role or \*PUBLIC**, **Object**, **Form** et **Version** (facultatifs) | `run`, `add`, `change`, `delete`, chacun `Y` ou `N`, et pour chacun la ligne qui décide (`run_by`…). |
+| **`menu`** — *Whether a user or role is shown a menu task* | Un menu ou une tâche d'une vue de tâches | **User, role or \*PUBLIC**, **Task view**, **Task**, **Folder** (facultatif) | `shown`, `Y` ou `N` ; `places` et `hidden_places` comptent les emplacements de la tâche et ceux où elle est masquée. Une tâche présente dans plusieurs dossiers est montrée dès qu'un de ses emplacements l'est ; **Folder** restreint la question à l'un d'eux. |
+| **`udo`** — *Whether a user or role sees a UDO* | Un objet défini par l'utilisateur | **User, role or \*PUBLIC**, **Kind of UDO**, **UDO** | `seen`, `Y` ou `N`, son nom (`name`) et `by`, la ligne qui décide. |
+| **`column`** — *What a user or role may do on a table's column* | Une colonne d'une table | **User, role or \*PUBLIC**, **Table**, **Column** (l'élément de données, sans le préfixe de la table) | `view`, `add`, `change`, chacun `Y` ou `N`, et pour chacun la ligne qui décide (`view_by`…). Une colonne qu'aucune ligne ne nomme est autorisée. |
 
 ---
 
-## Ce qui ne tient plus \{#failures\}
+## Des paramètres choisis dans des listes \{#lists\}
 
-Après **Rejouer** ou **Tout rejouer**, un bandeau indique *Toutes les attentes tiennent.*, ou la liste **Ce qui ne tient plus** s'ouvre sous les cas, avec son nombre de lignes :
+Aucun paramètre de ces points d'accès n'est à saisir : chacun se choisit dans une liste — dans l'étape d'un cas, dans l'exécuteur HTTP et partout où le point d'accès est appelé à la main. Une longue liste s'ouvre en tableau (**Ouvrir en tableau**), avec ses colonnes et ses filtres.
 
-| Colonne | Contenu |
+| Paramètre | La liste |
 |---|---|
-| **Cas** | Le cas auquel appartient l'attente. |
-| **Objet**, **Droit** | L'objet et le droit — exécuter, ajouter, modifier ou supprimer. |
-| **Attendu** | Ce que le cas attend : *oui* ou **NON**. |
-| **La sécurité dit** | Ce que donne la sécurité actuelle. |
-| **Décidé par** | La ligne qui décide désormais, sous la forme *qui on quoi* — ou *no rule* quand rien ne l'interdit. |
+| **User, role or \*PUBLIC** | Les utilisateurs et les rôles de JD Edwards, et `*PUBLIC`, filtrables par nature. |
+| **Object**, **Table** | Les objets de l'Object Librarian, filtrables par type. |
+| **Task view** | Les vues de tâches. |
+| **Task**, **Folder** | Les menus et tâches de la vue choisie, chacun avec le dossier où il se trouve et l'application qu'il lance ; l'identifiant technique de la tâche n'est pas affiché. |
+| **Kind of UDO** | Les natures d'objets définis par l'utilisateur. |
+| **UDO** | Les UDO de la nature choisie, par nom. |
+| **Column** | Les colonnes de la table choisie. |
 
-L'utilisateur est évalué avec les rôles qu'il détient le jour du passage, comme pour une [simulation](./security-simulation.md#rule). Les nombres d'attentes tenues et rompues sont conservés sur le cas.
+Une liste qui dépend d'un autre paramètre — les tâches d'une vue, les UDO d'une nature, les colonnes d'une table — attend ce paramètre. Une valeur absente de la liste peut toujours être saisie. Les quatre dernières listes sont des listes de valeurs du dictionnaire de Nomajde : *Tasks of a task view*, *Kinds of UDO*, *UDOs of a kind*, *Columns of a table*.
+
+---
+
+## Écrire un cas \{#write\}
+
+1. Dans **Tests → Cas**, choisir la suite **JDE — who may do what** puis **Nouveau cas** — ou **Cas depuis un point d'accès**, qui prépare une première étape à partir de l'un des quatre points d'accès avec sa réponse actuelle.
+2. Le **+** du flux ajoute une étape. **Point d'accès appelé** : l'un des quatre points d'accès de sécurité. **Paramètres** : qui, puis l'objet, le menu, l'UDO ou la colonne, chacun choisi dans sa liste.
+3. **Remplir depuis la réponse** joue l'appel tout de suite et propose les valeurs attendues. Sous **Ce qui est attendu**, **Une valeur de la réponse brute est égale à — chemin, valeur** porte les réponses qui doivent rester vraies : `run` = `Y`, `shown` = `N`, `seen` = `N`, `view` = `N`…
+4. Cocher **Jouée même après un échec (un nettoyage)** sur chaque étape : chaque point est alors interrogé, quel que soit le résultat de l'étape précédente.
+5. **Enregistrer**, puis **Jouer ce cas**.
+
+Un cas par utilisateur ou par rôle, nommé d'après la fonction du rôle, garde un échec lisible : il désigne un seul rôle.
+
+---
+
+## Un cas gardé depuis Simuler la sécurité \{#from-simulate\}
+
+Dans [Simuler la sécurité](../reviews/simulate-security.md#keep), **Garder comme cas de test…** transforme ce que présentent les onglets en un cas de la suite `jde-security`, **avec la sécurité d'aujourd'hui** : une étape par application, tâche de menu, UDO ou colonne présenté, avec sa réponse actuelle comme valeur attendue. Un cas de même nom est remplacé.
+
+La même fenêtre propose, une seule fois, de reprendre dans les tests les cas de sécurité enregistrés dans la base propre de Nomajde (**Reprendre mes n ancien(s) cas dans Tests**) ; les exemples de cette base sont laissés de côté, la suite a les siens.
 
 ---
 
 ## Cas d'exemple \{#samples\}
 
-**Ajouter les exemples** ajoute cinq cas écrits pour des rôles types. Chacun nomme un **rôle fictif**, à remplacer par l'un des vôtres :
+La suite `jde-security` est livrée avec cinq cas d'exemple d'une **sécurité fermée et séparée**, écrits sur les rôles, menus et listes de surveillance livrés par JD Edwards. Ce sont des points de départ : remplacer chaque rôle par l'un des vôtres, puis adapter les valeurs attendues. Sur un système dont la sécurité est restée ouverte, ils échouent là où elle l'est — c'est leur rôle.
 
-| Exemple | Concerne | Attentes |
+| Exemple | Porte sur | Ce qu'il attend |
 |---|---|---|
-| Accounts payable clerk (comptable fournisseurs) | `APCLERK` | Saisit les pièces fournisseurs (`P0411` : exécuter et ajouter) sans jamais les supprimer ; ne paie pas (`P0413M`), ne gère pas les fournisseurs (`P04012`) et ne comptabilise pas au grand livre (`P0911`). |
-| Sales order entry (saisie des commandes clients) | `SALESORDER` | Saisit les commandes (`P4210` : exécuter et ajouter) ; ne gère ni les clients (`P03013`), ni les prix (`P4106`), ni le crédit (`P03B11`). |
-| Buyer (acheteur) | `BUYER` | Saisit les commandes d'achat (`P4310` : exécuter et ajouter) ; ne réceptionne pas (`P4312`), ne saisit pas de pièces fournisseurs (`P0411`) et ne gère pas les fournisseurs (`P04012`). |
-| Inquiry only (consultation seule) | `INQUIRY` | Ouvre `P0411` et `P4210` sans rien modifier : ajouter, modifier et supprimer refusés. |
-| Nobody but administrators manages security (seuls les administrateurs gèrent la sécurité) | `*PUBLIC` | Personne n'ouvre les applications de sécurité (`P00950`, `P0092`, `P95921`, `P98OWSEC`). Garder `*PUBLIC` ou choisir un rôle ordinaire. |
-
-Un exemple déjà ajouté — modifié ou non — n'est jamais écrasé : ajouter de nouveau les exemples n'ajoute que ceux qui manquent, ou affiche *Les exemples sont déjà là.* Tant que son rôle n'est pas remplacé, un exemple échoue ou porte sur un rôle inconnu de JD Edwards.
+| **Accounts payable manager** | `APMGRJDE` | Saisit les factures fournisseurs (`P0411` : exécuter, ajouter) et les paiements manuels (`P0413M`) ; ni commandes d'achat (`P4310`), ni crédit (`P03B11`), ni Security Workbench (`P00950`). Voit le menu Financials, ni Supply Management ni EnterpriseOne Life Cycle Tools ; voit la liste de surveillance *Payments Overdue*, pas *Held Purchase Orders* ; ne voit pas `F060116.SSN`. |
+| **Accounts receivable manager** | `ARMGRJDE` | Traite les créances (`P03B11` : exécuter, ajouter ; `P03B102`) ; ni factures fournisseurs, ni paiements, ni Security Workbench. Ne voit que Financials ; voit *Credit Review Overdue*, pas *Payments Overdue* ; ne voit pas `F060116.SSN`. |
+| **Buyer** | `BUYERJDE` | Saisit les commandes d'achat (`P4310` : exécuter, ajouter) ; ne réceptionne pas (`P4312`), ne saisit pas de facture fournisseur et ne paie pas ; consulte la fiche fournisseur (`P04012`) sans ajouter, modifier ni supprimer. Ne voit que Supply Management ; voit *Held Purchase Orders* ; ne voit ni `F0030.CBNK` ni `F060116.SSN`. |
+| **Security administrator** | `SYSADMIN` | Exécute les applications de sécurité (`P00950` avec tous les droits, `P0092`, `P95921`) ; ne saisit aucune facture fournisseur et n'effectue aucun paiement. Voit EnterpriseOne Life Cycle Tools. |
+| **Everybody is closed by default** | `*PUBLIC` | Personne n'exécute les applications de sécurité et d'OMW (`P00950`, `P0092`, `P95921`, `P98OWSEC`, `P98220`), ni `P0411` et `P4210` ; les menus EnterpriseOne Life Cycle Tools et Development Utilities sont masqués ; la page EnterpriseOne est vue, *Payments Overdue* ne l'est pas ; `F060116.SSN` et `F0030.CBNK` ne sont pas visibles. |
 
 ---
 
-## Modifier un cas \{#edit\}
+## Jouer les cas \{#play\}
 
-**Modifier** sur une ligne ouvre le cas au-dessus de la liste.
-
-<svg viewBox="0 0 1200 345" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <marker id="njce-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="njce-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="njce-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="njce-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
-  </defs>
-
-  <rect x="220" y="20" width="760" height="282" rx="14" fill="url(#njce-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="40" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CAS</text>
-  <text x="280" y="40" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Sample: replace APCLERK with your accounts payable role…</text>
-  <line x1="220" y1="50" x2="980" y2="50" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="70" fill="#64748b" fontSize="7.5" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">NOM</text>
-  <rect x="240" y="75" width="350" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="89.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Sample — Accounts payable clerk</text>
-  <text x="610" y="70" fill="#64748b" fontSize="7.5" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">CONCERNE (UTILISATEUR, RÔLE OU &#42;PUBLIC)</text>
-  <rect x="610" y="75" width="350" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="620" y="89.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">APCLERK ▾</text>
-  <rect x="240" y="104" width="720" height="22" rx="5" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1"/>
-  <text x="250" y="119" fill="#fb923c" fontSize="9" fontFamily="system-ui, sans-serif">APCLERK n'est ni un utilisateur ni un rôle de ce JD Edwards : choisissez un des vôtres.</text>
-  <text x="240" y="144" fill="#64748b" fontSize="7.5" letterSpacing="0.03em" fontFamily="system-ui, sans-serif">NOTE</text>
-  <rect x="240" y="149" width="720" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="163.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Sample: replace APCLERK with your accounts payable role. Enters vouchers, never deletes them…</text>
-  <rect x="240" y="178" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="192.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">P0411</text>
-  <rect x="416" y="178" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="426" y="192.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Écran</text>
-  <rect x="592" y="178" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="602" y="192.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">exécuter ▾</text>
-  <rect x="748" y="178" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="758" y="192.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">permis ▾</text>
-  <rect x="904" y="178" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="932.0" y="192.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Retirer</text>
-  <rect x="240" y="206" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="220.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">P0411</text>
-  <rect x="416" y="206" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="426" y="220.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Écran</text>
-  <rect x="592" y="206" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="602" y="220.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">supprimer ▾</text>
-  <rect x="748" y="206" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="758" y="220.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">refusé ▾</text>
-  <rect x="904" y="206" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="932.0" y="220.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Retirer</text>
-  <rect x="240" y="234" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="248.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">P04012</text>
-  <rect x="416" y="234" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="426" y="248.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Écran</text>
-  <rect x="592" y="234" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="602" y="248.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">exécuter ▾</text>
-  <rect x="748" y="234" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="758" y="248.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">refusé ▾</text>
-  <rect x="904" y="234" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="932.0" y="248.5" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Retirer</text>
-  <rect x="240" y="264" width="117" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="298.5" y="278.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Ajouter une attente</text>
-  <rect x="365" y="264" width="112" height="22" rx="5" fill="url(#njce-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="421.0" y="278.5" fill="#e2e8f0" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Enregistrer le cas</text>
-  <rect x="485" y="264" width="57" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="513.5" y="278.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
-  <rect x="20" y="70" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nom et qui</text>
-  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">renommer, choisir un de vos rôles</text>
-  <line x1="200" y1="87.0" x2="240" y2="85" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njce-arrow)"/>
-  <rect x="20" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rôle inconnu</text>
-  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un rôle fictif à remplacer</text>
-  <line x1="200" y1="167.0" x2="240" y2="115" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njce-arrow)"/>
-  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une attente par ligne</text>
-  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">objet, écran, droit, attendu</text>
-  <line x1="200" y1="247.0" x2="240" y2="189" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njce-arrow)"/>
-  <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Permis ou refusé</text>
-  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ce que la sécurité doit dire</text>
-  <line x1="1000" y1="247.0" x2="820" y2="189" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njce-arrow)"/>
-  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enregistrer le cas</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">remplace le cas entier</text>
-  <line x1="200" y1="317.0" x2="365" y2="275" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#njce-arrow)"/>
-</svg>
-
-| Champ | Usage |
-|---|---|
-| **Nom** | Le nom du cas ; il peut changer, tant qu'aucun autre cas ne le porte. |
-| **Concerne (utilisateur, rôle ou \*PUBLIC)** | La personne ou le rôle visé. Quand ce n'est ni un utilisateur ni un rôle de ce JD Edwards — le rôle fictif d'un exemple — un avertissement le signale : choisir l'un des vôtres. |
-| **Note** | Texte libre ; les exemples y décrivent ce que le rôle est censé faire. |
-| Attentes | Une ligne chacune : **Objet**, **Écran** (facultatif, pour une attente sur un seul écran), le **droit** (exécuter, ajouter, modifier, supprimer) et **permis** ou **refusé**. **Retirer** supprime la ligne ; **Ajouter une attente** en ajoute une. |
-
-**Enregistrer le cas** remplace le cas entier, attentes comprises ; les lignes sans objet sont ignorées. **Annuler** ferme l'éditeur sans enregistrer.
+**Jouer ce cas** joue le cas ouvert, **Jouer la suite** tous les cas de `jde-security` ; le flux marque chaque étape réussie ou en échec, et **Tests → Résultats** conserve les dernières exécutions de la suite. Pour une application, un UDO ou une colonne, la réponse d'une étape en échec nomme la ligne qui décide (`run_by`, `by`, `view_by`…) : la correction porte sur le bon utilisateur, le bon rôle ou la bonne ligne `*ALL`.
 
 ---
 
 ## Accès \{#access\}
 
-L'onglet fait partie de la page Simulation de la sécurité, dans le dossier **Maintenance de la sécurité** ; les rôles prédéfinis **Administrateur de la sécurité** et **Administrateur** y ont accès (voir [Rôles prédéfinis](../overview.md#roles)). Enregistrer, modifier ou supprimer un cas n'écrit que dans la base de Nomajde.
+Les cas se trouvent dans le dossier **Tests** du menu Nomajde (**Tests → Cas**, **Tests → Résultats**). Les écrire et les jouer demande les permissions de test de la plateforme (voir [Tests](../tests.md#access)). **Garder comme cas de test…** fait partie de [Simuler la sécurité](../reviews/simulate-security.md), accessible aux rôles prédéfinis **Administrateur de la sécurité** et **Administrateur** ; tous deux ouvrent aussi les Tests et lancent la tâche de tests, si bien que les cas gardés se jouent et se planifient.
+
+La connexion utilisée pour lire JD Edwards doit pouvoir lire le Security Workbench (`F00950`), le filtrage des menus (`F9006`) et les menus (`F9000`, `F9001`), la sécurité des UDO (`F00950W`) et leur catalogue (`F9860W`), les profils (`F0092`), les rôles (`F00926`), les affectations de rôles (`F95921`) et l'Object Librarian (`F9860`).
 
 ---
 
 ## Conseils & bonnes pratiques \{#tips\}
 
-- **Un cas par rôle**, nommé d'après la fonction du rôle : une attente rompue désigne alors un seul rôle.
-- **Conserver les refus.** Les attentes les plus utiles sont souvent les *NON* : une gestion des fournisseurs hors de portée du comptable fournisseurs, des applications de sécurité réservées aux administrateurs.
-- **Tout rejouer après chaque changement** dans le Security Workbench, après [Refusionner la sécurité](../jobs.md#remerge) et après une promotion de la sécurité vers un autre environnement.
-- **Partir des exemples** : remplacer le rôle fictif, adapter les objets aux applications réellement utilisées, puis ajouter les attentes propres au métier.
+- **Garder les refus.** Les attentes les plus importantes sont souvent les `N` : une fiche fournisseur qu'un acheteur ne doit pas modifier, une application de sécurité réservée aux administrateurs, une colonne de données personnelles cachée à tous.
+- **Jouer la suite après chaque changement** du Security Workbench, après [Refusionner la sécurité](../jobs.md#remerge) et après une promotion de la sécurité vers un autre environnement.
+- **Partir des exemples** : remplacer le rôle livré par le vôtre, adapter les objets aux applications réellement utilisées, puis ajouter ce qui est propre au métier.
+- **Garder un cas depuis Simuler la sécurité** une fois un changement appliqué : la nouvelle sécurité devient la référence attendue.

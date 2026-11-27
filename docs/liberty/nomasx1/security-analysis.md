@@ -8,7 +8,7 @@ keywords: [Nomasx-1, security analysis, what to fix, remediation, segregation of
 
 **What to fix**, in the **Reviews** folder of the Nomasx-1 menu, is the security analysis of an application: nineteen checks run on what was collected, each finding with what to do about it. Where the [Security review](./security-review.md) lists the accounts to look at and the [Segregation of duties review](./sod-review.md) the conflicts, this page says **where a change removes the most** and **what does not add up** in the security itself.
 
-The page reads one application at a time, picked at the top right; **Read again** runs the checks anew. **Nothing is changed by the page**: the security is fixed in JD Edwards — or with Nomajde's [Security Maintenance](../nomajde/security-maintenance/security-workbench.md) — then collected again.
+The page reads one application at a time, picked at the top right. The page opens at once on the answer kept by the server, with the moment it was computed next to **Read again** (*Computed on 24 Nov at 06:15*): the collection prepares it each time it runs, so the first person to open the page after the night's collection does not wait. **Read again** runs the checks now, however long it takes, and replaces the kept one for everybody. **Nothing is changed by the page**: the security is fixed in JD Edwards — or with Nomajde's [Security Maintenance](../nomajde/security-maintenance/security-workbench.md) — then collected again.
 
 :::info[JDE-specific]
 The checks read the security collected from JD Edwards EnterpriseOne — the Security Workbench, the UDO security and the row security among them. The picker lists the JD Edwards applications only.
@@ -31,11 +31,12 @@ The checks read the security collected from JD Edwards EnterpriseOne — the Sec
   <text x="253" y="53" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">◎</text>
   <text x="276" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Security analysis</text>
   <text x="276" y="64" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">What to fix, and what does not add up — each finding with what to do.</text>
+  <text x="997" y="52.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Computed on 24 Nov at 06:15</text>
   <rect x="1005" y="38" width="75" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1042.5" y="52.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
-  <rect x="847" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="857" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
-  <text x="839" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="707" y="38" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="717" y="52.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD ▾</text>
+  <text x="699" y="53" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="78" x2="1100" y2="78" stroke="#1f2937" strokeWidth="1"/>
   <rect x="240.0" y="92" width="161.6" height="54" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250.0" y="114" fill="#fb923c" fontSize="15" fontWeight="700" fontFamily="system-ui, sans-serif">202</text>

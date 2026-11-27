@@ -470,6 +470,10 @@ Le menu s'ouvre sur la vue d'ensemble et les **Revues** — ce qu'on lit pour ju
 | **Tâches** | [Collecter la sécurité et la SoD ou les licences, produire les deux rapports d'audit](./jobs.md), pour une ou plusieurs applications, avec un journal en direct. |
 | **Paramètres** | Définitions des sources (applications, schémas JDE et [bibliothèques UDO](./settings/global/udo-libraries.md), catalogues Oracle), mappage des départements LDAP, configuration SoD (processus, activités, risques, objets, matrice), catalogue de prix, sécurité et indicateurs AD. |
 
+### Une licence propre \{#licence\}
+
+Nomasx-1 fait l'objet d'une licence propre, avec ou sans Nomajde ; Nomaflow et le connecteur JD Edwards sont fournis avec lui. Avec Nomasx-1 seul, rien de Nomajde n'est proposé, et le [rapport d'audit des licences](./reports/audit-licences.md) est produit sans la lecture de la plateforme que Nomajde conserve pour sa page d'architecture. Voir [Clé de licence](../framework/build/secure/license-key.md).
+
 ---
 
 ## Qui s'en sert

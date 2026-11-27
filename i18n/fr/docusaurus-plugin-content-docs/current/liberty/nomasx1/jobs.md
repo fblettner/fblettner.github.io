@@ -39,6 +39,22 @@ Sur une application JD Edwards, deux étapes de la collecte de la sécurité sui
 
 Une étape en échec n'arrête pas les autres : l'exécution continue et se termine en échec en nommant l'étape.
 
+### Les réponses conservées pour les revues \{#kept\}
+
+Les deux entrées se terminent par trois étapes qui préparent les pages longues du dossier **Revues** : elles s'ouvrent ainsi immédiatement sur ce que la collecte vient de rassembler.
+
+| Étape | Prépare |
+|---|---|
+| `KEEP_SOD_REVIEW` | La [revue de la séparation des tâches](./sod-review.md). |
+| `KEEP_WHAT_TO_FIX` | [À corriger](./security-analysis.md). |
+| `KEEP_LICENSING_REVIEW` | La [revue des licences](./licensing-review.md), en anglais et en français — et avec elle l'exposition licences que lisent la [Synthèse d'audit](./audit-synthesis.md), le [Data Explorer](./data-explorer.md) et l'écran *Licences - Rapport financier*. |
+
+L'échec de l'une de ces trois étapes ne met jamais la collecte en échec : la page calcule alors sa réponse à l'ouverture, ou sur **Relire**.
+
+:::tip[Tâche de collecte modifiée sur la plateforme]
+Si les étapes de `nomasx1-collect-all` ont été modifiées sur la plateforme, une mise à jour conserve cette version de la tâche, sans les trois étapes. Il faut les ajouter dans l'éditeur de la tâche, dans Nomaflow, ou reprendre la tâche livrée ; d'ici là, les trois pages calculent leur réponse à la première ouverture et l'exposition licences reste vide tant que la revue des licences n'a pas été relue une fois.
+:::
+
 ---
 
 ## Selon une planification \{#reports\}

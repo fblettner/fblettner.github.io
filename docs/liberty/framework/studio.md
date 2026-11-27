@@ -506,7 +506,7 @@ The Studio shows what an application carries for nothing, and what is broken:
 | **Show the N no screen uses** (end of the Data column) | Lists the application's queries and endpoints no screen uses; **Hide the N no screen uses** folds them again. |
 | Orange chip at the top | The number of screens nothing opens. |
 
-A screen is opened when a menu entry opens it (the screen itself, or a query it reads), when another screen opens it (its row click, a tab of its record form, a `navigate` action), or when an [Explorer entity](./explorer/model.md) names it. The rule is the one **Deploy → Integrity** applies: a screen the Studio says nothing opens is the orphan screen Integrity reports. The integrity chip beside it opens the full check.
+A screen is opened when a menu entry opens it (the screen itself, or a query it reads), when another screen opens it (its row click, a tab of its record form, a `navigate` action), when an [Explorer entity](./explorer/model.md) names it, or when the menu entry of a page lists it in **Screens the page works through** (see [A page an application ships](./build/menus/item-types.md#app-page)). The rule is the one **Deploy → Integrity** applies: a screen the Studio says nothing opens is the orphan screen Integrity reports. The integrity chip beside it opens the full check.
 
 ### Edit in place \{#edit\}
 

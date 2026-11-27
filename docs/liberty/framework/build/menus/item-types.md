@@ -260,6 +260,15 @@ Like a link to the model, it shows to whoever may use the model (`explorer:<app>
 
 `/app/<app>/<page>` opens a page an application ships with its plugins — a structure to browse, a guided flow, anything that is neither a grid nor a form. The entry needs the permission `page:<app>:<page>`. See [Plugins → Pages an application ships](../../apps/plugins.md#pages).
 
+A page may read and save through a screen's own queries — a record form opened from the page, the screens' import. The entry then lists those screens in **Screens the page works through** (tab *Advanced*):
+
+- whoever is given the entry is given what the screens need: their read, and their change when the entry is given in **Read and change**;
+- the screens count as reached from the menu — the Studio and **Deploy → Integrity** do not report them as opened by nothing;
+- **Find usages** on one of those screens lists the entry;
+- the integrity check reports a screen named there that does not exist.
+
+Leave it empty for a page that works through its own functions only.
+
 ### When to use
 
 - A bundled product (Nomaflow, Nomasx-1's specialised dashboards).

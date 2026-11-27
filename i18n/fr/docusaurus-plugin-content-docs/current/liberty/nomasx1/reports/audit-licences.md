@@ -149,10 +149,10 @@ Neuf sections, chacune construite à partir des données collectées par Nomasx-
 1. **Synthèse** — résumé pour la direction : contexte et objectifs, les constats principaux assortis chacun d'un niveau de risque, le risque financier estimé et les recommandations clés.
 2. **Périmètre de l'audit** — composants audités, ce qui est hors périmètre, le tableau des environnements JD Edwards (production vs hors production) et l'**architecture technique** : versions logicielles, inventaire des serveurs et schéma d'architecture sur une page au format paysage (voir [La page d'architecture](#architecture)).
 3. **Méthodologie** — les outils et données utilisés, les règles d'analyse (l'usage se mesure à la consommation réelle, pas aux autorisations) et un tableau des **sources de données** qui date chaque entrée.
-4. **Licences acquises** — l'inventaire souscrit : Oracle Database Enterprise Edition (NUP), les options et packs, les composants détectés en usage, la *règle des minimas* et le minimum NUP calculé à partir du nombre de processeurs ; puis l'Oracle Technology Foundation de JD Edwards et les modules applicatifs.
+4. **Licences acquises** — l'inventaire souscrit : Oracle Database Enterprise Edition (NUP), les options et packs, les composants détectés en usage, la *règle des minimas* et le minimum NUP calculé à partir du nombre de processeurs ; puis l'Oracle Technology Foundation de JD Edwards (§4.2) et les modules applicatifs (§4.3). Les lignes de contrat sur Oracle Data Integrator et Oracle Analytics Server ont leur propre tableau, **§4.4 Autres produits Oracle**, avec la métrique, la quantité et le numéro de contrat ; leur position est lue au §6.5.
 5. **Utilisation et conformité** — le cœur du rapport :
    - les modules JD Edwards croisés **OUT × transactions** — consommation réelle face à l'activité d'écriture — avec un détail sur les modules peu utilisés (quel utilisateur a touché quel objet) ;
-   - les **autorisations face à l'usage réel** par module (utilisateurs autorisés vs OUT vs transactions vs nombre de rôles), qui met en évidence des accès bien plus larges que l'usage effectif ;
+   - les **autorisations face à l'usage réel** par module (utilisateurs autorisés vs utilisateurs réels vs utilisateurs avec transactions vs nombre de rôles), qui met en évidence des accès bien plus larges que l'usage effectif — voir [Qui est compté](#counted) ;
    - l'**analyse d'optimisation** (voir plus bas) ;
    - l'analyse des utilisateurs Oracle Technology Foundation (déclarés / actifs / désactivés, comptes techniques, affectations de rôles) et le décompte des utilisateurs de la base Oracle.
 6. **Risque financier** — la méthode de calcul (prix public Oracle plus trois ans d'arriérés de support), chaque risque identifié chiffré ligne à ligne, un montant consolidé et les leviers priorisés. Les risques viennent de la même position de licences que la [revue des licences](../licensing-review.md) : les licences manquantes par module et les modules qu'aucune ligne du contrat ne couvre, selon la [lecture d'un contrat](../how-a-contract-is-counted.md) — bundles, lignes au chiffre d'affaires, aux employés et au processeur compris. La section s'ouvre sur le même avertissement : une hypothèse aux prix publics, jamais une position certifiée.
@@ -161,6 +161,12 @@ Neuf sections, chacune construite à partir des données collectées par Nomasx-
 8. **Recommandations et plan d'action** — chaque action classée par priorité, effort et impact financier, un planning indicatif en quatre phases, et les indicateurs de suivi à surveiller ensuite.
 9. **Annexes** — la liste détaillée des utilisateurs à désactiver (avec dates de création et de dernière modification, et les précautions de validation à appliquer avant désactivation) et un glossaire.
 
+### Qui est compté \{#counted\}
+
+- Les **utilisateurs autorisés** sont les utilisateurs **activés** auxquels un rôle donne accès au composant : un compte désactivé n'est autorisé à rien. Les chiffres sur les rôles du §5.2 — affectations, rôles par utilisateur, utilisateurs à plus de 10 rôles, rôles non affectés — ne comptent que les utilisateurs activés : un rôle détenu uniquement par des comptes désactivés est donc considéré comme non affecté.
+- Les **utilisateurs réels** suivent la règle de l'analyse des licences : Object Usage Tracking quand il contient des données ; sinon, les utilisateurs autorisés **connectés pendant la période de l'application** — la colonne (`Connectés < 90 j` avec la période par défaut) et l'explication le précisent.
+- Les **utilisateurs avec transactions** sont donnés pour chaque composant, qu'Object Usage Tracking l'ait vu ou non.
+
 ---
 
 ## La page d'architecture \{#architecture\}
@@ -168,7 +174,7 @@ Neuf sections, chacune construite à partir des données collectées par Nomasx-
 La section *Périmètre de l'audit* présente l'architecture de l'application sur une page au format paysage. Le rapport retient la première image disponible, dans cet ordre :
 
 1. **Une image déposée pour l'application** — le fichier `data/architecture/<apps_id>.svg` du dossier des applications de l'installation. Elle passe toujours en premier.
-2. **La plateforme telle que Nomajde l'a lue** — dans [Nomajde → Supervision → Architecture](../../nomajde/monitoring/architecture.md#download), **Conserver pour le rapport d'audit** enregistre la lecture d'un pool JD Edwards. Le rapport dessine la lecture conservée pour le pool désigné par l'application dans [Applications](../settings/global/applications.md), **dans la langue du rapport** et avec la date de la lecture. La lecture est conservée sur l'installation : le rapport la dessine même quand Server Manager n'est pas joignable depuis la machine qui produit le rapport. Une application sans pool reprend la lecture conservée quand il n'y en a qu'une.
+2. **La plateforme telle que Nomajde l'a lue** — quand la licence couvre Nomajde : dans [Nomajde → Supervision → Architecture](../../nomajde/monitoring/architecture.md#download), **Conserver pour le rapport d'audit** enregistre la lecture d'un pool JD Edwards. Le rapport dessine la lecture conservée pour le pool désigné par l'application dans [Applications](../settings/global/applications.md), **dans la langue du rapport** et avec la date de la lecture. La lecture est conservée sur l'installation : le rapport la dessine même quand Server Manager n'est pas joignable depuis la machine qui produit le rapport. Une application sans pool reprend la lecture conservée quand il n'y en a qu'une.
 3. **L'image de l'installation** — le fichier `data/architecture/default.svg`, pour une installation qui ne compte qu'une application.
 
 Sans aucune de ces images, le rapport ne comporte pas de page d'architecture.

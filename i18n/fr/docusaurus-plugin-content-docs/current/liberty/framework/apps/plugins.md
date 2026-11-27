@@ -129,6 +129,10 @@ L'objet que reçoit la page est un contrat : un champ s'y ajoute, il n'est jamai
 | `useAssistantContext(titre, faits)` | Indique à l'[assistant](../ai-assistant.md#context) ce que l'utilisateur a sous les yeux. | 4 |
 | `Diagram` | Un schéma mis en page par le serveur, puis dessiné — voir [plus bas](#page-diagram). | 5 |
 | `download(path, name, body)` | Remet à l'utilisateur un fichier produit par une route du serveur — voir [plus bas](#page-download). | 6 |
+| `callKept(fn, params, refresh?)` | Exécute une fonction et obtient sa **réponse conservée**, avec le moment où elle a été calculée — voir [plus bas](#page-kept). | 7 |
+| `Record` | La fiche d'un écran, ouverte depuis la page — voir [plus bas](#page-record). | 8 |
+| `Import`, `workbook(name, sheets)` | La boîte d'import des écrans, ouverte depuis la page ; un fichier Excel de plusieurs feuilles remis à l'utilisateur — voir [plus bas](#page-import). | 9 |
+| `Grid` avec `toolbarEnd`, `noExport` | Des boutons en fin de barre d'outils de la grille, après *Exporter* ; pas d'export propre à la grille, quand la page fournit le sien. | 9 |
 
 #### L'assistant sur une page \{#page-assistant\}
 
@@ -141,6 +145,28 @@ Pour représenter une plateforme ou un système, la fonction de l'application co
 #### Un fichier pour l'utilisateur \{#page-download\}
 
 `download('/api/reports/<scope>/<id>/run', 'report.pdf', { format: 'pdf', params })` demande un fichier à une route du serveur — un rapport en PDF, un export — et l'enregistre sur le poste de l'utilisateur : avec un corps, la route est appelée en `POST`, sans corps en `GET`. Le fichier prend le nom donné par le serveur, à défaut celui passé en paramètre. Un refus revient sous la forme du message du serveur, que la page affiche. Les pages des applications l'utilisent pour leurs documents — le rapport de la plateforme, l'estimation OCI, le rapport hebdomadaire de montée de version.
+
+#### Une réponse conservée \{#page-kept\}
+
+Certaines pages lisent toute une plateforme, ou chaque utilisateur et chaque règle, avant de pouvoir s'afficher — et ce qu'elles montrent change quand une collecte s'exécute, pas pendant qu'on les regarde. Leur fonction peut alors être interrogée pour sa **réponse conservée** : `callKept('review:j_review', { … })` renvoie aussitôt ce que la fonction a répondu la dernière fois, avec `at` (le moment du calcul), `by` (un utilisateur, ou `job`), `ms` (la durée du calcul) et `fresh` (calculée par cet appel même). La page affiche ce moment : un chiffre ancien n'est jamais pris pour l'état présent. Sans réponse conservée, la fonction s'exécute, et sa réponse est conservée puis renvoyée.
+
+`callKept(fn, params, true)` est la relecture que l'utilisateur demande depuis la page (un bouton *Relire*) : la fonction s'exécute aussitôt, quelle que soit sa durée, et sa réponse remplace la réponse conservée pour tout le monde.
+
+- Une réponse est conservée par fonction, paramètres **et périmètre de données** : ce qu'a calculé un utilisateur doté d'un [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) n'est jamais remis à un autre périmètre. La réponse d'une tâche — calculée sans périmètre — va aux utilisateurs qui n'en ont pas.
+- La permission `plugin:<référence>` est vérifiée avant toute lecture d'une réponse conservée.
+- Seule une réponse qui est un objet est conservée.
+- Une tâche prépare la réponse, pour que la première personne qui ouvre la page après la collecte de la nuit n'attende pas : l'étape `liberty.kept:j_keep` — voir [Étapes → Préparer une réponse conservée](../../nomaflow/steps.md#kept).
+- Hors d'une page, `POST /api/plugins/run` accepte `kept: "use"` ou `kept: "refresh"` dans son corps, avec le même comportement.
+
+#### La fiche d'un écran \{#page-record\}
+
+`<Record app="crm" screen="customers" mode="add" values={{ COUNTRY: 'FR' }} onClose={…} onSaved={…} />` ajoute ou modifie un enregistrement par la fiche de l'écran — ses champs, ses règles par valeur, ses lookups, ses valeurs par défaut, son enregistrement et ses hooks — sans envoyer l'utilisateur sur l'écran. En `mode="add"`, la fiche s'ouvre sur `values` ; en `mode="edit"`, `values` porte les valeurs de clé de l'enregistrement : celui-ci est lu par l'écran puis ouvert (sans correspondance, la fiche s'ouvre sur `values`). Les valeurs se donnent par nom de colonne. L'entrée de menu de la page indique l'écran dans **Screens the page works through**, pour que ses utilisateurs reçoivent ce dont la fiche a besoin — voir [Une page livrée par une application](../build/menus/item-types.md#app-page).
+
+#### L'import des écrans, un classeur \{#page-import\}
+
+`<Import screens={[{ app: 'crm', screen: 'customers' }]} onClose={…} onSaved={(n) => …} />` ouvre depuis la page la [boîte d'import](../cookbook/bulk-import.md) des écrans de données : mêmes modes, même contrôle par les règles puis par la base, chaque ligne enregistrée par son écran. Pour un écran, la première feuille du fichier est lue ; pour plusieurs, un classeur avec une feuille par écran, retrouvée par son nom `sheet` (à défaut, l'identifiant de l'écran). `onSaved` reçoit le nombre de lignes enregistrées.
+
+`workbook('customers-FR', [{ name: 'Customers', rows, columns }])` remet à l'utilisateur un fichier Excel de plusieurs feuilles ; `columns` donne les en-têtes dans l'ordre (par défaut, les clés des lignes). Une feuille qui porte le nom `sheet` d'un écran de `Import`, avec les noms de colonnes de l'écran en en-têtes, est exactement ce que cet import relit — un export à corriger puis à recharger.
 
 ---
 

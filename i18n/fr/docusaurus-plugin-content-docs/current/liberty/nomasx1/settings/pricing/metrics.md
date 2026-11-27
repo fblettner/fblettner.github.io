@@ -159,7 +159,7 @@ La grille est modifiable. **Ajouter une ligne** ouvre un formulaire vide ; un cl
 
 | Champ | À renseigner |
 |---|---|
-| **Métrique ID** | Numéro de la métrique. Non modifiable sur une ligne enregistrée. |
+| **Métrique ID** | Numéro de la métrique, saisi à l'ajout de la ligne — tout numéro encore libre, ce qui permet de créer une nouvelle métrique. Non modifiable sur une ligne enregistrée. |
 | **Métrique** | Nom Oracle de la métrique. |
 
 

@@ -159,7 +159,7 @@ The grid is writable. **Add row** opens an empty form; a click on a row opens it
 
 | Field | What to enter |
 |---|---|
-| **Metric ID** | The number of the metric. Read-only on a saved row. |
+| **Metric ID** | The number of the metric, typed when the row is added — any number not yet used, so a new metric can be created. Read-only on a saved row. |
 | **Metric** | The Oracle name of the metric. |
 
 

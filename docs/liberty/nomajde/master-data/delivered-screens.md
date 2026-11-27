@@ -160,7 +160,9 @@ The column titles and value lists come from the JD Edwards data dictionary, in t
 | **OMW Project Objects** | F98222 | General. |
 | **OMW Log** | F98210 | General. |
 
-Next to the workbench, **Development → Back to standard** compares the changed objects with Oracle's and names the OMW project that holds each one — see [Back to standard](../development/back-to-standard.md).
+To read the OMW as one thing — a project with its objects, its users and its log, everything done on an object, what a user holds — and to create a project or add a user or an object to it, open **Reviews → Object Management Workbench**: see [Object Management Workbench](../reviews/omw.md).
+
+Next to the workbench, **Reviews → Back to standard** compares the changed objects with Oracle's and names the OMW project that holds each one — see [Back to standard](../reviews/back-to-standard.md).
 
 ---
 

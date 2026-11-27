@@ -101,7 +101,7 @@ Each tab says, beside its description, how many of its points are to review.
 | Tab | Sections |
 |---|---|
 | **Overview** | **The instance** — version, instance, database, mode, platform and the parameters that matter (`control_management_pack_access`, `cursor_sharing`, `db_block_size`, `open_cursors`, `processes`, `sga_target`, `undo_retention`…) — and **What the figures say**. |
-| **Storage** | **Size** by what each owner holds — business data, control tables, central objects, system, object librarian, data dictionary, Oracle, other —; **Tablespaces** with what they use and may grow to; **The largest tables**, their indexes and LOBs counted in, with their description from the Object Librarian. |
+| **Storage** | **Size** by what each owner holds — business data, control tables, central objects, system, object librarian, data dictionary, Oracle, other —; **Tablespaces** with what they use and may grow to; **The largest tables**, their indexes and LOBs counted in, with their description from the Object Librarian — read through the pool's database link when the Object Librarian is in another database. When the account may not read it, the sizes are shown without the descriptions, and *What the figures say* names the table to grant. |
 | **Activity** | **Activity** — five figures on one strip: cache hit ratio, hard parses, executions, commits, sorts on disk —; **Where time was waited** beside **Sessions** by program — JDE kernels, JDE batches, web / AIS servers, tools; **Redo logs** and their switches hour by hour, across the page; **The most expensive statements** and who sends them, last. |
 | **Objects** | **Objects and statistics** — invalid objects, unusable indexes, JDE tables never analysed or with stale statistics. |
 
@@ -118,6 +118,7 @@ Each tab says, beside its description, how many of its points are to review.
 | Tools connected to the database | Sessions of programs other than JD Edwards. |
 | Invalid objects, unusable indexes, statistics never taken or stale | On the JD Edwards owners. |
 | `control_management_pack_access` | Whether the Diagnostics / Tuning packs' features may be used — a licence exposure if they are not held. |
+| Tables without description | The account may not read the Object Librarian's table: the largest tables are listed without their description, and the line gives the `GRANT SELECT` to run. |
 
 These are Oracle's rules; the other databases follow the same ones in their own words, with a few of their own — see [Per database](#databases).
 
@@ -125,9 +126,9 @@ These are Oracle's rules; the other databases follow the same ones in their own 
 
 ## What the page keeps \{#kept\}
 
-What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read — *Read at 14:02*, with the day when the reading is older than today. **Read again** reads every section anew.
+The page opens at once on the readings the server keeps, section by section — the last ones, made by the [platform reading job](../jobs.md#platform-reading) or by anyone's last **Read again** — and the header says when the oldest of them was made — *Read at 14:02*, with the day when the reading is older than today: an old figure is never taken for the present. **Read again** reads every section live, however long it takes, and replaces the kept readings for everybody. With no reading kept yet, the first opening reads live.
 
-The Monitoring pages share their readings: once [Platform synthesis](../synthesis.md) is read, this page reads only the two sections the synthesis does not show, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+The Monitoring pages share their readings: once [Platform synthesis](../synthesis.md) is read, this page reads only the two sections the synthesis does not show, and what one page reads again is fresh in the others.
 
 ---
 

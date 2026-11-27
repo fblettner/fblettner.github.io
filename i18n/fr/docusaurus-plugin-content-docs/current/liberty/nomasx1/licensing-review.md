@@ -35,13 +35,14 @@ La revue des licences lit les applications JD Edwards EnterpriseOne : leurs util
   <line x1="250" y1="40" x2="258" y2="32" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="264" y="42" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Revue des licences</text>
   <text x="264" y="58" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Qui est compté sur quelle ligne des contrats, ce qui manque, et ce que cela pourrait coûter.</text>
+  <text x="1023" y="44.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Calculé le 24 nov. à 06:15</text>
   <rect x="1031" y="30" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1056.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
-  <rect x="878" y="30" width="147" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="951.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
-  <rect x="722" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="732" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
-  <text x="714" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="756" y="30" width="147" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="829.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
+  <rect x="600" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="610" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
+  <text x="592" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="72" x2="1100" y2="72" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238" y="82" width="844" height="30" rx="6" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1"/>
   <text x="250" y="101" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">Une hypothèse, pas une position certifiée. … les montants sont les prix publics avec 3 ans de support. Seul Oracle peut établir une position de licences.</text>
@@ -170,7 +171,7 @@ La revue des licences lit les applications JD Edwards EnterpriseOne : leurs util
   <rect x="1120" y="2" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="17" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
   <text x="1130" y="30" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la même lecture, en document</text>
-  <line x1="1120" y1="19.0" x2="970" y2="30" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lrv-arrow)"/>
+  <line x1="1120" y1="19.0" x2="848" y2="30" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lrv-arrow)"/>
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toujours affiché</text>
   <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une hypothèse, jamais certifiée</text>
@@ -217,7 +218,8 @@ La revue des licences lit les applications JD Edwards EnterpriseOne : leurs util
 |---|---|
 | **Application** | L'application JD Edwards à lire, choisie par son numéro et son nom. La page retient la dernière choisie. |
 | **Obtenir le rapport (PDF)** | Produit la même lecture sous forme de document, dans la langue de la page — voir [Le rapport PDF](#report). |
-| **Relire** | Relit la position : la page lit toujours ce que contient la base au moment où elle s'ouvre. |
+| **Calculé le …** | Moment du calcul de la position affichée. La page s'ouvre immédiatement sur la position conservée par le serveur — préparée par la collecte ou par le dernier **Relire** — et indique quand elle a été calculée : un chiffre ancien n'est jamais pris pour le chiffre du jour. |
+| **Relire** | Recalcule la position sur-le-champ, quelle que soit sa durée, et remplace pour tous celle qui était conservée — la carte *Exposition licences* de la [Synthèse d'audit](./audit-synthesis.md), l'*Exposition financière* du Data Explorer et l'écran *Licences - Rapport financier* la lisent aussi (voir [Une seule exposition partout](#exposure)). |
 
 Sous l'avertissement, cinq chiffres :
 
@@ -263,7 +265,9 @@ Les lignes qui ne sont pas des licences nominatives, un chiffre par contrat et p
 
 ### Autres produits Oracle des contrats \{#products\}
 
-Quand les contrats de l'application décrivent une installation d'**Oracle Data Integrator** ou d'**Oracle Analytics Server**, chacune apparaît avec son contrat, un bouton **Ouvrir** vers sa page et ses constats, chacun avec son niveau : **risque**, **à vérifier**, **non connu** ou **correct**. Ces produits se décrivent par questionnaire sur leurs propres pages — [Oracle Data Integrator](./licenses/odi.md) et [Oracle Analytics Server](./licenses/analytics-server.md) — et les constats sont formulés de la même façon là-bas, ici et dans le PDF.
+Quand les contrats de l'application décrivent une installation d'**Oracle Data Integrator** ou d'**Oracle Analytics Server**, chacune apparaît avec son contrat, un bouton **Ouvrir** vers sa page et ses constats, chacun avec son niveau : **risque**, **à vérifier**, **non connu** ou **correct**. Ces produits se décrivent par questionnaire sur leurs propres pages — [Oracle Data Integrator](./licenses/odi.md) et [Oracle Analytics Server](./licenses/analytics-server.md) — et les constats sont formulés de la même façon là-bas, ici et dans le PDF — ce qui manque comme ce qui est couvert (*Licences au processeur : 1 nécessaires, 2 souscrites — couvert.*).
+
+Une installation couverte par plusieurs contrats n'apparaît qu'une fois, sous ses contrats reliés par `+` (`10000001 + 10000002`) : leurs lignes sont comptées ensemble (voir [Une installation, plusieurs contrats](./licenses/odi.md#several-contracts)). Un contrat ne figure ici que tant qu'un élément est décrit pour le produit sur ce contrat — une machine, une réponse à une question encore posée par le questionnaire, ou une ligne sur le produit. La taille d'un référentiel Express Edition, par exemple, disparaît avec le référentiel quand celui-ci est retiré : un produit décrit par erreur sur un contrat puis retiré quitte donc la revue.
 
 ---
 
@@ -282,13 +286,14 @@ Quand les contrats de l'application décrivent une installation d'**Oracle Data 
   <line x1="250" y1="40" x2="258" y2="32" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="264" y="42" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Revue des licences</text>
   <text x="264" y="58" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Qui est compté sur quelle ligne des contrats, ce qui manque, et ce que cela pourrait coûter.</text>
+  <text x="1023" y="44.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Calculé le 24 nov. à 06:15</text>
   <rect x="1031" y="30" width="51" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1056.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Relire</text>
-  <rect x="878" y="30" width="147" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="951.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
-  <rect x="722" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="732" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
-  <text x="714" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="756" y="30" width="147" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="829.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Obtenir le rapport (PDF)</text>
+  <rect x="600" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="610" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
+  <text x="592" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="72" x2="1100" y2="72" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238" y="82" width="844" height="30" rx="6" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1"/>
   <text x="250" y="101" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">Une hypothèse, pas une position certifiée. … les montants sont les prix publics avec 3 ans de support. Seul Oracle peut établir une position de licences.</text>
@@ -416,6 +421,22 @@ Ce que pourraient coûter les écarts de l'onglet *Utilisation*, bloc par bloc, 
 Chaque ligne donne **Prix public**, **Support / an**, **Chacun (3 ans de support)** et **Estimation** ; un module sans prix dans [Prix public](./settings/pricing/pricing.md) affiche *pas de prix* et n'ajoute rien. Les prix sont ceux de [Paramètres → Licences → Tarification → Prix public](./settings/pricing/pricing.md).
 
 Les lignes au chiffre d'affaires, aux employés et aux processeurs ne sont pas chiffrées : quand l'une d'elles dépasse sa souscription, un bandeau en bas de l'onglet en donne le nombre et renvoie à *Utilisation*.
+
+---
+
+## Une seule exposition partout \{#exposure\}
+
+À chaque calcul de la position — par la collecte ou par **Relire** — ses lignes au-delà de la souscription sont conservées pour l'application : les **licences manquantes** (`missing`), les **modules qu'aucune ligne ne couvre** (`uncovered`), les **Named User Plus** au-delà d'une ligne technologique (`named`), et ce qui manque à **Data Integrator** et à **Analytics Server** (`product`). Trois autres vues lisent ces lignes conservées et donnent donc le même total que la page, ligne à ligne :
+
+| Où | Ce qui est affiché |
+|---|---|
+| La carte *Exposition licences* de la [Synthèse d'audit](./audit-synthesis.md#figures) | Le total, avec le nombre de lignes au-delà de la souscription et les utilisateurs en trop. La liste *Ce qui demande une décision* en tire aussi sa ligne sur les licences. |
+| *Financial exposure* dans le [Data Explorer](./data-explorer.md#licenses) | Une ligne par écart, avec sa nature, au prix catalogue avec trois ans de support ; les montants gardent leur signe (négatif = au-delà de la souscription). |
+| L'écran *Licences - Rapport financier* | Les mêmes lignes avec leur **Nature** — le code et son libellé : *Postes manquants sur un module souscrit*, *Module utilisé, non souscrit*, *Utilisateurs nommés au-delà du contrat*, *Produit (Data Integrator, Analytics Server)* —, leur **Ligne**, les prix unitaires, les totaux et **Calculé le**. |
+
+Elles affichent le **dernier calcul** : tant que la collecte n'a pas été exécutée avec son étape `KEEP_LICENSING_REVIEW`, ou que la revue n'a pas été relue une fois, elles restent vides (voir [Les réponses conservées pour les revues](./jobs.md#kept)). Un **Relire** lancé par un utilisateur dont les rôles limitent les données à une partie de l'application ne renouvelle que sa propre page : les lignes conservées sont celles d'une lecture sans restriction.
+
+Les vues qui recensent les utilisateurs par composant — *Users per component* dans le Data Explorer, *Par composant de licence* dans la Synthèse d'audit — comptent les utilisateurs avec des droits et les utilisateurs actifs sans les comparer à la souscription : cette comparaison revient à cette page, avec les bundles, les composants inclus et la métrique de chaque ligne.
 
 ---
 

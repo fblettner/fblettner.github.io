@@ -64,7 +64,7 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `POST` | `/api/sql/{connector}/_import` | Import rows (the grid's Excel import). |
 | `POST` | `/api/http/{connector}/{endpoint}` | Call an API connector's endpoint. |
 | `GET` | `/api/actions`, `/api/actions/{action_id}` | Services (Logic → Services). |
-| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Plugin functions callable from screens. |
+| `GET` / `POST` | `/api/plugins/callables`, `/api/plugins/run` | Plugin functions callable from screens. `kept: "use"` in the body of `run` returns the function's [kept answer](../framework/apps/plugins.md#page-kept) at once, `kept: "refresh"` computes it anew and keeps it. A function of an application the licence does not cover is refused. |
 
 ---
 
@@ -92,7 +92,7 @@ See [Sign-in](../framework/build/secure/sign-in.md).
 | `GET` | `/api/notifications` (`?unread=1`), `/api/notifications/unread_count` | The caller's notifications. |
 | `POST` | `/api/notifications/read` | Mark notifications read (`{ids}`, or all). |
 | `POST` | `/api/notify/fire` | Fire an action-kind notification rule (used by the `send_notification` screen action). |
-| `GET` | `/api/license` | Licence mode, customer, plan, apps, expiry. |
+| `GET` | `/api/license` | Licence mode, customer, plan, applications covered, expiry — see [What a key covers](../framework/build/secure/license-key.md#coverage). |
 
 ---
 

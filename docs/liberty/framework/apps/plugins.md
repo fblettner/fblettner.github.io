@@ -129,6 +129,10 @@ The object the page receives is a contract: a field is added, never renamed or r
 | `useAssistantContext(title, facts)` | Tells the [assistant](../ai-assistant.md#context) what the user is looking at. | 4 |
 | `Diagram` | A diagram laid out by the server, drawn — see [below](#page-diagram). | 5 |
 | `download(path, name, body)` | Gives the user a file a route of the server answers — see [below](#page-download). | 6 |
+| `callKept(fn, params, refresh?)` | Runs a function and gets its **kept answer**, with the moment it was computed — see [below](#page-kept). | 7 |
+| `Record` | A screen's own record form, opened from the page — see [below](#page-record). | 8 |
+| `Import`, `workbook(name, sheets)` | The screens' import dialog, opened from the page; an Excel file of several sheets for the user — see [below](#page-import). | 9 |
+| `Grid` with `toolbarEnd`, `noExport` | Buttons at the end of the grid's toolbar, after *Export*; no export of the grid's own, when the page gives its own. | 9 |
 
 #### The assistant on a page \{#page-assistant\}
 
@@ -141,6 +145,28 @@ For a picture of a platform or a system, the application's function builds the m
 #### A file for the user \{#page-download\}
 
 `download('/api/reports/<scope>/<id>/run', 'report.pdf', { format: 'pdf', params })` asks a route of the server for a file — a report as a PDF, an export — and saves it on the user's machine: with a body the route is called with a `POST`, without one with a `GET`. The file takes the name the server gives it, else the one passed. A refusal comes back as the server's message, for the page to show. The applications' own pages use it for their documents — the platform report, the OCI estimate, the weekly upgrade report.
+
+#### A kept answer \{#page-kept\}
+
+Some pages read a whole platform, or every user and every rule, before they can draw — and what they show changes when a collection runs, not while one looks. Their function can be asked for its **kept answer**: `callKept('review:j_review', { … })` gives back at once what the function answered before, with `at` (when it was computed), `by` (a user, or `job`), `ms` (how long it took) and `fresh` (computed by this very call). The page shows that moment, so an old figure is never taken for the present. With nothing kept yet, the function runs, and its answer is kept and returned.
+
+`callKept(fn, params, true)` is the re-reading the user asks for on the page (a *Read again* button): the function runs now, however long, and its answer replaces the kept one for everybody.
+
+- An answer is kept per function, parameters **and data scope**: what a user with a row-level [data scope](../build/secure/roles-and-permissions.md#data-scope) computed is never given to another scope. A job's answer — computed without a scope — goes to the users who have none.
+- The permission `plugin:<reference>` is checked before anything kept is read.
+- Only an answer that is an object is kept.
+- A job prepares the answer, so the first person to open the page after the night's collection does not wait: the step `liberty.kept:j_keep` — see [Steps → Prepare a kept answer](../../nomaflow/steps.md#kept).
+- Outside a page, `POST /api/plugins/run` takes `kept: "use"` or `kept: "refresh"` in its body for the same behaviour.
+
+#### A screen's record form \{#page-record\}
+
+`<Record app="crm" screen="customers" mode="add" values={{ COUNTRY: 'FR' }} onClose={…} onSaved={…} />` adds or changes a record through a screen's own form — its fields, its rules per value, its lookups, its defaults, its save and its hooks — without sending the user to the screen. With `mode="add"` the form opens on `values`; with `mode="edit"`, `values` are the record's key values: the record is read through the screen and opened (without a match, the form opens on `values`). The values are given by column name. The menu entry of the page names the screen in **Screens the page works through** so that its users get what the form needs — see [A page an application ships](../build/menus/item-types.md#app-page).
+
+#### The screens' import, a workbook \{#page-import\}
+
+`<Import screens={[{ app: 'crm', screen: 'customers' }]} onClose={…} onSaved={(n) => …} />` opens the data screens' [import dialog](../cookbook/bulk-import.md) from the page: the same modes, the same check against the rules then the database, each row saved through its screen. For one screen, the file's first sheet is read; for several, a workbook with a sheet per screen, each found by its `sheet` name (else the screen's id). `onSaved` receives the number of rows saved.
+
+`workbook('customers-FR', [{ name: 'Customers', rows, columns }])` gives the user an Excel file of several sheets; `columns` are the headings in order (by default, the rows' keys). A sheet named as an `Import` screen's `sheet`, with the screen's column names as headings, is what that import reads back — an export to fix and load again.
 
 ---
 

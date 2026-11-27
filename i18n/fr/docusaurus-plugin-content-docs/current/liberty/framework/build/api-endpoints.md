@@ -225,6 +225,7 @@ Chaque **paramètre** est une ligne — son nom, son libellé, sa valeur par dé
 | **Exemple**, **Aide — quoi y mettre** | Affichés sous le champ partout où le point d'accès se renseigne, et transmis à l'assistant IA. |
 | **Valeurs autorisées** | Une liste fermée : le champ devient une liste déroulante, toute autre valeur est refusée avant tout envoi, et la casse est corrigée. |
 | **Obligatoire** | Un appel sans ce paramètre est refusé avant tout envoi. |
+| **Liste où choisir (un lookup du dictionnaire)**, **Connecteur du lookup**, **Ce qui restreint la liste** | La valeur du paramètre se choisit dans un lookup du dictionnaire partout où le point d'accès se renseigne — la page d'appel qu'ouvre une entrée de menu de type point d'accès, une étape de test, un écran. Indiquer le connecteur du lookup : un connecteur API n'a pas de périmètre de dictionnaire propre. Voir [Un paramètre choisi dans une liste](./queries/parameter-binding.md#param-lookup). |
 
 ### L'appel \{#call\}
 
@@ -343,6 +344,8 @@ Un seul appel HTTP ne peut pas tout faire : modifier un enregistrement qu'un ser
 ## Servi par un service \{#service\}
 
 **Servi par un service** désigne un [service](./services.md) : ses étapes — requêtes, autres points d'accès, fonctions, conditions, boucles — s'exécutent sur le serveur et répondent comme un seul point d'accès. Les paramètres du point d'accès sont les entrées du service ; ce que le service retourne est la réponse. Il s'exécute avec la permission du point d'accès : qui peut appeler le point d'accès exécute ses étapes. **Exposer**, dans la page Services, crée un tel point d'accès en un clic.
+
+Un connecteur API dont un point d'accès est servi par une fonction ou un service est destiné à être appelé de l'extérieur — un client, les tests : **Déployer → Intégrité** le compte comme utilisé même si rien dans la configuration ne le désigne. Il en va de même d'un connecteur appelé par une [suite de tests](./tests.md).
 
 ---
 

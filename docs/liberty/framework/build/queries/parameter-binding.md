@@ -156,6 +156,7 @@ The **Parameters** stage of the query editor lists the parameters, one line each
 | **Help**, **Example** | What to put in it, in a sentence, and an example value (for a JSON parameter, an example of the JSON): shown under the field where the parameter is filled, and given to the AI assistant. |
 | **Choices** | The only values allowed, when there are a few: a dropdown where the parameter is filled. |
 | **Required** | A call without a value for it, and without a default, is refused before anything runs. |
+| **List to pick in**, **Connector of the lookup**, **What narrows the list** | A lookup of the dictionary the value is picked in — see [below](#param-lookup). |
 
 ```sql
 SELECT *
@@ -171,6 +172,18 @@ WHERE  invoice_date BETWEEN :FROM_DATE AND :TO_DATE
 | `STATUS` | Status | `OPEN` |
 
 Declaring is optional: a parameter that the caller does not send and that has no default is bound to `NULL`.
+
+### A parameter picked in a list \{#param-lookup\}
+
+A declared parameter of a query — or of an [API endpoint](../api-endpoints.md#inputs) — can name a **lookup of the dictionary**. Where the parameter is filled — a screen's parameter form, the call page an endpoint menu entry opens, a [test step](../tests.md#step) — its value is picked in that list instead of typed, with the lookup's code, label, extra columns and filter chips; a long list opens [as a table](../../dictionary.md#open-as-table).
+
+| Field | Role |
+|---|---|
+| **List to pick in** | The lookup, picked among the dictionary's — the shared ones and those of each connector. |
+| **Connector of the lookup** | The connector the lookup belongs to (its dictionary scope, and where its query runs when the lookup names none). Blank: the parameter's own connector — to be given for an API endpoint. |
+| **What narrows the list** | `name=value` lines: a `:parameter` of the lookup's query, set to the name of another parameter here (its current value is sent) or to a fixed value — the UDOs of the kind picked, the columns of the table picked. |
+
+A list narrowed by another parameter waits for it: the field says *pick … first* until that parameter has a value. A value that is not in the list can still be typed — a value captured by an earlier test step (`{{name}}`), for instance.
 
 ---
 

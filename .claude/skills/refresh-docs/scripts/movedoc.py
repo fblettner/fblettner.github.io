@@ -1,5 +1,5 @@
 # usage: python3 movedoc.py old_id new_id   (ids like nomaubl/sync/watched-folders)
-# Moves the EN and FR file (git mv), rewrites relative links in every NomaUBL page,
+# Moves the EN and FR file (git mv), rewrites relative links in every page of the same product folder,
 # updates sidebars.ts and adds a client redirect in docusaurus.config.ts.
 # Absolute links (/nomaubl/...) in JSX/src are NOT rewritten: grep them after.
 # zsh: call it once per page, never through a "for p in 'a b'" loop.
@@ -16,7 +16,7 @@ for r in ROOTS:
     subprocess.run(["git","mv",f"{r}/{old}{ex}",f"{r}/{new}{ex}"],check=True)
 LINK=re.compile(r"(\]\()([^)#\s]+?\.mdx?)(#[^)\s]*)?(\))")
 for r in ROOTS:
-    for p in glob.glob(r+"/nomaubl/**/*.md*",recursive=True):
+    for p in glob.glob(r+"/"+old.split("/")[0]+"/**/*.md*",recursive=True):
         rel=os.path.relpath(p,r)[:-len(os.path.splitext(p)[1])]   # current id
         was=old if rel==new else rel                              # id before move
         s=open(p).read()

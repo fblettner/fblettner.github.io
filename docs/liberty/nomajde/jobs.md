@@ -38,6 +38,12 @@ Keeps the platform's figures of the moment, so that their trend can be read in t
 
 Hourly as shipped, **off** until it is turned on. A source that does not answer leaves its figures out of that snapshot and is named in the run; the run fails only when nothing could be read. Read-only on JD Edwards.
 
+## Platform reading (`nomajde-platform-reading`) \{#platform-reading\}
+
+Reads the platform ahead of time — the architecture (in English and in French), the servers, the performance, each section of the database audit, the capacity and its history, the server sizes and the proposed improvements — and keeps the answers. [Platform synthesis](./synthesis.md) and its pages then open at once on that reading, with the moment it was made; their **Read again** still reads live and replaces it for everybody.
+
+Daily at 06:00 as shipped, **off** until it is turned on. A part that fails does not stop the others. Read-only on JD Edwards. It is in the Jobs folder of the Nomajde menu as **Platform reading (kept answers)**, held by the predefined role **Platform operator**; turn it on from **Nomaflow → Jobs**. Details: [`nomajde-platform-reading`](../nomaflow/bundled-jobs.md#nomajde-platform-reading).
+
 ## Instances watch \{#instances-watch\}
 
 Watches the JD Edwards instances through Server Manager — every enterprise server, HTML server and AIS server — every **15 minutes** as shipped, **off** until it is turned on. Everything goes through Server Manager's REST API: nothing is installed on the JD Edwards servers.
@@ -104,7 +110,7 @@ The two jobs of the upgrade analysis are started from the **Prepare for upgrade*
 
 ## Compare with the standard \{#standard-compare\}
 
-Compares every standard object a path code holds as changed, and every copy of a standard object, with Oracle's own in another path code — `PS920`, Oracle's objects as delivered, or any other —, record by record, and keeps the verdict of each: which are identical and can go back to standard, which differ and by how much. The result is read on [Back to standard](./development/back-to-standard.md), whose **Compare again** button opens this job with its values filled in.
+Compares every standard object a path code holds as changed, and every copy of a standard object, with Oracle's own in another path code — `PS920`, Oracle's objects as delivered, or any other —, record by record, and keeps the verdict of each: which are identical and can go back to standard, which differ and by how much. The result is read on [Back to standard](reviews/back-to-standard.md), whose **Compare again** button opens this job with its values filled in.
 
 | Parameter | Default | Meaning |
 |---|---|---|

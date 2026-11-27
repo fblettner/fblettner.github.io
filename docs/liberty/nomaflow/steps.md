@@ -502,6 +502,26 @@ Calls a function of an application's plugin.
 
 The function receives its arguments as keyword arguments and, when it declares them by name, `connectors` (the connector registry), `ctx` (the run: `ctx.run_id`, `ctx.job_id`, `ctx.trigger`) and `settings`. It may be `async` or not. Its return value: an `int` is the number of rows affected, a `dict` is kept as the step's details, `None` is fine; an exception fails the step. To reach the run log, write with a logger of a registered namespace. The full contract is in [Write a callable](../framework/build/plugins/write-a-callable.md).
 
+### Prepare a kept answer \{#kept\}
+
+A page that reads a lot opens at once on its function's [kept answer](../framework/apps/plugins.md#page-kept). A Python step prepares that answer, so the first person to open the page after the night's collection does not wait: pick `liberty.kept:j_keep` in **Function** (the framework's own function, listed with the applications' functions), then in **Values given to the function**:
+
+| Value | Notes |
+|---|---|
+| `function` | The page's function, `module:j_function` (`sales.review:j_review`). |
+| The function's parameters | The same values the page sends: an answer is kept per parameters. Only the parameters the function declares are passed — the job's shared parameters among them (an `apps_id` of a job run once per application). |
+| `langs` | `en,fr` keeps one answer per language, passed to the function as `lang` — for a function that declares it. |
+
+The step runs the function and keeps its answer — computed without a data scope, it goes to the users who have none. The run's details list each answer kept, its parameters and how long it took. A function that answers something other than an object fails the step.
+
+```toml
+[[jobs.steps]]
+name = "keep-review"
+type = "python"
+callable = "liberty.kept:j_keep"
+op_kwargs = { function = "sales.review:j_review", langs = "en,fr" }
+```
+
 ---
 
 ## HTTP — `http` \{#http\}

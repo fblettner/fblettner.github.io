@@ -163,10 +163,22 @@ Click **Add row** to give an application its LDAP scope, or click a row to open 
 |---|---|
 | **Application ID** | The application. Read-only once saved. |
 | **LDAP Context** | Base DN the search starts from (for example `OU=Users,DC=acme,DC=local`). |
-| **LDAP Filter** | Standard LDAP filter restricting the entries read (for example `(objectClass=user)`). |
+| **LDAP Filter** | Standard LDAP filter restricting the entries read (for example `(objectClass=user)`). Empty: every person of the context is read (`(objectClass=person)`). |
 | **LDAP Exclude** | Entries to leave out of the collection. |
 
 The grid also shows **User (Audit)** and **Date (Audit)**: who changed the row last, and when.
+
+---
+
+## Directories other than Active Directory \{#other-directories\}
+
+The LDAP collection reads Active Directory and any other LDAP directory the pool points at — WebLogic's embedded directory behind Oracle Analytics Server (or OBIEE), an OpenLDAP. On such a directory:
+
+- only the attributes its schema knows are asked: the Active Directory ones — company, department, manager, expiry… — stay empty;
+- the account is the entry's `uid`, else its `cn`; the display name is the given name and surname, else the `cn`;
+- every account is taken as **enabled**, since such a directory says nothing of a disabled or expired account.
+
+The comparisons of *Security → LDAP* therefore work on the accounts and their names; the checks that depend on the disabled state or the department only make sense on Active Directory.
 
 ---
 

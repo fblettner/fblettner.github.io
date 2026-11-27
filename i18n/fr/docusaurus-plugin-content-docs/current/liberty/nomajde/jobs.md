@@ -38,6 +38,12 @@ Conserve les chiffres du moment de la plateforme, pour en suivre l'évolution da
 
 Toutes les heures à la livraison, **désactivée** tant qu'elle n'est pas activée. Une source qui ne répond pas laisse ses chiffres hors du relevé et est nommée dans l'exécution ; l'exécution n'échoue que si rien n'a pu être lu. Lecture seule sur JD Edwards.
 
+## Lecture de la plateforme (`nomajde-platform-reading`) \{#platform-reading\}
+
+Lit la plateforme à l'avance — l'architecture (en anglais et en français), les serveurs, la performance, chaque section de l'audit de la base, la capacité et son historique, la taille des serveurs et les améliorations proposées — et conserve les réponses. La [synthèse de la plateforme](./synthesis.md) et ses pages s'ouvrent alors aussitôt sur cette lecture, avec son heure ; leur bouton **Relire** lit toujours en direct et la remplace pour tous les utilisateurs.
+
+Chaque jour à 06:00 à la livraison, **désactivée** tant qu'elle n'est pas activée. Une partie en échec n'arrête pas les autres. Lecture seule sur JD Edwards. Elle figure dans le dossier Tâches du menu de Nomajde sous le nom **Lecture de la plateforme (réponses conservées)**, accessible au rôle prédéfini **Exploitant de la plateforme** ; elle s'active depuis **Nomaflow → Tâches**. Détails : [`nomajde-platform-reading`](../nomaflow/bundled-jobs.md#nomajde-platform-reading).
+
 ## Surveillance des instances \{#instances-watch\}
 
 Surveille les instances JD Edwards au travers de Server Manager — chaque serveur d'entreprise, serveur HTML et serveur AIS — toutes les **15 minutes** à la livraison, **désactivée** tant qu'elle n'est pas activée. Tout passe par l'API REST de Server Manager : rien n'est installé sur les serveurs JD Edwards.
@@ -104,7 +110,7 @@ Les deux tâches de l'analyse de montée de version se lancent depuis la page **
 
 ## Comparer au standard \{#standard-compare\}
 
-Compare chaque objet standard qu'un path code tient pour modifié, et chaque copie d'un objet standard, à l'objet d'Oracle d'un autre path code — `PS920`, les objets d'Oracle tels que livrés, ou un autre —, enregistrement par enregistrement, et conserve le verdict de chacun : ceux qui sont identiques et peuvent revenir au standard, ceux qui diffèrent et dans quelle mesure. Le résultat se lit sur [Retour au standard](./development/back-to-standard.md), dont le bouton **Comparer à nouveau** ouvre cette tâche avec ses valeurs déjà renseignées.
+Compare chaque objet standard qu'un path code tient pour modifié, et chaque copie d'un objet standard, à l'objet d'Oracle d'un autre path code — `PS920`, les objets d'Oracle tels que livrés, ou un autre —, enregistrement par enregistrement, et conserve le verdict de chacun : ceux qui sont identiques et peuvent revenir au standard, ceux qui diffèrent et dans quelle mesure. Le résultat se lit sur [Retour au standard](reviews/back-to-standard.md), dont le bouton **Comparer à nouveau** ouvre cette tâche avec ses valeurs déjà renseignées.
 
 | Paramètre | Défaut | Rôle |
 |---|---|---|

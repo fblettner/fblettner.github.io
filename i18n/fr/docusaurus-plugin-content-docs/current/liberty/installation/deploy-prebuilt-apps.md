@@ -14,7 +14,7 @@ Nomasx-1, Nomajde et leurs tâches Nomaflow sont livrés dans un seul wheel Pyth
 
 Se connecter avec un superutilisateur et ouvrir **Liberty Next → Administrer → App → Licence**. Coller la clé reçue et enregistrer : la clé est chiffrée avec la clé maître de l'installation et les connecteurs sous licence apparaissent aussitôt, sans redémarrage.
 
-Sans clé, les applications s'installent mais leurs connecteurs sous licence restent masqués. `liberty-license status` (dans le conteneur : `docker exec -u liberty liberty-next liberty-license status`) indique ce que couvre la clé et sa date d'expiration — voir [Clé de licence](../framework/build/secure/license-key.md).
+Sans clé, les applications s'installent mais leurs connecteurs sous licence restent masqués. `liberty-license status` (dans le conteneur : `docker exec -u liberty liberty-next liberty-license status`) indique ce que couvre la clé et sa date d'expiration — voir [Clé de licence](../framework/build/secure/license-key.md). Une clé couvre une application, une autre, ou toutes : une application qu'elle ne couvre pas n'est pas proposée — ni menu, ni pages, ni tâches — même si le wheel l'installe (voir [Ce que couvre une clé](../framework/build/secure/license-key.md#coverage)).
 
 ---
 
@@ -51,7 +51,7 @@ Sur une installation Python, les mêmes étapes tiennent en trois commandes — 
 
 Les applications lisent leurs données dans le système source au travers d'un pool. Ouvrir **Liberty Next → Administrer → Pools**, renseigner le pool attendu par les applications (`jdedwards` pour JD Edwards EnterpriseOne) avec un compte en lecture seule, le tester, puis lancer **`nomasx1-roles`** pour créer les rôles d'auditeur et d'administrateur, et la collecte — `nomasx1-collect-all` — depuis **Nomaflow** ou depuis *Nomasx-1 → Tâches*. Les tâches et leurs paramètres sont décrits sur [Nomaflow → Tâches livrées](../nomaflow/bundled-jobs.md).
 
-Nomajde atteint aussi JD Edwards par son serveur AIS et par la console Server Manager. Chacun est un pool de type *HTTP server* — `jde_ais` et `jde_server_manager` —, réglé dans le même écran **Liberty Next → Administrer → Pools** : l'adresse avec son compte, le mot de passe, le contrôle TLS (et, pour les appels faits au nom de l'utilisateur connecté, la clé de signature). Les connecteurs désignent ces pools et ne portent ni adresse ni compte. Les pools peuvent aussi être alimentés par les variables d'environnement `JDE_AIS_URL` / `JDE_SM_URL` — l'adresse avec son compte, `https://JDE@ais-host:7077/jderest/v2` — et `JDE_AIS_VERIFY_SSL` / `JDE_SM_VERIFY_SSL` (`true` par défaut), dans `.env` ou `secrets.env`. Voir [Un serveur HTTP](../framework/connectors.md#pool-http).
+Nomajde atteint aussi JD Edwards par son serveur AIS et par la console Server Manager. Chacun est un pool de type *Serveur HTTP (une API)* — `jde_ais` et `jde_server_manager` —, réglé dans le même écran **Liberty Next → Administrer → Pools** : l'adresse avec son compte, le mot de passe, le contrôle TLS (et, pour les appels faits au nom de l'utilisateur connecté, la clé de signature). Les connecteurs désignent ces pools et ne portent ni adresse ni compte. Les pools peuvent aussi être alimentés par les variables d'environnement `JDE_AIS_URL` / `JDE_SM_URL` — l'adresse avec son compte, `https://JDE@ais-host:7077/jderest/v2` — et `JDE_AIS_VERIFY_SSL` / `JDE_SM_VERIFY_SSL` (`true` par défaut), dans `.env` ou `secrets.env`. Voir [Un serveur HTTP](../framework/connectors.md#pool-http).
 
 ---
 

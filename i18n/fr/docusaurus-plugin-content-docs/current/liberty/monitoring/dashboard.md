@@ -129,7 +129,7 @@ keywords: [Liberty Next, surveillance, tableau de bord technique, pools, session
   <text x="767" y="442" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">activée · claude-sonnet-4-5</text>
   <line x1="671" y1="448" x2="1078" y2="448" stroke="#1f2937" strokeWidth="1"/>
   <text x="677" y="462" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Licence</text>
-  <text x="767" y="462" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">complète · ACME</text>
+  <text x="767" y="462" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">complète ACME · offre standard · couvre nomasx1, nomajde</text>
   <line x1="671" y1="468" x2="1078" y2="468" stroke="#1f2937" strokeWidth="1"/>
   <text x="677" y="482" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Socket.IO</text>
   <text x="767" y="482" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">open</text>
@@ -213,7 +213,7 @@ Toutes les connexions *En cours d'usage* avec un *Dépassement* supérieur à 0 
 
 ## Exécution \{#runtime\}
 
-Une ligne chacun : **Connectors** et **Screens** (le nombre chargé), **Platform** (le système d'exploitation du serveur), **AI** (*on* avec le modèle, ou *off*), **License** (*full* avec le nom du client, ou *restricted*) et **Socket.IO** — l'état de la connexion en direct de cette page (*open*, *connecting*, ou fermée).
+Une ligne chacun : **Connecteurs** et **Écrans** (le nombre chargé), **Plateforme** (le système d'exploitation du serveur), **IA** (*activée* avec le modèle, ou *désactivée*), **Licence** (*complète* avec le nom du client, puis l'**offre** de la clé et les applications qu'elle **couvre** quand la clé les nomme — ou *restreinte* ; voir [Ce que couvre une clé](../framework/build/secure/license-key.md#coverage)) et **Socket.IO** — l'état de la connexion en direct de cette page (*open*, *connecting*, ou fermée).
 
 ---
 

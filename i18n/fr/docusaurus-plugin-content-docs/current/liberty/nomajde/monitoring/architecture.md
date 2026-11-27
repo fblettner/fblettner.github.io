@@ -215,7 +215,7 @@ Cinq chiffres ouvrent la page : **instances en marche** (sur celles que déclare
 
 En dessous, chaque source du schéma indique si elle a été lue : **Instances Server Manager**, **Appels de fonctions métier**, **Pool JD Edwards**, **Instance de la base**, **Sessions de la base** — *lu*, *non lu* ou *non lu sur cette base*. Une source qui n'a pas répondu est nommée dans un avertissement avec la raison, et le reste est tout de même dessiné.
 
-Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire** relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+La page s'ouvre aussitôt sur la lecture que conserve le serveur — la dernière, faite par la [tâche de lecture de la plateforme](../jobs.md#platform-reading) ou par le dernier **Relire**, quel qu'en soit l'auteur — et l'en-tête en indique l'heure (*Lu à 14:02*, avec le jour quand elle date d'avant aujourd'hui) : un chiffre ancien n'est jamais pris pour l'état présent. **Relire** relit en direct, quelle que soit la durée, et remplace la lecture conservée pour tous les utilisateurs. Tant qu'aucune lecture n'est conservée, la première ouverture lit en direct. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres.
 
 ---
 
@@ -259,7 +259,7 @@ Un clic sur une carte affiche à droite ce qui en est connu : son **État**, si 
 
 | Bouton | Effet |
 |---|---|
-| **Télécharger en SVG** | Relit la plateforme et enregistre le schéma dans un fichier SVG (`architecture-jde.svg`), au format d'une page de rapport à l'italienne. |
+| **Télécharger en SVG** | Enregistre le schéma affiché dans un fichier SVG (`architecture-jde.svg`), au format d'une page de rapport à l'italienne — immédiatement : rien n'est relu, le fichier reprend donc le schéma de la page. |
 | **Conserver pour le rapport d'audit** | Relit la plateforme et conserve cette lecture pour le rapport d'audit des licences de l'application sur ce pool JD Edwards : le rapport la dessine sur sa page d'architecture, dans sa propre langue — sauf si une image y a été placée à la main. Seule la dernière lecture est conservée. |
 
 La ligne sous l'en-tête indique ce qui est conservé : *Rien n'est encore conservé pour le rapport d'audit*, ou la date de la lecture conservée et son pool.

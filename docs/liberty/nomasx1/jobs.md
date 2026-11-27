@@ -39,6 +39,22 @@ On a JD Edwards application, two steps of the security collection follow the Sec
 
 A step that fails does not stop the others: the run goes on and ends failed, naming the step.
 
+### The answers kept for the reviews \{#kept\}
+
+Both entries end with three steps that prepare the long pages of the **Reviews** folder, so that they open at once with what the collection has just gathered:
+
+| Step | Prepares |
+|---|---|
+| `KEEP_SOD_REVIEW` | The [Segregation of duties review](./sod-review.md). |
+| `KEEP_WHAT_TO_FIX` | [What to fix](./security-analysis.md). |
+| `KEEP_LICENSING_REVIEW` | The [Licensing review](./licensing-review.md), in English and in French — and with it the licence exposure read by the [Audit synthesis](./audit-synthesis.md), the [Data Explorer](./data-explorer.md) and the *License - Financial report* screen. |
+
+A failure in one of these three steps never makes the collection fail: the page then computes its answer when it is opened, or on **Read again**.
+
+:::tip[A collection job changed on your platform]
+When the steps of `nomasx1-collect-all` were changed on your platform, an upgrade keeps your version of the job, without these three steps. Add them in the job's editor in Nomaflow, or take the shipped job again; until then, the three pages compute at their first opening and the licence exposure stays empty until the Licensing review is read again once.
+:::
+
 ---
 
 ## On a schedule \{#reports\}

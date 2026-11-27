@@ -1,6 +1,6 @@
 ---
 title: License key
-description: "The Liberty Next licence key: what it unlocks (Nomasx-1, Nomajde), where to paste it (Liberty Next → Administer → App → License), how to check it (liberty-license, /api/license), what happens without it, and how to replace it before it expires."
+description: "The Liberty Next licence key: what it unlocks (Nomasx-1, Nomajde — one application, another or all), the connectors and jobs that follow an application, where to paste it (Liberty Next → Administer → App → License), how to check it (liberty-license, /api/license), what happens without it, and how to replace it before it expires."
 keywords: [Liberty Next, licence, license key, Nomasx-1, Nomajde, Settings App, liberty-license, api license, expiry, restricted mode]
 ---
 
@@ -138,6 +138,39 @@ Before pasting it, the key can be checked from the server: `liberty-license veri
 | `liberty-license status` | Validity, products covered, expiry date of the configured key. |
 | `GET /api/license` | `{mode, customer, plan, apps, expires_at, error}`. |
 | `GET /info` | `license.mode`: `full` or `restricted`. |
+| **Monitoring**, *Runtime* block | The **License** line: *full* with the customer, the plan and the applications covered — see [Monitoring](../../../monitoring/dashboard.md#runtime). |
+
+---
+
+## What a key covers \{#coverage\}
+
+A key covers one licensed application, another, or all of them — what the plan sold. A key that names no application covers every one. `liberty-license status`, `GET /api/license` and the **License** line of the monitoring page name the applications covered.
+
+An application the key does not cover is not offered at all — not only hidden from the menu:
+
+| What | For an application the key does not cover |
+|---|---|
+| **Menu and switcher** | Its menu is not shown and the application is not in the switcher. An entry of another application's menu that opens one of its pages is left out too. |
+| **Pages** | Its pages are not listed and do not open. |
+| **Functions** | A function run by name — from a screen action, a page, `POST /api/plugins/run` — is refused with *The licence of this installation does not cover the application …*. |
+| **Jobs** | Its jobs are not listed, scheduled or run — see [Jobs that belong to an application](#jobs). |
+| **Data Explorer** | Its models are not offered. |
+| **Roles** | Its predefined roles are not offered in **Add a predefined role…**. |
+| **AI assistant** | Its tools are not given to the assistant. |
+
+A licence change applies at once: the applications, their menus and their jobs follow the new key without a restart.
+
+### A connector that serves an application \{#connector-applications\}
+
+An application may be made of several connectors — its own, a second database, a connector that holds its services. The setting **Serves the applications** of a connector (SQL connector: **Settings** card; API connector: **Connection** stage — see [Connectors](../../connectors.md#connection-fields)) names the licensed applications it belongs to:
+
+- the connector is loaded when the key covers one of them, and left out otherwise;
+- a licensed application whose data another application reads names that other application: its connector stays loaded for the reader, without its own menu, pages, functions and jobs being offered;
+- empty: the connector stands alone and follows no application.
+
+### Jobs that belong to an application \{#jobs\}
+
+A Nomaflow job has the setting **Applications** (job editor, *Job* section — see [Create a job](../../../nomaflow/jobs/create.md#sections)): it is listed, scheduled and run when the key covers one of the applications named. A job that names none is always offered. When the key changes, the jobs follow at once: a job of an application no longer covered leaves the list and its schedule stops; a job of a newly covered application appears with its schedule.
 
 ---
 
@@ -152,6 +185,8 @@ A licensed installation reports once a day to the licence management tool:
 | Enabled accounts | Their number. |
 | Installation fingerprint | A short hash that tells two installations apart; it carries no address and no name. |
 
+Where the accounts are kept in a file (the default), the installation keeps its own identity in a `.installation` file next to the accounts file (`auth.toml`, in the `config/` folder — the `liberty-config` volume on Docker). The fingerprint is drawn from it, so an upgrade, a recreated container or a new host name is not a new installation for the licence tool. Deleting the file gives the installation a new identity.
+
 No figure of the applications, no user name, no data.
 
 The report is sent by a Nomaflow job, `liberty-usage-report`, listed under **Nomaflow → Jobs** and scheduled every day at 04:17. Each run shows what was sent and what the tool answered; a refused or unreachable send is the run's error. The job is run, paused or rescheduled like any other.
@@ -162,7 +197,7 @@ The job exists while a licence key is installed and **Usage report address** (Li
 
 ## Without a valid key \{#restricted\}
 
-Without a key, or with an expired or invalid one, the server runs in **restricted mode**: the framework and the applications built on it work, the licensed applications do not load. The server log says why with a line starting `license: not loading licensed connector(s)`.
+Without a key, or with an expired or invalid one, the server runs in **restricted mode**: the framework and the applications built on it work, the licensed applications do not load. A valid key that does not cover an application leaves that application out the same way — see [What a key covers](#coverage). The server log says why with a line starting `license: not loading licensed connector(s)`.
 
 ---
 

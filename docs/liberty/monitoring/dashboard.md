@@ -129,7 +129,7 @@ keywords: [Liberty Next, monitoring, technical dashboard, pools, sessions, recor
   <text x="767" y="442" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">on · claude-sonnet-4-5</text>
   <line x1="671" y1="448" x2="1078" y2="448" stroke="#1f2937" strokeWidth="1"/>
   <text x="677" y="462" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">License</text>
-  <text x="767" y="462" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">full · ACME</text>
+  <text x="767" y="462" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">full ACME · plan standard · covers nomasx1, nomajde</text>
   <line x1="671" y1="468" x2="1078" y2="468" stroke="#1f2937" strokeWidth="1"/>
   <text x="677" y="482" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Socket.IO</text>
   <text x="767" y="482" fill="#4ade80" fontSize="8.5" fontFamily="ui-monospace, monospace">open</text>
@@ -213,7 +213,7 @@ All connections *In use* with *Overflow* above 0 means queries wait for a connec
 
 ## Runtime \{#runtime\}
 
-One line each: **Connectors** and **Screens** (how many are loaded), **Platform** (the server's operating system), **AI** (*on* with the model, or *off*), **License** (*full* with the customer's name, or *restricted*) and **Socket.IO** — the state of this page's live connection (*open*, *connecting*, or closed).
+One line each: **Connectors** and **Screens** (how many are loaded), **Platform** (the server's operating system), **AI** (*on* with the model, or *off*), **License** (*full* with the customer's name, then the **plan** of the key and the applications it **covers** when the key names them — or *restricted*; see [What a key covers](../framework/build/secure/license-key.md#coverage)) and **Socket.IO** — the state of this page's live connection (*open*, *connecting*, or closed).
 
 ---
 

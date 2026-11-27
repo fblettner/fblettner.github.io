@@ -60,7 +60,7 @@ keywords: [Nomasx-1, overview, audit synthesis, dashboard, segregation of duties
   <text x="889.5" y="175" fill="#cbd5e1" fontSize="8.8" fontFamily="system-ui, sans-serif">Licence exposure</text>
   <text x="889.5" y="188" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Beyond the subscription</text>
   <text x="889.5" y="218" fill="#e2e8f0" fontSize="21" fontWeight="700" fontFamily="system-ui, sans-serif">€84,500</text>
-  <text x="889.5" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">4 of 22 components · 18 users over</text>
+  <text x="889.5" y="236" fill="#cbd5e1" fontSize="8.3" fontFamily="system-ui, sans-serif">4 lines beyond the subscription · 18 users over</text>
   <rect x="240" y="260" width="520" height="176" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="254" y="280" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Conflicts per refresh</text>
   <text x="254" y="293" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">The conflict lines at each SoD refresh over the period, by business process</text>
@@ -115,7 +115,7 @@ keywords: [Nomasx-1, overview, audit synthesis, dashboard, segregation of duties
   <text x="1066" y="379" fill="#e2e8f0" fontSize="8.8" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
   <line x1="784" y1="395" x2="1066" y2="395" stroke="#1f2937" strokeWidth="1"/>
   <circle cx="788" cy="406" r="3.2" fill="#f87171"/>
-  <text x="800" y="409" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Components over subscription</text>
+  <text x="800" y="409" fill="#e2e8f0" fontSize="8.8" fontFamily="system-ui, sans-serif">Licences beyond the subscription</text>
   <text x="800" y="420" fill="#94a3b8" fontSize="7.6" fontFamily="system-ui, sans-serif">buy, or remove rights</text>
   <text x="1066" y="409" fill="#e2e8f0" fontSize="8.8" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">€84,500</text>
   <text x="1066" y="420" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">4</text>
@@ -138,7 +138,7 @@ keywords: [Nomasx-1, overview, audit synthesis, dashboard, segregation of duties
   <text x="499.33333333333326" y="574" fill="#94a3b8" fontSize="7.6" textAnchor="end" fontFamily="system-ui, sans-serif">248 conflict lines</text>
   <rect x="523.3333333333333" y="448" width="273.3333333333333" height="140" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="537.3333333333333" y="468" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Per licence component</text>
-  <text x="537.3333333333333" y="481" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Users with rights, against the subscribed quantity</text>
+  <text x="537.3333333333333" y="481" fill="#94a3b8" fontSize="8.3" fontFamily="system-ui, sans-serif">Users with rights on each component</text>
   <text x="537.3333333333333" y="507" fill="#e2e8f0" fontSize="8.6" fontFamily="system-ui, sans-serif">General Accounting</text>
   <text x="782.6666666666665" y="507" fill="#e2e8f0" fontSize="8.6" textAnchor="end" fontFamily="system-ui, sans-serif">64</text>
   <rect x="537.3333333333333" y="512" width="245.33333333333331" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
@@ -276,9 +276,9 @@ keywords: [Nomasx-1, overview, audit synthesis, dashboard, segregation of duties
 | **Users** — declared accounts | The accounts collected. | Enabled · disabled · **dormant**: enabled without a login in the last 90 days. |
 | **Roles** — defined roles and their assignment | The roles defined. | Assigned · **orphan** (assigned to no user) · users holding more than 10 roles, with the maximum. |
 | **Segregation of duties** — users carrying a conflict | The users with at least one conflict. | Conflict lines · privileged users in conflict · business processes concerned. |
-| **Licence exposure** — components deployed beyond the subscription | The value of the users over the subscribed quantities: list price plus three years of support per user over. | Components over the subscription out of all components · users over. |
+| **Licence exposure** — what the licensing review finds beyond the subscription | The total of the [Licensing review](./licensing-review.md)'s lines beyond the subscription — missing seats, modules no line covers, Named User Plus, Data Integrator and Analytics Server — at the list price plus three years of support. | Lines beyond the subscription · users over. |
 
-The exposure reads the [Subscribed Licenses](./licenses/subscribed-licences.md) and the [pricing catalogue](./settings/pricing/pricing.md): a component without a price counts zero.
+The card shows the review's last computing — the collection's or the last **Read again** of the review — and gives the same total as the review, line by line (see [One exposure everywhere](./licensing-review.md#exposure)). It stays empty until the collection has run or the review has been read again once.
 
 ---
 
@@ -291,7 +291,7 @@ The findings of the [Security & SoD assessment report](./reports/security-sox.md
 | **Active SoD violations** — or *No SoD violation*, or *No SoD matrix defined* | The matrix rules triggered out of all rules, and the privileged pairings. Red when a privileged user is concerned. Without a matrix, define it under [Settings → SoD](./settings/sod/matrix.md). |
 | **Self-conflicting roles** | A role grants both sides of an incompatible pair on its own: fix the role, and every holder is resolved. |
 | **Conflicting role combinations** | Pairs of roles that breach SoD only when held together: split the duties or revise the assignments. |
-| **Components over subscription** | More users with rights than licences: buy, or remove rights. The amount is the exposure; red from 250,000, orange from 25,000. |
+| **Licences beyond the subscription** | The lines of the Licensing review beyond what is subscribed: buy, or remove rights. The amount is the licence exposure, the count the number of lines; red from 250,000, orange from 25,000. |
 | **Privileged accounts** | Super-user access: confirm each one is owned, justified and reviewed quarterly. |
 | **Dormant enabled accounts** | No login within 90 days, with those that never logged in: disable or re-certify. |
 | **Generic / shared accounts** | Actions cannot be attributed to a person: replace them with nominative accounts. |
@@ -309,7 +309,7 @@ The findings of the [Security & SoD assessment report](./reports/security-sox.md
 |---|---|
 | **Conflicts per refresh** | The conflict lines at each SoD refresh over the period, stacked by business process — the trend of the remediation. |
 | **Per process** | Users in conflict per business process, with the number of conflict lines; red when privileged users are among them. |
-| **Per licence component** | Users with rights per component, against the subscribed quantity. Technical and linked accounts are excluded; active users are those with a login in the last 90 days. |
+| **Per licence component** | Users with rights on each component — not compared with the subscription, which is the Licensing review's. Technical and linked accounts are excluded; active users are those with a login in the last 90 days. |
 | **Data freshness** | The last collection per module, with its age: green under 2 days, orange under 8, red beyond. A red line means the figures above it are old. |
 | **Transacting users per month** | The distinct users with transactions each month, the applications added up. |
 | **Users with the most conflicts** | The users carrying the most conflict lines, with the number of processes; privileged accounts are tagged. |

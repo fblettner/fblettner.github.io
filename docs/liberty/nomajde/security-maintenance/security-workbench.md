@@ -199,6 +199,14 @@ Column visibility can also be overridden manually from the *Columns* button on t
 
 ---
 
+## UDO Security: the product code \{#udo-security-product-code\}
+
+The **UDO Security** screen (**Security Maintenance → UDO Security**) holds the security lines of the user defined objects (`F00950W`) on a grid like this one, with the same export, bulk edit and load from a file. Its **Product Code** field reads its own list: **All Product Codes** (`*ALL`) first, then the product codes. A UDO line that is not tied to a product holds `*ALL` — the form's default, and most of the lines JD Edwards writes — so such a line is shown by its name and is imported from a file like any other.
+
+The menu-filtering lines have their own grid, [Menu Filtering](./menu-filtering.md).
+
+---
+
 ## Change tracking
 
 Security changes on this screen are **captured into the active [change package](../../nomaflow/change-packages.md)** under the `security` entity. Every grant, revoke or bulk edit becomes a reviewable entry, so a workbench change can be promoted from development to production as a reviewed bundle instead of being re-applied by hand.
@@ -215,4 +223,5 @@ This is what makes a JDE security promotion repeatable: pair it with the [`nomaj
 - **Excel upload** for SI-delivered security bundles. The standard *Add* flow handles single rows; the upload is meant for the dozens of rows that ship with a new module.
 - **A deny on *All Actions* with `User = *PUBLIC` plus targeted grants on roles** is the standard JDE pattern. The grid makes it easy to read whether the deny is in place for every object.
 - **After bulk changes**, run *Nomasx-1 → Applications → Rights* to confirm the effective rights match the intent — the workbench shows what is configured, *Rights* shows what JDE will compute at sign-on.
-- **Before and after a change**, [Security simulation](./security-simulation.md) gives what a user or role would be allowed, object by object, with a what-if that writes nothing; its [Consistency](./workbench-consistency.md) tab lists the lines of this grid that serve nothing or contradict each other.
+- **Before and after a change**, [Simulate Security](../reviews/simulate-security.md) shows what a change would do before it is written, and [Security consistency](../reviews/security-consistency.md) lists the lines of this grid that serve nothing or contradict each other.
+- **The lines of one user or role, a kind at a time**: [Security Management → a user or role](../security-management/user-or-role.md#applications) shows its Security Workbench lines as boxes, beside everything else that applies to it, and saves through this screen.

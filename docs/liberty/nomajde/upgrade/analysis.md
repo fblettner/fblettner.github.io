@@ -706,4 +706,4 @@ The page shows to the roles that hold its menu entry, with the permissions `page
 - [Jobs](../jobs.md) — running a job from the Nomajde menu.
 - [Non-regression tests](../tests.md) — check that JD Edwards still behaves the same once the upgrade is done.
 - [Cross Reference](../cross-reference.md) — where an object is used, with **Only the applications of the upgrade analysis**.
-- [Back to standard](../development/back-to-standard.md) — which changed objects and copies could go back to the standard, and save their retrofit.
+- [Back to standard](../reviews/back-to-standard.md) — which changed objects and copies could go back to the standard, and save their retrofit.

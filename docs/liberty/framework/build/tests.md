@@ -205,7 +205,7 @@ The **+** on a link inserts an empty step at that place — *no endpoint yet* un
 |---|---|
 | **Name** | Unique in the case: the results and the reference are kept by step. |
 | **Endpoint called** | Picked in the connector's list. |
-| **Parameters** | The endpoint's own form: one labelled field per parameter, its help under it, a dropdown when it has a list of values. |
+| **Parameters** | The endpoint's own form: one labelled field per parameter, its help under it, a dropdown when it has a list of values or names a [dictionary lookup](./queries/parameter-binding.md#param-lookup) — a value kept by an earlier step (`{{name}}`) can still be typed there. |
 | **The call** | *must work* or *must be refused* — with **The refusal says** to check the message. |
 | **Rows, at least** / **exactly** / **at most** | The number of rows, counted where the endpoint says its rows are. |
 | **The first row holds** | Values of the first row, by the endpoint's column names. |

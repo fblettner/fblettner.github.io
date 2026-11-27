@@ -8,7 +8,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, platform analysis, Server Manager, insta
 
 **Monitoring → Platform analysis** reads what Server Manager measures now and reads it as an analysis: the figures, then **what the figures say** — the points to review first —, then the details by subject in four tabs. The figures are those of the console at the moment the page is read.
 
-What the page read is kept while the browser session lasts: opening it again draws it at once, and the header says when it was read (*Read at 14:02*). **Read again** reads anew. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others. The readings are kept per user, in the browser's memory only: reloading the browser reads again.
+The page opens at once on the reading the server keeps — the last one, made by the [platform reading job](../jobs.md#platform-reading) or by anyone's last **Read again** — and the header says when it was made (*Read at 14:02*, with the day when it is older than today): an old figure is never taken for the present. **Read again** reads live, however long it takes, and replaces the kept reading for everybody. With no reading kept yet, the first opening reads live. The Monitoring pages — Platform synthesis, Architecture, Platform analysis, Performance and Database audit — share their readings: what one page has read, the others draw at once, and what one page reads again is fresh in the others.
 
 ---
 
@@ -119,7 +119,7 @@ What the page read is kept while the browser session lasts: opening it again dra
   <line x1="1000" y1="117.0" x2="920" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nplat-arrow)"/>
   <rect x="1000" y="36" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="51" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Read again</text>
-  <text x="1010" y="64" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nothing is kept</text>
+  <text x="1010" y="64" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">live, for everybody</text>
   <line x1="1000" y1="53.0" x2="960" y2="44" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nplat-arrow)"/>
   <rect x="1000" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Instances</text>

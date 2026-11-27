@@ -143,6 +143,10 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          {from: '/liberty/nomajde/development/back-to-standard', to: '/liberty/nomajde/reviews/back-to-standard'},
+          {from: '/liberty/nomajde/security-maintenance/workbench-consistency', to: '/liberty/nomajde/reviews/security-consistency'},
+          {from: '/liberty/nomajde/security-maintenance/security-simulation', to: '/liberty/nomajde/reviews/simulate-security'},
+          {from: '/liberty/nomajde/security-maintenance/secure-a-module', to: '/liberty/nomajde/security-management/secure-a-module'},
           {from: '/liberty/nomasx1/licenses/subscribed', to: '/liberty/nomasx1/licenses/subscribed-licences'},
           {from: '/liberty/nomasx1/licenses/usage-report', to: '/liberty/nomasx1/licensing-review'},
           {from: '/liberty/nomasx1/licenses/financial-report', to: '/liberty/nomasx1/licensing-review'},

@@ -225,6 +225,7 @@ Each **parameter** is a line — its name, its label, its default, *Required* �
 | **Example**, **Help — what to put in it** | Shown under the field wherever the endpoint is filled, and given to the AI assistant. |
 | **Allowed values** | A closed list: the field becomes a dropdown, another value is refused before anything is sent, and the letter case is corrected. |
 | **Required** | A call without it is refused before anything is sent. |
+| **List to pick in (a dictionary lookup)**, **Connector of the lookup**, **What narrows the list** | The parameter's value is picked in a lookup of the dictionary wherever the endpoint is filled — the call page an endpoint menu entry opens, a test step, a screen. Give the connector of the lookup: an API connector has no dictionary scope of its own. See [A parameter picked in a list](./queries/parameter-binding.md#param-lookup). |
 
 ### The call \{#call\}
 
@@ -343,6 +344,8 @@ One HTTP call cannot do everything: changing a record a server only offers throu
 ## Served by a service \{#service\}
 
 **Served by a service** names a [service](./services.md): its steps — queries, other endpoints, functions, conditions, loops — run on the server and answer as one endpoint. The endpoint's parameters are the service's inputs; what the service returns is the answer. It runs with the endpoint's permission: who may call the endpoint runs its steps. **Expose**, on the Services page, creates such an endpoint in one click.
+
+An API connector with an endpoint served by a function or a service is there to be called from outside — a client, the tests: **Deploy → Integrity** counts it as used even when nothing of the configuration names it. So does a connector a [test suite](./tests.md) calls.
 
 ---
 

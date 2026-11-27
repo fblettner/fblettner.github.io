@@ -35,13 +35,14 @@ The licensing review reads JD Edwards EnterpriseOne applications: their users, t
   <line x1="250" y1="40" x2="258" y2="32" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="264" y="42" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licensing review</text>
   <text x="264" y="58" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Who is counted on which line of the contracts, what is missing, and what it could cost.</text>
+  <text x="1001" y="44.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Computed on 24 Nov at 06:15</text>
   <rect x="1009" y="30" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1045.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
-  <rect x="877" y="30" width="126" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="940.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
-  <rect x="721" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="731" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
-  <text x="713" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="739" y="30" width="126" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="802" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
+  <rect x="583" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="593" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
+  <text x="575" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="72" x2="1100" y2="72" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238" y="82" width="844" height="30" rx="6" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1"/>
   <text x="250" y="101" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">An assumption, not a certified position. … the amounts are public list prices with 3 years of support. Only Oracle can state a licence position.</text>
@@ -170,7 +171,7 @@ The licensing review reads JD Edwards EnterpriseOne applications: their users, t
   <rect x="1120" y="2" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1130" y="17" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
   <text x="1130" y="30" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the same reading, as a document</text>
-  <line x1="1120" y1="19.0" x2="970" y2="30" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lrv-arrow)"/>
+  <line x1="1120" y1="19.0" x2="832" y2="30" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#lrv-arrow)"/>
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Always said</text>
   <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">an assumption, never certified</text>
@@ -217,7 +218,8 @@ The licensing review reads JD Edwards EnterpriseOne applications: their users, t
 |---|---|
 | **Application** | The JD Edwards application to read, picked by number and name. The page remembers the last one picked. |
 | **Get the report (PDF)** | Writes the same reading as a document, in the language of the page — see [The PDF report](#report). |
-| **Read again** | Reads the position anew: the page always reads what is in the database at the moment it opens. |
+| **Computed on …** | When the position shown was computed. The page opens at once on the position the server keeps — prepared by the collection, or by the last **Read again** — and says when it was computed, so an old figure is never taken for the present one. |
+| **Read again** | Computes the position now, however long it takes, and replaces the kept one for everybody — the *Licence exposure* card of the [Audit synthesis](./audit-synthesis.md), the Data Explorer's *Financial exposure* and the *License - Financial report* screen read it too (see [One exposure everywhere](#exposure)). |
 
 Under the warning, five figures:
 
@@ -263,7 +265,9 @@ The lines that are not seats, one figure per contract and metric:
 
 ### Other Oracle products of the contracts \{#products\}
 
-When the application's contracts describe an installation of **Oracle Data Integrator** or **Oracle Analytics Server**, each one appears with its contract, an **Open** button to its page, and its findings, each with its level: **risk**, **to check**, **not known** or **fine**. These products are described by questionnaire on their own pages — [Oracle Data Integrator](./licenses/odi.md) and [Oracle Analytics Server](./licenses/analytics-server.md) — and the findings read the same there, here and in the PDF.
+When the application's contracts describe an installation of **Oracle Data Integrator** or **Oracle Analytics Server**, each one appears with its contract, an **Open** button to its page, and its findings, each with its level: **risk**, **to check**, **not known** or **fine**. These products are described by questionnaire on their own pages — [Oracle Data Integrator](./licenses/odi.md) and [Oracle Analytics Server](./licenses/analytics-server.md) — and the findings read the same there, here and in the PDF — what is short and what is covered (*Processor licences: 1 needed, 2 subscribed — covered.*).
+
+An installation covered by several contracts is listed once, under its contracts joined by `+` (`10000001 + 10000002`): their lines are counted together (see [One installation, several contracts](./licenses/odi.md#several-contracts)). A contract appears here only while something is described for the product on it — a machine, an answer the questionnaire still asks, or a line on the product: the size of an Express Edition repository, for instance, goes with the repository when it is taken out, so a product described on the wrong contract and then removed leaves the review.
 
 ---
 
@@ -282,13 +286,14 @@ When the application's contracts describe an installation of **Oracle Data Integ
   <line x1="250" y1="40" x2="258" y2="32" stroke="#4a9eff" strokeWidth="1.6"/>
   <text x="264" y="42" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Licensing review</text>
   <text x="264" y="58" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Who is counted on which line of the contracts, what is missing, and what it could cost.</text>
+  <text x="1001" y="44.5" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Computed on 24 Nov at 06:15</text>
   <rect x="1009" y="30" width="73" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="1045.5" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Read again</text>
-  <rect x="877" y="30" width="126" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="940.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
-  <rect x="721" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="731" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
-  <text x="713" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="739" y="30" width="126" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="802" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Get the report (PDF)</text>
+  <rect x="583" y="30" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="593" y="44.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">1 · JDE-PROD          ▾</text>
+  <text x="575" y="45" fill="#64748b" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Application</text>
   <line x1="220" y1="72" x2="1100" y2="72" stroke="#1f2937" strokeWidth="1"/>
   <rect x="238" y="82" width="844" height="30" rx="6" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1"/>
   <text x="250" y="101" fill="#fb923c" fontSize="8.5" fontFamily="system-ui, sans-serif">An assumption, not a certified position. … the amounts are public list prices with 3 years of support. Only Oracle can state a licence position.</text>
@@ -416,6 +421,22 @@ What the gaps of the *Usage* tab could cost, per block, each with its total:
 Each row gives **List price**, **Support / year**, **Each (3 years of support)** and **Estimate**; a module with no price in [Pricing](./settings/pricing/pricing.md) says *no price* and adds nothing. The prices are those of [Settings → Licenses → Pricing → Pricing](./settings/pricing/pricing.md).
 
 The revenue, employee and processor lines are not priced: when one of them is beyond its subscription, a banner at the bottom says how many and sends back to *Usage*.
+
+---
+
+## One exposure everywhere \{#exposure\}
+
+Each time the position is computed — by the collection or by **Read again** — its lines beyond the subscription are kept for the application: the **missing seats** (`missing`), the **modules no line covers** (`uncovered`), the **Named User Plus** beyond a technology line (`named`), and what **Data Integrator** and **Analytics Server** are short of (`product`). Three other places read these kept lines, so they give the same total as the page, line by line:
+
+| Where | What it shows |
+|---|---|
+| The *Licence exposure* card of the [Audit synthesis](./audit-synthesis.md#figures) | The total, with the number of lines beyond the subscription and the users over. Its *What needs a decision* list takes its licence line from them too. |
+| *Financial exposure* in the [Data Explorer](./data-explorer.md#licenses) | One row per line, with its kind, at the list price and three years of support; the amounts keep their sign (negative = beyond the subscription). |
+| The *License - Financial report* screen | The same lines with their **Kind** — the code and its name: *Seats missing on a subscribed module*, *Module used, not subscribed*, *Named users beyond the contract*, *Product (Data Integrator, Analytics Server)* —, **Line**, unit prices, totals and **Computed at**. |
+
+They show the **last computing**: until the collection has run with its `KEEP_LICENSING_REVIEW` step, or the review has been read again once, they stay empty (see [The answers kept for the reviews](./jobs.md#kept)). A **Read again** made by a user whose roles restrict the data to part of the application renews that user's page only: the kept lines are those of an unrestricted reading.
+
+The views that list the users per component — *Users per component* in the Data Explorer, *Per licence component* on the Audit synthesis — count the users with rights and the active users without comparing them with the subscription: that comparison is this page's, with bundles, included components and each line's metric.
 
 ---
 

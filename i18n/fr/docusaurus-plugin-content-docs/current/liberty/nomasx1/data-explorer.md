@@ -197,11 +197,13 @@ Chaque conflit relevé par la [matrice SoD](./settings/sod/matrix.md) : l'utilis
 
 ## Conformité des licences \{#licenses\}
 
-Les transactions de chaque utilisateur par table et par jour, la chaîne objet → code système → composant de licence, l'usage face aux quantités souscrites, l'exposition financière, et les salariés par date d'extraction.
+Les transactions de chaque utilisateur par table et par jour, la chaîne objet → code système → composant de licence, les utilisateurs par composant, l'exposition financière issue de la [revue des licences](./licensing-review.md), et les salariés par date d'extraction.
 
-**Analyses** : *Financial exposure*, *Financial exposure by component* (prix, support et total), *Usage vs subscribed by component*, *Compliance gap by component* — une valeur négative signale plus d'utilisateurs que de licences —, *Transactions by month*, *Transacting users by component* et *by company* — choisir la période pour appliquer une règle des 90 jours —, *Most used tables*, *Employees per extraction*.
+**Analyses** : *Financial exposure*, *Financial exposure by component* (prix, support et total de chaque ligne de la revue des licences au-delà de la souscription, avec sa nature), *Users by component* — utilisateurs avec des droits et utilisateurs actifs — et son graphique *Users by component (chart)*, *Transactions by month*, *Transacting users by component* et *by company* — choisir la période pour appliquer une règle des 90 jours —, *Most used tables*, *Employees per extraction*.
 
-**Tableau de bord** *Licence overview* : l'exposition financière, l'usage face à la souscription par composant, la tendance des transactions et les utilisateurs actifs.
+**Tableau de bord** *Licence overview* : l'exposition financière de la revue des licences, les utilisateurs par composant, la tendance des transactions et les utilisateurs actifs.
+
+Les deux entités du modèle répondent à deux questions distinctes. *Users per component* compte, par application et par composant, les utilisateurs avec des droits et les utilisateurs actifs, sans les comparer à la souscription. *Financial exposure* reprend ce que la revue des licences trouve au-delà de la souscription — postes manquants, modules couverts par aucune ligne de contrat, Named User Plus, Data Integrator et Analytics Server — valorisé au prix catalogue avec trois ans de support ; les montants gardent leur signe (négatif = au-delà de la souscription). Elle contient le dernier calcul de la revue, celui de la collecte ou du dernier *Relire* de la revue, et reste vide tant qu'aucun des deux n'a eu lieu.
 
 :::info[Spécifique à JDE]
 Les transactions et la chaîne objet → code système → composant de licence proviennent de la collecte d'usage de JD Edwards EnterpriseOne. Pour une autre source, le modèle *Licence compliance* contient ce que fournit la collecte de cette source.

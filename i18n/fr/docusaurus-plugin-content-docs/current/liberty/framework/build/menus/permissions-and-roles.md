@@ -268,6 +268,8 @@ Une entrée est affichée d'après ce que l'utilisateur peut ouvrir par elle :
 
 Pour tous les types sauf `job`, l'entrée ou son dossier en **Lecture** affiche l'entrée ; pour tous les types, un refus `menu:` la masque, et le filtre `roles` s'applique en premier.
 
+La licence passe avant tout cela : le menu d'une application que la licence ne couvre pas n'est pas affiché, pas plus qu'une entrée d'un autre menu qui ouvre l'une de ses pages — voir [Ce que couvre une clé](../secure/license-key.md#coverage). Une entrée qui ouvre une page et indique **Screens the page works through** donne la lecture de ces écrans — et leur modification en **Lecture et modification** — voir [Une page livrée par une application](./item-types.md#app-page).
+
 **Les applications visibles par un utilisateur.** Une application qui a un menu et figure dans le sélecteur n'est listée pour un utilisateur que si au moins une de ses entrées lui revient par une permission. Les entrées ouvertes à tous — une adresse externe, une page libre, un tableau de bord de textes — ne suffisent pas à lister une application. Un superutilisateur, ou un rôle qui détient `*`, voit toutes les applications.
 
 Pour vérifier un rôle, l'ouvrir dans **Liberty Next → Administrer → Accès** : l'œil de chaque entrée et le compteur de chaque application (`sales · 4 visibles sur 6`) suivent cette règle. L'assistant IA cite les applications selon la même règle.

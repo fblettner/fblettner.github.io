@@ -129,7 +129,10 @@ The dialect strings come from SQLAlchemy. A pool's dialect follows its **Databas
 | `mariadb` | MariaDB. |
 | `mssql` | Microsoft SQL Server. |
 | `sqlite` | SQLite. |
-| `db2` | IBM DB2. |
+| `db2` | IBM Db2 (Linux, UNIX, Windows). |
+| `ibmi` | Db2 for i (IBM i, AS/400). |
+
+A Db2 or IBM i pool is named `db2` / `ibmi` everywhere, before and after it is connected — not after the name IBM's driver gives itself — so a variant written under `db2` or `ibmi` is the one that runs.
 
 The validator enforces two rules on the map:
 

@@ -306,9 +306,16 @@ A lookup is a query whose rows turn a code into a label — for values held in a
 | **Columns handed back** | Columns that a screen column can copy into other fields of the form when a row is picked. |
 | **Extra columns shown** | Extra columns shown next to the code and label in the list, to tell similar rows apart. |
 | **Columns to filter on** | Extra columns that get filter chips at the top of the list. |
+| **Hide the code** | For a code nobody reads — a generated identifier, a JD Edwards task id: the list shows the label and the extra columns only, ordered by label, in the record form, the grid's edit cells and the filters. The grid starts with the code column hidden; it stays in the column chooser and in an export of all columns. The value saved is still the code. |
 | **Keep on upgrade** | As for entries. |
 
 The lookup's query declares its own `:params`; their values come from the entry's **List parameters**, or from the screen column. Cascading lists are built on the screen — see [Sequences and lookups](./build/queries/sequences-and-lookups.md).
+
+### A long list, as a table \{#open-as-table\}
+
+Every dropdown whose list is long (40 lines or more) or has extra columns ends with **Open as a table** — on every screen, record form, filter and application page, with nothing to configure. The dialog — headed by the field's name, or *Choose in the list* — shows the code, the description and each extra column under its heading, with the same search and filter chips as the list, and room to read; a click on a line picks it.
+
+A lookup also gives its list to a declared parameter of a query or an endpoint: where the parameter is filled, its value is picked in the lookup's list — see [Parameter binding → A parameter picked in a list](./build/queries/parameter-binding.md#param-lookup).
 
 ---
 

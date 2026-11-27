@@ -502,6 +502,26 @@ Appelle une fonction du plugin d'une application.
 
 La fonction reçoit ses arguments par mot-clé et, quand elle les déclare par leur nom, `connectors` (le registre des connecteurs), `ctx` (l'exécution : `ctx.run_id`, `ctx.job_id`, `ctx.trigger`) et `settings`. Elle peut être `async` ou non. Sa valeur de retour : un `int` donne le nombre de lignes modifiées, un `dict` est conservé comme détail de l'étape, `None` convient ; une exception fait échouer l'étape. Pour écrire dans le journal de l'exécution, utiliser un logger d'un espace de noms enregistré. Le contrat complet se trouve dans [Écrire un callable](../framework/build/plugins/write-a-callable.md).
 
+### Préparer une réponse conservée \{#kept\}
+
+Une page qui lit beaucoup s'ouvre aussitôt sur la [réponse conservée](../framework/apps/plugins.md#page-kept) de sa fonction. Une étape Python prépare cette réponse, pour que la première personne qui ouvre la page après la collecte de la nuit n'attende pas : choisir `liberty.kept:j_keep` dans **Fonction** (la fonction propre au framework, proposée avec celles des applications), puis dans **Valeurs données à la fonction** :
+
+| Valeur | Notes |
+|---|---|
+| `function` | La fonction de la page, `module:j_fonction` (`sales.review:j_review`). |
+| Les paramètres de la fonction | Les mêmes valeurs que celles envoyées par la page : une réponse est conservée par jeu de paramètres. Seuls les paramètres que déclare la fonction lui sont transmis — dont les paramètres partagés de la tâche (un `apps_id` pour une tâche exécutée une fois par application). |
+| `langs` | `en,fr` conserve une réponse par langue, transmise à la fonction dans `lang` — pour une fonction qui le déclare. |
+
+L'étape exécute la fonction et conserve sa réponse — calculée sans périmètre de données, elle va aux utilisateurs qui n'en ont pas. Le détail de l'exécution indique chaque réponse conservée, ses paramètres et la durée du calcul. Une fonction qui ne renvoie pas un objet fait échouer l'étape.
+
+```toml
+[[jobs.steps]]
+name = "keep-review"
+type = "python"
+callable = "liberty.kept:j_keep"
+op_kwargs = { function = "sales.review:j_review", langs = "en,fr" }
+```
+
 ---
 
 ## HTTP — `http` \{#http\}

@@ -149,10 +149,10 @@ Nine sections, each built from the data Nomasx-1 has collected:
 1. **Synthèse** — executive summary: context and objectives, the principal findings each with a risk level, the estimated financial exposure, and the key recommendations.
 2. **Périmètre de l'audit** — audited components, what is out of scope, the JD Edwards environments table (production vs non-production), and the **technical architecture**: software versions, a server inventory, and the architecture diagram on a landscape page of its own (see [The architecture page](#architecture)).
 3. **Méthodologie** — the tools and data used, the analysis rules (usage is measured from real consumption, not from authorisations), and a **data-sources** table that dates every input.
-4. **Licences acquises** — the subscribed inventory: Oracle Database Enterprise Edition (NUP), the options and packs, the components detected in use, the *règle des minimas* and the NUP minimum computed from the processor count; then the JD Edwards Oracle Technology Foundation and the application modules.
+4. **Licences acquises** — the subscribed inventory: Oracle Database Enterprise Edition (NUP), the options and packs, the components detected in use, the *règle des minimas* and the NUP minimum computed from the processor count; then the JD Edwards Oracle Technology Foundation (§4.2) and the application modules (§4.3). The contract lines on Oracle Data Integrator and Oracle Analytics Server have their own table, **§4.4 Other Oracle products**, with their metric, quantity and contract number; their position is read in §6.5.
 5. **Utilisation et conformité** — the core of the report:
    - JD Edwards modules cross-referenced **OUT × transactions** — real consumption versus write activity — with a drill-down on low-usage modules (which user touched which object);
-   - **authorisations versus real usage** per module (authorised users vs OUT vs transactions vs number of roles), which surfaces access far wider than actual use;
+   - **authorisations versus real usage** per module (authorised users vs real users vs transaction users vs number of roles), which surfaces access far wider than actual use — see [Who is counted](#counted);
    - the **optimisation analysis** (see below);
    - the Oracle Technology Foundation user analysis (declared / active / disabled, technical accounts, role assignments) and the Oracle database user count.
 6. **Risque financier** — the calculation method (Oracle public price list plus three years of support arrears), each identified risk costed line by line, a consolidated figure and the prioritised levers. The risks come from the same licence position as the [Licensing review](../licensing-review.md): the missing seats per module and the modules no line of the contract covers, read [the way a contract is counted](../how-a-contract-is-counted.md) — bundles, revenue, employee and processor lines included. The section opens on the same warning: an assumption at public list prices, never a certified position.
@@ -161,6 +161,12 @@ Nine sections, each built from the data Nomasx-1 has collected:
 8. **Recommandations et plan d'action** — every action ranked by priority, effort and financial impact, an indicative four-phase schedule, and the follow-up indicators to track afterwards.
 9. **Annexes** — the detailed list of users to deactivate (with creation and last-update dates, and the validation cautions to apply before disabling) and a glossary.
 
+### Who is counted \{#counted\}
+
+- **Authorised users** are the **enabled** users a role gives access to the component: a disabled account is authorised to nothing. The role figures of §5.2 — assignments, roles per user, users with more than 10 roles, roles not assigned — count enabled users only, so a role held only by disabled accounts reads as not assigned.
+- **Real users** follow the rule of the licence analysis: Object Usage Tracking when it has data; otherwise the authorised users who **signed in within the application's period** — the column (`Signed in < 90 d` with the default period) and the explanation say so.
+- **Transaction users** are given for every component, whether Object Usage Tracking saw it or not.
+
 ---
 
 ## The architecture page \{#architecture\}
@@ -168,7 +174,7 @@ Nine sections, each built from the data Nomasx-1 has collected:
 The *Périmètre de l'audit* section shows the application's architecture on a landscape page. The report takes the first picture it finds, in this order:
 
 1. **A picture put there for the application** — the file `data/architecture/<apps_id>.svg` in the applications' folder of the installation. It always comes first.
-2. **The platform as Nomajde read it** — on [Nomajde → Monitoring → Architecture](../../nomajde/monitoring/architecture.md#download), **Keep for the audit report** keeps the reading of a JD Edwards pool. The report draws the reading kept for the pool the application names on [Applications](../settings/global/applications.md), **in the report's language** and with the date of the reading. The reading is kept on the installation: the report draws it even where Server Manager cannot be reached from the machine that writes the report. An application that names no pool takes the reading when only one is kept.
+2. **The platform as Nomajde read it** — when the licence covers Nomajde: on [Nomajde → Monitoring → Architecture](../../nomajde/monitoring/architecture.md#download), **Keep for the audit report** keeps the reading of a JD Edwards pool. The report draws the reading kept for the pool the application names on [Applications](../settings/global/applications.md), **in the report's language** and with the date of the reading. The reading is kept on the installation: the report draws it even where Server Manager cannot be reached from the machine that writes the report. An application that names no pool takes the reading when only one is kept.
 3. **The installation's picture** — the file `data/architecture/default.svg`, for an installation that holds a single application.
 
 Without any of them, the report has no architecture page.

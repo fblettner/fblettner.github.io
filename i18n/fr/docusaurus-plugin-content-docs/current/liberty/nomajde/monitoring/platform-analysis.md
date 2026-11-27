@@ -8,7 +8,7 @@ keywords: [Nomajde, JD Edwards, JDE E1, analyse de la plateforme, Server Manager
 
 **Supervision → Analyse de la plateforme** lit ce que Server Manager mesure maintenant et le présente comme une analyse : les chiffres, puis **ce que disent les chiffres** — les points à revoir d'abord —, puis le détail par sujet, en quatre onglets. Les chiffres sont ceux de la console au moment de la lecture.
 
-Ce que la page a lu est conservé pendant toute la session du navigateur : la rouvrir l'affiche aussitôt, et l'en-tête indique l'heure de la lecture (*Lu à 14:02*). **Relire** relit l'ensemble. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres. Les lectures sont conservées par utilisateur, dans la mémoire du navigateur seulement : un rechargement du navigateur relit tout.
+La page s'ouvre aussitôt sur la lecture que conserve le serveur — la dernière, faite par la [tâche de lecture de la plateforme](../jobs.md#platform-reading) ou par le dernier **Relire**, quel qu'en soit l'auteur — et l'en-tête en indique l'heure (*Lu à 14:02*, avec le jour quand elle date d'avant aujourd'hui) : un chiffre ancien n'est jamais pris pour l'état présent. **Relire** relit en direct, quelle que soit la durée, et remplace la lecture conservée pour tous les utilisateurs. Tant qu'aucune lecture n'est conservée, la première ouverture lit en direct. Les pages de la supervision — Synthèse de la plateforme, Architecture, Analyse de la plateforme, Performance et Audit de la base de données — partagent leurs lectures : ce qu'une page a lu, les autres l'affichent aussitôt, et ce qu'une page relit est à jour dans les autres.
 
 ---
 
@@ -119,7 +119,7 @@ Ce que la page a lu est conservé pendant toute la session du navigateur : la ro
   <line x1="1000" y1="117.0" x2="920" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nplat-arrow)"/>
   <rect x="1000" y="36" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="51" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Relire</text>
-  <text x="1010" y="64" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rien n'est conservé</text>
+  <text x="1010" y="64" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">en direct, pour tous</text>
   <line x1="1000" y1="53.0" x2="960" y2="44" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#nplat-arrow)"/>
   <rect x="1000" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Instances</text>

@@ -1,6 +1,6 @@
 ---
 title: Create a job
-description: "The Nomaflow job editor, a tab per job: the Job section (id, schedule said in words, timezone, tags, timeout, what the run log holds, enabled, position in the installation, keep on upgrade), presets edited in place with their schedules, the retry policy, alerts, shared parameters, what the user may set when starting the job, the step pipeline — and how unsaved changes are kept."
+description: "The Nomaflow job editor, a tab per job: the Job section (id, schedule said in words, timezone, tags, the applications it belongs to, timeout, what the run log holds, enabled, position in the installation, keep on upgrade), presets edited in place with their schedules, the retry policy, alerts, shared parameters, what the user may set when starting the job, the step pipeline — and how unsaved changes are kept."
 keywords: [Nomaflow, create job, job editor, schedule, timezone, timeout, log level, checks before saving, install_step, override, presets, retry policy, alerts, shared params, user parameters, user_params, for_each, unsaved changes, steps, jobs.toml, Liberty Next]
 ---
 
@@ -239,6 +239,7 @@ Only the jobs that changed are rewritten: the other jobs of `jobs.toml` keep the
 | **Schedule (cron)** | The schedule said in words: *Only when started by hand*, *Every few minutes*, *Every hour, or every few hours*, *On chosen days, at a set time*, *Once a month*, or *Something else (typed)* for a cron expression — each choice shows only the fields it needs. The schedule is then said back in words (*every day at 02:00*) and **Next runs** previews the next five. See [Schedules](./schedules.md#editor). |
 | **Timezone** | Picked in the list of time zones (`Europe/Paris`, `America/New_York`); the schedule is evaluated in it. |
 | **Tags** | Free labels, used by the filter of the Jobs page. |
+| **Applications** | The licensed applications the job belongs to, picked among the connectors or typed: the job is listed, scheduled and run when the licence covers one of them. Empty: always offered. See [What a key covers](../../framework/build/secure/license-key.md#jobs). |
 | **Timeout (seconds)** | A run still going after this is stopped. Blank: 4 hours. |
 | **What the run log holds** | *Problems only*, *The steps and their figures (usual)* or *Everything, with each statement* — the level of the scheduled runs. A run started by hand can ask for more or less in **Run with parameters**. |
 | **Enabled** | Switches the job's own schedule on or off. |
